@@ -2537,6 +2537,9 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
                         else
                             pMasterPersist = (*pPageList2)[ nNextMaster ];
                     }
+                }
+                if ( pMasterPersist )
+                {
                     ((SdrPowerPointImport*)this)->aPageColors = pMasterPersist->aColorScheme;
                 }
             }
