@@ -1671,25 +1671,9 @@ sal_Bool Os2SalPrinter::StartJob( const XubString* pFileName,
         lType = OD_QUEUED;
     }
 
-#if 0 // YD FIXME
-    // Set comment (AppName nur bis zum 1. Space-Zeichen nehmen)
-    const xub_Unicode*  pComment = rAppName;
-    USHORT          nCommentLen = 0;
-    memset( maCommentBuf, 0, sizeof( maCommentBuf ) );
-    while ( (nCommentLen < 32) &&
-            (((*pComment >= 'a') && (*pComment <= 'z')) ||
-             ((*pComment >= 'A') && (*pComment <= 'Z')) ||
-             ((*pComment >= '0') && (*pComment <= '9')) ||
-             (*pComment == '-')))
-    {
-        maCommentBuf[nCommentLen] = (char)(*pComment);
-        nCommentLen++;
-        pComment++;
-    }
-    aDevOpenStruc.pszComment = (PSZ)maCommentBuf;
-#endif
-    ByteString jobName( rJobName, gsl_getSystemTextEncoding());
-    aDevOpenStruc.pszComment = (PSZ)jobName.GetBuffer();
+    // Set comment using application name
+    ByteString appName( rAppName, gsl_getSystemTextEncoding());
+    aDevOpenStruc.pszComment = (PSZ)appName.GetBuffer();
 
     // Kopien
     if ( nCopies > 1 )
@@ -1740,6 +1724,7 @@ sal_Bool Os2SalPrinter::StartJob( const XubString* pFileName,
 #endif
 
     // JobName ermitteln und Job starten
+    ByteString jobName( rJobName, gsl_getSystemTextEncoding());
     PSZ pszJobName = NULL;
     int nJobNameLen = 0;
     if ( jobName.Len() > 0 )
