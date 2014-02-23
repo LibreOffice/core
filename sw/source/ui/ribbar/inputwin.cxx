@@ -146,11 +146,14 @@ void SwInputWindow::CleanupUglyHackWithUndo()
 {
     if (m_bResetUndo)
     {
-        DelBoxCntnt();
-        pWrtShell->DoUndo(m_bDoesUndo);
-        if (m_bCallUndo)
+        if (pWrtShell)
         {
-            pWrtShell->Undo();
+            DelBoxCntnt();
+            pWrtShell->DoUndo(m_bDoesUndo);
+            if (m_bCallUndo)
+            {
+                pWrtShell->Undo();
+            }
         }
         m_bResetUndo = false; // #i117122# once is enough :)
     }
