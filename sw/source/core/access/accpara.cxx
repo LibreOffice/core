@@ -2648,7 +2648,7 @@ OUString SwAccessibleParagraph::getSelectedText()
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectionStart()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
