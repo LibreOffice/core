@@ -96,6 +96,16 @@ public:
         mStack.pop();
         appendElement(aName, makeAny(aSequence));
     }
+
+    void addInt32(OUString aElementName, sal_Int32 aIntValue)
+    {
+        appendElement(aElementName, makeAny(aIntValue));
+    }
+
+    void addString(OUString aElementName, OUString aStringValue)
+    {
+        appendElement(aElementName, makeAny(aStringValue));
+    }
 };
 
 OUString TextEffectsHandler::getSchemeColorValTypeString(sal_Int32 nType)
@@ -191,49 +201,48 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
     switch(aName)
     {
         case NS_ooxml::LN_CT_Percentage_val:
-            mpGrabBagStack->appendElement("val", makeAny(sal_Int32(aValue.getInt())));
-            break;
         case NS_ooxml::LN_CT_PositiveFixedPercentage_val:
-            mpGrabBagStack->appendElement("val", makeAny(sal_Int32(aValue.getInt())));
-            break;
         case NS_ooxml::LN_CT_PositivePercentage_val:
-            mpGrabBagStack->appendElement("val", makeAny(sal_Int32(aValue.getInt())));
+            mpGrabBagStack->addInt32("val", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_Glow_rad:
+            mpGrabBagStack->addInt32("rad", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_SchemeColor_val:
-            mpGrabBagStack->appendElement("val", makeAny(getSchemeColorValTypeString(sal_Int32(aValue.getInt()))));
+            {
+                OUString aString = getSchemeColorValTypeString(sal_Int32(aValue.getInt()));
+                mpGrabBagStack->addString("val", aString);
+            }
             break;
         case NS_ooxml::LN_CT_SRgbColor_val:
             {
-                OUStringBuffer aBuf = OUString::number(aValue.getInt(), 16);
-                OUStringBuffer aStr;
-                comphelper::string::padToLength(aStr, 6 - aBuf.getLength(), '0');
-                aStr.append(aBuf.getStr());
-                mpGrabBagStack->appendElement("val", makeAny(aStr.makeStringAndClear().toAsciiUpperCase()));
+                OUStringBuffer aBuffer = OUString::number(aValue.getInt(), 16);
+                OUStringBuffer aString;
+                comphelper::string::padToLength(aString, 6 - aBuffer.getLength(), '0');
+                aString.append(aBuffer.getStr());
+                mpGrabBagStack->addString("val", aString.makeStringAndClear().toAsciiUpperCase());
             }
             break;
-        case NS_ooxml::LN_CT_Glow_rad:
-            mpGrabBagStack->appendElement("rad", makeAny(sal_Int32(aValue.getInt())));
-            break;
         case NS_ooxml::LN_CT_Shadow_blurRad:
-            mpGrabBagStack->appendElement("blurRad", makeAny(sal_Int32(aValue.getInt())));
+            mpGrabBagStack->addInt32("blurRad", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_dist:
-            mpGrabBagStack->appendElement("dist", makeAny(sal_Int32(aValue.getInt())));
+            mpGrabBagStack->addInt32("dist", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_dir:
-            mpGrabBagStack->appendElement("dir", makeAny(sal_Int32(aValue.getInt())));
+            mpGrabBagStack->addInt32("dir", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_sx:
-            mpGrabBagStack->appendElement("sx", makeAny(sal_Int32(aValue.getInt())));
+            mpGrabBagStack->addInt32("sx", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_sy:
-            mpGrabBagStack->appendElement("sy", makeAny(sal_Int32(aValue.getInt())));
+            mpGrabBagStack->addInt32("sy", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_kx:
-            mpGrabBagStack->appendElement("kx", makeAny(sal_Int32(aValue.getInt())));
+            mpGrabBagStack->addInt32("kx", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_ky:
-            mpGrabBagStack->appendElement("ky", makeAny(sal_Int32(aValue.getInt())));
+            mpGrabBagStack->addInt32("ky", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_algn:
             {
