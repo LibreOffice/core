@@ -22,7 +22,8 @@ gb_SDKDIR := $(MACOSX_SDK_PATH)
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 # Darwin mktemp -t expects a prefix, not a pattern
-gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.
+####gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.
+gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
 gb_OSDEFS := \
 	-D$(OS) \
