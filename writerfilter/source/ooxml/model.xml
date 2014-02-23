@@ -5568,6 +5568,74 @@
         </optional>
       </define>
 
+      <define name="CT_Reflection">
+        <optional>
+          <attribute name="blurRad">
+            <ref name="ST_PositiveCoordinate"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="stA">
+            <ref name="ST_PositiveFixedPercentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="stPos">
+            <ref name="ST_PositiveFixedPercentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endA">
+            <ref name="ST_PositiveFixedPercentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endPos">
+            <ref name="ST_PositiveFixedPercentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dist">
+            <ref name="ST_PositiveCoordinate"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dir">
+            <ref name="ST_PositiveFixedAngle"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fadeDir">
+            <ref name="ST_PositiveFixedAngle"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="sx">
+            <ref name="ST_Percentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="sy">
+            <ref name="ST_Percentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="kx">
+            <ref name="ST_FixedAngle"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ky">
+            <ref name="ST_FixedAngle"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="algn">
+            <ref name="ST_RectAlignment"/>
+          </attribute>
+        </optional>
+      </define>
+
       <define name="CT_TextOutlineEffect">
         <empty/>
       </define>
@@ -5586,7 +5654,7 @@
 
       <define name="reflection">
         <element name="reflection">
-          <empty/>
+          <ref name="CT_Reflection"/>
         </element>
       </define>
 
@@ -5727,6 +5795,21 @@
       <attribute name="kx" tokenid="ooxml:CT_Shadow_kx"/>
       <attribute name="ky" tokenid="ooxml:CT_Shadow_ky"/>
       <attribute name="algn" tokenid="ooxml:CT_Shadow_algn"/>
+    </resource>
+    <resource name="CT_Reflection" resource="Properties" tag="character">
+      <attribute name="blurRad" tokenid="ooxml:CT_Reflection_blurRad"/>
+      <attribute name="stA" tokenid="ooxml:CT_Reflection_stA"/>
+      <attribute name="stPos" tokenid="ooxml:CT_Reflection_stPos"/>
+      <attribute name="endA" tokenid="ooxml:CT_Reflection_endA"/>
+      <attribute name="endPos" tokenid="ooxml:CT_Reflection_endPos"/>
+      <attribute name="dist" tokenid="ooxml:CT_Reflection_dist"/>
+      <attribute name="dir" tokenid="ooxml:CT_Reflection_dir"/>
+      <attribute name="fadeDir" tokenid="ooxml:CT_Reflection_fadeDir"/>
+      <attribute name="sx" tokenid="ooxml:CT_Reflection_sx"/>
+      <attribute name="sy" tokenid="ooxml:CT_Reflection_sy"/>
+      <attribute name="kx" tokenid="ooxml:CT_Reflection_kx"/>
+      <attribute name="ky" tokenid="ooxml:CT_Reflection_ky"/>
+      <attribute name="algn" tokenid="ooxml:CT_Reflection_algn"/>
     </resource>
     <resource name="glow" resource="Properties" tag="character">
       <element name="glow" tokenid="ooxml:glow_glow"/>
@@ -17407,12 +17490,12 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <!--<optional>
+        <optional>
           <element name="w14:reflection">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <optional>
+        <!--<optional>
           <element name="w14:textOutline">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -23426,8 +23509,8 @@
       <element name="oMath" tokenid="ooxml:EG_RPrBase_oMath"/>
       <element name="w14:glow" tokenid="ooxml:EG_RPrBase_w14_glow"/>
       <element name="w14:shadow" tokenid="ooxml:EG_RPrBase_w14_shadow"/>
-      <!--<element name="w14:reflection" tokenid="ooxml:EG_RPrBase_w14_reflection"/>
-      <element name="w14:textOutline" tokenid="ooxml:EG_RPrBase_w14_textOutline"/>
+      <element name="w14:reflection" tokenid="ooxml:EG_RPrBase_w14_reflection"/>
+      <!--<element name="w14:textOutline" tokenid="ooxml:EG_RPrBase_w14_textOutline"/>
       <element name="w14:textFill" tokenid="ooxml:EG_RPrBase_w14_textFill"/>
       <element name="w14:scene3d" tokenid="ooxml:EG_RPrBase_w14_scene3d"/>
       <element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
