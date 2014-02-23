@@ -30,15 +30,15 @@ class SvtFileDialog;
 
 typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
 
-    //====================================================================
+
+
     //= AsyncPickerAction
-    //====================================================================
+
     class AsyncPickerAction : public ::rtl::IReference
     {
     public:
@@ -98,9 +98,9 @@ namespace svt
         AsyncPickerAction& operator=( const AsyncPickerAction& );   // never implemented
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
 

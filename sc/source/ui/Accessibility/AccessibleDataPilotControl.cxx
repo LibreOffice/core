@@ -572,7 +572,7 @@ Rectangle ScAccessibleDataPilotControl::GetBoundingBox(void) const
 }
 
 
-//===============================================================================
+
 
 ScAccessibleDataPilotButton::ScAccessibleDataPilotButton(
         const ::com::sun::star::uno::Reference<

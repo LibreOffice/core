@@ -377,7 +377,7 @@ public:
             If not NULL, only this color will be used to draw all frame borders. */
     void                DrawArray( OutputDevice& rDev, const Color* pForceColor = 0 ) const;
 
-    // ------------------------------------------------------------------------
+
 
 private:
     typedef boost::scoped_ptr<ArrayImpl> ArrayImplPtr;

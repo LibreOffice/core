@@ -26,14 +26,14 @@
 
 #include <vector>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IPropertyEnumRepresentation
-    //====================================================================
+
     class SAL_NO_VTABLE IPropertyEnumRepresentation : public ::rtl::IReference
     {
     public:
@@ -58,9 +58,9 @@ namespace pcr
         virtual ~IPropertyEnumRepresentation() { };
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
 

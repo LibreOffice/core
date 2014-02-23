@@ -21,9 +21,9 @@
 #include "java/tools.hxx"
 #include "connectivity/dbconversion.hxx"
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.util.Date
-//**************************************************************
+
 
 jclass java_util_Date::theClass = 0;
 

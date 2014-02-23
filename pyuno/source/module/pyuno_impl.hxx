@@ -131,9 +131,9 @@ inline PyObject* PyStrBytes_FromStringAndSize(const char *string, Py_ssize_t len
 namespace pyuno
 {
 
-//--------------------------------------------------
+
 // Logging API - implementation can be found in pyuno_util
-//--------------------------------------------------
+
 struct RuntimeCargo;
 namespace LogLevel
 {
@@ -159,7 +159,7 @@ void logException( RuntimeCargo *cargo, const char *intro,
 static const sal_Int32 VAL2STR_MODE_DEEP = 0;
 static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
 OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP ) SAL_THROW(());
-//--------------------------------------------------
+
 
 typedef ::boost::unordered_map
 <

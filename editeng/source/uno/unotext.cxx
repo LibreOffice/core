@@ -130,9 +130,9 @@ const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
     return &aTextCursorSfxPropertySet;
 }
 
-// ====================================================================
+
 // helper for Item/Property conversion
-// ====================================================================
+
 
 void GetSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw()
 {
@@ -203,9 +203,9 @@ void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) throw()
     CheckSelection( rSel, pEdit->GetTextForwarder() );
 }
 
-// ====================================================================
+
 // class SvxUnoTextRangeBase
-// ====================================================================
+
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextRangeBase );
 
@@ -1551,9 +1551,9 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference<
     }
 }
 
-// ====================================================================
+
 // class SvxUnoTextRange
-// ====================================================================
+
 
 uno::Reference< uno::XInterface > SvxUnoTextRange_NewInstance()
 {
@@ -1674,9 +1674,9 @@ OUString SAL_CALL SvxUnoTextRange::getImplementationName()
     return OUString("SvxUnoTextRange");
 }
 
-// ====================================================================
+
 // class SvxUnoText
-// ====================================================================
+
 
 SvxUnoTextBase::SvxUnoTextBase() throw()
 : SvxUnoTextRangeBase( NULL )

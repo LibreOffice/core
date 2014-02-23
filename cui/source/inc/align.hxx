@@ -50,7 +50,7 @@
 
 namespace svx {
 
-// ============================================================================
+
 
 class AlignmentTabPage : public SfxTabPage
 {
@@ -110,7 +110,7 @@ private:
     VclContainer*        m_pPropertiesFrame;
 };
 
-// ============================================================================
+
 
 } // namespace svx
 

@@ -28,13 +28,13 @@
 
 #include <o3tl/compat_functional.hxx>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
     namespace hsqldb
     {
-    //........................................................................
+
         using namespace ::com::sun::star::uno;
         using namespace ::com::sun::star::lang;
         using namespace ::com::sun::star::embed;
@@ -339,12 +339,12 @@ namespace connectivity
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }
-    //........................................................................
+
     }   // namespace hsqldb
-    //........................................................................
-//........................................................................
+
+
 }
 // namespace connectivity
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

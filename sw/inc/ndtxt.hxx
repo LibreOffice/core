@@ -801,7 +801,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
 
-//-----------------------------------------------------------------------------
+
 
 inline SwpHints & SwTxtNode::GetSwpHints()
 {

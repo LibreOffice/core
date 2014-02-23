@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/weakbase.hxx>
 
-// --------------------------------------------------------------------
+
 
 class OutlinerParaObject;
 class SdrOutliner;

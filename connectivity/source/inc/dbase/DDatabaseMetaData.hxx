@@ -26,9 +26,9 @@ namespace connectivity
 {
     namespace dbase
     {
-        //**************************************************************
+
         //************ Class: java.sql.DatabaseMetaDataDate
-        //**************************************************************
+
 
         class ODbaseDatabaseMetaData :  public file::ODatabaseMetaData
         {

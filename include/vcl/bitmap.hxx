@@ -192,9 +192,9 @@ public:
         }
 };
 
-// --------------------
+
 // Resample kernels
-// --------------------
+
 
 class Kernel
 {

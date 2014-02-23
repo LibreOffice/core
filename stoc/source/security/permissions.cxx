@@ -100,9 +100,9 @@ static inline OUString makeStrings(
     return buf.makeStringAndClear();
 }
 
-//##################################################################################################
 
-//==================================================================================================
+
+
 class SocketPermission : public Permission
 {
     static char const * s_actions [];
@@ -271,9 +271,9 @@ OUString SocketPermission::toString() const SAL_THROW(())
     return buf.makeStringAndClear();
 }
 
-//##################################################################################################
 
-//==================================================================================================
+
+
 class FilePermission : public Permission
 {
     static char const * s_actions [];
@@ -428,9 +428,9 @@ OUString FilePermission::toString() const SAL_THROW(())
     return buf.makeStringAndClear();
 }
 
-//##################################################################################################
 
-//==================================================================================================
+
+
 class RuntimePermission : public Permission
 {
     OUString m_name;
@@ -467,7 +467,7 @@ OUString RuntimePermission::toString() const SAL_THROW(())
     return buf.makeStringAndClear();
 }
 
-//##################################################################################################
+
 
 
 bool AllPermission::implies( Permission const & ) const SAL_THROW(())
@@ -480,7 +480,7 @@ OUString AllPermission::toString() const SAL_THROW(())
     return OUString("com.sun.star.security.AllPermission");
 }
 
-//##################################################################################################
+
 
 
 PermissionCollection::PermissionCollection(
@@ -576,7 +576,7 @@ static void throwAccessControlException(
     throw security::AccessControlException(
         buf.makeStringAndClear(), Reference< XInterface >(), demanded_perm );
 }
-//==================================================================================================
+
 void PermissionCollection::checkPermission( Any const & perm ) const
     SAL_THROW( (RuntimeException) )
 {

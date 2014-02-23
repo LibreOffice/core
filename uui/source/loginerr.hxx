@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-//=========================================================================
+
 
 #define LOGINERROR_FLAG_MODIFY_ACCOUNT         1
 #define LOGINERROR_FLAG_MODIFY_USER_NAME       2

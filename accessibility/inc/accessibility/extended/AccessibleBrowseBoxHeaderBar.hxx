@@ -25,11 +25,11 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 typedef ::cppu::ImplHelper1<
             ::com::sun::star::accessibility::XAccessibleSelection >
@@ -263,11 +263,11 @@ inline sal_Bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
     return getType() == ::svt::BBTYPE_COLUMNHEADERBAR;
 }
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif
 

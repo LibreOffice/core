@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream > InputStream_BASE;
 
@@ -88,7 +88,7 @@ private:
     sal_Int32           mnBufferPos;
 };
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

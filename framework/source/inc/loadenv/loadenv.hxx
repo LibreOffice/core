@@ -305,7 +305,7 @@ public:
      */
     void startLoading();
 
-    //_______________________________________
+
 
     /** @short  wait for an alreay running load request (started by calling
                 startLoading() before).
@@ -329,7 +329,7 @@ public:
      */
     sal_Bool waitWhileLoading(sal_uInt32 nTimeout = 0);
 
-    //_______________________________________
+
     /** TODO document me ... */
     css::uno::Reference< css::lang::XComponent > getTargetComponent() const;
 
@@ -381,7 +381,7 @@ public:
     /** TODO document me ... */
     css::uno::Reference< css::uno::XInterface > impl_searchLoader();
 
-    //_______________________________________
+
 
     /** @short  it means; show the frame, bring it to front,
                 might set the right icon etcpp. in case loading was

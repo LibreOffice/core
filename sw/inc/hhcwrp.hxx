@@ -27,7 +27,7 @@ class SwWrtShell;
 struct SwConversionArgs;
 class SwPaM;
 
-//////////////////////////////////////////////////////////////////////
+
 
 class SwHHCWrapper : public editeng::HangulHanjaConversion
 {

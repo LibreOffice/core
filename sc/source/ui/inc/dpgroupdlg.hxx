@@ -28,7 +28,7 @@
 #include "editfield.hxx"
 #include "dpgroup.hxx"
 
-// ============================================================================
+
 
 class ScDPGroupEditHelper
 {
@@ -56,7 +56,7 @@ private:
     Edit&               mrEdValue;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ScDPNumGroupEditHelper : public ScDPGroupEditHelper
 {
@@ -75,7 +75,7 @@ private:
     ScDoubleField&      mrEdValue;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ScDPDateGroupEditHelper : public ScDPGroupEditHelper
 {
@@ -95,8 +95,8 @@ private:
     Date                maNullDate;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class ScDPNumGroupDlg : public ModalDialog
 {
@@ -123,7 +123,7 @@ private:
     ScDPNumGroupEditHelper maEndHelper;
 };
 
-// ============================================================================
+
 
 class ScDPDateGroupDlg : public ModalDialog
 {
@@ -159,7 +159,7 @@ private:
     ScDPDateGroupEditHelper maEndHelper;
 };
 
-// ============================================================================
+
 
 #endif
 

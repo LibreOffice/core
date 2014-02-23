@@ -44,10 +44,10 @@ class VCLXWindow;
 class TextEngine;
 class TextView;
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     class ToolPanelDeck;
     class IToolPanelDeck;
@@ -175,9 +175,9 @@ namespace svt
         ~IAccessibleFactory() {}
     };
 
-//........................................................................
+
 }   // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_ACCESSIBLEFACTORY_HXX
 

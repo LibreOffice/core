@@ -206,7 +206,7 @@ namespace accessibility
         void Dispose            ();
 
         // forwarder to given paragraphs
-        //------------------------------------------------------------------------
+
         /** Release the given range of paragraphs
 
             All ranges have the meaning [start,end), similar to STL

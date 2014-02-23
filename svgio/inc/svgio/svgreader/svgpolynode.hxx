@@ -24,7 +24,7 @@
 #include <svgio/svgreader/svgstyleattributes.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -68,7 +68,7 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_SVGIO_SVGREADER_SVGPOLYNODE_HXX
 

@@ -21,7 +21,7 @@
 #include "accessibility/extended/AccessibleGridControlTableCell.hxx"
 #include <svtools/accessibletable.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -31,11 +31,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 using namespace ::svt::table;
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 AccessibleGridControlTable::AccessibleGridControlTable(
         const Reference< XAccessible >& rxParent,
@@ -405,10 +405,10 @@ std::vector< Reference< XAccessible > >& AccessibleGridControlTable::getAccessib
 {
     return m_pAccessCellVector;
 }
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

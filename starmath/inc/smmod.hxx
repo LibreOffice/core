@@ -52,7 +52,7 @@ class SmSymbolManager;
 class SvtSysLocale;
 class VirtualDevice;
 
-/////////////////////////////////////////////////////////////////
+
 
 class SmResId : public ResId
 {
@@ -84,7 +84,7 @@ public:
     const OUString        GetExportSymbolSetName( const OUString &rUiName ) const;
 };
 
-/////////////////////////////////////////////////////////////////
+
 
 class SmModule : public SfxModule, utl::ConfigurationListener
 {

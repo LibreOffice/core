@@ -53,7 +53,7 @@ private:
     OUString         maFilterOptions;
 };
 
-// ============================================================================
+
 
 class ScXMLExternalRefRowsContext : public SvXMLImportContext
 {
@@ -77,7 +77,7 @@ private:
     ScXMLExternalTabData&   mrExternalRefInfo;
 };
 
-// ============================================================================
+
 
 class ScXMLExternalRefRowContext : public SvXMLImportContext
 {
@@ -102,7 +102,7 @@ private:
     sal_Int32               mnRepeatRowCount;
 };
 
-// ============================================================================
+
 
 class ScXMLExternalRefCellContext : public SvXMLImportContext
 {
@@ -136,7 +136,7 @@ private:
     bool                    mbIsEmpty;
 };
 
-// ============================================================================
+
 
 class ScXMLExternalRefCellTextContext : public SvXMLImportContext
 {

@@ -39,7 +39,7 @@
 
 extern "C" {
 
-//*********************************************************************
+
 //  acquire
 //
 static void REGISTRY_CALLTYPE acquire(RegHandle hReg)
@@ -51,7 +51,7 @@ static void REGISTRY_CALLTYPE acquire(RegHandle hReg)
 }
 
 
-//*********************************************************************
+
 //  release
 //
 static void REGISTRY_CALLTYPE release(RegHandle hReg)
@@ -69,7 +69,7 @@ static void REGISTRY_CALLTYPE release(RegHandle hReg)
 }
 
 
-//*********************************************************************
+
 //  getName
 //
 static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
@@ -95,7 +95,7 @@ static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
 }
 
 
-//*********************************************************************
+
 //  isReadOnly
 //
 static sal_Bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
@@ -107,7 +107,7 @@ static sal_Bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
 }
 
 
-//*********************************************************************
+
 //  createRegistry
 //
 static RegError REGISTRY_CALLTYPE createRegistry(rtl_uString* registryName,
@@ -127,7 +127,7 @@ static RegError REGISTRY_CALLTYPE createRegistry(rtl_uString* registryName,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  openRootKey
 //
 static RegError REGISTRY_CALLTYPE openRootKey(RegHandle hReg,
@@ -152,7 +152,7 @@ static RegError REGISTRY_CALLTYPE openRootKey(RegHandle hReg,
 }
 
 
-//*********************************************************************
+
 //  openRegistry
 //
 static RegError REGISTRY_CALLTYPE openRegistry(rtl_uString* registryName,
@@ -175,7 +175,7 @@ static RegError REGISTRY_CALLTYPE openRegistry(rtl_uString* registryName,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  closeRegistry
 //
 static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
@@ -205,7 +205,7 @@ static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
 }
 
 
-//*********************************************************************
+
 //  destroyRegistry
 //
 static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
@@ -236,7 +236,7 @@ static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
 }
 
 
-//*********************************************************************
+
 //  loadRegKey
 //
 static RegError REGISTRY_CALLTYPE loadKey(RegHandle hReg,
@@ -287,7 +287,7 @@ static RegError REGISTRY_CALLTYPE loadKey(RegHandle hReg,
     return pKey->closeKey(pNewKey);
 }
 
-//*********************************************************************
+
 //  saveKey
 //
 static RegError REGISTRY_CALLTYPE saveKey(RegHandle hReg,
@@ -327,7 +327,7 @@ static RegError REGISTRY_CALLTYPE saveKey(RegHandle hReg,
     return pKey->releaseKey(pNewKey);
 }
 
-//*********************************************************************
+
 //  mergeKey
 //
 static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
@@ -376,7 +376,7 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
     return pReg->loadKey(pKey, regFileName, bWarnings, bReport);
 }
 
-//*********************************************************************
+
 //  dumpRegistry
 //
 static RegError REGISTRY_CALLTYPE dumpRegistry(RegHandle hReg,
@@ -399,7 +399,7 @@ static RegError REGISTRY_CALLTYPE dumpRegistry(RegHandle hReg,
     return pReg->dumpRegistry(hKey);
 }
 
-//*********************************************************************
+
 //  initRegistry_Api
 //
 REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
@@ -450,7 +450,7 @@ REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
 
 }
 
-//*********************************************************************
+
 //  reg_loadRegKey
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
@@ -467,7 +467,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
     return loadKey(pKey->getRegistry(), hKey, keyName, regFileName);
 }
 
-//*********************************************************************
+
 //  reg_saveKey
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
@@ -484,7 +484,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
     return saveKey(pKey->getRegistry(), hKey, keyName, regFileName);
 }
 
-//*********************************************************************
+
 //  reg_mergeKey
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
@@ -503,7 +503,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
     return mergeKey(pKey->getRegistry(), hKey, keyName, regFileName, bWarnings, bReport);
 }
 
-//*********************************************************************
+
 //  reg_createRegistry
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
@@ -523,7 +523,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registr
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  reg_openRootKey
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
@@ -533,7 +533,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
 }
 
 
-//*********************************************************************
+
 //  reg_getName
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
@@ -542,7 +542,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uS
 }
 
 
-//*********************************************************************
+
 //  reg_isReadOnly
 //
 REG_DLLPUBLIC sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hRegistry)
@@ -551,7 +551,7 @@ REG_DLLPUBLIC sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hRegistry)
 }
 
 
-//*********************************************************************
+
 //  reg_openRegistry
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
@@ -572,7 +572,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryN
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  reg_closeRegistry
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
@@ -591,7 +591,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
 }
 
 
-//*********************************************************************
+
 //  reg_destroyRegistry
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry,
@@ -601,7 +601,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry
 }
 
 
-//*********************************************************************
+
 //  reg_dumpRegistry
 //
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey)

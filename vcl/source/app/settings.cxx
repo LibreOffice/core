@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 
 #include <boost/make_shared.hpp>
 
-// =======================================================================
+
 
 ImplMouseData::ImplMouseData()
 {
@@ -179,7 +179,7 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
         return false;
 }
 
-// =======================================================================
+
 
 ImplStyleData::ImplStyleData() :
     mIconThemeScanner(vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath())),
@@ -796,7 +796,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
         return false;
 }
 
-// =======================================================================
+
 
 ImplMiscData::ImplMiscData()
 {
@@ -1020,7 +1020,7 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
     return mpData->mbEnableLocalizedDecimalSep;
 }
 
-// =======================================================================
+
 
 ImplHelpData::ImplHelpData()
 {
@@ -1094,7 +1094,7 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
         return false;
 }
 
-// =======================================================================
+
 
 ImplAllSettingsData::ImplAllSettingsData()
     :

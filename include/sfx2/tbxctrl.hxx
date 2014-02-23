@@ -38,7 +38,7 @@
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 
-//------------------------------------------------------------------
+
 
 class SfxToolBoxControl;
 class SfxBindings;
@@ -63,7 +63,7 @@ struct SfxTbxCtrlFactory
     {}
 };
 
-//------------------------------------------------------------------
+
 
 enum SfxPopupWindowType
 {
@@ -75,7 +75,7 @@ enum SfxPopupWindowType
     SFX_POPUPWINDOW_CONTEXTMENU
 };
 
-//------------------------------------------------------------------
+
 
 class SfxFrameStatusListener : public svt::FrameStatusListener
 {
@@ -93,7 +93,7 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
         SfxStatusListenerInterface* m_pCallee;
 };
 
-//------------------------------------------------------------------
+
 
 /* Floating windows that can be torn from tool boxes should be derived from
    this class. Since it is also derived from SfxControllerItem, its instances
@@ -162,7 +162,7 @@ public:
                             }
 };
 
-//------------------------------------------------------------------
+
 
 #define SFX_DECL_TOOLBOX_CONTROL() \
         static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \
@@ -293,7 +293,7 @@ public:
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
-//=========================================================================
+
 
 
 class SfxDragButton_Impl : public FixedImage
@@ -316,7 +316,7 @@ public:
     virtual void            Select( sal_Bool bMod1 = sal_False );
 };
 
-//------------------------------------------------------------------------
+
 
 /** Toolbox that implements recent files menu for the Open file toolbar button.
 

@@ -691,7 +691,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    //*******************************************
+
     // i) Step over all well known URL pattern
     //    and add registered types to the return list too
     //    Do it as first one - because: if a type match by a
@@ -715,7 +715,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
         }
     }
 
-    //*******************************************
+
     // ii) search types matching to the given extension.
     //     Copy every macthing type without changing its order!
     //     Because preferred types was added as first one during

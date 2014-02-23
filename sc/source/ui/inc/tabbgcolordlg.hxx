@@ -25,7 +25,7 @@
 #include <vcl/button.hxx>
 #include <svx/SvxColorValueSet.hxx>
 
-//------------------------------------------------------------------------
+
 
 class ScTabBgColorDlg : public ModalDialog
 {

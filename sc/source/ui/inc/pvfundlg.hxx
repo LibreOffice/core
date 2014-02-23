@@ -40,13 +40,13 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
-// ============================================================================
+
 
 typedef sfx::ListBoxWrapper< sal_Int32 > ScDPListBoxWrapper;
 
 class ScDPObject;
 
-// ============================================================================
+
 
 class ScDPFunctionListBox : public ListBox
 {
@@ -60,7 +60,7 @@ private:
     void                FillFunctionNames();
 };
 
-// ============================================================================
+
 
 class ScDPFunctionDlg : public ModalDialog
 {
@@ -103,7 +103,7 @@ private:
     bool                 mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
-// ============================================================================
+
 
 class ScDPSubtotalDlg : public ModalDialog
 {
@@ -140,7 +140,7 @@ private:
     bool                 mbEnableLayout;     /// true = Enable Layout mode controls.
 };
 
-// ============================================================================
+
 
 class ScDPSubtotalOptDlg : public ModalDialog
 {
@@ -194,7 +194,7 @@ private:
     NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
-// ============================================================================
+
 
 class ScDPShowDetailDlg : public ModalDialog
 {
@@ -225,7 +225,7 @@ private:
     ScDPObject&         mrDPObj;
 };
 
-// ============================================================================
+
 
 #endif
 

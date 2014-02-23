@@ -64,9 +64,9 @@ namespace rptxml
 
         virtual void EndElement();
     };
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 #endif // RPT_XMLREPORTELEMENTBASE_HXX
 

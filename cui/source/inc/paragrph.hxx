@@ -255,7 +255,7 @@ private:
     virtual void            PageCreated(SfxAllItemSet aSet);
 };
 
-//--------------------------------------------------------------------------
+
 class SvxAsianTabPage : public SfxTabPage
 {
 

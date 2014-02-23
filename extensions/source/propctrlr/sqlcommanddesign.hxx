@@ -32,15 +32,15 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     class ISQLCommandAdapter;
-    //====================================================================
+
     //= SQLCommandDesigner
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   SQLCommandDesigner_Base;
     /** encapsulates the code for calling and managing a query design frame, used
@@ -184,9 +184,9 @@ namespace pcr
         SQLCommandDesigner& operator=( const SQLCommandDesigner& ); // never implemented
     };
 
-    //====================================================================
+
     //= ISQLCommandAdapter
-    //====================================================================
+
     /** an adapter to forward changed SQL command property values to a component
     */
     class ISQLCommandAdapter : public ::rtl::IReference
@@ -205,9 +205,9 @@ namespace pcr
         virtual ~ISQLCommandAdapter();
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_SQLCOMMANDDESIGN_HXX
 

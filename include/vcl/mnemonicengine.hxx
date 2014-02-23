@@ -30,14 +30,14 @@
 
 class KeyEvent;
 
-//........................................................................
+
 namespace vcl
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IMnemonicEntryList
-    //====================================================================
+
     /// callback for a MnemonicEngine
     class SAL_NO_VTABLE VCL_DLLPUBLIC IMnemonicEntryList
     {
@@ -115,9 +115,9 @@ namespace vcl
         ~IMnemonicEntryList() {}
     };
 
-    //====================================================================
+
     //= MnemonicEngine
-    //====================================================================
+
     struct MnemonicEngine_Data;
     class VCL_DLLPUBLIC MnemonicEngine
     {
@@ -145,9 +145,9 @@ namespace vcl
         bool    HandleKeyEvent( const KeyEvent& _rKEvt );
     };
 
-//........................................................................
+
 } // namespace vcl
-//........................................................................
+
 
 #endif // INCLUDED_VCL_MNEMONICENGINE_HXX
 

@@ -29,7 +29,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <boost/shared_ptr.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace basegfx {
@@ -58,7 +58,7 @@ namespace drawinglayer { namespace texture {
     class GeoTexSvx;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -104,7 +104,7 @@ namespace drawinglayer
             bool                                                mbFilter : 1;
             bool                                                mbSimpleTextureActive : 1;
 
-            //////////////////////////////////////////////////////////////////////////////
+
             // rendering support
 
             void impRenderGradientTexturePrimitive3D(const primitive3d::GradientTexturePrimitive3D& rPrimitive, bool bTransparence);
@@ -115,7 +115,7 @@ namespace drawinglayer
             void impRenderPolyPolygonMaterialPrimitive3D(const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive);
             void impRenderTransformPrimitive3D(const primitive3d::TransformPrimitive3D& rTransformCandidate);
 
-            //////////////////////////////////////////////////////////////////////////////
+
             // rasterconversions for filled and non-filled polygons. These NEED to be
             // implemented from derivations
 
@@ -151,7 +151,7 @@ namespace drawinglayer
     } // end of namespace processor3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 

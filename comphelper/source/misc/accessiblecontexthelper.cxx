@@ -24,10 +24,10 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -35,9 +35,9 @@ namespace comphelper
 
     IMutex::~IMutex() {}
 
-    //=====================================================================
+
     //= OContextHelper_Impl
-    //=====================================================================
+
     /** implementation class for OAccessibleContextHelper. No own thread safety!
     */
     class OContextHelper_Impl
@@ -75,9 +75,9 @@ namespace comphelper
         m_aCreator = _rAcc;
     }
 
-    //=====================================================================
+
     //= OAccessibleContextHelper
-    //=====================================================================
+
 
     OAccessibleContextHelper::OAccessibleContextHelper( IMutex* _pExternalLock )
         :OAccessibleContextHelper_Base( GetMutex() )
@@ -302,9 +302,9 @@ namespace comphelper
         return xParentContext;
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

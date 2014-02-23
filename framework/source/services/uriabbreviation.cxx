@@ -30,9 +30,9 @@
 namespace framework
 {
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
 DEFINE_XSERVICEINFO_MULTISERVICE_2 (    UriAbbreviation                                                         ,
                                         ::cppu::OWeakObject                                                     ,
                                         SERVICENAME_STRINGABBREVIATION                                          ,

@@ -24,14 +24,14 @@
 #include "loadlisteneradapter.hxx"
 #include <com/sun/star/awt/XControlContainer.hpp>
 
-//.........................................................................
+
 namespace bib
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= FormControlContainer
-    //=====================================================================
+
     class FormControlContainer
             :public ::comphelper::OBaseMutex
             ,public ::bib::OLoadListener
@@ -66,9 +66,9 @@ namespace bib
 
     };
 
-//.........................................................................
+
 }   // namespace bib
-//.........................................................................
+
 
 #endif // EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
 

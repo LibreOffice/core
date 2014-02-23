@@ -146,6 +146,6 @@ void XclTracer::TraceDVType(  bool bType)
         ProcessTraceOnce(eDVType);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

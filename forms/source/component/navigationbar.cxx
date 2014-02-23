@@ -32,10 +32,10 @@ extern "C" void SAL_CALL createRegistryInfo_ONavigationBarModel()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarModel > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -53,9 +53,9 @@ namespace frm
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID, \
         &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
 
-    //==================================================================
+
     // ONavigationBarModel
-    //==================================================================
+
 
     ONavigationBarModel::ONavigationBarModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _rxFactory, OUString() )
@@ -486,8 +486,8 @@ namespace frm
         );
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

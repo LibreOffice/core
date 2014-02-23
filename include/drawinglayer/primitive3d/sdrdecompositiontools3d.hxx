@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace basegfx {
@@ -44,7 +44,7 @@ namespace drawinglayer { namespace attribute {
     class SdrShadowAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -91,7 +91,7 @@ namespace drawinglayer
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
 

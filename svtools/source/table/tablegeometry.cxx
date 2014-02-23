@@ -21,14 +21,14 @@
 #include "tablegeometry.hxx"
 #include "tablecontrol_impl.hxx"
 
-//......................................................................................................................
+
 namespace svt { namespace table
 {
-//......................................................................................................................
 
-    //==================================================================================================================
+
+
     //= TableRowGeometry
-    //==================================================================================================================
+
 
     TableRowGeometry::TableRowGeometry( TableControl_Impl const & _rControl, Rectangle const & _rBoundaries,
             RowPos const _nRow, bool const i_allowVirtualRows )
@@ -83,9 +83,9 @@ namespace svt { namespace table
         return isValid();
     }
 
-    //==================================================================================================================
+
     //= TableColumnGeometry
-    //==================================================================================================================
+
 
     TableColumnGeometry::TableColumnGeometry( TableControl_Impl const & _rControl, Rectangle const & _rBoundaries,
             ColPos const _nCol, bool const i_allowVirtualColumns )
@@ -149,8 +149,8 @@ namespace svt { namespace table
         return isValid();
     }
 
-//......................................................................................................................
+
 } } // namespace svt::table
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

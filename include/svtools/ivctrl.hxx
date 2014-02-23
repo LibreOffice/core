@@ -179,7 +179,7 @@ public:
     sal_uInt16                  GetSubItem() const { return nSubItem; }
 };
 
-//###################################################################################################################################
+
 /*
     Window-Bits:
         WB_ICON             // Text unter dem Icon

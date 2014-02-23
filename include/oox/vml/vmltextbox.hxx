@@ -35,7 +35,7 @@ namespace vml {
 
 struct ShapeTypeModel;
 
-// ============================================================================
+
 
 /// A text paragraph in a textbox.
 struct TextParagraphModel
@@ -59,7 +59,7 @@ struct OOX_DLLPUBLIC TextFontModel
     explicit            TextFontModel();
 };
 
-// ============================================================================
+
 
 /** A text portion in a textbox with the same formatting for all characters. */
 struct TextPortionModel
@@ -71,7 +71,7 @@ struct TextPortionModel
     explicit            TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText );
 };
 
-// ============================================================================
+
 
 /** The textbox contains all text contents and properties. */
 class OOX_DLLPUBLIC TextBox
@@ -102,7 +102,7 @@ private:
     PortionVector       maPortions;
 };
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

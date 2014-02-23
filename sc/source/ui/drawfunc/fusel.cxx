@@ -278,9 +278,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 // try to select the clicked object
                 if ( pView->MarkObj( aMDPos, -2, false, rMEvt.IsMod1() ) )
                 {
-                    //*********************************************************
+
                     //Objekt verschieben
-                    //********************************************************
+
                     if (pView->IsMarkedHit(aMDPos))
                     {
                         //  Don't start drag timer if inplace editing of an OLE object
@@ -304,9 +304,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if (pViewShell->IsDrawSelMode())
                     {
-                        //*********************************************************
+
                         //Objekt selektieren
-                        //********************************************************
+
                         pView->BegMarkObj(aMDPos);
                         bReturn = true;
                     }

@@ -36,12 +36,12 @@
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > SdrPageWindow::GetControlContainer( bool _bCreateIfNecessary ) const
 {
@@ -178,7 +178,7 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
     GetPaintWindow().SetRedrawRegion(rReg);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // clip test
 #ifdef CLIPPER_TEST
 #include <svx/svdopath.hxx>
@@ -264,7 +264,7 @@ namespace
 } // end of anonymous namespace
 #endif // CLIPPER_TEST
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {

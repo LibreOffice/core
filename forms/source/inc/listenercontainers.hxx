@@ -24,14 +24,14 @@
 #include <comphelper/listenernotification.hxx>
 #include <cppuhelper/weak.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //=====================================================================
+
+
     //= EventListeners
-    //=====================================================================
+
     template < class LISTENER >
     class EventListeners : public ::comphelper::OListenerContainerBase< LISTENER, ::com::sun::star::lang::EventObject >
     {
@@ -77,9 +77,9 @@ namespace frm
         using EventListeners_Base::disposing;
     };
 
-    //=====================================================================
+
     //= ResetListeners
-    //=====================================================================
+
     typedef EventListeners  <   ::com::sun::star::form::XResetListener
                             >   ResetListeners_Base;
     class ResetListeners : public ResetListeners_Base
@@ -122,9 +122,9 @@ namespace frm
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_LISTENERCONTAINERS_HXX
 

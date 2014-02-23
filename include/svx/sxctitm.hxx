@@ -25,9 +25,9 @@
 
 enum SdrCaptionType   {SDRCAPT_TYPE1,SDRCAPT_TYPE2,SDRCAPT_TYPE3,SDRCAPT_TYPE4};
 
-//------------------------------
+
 // class SdrCaptionTypeItem
-//------------------------------
+
 class SVX_DLLPUBLIC SdrCaptionTypeItem: public SfxEnumItem {
 public:
     TYPEINFO();

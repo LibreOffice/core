@@ -169,33 +169,33 @@ public:
     */
     inline int  SAL_CALL isValid(rtl::OUString * pReason) const SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 inline Environment::Environment( uno_Environment * pEnv ) SAL_THROW(())
     : _pEnv( pEnv )
 {
     if (_pEnv)
         (*_pEnv->acquire)( _pEnv );
 }
-//__________________________________________________________________________________________________
+
 inline Environment::Environment( rtl::OUString const & rEnvDcp, void * pContext ) SAL_THROW(())
     : _pEnv(NULL)
 {
     uno_getEnvironment(&_pEnv, rEnvDcp.pData, pContext);
 }
-//__________________________________________________________________________________________________
+
 inline Environment::Environment( const Environment & rEnv ) SAL_THROW(())
     : _pEnv( rEnv._pEnv )
 {
     if (_pEnv)
         (*_pEnv->acquire)( _pEnv );
 }
-//__________________________________________________________________________________________________
+
 inline Environment::~Environment() SAL_THROW(())
 {
     if (_pEnv)
         (*_pEnv->release)( _pEnv );
 }
-//__________________________________________________________________________________________________
+
 inline void Environment::clear() SAL_THROW(())
 {
     if (_pEnv)
@@ -204,7 +204,7 @@ inline void Environment::clear() SAL_THROW(())
         _pEnv = 0;
     }
 }
-//__________________________________________________________________________________________________
+
 inline Environment & Environment::operator = ( uno_Environment * pEnv ) SAL_THROW(())
 {
     if (pEnv != _pEnv)
@@ -217,13 +217,13 @@ inline Environment & Environment::operator = ( uno_Environment * pEnv ) SAL_THRO
     }
     return *this;
 }
-//__________________________________________________________________________________________________
+
 inline void SAL_CALL Environment::invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const SAL_THROW(())
 {
     if (_pEnv)
         uno_Environment_invoke_v(_pEnv, pCallee, pParam);
 }
-//__________________________________________________________________________________________________
+
 inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const SAL_THROW(())
 {
     if (_pEnv)
@@ -236,17 +236,17 @@ inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const SAL
     }
 
 }
-//__________________________________________________________________________________________________
+
 inline void SAL_CALL Environment::enter() const SAL_THROW(())
 {
     uno_Environment_enter(_pEnv);
 }
-//__________________________________________________________________________________________________
+
 inline int  SAL_CALL Environment::isValid(rtl::OUString * pReason) const SAL_THROW(())
 {
     return uno_Environment_isValid(_pEnv, (rtl_uString **)pReason);
 }
-//__________________________________________________________________________________________________
+
 inline Environment Environment::getCurrent(rtl::OUString const & typeName) SAL_THROW(())
 {
     Environment environment;

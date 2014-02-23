@@ -23,7 +23,7 @@
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Overlay helper class which holds a BotmapEx which is to be visualized
 // at the given logic position with the Bitmap's pixel size, unscaled and
 // unrotated (like a marker). The discrete pixel on the bitmap assocciated
@@ -78,7 +78,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Overlay helper class for a crosshair
 namespace drawinglayer
 {
@@ -119,7 +119,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Overlay helper class for a hatch rectangle as used e.g. for text object
 // selection hilighting
 namespace drawinglayer
@@ -171,7 +171,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Overlay helper class for a striped helpline
 
 namespace drawinglayer
@@ -225,7 +225,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Overlay helper class for rolling rectangle helplines. This primitive is
 // only for the extended lines to the ends of the view
 
@@ -268,7 +268,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYTOOLS_HXX
 

@@ -65,7 +65,7 @@ protected:
 
 
     // other stuff
-    // ...
+
     // (e.g. DECLARE_SERVICE_INFO();)
 
 protected:

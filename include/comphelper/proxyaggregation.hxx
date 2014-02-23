@@ -71,14 +71,14 @@ namespace com { namespace sun { namespace star { namespace uno {
        - call baseAggregateProxyFor in your ctor
 */
 
-//.............................................................................
+
 namespace comphelper
 {
-//.............................................................................
 
-    //=========================================================================
+
+
     //= OProxyAggregation
-    //=========================================================================
+
     /** helper class for aggregating a proxy for a foreign object
     */
     class OProxyAggregation
@@ -115,9 +115,9 @@ namespace comphelper
         OProxyAggregation& operator=( const OProxyAggregation& );   // never implemented
     };
 
-    //=========================================================================
+
     //= OComponentProxyAggregationHelper
-    //=========================================================================
+
     /** a helper class for aggregating a proxy to an XComponent
 
         <p>The object couples the life time of itself and the component: if one of the both
@@ -176,9 +176,9 @@ namespace comphelper
         COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& );   // never implemented
     };
 
-    //=========================================================================
+
     //= OComponentProxyAggregation
-    //=========================================================================
+
     class COMPHELPER_DLLPUBLIC OComponentProxyAggregation   :public OBaseMutex
                                         ,public cppu::WeakComponentImplHelperBase
                                         ,public OComponentProxyAggregationHelper
@@ -215,9 +215,9 @@ namespace comphelper
         COMPHELPER_DLLPRIVATE OComponentProxyAggregation& operator=( const OComponentProxyAggregation& );   // never implemented
     };
 
-//.............................................................................
+
 }   // namespace comphelper
-//.............................................................................
+
 
 
 #endif // COMPHELPER_PROXY_AGGREGATION

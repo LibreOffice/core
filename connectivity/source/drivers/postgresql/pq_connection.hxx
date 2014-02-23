@@ -79,9 +79,9 @@ struct ConnectionSettings;
 
 
 
-//--------------------------------------------------
+
 // Logging API
-//--------------------------------------------------
+
 namespace LogLevel
 {
 // when you add a loglevel, extend the log function !
@@ -94,7 +94,7 @@ static const sal_Int32 DATA = 4;
 bool isLog( ConnectionSettings *settings, int loglevel );
 void log( ConnectionSettings *settings, sal_Int32 level, const OUString &logString );
 void log( ConnectionSettings *settings, sal_Int32 level, const char *str );
-//--------------------------------------------------
+
 
 class Tables;
 class Views;
@@ -128,7 +128,7 @@ struct ConnectionSettings
     sal_Int32 loglevel;
 };
 
-//--------------------------------------------------
+
 typedef cppu::WeakComponentImplHelper6<
     com::sun::star::sdbc::XConnection,
     com::sun::star::sdbc::XWarningsSupplier,

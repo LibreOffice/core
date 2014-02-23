@@ -31,7 +31,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star;
@@ -375,8 +375,8 @@ Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     }
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,7 @@ class ScRangeUtil;
 class ScAreaData;
 
 
-//============================================================================
+
 
 class ScConsolidateDlg : public ScAnyRefDlg
 {

@@ -54,9 +54,9 @@ public:
 
     virtual ~CXNotifyingDataObject() {}
 
-    //-----------------------------------------------------------------
+
     // ole interface implementation
-    //-----------------------------------------------------------------
+
 
     //IUnknown interface methods
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);

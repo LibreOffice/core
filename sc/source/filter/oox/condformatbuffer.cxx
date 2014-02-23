@@ -55,7 +55,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -65,7 +65,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -256,7 +256,7 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
     }
 }
 
-// ============================================================================
+
 
 DataBarRule::DataBarRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
@@ -313,7 +313,7 @@ void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScA
     pFormat->SetDataBarData(mpFormat);
 }
 
-// ============================================================================
+
 
 IconSetRule::IconSetRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
@@ -358,7 +358,7 @@ void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScA
     pFormat->SetIconSetData(mpFormatData);
 }
 
-// ============================================================================
+
 
 CondFormatRuleModel::CondFormatRuleModel() :
     mnPriority( -1 ),
@@ -393,7 +393,7 @@ void CondFormatRuleModel::setBiff12TextType( sal_Int32 nOperator )
     mnOperator = STATIC_ARRAY_SELECT( spnOperators, nOperator, XML_TOKEN_INVALID );
 }
 
-// ============================================================================
+
 
 CondFormatRule::CondFormatRule( const CondFormat& rCondFormat, ScConditionalFormat* pFormat ) :
     WorksheetHelper( rCondFormat ),
@@ -956,14 +956,14 @@ IconSetRule* CondFormatRule::getIconSet()
     return mpIconSet.get();
 }
 
-// ============================================================================
+
 
 CondFormatModel::CondFormatModel() :
     mbPivot( false )
 {
 }
 
-// ============================================================================
+
 
 CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -1038,7 +1038,7 @@ void CondFormat::insertRule( CondFormatRuleRef xRule )
     }
 }
 
-// ============================================================================
+
 
 CondFormatBuffer::CondFormatBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -1211,7 +1211,7 @@ void ExtCfRule::importCfvo( const AttributeList& rAttribs )
     mnRuleType = CFVO;
     maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );
 }
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

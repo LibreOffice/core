@@ -80,7 +80,7 @@ struct SpellCallbackInfo;
 #define SC_PD_BREAK_V       32
 
 
-// ---------------------------------------------------------------------------
+
 // predefines
 namespace sdr { namespace overlay { class OverlayObjectList; }}
 

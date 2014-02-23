@@ -20,9 +20,9 @@
 #ifndef INCLUDED_BASIC_SBXFORM_HXX
 #define INCLUDED_BASIC_SBXFORM_HXX
 
-//====================================================================
+
 // Implementation class for Basic command: Format$( d,formatStr )
-//====================================================================
+
 /*
   Grammar of format string (a try):
   -----------------------------------------------
@@ -158,7 +158,7 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
     OUString  sCurrencyFormatStrg;
 
     //*** temporary data for scan loop ***
-    //-----------------------------------------------
+
     // String containing the number in scientific format
     OUString  sSciNumStrg;
     // String containing the exponent of the number

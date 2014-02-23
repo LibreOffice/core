@@ -101,7 +101,7 @@ enum XclImpExtNameType
     xlExtEuroConvert            /// An external in Excel, but internal in OO function name.
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclImpCachedMatrix;
 class ScTokenArray;
@@ -225,7 +225,7 @@ private:
     XclImpLinkMgrImplPtr mxImpl;
 };
 
-// ============================================================================
+
 
 #endif
 

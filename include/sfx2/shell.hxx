@@ -61,7 +61,7 @@ namespace svl
     class IUndoManager;
 }
 
-//====================================================================
+
 
 enum SfxInterfaceId
 
@@ -123,7 +123,7 @@ enum SfxInterfaceId
 //TODO/CLEANUP: replace by UNO constant
 #define SVVERB_SHOW -1
 
-//====================================================================
+
 
 typedef void (*SfxExecFunc)(SfxShell *, SfxRequest &rReq);
 typedef void (*SfxStateFunc)(SfxShell *, SfxItemSet &rSet);
@@ -258,7 +258,7 @@ public:
     SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
 };
 
-//--------------------------------------------------------------------
+
 SfxItemPool& SfxShell::GetPool() const
 /*
     [Description]
@@ -276,7 +276,7 @@ SfxItemPool& SfxShell::GetPool() const
     DBG_ASSERT( pPool, "no pool" );
     return *pPool;
 }
-//-------------------------------------------------------------------
+
 inline void SfxShell::SetPool
 (
     SfxItemPool*        pNewPool        // Pointer to the new Pool or null
@@ -295,7 +295,7 @@ inline void SfxShell::SetPool
     pPool = pNewPool;
 }
 
-//=====================================================================
+
 
 #define SFX_ARGUMENTMAP(ShellClass) static SfxFormalArgument a##ShellClass##Args_Impl[] =
 

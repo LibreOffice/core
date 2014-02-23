@@ -311,7 +311,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 // static member initialization.
 sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
 
-// =======================================================================================================
+
 
 // Listener that forwards notifications from the PrintHelper to the "real" listeners
 class SfxPrintHelperListener_Impl : public ::cppu::WeakImplHelper1< view::XPrintJobListener >
@@ -511,7 +511,7 @@ SfxSaveGuard::~SfxSaveGuard()
     }
 }
 
-// =======================================================================================================
+
 
 
 //  constructor
@@ -3166,7 +3166,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     }
 }
 
-//********************************************************************************************************
+
 namespace {
 template< typename ListenerT, typename EventT >
 class NotifySingleListenerIgnoreRE
@@ -3936,7 +3936,7 @@ bool SfxBaseModel::impl_getPrintHelper()
     return true;
 }
 
-//=============================================================================
+
 // css.frame.XModule
  void SAL_CALL SfxBaseModel::setIdentifier(const OUString& Identifier)
     throw (RuntimeException)
@@ -3945,7 +3945,7 @@ bool SfxBaseModel::impl_getPrintHelper()
     m_pData->m_sModuleIdentifier = Identifier;
 }
 
-//=============================================================================
+
 // css.frame.XModule
  OUString SAL_CALL SfxBaseModel::getIdentifier()
     throw (RuntimeException)
@@ -3958,7 +3958,7 @@ bool SfxBaseModel::impl_getPrintHelper()
     return OUString();
 }
 
-//=============================================================================
+
 Reference< frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
 {
     SfxModelGuard aGuard( *this );
@@ -3978,7 +3978,7 @@ Reference< frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
     return m_pData->m_xTitleHelper;
 }
 
-//=============================================================================
+
 Reference< frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
 {
     SfxModelGuard aGuard( *this );
@@ -3997,7 +3997,7 @@ Reference< frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
     return m_pData->m_xNumberedControllers;
 }
 
-//=============================================================================
+
 // css.frame.XTitle
 OUString SAL_CALL SfxBaseModel::getTitle()
     throw (RuntimeException)
@@ -4050,7 +4050,7 @@ OUString SAL_CALL SfxBaseModel::getTitle()
     return aResult;
 }
 
-//=============================================================================
+
 // css.frame.XTitle
 void SAL_CALL SfxBaseModel::setTitle( const OUString& sTitle )
     throw (RuntimeException)
@@ -4062,7 +4062,7 @@ void SAL_CALL SfxBaseModel::setTitle( const OUString& sTitle )
     m_pData->m_bExternalTitle = sal_True;
 }
 
-//=============================================================================
+
 // css.frame.XTitleChangeBroadcaster
 void SAL_CALL SfxBaseModel::addTitleChangeListener( const Reference< frame::XTitleChangeListener >& xListener )
     throw (RuntimeException)
@@ -4075,7 +4075,7 @@ void SAL_CALL SfxBaseModel::addTitleChangeListener( const Reference< frame::XTit
         xBroadcaster->addTitleChangeListener (xListener);
 }
 
-//=============================================================================
+
 // css.frame.XTitleChangeBroadcaster
 void SAL_CALL SfxBaseModel::removeTitleChangeListener( const Reference< frame::XTitleChangeListener >& xListener )
     throw (RuntimeException)
@@ -4088,7 +4088,7 @@ void SAL_CALL SfxBaseModel::removeTitleChangeListener( const Reference< frame::X
         xBroadcaster->removeTitleChangeListener (xListener);
 }
 
-//=============================================================================
+
 // css.frame.XUntitledNumbers
 ::sal_Int32 SAL_CALL SfxBaseModel::leaseNumber( const Reference< XInterface >& xComponent )
     throw (lang::IllegalArgumentException,
@@ -4099,7 +4099,7 @@ void SAL_CALL SfxBaseModel::removeTitleChangeListener( const Reference< frame::X
     return impl_getUntitledHelper ()->leaseNumber (xComponent);
 }
 
-//=============================================================================
+
 // css.frame.XUntitledNumbers
 void SAL_CALL SfxBaseModel::releaseNumber( ::sal_Int32 nNumber )
     throw (lang::IllegalArgumentException,
@@ -4109,7 +4109,7 @@ void SAL_CALL SfxBaseModel::releaseNumber( ::sal_Int32 nNumber )
     impl_getUntitledHelper ()->releaseNumber (nNumber);
 }
 
-//=============================================================================
+
 // css.frame.XUntitledNumbers
 void SAL_CALL SfxBaseModel::releaseNumberForComponent( const Reference< XInterface >& xComponent )
     throw (lang::IllegalArgumentException,
@@ -4119,7 +4119,7 @@ void SAL_CALL SfxBaseModel::releaseNumberForComponent( const Reference< XInterfa
     impl_getUntitledHelper ()->releaseNumberForComponent (xComponent);
 }
 
-//=============================================================================
+
 // css.frame.XUntitledNumbers
 OUString SAL_CALL SfxBaseModel::getUntitledPrefix()
     throw (RuntimeException)
@@ -4128,7 +4128,7 @@ OUString SAL_CALL SfxBaseModel::getUntitledPrefix()
     return impl_getUntitledHelper ()->getUntitledPrefix ();
 }
 
-//=============================================================================
+
 // frame::XModel2
 Reference< container::XEnumeration > SAL_CALL SfxBaseModel::getControllers()
     throw (RuntimeException)
@@ -4146,7 +4146,7 @@ Reference< container::XEnumeration > SAL_CALL SfxBaseModel::getControllers()
     return xEnum;
 }
 
-//=============================================================================
+
 // frame::XModel2
 Sequence< OUString > SAL_CALL SfxBaseModel::getAvailableViewControllerNames()
     throw (RuntimeException)
@@ -4162,7 +4162,7 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getAvailableViewControllerNames()
     return aViewNames;
 }
 
-//=============================================================================
+
 // frame::XModel2
 Reference< frame::XController2 > SAL_CALL SfxBaseModel::createDefaultViewController( const Reference< frame::XFrame >& i_rFrame )
     throw (RuntimeException         ,
@@ -4179,7 +4179,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createDefaultViewControl
     return createViewController( sDefaultViewName, Sequence< PropertyValue >(), i_rFrame );
 }
 
-//=============================================================================
+
 namespace sfx { namespace intern {
 
     /** a class which, in its dtor, cleans up variuos objects (well, at the moment only the frame) collected during
@@ -4227,7 +4227,7 @@ namespace sfx { namespace intern {
     };
 } }
 
-//=============================================================================
+
 SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame >& i_rFrame, ::sfx::intern::ViewCreationGuard& i_rGuard ) const
 {
     SfxViewFrame* pViewFrame = NULL;
@@ -4277,7 +4277,7 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame 
     return pViewFrame;
 }
 
-//=============================================================================
+
 // frame::XModel2
 Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
         const OUString& i_rViewName, const Sequence< PropertyValue >& i_rArguments, const Reference< XFrame >& i_rFrame )
@@ -4364,7 +4364,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     return pBaseController;
 }
 
-//=============================================================================
+
 // RDF DocumentMetadataAccess
 
 // rdf::XRepositorySupplier:
@@ -4653,9 +4653,9 @@ throw (RuntimeException, lang::IllegalArgumentException,
     return xDMA->storeMetadataToMedium(i_rMedium);
 }
 
-// =====================================================================================================================
+
 // = SfxModelSubComponent
-// =====================================================================================================================
+
 
 SfxModelSubComponent::~SfxModelSubComponent()
 {

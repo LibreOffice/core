@@ -36,13 +36,13 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 
-//=========================================================================
+
 
 #define STORE_SERVICE_NAME          "com.sun.star.ucb.Store"
 #define PROPSET_REG_SERVICE_NAME    "com.sun.star.ucb.PropertySetRegistry"
 #define PERS_PROPSET_SERVICE_NAME   "com.sun.star.ucb.PersistentPropertySet"
 
-//=========================================================================
+
 
 struct UcbStore_Impl;
 
@@ -89,7 +89,7 @@ public:
     getInitArgs() const;
 };
 
-//=========================================================================
+
 
 struct PropertySetRegistry_Impl;
 class PersistentPropertySet;
@@ -171,7 +171,7 @@ public:
     getConfigWriteAccess( const OUString& rPath );
 };
 
-//=========================================================================
+
 
 struct PersistentPropertySet_Impl;
 

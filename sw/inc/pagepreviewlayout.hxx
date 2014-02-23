@@ -35,7 +35,7 @@ class SwPageFrm;
 class Fraction;
 struct PreviewPage;
 
-// =============================================================================
+
 /** page preview functionality in the writer
 
     @author OD

@@ -30,10 +30,10 @@
 #include <unotools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -45,9 +45,9 @@ namespace pcr
 
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 
-    //====================================================================
+
     //= XSDValidationHelper
-    //====================================================================
+
 
     XSDValidationHelper::XSDValidationHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
         :EFormsHelper( _rMutex, _rxIntrospectee, _rxContextDocument )
@@ -394,8 +394,8 @@ namespace pcr
         return sReturn;
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

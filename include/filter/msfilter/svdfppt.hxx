@@ -446,7 +446,7 @@ public:
     void                ImportHeaderFooterContainer( DffRecordHeader& rHeader, HeaderFooterEntry& rEntry );
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #define SD_HEADERFOOTER_DATE        1
 #define SD_HEADERFOOTER_TODAYDATE   2
@@ -508,7 +508,7 @@ struct ProcessData
     ~ProcessData() { delete[] pTableRowProperties; };
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 typedef ::std::vector< SdHyperlinkEntry* > SdHyperlinkEntryList;
 class SdrTextObj;

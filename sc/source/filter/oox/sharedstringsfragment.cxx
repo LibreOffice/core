@@ -25,12 +25,12 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::oox::core;
 
 
-// ============================================================================
+
 
 SharedStringsFragment::SharedStringsFragment(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
@@ -87,7 +87,7 @@ void SharedStringsFragment::finalizeImport()
     getSharedStrings().finalizeImport();
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

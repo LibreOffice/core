@@ -125,7 +125,7 @@ namespace slideshow
 
 
             // View layer methods
-            //------------------------------------------------------------------
+
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer );
@@ -133,7 +133,7 @@ namespace slideshow
             virtual bool clearAllViewLayers();
 
             // attribute methods
-            //------------------------------------------------------------------
+
 
             virtual ShapeAttributeLayerSharedPtr createAttributeLayer();
             virtual bool revokeAttributeLayer( const ShapeAttributeLayerSharedPtr& rLayer );
@@ -147,21 +147,21 @@ namespace slideshow
 
 
             // animation methods
-            //------------------------------------------------------------------
+
 
             virtual void enterAnimationMode();
             virtual void leaveAnimationMode();
             virtual bool isBackgroundDetached() const;
 
             // render methods
-            //------------------------------------------------------------------
+
 
             virtual bool update() const;
             virtual bool render() const;
             virtual bool isContentChanged() const;
 
             // Sub item specialities
-            //------------------------------------------------------------------
+
 
             virtual const DocTreeNodeSupplier&  getTreeNodeSupplier() const;
             virtual DocTreeNodeSupplier&        getTreeNodeSupplier();
@@ -174,7 +174,7 @@ namespace slideshow
 
 
             // DocTreeNodeSupplier methods
-            //------------------------------------------------------------------
+
 
             virtual sal_Int32   getNumberOfTreeNodes        ( DocTreeNode::NodeType eNodeType ) const; // throw ShapeLoadFailedException;
             virtual DocTreeNode getTreeNode                 ( sal_Int32             nNodeIndex,
@@ -186,14 +186,14 @@ namespace slideshow
                                                               DocTreeNode::NodeType eNodeType ) const; // throw ShapeLoadFailedException;
 
             // HyperlinkArea methods
-            //------------------------------------------------------------------
+
 
             virtual HyperlinkRegions getHyperlinkRegions() const;
             virtual double getHyperlinkPriority() const;
 
 
             // intrinsic animation methods
-            //------------------------------------------------------------------
+
 
             /** Display next frame of an intrinsic animation.
 

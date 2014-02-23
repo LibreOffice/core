@@ -324,7 +324,7 @@ void SwWW8ImplReader::DeleteFormImpl()
 
 
 
-// Hilfs-Deklarationen ///////////////////////////////////////////////////////
+// Hilfs-Deklarationen
 //
 // Style Id's for each level
 typedef sal_uInt16 WW8aIdSty[WW8ListManager::nMaxLevel];
@@ -394,7 +394,7 @@ struct WW8LFOLVL
         nStartAt(1), nLevel(0), bStartAt(1), bFormat(0) {}
 };
 
-// in den ListenInfos zu speichernde Daten ///////////////////////////////////
+// in den ListenInfos zu speichernde Daten
 //
 struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
 {
@@ -420,7 +420,7 @@ struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
 
 };
 
-// in den ListenFormatOverrideInfos zu speichernde Daten /////////////////////
+// in den ListenFormatOverrideInfos zu speichernde Daten
 //
 struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
 {
@@ -461,7 +461,7 @@ WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)
 
 
 
-// Hilfs-Methoden ////////////////////////////////////////////////////////////
+// Hilfs-Methoden
 //
 
 // finden der Sprm-Parameter-Daten, falls Sprm im Grpprl enthalten
@@ -1102,7 +1102,7 @@ SwNumRule* WW8ListManager::GetNumRule(size_t i)
         return 0;
 }
 
-// oeffentliche Methoden /////////////////////////////////////////////////////
+// oeffentliche Methoden
 //
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     : maSprmParser(rReader_.GetFib().GetFIBVersion()), rReader(rReader_),

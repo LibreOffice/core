@@ -46,9 +46,9 @@ namespace rptxml
         OXMLAutoStylePoolP(ORptExport& rXMLExport);
         virtual ~OXMLAutoStylePoolP();
     };
-// -----------------------------------------------------------------------------
+
 } // rptxml
-// -----------------------------------------------------------------------------
+
 #endif // RPT_XMLAUTOSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

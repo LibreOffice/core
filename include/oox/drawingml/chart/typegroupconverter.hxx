@@ -34,7 +34,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 /** Enumerates different chart types. */
 enum TypeId
@@ -55,7 +55,7 @@ enum TypeId
     TYPEID_UNKNOWN                  /// Default for unknown chart types.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Enumerates different categories of similar chart types. */
 enum TypeCategory
@@ -68,7 +68,7 @@ enum TypeCategory
     TYPECATEGORY_SURFACE            /// Surface charts.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Enumerates modes for varying point colors in a series. */
 enum VarPointMode
@@ -78,7 +78,7 @@ enum VarPointMode
     VARPOINTMODE_MULTI              /// Supported for multiple series in a chart type group.
 };
 
-// ============================================================================
+
 
 /** Contains info for a chart type related to the OpenOffice.org chart module. */
 struct TypeGroupInfo
@@ -101,7 +101,7 @@ struct TypeGroupInfo
     bool                mbPictureOptions;       /// True = bitmaps support options from c:pictureOptions.
 };
 
-// ============================================================================
+
 
 struct UpDownBarsModel;
 
@@ -116,7 +116,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& rxChartType );
 };
 
-// ============================================================================
+
 
 struct TypeGroupModel;
 struct View3DModel;
@@ -187,7 +187,7 @@ private:
     bool                mb3dChart;          /// True = type is a 3D chart type.
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

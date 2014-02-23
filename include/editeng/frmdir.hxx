@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EDITENG_FRMDIR_HXX
 #define INCLUDED_EDITENG_FRMDIR_HXX
 
-// ----------------------------------------------------------------------------
+
 
 /** Defines possible text directions in frames. */
 enum SvxFrameDirection
@@ -45,7 +45,7 @@ enum SvxFrameDirection
     FRMDIR_ENVIRONMENT
 };
 
-// ----------------------------------------------------------------------------
+
 
 #endif // INCLUDED_EDITENG_FRMDIR_HXX
 

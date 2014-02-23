@@ -22,7 +22,7 @@
 #include <svl/inettype.hxx>
 #include <svl/custritm.hxx>
 
-//=========================================================================
+
 
 class CntContentTypeItem : public CntUnencodedStringItem
 {

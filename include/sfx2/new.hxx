@@ -28,13 +28,13 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
 
-//=========================================================================
+
 
 class SfxObjectShellLock;
 class SfxObjectShell;
 class MoreButton;
 
-//=========================================================================
+
 
 #define SFXWB_PREVIEW 0x0003
 #define SFXWB_LOAD_TEMPLATE 0x0004

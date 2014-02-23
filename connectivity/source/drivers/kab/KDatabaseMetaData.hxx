@@ -28,9 +28,9 @@ namespace connectivity
 {
     namespace kab
     {
-        //**************************************************************
+
         //************ Class: KabDatabaseMetaData
-        //**************************************************************
+
 
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> KabDatabaseMetaData_BASE;
 

@@ -35,11 +35,11 @@
 
 
 
-// =======================================================================
+
 
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_PINABLE | WB_ROLLABLE )
 
-// =======================================================================
+
 
 
 
@@ -276,7 +276,7 @@ bool ImplDockFloatWin::Close()
     return mpDockWin->Close();
 }
 
-// =======================================================================
+
 
 bool DockingWindow::ImplStartDocking( const Point& rPos )
 {
@@ -331,7 +331,7 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
     return true;
 }
 
-// =======================================================================
+
 
 void DockingWindow::ImplInitDockingWindowData()
 {

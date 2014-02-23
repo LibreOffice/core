@@ -24,15 +24,15 @@
 #include <list>
 #include "connectivity/dbtoolsdllapi.hxx"
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     typedef sal_uInt16  ResourceId;
-    //====================================================================
+
     //= SharedResources
-    //====================================================================
+
     /** helper class for accessing resources shared by different libraries
         in the connectivity module
     */
@@ -145,9 +145,9 @@ namespace connectivity
                     const ::std::list< ::std::pair<const sal_Char* , OUString > > _aStringToSubstitutes) const;
     };
 
-//........................................................................
+
 } // namespace connectivity
-//........................................................................
+
 
 #endif // CONNECTIVITY_SHAREDRESOURCES_HXX
 

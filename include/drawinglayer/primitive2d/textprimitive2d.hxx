@@ -32,12 +32,12 @@
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class OutputDevice;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -174,7 +174,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
 

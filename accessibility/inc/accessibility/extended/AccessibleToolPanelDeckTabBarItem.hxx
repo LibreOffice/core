@@ -31,14 +31,14 @@ namespace svt
     class PanelTabBar;
 }
 
-//......................................................................................................................
+
 namespace accessibility
 {
-//......................................................................................................................
 
-    //==================================================================================================================
+
+
     //= AccessibleToolPanelDeckTabBarItem
-    //==================================================================================================================
+
     class AccessibleToolPanelDeckTabBarItem_Impl;
     typedef ::comphelper::OAccessibleExtendedComponentHelper AccessibleToolPanelDeckTabBarItem_Base;
     class AccessibleToolPanelDeckTabBarItem : public AccessibleToolPanelDeckTabBarItem_Base
@@ -90,9 +90,9 @@ namespace accessibility
         ::boost::scoped_ptr< AccessibleToolPanelDeckTabBarItem_Impl >   m_pImpl;
     };
 
-//......................................................................................................................
+
 } // namespace accessibility
-//......................................................................................................................
+
 
 #endif // ACC_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
 

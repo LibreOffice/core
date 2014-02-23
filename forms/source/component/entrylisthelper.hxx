@@ -28,17 +28,17 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     class OControlModel;
     class ControlModelLock;
 
-    //=====================================================================
+
     //= OEntryListHelper
-    //=====================================================================
+
     typedef ::cppu::ImplHelper3 <      ::com::sun::star::form::binding::XListEntrySink
                                 ,   ::com::sun::star::form::binding::XListEntryListener
                                 ,   ::com::sun::star::util::XRefreshable
@@ -180,9 +180,9 @@ namespace frm
         OEntryListHelper& operator=( const OEntryListHelper& ); // never implemented
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_ENTRYLISTHELPER_HXX

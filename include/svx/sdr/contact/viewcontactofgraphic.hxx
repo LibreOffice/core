@@ -23,14 +23,14 @@
 #include <sal/types.h>
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class SdrGrafObj;
 namespace drawinglayer { namespace attribute { class SdrLineFillShadowTextAttribute; }}
 class GraphicAttr;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -78,7 +78,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
 

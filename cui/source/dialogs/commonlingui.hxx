@@ -27,9 +27,9 @@
 #include <vcl/group.hxx>
 #include <vcl/dialog.hxx>
 
-//=============================================================================
+
 // SvxClickInfoCtr
-//=============================================================================
+
 
 class SvxClickInfoCtr: public Control
 {
@@ -53,9 +53,9 @@ protected:
 
 };
 
-//=============================================================================
+
 // SvxCommonLinguisticControl
-//=============================================================================
+
 class SvxCommonLinguisticControl : public Window
 {
 public:

@@ -22,14 +22,14 @@
 
 #include "propertyhandler.hxx"
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= EditPropertyHandler
-    //====================================================================
+
     class EditPropertyHandler;
     typedef HandlerComponentBase< EditPropertyHandler > EditPropertyHandler_Base;
     /** a property handler for any virtual string properties
@@ -63,9 +63,9 @@ namespace pcr
         bool    implHaveTextTypeProperty() const;
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_EDITPROPERTYHANDLER_HXX
 

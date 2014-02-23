@@ -105,7 +105,7 @@ template< bool polarity > struct ColorBlendFunctor32
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 template<> struct ColorTraits< Color >
 {

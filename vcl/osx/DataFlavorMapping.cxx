@@ -147,7 +147,7 @@ namespace // private
 } // namespace private
 
 
-//###########################
+
 
 /* A base class for other data provider.
  */
@@ -185,7 +185,7 @@ DataProviderBaseImpl::~DataProviderBaseImpl()
     }
 }
 
-//#################################
+
 
 class UniDataProvider : public DataProviderBaseImpl
 {
@@ -238,7 +238,7 @@ Any UniDataProvider::getOOoData()
   return oOOData;
 }
 
-//###########################
+
 
 class ByteSequenceDataProvider : public DataProviderBaseImpl
 {
@@ -292,7 +292,7 @@ Any ByteSequenceDataProvider::getOOoData()
 }
 
 
-//###########################
+
 
 class HTMLFormatDataProvider : public DataProviderBaseImpl
 {
@@ -357,7 +357,7 @@ Any HTMLFormatDataProvider::getOOoData()
   return oOOData;
 }
 
-//###########################
+
 
 class PNGDataProvider : public DataProviderBaseImpl
 {
@@ -423,7 +423,7 @@ Any PNGDataProvider::getOOoData()
   return oOOData;
 }
 
-//######################
+
 
 class FileListDataProvider : public DataProviderBaseImpl
 {
@@ -487,7 +487,7 @@ Any FileListDataProvider::getOOoData()
   return oOOData;
 }
 
-//###########################
+
 
 DataFlavorMapper::DataFlavorMapper()
 {

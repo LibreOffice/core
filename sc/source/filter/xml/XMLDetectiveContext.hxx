@@ -30,7 +30,7 @@
 class ScXMLImport;
 
 
-//___________________________________________________________________
+
 
 struct ScMyImpDetectiveObj
 {
@@ -44,7 +44,7 @@ struct ScMyImpDetectiveObj
 typedef ::std::vector< ScMyImpDetectiveObj > ScMyImpDetectiveObjVec;
 
 
-//___________________________________________________________________
+
 
 struct ScMyImpDetectiveOp
 {
@@ -75,7 +75,7 @@ public:
 };
 
 
-//___________________________________________________________________
+
 
 class ScXMLDetectiveContext : public SvXMLImportContext
 {
@@ -103,7 +103,7 @@ public:
 };
 
 
-//___________________________________________________________________
+
 
 class ScXMLDetectiveHighlightedContext : public SvXMLImportContext
 {
@@ -134,7 +134,7 @@ public:
 };
 
 
-//___________________________________________________________________
+
 
 class ScXMLDetectiveOperationContext : public SvXMLImportContext
 {

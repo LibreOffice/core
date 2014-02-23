@@ -26,9 +26,9 @@ namespace connectivity
 {
     namespace mozab
     {
-        //**************************************************************
+
         //************ Class: ODatabaseMetaData
-        //**************************************************************
+
 
         class ODatabaseMetaData : public ODatabaseMetaDataBase
         {

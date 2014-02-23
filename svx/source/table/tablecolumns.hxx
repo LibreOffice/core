@@ -25,13 +25,13 @@
 
 #include "tablemodel.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
+
 // TableColumns
-// -----------------------------------------------------------------------------
+
 
 class TableColumns : public ::cppu::WeakAggImplHelper1< ::com::sun::star::table::XTableColumns >
 {

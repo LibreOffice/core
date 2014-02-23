@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star {
 // Mapper-Classes for the various requirements on Document positions
 //        Swg - NodePosition is a SwIndex, which is used internally
 // EditEngine - ULONG to list of paragraphs
-// .....
+
 
 class SvxNodeIdx
 {
@@ -170,7 +170,7 @@ struct RTFPardAttrMapIds
 
 
 
-// -----------------------------------------------------------------------
+
 
 
 class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser

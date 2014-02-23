@@ -25,14 +25,14 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/awt/XSpinValue.hpp>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= VCLXSpinButton
-    //====================================================================
+
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XSpinValue
                                 >   VCLXSpinButton_Base;
 
@@ -84,9 +84,9 @@ namespace toolkit
         VCLXSpinButton& operator=( const VCLXSpinButton& ); // never implemented
     };
 
-//........................................................................
+
 } // namespacetoolkit
-//........................................................................
+
 
 #endif // TOOLKIT_INC_ INCLUDED_TOOLKIT_AWT_VCLXSPINBUTTON_HXX
 

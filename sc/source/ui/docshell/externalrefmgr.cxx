@@ -243,7 +243,7 @@ void removeRangeNamesBySrcDoc(ScRangeName& rRanges, sal_uInt16 nFileId)
 
 }
 
-// ============================================================================
+
 
 ScExternalRefCache::Table::Table()
     : meReferenced( REFERENCED_MARKED )
@@ -1228,7 +1228,7 @@ ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) 
     return &itrDoc->second;
 }
 
-// ============================================================================
+
 
 ScExternalRefLink::ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const OUString& rFilter) :
     ::sfx2::SvBaseLink(::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE),
@@ -1298,7 +1298,7 @@ IMPL_LINK_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
     return 0;
 }
 
-// ============================================================================
+
 
 static FormulaToken* convertToToken( ScDocument* pHostDoc, ScDocument* pSrcDoc, ScRefCellValue& rCell )
 {
@@ -1574,7 +1574,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefManager::getCacheTable(
     return maRefCache.getCacheTable(nFileId, rTabName, bCreateNew, pnIndex);
 }
 
-// ============================================================================
+
 
 ScExternalRefManager::LinkListener::LinkListener()
 {

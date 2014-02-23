@@ -52,11 +52,11 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-// -------------
-// - UnoDialog -
-// -------------
 
-////////////////////////////////////////////////////////////////////////
+// - UnoDialog -
+
+
+
 
 class UnoDialog
 {

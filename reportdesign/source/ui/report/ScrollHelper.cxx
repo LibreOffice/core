@@ -398,8 +398,8 @@ sal_uInt16 OScrollWindowHelper::getZoomFactor(SvxZoomType _eType) const
 {
     return m_aReportWindow.getZoomFactor(_eType);
 }
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

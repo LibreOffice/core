@@ -67,9 +67,9 @@ public:
                    const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& aXTransferable );
     virtual ~CXTDataObject() {}
 
-    //-----------------------------------------------------------------
+
     // ole interface implementation
-    //-----------------------------------------------------------------
+
 
     //IUnknown interface methods
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);
@@ -127,9 +127,9 @@ private:
     CFormatRegistrar                                                                       m_FormatRegistrar;
 };
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 class CEnumFormatEtc : public IEnumFORMATETC
 {

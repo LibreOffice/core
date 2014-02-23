@@ -40,7 +40,7 @@ class XMLPropertyHandlerFactory;
 class XMLPropertySetMapper;
 class SvXMLExportPropertyMapper;
 
-//______________________________________________________________________________
+
 
 struct XMLPageExportNameEntry
 {
@@ -48,7 +48,7 @@ struct XMLPageExportNameEntry
     OUString         sStyleName;
 };
 
-//______________________________________________________________________________
+
 
 class XMLOFF_DLLPUBLIC XMLPageExport : public UniRefBase
 {

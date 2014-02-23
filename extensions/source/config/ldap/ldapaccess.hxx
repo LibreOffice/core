@@ -42,10 +42,10 @@ namespace extensions { namespace config { namespace ldap {
 namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace ldap = css::ldap ;
-//------------------------------------------------------------------------------
+
 struct LdapUserProfile;
 
-//------------------------------------------------------------------------------
+
 /** Struct containing the information on LDAP connection */
 struct LdapDefinition
 {
@@ -129,7 +129,7 @@ private:
     LdapDefinition mLdapDefinition;
 } ;
 
-//------------------------------------------------------------------------------
+
 }} }
 
 #endif // EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILE_HXX_

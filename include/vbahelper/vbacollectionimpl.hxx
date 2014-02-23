@@ -37,11 +37,11 @@
 
 #include <vector>
 
-// ============================================================================
+
 
 typedef ::cppu::WeakImplHelper1< css::container::XEnumeration > EnumerationHelper_BASE;
 
-// ============================================================================
+
 
 /** A wrapper that holds a com.sun.star.container.XIndexAccess and provides a
     com.sun.star.container.XEnumeration.
@@ -75,7 +75,7 @@ private:
     sal_Int32 mnIndex;
 };
 
-// ============================================================================
+
 
 /** A wrapper that holds a com.sun.star.container.XEnumeration or a
     com.sun.star.container.XIndexAccess and provides an enumeration of VBA objects.
@@ -119,7 +119,7 @@ protected:
     css::uno::Reference< css::container::XEnumeration > mxEnumeration;
 };
 
-// ============================================================================
+
 
 // deprecated, use SimpleEnumerationBase instead!
 class VBAHELPER_DLLPUBLIC EnumerationHelperImpl : public EnumerationHelper_BASE

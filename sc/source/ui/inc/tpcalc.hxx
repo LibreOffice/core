@@ -28,7 +28,7 @@
 #include <svtools/stdctrl.hxx>
 #include "editfield.hxx"
 
-//===================================================================
+
 
 class ScDocOptions;
 
@@ -75,7 +75,7 @@ private:
 private:
     void            Init();
 
-    //------------------------------------
+
     // Handler:
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( CheckClickHdl, CheckBox* );

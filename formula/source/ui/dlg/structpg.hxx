@@ -30,9 +30,9 @@
 #include "formula/IFunctionDescription.hxx"
 #include "formula/omoduleclient.hxx"
 
-//============================================================================
 
-//============================================================================
+
+
 namespace formula
 {
 
@@ -64,7 +64,7 @@ public:
     void            LoseFocus();
 };
 
-//============================================================================
+
 
 class StructPage : public TabPage
                     , public IStructHelper

@@ -26,10 +26,10 @@
 #include <rtl/tencinfo.h>
 #include <rtl/strbuf.hxx>
 
-// ============================================================================
 
 
-// ============================================================================
+
+
 
 #define STREAM_BUFFER_SIZE 2048
 
@@ -66,7 +66,7 @@ bool operator==(const util::Date &i_rLeft, const util::Date &i_rRight)
         && i_rLeft.Day              == i_rRight.Day;
 }
 
-// ============================================================================
+
 
 /** Property representing a signed 32-bit integer value. */
 class SfxOleInt32Property : public SfxOlePropertyBase
@@ -85,7 +85,7 @@ private:
     sal_Int32           mnValue;
 };
 
-// ============================================================================
+
 
 /** Property representing a floating-point value. */
 class SfxOleDoubleProperty : public SfxOlePropertyBase
@@ -104,7 +104,7 @@ private:
     double              mfValue;
 };
 
-// ============================================================================
+
 
 /** Property representing a boolean value. */
 class SfxOleBoolProperty : public SfxOlePropertyBase
@@ -123,7 +123,7 @@ private:
     bool                mbValue;
 };
 
-// ============================================================================
+
 
 /** Base class for properties that contain a single string value. */
 class SfxOleStringPropertyBase : public SfxOlePropertyBase, public SfxOleStringHelper
@@ -146,7 +146,7 @@ private:
     OUString            maValue;
 };
 
-// ============================================================================
+
 
 /** Property representing a bytestring value. */
 class SfxOleString8Property : public SfxOleStringPropertyBase
@@ -163,7 +163,7 @@ private:
     virtual void        ImplSave( SvStream& rStrm );
 };
 
-// ============================================================================
+
 
 /** Property representing a Unicode string value. */
 class SfxOleString16Property : public SfxOleStringPropertyBase
@@ -176,7 +176,7 @@ private:
     virtual void        ImplSave( SvStream& rStrm );
 };
 
-// ============================================================================
+
 
 /** Property representing a filetime value as defined by the Windows API. */
 class SfxOleFileTimeProperty : public SfxOlePropertyBase
@@ -218,7 +218,7 @@ private:
     util::Date      maDate;
 };
 
-// ============================================================================
+
 
 /** Property representing a thumbnail picture.
 
@@ -240,7 +240,7 @@ private:
     uno::Sequence<sal_uInt8>    mData;
 };
 
-// ============================================================================
+
 
 /** Property representing a BLOB (which presumably stands for binary large
     object).
@@ -262,7 +262,7 @@ private:
     uno::Sequence<sal_uInt8>    mData;
 };
 
-// ============================================================================
+
 
 sal_uInt16 SfxOleTextEncoding::GetCodePage() const
 {
@@ -1297,7 +1297,7 @@ const SvGlobalName& SfxOlePropertySet::GetSectionGuid( SfxOleSectionType eSectio
     return saEmptyGuid;
 }
 
-// ============================================================================
+
 
 //} // namespace
 

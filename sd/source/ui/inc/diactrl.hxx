@@ -30,7 +30,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-//========================================================================
+
 // SdPagesField:
 
 class SdPagesField : public SvxMetricField
@@ -49,9 +49,9 @@ public:
     void            UpdatePagesField( const SfxUInt16Item* pItem );
 };
 
-//========================================================================
+
 // SdTbxCtlDiaPages:
-//========================================================================
+
 
 class SdTbxCtlDiaPages : public SfxToolBoxControl
 {

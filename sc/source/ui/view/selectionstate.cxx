@@ -23,7 +23,7 @@
 #include "viewdata.hxx"
 #include "markdata.hxx"
 
-// ============================================================================
+
 
 ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
     meType( SC_SELECTTYPE_NONE )
@@ -76,6 +76,6 @@ bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
     return bEqual;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

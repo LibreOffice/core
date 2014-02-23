@@ -71,7 +71,7 @@ LwpDocData::~LwpDocData()
 void LwpDocData::Read()
 {
     //XFDateTime
-    //////////////////////////////////////////////////////////////////////////
+
     //doc options
     //cOptionFlag
     m_DocOptions.nOptionFlag = m_pObjStrm->QuickReaduInt16();
@@ -90,7 +90,7 @@ void LwpDocData::Read()
     //cMarginMarksChar
     m_DocOptions.nMarginMarksChar = m_pObjStrm->QuickReaduInt16();
     m_pObjStrm->SkipExtra();
-    //////////////////////////////////////////////////////////////////////////
+
     //doc info
     //cDescription
     m_DocInfo.description.Read(m_pObjStrm);
@@ -132,7 +132,7 @@ void LwpDocData::Read()
 
     delete [] pCDLNList;
     delete [] pEditorList;
-    //////////////////////////////////////////////////////////////////////////
+
     //doc control
     //cGreeting
     m_DocControl.cGreeting.Read(m_pObjStrm);
@@ -161,7 +161,7 @@ void LwpDocData::Read()
     m_DocControl.nEditorVerification = m_pObjStrm->QuickReaduInt16();
 
     m_pObjStrm->SkipExtra();
-    //////////////////////////////////////////////////////////////////////////
+
     //editor list
     //numeditors
     sal_uInt16 numeditors = m_pObjStrm->QuickReaduInt16();

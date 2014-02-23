@@ -51,7 +51,7 @@ inline static Sequence< OUString > getSupportedServiceNames()
     return Sequence< OUString >( &aName, 1 );
 }
 
-//==================================================================================================
+
 class ServiceImpl
     : public XServiceInfo
     , public XPerformanceTest
@@ -198,7 +198,7 @@ public:
         { throw _aDummyRE; }
 };
 
-//##################################################################################################
+
 
 // XServiceInfo
 
@@ -220,9 +220,9 @@ Sequence< OUString > ServiceImpl::getSupportedServiceNames()
     return benchmark_object::getSupportedServiceNames();
 }
 
-// ...
 
-//==================================================================================================
+
+
 static Reference< XInterface > SAL_CALL ServiceImpl_create( const Reference< XMultiServiceFactory > & xSMgr )
 {
     return Reference< XInterface >( (XPerformanceTest *)new ServiceImpl( xSMgr ) );
@@ -231,9 +231,9 @@ static Reference< XInterface > SAL_CALL ServiceImpl_create( const Reference< XMu
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 
 extern "C"
@@ -259,7 +259,7 @@ sal_Bool SAL_CALL component_writeInfo(
     }
     return sal_False;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {

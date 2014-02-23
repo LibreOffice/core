@@ -26,9 +26,9 @@
 
 namespace connectivity
 {
-    //**************************************************************
+
     //************ Class: java.io.InputStream
-    //**************************************************************
+
     class java_io_Reader : public java_lang_Object,
                                 public ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream>
     {

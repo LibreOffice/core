@@ -57,12 +57,12 @@ GroupCompAccessArrays ist mit einem Element des GroupCompArrays verpointert.
 
 ========================================================================*/
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//========================================================================
+
+
     template <class ELEMENT, class LESS_COMPARE>
     sal_Int32 insert_sorted(::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, const LESS_COMPARE& _rCompareOp)
     {
@@ -94,7 +94,7 @@ namespace frm
         return sal_False;
     }
 
-//========================================================================
+
 class OGroupComp
 {
     OUString m_aName;
@@ -122,7 +122,7 @@ public:
 
 typedef std::vector<OGroupComp> OGroupCompArr;
 
-//========================================================================
+
 class OGroupComp;
 class OGroupCompAcc
 {
@@ -143,7 +143,7 @@ public:
 
 typedef std::vector<OGroupCompAcc> OGroupCompAccArr;
 
-//========================================================================
+
 class OGroup
 {
     OGroupCompArr       m_aCompArray;
@@ -173,7 +173,7 @@ public:
 typedef std::map<OUString, OGroup> OGroupArr;
 typedef std::vector<OGroupArr::iterator> OActiveGroups;
 
-//========================================================================
+
 class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
 {
     OGroup*         m_pCompGroup;           // Alle Components nach TabIndices sortiert
@@ -214,9 +214,9 @@ public:
 };
 
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_GROUPMANAGER_HXX
 

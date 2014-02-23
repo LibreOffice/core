@@ -145,7 +145,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
 
     LdapData data_;
 } ;
-//------------------------------------------------------------------------------
+
 }}}
 
 #endif // EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILE_HXX_

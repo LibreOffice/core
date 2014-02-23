@@ -40,11 +40,11 @@ class FmFormObj;
 class FmFormPage;
 class SdrObject;
 
-//==================================================================
+
 // FmFormPageImpl
 // lauscht an allen Containern, um festzustellen, wann Objecte
 // eingefuegt worden sind und wann diese entfernt wurden
-//==================================================================
+
 
 class SVX_DLLPRIVATE FmFormPageImpl
 {

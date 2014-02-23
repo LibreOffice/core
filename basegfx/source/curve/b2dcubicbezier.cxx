@@ -30,7 +30,7 @@
 static double fMultFactUnsharpen = FACTOR_FOR_UNSHARPEN;
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -323,7 +323,7 @@ namespace basegfx
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {

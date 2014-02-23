@@ -25,12 +25,12 @@
 #include <svx/svddrgv.hxx>
 #include <svx/svddrgmt.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class SdrDragView;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragMovHdl
 
 class SdrDragMovHdl : public SdrDragMethod
@@ -51,7 +51,7 @@ public:
     virtual Pointer GetSdrDragPointer() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragRotate
 
 class SdrDragRotate : public SdrDragMethod
@@ -77,7 +77,7 @@ public:
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragShear
 
 class SdrDragShear : public SdrDragMethod
@@ -106,7 +106,7 @@ public:
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragMirror
 
 class SdrDragMirror : public SdrDragMethod
@@ -133,7 +133,7 @@ public:
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragGradient
 
 class SdrDragGradient : public SdrDragMethod
@@ -159,7 +159,7 @@ public:
     virtual void CancelSdrDrag();
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragCrook
 
 class SdrDragCrook : public SdrDragMethod
@@ -211,7 +211,7 @@ public:
     virtual void applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragDistort
 
 class SdrDragDistort : public SdrDragMethod
@@ -245,7 +245,7 @@ public:
     virtual void applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragCrop
 
 // derive from SdrDragObjOwn to have handles aligned to object when it
@@ -262,7 +262,7 @@ public:
     virtual Pointer GetSdrDragPointer() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDDRGM1_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

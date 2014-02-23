@@ -28,11 +28,11 @@
 namespace cppu
 {
 
-//##################################################################################################
-//#### equality ####################################################################################
-//##################################################################################################
 
-//--------------------------------------------------------------------------------------------------
+//#### equality ####################################################################################
+
+
+
 inline bool _equalObject(
     void * pI1, void * pI2,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -62,13 +62,13 @@ inline bool _equalObject(
     return bRet;
 }
 
-//==================================================================================================
+
 bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW(());
-//--------------------------------------------------------------------------------------------------
+
 inline bool _equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -99,13 +99,13 @@ inline bool _equalStruct(
     }
     return true;
 }
-//==================================================================================================
+
 bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW(());
-//--------------------------------------------------------------------------------------------------
+
 inline bool _equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
@@ -262,7 +262,7 @@ inline bool _equalSequence(
         return false;
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 inline bool _equalData(
     void * pDest,
     typelib_TypeDescriptionReference * pDestType, typelib_TypeDescription * pDestTypeDescr,

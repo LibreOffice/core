@@ -66,7 +66,7 @@ private:
     TokenId             nAddToken;  // ')+1.0'
     TokenId             nSubToken;  // ~
     TokenId             n0Token;    // '0.0';
-    // ---------------------------------------------------------------
+
     static FUNC_TYPE    IndexToType( sal_uInt8 );
     static DefTokenId   IndexToToken( sal_uInt8 );
     static FUNC_TYPE    IndexToTypeWK123( sal_uInt8 );
@@ -76,7 +76,7 @@ private:
                             ScSingleRefData& rSRD );
     bool                bWK3;       // alternative Codeumsetzung statt fuer < WK1
     bool                bWK123;     // alternative for 123
-    // -------------------------------------------------------------------
+
     void                ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nFlags );
     inline void         ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nFlags );
     void                IncToken( TokenId &rParam );

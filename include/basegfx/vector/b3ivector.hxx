@@ -214,7 +214,7 @@ namespace basegfx
     };
 
     // external operators
-    //////////////////////////////////////////////////////////////////////////
+
 
     /** Transform vector by given transformation matrix.
 

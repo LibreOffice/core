@@ -27,14 +27,14 @@ class SvTreeListBox;
 class VclSimpleEvent;
 class VclWindowEvent;
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ListBoxAccessibleBase
-    //====================================================================
+
     /** helper class which couples it's life time to the life time of an
         SvTreeListBox
     */
@@ -80,9 +80,9 @@ namespace accessibility
         ListBoxAccessibleBase& operator=( const ListBoxAccessibleBase& );   // never implemented
     };
 
-//........................................................................
+
 }   // namespace accessibility
-//........................................................................
+
 
 #endif // ACCESSIBILITY_EXT_LISTBOX_ACCESSIBLE
 

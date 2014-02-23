@@ -22,9 +22,9 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
-//----------------------------------------------
+
 // class SdrTextLeft/Right/Upper/LowerDistItem
-//----------------------------------------------
+
 class SdrTextLeftDistItem: public SdrMetricItem {
 public:
     SdrTextLeftDistItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_LEFTDIST,nHgt)  {}

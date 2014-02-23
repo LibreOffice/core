@@ -86,9 +86,9 @@ public:
     virtual ~ODateTimeDialog();
     virtual short   Execute();
 };
-// =============================================================================
+
 } // namespace rptui
-// =============================================================================
+
 #endif // RPTUI_DATETIME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

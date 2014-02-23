@@ -32,10 +32,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -51,9 +51,9 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    //==================================================================
+
     //= OBrowserLine
-    //==================================================================
+
     DBG_NAME(OBrowserLine)
 
 
@@ -513,8 +513,8 @@ namespace pcr
         }
         return 0;
     }
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

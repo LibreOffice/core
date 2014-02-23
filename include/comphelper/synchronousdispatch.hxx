@@ -35,14 +35,14 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= SynchronousDispatch
-    //====================================================================
+
     /** a helper class for working with the dispatch interface replacing
         loadComponentFromURL
     */
@@ -57,9 +57,9 @@ namespace comphelper
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &lArguments );
     };
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_SYNCHRONOUSDISPATCH_HXX
 

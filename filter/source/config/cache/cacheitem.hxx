@@ -51,7 +51,7 @@ struct BaseLock
 
 typedef ::comphelper::SequenceAsVector< OUString > OUStringList;
 
-//_______________________________________________
+
 
 /** @short  represent an item of a FilterCache
             instance.
@@ -62,15 +62,15 @@ typedef ::comphelper::SequenceAsVector< OUString > OUStringList;
  */
 class CacheItem : public ::comphelper::SequenceAsHashMap
 {
-    //-------------------------------------------
+
     public:
 
-        //---------------------------------------
+
         /** @short  creates an empty item.
           */
         CacheItem();
 
-        //---------------------------------------
+
 
         /** @short  update only properties, which are given by the
                     specified rItem.
@@ -85,7 +85,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
          */
         void update(const CacheItem& rUpdateItem);
 
-        //---------------------------------------
+
 
         /** @short  check, if the given properties exists
                     at this item.
@@ -102,7 +102,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
          */
         sal_Bool haveProps(const CacheItem& lProps) const;
 
-        //---------------------------------------
+
 
         /** @short  check, if the given properties dont exists
                     at this item.
@@ -119,7 +119,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
          */
         sal_Bool dontHaveProps(const CacheItem& lProps) const;
 
-        //---------------------------------------
+
 
         /** @short  check, if the given properties dont exists
                     at this item.
@@ -136,7 +136,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
          */
         sal_Bool excludeProps(const CacheItem& lProps) const;
 
-        //---------------------------------------
+
 
         /** @short  because we know two UIName properties
                     (a list with all locales and the value
@@ -150,7 +150,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
          */
         void validateUINames(const OUString& sActLocale);
 
-        //---------------------------------------
+
 
         /** @short  convert this structure to a seq< PropertyValue >
                     and ignore all empty properties!
@@ -167,7 +167,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
         css::uno::Sequence< css::beans::PropertyValue > getAsPackedPropertyValueList();
 };
 
-//_______________________________________________
+
 
 /** @short  represent an item list of a FilterCache
             instance.
@@ -177,7 +177,7 @@ typedef ::boost::unordered_map< OUString                    ,
                          OUStringHash                ,
                          ::std::equal_to< OUString > > CacheItemList;
 
-//_______________________________________________
+
 
 /** @short  supports registration of multiple key to
             another string information.
@@ -196,7 +196,7 @@ typedef ::boost::unordered_map< OUString                    ,
                          OUStringHash                ,
                          ::std::equal_to< OUString > > CacheItemRegistration;
 
-//_______________________________________________
+
 
 /** @short  is used to collect all matching types of an URL
             during type detection.

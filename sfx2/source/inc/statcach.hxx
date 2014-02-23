@@ -114,7 +114,7 @@ public:
                             { xMyDispatch = rDisp; }
 };
 
-//--------------------------------------------------------------------
+
 
 // clears Cached-Item
 
@@ -123,7 +123,7 @@ inline void SfxStateCache::ClearCache()
     bItemDirty = sal_True;
 }
 
-//--------------------------------------------------------------------
+
 
 // registeres a item representing this function
 
@@ -138,7 +138,7 @@ inline SfxControllerItem* SfxStateCache::ChangeItemLink( SfxControllerItem* pNew
     }
     return pOldBinding;
 }
-//--------------------------------------------------------------------
+
 
 // returns the func binding which becomes called on spreading states
 
@@ -146,7 +146,7 @@ inline SfxControllerItem* SfxStateCache::GetItemLink() const
 {
     return pController;
 }
-//--------------------------------------------------------------------
+
 
 inline sal_uInt16 SfxStateCache::GetId() const
 {

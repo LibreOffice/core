@@ -24,16 +24,16 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
+
 
     struct GridTableRenderer_Impl;
 
-    //====================================================================
+
     //= GridTableRenderer
-    //====================================================================
+
     /** a default implementation for the ->ITableRenderer interface
 
         This class is able to paint a table grid, table headers, and cell
@@ -112,9 +112,9 @@ namespace svt { namespace table
                         OUString const & i_text
                    );
     };
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TABLE_GRIDTABLERENDERER_HXX
 

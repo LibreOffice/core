@@ -31,18 +31,18 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//_______________________________________________
+
 // namespaces
 
 namespace comphelper{
 
 
-//-----------------------------------------------
+
 class COMPHELPER_DLLPUBLIC ConfigurationHelper
 {
     public:
 
-    //-----------------------------------------------
+
     /** specify all possible modes, which can be used to open a configuration access.
      *
      *  @see    openConfig()
@@ -61,7 +61,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
         E_LAZY_WRITE = 4
     };
 
-    //-----------------------------------------------
+
     /** returns access to the specified configuration package.
      *
      *  This method should be used, if e.g. more then one request to the same
@@ -91,7 +91,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
                                                                   const OUString&                                    sPackage,
                                                                         sal_Int32                                           eMode   );
 
-    //-----------------------------------------------
+
     /** reads the value of an existing(!) configuration key,
      *  which is searched relative to the specified configuration access.
      *
@@ -120,7 +120,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
                                          const OUString&                            sRelPath,
                                          const OUString&                            sKey    );
 
-    //-----------------------------------------------
+
     /** writes a new value for an existing(!) configuration key,
      *  which is searched relative to the specified configuration access.
      *
@@ -151,7 +151,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
                                  const OUString&                            sKey    ,
                                  const css::uno::Any&                              aValue  );
 
-    //-----------------------------------------------
+
     /** it checks if the specified set node exists ... or create an empty one
      *  otherwise.
      *
@@ -184,7 +184,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
                                                                              const OUString&                            sRelPathToSet,
                                                                              const OUString&                            sSetNode     );
 
-    //-----------------------------------------------
+
     /** commit all changes made on the specified configuration access.
      *
      *  This method must be used in combination with openConfig().
@@ -199,7 +199,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      */
     static void flush(const css::uno::Reference< css::uno::XInterface >& xCFG);
 
-    //-----------------------------------------------
+
     /** does the same then openConfig() & readRelativeKey() together.
      *
      * This method should be used for reading one key at one code place only.
@@ -215,7 +215,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
                                        const OUString&                                       sKey    ,
                                              sal_Int32                                              eMode   );
 
-    //-----------------------------------------------
+
     /** does the same then openConfig() / writeRelativeKey() & flush() together.
      *
      * This method should be used for writing one key at one code place only.

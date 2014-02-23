@@ -50,10 +50,10 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::sdbc::XCloseable> OCommonStatement_IBASE;
 
-        //**************************************************************
+
         //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
-        //**************************************************************
+
         class OCommonStatement;
         typedef ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >  OCommonStatement_SBASE;
 

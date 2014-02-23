@@ -201,7 +201,7 @@ public:
     EditView*   GetView()       { return pView; }
 };
 
-// ----------------------------------------------------------------------
+
 //  class ImpEditView
 //  ---------------------------------------------------------------------
 class ImpEditView : public vcl::unohelper::DragAndDropClient
@@ -388,9 +388,9 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
 
 private:
 
-    // ================================================================
+
     // Data ...
-    // ================================================================
+
 
     // Document Specific data ...
     ParaPortionList     aParaPortionList;       // Formatting
@@ -502,9 +502,9 @@ private:
     bool            bFirstWordCapitalization:1;   // specifies if auto-correction should capitalize the first word or not
     bool            mbLastTryMerge:1;
 
-    // ================================================================
+
     // Methods...
-    // ================================================================
+
 
     void                CursorMoved( ContentNode* pPrevNode );
     void                ParaAttribsChanged( ContentNode* pNode );

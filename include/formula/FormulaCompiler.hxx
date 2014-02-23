@@ -407,9 +407,9 @@ private:
     mutable NonConstOpCodeMapPtr  mxSymbolsEnglishXL; // English Excel symbols (for VBA formula parsing)
     mutable NonConstOpCodeMapPtr  mxSymbolsOOXML;     // Excel OOXML symbols
 };
-// =============================================================================
+
 } // formula
-// =============================================================================
+
 
 #endif // INCLUDED_FORMULA_FORMULACOMPILER_HXX
 

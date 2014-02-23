@@ -30,7 +30,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Used as base for sheet data context classes. Provides fast access to often
     used converter objects and sheet index, to improve performance.
@@ -48,7 +48,7 @@ struct SheetDataContextBase
     virtual             ~SheetDataContextBase();
 };
 
-// ============================================================================
+
 
 /** This class implements importing the sheetData element.
 
@@ -133,7 +133,7 @@ private:
     sal_Int32 mnCol;
 };
 
-// ============================================================================
+
 
 
 } // namespace xls

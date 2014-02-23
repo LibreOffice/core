@@ -37,13 +37,13 @@
 
 #include <vcl/timer.hxx>
 
-//.........................................................................
+
 namespace frm
 {
 
-//==================================================================
+
 // OComboBoxModel
-//==================================================================
+
 class OComboBoxModel
             :public OBoundControlModel
             ,public OEntryListHelper
@@ -144,9 +144,9 @@ protected:
     DECLARE_XCLONEABLE();
 };
 
-//==================================================================
+
 // OComboBoxControl
-//==================================================================
+
 
 class OComboBoxControl : public OBoundControl
 {
@@ -158,9 +158,9 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_COMBOBOX_HXX
 

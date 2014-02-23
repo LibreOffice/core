@@ -30,7 +30,7 @@ namespace oox { class TokenMap; }
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::sun::star::xml::sax::XFastTokenHandler > FastTokenHandler_BASE;
 
@@ -62,7 +62,7 @@ private:
     const TokenMap&     mrTokenMap;     ///< Reference to global token map singleton.
 };
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

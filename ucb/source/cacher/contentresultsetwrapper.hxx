@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 
-//=========================================================================
+
 
 class ContentResultSetWrapperListener;
 class ContentResultSetWrapper
@@ -49,13 +49,13 @@ class ContentResultSetWrapper
 {
 protected:
 
-    //--------------------------------------------------------------------------
+
     //class PropertyChangeListenerContainer_Impl.
 
     typedef cppu::OMultiTypeInterfaceContainerHelperVar
     < OUString, OUStringHash >
     PropertyChangeListenerContainer_Impl;
-    //--------------------------------------------------------------------------
+
     // class ReacquireableGuard
 
     class ReacquireableGuard
@@ -101,7 +101,7 @@ protected:
         }
     };
 
-    //-----------------------------------------------------------------
+
     //members
 
     //my Mutex
@@ -146,7 +146,7 @@ private:
     PropertyChangeListenerContainer_Impl*
                             m_pVetoableChangeListeners;
 
-    //-----------------------------------------------------------------
+
     //methods:
 private:
     PropertyChangeListenerContainer_Impl* SAL_CALL
@@ -156,7 +156,7 @@ private:
     impl_getVetoableChangeListenerContainer();
 
 protected:
-    //-----------------------------------------------------------------
+
 
     ContentResultSetWrapper( com::sun::star::uno::Reference<
                         com::sun::star::sdbc::XResultSet > xOrigin );
@@ -195,16 +195,16 @@ protected:
 
 public:
 
-    //-----------------------------------------------------------------
+
     // XInterface
-    //-----------------------------------------------------------------
+
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XComponent
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     dispose() throw( com::sun::star::uno::RuntimeException );
 
@@ -218,26 +218,26 @@ public:
         com::sun::star::lang::XEventListener >& Listener )
             throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     //XCloseable
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     close()
         throw( com::sun::star::sdbc::SQLException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     //XResultSetMetaDataSupplier
-    //-----------------------------------------------------------------
+
     virtual com::sun::star::uno::Reference<
                 com::sun::star::sdbc::XResultSetMetaData > SAL_CALL
     getMetaData()
         throw( com::sun::star::sdbc::SQLException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XPropertySet
-    //-----------------------------------------------------------------
+
     virtual com::sun::star::uno::Reference<
                 com::sun::star::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo()
@@ -290,9 +290,9 @@ public:
                com::sun::star::lang::WrappedTargetException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // own methods
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
         impl_disposing( const com::sun::star::lang::EventObject& Source )
         throw( com::sun::star::uno::RuntimeException );
@@ -306,9 +306,9 @@ public:
         throw( com::sun::star::beans::PropertyVetoException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XContentAccess
-    //-----------------------------------------------------------------
+
     virtual OUString SAL_CALL
     queryContentIdentifierString()
         throw( com::sun::star::uno::RuntimeException );
@@ -323,9 +323,9 @@ public:
     queryContent()
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XResultSet
-    //-----------------------------------------------------------------
+
     virtual sal_Bool SAL_CALL
     next()
         throw( com::sun::star::sdbc::SQLException,
@@ -400,9 +400,9 @@ public:
         throw( com::sun::star::sdbc::SQLException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XRow
-    //-----------------------------------------------------------------
+
     virtual sal_Bool SAL_CALL
     wasNull()
         throw( com::sun::star::sdbc::SQLException,
@@ -512,7 +512,7 @@ public:
                com::sun::star::uno::RuntimeException );
 };
 
-//=========================================================================
+
 
 class ContentResultSetWrapperListener
         : public cppu::OWeakObject
@@ -527,34 +527,34 @@ public:
 
     virtual ~ContentResultSetWrapperListener();
 
-    //-----------------------------------------------------------------
+
     // XInterface
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     //XEventListener
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
         disposing( const com::sun::star::lang::EventObject& Source )
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     //XPropertyChangeListener
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     propertyChange( const com::sun::star::beans::PropertyChangeEvent& evt )
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     //XVetoableChangeListener
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     vetoableChange( const com::sun::star::beans::PropertyChangeEvent& aEvent )
         throw( com::sun::star::beans::PropertyVetoException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // own methods:
     void SAL_CALL impl_OwnerDies();
 };

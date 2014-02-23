@@ -30,10 +30,10 @@
 
 class SvtIconChoiceCtrl;
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
+
 
     typedef ::cppu::ImplHelper2<  ::com::sun::star::accessibility::XAccessible
                                 , ::com::sun::star::accessibility::XAccessibleSelection> AccessibleIconChoiceCtrl_BASE;
@@ -103,9 +103,9 @@ namespace accessibility
         void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     };
 
-//........................................................................
+
 }// namespace accessibility
-//........................................................................
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBLEICONCHOICECTRL_HXX_
 

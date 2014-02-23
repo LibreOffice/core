@@ -24,16 +24,16 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 class SimpleResMgr;
-//.........................................................................
+
 namespace reportdesign
 {
 
 #define RPT_RESSTRING(id,_rM) ResourceManager::loadString(id,_rM)
 
-    //==================================================================
+
     //= ResourceManager
     //= handling resources within the DBA-Core library
-    //==================================================================
+
     class ResourceManager
     {
         static SimpleResMgr*    m_pImpl;
@@ -62,9 +62,9 @@ namespace reportdesign
         static OUString loadString(sal_uInt16 _nResId,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >& _rM);
     };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // REPORTDESIGN_CORE_RESOURCE_HXX_
 

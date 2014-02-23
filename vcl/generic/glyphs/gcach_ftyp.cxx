@@ -112,9 +112,9 @@ static int nDefaultPrioEmbedded    = 2;
 static int nDefaultPrioAutoHint    = 1;
 static int nDefaultPrioAntiAlias   = 1;
 
-// =======================================================================
+
 // FreetypeManager
-// =======================================================================
+
 
 FtFontFile::FtFontFile( const OString& rNativeFileName )
 :   maNativeFileName( rNativeFileName ),
@@ -227,7 +227,7 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 }
 #endif
 
-// =======================================================================
+
 
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic)
@@ -379,7 +379,7 @@ void FtFontInfo::AnnounceFont( ImplDevFontList* pFontList )
     pFontList->Add( pFD );
 }
 
-// =======================================================================
+
 
 FreetypeManager::FreetypeManager()
 :   mnMaxFontId( 0 )
@@ -483,7 +483,7 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
     return pNew;
 }
 
-// =======================================================================
+
 
 ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplDevFontAttributes& rDFA )
 :   PhysicalFontFace( rDFA, IFTSFONT_MAGIC ),
@@ -501,9 +501,9 @@ ImplFontEntry* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) co
     return pEntry;
 }
 
-// =======================================================================
+
 // ServerFont
-// =======================================================================
+
 
 ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
 :   maGlyphList( 0),
@@ -1729,7 +1729,7 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
     {
         const sal_uLong nScriptTag      = GetUInt( pScriptHeader+0 ); // e.g. hani/arab/kana/hang
         const sal_uInt16 nOfsScriptTable= GetUShort( pScriptHeader+4 );
-        pScriptHeader += 6; //###
+        pScriptHeader += 6;
         if( (nScriptTag != nRequestedScript) && (nRequestedScript != 0) )
             continue;
 
@@ -1945,6 +1945,6 @@ GraphiteFaceWrapper* ServerFont::GetGraphiteFace() const
 }
 #endif
 
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

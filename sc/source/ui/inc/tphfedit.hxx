@@ -33,7 +33,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakref.hxx>
 
-//===================================================================
+
 
 class ScHeaderEditEngine;
 class ScPatternAttr;
@@ -98,7 +98,7 @@ private:
     Link                aObjectSelectLink;
 };
 
-//===================================================================
+
 class SC_DLLPUBLIC ScExtIButton : public ImageButton
 {
 private:

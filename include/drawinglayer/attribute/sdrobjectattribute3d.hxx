@@ -28,7 +28,7 @@
 #include <com/sun/star/drawing/TextureMode.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace attribute {
@@ -36,7 +36,7 @@ namespace drawinglayer { namespace attribute {
     class MaterialAttribute3D;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -92,7 +92,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDROBJECTATTRIBUTE3D_HXX
 

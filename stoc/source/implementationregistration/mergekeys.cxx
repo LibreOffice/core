@@ -45,7 +45,7 @@ struct Link
 };
 typedef ::std::vector< Link > t_links;
 
-//==================================================================================================
+
 static void mergeKeys(
     Reference< registry::XRegistryKey > const & xDest,
     Reference< registry::XRegistryKey > const & xSource,
@@ -141,7 +141,7 @@ static void mergeKeys(
     }
 }
 
-//==================================================================================================
+
 void mergeKeys(
     Reference< registry::XRegistryKey > const & xDest,
     Reference< registry::XRegistryKey > const & xSource )

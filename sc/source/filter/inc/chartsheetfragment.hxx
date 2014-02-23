@@ -25,7 +25,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 class ChartsheetFragment : public WorksheetFragmentBase
 {

@@ -24,14 +24,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
 
-    //========================================================================
+
+
     //= ControlCharacterDialog
-    //========================================================================
+
     class ControlCharacterDialog : public SfxTabDialog
     {
     public:
@@ -66,9 +66,9 @@ namespace pcr
     private:
         sal_uInt16 m_nCharsId;
     };
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_FONTDIALOG_HXX_
 

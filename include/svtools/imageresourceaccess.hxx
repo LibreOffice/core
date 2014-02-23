@@ -26,14 +26,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 class SvStream;
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= GraphicAccess
-    //====================================================================
+
     /** helper class for obtaining streams (which also can be used with the ImageProducer)
         from a resource
     */
@@ -72,9 +72,9 @@ namespace svt
                 );
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // DBA14_ INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 

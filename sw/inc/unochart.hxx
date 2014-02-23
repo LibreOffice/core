@@ -63,11 +63,11 @@ struct SwRangeDescriptor;
 class SwSelBoxes;
 class SwFrmFmt;
 
-//////////////////////////////////////////////////////////////////////
+
 
 bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const OUString &rCellRangeName );
 
-//////////////////////////////////////////////////////////////////////
+
 
 class SwChartHelper
 {
@@ -75,7 +75,7 @@ public:
     static void DoUpdateAllCharts( SwDoc* pDoc );
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 class SwChartLockController_Helper
 {
@@ -102,7 +102,7 @@ public:
     void Disconnect();
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 typedef cppu::WeakImplHelper4
 <
@@ -206,7 +206,7 @@ public:
     void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, sal_uInt16 nLines, sal_Bool bBehind );
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 typedef cppu::WeakImplHelper2
 <
@@ -239,7 +239,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 typedef cppu::WeakImplHelper10
 <
@@ -350,7 +350,7 @@ public:
     bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 typedef cppu::WeakImplHelper4
 <
@@ -415,7 +415,7 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 #endif
 

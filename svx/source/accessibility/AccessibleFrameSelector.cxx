@@ -69,7 +69,7 @@ typedef ::com::sun::star::awt::Rectangle    AwtRectangle;
 typedef ::com::sun::star::awt::KeyEvent     AwtKeyEvent;
 typedef ::com::sun::star::awt::FocusEvent   AwtFocusEvent;
 
-// ============================================================================
+
 
 AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
@@ -705,7 +705,7 @@ void AccFrameSelector::Invalidate()
     maPropertyListeners.disposeAndClear( aEvent );
 }
 
-// ============================================================================
+
 
 } // namespace a11y
 } // namespace svx

@@ -49,9 +49,9 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
 DEFINE_XINTERFACE_11    (   MenuBarWrapper                                                    ,
                             UIConfigElementWrapperBase                                        ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider          ),

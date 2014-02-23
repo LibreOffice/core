@@ -86,9 +86,9 @@ public:
 
   ~AquaClipboard();
 
-  //------------------------------------------------
+
   // XClipboard
-  //------------------------------------------------
+
 
   virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
     throw( ::com::sun::star::uno::RuntimeException );
@@ -100,16 +100,16 @@ public:
   virtual OUString SAL_CALL getName()
     throw( ::com::sun::star::uno::RuntimeException );
 
-  //------------------------------------------------
+
   // XClipboardEx
-  //------------------------------------------------
+
 
   virtual sal_Int8 SAL_CALL getRenderingCapabilities()
     throw( ::com::sun::star::uno::RuntimeException );
 
-  //------------------------------------------------
+
   // XClipboardNotifier
-  //------------------------------------------------
+
 
   virtual void SAL_CALL addClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
     throw( ::com::sun::star::uno::RuntimeException );
@@ -117,15 +117,15 @@ public:
   virtual void SAL_CALL removeClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
     throw( ::com::sun::star::uno::RuntimeException );
 
-  //------------------------------------------------
+
   // XFlushableClipboard
-  //------------------------------------------------
+
 
   virtual void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
 
-  //------------------------------------------------
+
   // XServiceInfo
-  //------------------------------------------------
+
 
   virtual OUString SAL_CALL getImplementationName()
     throw(::com::sun::star::uno::RuntimeException);

@@ -31,10 +31,10 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
 using namespace ::com::sun::star;
 
@@ -141,8 +141,8 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
 
 }
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include <memory>
 #include <svx/SpellDialogChildWindow.hxx>
 
-// ============================================================================
+
 
 class ScConversionEngineBase;
 class ScSelectionState;
@@ -92,7 +92,7 @@ private:
     bool                mbOldIdleEnabled;
 };
 
-// ============================================================================
+
 
 #endif
 

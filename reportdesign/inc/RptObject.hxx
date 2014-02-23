@@ -130,9 +130,9 @@ public:
     static SdrObject* createObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
     static sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
 };
-//============================================================================
+
 // OCustomShape
-//============================================================================
+
 class REPORTDESIGN_DLLPUBLIC OCustomShape: public SdrObjCustomShape , public OObjectBase
 {
     friend class OReportPage;
@@ -173,9 +173,9 @@ private:
     virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape );
 };
 
-//============================================================================
+
 // OOle2Obj
-//============================================================================
+
 class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
 {
     friend class OReportPage;
@@ -224,9 +224,9 @@ public:
     void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 };
 
-//============================================================================
+
 // OUnoObject
-//============================================================================
+
 class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
 {
     friend class OReportPage;
@@ -280,9 +280,9 @@ private:
     void    impl_initializeModel_nothrow();
 };
 
-//============================================================================
+
 } // rptui
-//============================================================================
+
 #endif // _REPORT_RPTUIOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

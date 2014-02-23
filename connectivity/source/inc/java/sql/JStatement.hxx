@@ -49,9 +49,9 @@ namespace connectivity
 
     class java_sql_Connection;
 
-    //**************************************************************
+
     //************ Class: java.sql.Statement
-    //**************************************************************
+
     class java_sql_Statement_Base : public comphelper::OBaseMutex,
                                     public  java_sql_Statement_BASE,
                                     public  java_lang_Object,

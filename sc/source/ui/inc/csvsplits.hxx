@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// ============================================================================
+
 
 #ifndef _SC_CSVSPLITS_HXX
 #define _SC_CSVSPLITS_HXX
@@ -27,7 +27,7 @@
 #include <vector>
 
 
-// ============================================================================
+
 
 /** Constant for an invalid vector index. */
 const sal_uInt32 CSV_VEC_NOTFOUND   = SAL_MAX_UINT32;
@@ -35,7 +35,7 @@ const sal_uInt32 CSV_VEC_NOTFOUND   = SAL_MAX_UINT32;
 const sal_Int32 CSV_POS_INVALID     = -1;
 
 
-// ----------------------------------------------------------------------------
+
 
 /** A vector of column splits that supports inserting, removing and moving splits. */
 class ScCsvSplits
@@ -89,7 +89,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 #endif
 

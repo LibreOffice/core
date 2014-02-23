@@ -24,13 +24,13 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
-//........................................................................
-namespace comphelper {
-//........................................................................
 
-    //====================================================================
+namespace comphelper {
+
+
+
     //= DocumentInfo
-    //====================================================================
+
     class COMPHELPER_DLLPUBLIC DocumentInfo
     {
     public:
@@ -42,9 +42,9 @@ namespace comphelper {
         DocumentInfo(); // never implemented
     };
 
-//........................................................................
+
 }   // namespace comphelper
-//........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_DOCUMENTINFO_HXX
 

@@ -40,7 +40,7 @@
 #include "cellvalue.hxx"
 #include "svl/sharedstring.hxx"
 
-//==================================================================
+
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {

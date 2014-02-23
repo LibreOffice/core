@@ -642,9 +642,9 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
     Any inrefDecimal, outrefDecimal;
 
     Reference<XInterface> xIntFoo(getComObject(L"AxTestComponents.Foo"));
-    //###################################################################################
+
     //  in and out parameter
-    //###################################################################################
+
     sal_Bool aBool = sal_True;
     inBool.setValue(&aBool, getCppuBooleanType());
     inv->invoke(OUString(L"inBool"), Sequence< Any > ( &inBool, 1), seqIndices, seqOut);
@@ -754,9 +754,9 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
         || inCY != outCY
         || inDate != outDate || inDecimal != outDecimal || inSCode != outSCode)
         return false;
-    //###################################################################################
+
     //  in/out parameter
-    //###################################################################################
+
     outBool = Any();
     seqIndices.realloc( 0);
     seqOut.realloc(0);
@@ -841,9 +841,9 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
         || inDate != outDate || inDecimal != outDecimal || inSCode != outSCode)
         return false;
 
-    //###################################################################################
+
     //  in byref parameters
-    //###################################################################################
+
 
     inrefLong <<= (sal_Int32) 1234;
     inv->invoke(OUString(L"inrefLong"), Sequence<Any>( & inrefLong, 1), seqIndices, seqOut);
@@ -872,9 +872,9 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
         return false;
 
 
-    //###################################################################################
+
     //  mixed parameter
-    //###################################################################################
+
     // mixed1
     seqIndices.realloc( 0);
     seqOut.realloc(0);
@@ -919,9 +919,9 @@ bool doSimpleSequenceTest(const Reference<XInvocation> & inv)
     arAnyStrTmp[2]<<= arStr[2];
     Sequence<Any> seq_1( arAnyStrTmp, 3);
     inArAny <<= seq_1;
-    //###################################################################################
+
     //  in, out Sequences
-    //###################################################################################
+
     //Test sequence containing Anys of Strings
     inv->invoke(OUString(L"inArray"), Sequence< Any > ( & inArAny, 1), seqIndices, seqOut);
     seqIndices.realloc(0);
@@ -1009,9 +1009,9 @@ bool doSimpleSequenceTest(const Reference<XInvocation> & inv)
         || ! equalSequences(inArString, outArString)  || ! equalSequences(inArObject, outArObject))
         return false;
 
-    //###################################################################################
+
     //  in/out Sequences
-    //###################################################################################
+
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"inoutArray"), Sequence< Any >( & inArString, 1), seqIndices, seqOut);
@@ -1108,9 +1108,9 @@ HRESULT doTest()
 
 
 //
-//  //###################################################################################
+//
 //  //  in multi Sequences
-//  //###################################################################################
+//
 //  // inMulDimArrayLong
     sal_Int32 arLongi[]={1,2,3};
     sal_Int32 arLongi2[]={4,5,6,7};
@@ -1189,15 +1189,15 @@ HRESULT doTest()
 
 
 
-    //###################################################################################
-    //###################################################################################
-    //###################################################################################
-    //  Tests with a MFC ActiveX control, ( pure dispinterface)
-    //###################################################################################
 
-    //###################################################################################
+
+
+    //  Tests with a MFC ActiveX control, ( pure dispinterface)
+
+
+
     //  in parameter MFC ActiveX
-    //###################################################################################
+
     // unsigned char is not supported by MFC
     //  aAny <<= ( sal_Int8) 127;
     //  invMfc->invoke( OUString(L"inByte"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
@@ -1233,9 +1233,9 @@ HRESULT doTest()
     aAny <<= inv5;
     aAny=invMfc->invoke( OUString(L"inObject"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
 //
-//  //###################################################################################
+//
 //  //  out parameter MFC ActiveX
-//  //###################################################################################
+//
 //
 //  // outShort
     aAny= invMfc->invoke( OUString(L"outShort"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
@@ -1286,9 +1286,9 @@ HRESULT doTest()
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
 
-    //###################################################################################
+
     //  Sequence parameter MFC ActiveX
-    //###################################################################################
+
     // Sequences are not directly supported.
 
 

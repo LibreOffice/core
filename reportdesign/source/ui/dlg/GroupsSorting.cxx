@@ -165,9 +165,9 @@ public:
     DECL_LINK( DelayedDelete, void* );
 
 };
-//========================================================================
+
 // class OFieldExpressionControl
-//========================================================================
+
 
 OFieldExpressionControl::OFieldExpressionControl( OGroupsSortingDialog* _pParent,const ResId& _rResId )
     :EditBrowseBox( _pParent, _rResId,EBBF_NONE, WB_TABSTOP | BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
@@ -190,7 +190,7 @@ OFieldExpressionControl::~OFieldExpressionControl()
     acquire();
     uno::Reference< report::XGroups > xGroups = m_pParent->getGroups();
     xGroups->removeContainerListener(this);
-    //////////////////////////////////////////////////////////////////////
+
     // delete events from queue
     if( m_nPasteEvent )
         Application::RemoveUserEvent( m_nPasteEvent );
@@ -367,7 +367,7 @@ void OFieldExpressionControl::lateInit()
             pControls[i]->SetLoseFocusHdl(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusLost));
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         // set browse mode
         BrowserMode nMode(BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION  | BROWSER_KEEPSELECTION |
                           BROWSER_HLINESFULL | BROWSER_VLINESFULL       | BROWSER_AUTOSIZE_LASTCOL | BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL);
@@ -808,7 +808,7 @@ void OFieldExpressionControl::cut()
 
 void OFieldExpressionControl::copy()
 {
-    //////////////////////////////////////////////////////////////////////
+
     // set to the right row and save it
     m_pParent->SaveData( m_nDataPos );
 
@@ -858,7 +858,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
 {
 
     sal_Int32 nSize = 0;
-    //////////////////////////////////////////////////////////////////////
+
     // get rows from clipboard
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
     if(aTransferData.HasFormat(OGroupExchange::getReportGroupId()))
@@ -913,9 +913,9 @@ void OFieldExpressionControl::InsertRows( long nRow )
 }
 
 
-//========================================================================
+
 // class OGroupsSortingDialog
-//========================================================================
+
 OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
                                            ,sal_Bool _bReadOnly
                                            ,OReportController* _pController)
@@ -1436,8 +1436,8 @@ ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType) SAL_THROW (( co
     return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SC));
 }
 
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

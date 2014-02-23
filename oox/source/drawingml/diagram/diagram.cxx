@@ -147,7 +147,7 @@ static sal_Int32 calcDepth( const OUString& rNodeName,
 void Diagram::build(  )
 {
     // build name-object maps
-    // ======================
+
 
 #if OSL_DEBUG_LEVEL > 1
     std::ofstream output("/tmp/tree.dot");

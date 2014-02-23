@@ -27,16 +27,16 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include "dbptypes.hxx"
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     struct OControlWizardContext;
     struct OOptionGroupSettings;
-    //=====================================================================
+
     //= OOptionGroupLayouter
-    //=====================================================================
+
     class OOptionGroupLayouter
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
@@ -59,9 +59,9 @@ namespace dbp
             );
     };
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 #endif // _EXTENSIONS_DBP_OPTIONGROUPLAYOUTER_HXX_
 

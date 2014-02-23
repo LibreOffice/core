@@ -53,7 +53,7 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i68101#
 // Dialog for editing Object Name
 // plus uniqueness-callback-linkHandler
@@ -84,7 +84,7 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i68101#
 // Dialog for editing Object Title and Description
 
@@ -106,7 +106,7 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
     pEdtTitle->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+
 
 /*************************************************************************
 |*

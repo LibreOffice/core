@@ -22,20 +22,20 @@
 //+-------------------------------------------------------------------------
 //  Contents:   LibreOffice filter declarations
 //  Platform:   Windows 2000, Windows XP
-//--------------------------------------------------------------------------
+
 
 #pragma once
 
 //+-------------------------------------------------------------------------
 //  forward declaration
-//--------------------------------------------------------------------------
+
 class CContentReader;
 class CMetaInfoReader;
 class CFullPropSpec;
 
 //+-------------------------------------------------------------------------
 //  Global definitions
-//--------------------------------------------------------------------------
+
 
 long g_lInstances = 0;                        // Global count of COooFilter and COooFilterCF instances
 GUID const guidStorage = PSGUID_STORAGE;      // GUID for storage property set
@@ -43,7 +43,7 @@ GUID const guidStorage = PSGUID_STORAGE;      // GUID for storage property set
 //C-------------------------------------------------------------------------
 //  Class:      COooFilter
 //  Purpose:    Implements interfaces of LibreOffice filter
-//--------------------------------------------------------------------------
+
 
 // OooFilter Class ID
 // {7BC0E710-5703-45be-A29D-5D46D8B39262}
@@ -163,7 +163,7 @@ private:
 //C-------------------------------------------------------------------------
 //  Class:      COooFilterCF
 //  Purpose:    Implements class factory for LibreOffice filter
-//--------------------------------------------------------------------------
+
 
 class COooFilterCF : public IClassFactory
 {

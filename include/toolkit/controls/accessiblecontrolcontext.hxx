@@ -28,14 +28,14 @@
 #include <com/sun/star/awt/XWindow.hpp>
 
 class Window;
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OAccessibleControlContext
-    //====================================================================
+
 
     typedef ::comphelper::OAccessibleComponentHelper    OAccessibleControlContext_Base;
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XEventListener
@@ -120,9 +120,9 @@ namespace toolkit
         Window* implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
     };
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_ACCESSIBLECONTROLCONTEXT_HXX
 

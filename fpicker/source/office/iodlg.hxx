@@ -44,14 +44,14 @@
 
 // @@@ using namespace com::sun::star::ucb;
 
-//*****************************************************************************
+
 
 class SvTabListBox;
 class SvtFileView;
 struct ControlChain_Impl;
 class SvtFileDialogFilter_Impl;
 
-//*****************************************************************************
+
 
 #define SFXWB_INSERT            ( 0x04000000L | WB_OPEN )
 #define SFXWB_PASSWORD          WB_PASSWORD
@@ -75,9 +75,9 @@ class SvtFileDialogFilter_Impl;
 
 #define FILEDIALOG_FILTER_ALL   "*.*"
 
-//*****************************************************************************
+
 // SvtFileDialog
-//*****************************************************************************
+
 
 class SvtExpFileDlg_Impl;
 class SvtFileDialog : public ModalDialog, public ::svt::IFilePickerController
@@ -346,28 +346,28 @@ private:
     void                        initDefaultPlaces( );
 };
 
-//***************************************************************************
+
 
 inline void SvtFileDialog::SetPath( const OUString& rNewURL )
 {
     _aPath = rNewURL;
 }
 
-//***************************************************************************
+
 
 inline void SvtFileDialog::SetHasFilename( bool bHasFilename )
 {
     m_bHasFilename = bHasFilename;
 }
 
-//***************************************************************************
+
 
 inline const OUString& SvtFileDialog::GetPath() const
 {
     return _aPath;
 }
 
-//***************************************************************************
+
 
 inline void SvtFileDialog::SetDefaultExt( const OUString& rExt )
 {
@@ -384,7 +384,7 @@ inline const OUString& SvtFileDialog::GetDefaultExt() const
     return _aDefExt;
 }
 
-//*****************************************************************************
+
 
 inline void SvtFileDialog::SetOKHdl
 (
@@ -394,14 +394,14 @@ inline void SvtFileDialog::SetOKHdl
     _aOKHdl = rLink;
 }
 
-//*****************************************************************************
+
 
 inline const Link& SvtFileDialog::GetOKHdl() const
 {
     return _aOKHdl;
 }
 
-//*****************************************************************************
+
 
 inline void SvtFileDialog::SetFileSelectHdl
 (
@@ -411,14 +411,14 @@ inline void SvtFileDialog::SetFileSelectHdl
     _aFileSelectHdl = rLink;
 }
 
-//*****************************************************************************
+
 
 inline const Link& SvtFileDialog::GetFileSelectHdl() const
 {
     return _aFileSelectHdl;
 }
 
-//*****************************************************************************
+
 
 inline void SvtFileDialog::SetFilterSelectHdl
 (
@@ -428,23 +428,23 @@ inline void SvtFileDialog::SetFilterSelectHdl
     _aFilterSelectHdl = rLink;
 }
 
-//*****************************************************************************
+
 
 inline const Link& SvtFileDialog::GetFilterSelectHdl() const
 {
     return _aFilterSelectHdl;
 }
 
-//*****************************************************************************
+
 
 inline SvtFileView* SvtFileDialog::GetView() const
 {
     return _pFileView;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+
+
+
 
 #define FILE_SELECTION_CHANGED  1
 #define DIRECTORY_CHANGED       2

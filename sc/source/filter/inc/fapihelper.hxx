@@ -194,13 +194,13 @@ public:
         @param rValues  The related property values. */
     void                SetProperties( const css::uno::Sequence< OUString > & rPropNames, const css::uno::Sequence< css::uno::Any >& rValues );
 
-    // ------------------------------------------------------------------------
+
 private:
     css::uno::Reference< css::beans::XPropertySet >       mxPropSet;          /// The mandatory property set interface.
     css::uno::Reference< css::beans::XMultiPropertySet >  mxMultiPropSet;     /// The optional multi property set interface.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Generic helper class for reading from and writing to property sets.
 
@@ -256,7 +256,7 @@ public:
     /** Writes all values to the passed property set. */
     void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
 
-    // ------------------------------------------------------------------------
+
 private:
     /** Returns a pointer to the next Any to be written to. */
     css::uno::Any*             GetNextAny();
@@ -268,7 +268,7 @@ private:
     size_t              mnNextIdx;          /// Counter for next Any to be processed.
 };
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 bool ScfPropSetHelper::ReadValue( Type& rValue )
@@ -299,7 +299,7 @@ ScfPropSetHelper& operator<<( ScfPropSetHelper& rPropSetHelper, const Type& rVal
     return rPropSetHelper;
 }
 
-// ============================================================================
+
 
 #endif
 

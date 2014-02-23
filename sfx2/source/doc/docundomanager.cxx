@@ -36,10 +36,10 @@
 #include <boost/noncopyable.hpp>
 #include <stack>
 
-//......................................................................................................................
+
 namespace sfx2
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -71,9 +71,9 @@ namespace sfx2
 
     using ::svl::IUndoManager;
 
-    //==================================================================================================================
+
     //= DocumentUndoManager_Impl
-    //==================================================================================================================
+
     struct DocumentUndoManager_Impl : public ::framework::IUndoManagerImplementation
     {
         DocumentUndoManager&                rAntiImpl;
@@ -160,9 +160,9 @@ namespace sfx2
         }
     }
 
-    //==================================================================================================================
+
     //= SolarMutexFacade
-    //==================================================================================================================
+
     /** a facade for the SolarMutex, implementing ::framework::IMutex (as opposed to ::vos::IMutex)
     */
     class SolarMutexFacade : public ::framework::IMutex
@@ -185,9 +185,9 @@ namespace sfx2
         }
     };
 
-    //==================================================================================================================
+
     //= UndoManagerGuard
-    //==================================================================================================================
+
     class UndoManagerGuard  :public ::framework::IMutexGuard
                             ,public ::boost::noncopyable
     {
@@ -224,9 +224,9 @@ namespace sfx2
         SolarMutexFacade    m_solarMutexFacade;
     };
 
-    //==================================================================================================================
+
     //= DocumentUndoManager
-    //==================================================================================================================
+
 
     DocumentUndoManager::DocumentUndoManager( SfxBaseModel& i_document )
         :SfxModelSubComponent( i_document )
@@ -445,8 +445,8 @@ namespace sfx2
         throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 
-//......................................................................................................................
+
 } // namespace sfx2
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

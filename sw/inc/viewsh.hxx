@@ -232,7 +232,7 @@ public:
 
     void InvalidateWindows( const SwRect &rRect );
 
-    //////////////////////////////////////////////////////////////////////////////
+
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
     std::stack<Region>          mPrePostPaintRegions; // acts also as a lock counter (empty == not locked)
@@ -243,7 +243,7 @@ public:
     void DLPrePaint2(const Region& rRegion);
     void DLPostPaint2(bool bPaintFormLayer);
     const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
-    //////////////////////////////////////////////////////////////////////////////
+
 
     virtual void Paint(const Rectangle &rRect);
 

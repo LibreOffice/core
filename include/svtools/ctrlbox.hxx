@@ -147,9 +147,9 @@ FontList; FontNameBox; FontStyleBox; FontSizeMenu
 
 *************************************************************************/
 
-// ----------------
+
 // - ColorListBox -
-// ----------------
+
 
 class SVT_DLLPUBLIC ColorListBox : public ListBox
 {
@@ -228,9 +228,9 @@ inline Color ColorListBox::GetSelectEntryColor( sal_uInt16 nSelIndex ) const
     return aColor;
 }
 
-// ---------------
+
 // - LineListBox -
-// ---------------
+
 
 /**
     Class computing border widths shared between Line style listbox and the
@@ -401,9 +401,9 @@ inline void LineListBox::SetNone( const OUString& sNone )
     m_sNone = sNone;
 }
 
-// ---------------
+
 // - FontNameBox -
-// ---------------
+
 
 class SVT_DLLPUBLIC FontNameBox : public ComboBox
 {
@@ -438,9 +438,9 @@ private:
     FontNameBox&    operator =( const FontNameBox& );
 };
 
-// ----------------
+
 // - FontStyleBox -
-// ----------------
+
 
 class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 {
@@ -475,9 +475,9 @@ inline void FontStyleBox::SetText( const OUString& rText )
     ComboBox::SetText( rText );
 }
 
-// ---------------
+
 // - FontSizeBox -
-// ---------------
+
 
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {

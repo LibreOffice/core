@@ -262,32 +262,32 @@ HRESULT doTest()
 
     // preparing out parameter;
     char byteOut;
-    CComVariant varOutByte;     //###
+    CComVariant varOutByte;
     varOutByte.vt= VT_BYREF | VT_UI1;
     V_I1REF(&varOutByte)= &byteOut;
     short shortOut;
-    CComVariant varOutShort;    //###
+    CComVariant varOutShort;
     varOutShort.vt= VT_BYREF | VT_I2;
     V_I2REF( &varOutShort)= &shortOut;
     long longOut;
-    CComVariant varOutLong;     //###
+    CComVariant varOutLong;
     varOutLong.vt= VT_BYREF | VT_I4;
     V_I4REF( &varOutLong)= &longOut;
     double doubleOut;
-    CComVariant varOutDouble;   //###
+    CComVariant varOutDouble;
     varOutDouble.vt= VT_BYREF | VT_R8;
     V_R8REF( &varOutDouble)= &doubleOut;
     BSTR bstrOut= NULL;
-    CComVariant varOutString;   //###
+    CComVariant varOutString;
     varOutString.vt= VT_BYREF | VT_BSTR;
     V_BSTRREF(&varOutString)= &bstrOut;
     CComVariant variantOut;
-    CComVariant varOutAny;      //###
+    CComVariant varOutAny;
     varOutAny.vt= VT_BYREF | VT_VARIANT;
     V_VARIANTREF(&varOutAny)= &variantOut;
 
     CComPtr<IDispatch> dispOut;
-    CComVariant varOutXInterface; //###
+    CComVariant varOutXInterface;
     varOutXInterface.vt= VT_BYREF |VT_DISPATCH;
     V_DISPATCHREF(&varOutXInterface)= &dispOut.p;
 

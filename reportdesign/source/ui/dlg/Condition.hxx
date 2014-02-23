@@ -58,9 +58,9 @@ namespace rptui
         virtual void Resize();
     };
 
-    //========================================================================
+
     //= Condition
-    //========================================================================
+
     class Condition :public Control
                     ,public dbaui::OToolBoxHelper
     {
@@ -166,21 +166,21 @@ namespace rptui
         DECL_LINK( OnOperationSelected, ListBox* );
     };
 
-    // -------------------------------------------------------------------------
+
     inline ConditionType Condition::impl_getCurrentConditionType() const
     {
         return sal::static_int_cast< ConditionType >( m_aConditionType.GetSelectEntryPos() );
     }
 
-    // -------------------------------------------------------------------------
+
     inline ComparisonOperation Condition::impl_getCurrentComparisonOperation() const
     {
         return sal::static_int_cast< ComparisonOperation >( m_aOperationList.GetSelectEntryPos() );
     }
 
-// =============================================================================
+
 } // namespace rptui
-// =============================================================================
+
 #endif // RPTUI_CONDITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,7 +41,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/uno3.hxx>
 
-// ============================================================================
+
 
 class Window;
 
@@ -49,13 +49,13 @@ namespace utl {
     class AccessibleStateSetHelper;
 }
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
 
-// ============================================================================
+
+
 
 typedef ::cppu::WeakAggComponentImplHelper4<
             ::com::sun::star::accessibility::XAccessibleContext,
@@ -326,7 +326,7 @@ private:
     ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
 
-// ============================================================================
+
 // a version of AccessibleGridControlBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
@@ -394,11 +394,11 @@ inline void AccessibleGridControlBase::implSetDescription(
     m_aDescription = rDescription;
 }
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLBASE_HXX
 

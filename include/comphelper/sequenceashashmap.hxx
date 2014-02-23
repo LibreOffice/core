@@ -52,40 +52,40 @@ struct SequenceAsHashMapBase : public ::boost::unordered_map<
 
 class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
 {
-    //-------------------------------------------
+
     public:
 
-        //---------------------------------------
+
         /** @short  creates an empty hash map.
          */
         SequenceAsHashMap();
 
-        //---------------------------------------
+
         /** @see    operator<<(const ::com::sun::star::uno::Any&)
          */
         SequenceAsHashMap(const ::com::sun::star::uno::Any& aSource);
 
-        //---------------------------------------
+
         /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&)
          */
         SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lSource);
 
-        //---------------------------------------
+
         /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&)
          */
         SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
 
-        //---------------------------------------
+
         /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >&)
          */
         SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lSource);
 
-        //---------------------------------------
+
         /** @short  not really used but maybe useful :-)
          */
         ~SequenceAsHashMap();
 
-        //---------------------------------------
+
         /** @short  fill this map from the given
                     any, which of course must contain
                     a suitable sequence of element types
@@ -105,7 +105,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         void operator<<(const ::com::sun::star::uno::Any& aSource);
 
-        //---------------------------------------
+
         /** @short  fill this map from the given
                     sequence, where every Any must contain
                     an item from type "css.beans.PropertyValue"
@@ -120,7 +120,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         void operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lSource);
 
-        //---------------------------------------
+
         /** @short  fill this map from the given
                     PropertyValue sequence.
 
@@ -129,7 +129,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         void operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
 
-        //---------------------------------------
+
         /** @short  fill this map from the given
                     NamedValue sequence.
 
@@ -138,7 +138,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         void operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lSource);
 
-        //---------------------------------------
+
         /** @short  converts this map instance to an
                     PropertyValue sequence.
 
@@ -147,7 +147,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         void operator>>(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDestination) const;
 
-        //---------------------------------------
+
         /** @short  converts this map instance to an
                     NamedValue sequence.
 
@@ -156,7 +156,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         void operator>>(::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lDestination) const;
 
-        //---------------------------------------
+
         /** @short  return this map instance as an
                     Any, which can be
                     used in const environments only.
@@ -174,7 +174,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         const ::com::sun::star::uno::Any getAsConstAny(bool bAsPropertyValue) const;
 
-        //---------------------------------------
+
         /** @short  return this map instance to as a
                     NamedValue sequence, which can be
                     used in const environments only.
@@ -188,7 +188,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > getAsConstNamedValueList() const;
 
-        //---------------------------------------
+
         /** @short  return this map instance to as a
                     PropertyValue sequence, which can be
                     used in const environments only.
@@ -202,7 +202,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getAsConstPropertyValueList() const;
 
-        //---------------------------------------
+
         /** @short  check if the specified item exists
                     and return its (unpacked!) value or it returns the
                     specified default value otherwise.
@@ -240,7 +240,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             return aValue;
         }
 
-        //---------------------------------------
+
         /** @short  creates a new item with the specified
                     name and value only in case such item name
                     does not already exist.
@@ -274,7 +274,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             return false;
         }
 
-        //---------------------------------------
+
         /** @short  check if all items of given map
                     exists in these called map also.
 
@@ -292,7 +292,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
          */
         bool match(const SequenceAsHashMap& rCheck) const;
 
-        //---------------------------------------
+
         /** @short  merge all values from the given map into
                     this one.
 

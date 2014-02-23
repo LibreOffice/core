@@ -24,9 +24,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//--------------------------
+
 // SdrGrafTransparenceItem -
-//--------------------------
+
 
 class SVX_DLLPUBLIC SdrGrafTransparenceItem : public SdrPercentItem
 {

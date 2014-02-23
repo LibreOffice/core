@@ -23,9 +23,9 @@
 #include <tools/poly.hxx>
 #include <vcl/gdimtf.hxx>
 
-// --------------
+
 // - Vectorizer -
-// --------------
+
 
 class BitmapReadAccess;
 class ImplChain;

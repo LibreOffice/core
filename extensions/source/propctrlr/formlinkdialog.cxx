@@ -43,10 +43,10 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -57,9 +57,9 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //========================================================================
+
     //= FieldLinkRow
-    //========================================================================
+
     class FieldLinkRow : public Window
     {
     private:
@@ -143,9 +143,9 @@ namespace pcr
         return 0L;
     }
 
-    //========================================================================
+
     //= FormLinkDialog
-    //========================================================================
+
 
     FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
             const Reference< XPropertySet >& _rxMasterForm, const Reference< XComponentContext >& _rxContext,
@@ -654,8 +654,8 @@ namespace pcr
         initializeSuggest();
         return 0L;
     }
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

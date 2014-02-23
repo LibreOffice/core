@@ -30,14 +30,14 @@
 
 #include <vector>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= FeatureSlotTranslation
-    //====================================================================
+
     class FeatureSlotTranslation
     {
     public:
@@ -51,9 +51,9 @@ namespace svx
         static  sal_Int32       getSlotIdForFormFeature( sal_Int16 _nFormFeature );
     };
 
-    //====================================================================
+
     //= IControllerFeatureInvalidation
-    //====================================================================
+
     class IControllerFeatureInvalidation
     {
     public:
@@ -72,9 +72,9 @@ namespace svx
         ~IControllerFeatureInvalidation() {}
     };
 
-    //====================================================================
+
     //= ControllerFeatures
-    //====================================================================
+
     class FormControllerHelper;
     /** easier access to an FormControllerHelper instance
     */
@@ -132,9 +132,9 @@ namespace svx
         inline       FormControllerHelper& operator*()        { return *m_pImpl; }
     };
 
-    //====================================================================
+
     //= FormControllerHelper
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::form::runtime::XFeatureInvalidation
                                     ,   ::com::sun::star::sdb::XSQLErrorListener
                                     >   FormControllerHelper_Base;
@@ -230,9 +230,9 @@ namespace svx
         FormControllerHelper& operator=( const FormControllerHelper& ); // never implemented
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FORMCONTROLLING_HXX
 

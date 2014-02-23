@@ -37,7 +37,7 @@ namespace func_provider
 {
 
 //Typedefs
-//=============================================================================
+
 //typedef ::cppu::WeakImplHelper1< css::beans::XPropertySet > ScriptingContextImpl_BASE;
 
 class ScriptingContext : public ::comphelper::OMutexAndBroadcastHelper, public ::comphelper::OPropertyContainer,

@@ -38,7 +38,7 @@ namespace drawingml {
 
 class ShapePropertyMap;
 
-// ============================================================================
+
 
 struct GradientFillProperties
 {
@@ -57,7 +57,7 @@ struct GradientFillProperties
     void                assignUsed( const GradientFillProperties& rSourceProps );
 };
 
-// ============================================================================
+
 
 struct PatternFillProperties
 {
@@ -69,7 +69,7 @@ struct PatternFillProperties
     void                assignUsed( const PatternFillProperties& rSourceProps );
 };
 
-// ============================================================================
+
 
 struct BlipFillProperties
 {
@@ -99,7 +99,7 @@ struct BlipFillProperties
     void                assignUsed( const BlipFillProperties& rSourceProps );
 };
 
-// ============================================================================
+
 
 struct OOX_DLLPUBLIC FillProperties
 {
@@ -126,7 +126,7 @@ struct OOX_DLLPUBLIC FillProperties
                             bool bFlipV = false ) const;
 };
 
-// ============================================================================
+
 
 struct GraphicProperties
 {
@@ -143,7 +143,7 @@ struct GraphicProperties
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

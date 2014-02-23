@@ -26,9 +26,9 @@
 #include <vcl/keycod.hxx>
 #include <vcl/font.hxx>
 
-// ---------------------------
+
 // - CommandExtTextInputData -
-// ---------------------------
+
 
 #define EXTTEXTINPUT_ATTR_GRAYWAVELINE          ((sal_uInt16)0x0100)
 #define EXTTEXTINPUT_ATTR_UNDERLINE             ((sal_uInt16)0x0200)
@@ -78,9 +78,9 @@ public:
     bool                IsOnlyCursorChanged() const { return mbOnlyCursor; }
 };
 
-// ---------------------------
+
 // - CommandInputContextData -
-// ---------------------------
+
 
 class VCL_DLLPUBLIC CommandInputContextData
 {
@@ -104,9 +104,9 @@ inline CommandInputContextData::CommandInputContextData( LanguageType eLang )
     meLanguage = eLang;
 }
 
-// --------------------
+
 // - CommandWheelData -
-// --------------------
+
 
 #define COMMAND_WHEEL_SCROLL            ((sal_uInt16)0x0001)
 #define COMMAND_WHEEL_ZOOM              ((sal_uInt16)0x0002)
@@ -178,9 +178,9 @@ inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDel
     mbDeltaIsPixel  = bDeltaIsPixel;
 }
 
-// ---------------------
+
 // - CommandScrollData -
-// ---------------------
+
 
 class VCL_DLLPUBLIC CommandScrollData
 {
@@ -208,9 +208,9 @@ inline CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
     mnDeltaY    = nDeltaY;
 }
 
-// ---------------------
+
 // - CommandModKeyData -
-// ---------------------
+
 
 class VCL_DLLPUBLIC CommandModKeyData
 {
@@ -247,9 +247,9 @@ inline CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
     mnCode = nCode;
 }
 
-// --------------------
+
 // - CommanDialogData -
-// --------------------
+
 
 #define SHOWDIALOG_ID_PREFERENCES       1
 #define SHOWDIALOG_ID_ABOUT             2
@@ -265,9 +265,9 @@ class VCL_DLLPUBLIC CommandDialogData
     int GetDialogId() const { return m_nDialogId; }
 };
 
-// --------------
+
 // Media Commands
-// --------------
+
 
 #define MEDIA_COMMAND_CHANNEL_DOWN           ((sal_Int16)1) // Decrement the channel value, for example, for a TV or radio tuner.
 #define MEDIA_COMMAND_CHANNEL_UP             ((sal_Int16)2) // Increment the channel value, for example, for a TV or radio tuner.
@@ -293,9 +293,9 @@ class VCL_DLLPUBLIC CommandDialogData
 #define MEDIA_COMMAND_PREVIOUSTRACK_HOLD     ((sal_Int16)22)// Button Left holding pressed.
 
 
-// ------------------------------
+
 // - CommandSelectionChangeData -
-// ------------------------------
+
 
 class VCL_DLLPUBLIC CommandSelectionChangeData
 {
@@ -323,9 +323,9 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
     mnEnd = nEnd;
 }
 
-// ----------------
+
 // - CommandEvent -
-// ----------------
+
 
 #define COMMAND_CONTEXTMENU             ((sal_uInt16)1)
 #define COMMAND_STARTDRAG               ((sal_uInt16)2)

@@ -27,10 +27,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 
-//......................................................................................................................
+
 namespace svt { namespace uno
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -50,9 +50,9 @@ namespace svt { namespace uno
 
     using namespace ::com::sun::star;
 
-    //==================================================================================================================
+
     //= WizardPageController
-    //==================================================================================================================
+
 
     WizardPageController::WizardPageController( WizardShell& i_rParent, const Reference< XWizardController >& i_rController,
             const sal_Int16 i_nPageId )
@@ -174,8 +174,8 @@ namespace svt { namespace uno
         return true;
     }
 
-//......................................................................................................................
+
 } } // namespace svt::uno
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

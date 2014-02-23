@@ -36,9 +36,9 @@
 //... namespace comphelper ................................................
 namespace comphelper
 {
-//.........................................................................
 
-//========================================================================
+
+
 // comparison functors
 
 struct UStringMixLess : public ::std::binary_function< OUString, OUString, bool>
@@ -57,7 +57,7 @@ public:
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 
-//------------------------------------------------------------------------
+
 class UStringMixEqual: public std::binary_function<OUString, OUString, bool>
 {
     bool m_bCaseSensitive;
@@ -70,7 +70,7 @@ public:
     }
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
-//------------------------------------------------------------------------
+
 class TPropertyValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::PropertyValue,OUString,bool>
 {
 public:
@@ -81,7 +81,7 @@ public:
         return !!(lhs.Name == rhs);
     }
 };
-//------------------------------------------------------------------------
+
 class TNamedValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::NamedValue,OUString,bool>
 {
 public:
@@ -93,9 +93,9 @@ public:
     }
 };
 
-//=====================================================================
+
 //= OInterfaceCompare
-//=====================================================================
+
 /** is stl-compliant structure for comparing Reference&lt; &lt;iface&gt; &gt; instances
 */
 template < class IAFCE >
@@ -132,7 +132,7 @@ inline mem_fun1_t<_Tp,_Arg> mem_fun(void (_Tp::*__f)(_Arg))
     return mem_fun1_t<_Tp,_Arg>(__f);
 }
 
-//.........................................................................
+
 /** output iterator that appends OUStrings into an OUStringBuffer.
  */
 class OUStringBufferAppender :
@@ -161,7 +161,7 @@ private:
     OUStringBuffer & m_rBuffer;
 };
 
-//.........................................................................
+
 /** algorithm similar to std::copy, but inserts a separator between elements.
  */
 template< typename ForwardIter, typename OutputIter, typename T >
@@ -185,7 +185,7 @@ OutputIter intersperse(
     return out;
 }
 
-//.........................................................................
+
 }
 //... namespace comphelper ................................................
 

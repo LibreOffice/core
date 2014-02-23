@@ -28,14 +28,14 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= UnoSimpleAnimationControlModel
-    //====================================================================
+
     class UnoSimpleAnimationControlModel : public UnoControlModel
     {
     protected:
@@ -59,9 +59,9 @@ namespace toolkit
         ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     };
 
-    //====================================================================
+
     //= UnoSimpleAnimationControl
-    //====================================================================
+
 
     typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlBase
                                                 ,   ::com::sun::star::awt::XSimpleAnimation
@@ -86,9 +86,9 @@ namespace toolkit
         ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     };
 
-//........................................................................
+
 } // namespacetoolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_TKSIMPLEANIMATION_HXX
 

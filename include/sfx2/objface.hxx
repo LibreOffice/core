@@ -98,7 +98,7 @@ public:
                             { return aNameResId.GetResMgr(); }
 };
 
-//--------------------------------------------------------------------
+
 
 // returns the number of functions in this cluster
 
@@ -107,7 +107,7 @@ inline sal_uInt16 SfxInterface::Count() const
     return nCount;
 }
 
-//--------------------------------------------------------------------
+
 
 // returns a function by position in the array
 

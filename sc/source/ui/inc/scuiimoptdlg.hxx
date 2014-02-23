@@ -23,7 +23,7 @@
 #include <vcl/layout.hxx>
 #include "imoptdlg.hxx"
 
-//===================================================================
+
 
 
 class ScDelimiterTable;

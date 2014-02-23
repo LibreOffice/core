@@ -113,20 +113,20 @@ using namespace ::com::sun::star::beans;
 # define WM_MOUSEHWHEEL 0x020E
 #endif
 
-// =======================================================================
+
 
 const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYSTEM_WINDOW_ACTIVATED");
 
 sal_Bool WinSalFrame::mbInReparent = FALSE;
 
-// =======================================================================
+
 
 // Macros for support of WM_UNICHAR & Keyman 6.0
 //#define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
 #define Uni_UTF32ToSurrogate2(ch)   (((unsigned long) (ch) - 0x10000) % 0x400 + 0xDC00)
 #define Uni_SupplementaryPlanesStart    0x10000
 
-// =======================================================================
+
 
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect = NULL );
@@ -282,7 +282,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
     }
 }
 
-// =======================================================================
+
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
                               HWND hWndParent, sal_uLong nSalFrameStyle )
@@ -525,7 +525,7 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, sal_Bool bAsChild )
                             hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
 }
 
-// =======================================================================
+
 
 // translation table from System keycodes into StartView keycodes
 #define KEY_TAB_SIZE     146
@@ -681,7 +681,7 @@ static const sal_uInt16 aImplTranslateKeyTab[KEY_TAB_SIZE] =
     0                     // SCROLLLOCK                      145
 };
 
-// =======================================================================
+
 
 static UINT ImplSalGetWheelScrollLines()
 {

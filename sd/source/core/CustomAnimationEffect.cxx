@@ -1747,7 +1747,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
     setPath( ::basegfx::tools::exportToSvgD( xPolyPoly, true, true, true) );
 }
 
-// ====================================================================
+
 
 EffectSequenceHelper::EffectSequenceHelper()
 : mnSequenceType( EffectNodeType::DEFAULT )
@@ -3157,7 +3157,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     }
 }
 
-// ====================================================================
+
 
 class AnimationChangeListener : public cppu::WeakImplHelper1< XChangesListener >
 {
@@ -3180,7 +3180,7 @@ void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::
 {
 }
 
-// ====================================================================
+
 
 MainSequence::MainSequence()
 : mxTimingRootNode( SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() ) )
@@ -3339,7 +3339,7 @@ void MainSequence::reset()
     }
     catch( Exception& )
     {
-        // ...
+
     }
 }
 
@@ -3686,7 +3686,7 @@ void MainSequence::startRebuildTimer()
     maTimer.Start();
 }
 
-// ====================================================================
+
 
 InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence )
 : EffectSequenceHelper( xSequenceRoot ), mpMainSequence( pMainSequence )

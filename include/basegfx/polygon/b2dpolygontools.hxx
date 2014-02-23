@@ -30,7 +30,7 @@
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -422,7 +422,7 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolygon createWaveline(const B2DPolygon& rCandidate, double fWaveWidth, double fWaveHeight);
 
-        //////////////////////////////////////////////////////////////////////
+
         // comparators with tolerance for 2D Polygons
         BASEGFX_DLLPUBLIC bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, const double& rfSmallValue);
 

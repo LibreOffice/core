@@ -33,7 +33,7 @@ namespace core {
 namespace prv { class Locator; }
 namespace prv { class ContextStack; }
 
-// ============================================================================
+
 
 struct RecordInputSource
 {
@@ -42,7 +42,7 @@ struct RecordInputSource
     OUString     maSystemId;
 };
 
-// ============================================================================
+
 
 class RecordParser
 {
@@ -78,7 +78,7 @@ private:
     RecordInfoMap       maEndMap;
 };
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

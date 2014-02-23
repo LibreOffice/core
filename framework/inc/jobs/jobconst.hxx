@@ -31,7 +31,7 @@
 namespace framework{
 
 
-//_______________________________________
+
 /**
     @short  defines all constant values used within a job environment.
 

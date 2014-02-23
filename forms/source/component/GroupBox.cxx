@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -39,9 +39,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//==================================================================
+
 // OGroupBoxModel
-//==================================================================
+
 
 
 InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
@@ -127,9 +127,9 @@ void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInSt
     }
 };
 
-//==================================================================
+
 // OGroupBoxControl
-//==================================================================
+
 
 
 InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
@@ -154,8 +154,8 @@ StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(Runti
     return aSupported;
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

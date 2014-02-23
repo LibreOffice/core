@@ -35,7 +35,7 @@ namespace oox {
 namespace dump {
 namespace xlsb {
 
-// ============================================================================
+
 
 class RecordObjectBase : public SequenceRecordObjectBase
 {
@@ -51,13 +51,13 @@ protected:
 
     OUString     getErrorName( sal_uInt8 nErrCode ) const;
 
-    // ------------------------------------------------------------------------
+
 
     void                readAddress( Address& orAddress );
     void                readRange( Range& orRange );
     void                readRangeList( RangeList& orRanges );
 
-    // ------------------------------------------------------------------------
+
 
     void                writeBooleanItem( const String& rName, sal_uInt8 nBool );
     void                writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode );
@@ -65,7 +65,7 @@ protected:
     void                writeFontPortions( const ::oox::xls::FontPortionModelList& rPortions );
     void                writePhoneticPortions( const ::oox::xls::PhoneticPortionModelList& rPhonetics );
 
-    // ------------------------------------------------------------------------
+
 
     sal_uInt8           dumpBoolean( const String& rName = EMPTY_STRING );
     sal_uInt8           dumpErrorCode( const String& rName = EMPTY_STRING );
@@ -82,7 +82,7 @@ protected:
     Range               dumpRange( const String& rName = EMPTY_STRING );
     void                dumpRangeList( const String& rName = EMPTY_STRING );
 
-    // ------------------------------------------------------------------------
+
 private:
     bool                readCompressedInt( BinaryInputStream& rStrm, sal_Int32& ornValue );
 
@@ -93,7 +93,7 @@ private:
     NameListRef         mxErrCodes;
 };
 
-// ============================================================================
+
 
 class RootStorageObject : public StorageObjectBase
 {
@@ -108,7 +108,7 @@ protected:
                             const OUString& rSysFileName );
 };
 
-// ============================================================================
+
 
 class Dumper : public DumperBase
 {
@@ -124,7 +124,7 @@ protected:
     virtual void        implDump();
 };
 
-// ============================================================================
+
 
 } // namespace xlsb
 } // namespace dump

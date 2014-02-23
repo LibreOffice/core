@@ -42,7 +42,7 @@ namespace ucbhelper_impl {
 namespace ucbhelper
 {
 
-//=========================================================================
+
 
 /**
  * This is a structure that holds additional meta data for one column
@@ -127,7 +127,7 @@ ResultSetColumnData::ResultSetColumnData()
 {
 }
 
-//=========================================================================
+
 
 /**
  * This is an implementation of the interface XResultSetMetaData. It can be

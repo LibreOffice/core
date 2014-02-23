@@ -117,7 +117,7 @@ public:
     static void InvalidateUnequalItems( SfxItemSet &rDestSet, const SfxItemSet &rSourceSet );
 
 protected:
-    // ________
+
 
     /** implement this method to provide an array of which-ranges of the form:
 
@@ -164,7 +164,7 @@ protected:
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
 
-    // ________
+
 
     /// Returns the pool
     SfxItemPool & GetItemPool() const;

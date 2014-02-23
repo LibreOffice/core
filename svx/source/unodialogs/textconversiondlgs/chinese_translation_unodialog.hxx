@@ -30,12 +30,12 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase5.hxx>
 
-//.............................................................................
+
 namespace textconversiondlgs
 {
-//.............................................................................
 
-//-------------------------------------------------------------------------
+
+
 /** This class provides the chinese translation dialog as an uno component.
 
 It can be created via lang::XMultiComponentFactory::createInstanceWithContext
@@ -129,9 +129,9 @@ private:
     cppu::OInterfaceContainerHelper m_aDisposeEventListeners;
 };
 
-//.............................................................................
+
 } //end namespace
-//.............................................................................
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,14 +26,14 @@
 
 class SfxItemPool;
 class EditStatus;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IEngineStatusListener
-    //====================================================================
+
     class IEngineStatusListener
     {
     public:
@@ -43,9 +43,9 @@ namespace frm
         ~IEngineStatusListener() {}
     };
 
-    //====================================================================
+
     //= RichTextEngine
-    //====================================================================
+
     class RichTextEngine : public EditEngine
     {
     private:
@@ -78,9 +78,9 @@ namespace frm
         DECL_LINK( EditEngineStatusChanged, EditStatus* );
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTENGINE_HXX
 

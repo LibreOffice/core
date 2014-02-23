@@ -30,7 +30,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct DataSequenceModel;
 
@@ -45,7 +45,7 @@ public:
                         createDataSequence( const OUString& rRole );
 };
 
-// ============================================================================
+
 
 struct DataSourceModel;
 
@@ -60,7 +60,7 @@ public:
                         createDataSequence( const OUString& rRole );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

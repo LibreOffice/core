@@ -40,9 +40,9 @@ public:
     virtual bool Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndo
-// ------------------------------------------------------------------------
+
 class EDITENG_DLLPUBLIC EditUndo : public SfxUndoAction
 {
 private:

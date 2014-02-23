@@ -74,7 +74,7 @@ namespace task {
 } } }
 
 
-//.........................................................................
+
 namespace dbtools
 {
     class ISQLStatementHelper;
@@ -89,7 +89,7 @@ namespace dbtools
         eInPrivilegeDefinitions,
         eComplete
     };
-//=========================================================================
+
     // date conversion
 
     // calculates the default numberformat for a given datatype and a give language
@@ -108,7 +108,7 @@ namespace dbtools
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
                                      const ::com::sun::star::lang::Locale& _rLocale);
 
-//=========================================================================
+
 
     /** creates a connection which can be used for the rowset given
 
@@ -446,7 +446,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
 
-    //----------------------------------------------------------------------------------
+
     /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
     */
     OOO_DLLPUBLIC_DBTOOLS OUString composeTableName( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
@@ -477,7 +477,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS OUString composeTableNameForSelect(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable );
-    //----------------------------------------------------------------------------------
+
     /** compose the table name out of the property set which must support the properties from the service <member scope= "com::sun::star::sdbcx">table</member>
         @param  _xMetaData
             The metadata from the connection.
@@ -492,7 +492,7 @@ namespace dbtools
         bool _bSuppressSchemaName,
         bool _bQuote);
 
-    //----------------------------------------------------------------------------------
+
     OOO_DLLPUBLIC_DBTOOLS sal_Int32 getSearchColumnFlag( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
                                     sal_Int32 _nDataType);
     // return the datasource for the given datasource name
@@ -791,9 +791,9 @@ namespace dbtools
             OUStringBuffer& _out_rSQLPredicate
         );
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 

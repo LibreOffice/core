@@ -363,7 +363,7 @@ void ScXMLConverter::ConvertAPIToCoreDateTime(const util::DateTime& aDateTime, D
     rDateTime = aTempDateTime;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -650,6 +650,6 @@ OUString ScXMLConditionHelper::getExpression( const sal_Unicode*& rpcString, con
     return aExp;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

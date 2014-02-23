@@ -328,7 +328,7 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-// ----------------------------------------------------
+
 //  class VCLXCurrencyField
 //  ----------------------------------------------------
 class SVTXCurrencyField : public ::com::sun::star::awt::XCurrencyField, public SVTXFormattedField

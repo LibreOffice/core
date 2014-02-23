@@ -37,12 +37,12 @@ namespace oox {
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 typedef ::std::pair< sal_Int32, sal_Int32 > Int32Pair;
 typedef ::std::pair< double, double >       DoublePair;
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC ConversionHelper
 {
@@ -162,7 +162,7 @@ private:
                         ~ConversionHelper();
 };
 
-// ============================================================================
+
 
 /** The stroke arrow model structure contains all properties for an line end arrow. */
 struct StrokeArrowModel
@@ -174,7 +174,7 @@ struct StrokeArrowModel
     void                assignUsed( const StrokeArrowModel& rSource );
 };
 
-// ============================================================================
+
 
 /** The stroke model structure contains all shape border properties. */
 struct StrokeModel
@@ -198,7 +198,7 @@ struct StrokeModel
                             const GraphicHelper& rGraphicHelper ) const;
 };
 
-// ============================================================================
+
 
 /** The fill model structure contains all shape fill properties. */
 struct OOX_DLLPUBLIC FillModel
@@ -224,7 +224,7 @@ struct OOX_DLLPUBLIC FillModel
                             const GraphicHelper& rGraphicHelper ) const;
 };
 
-// ============================================================================
+
 
 /** The shadow model structure contains all shape shadow properties. */
 struct OOX_DLLPUBLIC ShadowModel

@@ -232,7 +232,7 @@ bool needToSyncRepository(OUString const & name)
 
 } // anon namespace
 
-//==============================================================================
+
 
 namespace {
 inline OUString encodeForRcFile( OUString const & str )
@@ -257,7 +257,7 @@ inline OUString encodeForRcFile( OUString const & str )
 }
 }
 
-//==============================================================================
+
 OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
 {
     OUStringBuffer buf;
@@ -301,7 +301,7 @@ OUString makeURLAppendSysPathSegment( OUString const & baseURL, OUString const &
 
 
 
-//==============================================================================
+
 OUString expandUnoRcTerm( OUString const & term_ )
 {
     OUString term(term_);
@@ -324,7 +324,7 @@ OUString makeRcTerm( OUString const & url )
         return url;
 }
 
-//==============================================================================
+
 OUString expandUnoRcUrl( OUString const & url )
 {
     if (url.match( "vnd.sun.star.expand:" )) {
@@ -342,7 +342,7 @@ OUString expandUnoRcUrl( OUString const & url )
     }
 }
 
-//==============================================================================
+
 bool office_is_running()
 {
     //We need to check if we run within the office process. Then we must not use the pipe, because
@@ -380,7 +380,7 @@ bool office_is_running()
     return ret;
 }
 
-//==============================================================================
+
 oslProcess raiseProcess(
     OUString const & appURL, Sequence<OUString> const & args )
 {
@@ -416,7 +416,7 @@ oslProcess raiseProcess(
     return hProcess;
 }
 
-//==============================================================================
+
 OUString generateRandomPipeId()
 {
     // compute some good pipe id:
@@ -435,7 +435,7 @@ OUString generateRandomPipeId()
     return buf.makeStringAndClear();
 }
 
-//==============================================================================
+
 Reference<XInterface> resolveUnoURL(
     OUString const & connectString,
     Reference<XComponentContext> const & xLocalContext,

@@ -29,7 +29,7 @@
 #include <basegfx/tools/rectcliptools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -337,7 +337,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
@@ -461,7 +461,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon clipPolygonOnPolyPolygon(const B2DPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
@@ -475,7 +475,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         /*
         * let a plane be defined as
@@ -619,9 +619,9 @@ namespace basegfx
 
                 if(nVertexCount)
                 {
-                    ////////////////////////////////////////////////////////////////////////
-                    ////////////////////////////////////////////////////////////////////////
-                    ////////////////////////////////////////////////////////////////////////
+
+
+
                     //
                     // Upper bound for the maximal number of vertices when intersecting an
                     // axis-aligned rectangle with a triangle in E2
@@ -708,9 +708,9 @@ namespace basegfx
                     // resulting triangle fans we therefore need 15 times
                     // the number of original vertices.
                     //
-                    ////////////////////////////////////////////////////////////////////////
-                    ////////////////////////////////////////////////////////////////////////
-                    ////////////////////////////////////////////////////////////////////////
+
+
+
 
                     //const size_t nBufferSize = sizeof(vertex)*(nVertexCount*16);
                     //vertex *pVertices = (vertex*)alloca(nBufferSize);
@@ -787,7 +787,7 @@ namespace basegfx
             return aResult;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
     } // end of namespace tools
 } // end of namespace basegfx

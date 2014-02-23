@@ -113,7 +113,7 @@ using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::sfx2;
 
-//=========================================================================
+
 
 class SfxOpenDocStatusListener_Impl : public WeakImplHelper1< XDispatchResultListener >
 {
@@ -138,7 +138,7 @@ void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& ) thr
 {
 }
 
-//====================================================================
+
 
 void SetTemplate_Impl( const OUString &rFileName,
                         const OUString &rLongName,
@@ -149,7 +149,7 @@ void SetTemplate_Impl( const OUString &rFileName,
     pDoc->ResetFromTemplate( rLongName, rFileName );
 }
 
-//====================================================================
+
 class SfxDocPasswordVerifier : public ::comphelper::IDocPasswordVerifier
 {
 public:
@@ -205,7 +205,7 @@ private:
     return eResult;
 }
 
-//====================================================================
+
 
 
 

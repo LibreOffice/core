@@ -43,19 +43,19 @@
 
 class FmFormShell;
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
 class FmFilterItem;
 class FmFilterItems;
 class FmParentData;
 class FmFilterAdapter;
 
-//========================================================================
+
 // data structure for the filter model
-//========================================================================
+
 class FmFilterData
 {
     FmParentData*           m_pParent;
@@ -76,7 +76,7 @@ public:
     virtual Image GetImage() const;
 };
 
-//========================================================================
+
 class FmParentData : public FmFilterData
 {
 protected:
@@ -92,7 +92,7 @@ public:
     ::std::vector< FmFilterData* >& GetChildren() { return m_aChildren; }
 };
 
-//========================================================================
+
 // Item representing the forms and subforms
 class FmFormItem : public FmParentData
 {
@@ -120,7 +120,7 @@ public:
     virtual Image GetImage() const;
 };
 
-//========================================================================
+
 class FmFilterItems : public FmParentData
 {
 public:
@@ -132,7 +132,7 @@ public:
     virtual Image GetImage() const;
 };
 
-//========================================================================
+
 class FmFilterItem : public FmFilterData
 {
     OUString     m_aFieldName;
@@ -153,7 +153,7 @@ public:
     virtual Image GetImage() const;
 };
 
-//========================================================================
+
 class FmFilterModel : public FmParentData
                      ,public SfxBroadcaster
                      ,public ::svxform::OSQLParserClient
@@ -196,8 +196,8 @@ protected:
     void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, FmParentData* pParent);
 };
 
-//========================================================================
-//========================================================================
+
+
 class OFilterItemExchange : public OLocalExchange
 {
     ::std::vector<FmFilterItem*>    m_aDraggedEntries;
@@ -225,9 +225,9 @@ inline sal_Bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rForm
     return OLocalExchange::hasFormat( _rFormats, getFormatId() );
 }
 
-//====================================================================
+
 //= OFilterExchangeHelper
-//====================================================================
+
 class OFilterExchangeHelper : public OLocalExchangeHelper
 {
 public:
@@ -239,7 +239,7 @@ protected:
     virtual OLocalExchange* createExchange() const;
 };
 
-//========================================================================
+
 class FmFilterNavigator : public SvTreeListBox, public SfxListener
 {
     enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
@@ -313,7 +313,7 @@ private:
     using SvTreeListBox::Insert;
 };
 
-//========================================================================
+
 class FmFilterNavigatorWin : public SfxDockingWindow, public SfxControllerItem
 {
 private:
@@ -339,7 +339,7 @@ public:
     virtual void GetFocus();
 };
 
-//========================================================================
+
 class FmFilterNavigatorWinMgr : public SfxChildWindow
 {
 public:
@@ -348,9 +348,9 @@ public:
     SFX_DECL_CHILDWINDOW( FmFilterNavigatorWinMgr );
 };
 
-//........................................................................
+
 }   // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FILTNAV_HXX
 

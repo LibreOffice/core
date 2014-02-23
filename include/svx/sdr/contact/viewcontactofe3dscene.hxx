@@ -27,7 +27,7 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class E3dScene;
@@ -36,7 +36,7 @@ namespace basegfx {
     class B3DRange;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -107,7 +107,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 

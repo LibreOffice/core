@@ -26,11 +26,11 @@
 namespace cppu
 {
 
-//##################################################################################################
-//#### copy construction ###########################################################################
-//##################################################################################################
 
-//------------------------------------------------------------------------------
+//#### copy construction ###########################################################################
+
+
+
 inline uno_Sequence * allocSeq(
     sal_Int32 nElementSize, sal_Int32 nElements )
 {
@@ -50,13 +50,13 @@ inline uno_Sequence * allocSeq(
     return pSeq;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
     SAL_THROW (());
-//--------------------------------------------------------------------------------------------------
+
 inline void _copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -96,13 +96,13 @@ inline void _copyConstructStruct(
     }
 }
 
-//------------------------------------------------------------------------------
+
 uno_Sequence * copyConstructSequence(
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_AcquireFunc acquire, uno_Mapping * mapping );
 
-//--------------------------------------------------------------------------------------------------
+
 inline void _copyConstructAnyFromData(
     uno_Any * pDestAny, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
@@ -232,7 +232,7 @@ inline void _copyConstructAnyFromData(
         break;
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void _copyConstructAny(
     uno_Any * pDestAny, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
@@ -372,7 +372,7 @@ inline void _copyConstructAny(
         }
     }
 }
-//------------------------------------------------------------------------------
+
 inline uno_Sequence * icopyConstructSequence(
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
@@ -516,7 +516,7 @@ inline uno_Sequence * icopyConstructSequence(
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 inline void _copyConstructData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,

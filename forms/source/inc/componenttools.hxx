@@ -27,10 +27,10 @@
 #include <set>
 #include <functional>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     struct TypeCompareLess : public ::std::binary_function< ::com::sun::star::uno::Type, ::com::sun::star::uno::Type, bool >
     {
@@ -44,9 +44,9 @@ namespace frm
         }
     };
 
-    //====================================================================
+
     //= TypeBag
-    //====================================================================
+
     /** a helper class which merges sequences of <type scope="com::sun::star::uno">Type</type>s,
         so that the resulting sequence contains every type at most once
     */
@@ -87,9 +87,9 @@ namespace frm
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  getXModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
 

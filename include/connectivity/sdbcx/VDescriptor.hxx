@@ -32,9 +32,9 @@ namespace connectivity
 {
     namespace sdbcx
     {
-        // =========================================================================
+
         // = ODescriptor
-        // =========================================================================
+
         typedef ::comphelper::OPropertyContainer ODescriptor_PBASE;
         class OOO_DLLPUBLIC_DBTOOLS ODescriptor
                     :public ODescriptor_PBASE

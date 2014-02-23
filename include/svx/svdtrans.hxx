@@ -28,7 +28,7 @@
 #include <vcl/field.hxx>
 #include <vcl/mapmod.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // Winkelangaben der DrawingEngine sind 1/100 Degree
 // #i19054# nowhere used, removed // const int nWinkDiv=100;
@@ -295,7 +295,7 @@ public:
     static OUString GetUnitStr(FieldUnit eUnit) { OUString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDTRANS_HXX
 

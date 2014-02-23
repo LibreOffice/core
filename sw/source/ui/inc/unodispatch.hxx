@@ -87,7 +87,7 @@ public:
     // view destroyed
     void    Invalidate();
 };
-//---------------------------------------------------------------------------------------------------------------------
+
 struct StatusStruct_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener> xListener;

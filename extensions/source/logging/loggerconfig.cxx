@@ -42,10 +42,10 @@
 #include <vector>
 #include <sal/macros.h>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::logging::XLogger;
@@ -305,8 +305,8 @@ namespace logging
         }
     }
 
-//........................................................................
+
 } // namespace logging
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

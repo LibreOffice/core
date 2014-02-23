@@ -25,18 +25,18 @@
     ::pcr::OAutoRegistration< ::pcr::MasterDetailLinkDialog > aAutoRegistration;
 }
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= MasterDetailLinkDialog
-    //====================================================================
+
 
     MasterDetailLinkDialog::MasterDetailLinkDialog(const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
@@ -143,8 +143,8 @@ namespace pcr
         MasterDetailLinkDialog_DBase::implInitialize(_rValue);
     }
 
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

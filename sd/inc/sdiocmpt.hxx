@@ -22,7 +22,7 @@
 
 #include <tools/stream.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 class SvStream;
 
 class old_SdrDownCompat
@@ -44,7 +44,7 @@ public:
     void  OpenSubRecord();
     void  CloseSubRecord();
 };
-//////////////////////////////////////////////////////////////////////////////
+
 #include "sddllapi.h"
 
 #define SDIOCOMPAT_VERSIONDONTKNOW (sal_uInt16)0xffff

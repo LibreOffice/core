@@ -30,7 +30,7 @@ namespace xls {
 
 class HeaderFooterParser;
 
-// ============================================================================
+
 
 /** Holds page style data for a single sheet. */
 struct PageSettingsModel
@@ -81,7 +81,7 @@ struct PageSettingsModel
     void                setBiffPrintErrors( sal_uInt8 nPrintErrors );
 };
 
-// ============================================================================
+
 
 class PageSettings : public WorksheetHelper
 {
@@ -130,7 +130,7 @@ private:
     PageSettingsModel   maModel;
 };
 
-// ============================================================================
+
 
 class PageSettingsConverter : public WorkbookHelper
 {
@@ -180,7 +180,7 @@ private:
     HFHelperData        maFooterData;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

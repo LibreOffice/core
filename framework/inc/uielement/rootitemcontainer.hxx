@@ -61,7 +61,7 @@ class RootItemContainer :   protected ThreadHelpBase                            
         FWI_DLLPUBLIC RootItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rItemAccessContainer );
         virtual FWI_DLLPUBLIC ~RootItemContainer();
 
-        //---------------------------------------------------------------------------------------------------------
+
         // XInterface
         virtual void SAL_CALL acquire() throw ()
             { OWeakObject::acquire(); }

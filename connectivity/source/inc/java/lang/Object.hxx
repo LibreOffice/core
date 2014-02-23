@@ -29,7 +29,7 @@
 #include <functional>
 #include <boost/shared_ptr.hpp>
 
-//=====================================================================
+
 
 #ifdef HAVE_64BIT_POINTERS
 #error "no 64 bit pointer"
@@ -64,8 +64,8 @@ namespace connectivity
             return *pEnv;
         }
     };
-    //=====================================================================
-    //=====================================================================
+
+
     class  java_lang_Object
     {
         // operator= and the copy ctor are forbidden

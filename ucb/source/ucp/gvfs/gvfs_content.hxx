@@ -69,9 +69,9 @@ public:
 class Content : public ::ucbhelper::ContentImplHelper,
         public com::sun::star::ucb::XContentCreator
 {
-//=========================================================================
+
 //                             Internals
-//=========================================================================
+
 private:
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
@@ -179,9 +179,9 @@ public:
     OString  getOURI ();
     OUString getOUURI ();
 
-//=========================================================================
+
 //                            Externals
-//=========================================================================
+
 public:
 
     Content( const ::com::sun::star::uno::Reference<
@@ -230,9 +230,9 @@ public:
     abort( sal_Int32 CommandId )
         throw( com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Additional interfaces
-    //////////////////////////////////////////////////////////////////////
+
 
     // XContentCreator
     virtual com::sun::star::uno::Sequence<

@@ -28,11 +28,11 @@
 #include "hlmarkwn_def.hxx"
 class SvxHyperlinkTabPageBase;
 
-//########################################################################
+
 //#                                                                      #
 //# Tree-Window                                                          #
 //#                                                                      #
-//########################################################################
+
 
 class SvxHlinkDlgMarkWnd;
 
@@ -47,11 +47,11 @@ public:
     virtual void Paint( const Rectangle& rRect );
 };
 
-//########################################################################
+
 //#                                                                      #
 //# Window-Class                                                         #
 //#                                                                      #
-//########################################################################
+
 
 class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 {

@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 
 
-//------------------------------------------------------------
+
 // class SdrYesNoItem
 // GetValueTextByVal() returns "yes" or "no"
 // instead of "TRUE" and "FALSE"

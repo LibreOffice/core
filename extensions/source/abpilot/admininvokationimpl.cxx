@@ -30,10 +30,10 @@
 #include <vcl/waitobj.hxx>
 
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -42,9 +42,9 @@ namespace abp
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::sdbc;
 
-    //=====================================================================
+
     //= OAdminDialogInvokation
-    //=====================================================================
+
 
     OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource
@@ -119,8 +119,8 @@ namespace abp
         return sal_False;
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

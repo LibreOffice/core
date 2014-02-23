@@ -45,7 +45,7 @@ namespace framework{
 #define JOBURL_PART_SEPARATOR      ';'
 #define JOBURL_PARTARGS_SEPARATOR  ','
 
-//_______________________________________
+
 /**
     @short  can be used to parse, validate and work with job URL's
     @descr  Job URLs are specified by the following syntax:
@@ -55,7 +55,7 @@ namespace framework{
  */
 class JobURL : private ThreadHelpBase
 {
-    //___________________________________
+
     // types
 
     private:
@@ -77,7 +77,7 @@ class JobURL : private ThreadHelpBase
             E_SERVICE = 4
         };
 
-    //___________________________________
+
     // types
 
     private:
@@ -103,7 +103,7 @@ class JobURL : private ThreadHelpBase
         /** holds the service arguments */
         OUString m_sServiceArgs;
 
-    //___________________________________
+
     // native interface
 
     public:
@@ -114,7 +114,7 @@ class JobURL : private ThreadHelpBase
         sal_Bool getAlias      (       OUString& sAlias       ) const;
         sal_Bool getService    (       OUString& sService     ) const;
 
-    //___________________________________
+
     // private helper
 
     private:
@@ -125,7 +125,7 @@ class JobURL : private ThreadHelpBase
                                             OUString& rPartValue      ,
                                             OUString& rPartArguments  );
 
-    //___________________________________
+
     // debug methods!
 
     #ifdef ENABLE_COMPONENT_SELF_CHECK

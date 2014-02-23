@@ -38,7 +38,7 @@ namespace xls {
 
 class WorksheetHelper;
 
-// ============================================================================
+
 
 typedef ::std::pair< sal_Int32, OUString > IdCaptionPair;
 typedef ::std::vector< IdCaptionPair > IdCaptionPairList;
@@ -105,7 +105,7 @@ friend class PivotCacheItemList;
     bool                mbUnused;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class PivotCacheItemList : public WorkbookHelper
 {
@@ -141,7 +141,7 @@ private:
     CacheItemVector     maItems;            /// All items of this list.
 };
 
-// ============================================================================
+
 
 struct PCFieldModel
 {
@@ -162,7 +162,7 @@ struct PCFieldModel
     explicit            PCFieldModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct PCSharedItemsModel
 {
@@ -180,7 +180,7 @@ struct PCSharedItemsModel
     explicit            PCSharedItemsModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct PCFieldGroupModel
 {
@@ -203,7 +203,7 @@ struct PCFieldGroupModel
     void                setBiffGroupBy( sal_uInt8 nGroupBy );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Helper struct for mapping original item names from/to group item names. */
 struct PivotCacheGroupItem
@@ -217,7 +217,7 @@ struct PivotCacheGroupItem
 
 typedef ::std::vector< PivotCacheGroupItem > PivotCacheGroupItemVector;
 
-// ----------------------------------------------------------------------------
+
 
 class PivotCacheField : public WorkbookHelper
 {
@@ -337,7 +337,7 @@ private:
     PCFieldGroupModel   maFieldGroupModel;  /// Settings for item grouping.
 };
 
-// ============================================================================
+
 
 struct PCDefinitionModel
 {
@@ -361,7 +361,7 @@ struct PCDefinitionModel
     explicit            PCDefinitionModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct PCSourceModel
 {
@@ -371,7 +371,7 @@ struct PCSourceModel
     explicit            PCSourceModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct PCWorksheetSourceModel
 {
@@ -384,7 +384,7 @@ struct PCWorksheetSourceModel
     explicit            PCWorksheetSourceModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class PivotCache : public WorkbookHelper
 {
@@ -473,7 +473,7 @@ private:
     bool                mbDummySheet;       /// True = pivot cache is based on a dummy sheet.
 };
 
-// ============================================================================
+
 
 class PivotCacheBuffer : public WorkbookHelper
 {
@@ -501,7 +501,7 @@ private:
     PivotCacheIdVector  maCacheIds;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

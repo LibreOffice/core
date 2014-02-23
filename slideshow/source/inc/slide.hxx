@@ -58,7 +58,7 @@ namespace slideshow
         {
         public:
             // Showing
-            // -------------------------------------------------------------------
+
 
             /** Prepares to show slide.
 
@@ -91,7 +91,7 @@ namespace slideshow
 
 
             // Queries
-            // -------------------------------------------------------------------
+
 
             /** Query the size of this slide in user coordinates
 
@@ -122,7 +122,7 @@ namespace slideshow
             virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth ) = 0;
 
             // Slide bitmaps
-            // -------------------------------------------------------------------
+
 
             /** Request bitmap for current slide appearance.
 

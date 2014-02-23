@@ -180,7 +180,7 @@ your XComponent::dispose method has to be implemented in the following way:
         return;
 
     //--release all resources and references
-    //...
+
 }
 
 */

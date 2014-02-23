@@ -32,18 +32,18 @@
 
 class Window;
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     class IToolPanelDeck;
 
     struct TabDeckLayouter_Data;
 
-    //====================================================================
+
     //= TabDeckLayouter
-    //====================================================================
+
     class SVT_DLLPUBLIC TabDeckLayouter :public RefBase
                                         ,public IDeckLayouter
                                         ,public ::boost::noncopyable
@@ -90,9 +90,9 @@ namespace svt
         ::std::auto_ptr< TabDeckLayouter_Data > m_pData;
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TABLAYOUTER_HXX
 

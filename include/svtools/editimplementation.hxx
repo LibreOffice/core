@@ -21,21 +21,21 @@
 #error "not to be included directly!"
 #endif
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 GenericEditImplementation< EDIT >::GenericEditImplementation( EDIT& _rEdit )
     :m_rEdit( _rEdit )
 {
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 Control& GenericEditImplementation< EDIT >::GetControl()
 {
     return m_rEdit;
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 OUString GenericEditImplementation< EDIT >::GetText( LineEnd ) const
 {
@@ -43,98 +43,98 @@ OUString GenericEditImplementation< EDIT >::GetText( LineEnd ) const
     return m_rEdit.GetText( );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetText( const OUString& _rStr )
 {
     m_rEdit.SetText( _rStr );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 Selection GenericEditImplementation< EDIT >::GetSelection() const
 {
     return m_rEdit.GetSelection( );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetSelection( const Selection& _rSelection )
 {
     m_rEdit.SetSelection( _rSelection );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetReadOnly( sal_Bool bReadOnly )
 {
     m_rEdit.SetReadOnly( bReadOnly );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 sal_Bool GenericEditImplementation< EDIT >::IsReadOnly() const
 {
     return m_rEdit.IsReadOnly();
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::ReplaceSelected( const OUString& _rStr )
 {
     m_rEdit.ReplaceSelected( _rStr );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::DeleteSelected()
 {
     m_rEdit.DeleteSelected();
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 OUString GenericEditImplementation< EDIT >::GetSelected( LineEnd ) const
 {
     return m_rEdit.GetSelected( );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetMaxTextLen( sal_Int32 _nMaxLen )
 {
     m_rEdit.SetMaxTextLen( _nMaxLen );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 sal_Int32 GenericEditImplementation< EDIT >::GetMaxTextLen() const
 {
     return m_rEdit.GetMaxTextLen( );
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetModified()
 {
     m_rEdit.SetModifyFlag();
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 sal_Bool GenericEditImplementation< EDIT >::IsModified() const
 {
     return m_rEdit.IsModified();
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::ClearModified()
 {
     m_rEdit.ClearModifyFlag();
 }
 
-//----------------------------------------------------------------------
+
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetModifyHdl( const Link& _rLink )
 {

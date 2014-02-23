@@ -23,10 +23,10 @@
 #include <sal/types.h>
 #include <vcl/button.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     /** translates a VCL ImageAlign value into an css.awt.ImagePosition value
     */
@@ -44,9 +44,9 @@ namespace toolkit
     */
     sal_Int16 getExtendedImagePosition( sal_Int16 _nImageAlign );
 
-//........................................................................
+
 } // namespace toolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_HELPER_IMAGEALIGN_HXX
 

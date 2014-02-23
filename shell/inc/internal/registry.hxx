@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_REGISTRY_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_REGISTRY_HXX
 
-//-----------------------------
+
 // registry helper functions
-//-----------------------------
+
 
 #if defined _MSC_VER
 #pragma warning(push, 1)

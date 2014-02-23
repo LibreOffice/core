@@ -27,13 +27,13 @@
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 
-// ============================================================================
+
 
 namespace sfx {
 
-// ============================================================================
+
 // Helpers
-// ============================================================================
+
 
 class SFX2_DLLPUBLIC ItemWrapperHelper
 {
@@ -55,9 +55,9 @@ public:
     static void         RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, sal_uInt16 nSlot );
 };
 
-// ============================================================================
+
 // Item wrappers
-// ============================================================================
+
 
 /** Base class wrapping a single item.
 
@@ -120,7 +120,7 @@ private:
     sal_uInt16              mnSlot;     /// The SID of this item wrapper.
 };
 
-// ============================================================================
+
 
 /** An item wrapper usable for most types of items.
 
@@ -147,7 +147,7 @@ public:
                             { rItem.SetValue( static_cast< InternalValueT >( aValue ) ); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef ValueItemWrapper< SfxBoolItem,   sal_Bool >          BoolItemWrapper;
 typedef ValueItemWrapper< SfxInt16Item,  sal_Int16 >         Int16ItemWrapper;
@@ -156,7 +156,7 @@ typedef ValueItemWrapper< SfxInt32Item,  sal_Int32 >         Int32ItemWrapper;
 typedef ValueItemWrapper< SfxUInt32Item, sal_uInt32 >        UInt32ItemWrapper;
 typedef ValueItemWrapper< SfxStringItem, const OUString& >   StringItemWrapper;
 
-// ============================================================================
+
 
 /** An item wrapper that uses the item itself as value. */
 template< typename ItemT >
@@ -174,16 +174,16 @@ public:
                             { rItem = rValue; }
 };
 
-// ============================================================================
 
 
-// ============================================================================
+
+
 //               ***  Implementation of template functions  ***
-// ============================================================================
 
-// ============================================================================
+
+
 // Item wrappers
-// ============================================================================
+
 
 template< typename ItemT, typename ValueT >
 const ItemT* SingleItemWrapper< ItemT, ValueT >::GetUniqueItem( const SfxItemSet& rItemSet ) const
@@ -197,7 +197,7 @@ const ItemT& SingleItemWrapper< ItemT, ValueT >::GetDefaultItem( const SfxItemSe
     return static_cast< const ItemT& >( ItemWrapperHelper::GetDefaultItem( rItemSet, mnSlot ) );
 }
 
-// ============================================================================
+
 
 } // namespace sfx
 

@@ -30,7 +30,7 @@ class PivotTable;
 class PivotTableField;
 class PivotTableFilter;
 
-// ============================================================================
+
 
 class PivotTableFieldContext : public WorksheetContextBase
 {
@@ -49,7 +49,7 @@ private:
     PivotTableField&    mrTableField;
 };
 
-// ============================================================================
+
 
 class PivotTableFilterContext : public WorksheetContextBase
 {
@@ -68,7 +68,7 @@ private:
     PivotTableFilter&   mrTableFilter;
 };
 
-// ============================================================================
+
 
 class PivotTableFragment : public WorksheetFragmentBase
 {
@@ -86,7 +86,7 @@ private:
     PivotTable&         mrPivotTable;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

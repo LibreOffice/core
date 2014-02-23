@@ -114,14 +114,14 @@ namespace slideshow
 
 
             // get relative animation position
-            // ===============================
+
 
             const double nCurrElapsedTime( maTimer.getElapsedTime() );
             double nT( nCurrElapsedTime / mnMinSimpleDuration );
 
 
             // one of the stop criteria reached?
-            // =================================
+
 
             // will be set to true below, if one of the termination criteria
             // matched.
@@ -130,7 +130,7 @@ namespace slideshow
             if( isRepeatCountValid() )
             {
                 // Finite duration
-                // ===============
+
 
                 // When we've autoreverse on, the repeat count
                 // doubles
@@ -154,7 +154,7 @@ namespace slideshow
 
 
             // need to do auto-reverse?
-            // ========================
+
 
             double nRepeats;
             double nRelativeSimpleTime;
@@ -187,7 +187,7 @@ namespace slideshow
             else
             {
                 // determine repeat
-                // ================
+
 
                 // calc simple time and number of repeats from nT
                 // Now, that's easy, since the fractional part of
@@ -224,7 +224,7 @@ namespace slideshow
             }
 
             // actually perform something
-            // ==========================
+
 
             simplePerform( nRelativeSimpleTime,
                            // nRepeats is already integer-valued

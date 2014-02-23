@@ -27,18 +27,18 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
+
     //= SharedResources_Impl
-    //====================================================================
+
     class SharedResources_Impl
     {
     private:
@@ -127,9 +127,9 @@ namespace connectivity
         return *s_pInstance;
     }
 
-    //====================================================================
+
     //= helpers
-    //====================================================================
+
     namespace
     {
         size_t lcl_substitute( OUString& _inout_rString,
@@ -149,9 +149,9 @@ namespace connectivity
         }
     }
 
-    //====================================================================
+
     //= SharedResources
-    //====================================================================
+
 
     SharedResources::SharedResources()
     {
@@ -215,8 +215,8 @@ namespace connectivity
         return sString;
     }
 
-//........................................................................
+
 } // namespace connectivity
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

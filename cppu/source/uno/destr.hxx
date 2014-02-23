@@ -25,17 +25,17 @@
 namespace cppu
 {
 
-//##################################################################################################
-//#### destruction #################################################################################
-//##################################################################################################
 
-//==================================================================================================
+//#### destruction #################################################################################
+
+
+
 void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
     SAL_THROW(());
-//--------------------------------------------------------------------------------------------------
+
 inline void _destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -58,14 +58,14 @@ inline void _destructStruct(
     }
 }
 
-//==============================================================================
+
 void destructSequence(
     uno_Sequence * pSequence,
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release );
 
-//--------------------------------------------------------------------------------------------------
+
 inline void _destructAny(
     uno_Any * pAny,
     uno_ReleaseFunc release )
@@ -137,7 +137,7 @@ inline void _destructAny(
 
     ::typelib_typedescriptionreference_release( pType );
 }
-//--------------------------------------------------------------------------------------------------
+
 inline sal_Int32 idestructElements(
     void * pElements, typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
@@ -259,7 +259,7 @@ inline sal_Int32 idestructElements(
     }
 }
 
-//------------------------------------------------------------------------------
+
 inline void idestructSequence(
     uno_Sequence * pSeq,
     typelib_TypeDescriptionReference * pType,
@@ -291,7 +291,7 @@ inline void idestructSequence(
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 inline void _destructData(
     void * pValue,
     typelib_TypeDescriptionReference * pType,

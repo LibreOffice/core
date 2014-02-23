@@ -40,7 +40,7 @@ class ScRangeList;
 class ScTabViewShell;
 class Accelerator;
 
-//========================================================================
+
 
 class ScTextWndBase : public Window
 {
@@ -130,7 +130,7 @@ private:
     ScTabViewShell* mpViewShell;
 };
 
-//========================================================================
+
 
 class ScPosWnd : public ComboBox, public SfxListener        // Display position
 {
@@ -164,7 +164,7 @@ private:
     void            ReleaseFocus_Impl();
 };
 
-//========================================================================
+
 class ScInputBarGroup;
 
 class ScMultiTextWnd : public ScTextWnd
@@ -304,7 +304,7 @@ private:
     bool            mbIsMultiLine;
 };
 
-//==================================================================
+
 
 class ScInputWindowWrapper : public SfxChildWindow
 {

@@ -108,7 +108,7 @@ public:
     DECL_LINK( Select, Menu * );
 };
 
-//--------------------------------------------------------------------
+
 
 // return the number of virtual items in this menu
 
@@ -116,14 +116,14 @@ inline sal_uInt16 SfxVirtualMenu::GetItemCount() const
 {
     return nCount;
 }
-//--------------------------------------------------------------------
+
 
 
 inline SfxMenuControl& SfxVirtualMenu::operator[]( sal_uInt16 nPos ) const
 {
     return *(pItems+nPos);
 }
-//--------------------------------------------------------------------
+
 
 // returns the item id at position nPos in the menu (or 0 if sep.)
 

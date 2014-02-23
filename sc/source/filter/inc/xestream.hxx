@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// ============================================================================
+
 
 #ifndef SC_XESTREAM_HXX
 #define SC_XESTREAM_HXX
@@ -198,7 +198,7 @@ private:
     bool                mbInRec;        /// true = currently writing inside of a record.
 };
 
-// ============================================================================
+
 
 class XclExpBiff8Encrypter
 {
@@ -241,10 +241,10 @@ private:
     bool                mbValid;
 };
 
-// ----------------------------------------------------------------------------
 
 
-// ============================================================================
+
+
 
 // `s.GetChar(0) != 0` needed because some strings on export only contain NULL.
 #define XESTRING_TO_PSZ(s) \

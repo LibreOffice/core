@@ -177,7 +177,7 @@ namespace slideshow
                 // rect. Do that before any transformations.
 
                 // calc maBackgroundRect \ aClipPoly
-                // =================================
+
 
                 // AW: Simplified
                 // use a range with fixed size (-1,-1),(2,2)

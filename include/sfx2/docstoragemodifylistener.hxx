@@ -28,14 +28,14 @@
 
 namespace comphelper { class SolarMutex; }
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IModifiableDocument
-    //====================================================================
+
     /** callback for the DocumentStorageModifyListener class
     */
     class SAL_NO_VTABLE IModifiableDocument
@@ -48,9 +48,9 @@ namespace sfx2
         ~IModifiableDocument() {}
     };
 
-    //====================================================================
+
     //= DocumentStorageModifyListener
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 < ::com::sun::star::util::XModifyListener > DocumentStorageModifyListener_Base;
 
     class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
@@ -78,9 +78,9 @@ namespace sfx2
         DocumentStorageModifyListener& operator=( const DocumentStorageModifyListener& );   // never implemented
     };
 
-//........................................................................
+
 } // namespace sfx2
-//........................................................................
+
 
 #endif // INCLUDED_SFX2_DOCSTORAGEMODIFYLISTENER_HXX
 

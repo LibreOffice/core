@@ -30,10 +30,10 @@ namespace cppu_threadpool {
 
     class JobQueue;
 
-    //-----------------------------------------
+
     // private thread class for the threadpool
     // independent from vos
-    //-----------------------------------------
+
     class ORequestThread:
         public salhelper::SimpleReferenceObject, public osl::Thread
     {

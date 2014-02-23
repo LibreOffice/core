@@ -69,9 +69,9 @@ namespace rptui
         virtual SdrUndoAction* CreateUndoPageChangeMasterPage(SdrPage& rChangedPage);
 
     };
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 
 #endif // REPORT_UNDOFACTORY_HXX_INCLUDED
 

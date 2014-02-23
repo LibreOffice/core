@@ -50,7 +50,7 @@ struct MutexHolder
 typedef ::cppu::WeakComponentImplHelper2<
     lang::XServiceInfo, ucb::XContentProvider > t_impl_helper;
 
-//==============================================================================
+
 class ExpandContentProviderImpl : protected MutexHolder, public t_impl_helper
 {
     uno::Reference< uno::XComponentContext > m_xComponentContext;
@@ -114,7 +114,7 @@ void ExpandContentProviderImpl::disposing()
 {
 }
 
-//==============================================================================
+
 static uno::Reference< uno::XInterface > SAL_CALL create(
     uno::Reference< uno::XComponentContext > const & xComponentContext )
     SAL_THROW( (uno::Exception) )
@@ -123,13 +123,13 @@ static uno::Reference< uno::XInterface > SAL_CALL create(
         new ExpandContentProviderImpl( xComponentContext ) );
 }
 
-//==============================================================================
+
 static OUString SAL_CALL implName()
 {
     return OUString("com.sun.star.comp.ucb.ExpandContentProvider");
 }
 
-//==============================================================================
+
 static uno::Sequence< OUString > SAL_CALL supportedServices()
 {
     OUString names [] = {

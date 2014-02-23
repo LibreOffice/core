@@ -28,19 +28,19 @@
 #include <algorithm>
 #include <map>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
 
@@ -72,9 +72,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
+
     //= PropertyComposer
-    //====================================================================
+
 
     // TODO: there are various places where we determine the first handler in our array which
     // supports a given property id. This is, at the moment, done with searching all handlers,
@@ -498,8 +498,8 @@ namespace pcr
         return impl_isSupportedProperty_nothrow( _rName );
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -150,7 +150,7 @@ namespace canvas
 
 
         // View- and RenderState utilities
-        // ===================================================================
+
 
         CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::RenderState&
             initRenderState( ::com::sun::star::rendering::RenderState&                      renderState );
@@ -189,7 +189,7 @@ namespace canvas
 
 
         // Matrix utilities
-        // ===================================================================
+
 
         CANVASTOOLS_DLLPUBLIC ::com::sun::star::geometry::AffineMatrix2D&
             setIdentityAffineMatrix2D( ::com::sun::star::geometry::AffineMatrix2D&  matrix );
@@ -199,7 +199,7 @@ namespace canvas
 
 
         // Special utilities
-        // ===================================================================
+
 
         /** Calc the bounding rectangle of a transformed rectangle.
 

@@ -29,14 +29,14 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
-// ============================================================================
+
 
 ShapeAnchor::ShapeAnchor( bool bRelSize ) :
     mbRelSize( bRelSize )
@@ -109,7 +109,7 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const EmuRectangle& rChartRect ) co
 
     return aAnchorRect;
 }
-// ============================================================================
+
 
 ChartDrawingFragment::ChartDrawingFragment( XmlFilterBase& rFilter,
         const OUString& rFragmentPath, const Reference< XShapes >& rxDrawPage,
@@ -223,7 +223,7 @@ void ChartDrawingFragment::onEndElement()
     }
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

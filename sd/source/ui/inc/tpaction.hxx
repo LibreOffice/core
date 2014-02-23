@@ -80,7 +80,7 @@ private:
     OUString                aLastFile;
     ::std::vector< long >   aVerbVector;
 
-    //------------------------------------
+
 
     DECL_LINK( ClickSearchHdl, void * );
     DECL_LINK( ClickActionHdl, void * );

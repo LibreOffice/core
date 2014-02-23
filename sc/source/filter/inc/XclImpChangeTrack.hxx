@@ -27,7 +27,7 @@
 #include "imp_op.hxx"
 
 
-//___________________________________________________________________
+
 
 struct ScCellValue;
 class ScChangeAction;
@@ -35,7 +35,7 @@ class ScChangeTrack;
 class XclImpChTrFmlConverter;
 
 
-//___________________________________________________________________
+
 
 struct XclImpChTrRecHeader
 {
@@ -51,7 +51,7 @@ inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpChTrRecHeader& rRecH
     return rStrm;
 }
 
-//___________________________________________________________________
+
 
 class XclImpChangeTrack : protected XclImpRoot
 {
@@ -154,7 +154,7 @@ inline void XclImpChangeTrack::ReadString( OUString& rString )
     rString = pStrm->ReadUniString();
 }
 
-//___________________________________________________________________
+
 // derived class for special 3D ref handling
 
 class XclImpChTrFmlConverter : public ExcelToSc8
@@ -179,7 +179,7 @@ inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
 {
 }
 
-//___________________________________________________________________
+
 
 #endif
 

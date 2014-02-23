@@ -26,7 +26,7 @@
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DiscreteShadowPrimitive2D class
 
 namespace drawinglayer
@@ -114,7 +114,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DISCRETESHADOWPRIMITIVE2D_HXX
 

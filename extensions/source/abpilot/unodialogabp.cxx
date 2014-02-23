@@ -30,10 +30,10 @@ extern "C" void SAL_CALL createRegistryInfo_OABSPilotUno()
 }
 
 #define PROPERTY_ID_DATASOURCENAME  3
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -41,9 +41,9 @@ namespace abp
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::ui::dialogs;
 
-    //=====================================================================
+
     //= OABSPilotUno
-    //=====================================================================
+
 
     OABSPilotUno::OABSPilotUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
@@ -194,8 +194,8 @@ namespace abp
         }
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

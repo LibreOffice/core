@@ -60,7 +60,7 @@ namespace cppcanvas
     namespace internal
     {
         // free support functions
-        // ======================
+
         namespace
         {
             class TransparencyGroupAction : public Action, private ::boost::noncopyable

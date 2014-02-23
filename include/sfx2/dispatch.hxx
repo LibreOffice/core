@@ -54,13 +54,13 @@ namespace com
     }
 }
 
-//=========================================================================
+
 
 #define SFX_SHELL_POP_UNTIL     4
 #define SFX_SHELL_POP_DELETE    2
 #define SFX_SHELL_PUSH          1
 
-//=========================================================================
+
 
 class SFX2_DLLPUBLIC SfxDispatcher
 {

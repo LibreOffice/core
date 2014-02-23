@@ -27,7 +27,7 @@ namespace basegfx
     namespace tools
     {
         // Interpolator specializations
-        // ============================
+
 
         // NOTE: generic lerp is included from lerp.hxx. Following
         // are some specializations for various

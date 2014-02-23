@@ -21,25 +21,25 @@
 #include <osl/diagnose.h>
 
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     //= OWeakListenerAdapter
-    //=====================================================================
+
 
     OWeakListenerAdapterBase::~OWeakListenerAdapterBase()
     {
     }
 
-    //=====================================================================
+
     //= OWeakEventListenerAdapter
-    //=====================================================================
+
 
     OWeakEventListenerAdapter::OWeakEventListenerAdapter( Reference< XWeak > _rxListener, Reference< XComponent > _rxBroadcaster )
         :OWeakEventListenerAdapter_Base( _rxListener, _rxBroadcaster )
@@ -76,9 +76,9 @@ namespace comphelper
         resetListener();
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

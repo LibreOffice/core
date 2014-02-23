@@ -26,10 +26,10 @@
 
 using namespace dbtools;
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -320,8 +320,8 @@ Sequence< Type > ODateModel::getSupportedBindingTypes()
     return Sequence< Type >( &::getCppuType( static_cast< util::Date* >( NULL ) ), 1 );
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

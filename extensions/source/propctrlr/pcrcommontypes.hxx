@@ -25,17 +25,17 @@
 
 #include <boost/unordered_map.hpp>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     typedef ::boost::unordered_map< OUString, ::com::sun::star::beans::Property, OUStringHash >
         PropertyMap;
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
 

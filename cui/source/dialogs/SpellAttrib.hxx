@@ -94,7 +94,7 @@ struct SpellErrorDescription
     }
 };
 
-//-------------------------------------------------
+
 class SpellErrorAttrib : public TextAttrib
 {
 public:
@@ -117,7 +117,7 @@ public:
     virtual bool            operator==( const TextAttrib& rAttr ) const;
 };
 
-//-------------------------------------------------
+
 class SpellLanguageAttrib : public TextAttrib
 {
     LanguageType m_eLanguage;
@@ -140,7 +140,7 @@ public:
     virtual bool            operator==( const TextAttrib& rAttr ) const;
 };
 
-//-------------------------------------------------
+
 class SpellBackgroundAttrib : public TextAttrib
 {
     Color   m_aBackgroundColor;

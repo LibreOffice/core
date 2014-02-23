@@ -20,9 +20,9 @@
 #define _CONNECTIVITY_JAVA_MATH_BIGDECIMAL_HXX_
 
 #include "java/lang/Object.hxx"
-//**************************************************************
+
 //************ Class: java.lang.Boolean
-//**************************************************************
+
 namespace connectivity
 {
     class java_math_BigDecimal : public java_lang_Object

@@ -25,7 +25,7 @@
 #include <vcl/fixed.hxx>
 #include "global.hxx"
 
-//------------------------------------------------------------------------
+
 
 // +1 because one field is reserved for the "- none -" entry
 #define SC_MAXFIELDS    MAXCOLCOUNT+1
@@ -34,7 +34,7 @@ class ScViewData;
 class ScDocument;
 struct ScSubTotalParam;
 
-//========================================================================
+
 
 class ScTpSubTotalGroup : public SfxTabPage
 {
@@ -76,7 +76,7 @@ private:
     DECL_LINK( CheckHdl, ListBox * );
 };
 
-//------------------------------------------------------------------------
+
 
 class ScTpSubTotalGroup1 : public ScTpSubTotalGroup
 {
@@ -93,7 +93,7 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
-//------------------------------------------------------------------------
+
 
 class ScTpSubTotalGroup2 : public ScTpSubTotalGroup
 {
@@ -110,7 +110,7 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
-//------------------------------------------------------------------------
+
 
 class ScTpSubTotalGroup3 : public ScTpSubTotalGroup
 {
@@ -127,7 +127,7 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
-//========================================================================
+
 
 class ScTpSubTotalOptions : public SfxTabPage
 {

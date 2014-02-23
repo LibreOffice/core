@@ -134,9 +134,9 @@ using namespace msfilter::util;
 // Zusatz-Filter-Flags, gueltig ab Winword 8
 #define WW8FL_NO_FLY_FOR_TXBX         1
 
-//-----------------------------------------
+
 //            Listen-Manager (ab Ver8)
-//-----------------------------------------
+
 
 struct WW8LFOInfo;
 
@@ -320,9 +320,9 @@ public:
     rtl_TextEncoding GetCJKCharSet() const;
 };
 
-//-----------------------------------------
+
 //            Stack
-//-----------------------------------------
+
 class SwWW8FltControlStack : public SwFltControlStack
 {
 private:
@@ -553,9 +553,9 @@ class WW8FieldEntry
 };
 
 
-//-----------------------------------------
+
 //    Mini-Merker fuer einige Flags
-//-----------------------------------------
+
 class WW8ReaderSave
 {
 private:
@@ -607,9 +607,9 @@ private:
 };
 
 
-//-----------------------------------------
+
 //    Formulas
-//-----------------------------------------
+
 enum SwWw8ControlType
 {
     WW8_CT_EDIT,
@@ -1037,9 +1037,9 @@ struct WW8TabBandDesc
     enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
 };
 
-//-----------------------------------------
+
 //            Storage-Reader
-//-----------------------------------------
+
 typedef std::set<WW8_CP> cp_set;
 typedef std::vector<WW8_CP> cp_vector;
 
@@ -1357,7 +1357,7 @@ private:
     cp_vector maEndParaPos;
     WW8_CP maCurrAttrCP;
     bool mbOnLoadingMain:1;
-//---------------------------------------------
+
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
 

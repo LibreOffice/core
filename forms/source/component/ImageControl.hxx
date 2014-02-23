@@ -32,14 +32,14 @@
 
 using namespace comphelper;
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 // OImageControlModel
-//==================================================================
+
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::form::XImageProducerSupplier
                             ,   ::com::sun::star::awt::XImageProducer
                             >   OImageControlModel_Base;
@@ -143,9 +143,9 @@ protected:
     DECL_LINK( OnImageImportDone, ::Graphic* );
 };
 
-//==================================================================
+
 //= OImageControlControl
-//==================================================================
+
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XMouseListener
                             ,   ::com::sun::star::util::XModifyBroadcaster
                             >   OImageControlControl_Base;
@@ -194,9 +194,9 @@ private:
     bool    impl_isEmptyGraphics_nothrow() const;
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_IMAGECONTROL_HXX
 

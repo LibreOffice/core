@@ -45,7 +45,7 @@ namespace sd {
 class AnimationControllerItem;
 class View;
 
-//------------------------------------------------------------------------
+
 
 enum BitmapAdjustment
 {
@@ -60,7 +60,7 @@ enum BitmapAdjustment
     BA_RIGHT_DOWN
 };
 
-//------------------------------------------------------------------------
+
 
 class SdDisplay : public Control
 {
@@ -80,7 +80,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-//------------------------------------------------------------------------
+
 
 class AnimationWindow : public SfxDockingWindow
 {
@@ -147,7 +147,7 @@ private:
     AnimationControllerItem*    pControllerItem;
 
     ScopeLock       maPlayLock;
-    //------------------------------------
+
 
     DECL_LINK( ClickFirstHdl, void * );
     DECL_LINK( ClickStopHdl, void * );

@@ -29,7 +29,7 @@
 
 #include <vcl/dialog.hxx>
 
-//------------------------------------------------------------------------
+
 
 class ScSelEntryDlg : public ModalDialog
 {

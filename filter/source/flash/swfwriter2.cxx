@@ -132,7 +132,7 @@ sal_uInt32 BitStream::getOffset() const
     return maData.size();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 Tag::Tag( sal_uInt8 nTagId )
 {
@@ -361,7 +361,7 @@ void Tag::addStream( SvStream& rIn )
     (*this).WriteStream( rIn );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 Sprite::Sprite( sal_uInt16 nId )
 : mnId( nId ), mnFrames(0)
@@ -409,7 +409,7 @@ void Sprite::addTag( Tag* pNewTag )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt32 swf::getFixed( double fValue )
 {
@@ -422,7 +422,7 @@ sal_uInt32 swf::getFixed( double fValue )
     return temp;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+
 
 /** constructs a new flash font for the given VCL Font */
 FlashFont::FlashFont( const Font& rFont, sal_uInt16 nId )
@@ -515,7 +515,7 @@ void FlashFont::write( SvStream& out )
     aTag.write( out );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 /** this c'tor creates a solid fill style */
 FillStyle::FillStyle( const Color& rSolidColor )

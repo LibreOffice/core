@@ -28,10 +28,10 @@
 
 #include <algorithm>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -61,9 +61,9 @@ namespace
     };
 }
 
-//==========================================================================
+
 //= OPropertyContainerHelper
-//==========================================================================
+
 
 OPropertyContainerHelper::OPropertyContainerHelper()
     :m_bUnused(false)
@@ -504,9 +504,9 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     _rProps = aOutput;
 }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

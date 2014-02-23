@@ -22,14 +22,14 @@
 
 #include "parametrizedattributedispatcher.hxx"
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OSelectAllDispatcher
-    //====================================================================
+
     class OSelectAllDispatcher : public ORichTextFeatureDispatcher
     {
     public:
@@ -47,9 +47,9 @@ namespace frm
         virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const;
     };
 
-    //====================================================================
+
     //= OParagraphDirectionDispatcher
-    //====================================================================
+
     class OParagraphDirectionDispatcher : public OAttributeDispatcher
     {
     public:
@@ -65,9 +65,9 @@ namespace frm
         virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const;
     };
 
-    //====================================================================
+
     //= OTextDirectionDispatcher
-    //====================================================================
+
     class OTextDirectionDispatcher : public ORichTextFeatureDispatcher
     {
     public:
@@ -81,9 +81,9 @@ namespace frm
         virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const;
     };
 
-    //====================================================================
+
     //= OAsianFontLayoutDispatcher
-    //====================================================================
+
     class OAsianFontLayoutDispatcher : public OParametrizedAttributeDispatcher
     {
     public:
@@ -100,9 +100,9 @@ namespace frm
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_SPECIALDISPATCHERS_HXX
 

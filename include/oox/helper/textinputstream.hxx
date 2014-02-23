@@ -33,7 +33,7 @@ namespace oox {
 
 class BinaryInputStream;
 
-// ============================================================================
+
 
 class TextInputStream
 {
@@ -87,7 +87,7 @@ public:
      */
     OUString     readToChar( sal_Unicode cChar, bool bIncludeChar );
 
-    // ------------------------------------------------------------------------
+
 
     /** Creates a UNO text input stream object from the passed UNO input stream.
      */
@@ -97,7 +97,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
                             rtl_TextEncoding eTextEnc );
 
-    // ------------------------------------------------------------------------
+
 private:
     void                init(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
@@ -113,7 +113,7 @@ private:
     sal_Unicode         mcPendingChar;
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

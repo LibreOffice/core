@@ -38,16 +38,16 @@
 
 class SfxMedium;
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     class OImageProducerThread_Impl;
     class ControlFeatureInterception;
-    //==================================================================
+
     // OClickableImageBaseModel
-    //==================================================================
+
     typedef ::cppu::ImplHelper3 <   ::com::sun::star::form::XImageProducerSupplier
                                 ,   ::com::sun::star::awt::XImageProducer
                                 ,   ::com::sun::star::form::submission::XSubmissionSupplier
@@ -145,9 +145,9 @@ namespace frm
         void implInitializeImageURL( );
     };
 
-    //==================================================================
+
     // ImageModelMethodGuard
-    //==================================================================
+
     class ImageModelMethodGuard : public ::osl::MutexGuard
     {
     private:
@@ -165,9 +165,9 @@ namespace frm
         }
     };
 
-    //==================================================================
+
     // OClickableImageBaseControl
-    //==================================================================
+
     typedef ::cppu::ImplHelper3 <   ::com::sun::star::form::XApproveActionBroadcaster
                                 ,   ::com::sun::star::form::submission::XSubmission
                                 ,   ::com::sun::star::frame::XDispatchProviderInterception
@@ -248,9 +248,9 @@ namespace frm
         ) SAL_THROW((com::sun::star::util::VetoException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException));
     };
 
-    //==================================================================
+
     // OImageProducerThread_Impl
-    //==================================================================
+
     class OImageProducerThread_Impl: public OComponentEventThread
     {
     protected:
@@ -277,9 +277,9 @@ namespace frm
         using OComponentEventThread::addEvent;
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_CLICKABLEIMAGE_HXX
 

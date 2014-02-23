@@ -23,7 +23,7 @@
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -254,7 +254,7 @@ namespace basegfx
     };
 
     // external operators
-    //////////////////////////////////////////////////////////////////////////
+
 
     /** get a 3D Vector which is in 2D (ignoring
         the Z-Coordinate) perpendicular to a given 3D Vector
@@ -315,7 +315,7 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_BASEGFX_VECTOR_B3DVECTOR_HXX
 

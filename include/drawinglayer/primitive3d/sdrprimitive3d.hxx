@@ -29,7 +29,7 @@
 #include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -81,7 +81,7 @@ namespace drawinglayer
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 

@@ -23,18 +23,18 @@
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
+
 
     class TableControl_Impl;
     class TableFunctionSet;
 
 
-    //====================================================================
+
     //= TableDataWindow
-    //====================================================================
+
     /** the window containing the content area (including headers) of
         a table control
     */
@@ -68,9 +68,9 @@ namespace svt { namespace table
     private:
         void    impl_hideTipWindow();
     };
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
 

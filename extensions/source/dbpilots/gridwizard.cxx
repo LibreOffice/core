@@ -34,10 +34,10 @@
 #define GW_STATE_DATASOURCE_SELECTION   0
 #define GW_STATE_FIELDSELECTION         1
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -48,9 +48,9 @@ namespace dbp
     using namespace ::com::sun::star::awt;
     using namespace ::svt;
 
-    //=====================================================================
+
     //= OGridWizard
-    //=====================================================================
+
 
     OGridWizard::OGridWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
@@ -290,9 +290,9 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
+
     //= OGridFieldsSelection
-    //=====================================================================
+
 
     OGridFieldsSelection::OGridFieldsSelection( OGridWizard* _pParent )
         :OGridPage(_pParent, ModuleRes(RID_PAGE_GW_FIELDSELECTION))
@@ -470,8 +470,8 @@ namespace dbp
         return 0;
     }
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

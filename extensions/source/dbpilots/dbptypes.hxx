@@ -26,18 +26,18 @@
 #include <set>
 #include <vector>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     typedef std::vector<OUString> StringArray;
     typedef std::set<OUString> StringBag;
     typedef std::map<sal_uInt32, OUString> MapInt2String;
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 #endif // _EXTENSIONS_DBP_DBPTYPES_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

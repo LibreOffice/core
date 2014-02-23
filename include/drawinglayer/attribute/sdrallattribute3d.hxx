@@ -28,10 +28,10 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -69,7 +69,7 @@ namespace drawinglayer
     } // end of namespace overlay
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 

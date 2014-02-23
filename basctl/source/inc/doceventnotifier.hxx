@@ -26,16 +26,16 @@
 
 #include <boost/noncopyable.hpp>
 
-//........................................................................
+
 namespace basctl
 {
-//........................................................................
+
 
     class ScriptDocument;
 
-    //====================================================================
+
     //= DocumentEventListener
-    //====================================================================
+
     class SAL_NO_VTABLE DocumentEventListener : ::boost::noncopyable
     {
     public:
@@ -52,9 +52,9 @@ namespace basctl
         virtual ~DocumentEventListener();
     };
 
-    //====================================================================
+
     //= DocumentEventNotifier
-    //====================================================================
+
     /** allows registering at theGlobalEventBroadcaster for global document events
     */
     class DocumentEventNotifier
@@ -78,9 +78,9 @@ namespace basctl
         rtl::Reference<Impl> m_pImpl;
     };
 
-//........................................................................
+
 } // namespace basctl
-//........................................................................
+
 
 #endif // BASCTL_DOCEVENTNOTIFIER_HXX
 

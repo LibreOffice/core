@@ -31,9 +31,9 @@
 
 #include <vcl/FilterConfigItem.hxx>
 
-// ----------------
+
 // - ImpSWFDialog -
-// ----------------
+
 
 class ResMgr;
 class Window;

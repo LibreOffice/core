@@ -152,7 +152,7 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 //
 // Creating:
 // ~~~~~~~~~
@@ -203,7 +203,7 @@ public:
 // -> during Copy, etc. use the respective code of the connectors?!?
 // this probably will be pretty complicated ...
 //
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDOMEAS_HXX
 

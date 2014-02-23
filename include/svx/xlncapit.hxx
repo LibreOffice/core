@@ -25,9 +25,9 @@
 #include <svx/xenum.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-//---------------------
+
 // class XLineCapItem
-//---------------------
+
 
 class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem
 {

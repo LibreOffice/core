@@ -39,7 +39,7 @@ class LoadDispatcher : private ThreadHelpBase
                      , public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDispatch,          // => XDispatch => XInterface
                                                         css::frame::XSynchronousDispatch >
 {
-    //___________________________________________
+
     // member
 
     private:
@@ -59,7 +59,7 @@ class LoadDispatcher : private ThreadHelpBase
         /** @short  TODO document me */
         LoadEnv m_aLoader;
 
-    //___________________________________________
+
     // native interface
 
     public:
@@ -88,13 +88,13 @@ class LoadDispatcher : private ThreadHelpBase
                        const OUString                                         sTargetName ,
                              sal_Int32                                               nSearchFlags);
 
-        //_______________________________________
+
 
         /** @short  used to free internal resources.
          */
         virtual ~LoadDispatcher();
 
-    //___________________________________________
+
     // uno interface
 
     public:

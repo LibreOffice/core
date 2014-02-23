@@ -31,10 +31,10 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <jni.h>
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
     namespace hsqldb
     {
         class StreamHelper
@@ -76,13 +76,13 @@ namespace connectivity
             static OUString removeOldURLPrefix(const OUString& _sURL);
             static void throwJavaException(const ::com::sun::star::uno::Exception& _aException,JNIEnv * env);
         };
-    //........................................................................
+
     }   // namespace hsqldb
-    //........................................................................
-//........................................................................
+
+
 }   // namespace connectivity
 
-//........................................................................
+
 #endif // CONNECTIVI_HSQLDB_HSTORAGEMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

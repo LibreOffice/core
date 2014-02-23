@@ -54,10 +54,10 @@ namespace connectivity
         class OCommonStatement;
         typedef OSubComponent< OCommonStatement, OCommonStatement_IBase >   OStatement_CBase;
 
-        //**************************************************************
+
         //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
-        //**************************************************************
+
         class OCommonStatement  :public OBase_Mutex
                                 ,public OCommonStatement_IBase
                                 ,public ::cppu::OPropertySetHelper

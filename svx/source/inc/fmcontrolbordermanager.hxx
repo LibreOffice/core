@@ -32,10 +32,10 @@ namespace com { namespace sun { namespace star { namespace form { namespace vali
     class XValidatableFormComponent;
 } } } } }
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     typedef sal_Int16 ControlStatus;
 
@@ -44,9 +44,9 @@ namespace svxform
     #define CONTROL_STATUS_MOUSE_HOVER  0x02
     #define CONTROL_STATUS_INVALID      0x04
 
-    //====================================================================
+
     //= BorderDescriptor
-    //====================================================================
+
     struct BorderDescriptor
     {
         sal_Int16   nBorderType;
@@ -64,9 +64,9 @@ namespace svxform
         }
     };
 
-    //====================================================================
+
     //= UnderlineDescriptor
-    //====================================================================
+
     struct UnderlineDescriptor
     {
         sal_Int16 nUnderlineType;
@@ -91,9 +91,9 @@ namespace svxform
         }
     };
 
-    //====================================================================
+
     //= ControlData
-    //====================================================================
+
     struct ControlData : public BorderDescriptor, UnderlineDescriptor
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl;
@@ -113,9 +113,9 @@ namespace svxform
         }
     };
 
-    //====================================================================
+
     //= ControlBorderManager
-    //====================================================================
+
     /** manages the dynamic border color for form controls
 
         Used by the <type>FormController</type>, this class manages the dynamic changes in the
@@ -146,7 +146,7 @@ namespace svxform
         ControlData m_aMouseHoverControl;
         ControlBag  m_aInvalidControls;
 
-        // ----------------
+
         // attributes
         sal_Int32   m_nFocusColor;
         sal_Int32   m_nMouseHoveColor;
@@ -250,9 +250,9 @@ namespace svxform
                 ) const;
     };
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
 

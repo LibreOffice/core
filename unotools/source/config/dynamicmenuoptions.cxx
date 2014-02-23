@@ -342,9 +342,9 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
         SvtDynMenu  m_aHelpBookmarksMenu    ;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // Init baseclasses first
     :   ConfigItem( ROOTNODE_MENUS )
@@ -450,9 +450,9 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
 */
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
 {
     // We must save our current values .. if user forget it!
@@ -462,17 +462,17 @@ SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& )
 {
     DBG_ASSERT( false, "SvtDynamicMenuOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtDynamicMenuOptions_Impl::Commit()
 {
     OSL_FAIL( "SvtDynamicMenuOptions_Impl::Commit()\nNot implemented yet!\n" );
@@ -559,9 +559,9 @@ void SvtDynamicMenuOptions_Impl::Commit()
     */
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDynamicMenuType eMenu ) const
 {
     Sequence< Sequence< PropertyValue > > lReturn;
@@ -585,9 +585,9 @@ Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDyna
     return lReturn;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount, sal_uInt32& nHelpBookmarksCount )
 {
     // First get ALL names of current existing list items in configuration!
@@ -610,9 +610,9 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
     return lProperties;
 }
 
-//*****************************************************************************************************************
+
 //  private helper
-//*****************************************************************************************************************
+
 class CountWithPrefixSort
 {
     public:
@@ -640,9 +640,9 @@ class SelectByPrefix
         }
 };
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource      ,
                                                                         Sequence< OUString >& lDestination ,
                                                                   const OUString&             sSetNode     )
@@ -689,17 +689,17 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
     }
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = NULL  ;
 sal_Int32                       SvtDynamicMenuOptions::m_nRefCount      = 0     ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtDynamicMenuOptions::SvtDynamicMenuOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -714,9 +714,9 @@ SvtDynamicMenuOptions::SvtDynamicMenuOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -732,9 +732,9 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions::GetMenu( EDynamicMenuType eMenu ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -746,9 +746,9 @@ namespace
     class theDynamicMenuOptionsMutex : public rtl::Static<osl::Mutex, theDynamicMenuOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Mutex& SvtDynamicMenuOptions::GetOwnStaticMutex()
 {
     return theDynamicMenuOptionsMutex::get();

@@ -28,7 +28,7 @@ namespace oox {
 namespace dump {
 namespace pptx {
 
-// ============================================================================
+
 
 class RootStorageObject : public StorageObjectBase
 {
@@ -43,7 +43,7 @@ protected:
                             const OUString& rSysFileName );
 };
 
-// ============================================================================
+
 
 class Dumper : public DumperBase
 {
@@ -59,7 +59,7 @@ protected:
     virtual void        implDump();
 };
 
-// ============================================================================
+
 
 } // namespace pptx
 } // namespace dump

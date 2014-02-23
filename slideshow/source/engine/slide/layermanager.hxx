@@ -252,7 +252,7 @@ namespace slideshow
             typedef ::std::set< ShapeSharedPtr > ShapeUpdateSet;
 
 
-            ////////////////////////////////////////////////////////////////////////
+
 
 
             /// Adds shape area to containing layer's damage area

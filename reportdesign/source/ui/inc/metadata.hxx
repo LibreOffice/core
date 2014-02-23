@@ -24,16 +24,16 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 
-//............................................................................
+
 namespace rptui
 {
-//............................................................................
+
 
     struct OPropertyInfoImpl;
 
-    //========================================================================
+
     //= OPropertyInfoService
-    //========================================================================
+
     class OPropertyInfoService
         :public OModuleClient
     {
@@ -66,9 +66,9 @@ namespace rptui
         static const OPropertyInfoImpl* getPropertyInfo(sal_Int32 _nId);
     };
 
-    //========================================================================
+
     //= HelpIdUrl
-    //========================================================================
+
     /// small helper to translate help ids into help urls
     class HelpIdUrl
     {
@@ -76,9 +76,9 @@ namespace rptui
         static OUString getHelpURL( const OString& _sHelpId );
     };
 
-    //========================================================================
+
     //= UI flags (for all browseable properties)
-    //========================================================================
+
 
 #define PROP_FLAG_NONE              0x00000001  // no special flag
 #define PROP_FLAG_ENUM              0x00000002  // the property is some kind of enum property, i.e. its
@@ -92,10 +92,10 @@ namespace rptui
                                                 // option
 #define PROP_FLAG_DATA_PROPERTY     0x00000020  // the property is to appear on the "Data" page
 
-    //========================================================================
+
     //= property ids (for all browseable properties)
     //= The ID is used for the view order in the property browser.
-    //========================================================================
+
 
     #define PROPERTY_ID_FORCENEWPAGE                    1
     #define PROPERTY_ID_NEWROWORCOL                     2
@@ -144,9 +144,9 @@ namespace rptui
     #define PROPERTY_ID_VERTICALALIGN                   42
 
 
-//............................................................................
+
 } // namespace rptui
-//............................................................................
+
 
 #endif // RPTUI_METADATA_HXX_
 

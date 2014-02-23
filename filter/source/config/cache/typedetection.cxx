@@ -376,7 +376,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    //*******************************************
+
     // parse given URL to split it into e.g. main and jump marks ...
     OUString sURL = stlDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
 
@@ -415,7 +415,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
 
     try
     {
-        //*******************************************
+
         // verify every flat detected (or preselected!) type
         // by calling its registered deep detection service.
         // But break this loop if a type match to the given descriptor
@@ -427,7 +427,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         if (lFlatTypes.size()>0)
             sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, lUsedDetectors, sLastChance);
 
-        //*******************************************
+
         // flat detection failed
         // pure deep detection failed
         // => ask might existing InteractionHandler
@@ -435,7 +435,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         if (sType.isEmpty())
             sType = impl_askUserForTypeAndFilterIfAllowed(stlDescriptor);
 
-        //*******************************************
+
         // no real detected type - but a might valid one.
         // update descriptor and set last chance for return.
         if (sType.isEmpty() && !sLastChance.isEmpty())
@@ -455,7 +455,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
             sType = OUString();
         }
 
-    //*******************************************
+
     // adapt media descriptor, so it contains the right values
     // for type/filter name/document service/ etcpp.
     impl_checkResultsAndAddBestFilter(stlDescriptor, sType); // Attention: sType is used as IN/OUT param here and will might be changed inside this method !!!

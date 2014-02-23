@@ -29,7 +29,7 @@
 #include "gcach_xpeer.hxx"
 #include "xrender_peer.hxx"
 
-// ===========================================================================
+
 
 X11GlyphPeer::X11GlyphPeer()
 {
@@ -62,7 +62,7 @@ X11GlyphPeer::~X11GlyphPeer()
     }
 }
 
-// ===========================================================================
+
 
 X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
 :   GlyphCache( rPeer )
@@ -118,13 +118,13 @@ void X11GlyphCache::KillInstance()
     return theGlyphCacheHolder::get().release();
 }
 
-// ===========================================================================
+
 
 void X11SalGraphics::releaseGlyphPeer()
 {
     X11GlyphCache::KillInstance();
 }
 
-// ===========================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,15 +26,15 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     class UrlTransformer;
-    //====================================================================
+
     //= ControlFeatureInterception
-    //====================================================================
+
     /** helper class for controls which allow some of their features to be intercepted
         by external instances
 
@@ -85,9 +85,9 @@ namespace frm
             queryDispatch( const sal_Char* _pAsciiURL ) SAL_THROW((::com::sun::star::uno::RuntimeException));
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_CONTROLFEATUREINTERCEPTION_HXX
 

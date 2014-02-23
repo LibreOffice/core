@@ -19,9 +19,9 @@
 
 #include "java/lang/Exception.hxx"
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.lang.Exception
-//**************************************************************
+
 
 jclass java_lang_Exception::theClass = 0;
 

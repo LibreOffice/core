@@ -54,7 +54,7 @@ namespace editeng { class SvxBorderLine; }
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
-//==================================================================
+
 
 class ScViewFunc : public ScTabView
 {

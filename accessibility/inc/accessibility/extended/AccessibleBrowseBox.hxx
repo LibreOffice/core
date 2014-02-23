@@ -26,14 +26,14 @@
 #include <cppuhelper/weakref.hxx>
 #include <svtools/accessibletableprovider.hxx>
 
-// ============================================================================
+
 
 namespace accessibility {
 
     class AccessibleBrowseBoxImpl;
     class AccessibleBrowseBoxTable;
 
-// ============================================================================
+
 
 /** This class represents the complete accessible BrowseBox object. */
 class AccessibleBrowseBox : public AccessibleBrowseBoxBase
@@ -192,7 +192,7 @@ private:
     boost::scoped_ptr< AccessibleBrowseBoxImpl > m_pImpl;
 };
 
-// ============================================================================
+
 /** the XAccessible which creates/returns an AccessibleBrowseBox
 
     <p>The instance holds it's XAccessibleContext with a hard reference, while
@@ -292,10 +292,10 @@ private:
     AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& );   // never implemented
 };
 
-// ============================================================================
+
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif
 

@@ -25,14 +25,14 @@
 
 using namespace com::sun::star;
 
-//=========================================================================
+
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-//=========================================================================
+
 extern "C" void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -43,9 +43,9 @@ extern "C" void * SAL_CALL component_getFactory(
                 pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
+
     // WebDAV Content Provider.
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( ::http_dav_ucp::ContentProvider::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -53,7 +53,7 @@ extern "C" void * SAL_CALL component_getFactory(
         xFactory = ::http_dav_ucp::ContentProvider::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( xFactory.is() )
     {

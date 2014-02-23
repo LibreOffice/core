@@ -228,7 +228,7 @@ OUString SAL_CALL CFilterContainer::getCurrentFilter() const
     return m_sCurrentFilter;
 }
 
-//###################################################################
+
 
 
 

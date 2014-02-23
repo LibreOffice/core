@@ -33,9 +33,9 @@ namespace connectivity
     {
         using ::com::sun::star::sdbc::SQLException;
         using ::com::sun::star::uno::RuntimeException;
-        //**************************************************************
+
         //************ Class: ResultSetMetaData
-        //**************************************************************
+
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData> OResultSetMetaData_BASE;
 
         class OResultSetMetaData : public OResultSetMetaData_BASE

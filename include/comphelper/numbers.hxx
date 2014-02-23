@@ -25,10 +25,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     namespace staruno   = ::com::sun::star::uno;
     namespace starlang  = ::com::sun::star::lang;
@@ -58,9 +58,9 @@ namespace comphelper
         const OUString& _rPropertyName
     );
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_NUMBERS_HXX
 

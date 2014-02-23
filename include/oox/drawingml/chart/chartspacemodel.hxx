@@ -28,7 +28,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct ChartSpaceModel
 {
@@ -62,7 +62,7 @@ struct ChartSpaceModel
                         ~ChartSpaceModel();
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

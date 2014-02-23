@@ -35,14 +35,14 @@ namespace cppu
     class OWeakObject;
 }
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IPropertyValueProvider
-    //====================================================================
+
     /** a provider for a property value
     */
     class SVX_DLLPUBLIC IPropertyValueProvider
@@ -60,9 +60,9 @@ namespace svx
     };
     typedef ::boost::shared_ptr< IPropertyValueProvider >  PPropertyValueProvider;
 
-    //====================================================================
+
     //= PropertyValueProvider
-    //====================================================================
+
     /** default implementation of a IPropertyValueProvider
 
         This default implementation queries the object which it is constructed with for the XPropertySet interface,
@@ -88,9 +88,9 @@ namespace svx
         const OUString   m_sPropertyName;
     };
 
-    //====================================================================
+
     //= PropertyChangeNotifier
-    //====================================================================
+
     struct PropertyChangeNotifier_Data;
 
     /** helper class for notifying XPropertyChangeListeners
@@ -132,9 +132,9 @@ namespace svx
         ::std::auto_ptr< PropertyChangeNotifier_Data >  m_pData;
     };
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SHAPEPROPERTYNOTIFIER_HXX
 

@@ -25,14 +25,14 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= StringListResource
-    //====================================================================
+
     /** loads a list of strings from a resource, where the resource is of type RSC_RESOURCE,
         and has sub resources of type string, numbered from 1 to n
     */
@@ -70,9 +70,9 @@ namespace svx
         ::std::vector< OUString > m_aStrings;
     };
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_STRINGLISTRESOURCE_HXX
 

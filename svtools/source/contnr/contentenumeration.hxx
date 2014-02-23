@@ -28,14 +28,14 @@
 #include <tools/datetime.hxx>
 #include <vcl/image.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= SortingData_Impl
-    //====================================================================
+
     struct SortingData_Impl
     {
     private:
@@ -114,9 +114,9 @@ namespace svt
         maLowerTitle = rNewTitle.toAsciiLowerCase();
     }
 
-    //====================================================================
+
     //= IContentTitleTranslation
-    //====================================================================
+
     class IContentTitleTranslation
     {
     public:
@@ -126,9 +126,9 @@ namespace svt
         ~IContentTitleTranslation() {}
     };
 
-    //====================================================================
+
     //= EnumerationResult
-    //====================================================================
+
     enum EnumerationResult
     {
         SUCCESS,    /// the enumeration was successful
@@ -136,9 +136,9 @@ namespace svt
         RUNNING     /// the enumeration is still running, and the maximum wait time has passed
     };
 
-    //====================================================================
+
     //= FolderDescriptor
-    //====================================================================
+
     struct FolderDescriptor
     {
         /** a content object describing the folder. Can be <NULL/>, in this case <member>sURL</member>
@@ -162,9 +162,9 @@ namespace svt
         }
     };
 
-    //====================================================================
+
     //= IEnumerationResultHandler
-    //====================================================================
+
     class IEnumerationResultHandler
     {
     public:
@@ -174,9 +174,9 @@ namespace svt
         ~IEnumerationResultHandler() {}
     };
 
-    //====================================================================
+
     //= FileViewContentEnumerator
-    //====================================================================
+
     class FileViewContentEnumerator: public salhelper::Thread
     {
     public:
@@ -261,9 +261,9 @@ namespace svt
         sal_Bool implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const;
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 

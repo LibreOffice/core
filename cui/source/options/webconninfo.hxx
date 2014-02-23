@@ -25,10 +25,10 @@
 #include <svtools/simptabl.hxx>
 #include <svtools/stdctrl.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     class PasswordTable : public SvSimpleTable
     {
@@ -41,9 +41,9 @@ namespace svx
         virtual void Resize();
     };
 
-    //====================================================================
+
     //= class WebConnectionIfoDialog
-    //====================================================================
+
     class WebConnectionInfoDialog : public ModalDialog
     {
     private:
@@ -66,9 +66,9 @@ namespace svx
         ~WebConnectionInfoDialog();
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_WEBCONNINFO_HXX
 

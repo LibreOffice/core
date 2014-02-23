@@ -30,17 +30,17 @@
 
 struct SvXMLEnumMapEntry;
 class Color;
-//.........................................................................
+
 namespace xmloff
 {
-//.........................................................................
+
 
     class IFormsExportContext;
     class OFormLayerXMLImport_Impl;
 
-    //=====================================================================
+
     //= ORotationAngleHandler
-    //=====================================================================
+
     class ORotationAngleHandler : public XMLPropertyHandler
     {
     public:
@@ -50,9 +50,9 @@ namespace xmloff
         virtual bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
     };
 
-    //=====================================================================
+
     //= OFontWidthHandler
-    //=====================================================================
+
     class OFontWidthHandler : public XMLPropertyHandler
     {
     public:
@@ -62,9 +62,9 @@ namespace xmloff
         virtual bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
     };
 
-    //=====================================================================
+
     //= OControlBorderHandlerBase
-    //=====================================================================
+
     class OControlBorderHandler : public XMLPropertyHandler
     {
     public:
@@ -83,9 +83,9 @@ namespace xmloff
         BorderFacet m_eFacet;
     };
 
-    //=====================================================================
+
     //= OControlTextEmphasisHandler
-    //=====================================================================
+
     class OControlTextEmphasisHandler : public XMLPropertyHandler
     {
     public:
@@ -95,18 +95,18 @@ namespace xmloff
         virtual bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
     };
 
-    //=====================================================================
+
     //= ImageScaleModeHandler
-    //=====================================================================
+
     class XMLOFF_DLLPUBLIC ImageScaleModeHandler : public XMLConstantsPropertyHandler
     {
     public:
         ImageScaleModeHandler();
     };
 
-    //=====================================================================
+
     //= OControlPropertyHandlerFactory
-    //=====================================================================
+
     class XMLOFF_DLLPUBLIC OControlPropertyHandlerFactory : public XMLPropertyHandlerFactory
     {
     protected:
@@ -127,9 +127,9 @@ namespace xmloff
         virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 _nType) const;
     };
 
-//.........................................................................
+
 }   // namespace xmloff
-//.........................................................................
+
 
 #endif // INCLUDED_XMLOFF_CONTROLPROPERTYHDL_HXX
 

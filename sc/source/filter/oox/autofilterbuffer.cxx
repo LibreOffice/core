@@ -42,7 +42,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -145,7 +145,7 @@ bool lclConvertWildcardsToRegExp( OUString& rValue )
 
 } // namespace
 
-// ============================================================================
+
 
 ApiFilterSettings::ApiFilterSettings()
 {
@@ -188,7 +188,7 @@ void ApiFilterSettings::appendField( bool bAnd, const std::vector<OUString>& rVa
     }
 }
 
-// ============================================================================
+
 
 FilterSettingsBase::FilterSettingsBase( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -208,7 +208,7 @@ ApiFilterSettings FilterSettingsBase::finalizeImport( sal_Int32 /*nMaxCount*/ )
     return ApiFilterSettings();
 }
 
-// ============================================================================
+
 
 DiscreteFilter::DiscreteFilter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),
@@ -285,7 +285,7 @@ ApiFilterSettings DiscreteFilter::finalizeImport( sal_Int32 nMaxCount )
     return aSettings;
 }
 
-// ============================================================================
+
 
 Top10Filter::Top10Filter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),
@@ -326,7 +326,7 @@ ApiFilterSettings Top10Filter::finalizeImport( sal_Int32 /*nMaxCount*/ )
     return aSettings;
 }
 
-// ============================================================================
+
 
 FilterCriterionModel::FilterCriterionModel() :
     mnOperator( XML_equal ),
@@ -501,7 +501,7 @@ void CustomFilter::appendCriterion( const FilterCriterionModel& rCriterion )
         maCriteria.push_back( rCriterion );
 }
 
-// ============================================================================
+
 
 FilterColumn::FilterColumn( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -540,7 +540,7 @@ ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
     return aSettings;
 }
 
-// ============================================================================
+
 
 AutoFilter::AutoFilter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -648,7 +648,7 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
     }
 }
 
-// ============================================================================
+
 
 AutoFilterBuffer::AutoFilterBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -745,7 +745,7 @@ AutoFilter* AutoFilterBuffer::getActiveAutoFilter()
     return maAutoFilters.empty() ? 0 : maAutoFilters.back().get();
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

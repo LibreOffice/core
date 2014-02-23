@@ -85,9 +85,9 @@ namespace connectivity
             virtual void setObject(sal_Int32 _nIndex,const ObjectType& _xObject) = 0;
             virtual sal_Bool isCaseSensitive() const = 0;
         };
-        //************************************************************
+
         //  OCollection
-        //************************************************************
+
         class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE OCollection :
             public OCollectionBase
         {

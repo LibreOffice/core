@@ -35,10 +35,10 @@
 #include "RptObject.hxx"
 #include "FormatCondition.hxx"
 #include "ReportHelperImpl.hxx"
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 uno::Sequence< OUString > lcl_getShapeOptionals()
@@ -508,8 +508,8 @@ void SAL_CALL OShape::setCustomShapeGeometry( const uno::Sequence< beans::Proper
 
 
 
-// =============================================================================
+
 }// namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

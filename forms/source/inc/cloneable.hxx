@@ -22,14 +22,14 @@
 
 #include <com/sun/star/uno/XAggregation.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-    //====================================================================
+
+
     //= OCloneableAggregation
-    //====================================================================
+
     class OCloneableAggregation
     {
     protected:
@@ -39,9 +39,9 @@ namespace frm
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > createAggregateClone( const OCloneableAggregation* _pOriginal );
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_CLONEABLE_HXX
 

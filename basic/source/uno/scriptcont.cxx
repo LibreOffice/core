@@ -73,7 +73,7 @@ using namespace com::sun::star;
 using namespace cppu;
 using namespace osl;
 
-//============================================================================
+
 // Implementation class SfxScriptLibraryContainer
 
 const sal_Char* SAL_CALL SfxScriptLibraryContainer::getInfoFileName() const { return "script"; }
@@ -1193,7 +1193,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString&
     return sal_True;
 }
 
-//============================================================================
+
 // Service
 void createRegistryInfo_SfxScriptLibraryContainer()
 {
@@ -1233,7 +1233,7 @@ Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create( const Refere
     return xRet;
 }
 
-//============================================================================
+
 // Implementation class SfxScriptLibrary
 
 // Ctor
@@ -1351,7 +1351,7 @@ void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
 }
 
 
-//============================================================================
+
 
 }   // namespace basic
 

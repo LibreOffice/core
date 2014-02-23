@@ -142,7 +142,7 @@ namespace basegfx
         }
 
         // operators
-        //////////////////////////////////////////////////////////////////////
+
 
         B3I64Tuple& operator+=( const B3I64Tuple& rTup )
         {
@@ -217,7 +217,7 @@ namespace basegfx
     };
 
     // external operators
-    //////////////////////////////////////////////////////////////////////////
+
 
     inline B3I64Tuple minimum(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
     {

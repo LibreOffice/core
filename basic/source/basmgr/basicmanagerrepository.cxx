@@ -46,10 +46,10 @@
 
 #include <map>
 
-//........................................................................
+
 namespace basic
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -73,9 +73,9 @@ namespace basic
 
     typedef ::std::vector< BasicManagerCreationListener* >  CreationListeners;
 
-    //====================================================================
+
     //= BasicManagerCleaner
-    //====================================================================
+
     /// is the only instance which is allowed to delete a BasicManager instance
     class BasicManagerCleaner
     {
@@ -87,9 +87,9 @@ namespace basic
         }
     };
 
-    //====================================================================
+
     //= ImplRepository
-    //====================================================================
+
     class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener
     {
     private:
@@ -207,9 +207,9 @@ namespace basic
         StarBASIC* impl_getDefaultAppBasicLibrary();
     };
 
-    //====================================================================
+
     //= CreateImplRepository
-    //====================================================================
+
     struct CreateImplRepository
     {
         ImplRepository* operator()()
@@ -220,9 +220,9 @@ namespace basic
     };
 
 
-    //====================================================================
+
     //= ImplRepository
-    //====================================================================
+
 
     ImplRepository::ImplRepository()
     {
@@ -609,9 +609,9 @@ namespace basic
         }
     }
 
-    //====================================================================
+
     //= BasicManagerRepository
-    //====================================================================
+
 
     BasicManager* BasicManagerRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
     {
@@ -642,8 +642,8 @@ namespace basic
         ImplRepository::Instance().revokeCreationListener( _rListener );
     }
 
-//........................................................................
+
 } // namespace basic
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

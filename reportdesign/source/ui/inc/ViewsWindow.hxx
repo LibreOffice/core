@@ -45,7 +45,7 @@ namespace rptui
     class OSectionView;
 
 
-    // -----------------------------------------------------------------------------
+
     struct RectangleLess : public ::std::binary_function< Rectangle, Rectangle, bool>
     {
         enum CompareMode { POS_LEFT,POS_RIGHT,POS_UPPER,POS_DOWN,POS_CENTER_HORIZONTAL,POS_CENTER_VERTICAL };
@@ -341,9 +341,9 @@ namespace rptui
         */
         void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
     };
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 #endif // RPTUI_VIEWSWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

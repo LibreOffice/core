@@ -24,16 +24,16 @@
 #include "modulepcr.hxx"
 #include "enumrepresentation.hxx"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     struct OPropertyInfoImpl;
 
-    //========================================================================
+
     //= OPropertyInfoService
-    //========================================================================
+
     class OPropertyInfoService
                 :public IPropertyInfoService
                 ,public PcrClient
@@ -62,9 +62,9 @@ namespace pcr
         static const OPropertyInfoImpl* getPropertyInfo(sal_Int32 _nId);
     };
 
-    //========================================================================
+
     //= DefaultEnumRepresentation
-    //========================================================================
+
     /** an implementation of the IPropertyEnumRepresentation
 
         To be used with properties which, in formmetadata.cxx, are declared as ENUM.
@@ -106,9 +106,9 @@ namespace pcr
         DefaultEnumRepresentation& operator=( const DefaultEnumRepresentation& );   // never implemented
     };
 
-    //========================================================================
+
     //= UI flags (for all browseable properties)
-    //========================================================================
+
 
 #define PROP_FLAG_NONE              0x00000000  // no special flag
 #define PROP_FLAG_FORM_VISIBLE      0x00000001  // the property is visible when inspecting a form object
@@ -124,9 +124,9 @@ namespace pcr
                                                 // UI, unless experimental properties are enabled by a configuraiton
                                                 // option
 
-    //========================================================================
+
     //= property ids (for all browseable properties)
-    //========================================================================
+
 
     #define PROPERTY_ID_NAME                  1
     #define PROPERTY_ID_LABEL                 2
@@ -334,9 +334,9 @@ namespace pcr
     #define PROPERTY_ID_SCROLL_TOP                  205
     #define PROPERTY_ID_SCROLL_LEFT                 206
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
 

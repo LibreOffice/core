@@ -24,7 +24,7 @@
 class SwDoc;
 class SwDocShell;
 
-//==================================================================
+
 
 class SwDrawDocument : public FmFormModel
 {

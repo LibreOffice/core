@@ -193,7 +193,7 @@ static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
     { NULL, NULL }
 };
 
-//****************************************************************************
+
 
 static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
 {
@@ -346,7 +346,7 @@ static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        // ...
+
     }
     return nRet;
 }
@@ -472,7 +472,7 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        // ...
+
     }
     return nRet;
 }

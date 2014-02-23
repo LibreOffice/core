@@ -30,10 +30,10 @@
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/CommonTools.hxx"
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     namespace hsqldb
     {
@@ -128,9 +128,9 @@ namespace connectivity
         };
     }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 #endif // CONNECTIVITY_HSQLDB_DRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

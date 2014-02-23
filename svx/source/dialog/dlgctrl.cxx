@@ -1829,7 +1829,7 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_uInt16 nPos, const Bitm
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
 {

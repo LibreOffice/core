@@ -38,7 +38,7 @@ namespace osl
 {
 
 
-// -----------------------------------------------------------------------------
+
 /** Base class for all File System specific objects.
 
     @see Directory
@@ -319,7 +319,7 @@ public:
 };
 
 
-// -----------------------------------------------------------------------------
+
 /** The VolumeDevice class.
 
     @see VolumeInfo
@@ -396,7 +396,7 @@ public:
     friend class VolumeInfo;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class Directory;
 
@@ -638,7 +638,7 @@ public:
     friend class Directory;
 };
 
-// -----------------------------------------------------------------------------
+
 class DirectoryItem;
 
 /** The FileStatus class.
@@ -894,7 +894,7 @@ public:
 };
 
 
-// -----------------------------------------------------------------------------
+
 /** The file class object provides access to file contents and attributes.
 
     @see Directory
@@ -1429,7 +1429,7 @@ public:
     friend class DirectoryItem;
 };
 
-// -----------------------------------------------------------------------------
+
 /** The directory item class object provides access to file status information.
 
     @see FileStatus
@@ -1601,7 +1601,7 @@ public:
     friend class Directory;
 };
 
-//###########################################
+
 
 /** Base class for observers of directory creation notifications.
 
@@ -1630,7 +1630,7 @@ public:
     virtual void DirectoryCreated(const rtl::OUString& aDirectoryUrl) = 0;
 };
 
-//###########################################
+
 // This just an internal helper function for
 // private use.
 extern "C" inline void SAL_CALL onDirectoryCreated(void* pData, rtl_uString* aDirectoryUrl)

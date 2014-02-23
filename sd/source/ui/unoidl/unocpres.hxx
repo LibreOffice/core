@@ -30,7 +30,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/servicehelper.hxx>
 
-///////////////////////////////////////////////////////////////////////////////
+
 
 class SdXImpressDocument;
 class SdCustomShow;
@@ -94,7 +94,7 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-// --------------------------------------------------------------------------
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 

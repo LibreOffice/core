@@ -49,7 +49,7 @@ DBG_NAME(SfxAppMainWizMenu)
 DBG_NAME(SfxAppMainOLEReg)
 DBG_NAME(SfxAppMainCHAOSReg)
 
-//===================================================================
+
 
 TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
 

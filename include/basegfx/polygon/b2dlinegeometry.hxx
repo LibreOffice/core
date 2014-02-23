@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {

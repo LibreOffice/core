@@ -37,9 +37,9 @@ class SalGtkFolderPicker :
         // constructor
         SalGtkFolderPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xServiceMgr );
 
-        //------------------------------------------------------------------------------------
+
         // XExecutableDialog functions
-        //------------------------------------------------------------------------------------
+
 
         virtual void SAL_CALL setTitle( const OUString& aTitle )
             throw( ::com::sun::star::uno::RuntimeException );
@@ -47,9 +47,9 @@ class SalGtkFolderPicker :
         virtual sal_Int16 SAL_CALL execute(  )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        //------------------------------------------------------------------------------------
+
         // XFolderPicker functions
-        //------------------------------------------------------------------------------------
+
 
         virtual void SAL_CALL setDisplayDirectory( const OUString& rDirectory )
             throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
@@ -63,16 +63,16 @@ class SalGtkFolderPicker :
         virtual void SAL_CALL setDescription( const OUString& rDescription )
             throw( com::sun::star::uno::RuntimeException );
 
-        //------------------------------------------------
+
         // XCancellable
-        //------------------------------------------------
+
 
         virtual void SAL_CALL cancel( )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        //------------------------------------------------
+
         // XEventListener
-        //------------------------------------------------
+
 
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
             throw(::com::sun::star::uno::RuntimeException);

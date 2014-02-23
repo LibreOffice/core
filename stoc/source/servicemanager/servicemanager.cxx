@@ -188,7 +188,7 @@ Any ServiceEnumeration_Impl::nextElement()
     return Any( &aFactories.getConstArray()[nIt++], ::getCppuType( (const Reference<XInterface > *)0 ) );
 }
 
-//==================================================================================================
+
 class PropertySetInfo_Impl : public WeakImplHelper1< beans::XPropertySetInfo >
 {
     Sequence< beans::Property > m_properties;
@@ -501,9 +501,9 @@ inline void OServiceManager::check_undisposed() const
     }
 }
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 typedef WeakComponentImplHelper6<
     lang::XMultiServiceFactory, lang::XMultiComponentFactory, lang::XServiceInfo,
@@ -679,9 +679,9 @@ OServiceManagerWrapper::OServiceManagerWrapper(
     }
 }
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 /**
  * Create a ServiceManager

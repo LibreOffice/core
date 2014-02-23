@@ -36,10 +36,10 @@ extern "C" void SAL_CALL createRegistryInfo_SubmissionPropertyHandler()
     ::pcr::SubmissionPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::comphelper;
     using namespace ::com::sun::star;
@@ -52,9 +52,9 @@ namespace pcr
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= SubmissionHelper
-    //====================================================================
+
 
     SubmissionHelper::SubmissionHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
         :EFormsHelper( _rMutex, _rxIntrospectee, _rxContextDocument )
@@ -83,9 +83,9 @@ namespace pcr
         return false;
     }
 
-    //====================================================================
+
     //= SubmissionPropertyHandler
-    //====================================================================
+
     DBG_NAME( SubmissionPropertyHandler )
 
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )
@@ -430,8 +430,8 @@ namespace pcr
             firePropertyChange( PROPERTY_XFORMS_BUTTONTYPE, PROPERTY_ID_XFORMS_BUTTONTYPE, _rEvent.OldValue, _rEvent.NewValue );
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

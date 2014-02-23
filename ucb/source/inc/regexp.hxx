@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-//============================================================================
+
 namespace ucb_impl {
 
 class Regexp

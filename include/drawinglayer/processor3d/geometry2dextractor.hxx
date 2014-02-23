@@ -28,7 +28,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

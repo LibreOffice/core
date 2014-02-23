@@ -43,9 +43,9 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
             const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
         virtual ~MenuBarWrapper();
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XInterface, XTypeProvider
-        //---------------------------------------------------------------------------------------------------------
+
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
 

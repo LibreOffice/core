@@ -197,7 +197,7 @@ private:
     boost::ptr_vector<FontCollectionEntry> maFonts;
 };
 
-// ------------------------------------------------------------------------
+
 
 #define PPTEX_STYLESHEETENTRYS  9
 
@@ -322,7 +322,7 @@ class PPTExStyleSheet
                 void            WriteTxCFStyleAtom( SvStream& rSt );
 };
 
-// ------------------------------------------------------------------------
+
 
 class PPTWriterBase : public PropValue, public GroupTable
 {

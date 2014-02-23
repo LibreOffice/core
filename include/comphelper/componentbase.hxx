@@ -23,14 +23,14 @@
 #include <comphelper/comphelperdllapi.h>
 #include <cppuhelper/interfacecontainer.hxx>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ComponentBase
-    //====================================================================
+
     class COMPHELPER_DLLPUBLIC ComponentBase
     {
     protected:
@@ -145,9 +145,9 @@ namespace comphelper
         ::osl::ResettableMutexGuard   m_aMutexGuard;
     };
 
-//........................................................................
+
 } // namespace ComponentBase
-//........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_COMPONENTBASE_HXX
 

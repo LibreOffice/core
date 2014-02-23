@@ -59,7 +59,7 @@ class FmFormModel;
 class FmFormView;
 class SdrMarkList;
 
-//========================================================================
+
 class FmEntryData;
 class FmNavInsertedHint : public SfxHint
 {
@@ -75,7 +75,7 @@ public:
     sal_uInt32 GetRelPos() const { return nPos; }
 };
 
-//========================================================================
+
 class FmNavModelReplacedHint : public SfxHint
 {
     FmEntryData* pEntryData;    // die Daten des Eintrages, der ein neues Model bekommen hat
@@ -88,7 +88,7 @@ public:
     FmEntryData* GetEntryData() const { return pEntryData; }
 };
 
-//========================================================================
+
 class FmNavRemovedHint : public SfxHint
 {
     FmEntryData* pEntryData;
@@ -101,7 +101,7 @@ public:
     FmEntryData* GetEntryData() const { return pEntryData; }
 };
 
-//========================================================================
+
 class FmNavNameChangedHint : public SfxHint
 {
     FmEntryData*    pEntryData;
@@ -116,7 +116,7 @@ public:
     OUString          GetNewName() const { return aNewName; }
 };
 
-//========================================================================
+
 class FmNavClearedHint : public SfxHint
 {
 public:
@@ -125,7 +125,7 @@ public:
     virtual ~FmNavClearedHint();
 };
 
-//========================================================================
+
 class FmNavViewMarksChanged : public SfxHint
 {
     FmFormView* pView;
@@ -137,7 +137,7 @@ public:
     FmFormView* GetAffectedView() { return pView; }
 };
 
-//========================================================================
+
 class FmEntryDataList;
 class FmEntryData
 {
@@ -194,7 +194,7 @@ public:
     }
 };
 
-//========================================================================
+
 typedef ::std::vector< FmEntryData* > FmEntryDataBaseList;
 
 class FmEntryDataList
@@ -215,7 +215,7 @@ public:
     void            clear();
 };
 
-//========================================================================
+
 // FmNavRequestSelectHint - jemand teilt dem NavigatorTree mit, dass er bestimmte Eintraege selektieren soll
 
 typedef std::set<FmEntryData*> FmEntryDataArray;
@@ -236,7 +236,7 @@ public:
     FmEntryDataArray& GetItems() { return m_arredToSelect; }
 };
 
-//========================================================================
+
 class FmFormData : public FmEntryData
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >           m_xForm;
@@ -269,7 +269,7 @@ public:
 };
 
 
-//========================================================================
+
 class FmControlData : public FmEntryData
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  m_xFormComponent;
@@ -298,16 +298,16 @@ public:
 };
 
 
-//========================================================================
-//............................................................................
+
+
 namespace svxform
 {
-//............................................................................
+
 
     class NavigatorTreeModel;
-    //========================================================================
+
     // class OFormComponentObserver
-    //========================================================================
+
     class OFormComponentObserver
         :public ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener
@@ -342,9 +342,9 @@ namespace svxform
         void Remove( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement );
     };
 
-    //========================================================================
+
     //= NavigatorTreeModel
-    //========================================================================
+
     class NavigatorTreeModel : public SfxBroadcaster
                            ,public SfxListener
     {
@@ -407,7 +407,7 @@ namespace svxform
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     };
 
-    //========================================================================
+
     typedef std::set<SvTreeListEntry*> SvLBoxEntrySortedArray;
 
     class NavigatorTree : public SvTreeListBox, public SfxListener
@@ -560,7 +560,7 @@ namespace svxform
         sal_Bool    doingKeyboardCut( ) const { return m_bKeyboardCut; }
     };
 
-    //========================================================================
+
     class NavigatorFrame : public SfxDockingWindow, public SfxControllerItem
     {
     private:
@@ -585,7 +585,7 @@ namespace svxform
         void FillInfo( SfxChildWinInfo& rInfo ) const;
     };
 
-    //========================================================================
+
     class SVX_DLLPUBLIC NavigatorFrameManager : public SfxChildWindow
     {
     public:
@@ -594,9 +594,9 @@ namespace svxform
         SFX_DECL_CHILDWINDOW( NavigatorFrameManager );
     };
 
-//............................................................................
+
 }   // namespace svxform
-//............................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMEXPL_HXX
 

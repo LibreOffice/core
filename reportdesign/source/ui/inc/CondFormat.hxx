@@ -34,19 +34,19 @@
 
 #include <vector>
 
-// .............................................................................
+
 namespace rptui
 {
-// .............................................................................
+
 
     #define MAX_CONDITIONS  (size_t)3
 
     class OReportController;
     class Condition;
 
-    //=========================================================================
+
     //= IConditionalFormatAction
-    //=========================================================================
+
     class SAL_NO_VTABLE IConditionalFormatAction
     {
     public:
@@ -174,9 +174,9 @@ namespace rptui
         void    impl_ensureConditionVisible( size_t _nCondIndex );
     };
 
-// .............................................................................
+
 } // namespace rptui
-// .............................................................................
+
 
 #endif // RPTUI_CONDFORMAT_HXX
 

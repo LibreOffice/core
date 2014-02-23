@@ -36,7 +36,7 @@ CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DLL Entry Point
 
 extern "C"

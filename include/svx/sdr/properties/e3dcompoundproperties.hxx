@@ -23,7 +23,7 @@
 #include <svx/sdr/properties/e3dproperties.hxx>
 #include <svx/svxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -64,7 +64,7 @@ namespace sdr
     } // end of namespace properties
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_E3DCOMPOUNDPROPERTIES_HXX
 

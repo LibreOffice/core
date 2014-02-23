@@ -39,7 +39,7 @@ namespace rptui
     class OReportController;
     class OXReportControllerObserverImpl;
 
-    //========================================================================
+
     class OXReportControllerObserver
         : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener

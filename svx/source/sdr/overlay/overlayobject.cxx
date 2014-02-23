@@ -28,7 +28,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -183,7 +183,7 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

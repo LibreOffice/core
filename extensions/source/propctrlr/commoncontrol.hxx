@@ -28,15 +28,15 @@
 #include <vcl/window.hxx>
 
 class NotifyEvent;
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     class ControlHelper;
-    //========================================================================
+
     //= ControlWindow
-    //========================================================================
+
     template< class WINDOW >
     class ControlWindow : public WINDOW
     {
@@ -61,9 +61,9 @@ namespace pcr
         inline virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
-    //========================================================================
+
     //= IModifyListener
-    //========================================================================
+
     class SAL_NO_VTABLE IModifyListener
     {
     public:
@@ -73,9 +73,9 @@ namespace pcr
         ~IModifyListener() {}
     };
 
-    //========================================================================
+
     //= ControlHelper
-    //========================================================================
+
     /** A helper class for implementing the <type scope="com::sun::star::inspection">XPropertyControl</type>
         or one of its derived interfaces.
 
@@ -163,9 +163,9 @@ namespace pcr
         void    impl_activateNextControl_nothrow() const;
     };
 
-    //========================================================================
+
     //= CommonBehaviourControl
-    //========================================================================
+
     /** implements a base class for <type scope="com::sun::star::inspection">XPropertyControl</type>
         implementations, which delegates the generic functionality of this interface to a
         <type>ControlHelper</type> member.
@@ -219,17 +219,17 @@ namespace pcr
         inline void impl_checkDisposed_throw();
     };
 
-    //========================================================================
+
     //= ControlWindow - implementation
-    //========================================================================
-    //------------------------------------------------------------------------
+
+
     template< class WINDOW >
     inline void ControlWindow< WINDOW >::setControlHelper( ControlHelper& _rControlHelper )
     {
         m_pHelper = &_rControlHelper;
     }
 
-    //------------------------------------------------------------------------
+
     template< class WINDOW >
     inline bool ControlWindow< WINDOW >::PreNotify( NotifyEvent& rNEvt )
     {
@@ -238,10 +238,10 @@ namespace pcr
         return WindowType::PreNotify( rNEvt );
     }
 
-    //========================================================================
+
     //= CommonBehaviourControl - implementation
-    //========================================================================
-    //------------------------------------------------------------------------
+
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::CommonBehaviourControl ( sal_Int16 _nControlType, Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers )
         :ComponentBaseClass( m_aMutex )
@@ -258,63 +258,63 @@ namespace pcr
         m_aImplControl.autoSizeWindow();
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline ::sal_Int16 SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::getControlType() throw (::com::sun::star::uno::RuntimeException)
     {
         return m_aImplControl.getControlType();
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::getControlContext() throw (::com::sun::star::uno::RuntimeException)
     {
         return m_aImplControl.getControlContext();
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline void SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::setControlContext( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >& _controlcontext ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_aImplControl.setControlContext( _controlcontext );
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::getControlWindow() throw (::com::sun::star::uno::RuntimeException)
     {
         return m_aImplControl.getControlWindow();
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline ::sal_Bool SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::isModified(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         return m_aImplControl.isModified();
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline void SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::notifyModifiedValue(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_aImplControl.notifyModifiedValue();
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline void SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::disposing()
     {
         m_aImplControl.dispose();
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline void CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::modified()
     {
         m_aImplControl.setModified();
     }
 
-    //--------------------------------------------------------------------
+
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline void CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::impl_checkDisposed_throw()
     {
@@ -322,9 +322,9 @@ namespace pcr
             throw ::com::sun::star::lang::DisposedException( OUString(), *this );
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_COMMONCONTROL_HXX_
 

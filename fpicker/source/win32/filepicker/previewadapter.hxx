@@ -38,7 +38,7 @@
 // forward declaration
 class CPreviewAdapterImpl;
 
-//---------------------------------------------
+
 // A kind of a facade for the preview class.
 // We want to hide the fact that the preview
 // window may only become visible if there is
@@ -46,7 +46,7 @@ class CPreviewAdapterImpl;
 // is in execution mode. So unless someone sets
 // the preview active with a valid parent
 // window the preview may not be visible
-//---------------------------------------------
+
 
 class CPreviewAdapter
 {
@@ -74,9 +74,9 @@ public:
 
     void SAL_CALL setParent(HWND parent);
 
-    //--------------------------------------
+
     // notification from parent
-    //--------------------------------------
+
 
     void SAL_CALL notifyParentShow(bool bShow);
 

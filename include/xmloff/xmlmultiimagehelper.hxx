@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <xmloff/xmlimp.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class MultiImageImportHelper
 {
@@ -54,7 +54,7 @@ public:
     void setSupportsMultipleContents(bool bNew) { mbSupportsMultipleContents = bNew; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_XMLOFF_XMLMULTIIMAGEHELPER_HXX
 

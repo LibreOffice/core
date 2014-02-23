@@ -23,10 +23,10 @@
 
 #include <tools/debug.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     #define LAYOUT_BORDER_LEFT      3
     #define LAYOUT_BORDER_TOP       3
@@ -37,9 +37,9 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::Reference;
 
-    //==================================================================
+
     // class OPropertyEditor
-    //==================================================================
+
     DBG_NAME(OPropertyEditor)
 
     OPropertyEditor::OPropertyEditor( Window* pParent, WinBits nWinStyle)
@@ -521,9 +521,9 @@ namespace pcr
         return 1L;
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

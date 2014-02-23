@@ -23,10 +23,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::uno::Reference;
@@ -36,9 +36,9 @@ namespace rptui
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
+
     //= ConditionUpdater
-    //====================================================================
+
 
     ConditionUpdater::ConditionUpdater()
     {
@@ -117,8 +117,8 @@ namespace rptui
         }
     }
 
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

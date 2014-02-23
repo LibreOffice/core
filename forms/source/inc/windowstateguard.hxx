@@ -24,14 +24,14 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <rtl/ref.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= WindowStateGuard
-    //====================================================================
+
     class WindowStateGuard_Impl;
 
     /** a helper class which monitors certain states of an XWindow2, and ensures
@@ -65,9 +65,9 @@ namespace frm
         );
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_WINDOWSTATEGUARD_HXX
 

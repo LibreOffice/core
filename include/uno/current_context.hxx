@@ -95,7 +95,7 @@ public:
         SAL_THROW(())
         { return m_xPreviousContext; }
 };
-//__________________________________________________________________________________________________
+
 inline ContextLayer::ContextLayer( Reference< XCurrentContext > const & xNewContext )
     SAL_THROW(())
     : m_aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME )
@@ -103,7 +103,7 @@ inline ContextLayer::ContextLayer( Reference< XCurrentContext > const & xNewCont
     ::uno_getCurrentContext( (void **)&m_xPreviousContext, m_aEnvTypeName.pData, 0 );
     ::uno_setCurrentContext( xNewContext.get(), m_aEnvTypeName.pData, 0 );
 }
-//__________________________________________________________________________________________________
+
 inline ContextLayer::~ContextLayer()
     SAL_THROW(())
 {

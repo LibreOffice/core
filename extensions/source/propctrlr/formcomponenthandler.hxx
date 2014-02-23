@@ -37,14 +37,14 @@
 
 #include <set>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ComponentClassification
-    //====================================================================
+
     enum ComponentClassification
     {
         eFormControl,
@@ -52,9 +52,9 @@ namespace pcr
         eUnknown
     };
 
-    //====================================================================
+
     //= FormComponentPropertyHandler
-    //====================================================================
+
     class FormComponentPropertyHandler;
     typedef HandlerComponentBase< FormComponentPropertyHandler > FormComponentPropertyHandler_Base;
     typedef ::comphelper::OPropertyArrayUsageHelper<FormComponentPropertyHandler> FormComponentPropertyHandler_PROP;
@@ -443,9 +443,9 @@ namespace pcr
         using ::comphelper::OPropertyContainer::removePropertyChangeListener;
     };
 
-    //====================================================================
+
     //= WaitCursor
-    //====================================================================
+
     /** wrapper around a ->WaitObject which can cope with a NULL window
     */
     class WaitCursor
@@ -461,9 +461,9 @@ namespace pcr
         }
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_FORMCOMPONENTHANDLER_HXX
 

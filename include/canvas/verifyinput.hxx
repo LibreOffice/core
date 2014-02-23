@@ -64,7 +64,7 @@ namespace canvas
     {
 
         // Input checking facilities
-        // ===================================================================
+
 
         // This header provides methods to check all common
         // css::rendering::* method input parameters against

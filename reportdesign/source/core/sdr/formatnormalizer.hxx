@@ -28,15 +28,15 @@
 
 #include <vector>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 
     class OReportModel;
-    //====================================================================
+
     //= FormatNormalizer
-    //====================================================================
+
     class FormatNormalizer : public ::boost::noncopyable
     {
     public:
@@ -77,9 +77,9 @@ namespace rptui
         void    impl_adjustFormatToDataFieldType_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormattedField >& _rxFormatted );
     };
 
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 #endif // REPORTDESIGN_FORMATNORMALIZER_HXX
 

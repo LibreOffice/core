@@ -33,7 +33,7 @@ namespace sax_fastparser {
 
 namespace oox {
 
-// ============================================================================
+
 
 /** Static helpers for conversion of strings to attribute values of various
     different data types.
@@ -64,7 +64,7 @@ public:
     static sal_Int32    decodeIntegerHex( const OUString& rValue );
 };
 
-// ============================================================================
+
 
 /** Provides access to attribute values of an element.
 
@@ -170,7 +170,7 @@ private:
     sax_fastparser::FastAttributeList *getAttribList() const;
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

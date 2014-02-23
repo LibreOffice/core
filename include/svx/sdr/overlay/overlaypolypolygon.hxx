@@ -24,7 +24,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -54,7 +54,7 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX
 

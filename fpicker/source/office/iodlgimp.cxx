@@ -43,9 +43,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::utl;
 
-//*****************************************************************************
+
 // ResMgrHolder / SvtSimpleResId
-//*****************************************************************************
+
 namespace
 {
     struct ResMgrHolder
@@ -69,9 +69,9 @@ namespace
     };
 }
 
-//*****************************************************************************
+
 // SvtFileDialogFilter_Impl
-//*****************************************************************************
+
 
 DBG_NAME( SvtFileDialogFilter_Impl )
 SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const OUString& rType )
@@ -83,20 +83,20 @@ SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const
     m_aType = m_aType.toAsciiLowerCase();
 }
 
-//*****************************************************************************
+
 
 SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 {
     DBG_DTOR( SvtFileDialogFilter_Impl, NULL );
 }
 
-//*****************************************************************************
-// SvtFileDialogFilterList_Impl
-//*****************************************************************************
 
-//=============================================================================
+// SvtFileDialogFilterList_Impl
+
+
+
 //= SvtFileDialogURLSelector
-//=============================================================================
+
 
 
 SvtFileDialogURLSelector::SvtFileDialogURLSelector( SvtFileDialog* _pParent, const ResId& _rResId, sal_uInt16 _nButtonId )
@@ -126,9 +126,9 @@ void SvtFileDialogURLSelector::Activate()
     SetPopupMenu( m_pMenu );
 }
 
-//=============================================================================
+
 //= SvtUpButton_Impl
-//=============================================================================
+
 
 
 SvtUpButton_Impl::SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId )
@@ -204,9 +204,9 @@ void SvtUpButton_Impl::Click()
     GetDialogParent()->PrevLevel_Impl();
 }
 
-//*****************************************************************************
+
 // SvtExpFileDlg_Impl
-//*****************************************************************************
+
 
 SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
 
@@ -247,7 +247,7 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
 {
 }
 
-//*****************************************************************************
+
 
 SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 {
@@ -276,7 +276,7 @@ SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
     delete _pBtnConnectToServer;
 }
 
-//*****************************************************************************
+
 
 void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
 {
@@ -285,7 +285,7 @@ void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
         _aStdDir = "file:///";
 }
 
-//*****************************************************************************
+
 #if defined DBG_UTIL
 
 namespace {

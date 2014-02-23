@@ -35,7 +35,7 @@ namespace sax_fastparser {
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 /** Wrapper for a fast SAX parser that works on automatically generated OOXML
     token and namespace identifiers.
@@ -95,7 +95,7 @@ private:
     sax_fastparser::FastSaxParser* mpParser;
 };
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

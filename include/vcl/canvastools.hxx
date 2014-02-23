@@ -73,7 +73,7 @@ namespace vcl
     namespace unotools
     {
         // Bitmap conversions
-        // ===================================================================
+
 
         /** Create an XBitmap from VCL BitmapEx
          */
@@ -88,7 +88,7 @@ namespace vcl
                                                             ::com::sun::star::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
 
         // Color conversions (vcl/tools Color <-> canvas standard color space)
-        // ===================================================================
+
 
         /** Create a device-specific color sequence from VCL/Tools color
 
@@ -149,7 +149,7 @@ namespace vcl
             ::com::sun::star::rendering::XColorSpace> VCL_DLLPUBLIC createStandardColorSpace();
 
         // Geometry conversions (vcl/tools <-> x)
-        // ===================================================================
+
 
         // geometry::Real
         ::com::sun::star::geometry::RealSize2D          VCL_DLLPUBLIC size2DFromSize( const Size& );

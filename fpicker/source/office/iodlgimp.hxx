@@ -36,9 +36,9 @@ class SvtFileDialog;
 #define FILEDIALOG_DEF_EXTSEP       ';'
 #define FILEDIALOG_DEF_WILDCARD     '*'
 
-//*****************************************************************************
+
 // SvtFileDialogFilter_Impl
-//*****************************************************************************
+
 
 /*  [Description]
 
@@ -199,7 +199,7 @@ public:
     inline const OUString&  GetStandardDir() const          { return _aStdDir; }
     inline void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( false ); }
 
-    // ------------------------------------------
+
     // access to the filter listbox only as Control* - we want to maintain the entries/userdata ourself
             Control*        GetFilterListControl()          { return _pLbFilter; }
             const Control*  GetFilterListControl() const    { return _pLbFilter; }
@@ -217,7 +217,7 @@ public:
     inline  SvtFileDialogFilter_Impl*   GetSelectedFilterEntry( OUString& /* [out] */ _rDisplayName ) const;
     inline  sal_Bool        IsFilterListTravelSelect() const;
 
-    // ------------------------------------------
+
     // access to the current filter via methods only - need to care for consistency between _pCurFilter and m_sCurrentFilterDisplayName
     inline      const SvtFileDialogFilter_Impl*     GetCurFilter( ) const;
     inline      const OUString&                     GetCurFilterDisplayName() const;

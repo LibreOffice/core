@@ -89,9 +89,9 @@ class GraphicCollector
         const GraphicSettings& rGraphicSettings, sal_Int32& rGraphics );
 };
 
-// --------------------
+
 // - GRAPHICCOLLECTOR -
-// --------------------
+
 
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_GRAPHICCOLLECTOR_HXX

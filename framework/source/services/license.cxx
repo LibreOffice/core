@@ -79,9 +79,9 @@ static const char *szWNTLicenseName = "/license";
 static const char *szWNTLicenseExt = ".txt";
 #endif
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 License::License( const Reference< XComponentContext >& rxContext )
         //  Init baseclasses first
         //  Attention:
@@ -96,16 +96,16 @@ License::License( const Reference< XComponentContext >& rxContext )
 {
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 License::~License()
 {
 }
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2  (   License,
                                         OWeakObject                 ,
@@ -318,9 +318,9 @@ void SAL_CALL License::removeCloseListener(const css::uno::Reference< css::util:
 }
 
 
-//************************************************************************
+
 //   License Dialog
-//************************************************************************
+
 
 LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
     ModalDialog(NULL, ResId(DLG_LICENSE, *pResMgr)),

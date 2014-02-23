@@ -24,14 +24,14 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/string.hxx>
 
-//..............................................................................
+
 namespace frm
 {
-//..............................................................................
 
-    //--------------------------------------------------------------------------
+
+
     //- properties
-    //--------------------------------------------------------------------------
+
     #define PROPERTY_TABINDEX                 "TabIndex"
     #define PROPERTY_TAG                      "Tag"
     #define PROPERTY_NAME                     "Name"
@@ -270,9 +270,9 @@ namespace frm
     #define PROPERTY_CONTROL_TYPE_IN_MSO          "ControlTypeinMSO"
     #define PROPERTY_OBJ_ID_IN_MSO                "ObjIDinMSO"
 
-    //--------------------------------------------------------------------------
+
     //- URLs
-    //--------------------------------------------------------------------------
+
     #define URL_FORM_POSITION     ".uno:FormController/positionForm"
     #define URL_FORM_RECORDCOUNT  ".uno:FormController/RecordCount"
     #define URL_RECORD_FIRST      ".uno:FormController/moveToFirst"
@@ -294,9 +294,9 @@ namespace frm
     #define URL_FORM_APPLY_FILTER ".uno:FormController/applyFilter"
     #define URL_FORM_REMOVE_FILTER ".uno:FormController/removeFilterOrder"
 
-//..............................................................................
+
 }   // namespace frm
-//..............................................................................
+
 
 
 #endif // INCLUDED_FORMS_SOURCE_INC_FRM_STRINGS_HXX

@@ -29,7 +29,7 @@ using ::oox::core::XmlFilterBase;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 namespace {
 
@@ -49,7 +49,7 @@ sal_Int16 lclGetFontFamily( sal_Int32 nOoxValue )
 
 } // namespace
 
-// ============================================================================
+
 
 TextFont::TextFont() :
     mnPitch( 0 ),
@@ -95,7 +95,7 @@ bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal
     return !rFontName.isEmpty();
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

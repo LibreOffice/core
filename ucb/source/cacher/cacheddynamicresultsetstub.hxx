@@ -26,7 +26,7 @@
 #define CACHED_DRS_STUB_SERVICE_NAME "com.sun.star.ucb.CachedDynamicResultSetStub"
 #define CACHED_DRS_STUB_FACTORY_NAME "com.sun.star.ucb.CachedDynamicResultSetStubFactory"
 
-//=========================================================================
+
 
 class CachedDynamicResultSetStub
                 : public DynamicResultSetWrapper
@@ -50,21 +50,21 @@ public:
     virtual ~CachedDynamicResultSetStub();
 
 
-    //-----------------------------------------------------------------
+
     // XInterface inherited
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
-    //-----------------------------------------------------------------
+
     // XTypeProvider
-    //-----------------------------------------------------------------
+
     XTYPEPROVIDER_DECL()
-    //-----------------------------------------------------------------
+
     // XServiceInfo
-    //-----------------------------------------------------------------
+
     XSERVICEINFO_NOFACTORY_DECL()
 };
 
-//=========================================================================
+
 
 class CachedDynamicResultSetStubFactory
                 : public cppu::OWeakObject
@@ -84,19 +84,19 @@ public:
 
     virtual ~CachedDynamicResultSetStubFactory();
 
-    //-----------------------------------------------------------------
+
     // XInterface
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     // XTypeProvider
     XTYPEPROVIDER_DECL()
 
-    //-----------------------------------------------------------------
+
     // XServiceInfo
     XSERVICEINFO_DECL()
 
-    //-----------------------------------------------------------------
+
     // XCachedDynamicResultSetStubFactory
 
     virtual com::sun::star::uno::Reference<

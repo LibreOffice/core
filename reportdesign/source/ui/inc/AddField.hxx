@@ -40,10 +40,10 @@
 
 namespace rptui
 {
-//==================================================================
+
 class OAddFieldWindow;
 class OAddFieldWindowListBox;
-//========================================================================
+
 class  OAddFieldWindow  :public FloatingWindow
                     ,   public ::cppu::BaseMutex
                     ,   public ::comphelper::OPropertyChangeListener
@@ -122,9 +122,9 @@ private:
     virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
     virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
 };
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 #endif // RPTUI_ADDFIELDWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

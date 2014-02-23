@@ -301,9 +301,9 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
 
 }
 
-// ============================================================================
+
 // = class UnoDialogControl
-// ============================================================================
+
 
 UnoDialogControl::UnoDialogControl( const uno::Reference< uno::XComponentContext >& rxContext )
     :UnoDialogControl_Base( rxContext )

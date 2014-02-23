@@ -26,17 +26,17 @@
 #include "componentmodule.hxx"
 #include <vcl/fixed.hxx>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
     class OAddessBookSourcePilot;
     struct AddressSettings;
 
-    //=====================================================================
+
     //= AddressBookSourcePage
-    //=====================================================================
+
     typedef ::svt::OWizardPage AddressBookSourcePage_Base;
     /// the base class for all tab pages in the address book source wizard
     class AddressBookSourcePage : public AddressBookSourcePage_Base
@@ -57,9 +57,9 @@ namespace abp
         virtual void        DeactivatePage();
     };
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 #endif // EXTENSIONS_ABP_ABSPAGE_HXX
 

@@ -29,7 +29,7 @@
 #include <svx/sdr/primitive2d/sdrmeasureprimitive2d.hxx>
 #include <svx/sxmtpitm.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

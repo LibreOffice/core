@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
 
 namespace ucbhelper {
 
-//============================================================================
+
 /** Get a 'root' URL for the most 'local' file content provider.
 
     @descr
@@ -45,7 +45,7 @@ namespace ucbhelper {
 UCBHELPER_DLLPUBLIC OUString getLocalFileURL()
     SAL_THROW((com::sun::star::uno::RuntimeException));
 
-//============================================================================
+
 /** Using a specific content provider manager, convert a file path in system
     dependent notation to a (file) URL.
 
@@ -78,7 +78,7 @@ getFileURLFromSystemPath(
     OUString const & rSystemPath)
     SAL_THROW((com::sun::star::uno::RuntimeException));
 
-//============================================================================
+
 /** Using a specific content provider manager, convert a (file) URL to a
     file path in system dependent notation.
 

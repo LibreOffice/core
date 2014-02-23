@@ -116,9 +116,9 @@ public:
     static MapUnit                                  UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit );
     static sal_Int32                                VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit );
 
-    //========================================================================
+
     //= MeasurementUnitConversion
-    //========================================================================
+
     /** small helper to convert between MeasurementUnit and
         FieldUnit
     */

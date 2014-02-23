@@ -38,17 +38,17 @@ namespace com { namespace sun { namespace star {
 } } }
 class Window;
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
 
-    //.....................................................................
+
+
     namespace fieldmapping
     {
-    //.....................................................................
 
-        //-----------------------------------------------------------------
+
+
         /** invokes the field mapping dialog
             @param _rxORB
                 service factory to use for creating UNO services
@@ -66,7 +66,7 @@ namespace abp
             AddressSettings& _rSettings
         ) SAL_THROW ( ( ) );
 
-        //-----------------------------------------------------------------
+
         /** creates a default field mapping for usage with the address book SDBC driver
             <p>The column names as used by the SDBC driver for address books is stored in the configuration,
             and this function creates a mapping which uses this configuration information.</p>
@@ -76,7 +76,7 @@ namespace abp
             MapString2String& /* [out] */ _rFieldAssignment
         ) SAL_THROW ( ( ) );
 
-        //-----------------------------------------------------------------
+
         /** writes a field mapping for the template document address source
         */
         void writeTemplateAddressFieldMapping(
@@ -84,16 +84,16 @@ namespace abp
             const MapString2String& _rFieldAssignment
         ) SAL_THROW ( ( ) );
 
-    //.....................................................................
-    }   // namespace fieldmapping
-    //.....................................................................
 
-    //.....................................................................
+    }   // namespace fieldmapping
+
+
+
     namespace addressconfig
     {
-    //.....................................................................
 
-        //-----------------------------------------------------------------
+
+
         /** writes the data source / table name given into the configuration, to where the template documents
             expect it.
         */
@@ -109,13 +109,13 @@ namespace abp
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         ) SAL_THROW ( ( ) );
 
-    //.....................................................................
-    }   // namespace addressconfig
-    //.....................................................................
 
-//.........................................................................
+    }   // namespace addressconfig
+
+
+
 }   // namespace abp
-//.........................................................................
+
 
 #endif // EXTENSIONS_ABP_FIELDMAPPINGIMPL_HXX
 

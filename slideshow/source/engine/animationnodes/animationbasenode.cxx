@@ -59,7 +59,7 @@ AnimationBaseNode::AnimationBaseNode(
       mbIsIndependentSubset( rContext.mbIsIndependentSubset )
 {
     // extract native node targets
-    // ===========================
+
 
     // plain shape target
     uno::Reference< drawing::XShape > xShape( mxAnimateNode->getTarget(),

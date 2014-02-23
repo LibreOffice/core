@@ -32,10 +32,10 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-// ............................................................................
+
 namespace utl
 {
-// ............................................................................
+
 
 SearchParam::SearchParam( const OUString &rText,
                                 SearchType eType,
@@ -358,8 +358,8 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
     }
 }
 
-// ............................................................................
+
 }   // namespace utl
-// ............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

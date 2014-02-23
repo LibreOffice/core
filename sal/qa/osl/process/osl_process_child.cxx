@@ -18,7 +18,7 @@
  */
 
 
-//########################################
+
 
 
 #if ( defined WNT )                     // Windows
@@ -48,7 +48,7 @@
 # endif
 #endif
 
-//########################################
+
 
 
 #ifdef WNT
@@ -57,22 +57,22 @@
 #   define SLEEP(t) (sleep((t)))
 #endif
 
-//########################################
+
 void wait_for_seconds(char* time)
 {
     SLEEP(atoi(time));
 }
 
-//########################################
+
 
 #ifdef WNT
-//########################################
+
 void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
 {
     LPCWSTR strW = reinterpret_cast<LPCWSTR>(_strW);
     WideCharToMultiByte(CP_ACP, 0, strW, -1, strA, size, NULL, NULL);
 }
-//########################################
+
     void dump_env(char* file_path)
     {
         LPTSTR env = reinterpret_cast<LPTSTR>(
@@ -99,7 +99,7 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
     }
 #endif
 
-//########################################
+
 int main(int argc, char* argv[])
 {
     if (argc > 2)

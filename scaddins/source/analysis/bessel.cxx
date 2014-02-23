@@ -28,16 +28,16 @@ using ::com::sun::star::sheet::NoConvergenceException;
 namespace sca {
 namespace analysis {
 
-// ============================================================================
+
 
 const double f_PI       = 3.1415926535897932385;
 const double f_PI_DIV_2 = f_PI / 2.0;
 const double f_PI_DIV_4 = f_PI / 4.0;
 const double f_2_DIV_PI = 2.0 / f_PI;
 
-// ============================================================================
+
 // BESSEL J
-// ============================================================================
+
 
 /*  The BESSEL function, first kind, unmodified:
     The algorithm follows
@@ -158,9 +158,9 @@ double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConve
         throw NoConvergenceException(); // unlikely to happen
 }
 
-// ============================================================================
+
 // BESSEL I
-// ============================================================================
+
 
 /*  The BESSEL function, first kind, modified:
 
@@ -229,7 +229,7 @@ double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConve
 }
 
 
-// ============================================================================
+
 
 double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
 {
@@ -310,9 +310,9 @@ double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
     }
 }
 
-// ============================================================================
+
 // BESSEL Y
-// ============================================================================
+
 
 /*  The BESSEL function, second kind, unmodified:
     The algorithm for order 0 and for order 1 follows
@@ -464,7 +464,7 @@ double BesselY( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
     }
 }
 
-// ============================================================================
+
 
 } // namespace analysis
 } // namespace sca

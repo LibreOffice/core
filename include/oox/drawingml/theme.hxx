@@ -29,7 +29,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 const sal_Int32 THEMED_STYLE_SUBTLE     = 1;
 const sal_Int32 THEMED_STYLE_MODERATE   = 2;
@@ -40,7 +40,7 @@ typedef RefVector< LineProperties >                     LineStyleList;
 typedef RefVector< EffectProperties >                   EffectStyleList;
 typedef RefMap< sal_Int32, TextCharacterProperties >    FontScheme;
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC Theme
 {
@@ -106,7 +106,7 @@ private:
         ::com::sun::star::xml::dom::XDocument> mxFragment;
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

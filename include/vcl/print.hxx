@@ -50,9 +50,9 @@ namespace vcl {
     class PrintDialog;
 }
 
-// -----------------
+
 // - Printer-Types -
-// -----------------
+
 
 #define PAGEQUEUE_ALLPAGES   0xFFFF
 
@@ -61,9 +61,9 @@ enum PrinterSupport { SUPPORT_SET_ORIENTATION, SUPPORT_SET_PAPERBIN,
                       SUPPORT_COPY, SUPPORT_COLLATECOPY,
                       SUPPORT_SETUPDIALOG, SUPPORT_FAX, SUPPORT_PDF };
 
-// ---------------
+
 // - PrinterPage -
-// ---------------
+
 
 class VCL_DLLPUBLIC PrinterPage
 {
@@ -84,9 +84,9 @@ public:
 };
 
 
-// -------------
+
 // - QueueInfo -
-// -------------
+
 
 class VCL_DLLPUBLIC QueueInfo
 {
@@ -118,9 +118,9 @@ public:
     friend VCL_DLLPUBLIC SvStream&          WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo );
 };
 
-// ------------------
+
 // - PrinterOptions -
-// ------------------
+
 
 enum PrinterTransparencyMode
 {
@@ -128,7 +128,7 @@ enum PrinterTransparencyMode
     PRINTER_TRANSPARENCY_NONE = 1
 };
 
-// -----------------------------------------------------------------------------
+
 
 enum PrinterGradientMode
 {
@@ -136,7 +136,7 @@ enum PrinterGradientMode
     PRINTER_GRADIENT_COLOR = 1
 };
 
-// -----------------------------------------------------------------------------
+
 
 enum PrinterBitmapMode
 {
@@ -145,7 +145,7 @@ enum PrinterBitmapMode
     PRINTER_BITMAP_RESOLUTION = 2
 };
 
-// -----------------------------------------------------------------------------
+
 
 class VCL_DLLPUBLIC PrinterOptions
 {
@@ -207,9 +207,9 @@ public:
     bool                        ReadFromConfig( bool bFile );
 };
 
-// -----------
+
 // - Printer -
-// -----------
+
 
 class VCL_DLLPUBLIC Printer : public OutputDevice
 {

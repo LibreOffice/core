@@ -28,16 +28,16 @@
 #include <algorithm>
 #include <functional>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
 
-    //========================================================================
+
     //= OPropertyInfoImpl
-    //========================================================================
+
     struct OPropertyInfoImpl
     {
         OUString        sName;
@@ -78,9 +78,9 @@ namespace pcr
         }
     };
 
-    //========================================================================
+
     //= OPropertyInfoService
-    //========================================================================
+
 #define DEF_INFO( ident, uinameres, pos, helpid, flags )       \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
             PcrRes( RID_STR_##uinameres ).toString(), pos, HID_PROP_##helpid, flags )
@@ -575,9 +575,9 @@ namespace pcr
         return NULL;
     }
 
-    //====================================================================
+
     //= DefaultEnumRepresentation
-    //====================================================================
+
     DBG_NAME( DefaultEnumRepresentation )
 
     DefaultEnumRepresentation::DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const Type& _rType, sal_Int32 _nPropertyId )
@@ -685,8 +685,8 @@ namespace pcr
         return m_refCount;
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

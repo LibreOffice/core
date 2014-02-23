@@ -71,10 +71,10 @@ class Edit;
 class SpinField;
 class FormattedField;
 
-// .......................................................................
+
 namespace svt
 {
-// .......................................................................
+
 
     class CellControllerRef;
 
@@ -675,9 +675,9 @@ namespace svt
         DECL_DLLPRIVATE_LINK(CellModifiedHdl, void* );
     };
 
-// .......................................................................
+
 }   // namespace svt
-// .......................................................................
+
 
 #undef SVTOOLS_IN_EDITBROWSEBOX_HXX
 #endif // INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX

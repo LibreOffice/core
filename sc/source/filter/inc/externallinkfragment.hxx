@@ -28,8 +28,8 @@ namespace xls {
 
 class ExternalLink;
 
-// ============================================================================
-// ============================================================================
+
+
 
 /** This class implements importing the sheetData element in external sheets.
 
@@ -74,7 +74,7 @@ private:
     sal_Int32           mnCurrType;                 /// Data type of current cell.
 };
 
-// ============================================================================
+
 
 class ExternalLinkFragment : public WorkbookFragmentBase
 {
@@ -103,7 +103,7 @@ private:
     sal_Int32           mnResultType;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

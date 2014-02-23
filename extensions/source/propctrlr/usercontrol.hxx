@@ -27,14 +27,14 @@
 
 class SvNumberFormatsSupplierObj;
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
 
-    //========================================================================
+
+
     //= NumberFormatSampleField
-    //========================================================================
+
     class NumberFormatSampleField : public ControlWindow< FormattedField >
     {
     private:
@@ -52,9 +52,9 @@ namespace pcr
         virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
-    //========================================================================
+
     //= OFormatSampleControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, NumberFormatSampleField > OFormatSampleControl_Base;
     class OFormatSampleControl : public OFormatSampleControl_Base
     {
@@ -83,18 +83,18 @@ namespace pcr
         static double getPreviewValue( const SvNumberformat& i_rEntry );
     };
 
-    //========================================================================
+
     //= FormatDescription
-    //========================================================================
+
     struct FormatDescription
     {
         SvNumberFormatsSupplierObj*     pSupplier;
         sal_Int32                       nKey;
     };
 
-    //========================================================================
+
     //= OFormattedNumericControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, ControlWindow< FormattedField > > OFormattedNumericControl_Base;
     class OFormattedNumericControl : public OFormattedNumericControl_Base
     {
@@ -121,9 +121,9 @@ namespace pcr
         ~OFormattedNumericControl();
     };
 
-    //========================================================================
+
     //= OFileUrlControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, ControlWindow< ::svt::FileURLBox > > OFileUrlControl_Base;
     class OFileUrlControl : public OFileUrlControl_Base
     {
@@ -139,9 +139,9 @@ namespace pcr
         ~OFileUrlControl();
     };
 
-    //========================================================================
+
     //= OTimeDurationControl
-    //========================================================================
+
     class OTimeDurationControl : public ONumericControl
     {
     public:
@@ -155,9 +155,9 @@ namespace pcr
         DECL_LINK( OnCustomConvert, MetricField* );
     };
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_USERCONTROL_HXX_
 

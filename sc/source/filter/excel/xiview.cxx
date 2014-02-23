@@ -293,6 +293,6 @@ void XclImpTabViewSettings::Finalize()
         rDoc.SetTabBgColor(nScTab, maData.maTabBgColor);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

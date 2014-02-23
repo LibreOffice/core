@@ -71,9 +71,9 @@ namespace rptxml
         static ::com::sun::star::util::Time implGetTime(double _nValue);
         static ::com::sun::star::util::Date implGetDate(double _nValue);
     };
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 #endif // RPT_XMLCONTROLPROPERTY_HXX
 

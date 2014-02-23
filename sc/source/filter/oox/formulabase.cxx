@@ -42,7 +42,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -1764,7 +1764,7 @@ void FormulaProcessorBase::convertStringToStringList(
     }
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

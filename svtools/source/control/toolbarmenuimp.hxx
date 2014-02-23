@@ -53,9 +53,9 @@ const int TITLE_ID = -1;
 const int BORDER_X = 0;
 const int BORDER_Y = 0;
 
-// --------------------
+
 // - ToolbarMenuEntry -
-// --------------------
+
 
 class ToolbarMenuEntry
 {
@@ -98,9 +98,9 @@ public:
     }
 };
 
-// ---------------
+
 // - ToolbarMenuAcc -
-// ---------------
+
 
 typedef ::cppu::PartialWeakComponentImplHelper5<
     ::com::sun::star::accessibility::XAccessible,
@@ -195,9 +195,9 @@ private:
     void ThrowIfDisposed (void) throw (::com::sun::star::lang::DisposedException);
 };
 
-// -----------------------
+
 // - ToolbarMenuEntryAcc -
-// -----------------------
+
 
 typedef ::cppu::PartialWeakComponentImplHelper4< ::com::sun::star::accessibility::XAccessible,
                                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -262,7 +262,7 @@ private:
     virtual void SAL_CALL disposing (void);
 };
 
-// -----------------------------------------------------------------------------
+
 
 struct ToolbarMenu_Impl
 {

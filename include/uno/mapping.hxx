@@ -195,7 +195,7 @@ public:
      */
     inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, const ::com::sun::star::uno::Type & rType ) const SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping(
     const ::rtl::OUString & rFrom, const ::rtl::OUString & rTo, const ::rtl::OUString & rAddPurpose )
     SAL_THROW(())
@@ -203,7 +203,7 @@ inline Mapping::Mapping(
 {
     uno_getMappingByName( &_pMapping, rFrom.pData, rTo.pData, rAddPurpose.pData );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping(
     uno_Environment * pFrom, uno_Environment * pTo, const ::rtl::OUString & rAddPurpose )
     SAL_THROW(())
@@ -211,7 +211,7 @@ inline Mapping::Mapping(
 {
     uno_getMapping( &_pMapping, pFrom, pTo, rAddPurpose.pData );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping(
     const Environment & rFrom, const Environment & rTo, const ::rtl::OUString & rAddPurpose )
     SAL_THROW(())
@@ -219,27 +219,27 @@ inline Mapping::Mapping(
 {
     uno_getMapping( &_pMapping, rFrom.get(), rTo.get(), rAddPurpose.pData );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping( uno_Mapping * pMapping ) SAL_THROW(())
     : _pMapping( pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping( const Mapping & rMapping ) SAL_THROW(())
     : _pMapping( rMapping._pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::~Mapping() SAL_THROW(())
 {
     if (_pMapping)
         (*_pMapping->release)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline void Mapping::clear() SAL_THROW(())
 {
     if (_pMapping)
@@ -248,7 +248,7 @@ inline void Mapping::clear() SAL_THROW(())
         _pMapping = 0;
     }
 }
-//__________________________________________________________________________________________________
+
 inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW(())
 {
     if (pMapping)
@@ -258,7 +258,7 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW(())
     _pMapping = pMapping;
     return *this;
 }
-//__________________________________________________________________________________________________
+
 inline void Mapping::mapInterface(
     void ** ppOut, void * pInterface, const ::com::sun::star::uno::Type & rType ) const
     SAL_THROW(())
@@ -271,7 +271,7 @@ inline void Mapping::mapInterface(
         TYPELIB_DANGER_RELEASE( pTD );
     }
 }
-//__________________________________________________________________________________________________
+
 inline void * Mapping::mapInterface(
     void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const
     SAL_THROW(())
@@ -280,7 +280,7 @@ inline void * Mapping::mapInterface(
     (*_pMapping->mapInterface)( _pMapping, &pOut, pInterface, pTypeDescr );
     return pOut;
 }
-//__________________________________________________________________________________________________
+
 inline void * Mapping::mapInterface(
     void * pInterface, const ::com::sun::star::uno::Type & rType ) const
     SAL_THROW(())

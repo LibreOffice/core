@@ -23,14 +23,14 @@
 #include "attributedispatcher.hxx"
 
 class SfxPoolItem;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OParametrizedAttributeDispatcher
-    //====================================================================
+
     class OParametrizedAttributeDispatcher  :public OAttributeDispatcher
     {
     public:
@@ -59,9 +59,9 @@ namespace frm
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_PARAMETRIZEDATTRIBUTEDISPATCHER_HXX
 

@@ -21,10 +21,10 @@
 #include <comphelper/guarding.hxx>
 #include <tools/debug.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -218,8 +218,8 @@ void OComponentEventThread::run()
     while( true );
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

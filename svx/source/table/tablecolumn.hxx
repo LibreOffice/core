@@ -27,13 +27,13 @@
 #include "propertyset.hxx"
 #include "tablemodel.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
+
 // TableColumn
-// -----------------------------------------------------------------------------
+
 
 typedef ::cppu::ImplInheritanceHelper2< FastPropertySet, ::com::sun::star::table::XCellRange, ::com::sun::star::container::XNamed > TableColumnBase;
 

@@ -23,7 +23,7 @@
 #include <svl/poolitem.hxx>
 #include <comphelper/uno3.hxx>
 
-//==================================================================
+
 class FmInterfaceItem : public SfxPoolItem
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface;

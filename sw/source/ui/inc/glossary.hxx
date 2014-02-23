@@ -51,7 +51,7 @@ class Menu;
 
 const short RET_EDIT = 100;
 
-//------------------------------------------------------------------
+
 
 class SwGlTreeListBox : public SvTreeListBox
 {
@@ -84,7 +84,7 @@ public:
     void Clear();
 };
 
-//------------------------------------------------------------------
+
 class SwOneExampleFrame;
 class SwGlossaryDlg : public SvxStandardDialog
 {

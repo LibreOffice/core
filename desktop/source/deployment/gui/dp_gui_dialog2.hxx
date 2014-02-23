@@ -45,12 +45,12 @@
 
 namespace dp_gui {
 
-//==============================================================================
+
 class ExtBoxWithBtns_Impl;
 class ExtensionBox_Impl;
 class TheExtensionManager;
 
-//==============================================================================
+
 class DialogHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
@@ -94,7 +94,7 @@ public:
     bool            installForAllUsers( bool &bInstallForAll ) const;
 };
 
-//==============================================================================
+
 class ExtMgrDialog : public ModelessDialog,
                      public DialogHelper
 {
@@ -168,7 +168,7 @@ public:
     ::com::sun::star::uno::Sequence< OUString > raiseAddPicker();
 };
 
-//==============================================================================
+
 class UpdateRequiredDialog : public ModalDialog,
                              public DialogHelper
 {
@@ -239,7 +239,7 @@ public:
     bool            installExtensionWarn( const OUString &rExtensionURL ) const;
 };
 
-//==============================================================================
+
 class ShowLicenseDialog : public ModalDialog
 {
     VclMultiLineEdit* m_pLicenseText;
@@ -247,7 +247,7 @@ public:
     ShowLicenseDialog(Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
 };
 
-//==============================================================================
+
 class UpdateRequiredDialogService : public ::cppu::WeakImplHelper1< ::com::sun::star::ui::dialogs::XExecutableDialog >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const m_xComponentContext;

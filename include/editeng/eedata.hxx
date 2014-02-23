@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_EEDATA_HXX
 #define INCLUDED_EDITENG_EEDATA_HXX
 
-//////////////////////////////////////////////////////////////////////////////
+
 // extended data definitions for EditEngine portion stripping (StripPortions()
 // support). These may be mapped to some primitive definitions from Drawinglayer
 // later.

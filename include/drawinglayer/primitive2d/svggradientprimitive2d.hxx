@@ -28,7 +28,7 @@
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // SvgGradientEntry class
 
 namespace drawinglayer
@@ -73,7 +73,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // SvgGradientHelper class
 
 namespace drawinglayer
@@ -172,7 +172,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // SvgLinearGradientPrimitive2D class
 
 namespace drawinglayer
@@ -226,7 +226,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // SvgRadialGradientPrimitive2D class
 
 namespace drawinglayer
@@ -298,7 +298,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // SvgLinearAtomPrimitive2D class
 
 namespace drawinglayer
@@ -344,7 +344,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // SvgRadialAtomPrimitive2D class
 
 namespace drawinglayer
@@ -413,7 +413,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_SVGGRADIENTPRIMITIVE2D_HXX
 

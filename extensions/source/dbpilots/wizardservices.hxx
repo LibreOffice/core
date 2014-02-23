@@ -23,14 +23,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OGroupBoxSI
-    //=====================================================================
+
     /// service info for the group box wizard
     struct OGroupBoxSI
     {
@@ -40,9 +40,9 @@ namespace dbp
                                 getServiceNames() const;
     };
 
-    //=====================================================================
+
     //= OListComboSI
-    //=====================================================================
+
     /// service info for the list/combo box wizard
     struct OListComboSI
     {
@@ -52,9 +52,9 @@ namespace dbp
                                 getServiceNames() const;
     };
 
-    //=====================================================================
+
     //= OGridSI
-    //=====================================================================
+
     /// service info for the grid wizard
     struct OGridSI
     {
@@ -64,9 +64,9 @@ namespace dbp
                                 getServiceNames() const;
     };
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 #endif // _EXTENSIONS_DBW_WIZARDSERVICES_HXX_
 

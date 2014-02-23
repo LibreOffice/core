@@ -506,7 +506,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
     return false;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 //
 // Visitation
 //

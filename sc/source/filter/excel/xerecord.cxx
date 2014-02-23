@@ -231,7 +231,7 @@ void XclExpFutureRecord::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 }
 
-// ============================================================================
+
 
 XclExpSubStream::XclExpSubStream( sal_uInt16 nSubStrmType ) :
     mnSubStrmType( nSubStrmType )
@@ -281,6 +281,6 @@ void XclExpSubStream::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

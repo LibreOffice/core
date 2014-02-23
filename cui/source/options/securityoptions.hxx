@@ -26,14 +26,14 @@
 
 class SvtSecurityOptions;
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= class SecurityOptionsDialog
-    //====================================================================
+
     class SecurityOptionsDialog : public ModalDialog
     {
     private:
@@ -61,9 +61,9 @@ namespace svx
         bool IsBlockUntrustedRefererLinksChecked() const { return m_pBlockUntrustedRefererLinksCB->IsChecked(); }
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_SECURITYOPTIONS_HXX
 

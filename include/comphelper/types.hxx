@@ -34,10 +34,10 @@ namespace com { namespace sun { namespace star { namespace awt {
     struct FontDescriptor;
 } } } }
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     namespace staruno       = ::com::sun::star::uno;
     namespace starawt       = ::com::sun::star::awt;
@@ -46,14 +46,14 @@ namespace comphelper
     typedef staruno::Reference< staruno::XInterface >           InterfaceRef;
     typedef staruno::Sequence< OUString >                StringSequence;
 
-    //-------------------------------------------------------------------------
+
     /** compare the two given Anys
         The comparison is deep, means if one of the Any's contains an Any which contains an Any ..., this is resolved <br/>
         Other types recognized currently : FontDescriptor, ::com::sun::star::util::Date/Tim/DateTime, staruno::Sequence<sal_Int8>
     */
     COMPHELPER_DLLPUBLIC bool compare(const staruno::Any& rLeft, const staruno::Any& rRight);
 
-    //-------------------------------------------------------------------------
+
     /** compare two FontDescriptor's
     */
     COMPHELPER_DLLPUBLIC bool   operator ==(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight);
@@ -62,11 +62,11 @@ namespace comphelper
         return !(_rLeft == _rRight);
     }
 
-    //-------------------------------------------------------------------------
+
     /// returns sal_True if objects of the types given are "compatible"
     COMPHELPER_DLLPUBLIC bool isAssignableFrom(const staruno::Type& _rAssignable, const staruno::Type& _rFrom);
 
-    //-------------------------------------------------------------------------
+
     /** just a small shortcut ...
         check if a type you have at hand at runtime is equal to another type you have at compile time
         if all our compiler would accept function calls with explicit template arguments (like
@@ -80,7 +80,7 @@ namespace comphelper
         return  _rType.equals(cppu::getTypeFavourUnsigned(pDummy));
     }
 
-    //-------------------------------------------------------------------------
+
     /** check if a type you have at hand at runtime is equal to another type you have at compile time
         same comment as for the other isA ....
     */
@@ -91,7 +91,7 @@ namespace comphelper
             cppu::getTypeFavourUnsigned(pDummy));
     }
 
-    //-------------------------------------------------------------------------
+
     /** check if a type you have at hand at runtime is equal to another type you have at compile time
     */
     template <class TYPE>
@@ -102,7 +102,7 @@ namespace comphelper
                 static_cast<staruno::Reference<TYPE>*>(NULL)));
     }
 
-    //-------------------------------------------------------------------------
+
     /** ask the given object for an XComponent interface and dispose on it
     */
     template <class TYPE>
@@ -115,7 +115,7 @@ namespace comphelper
             _rxComp = NULL;
         }
     }
-    //-------------------------------------------------------------------------
+
     template <class TYPE>
     bool getImplementation(TYPE*& _pObject, const staruno::Reference< staruno::XInterface >& _rxIFace)
     {
@@ -128,7 +128,7 @@ namespace comphelper
     }
 
 
-    //-------------------------------------------------------------------------
+
     /** get a com::sun::star::awt::FontDescriptor that is fully initialized with
         the XXX_DONTKNOW enum values (which isn't the case if you instantiate it
         via the default constructor)
@@ -139,7 +139,7 @@ namespace comphelper
     */
     COMPHELPER_DLLPUBLIC staruno::Type getSequenceElementType(const staruno::Type& _rSequenceType);
 
-//=========================================================================
+
 //= replacement of the former UsrAny.getXXX methods
 
     // may be used if you need the return value just as temporary, else it's may be too inefficient ....
@@ -165,9 +165,9 @@ namespace comphelper
     inline staruno::Any makeBoolAny(bool _b)
     { return staruno::Any(&_b, ::getBooleanCppuType()); }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_TYPES_HXX
 

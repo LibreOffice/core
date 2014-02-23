@@ -21,7 +21,7 @@
 
 #include <vcl/gdimtf.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #i121267# Added tooling to be able to support old exporters which are based on
 // metafiles as graphic content, but do not implement using the contained clip
 // regions.
@@ -34,12 +34,12 @@
 
 void VCL_DLLPUBLIC clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource);
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Allow to check if a Metafile contains clipping or not
 
 bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource);
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_VCL_GDIMETAFILETOOLS_HXX
 

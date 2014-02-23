@@ -42,14 +42,14 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//.............................................................................
+
 namespace comphelper
 {
-//.............................................................................
 
-    //=========================================================================
+
+
     //= OAccessibleWrapper
-    //=========================================================================
+
 
     class OAccessibleContextWrapper;
     class OWrappedAccessibleChildrenManager;
@@ -122,9 +122,9 @@ namespace comphelper
         COMPHELPER_DLLPRIVATE OAccessibleWrapper& operator=( const OAccessibleWrapper& );   // never implemented
     };
 
-    //=========================================================================
+
     //= OAccessibleContextWrapperHelper
-    //=========================================================================
+
 
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleEventListener
                                 >   OAccessibleContextWrapperHelper_Base;
@@ -233,9 +233,9 @@ namespace comphelper
         OAccessibleContextWrapperHelper& operator=( const OAccessibleContextWrapperHelper& );   // never implemented
     };
 
-    //=========================================================================
+
     //= OAccessibleContextWrapper
-    //=========================================================================
+
     typedef ::cppu::PartialWeakComponentImplHelper2<    ::com::sun::star::accessibility::XAccessibleEventBroadcaster
                                             ,   ::com::sun::star::accessibility::XAccessibleContext
                                             >   OAccessibleContextWrapper_CBase;
@@ -317,9 +317,9 @@ namespace comphelper
         COMPHELPER_DLLPRIVATE OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& ); // never implemented
     };
 
-    //=========================================================================
+
     //= OWrappedAccessibleChildrenManager
-    //=========================================================================
+
 
     typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         ,   ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -405,9 +405,9 @@ namespace comphelper
         COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& ); // never implemented
     };
 
-//.............................................................................
+
 }   // namespace accessibility
-//.............................................................................
+
 
 #endif // INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX
 

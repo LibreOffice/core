@@ -28,10 +28,10 @@
 
 
 #define CORNER_SPACE    5
-//=====================================================================
+
 namespace rptui
 {
-//=====================================================================
+
 OEndMarker::OEndMarker(Window* _pParent ,const OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 {
@@ -92,8 +92,8 @@ void OEndMarker::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     static_cast<OSectionWindow*>(GetParent())->showProperties();
 }
-// =======================================================================
+
 }
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

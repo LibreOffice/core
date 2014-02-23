@@ -215,7 +215,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  ) throw(css::u
     );
 }
 
-//=============================================================================
+
 sal_Bool SAL_CALL Desktop::terminate()
     throw( css::uno::RuntimeException )
 {
@@ -377,7 +377,7 @@ bool SAL_CALL Desktop::terminateQuickstarterToo()
     return terminate();
 }
 
-//=============================================================================
+
 void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
     throw( css::uno::RuntimeException )
 {
@@ -420,7 +420,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
 }
 
-//=============================================================================
+
 void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
     throw( css::uno::RuntimeException )
 {
@@ -700,7 +700,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
     }
 }
 
-//*****************************************************************************************************************
+
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desktop::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lQueries ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -730,7 +730,7 @@ void SAL_CALL Desktop::registerDispatchProviderInterceptor( const css::uno::Refe
     xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
     throw( css::uno::RuntimeException)
 {
@@ -805,7 +805,7 @@ void SAL_CALL Desktop::setActiveFrame( const css::uno::Reference< css::frame::XF
     }
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getActiveFrame() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -833,24 +833,24 @@ void SAL_CALL Desktop::initialize( const css::uno::Reference< css::awt::XWindow 
 {
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::awt::XWindow > SAL_CALL Desktop::getContainerWindow() throw( css::uno::RuntimeException )
 {
     return css::uno::Reference< css::awt::XWindow >();
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& /*xCreator*/ ) throw( css::uno::RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Desktop::getCreator() throw( css::uno::RuntimeException )
 {
     return css::uno::Reference< css::frame::XFramesSupplier >();
 }
 
-//*****************************************************************************************************************
+
 OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException )
 {
     /* SAFE { */
@@ -859,7 +859,7 @@ OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException )
     /* } SAFE */
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::setName( const OUString& sName ) throw( css::uno::RuntimeException )
 {
     /* SAFE { */
@@ -869,13 +869,13 @@ void SAL_CALL Desktop::setName( const OUString& sName ) throw( css::uno::Runtime
     /* } SAFE */
 }
 
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL Desktop::isTop() throw( css::uno::RuntimeException )
 {
     return sal_True;
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::activate() throw( css::uno::RuntimeException )
 {
     // Desktop is activae always ... but sometimes our frames try to activate
@@ -883,7 +883,7 @@ void SAL_CALL Desktop::activate() throw( css::uno::RuntimeException )
     // So - please don't show any assertions here. Do nothing!
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::deactivate() throw( css::uno::RuntimeException )
 {
     // Desktop is activae always ... but sometimes our frames try to deactivate
@@ -891,44 +891,44 @@ void SAL_CALL Desktop::deactivate() throw( css::uno::RuntimeException )
     // So - please don't show any assertions here. Do nothing!
 }
 
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL Desktop::isActive() throw( css::uno::RuntimeException )
 {
     return sal_True;
 }
 
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
                                          const css::uno::Reference< css::frame::XController >& /*xController*/      ) throw( css::uno::RuntimeException )
 {
     return sal_False;
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::awt::XWindow > SAL_CALL Desktop::getComponentWindow() throw( css::uno::RuntimeException )
 {
     return css::uno::Reference< css::awt::XWindow >();
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::frame::XController > SAL_CALL Desktop::getController() throw( css::uno::RuntimeException )
 {
     return css::uno::Reference< css::frame::XController >();
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::contextChanged() throw( css::uno::RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& ) throw( css::uno::RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
+
 //   css::frame::XFrame
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& ) throw( css::uno::RuntimeException )
 {
 }
@@ -1193,7 +1193,7 @@ void SAL_CALL Desktop::addEventListener( const css::uno::Reference< css::lang::X
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >*) NULL ), xListener );
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -1722,7 +1722,7 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
     return lPropertyDescriptor;
 }
 
-//=============================================================================
+
 void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,
                                              ::sal_Bool&                      bVeto          )
 {
@@ -1763,7 +1763,7 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
     }
 }
 
-//=============================================================================
+
 void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerList& lCalledListener)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1788,7 +1788,7 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
     }
 }
 
-//=============================================================================
+
 void Desktop::impl_sendNotifyTerminationEvent()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1819,7 +1819,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
     }
 }
 
-//=============================================================================
+
 ::sal_Bool Desktop::impl_closeFrames(::sal_Bool bAllowUI)
 {
     ReadGuard aReadLock( m_aLock ); // start synchronize

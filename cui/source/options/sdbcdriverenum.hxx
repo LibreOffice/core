@@ -26,14 +26,14 @@
 
 #include <vector>
 
-//........................................................................
+
 namespace offapp
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ODriverEnumeration
-    //====================================================================
+
     class ODriverEnumerationImpl;
     /** simple class for accessing SDBC drivers registered within the office
         <p>Rather small, introduced to not contaminate other instances with the
@@ -54,9 +54,9 @@ namespace offapp
         const_iterator  end() const throw();
     };
 
-//........................................................................
+
 }   // namespace offapp
-//........................................................................
+
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_SDBCDRIVERENUM_HXX
 

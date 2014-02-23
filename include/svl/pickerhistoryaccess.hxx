@@ -24,21 +24,21 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    // --------------------------------------------------------------------
+
+
     SVL_DLLPUBLIC void addFolderPicker(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxPicker );
 
     SVL_DLLPUBLIC void addFilePicker(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxPicker );
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 #endif // INCLUDED_SVL_PICKERHISTORYACCESS_HXX
 

@@ -25,14 +25,14 @@
 
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= IWarningsContainer
-    //=====================================================================
+
     class SAL_NO_VTABLE IWarningsContainer
     {
     public:
@@ -44,9 +44,9 @@ namespace dbtools
         ~IWarningsContainer() {}
     };
 
-    //====================================================================
+
     //= WarningsContainer
-    //====================================================================
+
     /** helper class for implementing XWarningsSupplier, which mixes own warnings with
         warnings obtained from an external instance
     */
@@ -93,9 +93,9 @@ namespace dbtools
         void SAL_CALL clearWarnings(  );
     };
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_WARNINGSCONTAINER_HXX
 

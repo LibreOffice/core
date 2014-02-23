@@ -39,11 +39,11 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 namespace ftp
 {
 
-//=========================================================================
+
 
     class FTPContentProvider;
 
-//=========================================================================
+
 
     class FTPContent
         : public ::ucbhelper::ContentImplHelper,

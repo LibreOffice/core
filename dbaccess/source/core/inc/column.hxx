@@ -55,9 +55,9 @@
 namespace dbaccess
 {
 
-    //************************************************************
+
     //  OColumn
-    //************************************************************
+
     typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::container::XNamed
                                             >   OColumnBase;

@@ -24,7 +24,7 @@
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -40,7 +40,7 @@ namespace drawinglayer
     } // end of namespace tools
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_TOOLS_CONVERTERS_HXX
 

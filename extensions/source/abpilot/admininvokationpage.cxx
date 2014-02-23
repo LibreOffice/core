@@ -22,14 +22,14 @@
 #include "admininvokationimpl.hxx"
 #include "comphelper/processfactory.hxx"
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= AdminDialogInvokationPage
-    //=====================================================================
+
     AdminDialogInvokationPage::AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_ADMININVOKATION))
         ,m_aExplanation         (this, ModuleRes(FT_ADMINEXPLANATION))
@@ -99,8 +99,8 @@ namespace abp
         return 0L;
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

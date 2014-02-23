@@ -27,7 +27,7 @@
 #include <cppuhelper/weak.hxx>
 #include <tools/stream.hxx>
 
-//============================================================================
+
 class SVL_DLLPUBLIC SvOutputStreamOpenLockBytes: public SvOpenLockBytes
 {
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
@@ -64,7 +64,7 @@ public:
     virtual void Terminate();
 };
 
-//============================================================================
+
 class SVL_DLLPUBLIC SvLockBytesInputStream: public cppu::OWeakObject,
                               public com::sun::star::io::XInputStream,
                               public com::sun::star::io::XSeekable

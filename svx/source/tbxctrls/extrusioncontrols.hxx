@@ -33,7 +33,7 @@
 
 class ValueSet;
 
-//========================================================================
+
 
 namespace svx
 {
@@ -64,7 +64,7 @@ private:
 
 };
 
-//========================================================================
+
 
 class ExtrusionDirectionControl : public svt::PopupWindowController
 {
@@ -80,7 +80,7 @@ public:
     using svt::PopupWindowController::createPopupWindow;
 };
 
-//========================================================================
+
 
 class ExtrusionDepthWindow : public svtools::ToolbarMenu
 {
@@ -112,7 +112,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-//========================================================================
+
 
 class ExtrusionDepthController : public svt::PopupWindowController
 {
@@ -128,7 +128,7 @@ public:
     using svt::PopupWindowController::createPopupWindow;
 };
 
-//========================================================================
+
 
 class ExtrusionLightingWindow : public svtools::ToolbarMenu
 {
@@ -163,7 +163,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-//========================================================================
+
 
 class ExtrusionLightingControl : public svt::PopupWindowController
 {
@@ -179,7 +179,7 @@ public:
     using svt::PopupWindowController::createPopupWindow;
 };
 
-//========================================================================
+
 
 class ExtrusionSurfaceWindow : public svtools::ToolbarMenu
 {
@@ -203,7 +203,7 @@ public:
     virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 };
 
-//========================================================================
+
 
 class ExtrusionSurfaceControl : public svt::PopupWindowController
 {
@@ -219,7 +219,7 @@ public:
     using svt::PopupWindowController::createPopupWindow;
 };
 
-//========================================================================
+
 
 }
 #endif

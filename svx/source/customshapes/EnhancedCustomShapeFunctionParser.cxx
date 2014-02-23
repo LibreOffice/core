@@ -86,11 +86,11 @@ ExpressionNode::~ExpressionNode()
 namespace
 {
 
-//////////////////////
-//////////////////////
+
+
 // EXPRESSION NODES
-//////////////////////
-//////////////////////
+
+
 class ConstantValueExpression : public ExpressionNode
 {
     double  maValue;
@@ -754,11 +754,11 @@ public:
     }
 };
 
-////////////////////////
-////////////////////////
+
+
 // FUNCTION PARSER
-////////////////////////
-////////////////////////
+
+
 
 typedef const sal_Char* StringIteratorT;
 

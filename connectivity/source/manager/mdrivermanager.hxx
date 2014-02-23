@@ -41,9 +41,9 @@
 namespace drivermanager
 {
 
-    //======================================================================
+
     //= various
-    //======================================================================
+
     typedef std::map< OUString, css::uno::Reference< css::sdbc::XDriver > > DriverCollection;
 
     struct DriverAccess
@@ -53,9 +53,9 @@ namespace drivermanager
         css::uno::Reference< css::lang::XSingleComponentFactory >  xComponentFactory;          /// the factory to create the driver component (if not already done so)
     };
 
-    //==========================================================================
+
     //= OSDBCDriverManager - the one-instance service for managing SDBC drivers
-    //==========================================================================
+
     typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::sdbc::XDriverManager2
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::uno::XNamingService

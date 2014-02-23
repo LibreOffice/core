@@ -25,9 +25,9 @@
 #include <sane/sane.h>
 #include <scanner.hxx>
 
-// ---------------------
+
 // - BitmapTransporter -
-// ---------------------
+
 
 class BitmapTransporter : public OWeakObject, css::awt::XBitmap
 {
@@ -55,9 +55,9 @@ public:
     SvMemoryStream&                     getStream() { return m_aStream; }
 };
 
-// --------
+
 // - Sane -
-// --------
+
 
 class Sane
 {

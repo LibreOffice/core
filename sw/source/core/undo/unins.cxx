@@ -485,7 +485,7 @@ SwRewriter SwUndoInsert::GetRewriter() const
 }
 
 
-// SwUndoReplace /////////////////////////////////////////////////////////
+// SwUndoReplace
 
 
 class SwUndoReplace::Impl
@@ -791,7 +791,7 @@ void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 }
 
 
-// SwUndoReRead //////////////////////////////////////////////////////////
+// SwUndoReRead
 
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )

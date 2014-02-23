@@ -22,18 +22,18 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-//------------------------------
+
 // class SdrCircStartAngleItem
-//------------------------------
+
 class SdrCircStartAngleItem: public SdrAngleItem {
 public:
     SdrCircStartAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_CIRCSTARTANGLE,nAngle) {}
     SdrCircStartAngleItem(SvStream& rIn): SdrAngleItem(SDRATTR_CIRCSTARTANGLE,rIn)    {}
 };
 
-//------------------------------
+
 // class SdrCircEndAngleItem
-//------------------------------
+
 class SdrCircEndAngleItem: public SdrAngleItem {
 public:
     SdrCircEndAngleItem(long nAngle=36000): SdrAngleItem(SDRATTR_CIRCENDANGLE,nAngle) {}

@@ -35,7 +35,7 @@ namespace oox { class GraphicHelper; }
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC Color
 {
@@ -152,7 +152,7 @@ private:
 
 typedef boost::shared_ptr< Color > ColorPtr;
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

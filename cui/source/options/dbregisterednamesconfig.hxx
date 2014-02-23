@@ -21,14 +21,14 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTEREDNAMESCONFIG_HXX
 
 class SfxItemSet;
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DbRegisteredNamesConfig
-    //====================================================================
+
     class DbRegisteredNamesConfig
     {
 
@@ -37,9 +37,9 @@ namespace svx
         static void SetOptions(const SfxItemSet& _rSourceItems);
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTEREDNAMESCONFIG_HXX
 

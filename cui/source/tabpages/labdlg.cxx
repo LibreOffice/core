@@ -505,7 +505,7 @@ void SvxCaptionTabPage::FillValueSet()
     m_pCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_3, m_aBmpCapTypes[2] );
 }
 
-//========================================================================
+
 
 
 SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView,

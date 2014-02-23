@@ -78,7 +78,7 @@
 
 using namespace ::com::sun::star;
 
-//===========================================================================
+
 
 class IntCounterGuard {
     sal_Int32& m_nFlag;
@@ -96,7 +96,7 @@ public:
     }
 };
 
-//===========================================================================
+
 
 static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >& xTargetMenu,
                             sal_Int32 nTargetIndex,
@@ -148,7 +148,7 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
     xTargetMenu->insertByIndex( nTargetIndex, uno::makeAny( aTargetProps ) );
 }
 
-//===========================================================================
+
 DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& xContext,
                                 OCommonEmbeddedObject* pEmbObj )
 : m_pEmbedObj( pEmbObj ),

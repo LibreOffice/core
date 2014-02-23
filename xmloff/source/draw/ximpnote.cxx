@@ -100,7 +100,7 @@ SvXMLImportContext *SdXMLNotesContext::CreateChildContext( sal_uInt16 nPrefix,
     SvXMLImportContext *pContext = 0L;
 
     // some special objects inside presentation:notes context
-    // ...
+
 
     // call parent when no own context was created
     if(!pContext)

@@ -30,7 +30,7 @@ class SwWrtShell;
 class SwView;
 class SfxDispatcher;
 
-//========================================================================
+
 class InputEdit : public Edit
 {
 public:
@@ -44,7 +44,7 @@ protected:
     virtual void    KeyInput( const KeyEvent&  );
 };
 
-//========================================================================
+
 
 class SwInputWindow : public ToolBox
 {
@@ -117,7 +117,7 @@ public:
 
 };
 
-//==================================================================
+
 
 #endif
 

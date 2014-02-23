@@ -23,22 +23,22 @@
 
 namespace osl
 {
-    //______________________________________________________________________________
+
     inline Pipe::Pipe()
         : m_handle( 0 )
     {}
 
-    //______________________________________________________________________________
+
     inline Pipe::Pipe(const ::rtl::OUString& strName, oslPipeOptions Options )
         : m_handle( osl_createPipe( strName.pData, Options , 0 ) )
     {}
 
-    //______________________________________________________________________________
+
     inline Pipe::Pipe(const ::rtl::OUString& strName, oslPipeOptions Options,const Security & rSecurity)
         : m_handle( osl_createPipe( strName.pData, Options , rSecurity.getHandle() ) )
     {}
 
-    //______________________________________________________________________________
+
     inline Pipe::Pipe(const Pipe& pipe )
         : m_handle( pipe.m_handle )
     {
@@ -46,12 +46,12 @@ namespace osl
             osl_acquirePipe( m_handle );
     }
 
-    //______________________________________________________________________________
+
     inline Pipe::Pipe( oslPipe pipe, __sal_NoAcquire )
         : m_handle ( pipe )
     {}
 
-    //______________________________________________________________________________
+
     inline Pipe::Pipe(oslPipe pipe)
         : m_handle( pipe )
     {
@@ -59,14 +59,14 @@ namespace osl
             osl_acquirePipe( m_handle );
     }
 
-    //______________________________________________________________________________
+
     inline Pipe::~Pipe()
     {
         if( m_handle )
             osl_releasePipe( m_handle );
     }
 
-    //______________________________________________________________________________
+
     inline bool Pipe::create( const ::rtl::OUString & strName,
                                   oslPipeOptions Options, const Security &rSec )
     {
@@ -74,20 +74,20 @@ namespace osl
         return is();
     }
 
-    //______________________________________________________________________________
+
     inline bool Pipe::create( const ::rtl::OUString & strName, oslPipeOptions Options  )
     {
         *this = Pipe( strName, Options );
         return is();
     }
-    //______________________________________________________________________________
+
     inline Pipe& SAL_CALL Pipe::operator= (const Pipe& pipe)
     {
         *this = pipe.getHandle();
         return *this;
     }
 
-    //______________________________________________________________________________
+
     inline Pipe & SAL_CALL Pipe::operator=( oslPipe pipe)
     {
         if( pipe )
@@ -98,25 +98,25 @@ namespace osl
         return *this;
     }
 
-    //______________________________________________________________________________
+
     inline bool SAL_CALL Pipe::is() const
     {
         return m_handle != 0;
     }
 
-    //______________________________________________________________________________
+
     inline bool SAL_CALL Pipe::operator==( const Pipe& rPipe ) const
     {
         return m_handle == rPipe.m_handle;
     }
 
-    //______________________________________________________________________________
+
     inline void SAL_CALL Pipe::close()
     {
         osl_closePipe( m_handle );
     }
 
-    //______________________________________________________________________________
+
     inline void SAL_CALL Pipe::clear()
     {
         if( m_handle )
@@ -126,7 +126,7 @@ namespace osl
         }
     }
 
-    //______________________________________________________________________________
+
     inline oslPipeError SAL_CALL Pipe::accept(StreamPipe& Connection)
     {
         Connection = StreamPipe( osl_acceptPipe( m_handle ), SAL_NO_ACQUIRE);
@@ -136,65 +136,65 @@ namespace osl
             return getError();
     }
 
-    //______________________________________________________________________________
+
     inline oslPipeError SAL_CALL Pipe::getError() const
     {
         return osl_getLastPipeError( 0 );
     }
 
-    //______________________________________________________________________________
+
     inline oslPipe SAL_CALL Pipe::getHandle() const
     {
         return m_handle;
     }
 
-    //______________________________________________________________________________
+
     inline StreamPipe::StreamPipe(){}
 
-    //______________________________________________________________________________
+
     inline StreamPipe::StreamPipe(oslPipe hPipe)
         : Pipe( hPipe )
     {
     }
 
-    //______________________________________________________________________________
+
     inline StreamPipe::StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec )
         : Pipe( strName, Options , rSec )
     {}
 
-    //______________________________________________________________________________
+
     inline StreamPipe::StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options  )
         : Pipe( strName, Options )
     {}
 
-    //______________________________________________________________________________
+
     inline StreamPipe::StreamPipe(const StreamPipe& aPipe)
         : Pipe( aPipe )
     {}
-    //______________________________________________________________________________
+
     inline StreamPipe::StreamPipe( oslPipe pipe, __sal_NoAcquire noacquire )
         : Pipe( pipe , noacquire )
     {}
 
-    //______________________________________________________________________________
+
     inline sal_Int32 SAL_CALL StreamPipe::read(void* pBuffer, sal_Int32 n) const
     {
         return osl_readPipe( m_handle, pBuffer, n );
     }
 
-    //______________________________________________________________________________
+
     inline sal_Int32 SAL_CALL StreamPipe::write(const void* pBuffer, sal_Int32 n) const
     {
         return osl_writePipe( m_handle, pBuffer , n );
     }
 
-    //______________________________________________________________________________
+
     inline sal_Int32 SAL_CALL StreamPipe::recv(void* pBuffer, sal_Int32 BytesToRead) const
     {
         return osl_receivePipe( m_handle, pBuffer , BytesToRead );
     }
 
-    //______________________________________________________________________________
+
     inline sal_Int32 SAL_CALL StreamPipe::send(const void* pBuffer, sal_Int32 BytesToSend) const
     {
         return osl_sendPipe( m_handle, pBuffer , BytesToSend );

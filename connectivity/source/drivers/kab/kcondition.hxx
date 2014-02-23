@@ -28,7 +28,7 @@ namespace connectivity
 {
     namespace kab
     {
-// -----------------------------------------------------------------------------
+
 class KabCondition
 {
     public:
@@ -37,7 +37,7 @@ class KabCondition
         virtual sal_Bool isAlwaysFalse() const = 0;
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const = 0;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionConstant : public KabCondition
 {
     protected:
@@ -49,7 +49,7 @@ class KabConditionConstant : public KabCondition
         virtual sal_Bool isAlwaysFalse() const;
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionColumn : public KabCondition
 {
     protected:
@@ -63,7 +63,7 @@ class KabConditionColumn : public KabCondition
         virtual sal_Bool isAlwaysTrue() const;
         virtual sal_Bool isAlwaysFalse() const;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionNull : public KabConditionColumn
 {
     public:
@@ -71,7 +71,7 @@ class KabConditionNull : public KabConditionColumn
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionNotNull : public KabConditionColumn
 {
     public:
@@ -79,7 +79,7 @@ class KabConditionNotNull : public KabConditionColumn
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionCompare : public KabConditionColumn
 {
     protected:
@@ -90,7 +90,7 @@ class KabConditionCompare : public KabConditionColumn
             const OUString &sColumnName,
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionEqual : public KabConditionCompare
 {
     public:
@@ -99,7 +99,7 @@ class KabConditionEqual : public KabConditionCompare
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionDifferent : public KabConditionCompare
 {
     public:
@@ -108,7 +108,7 @@ class KabConditionDifferent : public KabConditionCompare
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionSimilar : public KabConditionCompare
 {
     public:
@@ -117,7 +117,7 @@ class KabConditionSimilar : public KabConditionCompare
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionBoolean : public KabCondition
 {
     protected:
@@ -127,7 +127,7 @@ class KabConditionBoolean : public KabCondition
         KabConditionBoolean(KabCondition *pLeft, KabCondition *pRight);
         virtual ~KabConditionBoolean();
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionOr : public KabConditionBoolean
 {
     public:
@@ -136,7 +136,7 @@ class KabConditionOr : public KabConditionBoolean
         virtual sal_Bool isAlwaysFalse() const;
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
-// -----------------------------------------------------------------------------
+
 class KabConditionAnd : public KabConditionBoolean
 {
     public:
@@ -145,7 +145,7 @@ class KabConditionAnd : public KabConditionBoolean
         virtual sal_Bool isAlwaysFalse() const;
         virtual sal_Bool eval(const ::KABC::Addressee &addressee) const;
 };
-// -----------------------------------------------------------------------------
+
     }
 }
 

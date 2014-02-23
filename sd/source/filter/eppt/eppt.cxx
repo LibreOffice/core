@@ -1204,7 +1204,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
 {
     //************************ ******
     //** DEFAULT BACKGROUND SHAPE **
-    //******************************
+
 
     sal_uInt32 nFillColor = 0xffffff;
     sal_uInt32 nFillBackColor = 0;

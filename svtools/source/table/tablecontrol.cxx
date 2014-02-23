@@ -35,16 +35,16 @@ using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace utl;
-//......................................................................................................................
+
 namespace svt { namespace table
 {
-//......................................................................................................................
+
 
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 
-    //==================================================================================================================
+
     //= TableControl
-    //==================================================================================================================
+
 
     TableControl::TableControl( Window* _pParent, WinBits _nStyle )
         :Control( _pParent, _nStyle )
@@ -673,5 +673,5 @@ namespace svt { namespace table
 
 }} // namespace svt::table
 
-//......................................................................................................................
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

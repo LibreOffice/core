@@ -28,14 +28,14 @@
 #include <vector>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= FilterManager
-    //====================================================================
+
     /** manages the filter of a database component with filter properties
 
         The idea is that the filter which a database component actually really uses is composed of several single
@@ -109,9 +109,9 @@ namespace dbtools
         }
     };
 
-//........................................................................
+
 } // namespacefrm
-//........................................................................
+
 
 #endif // CONNECTIVITY_FORMFILTERMANAGER_HXX
 

@@ -46,9 +46,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Cha
         reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
+
     // UUI Interaction Request String Resolver.
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( rtl_str_compare(pImplName,
                   UUIInteractionRequestStringResolver::m_aImplementationName)
@@ -63,9 +63,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Cha
                 UUIInteractionRequestStringResolver::getSupportedServiceNames_static());
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // UUI Password Container Interaction Handler.
-    //////////////////////////////////////////////////////////////////////
+
 
     else if ( uui::PasswordContainerInteractionHandler::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -74,7 +74,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Cha
             uui::PasswordContainerInteractionHandler::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( xFactory.is() )
     {

@@ -38,7 +38,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//==================================================================
+
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 

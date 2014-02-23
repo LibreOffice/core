@@ -35,10 +35,10 @@
 #include <comphelper/numbers.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -66,9 +66,9 @@ namespace dbtools
     namespace DataType = ::com::sun::star::sdbc::DataType;
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 
-    //====================================================================
+
     //= FormattedColumnValue_Data
-    //====================================================================
+
     struct FormattedColumnValue_Data
     {
         Reference< XNumberFormatter >   m_xFormatter;
@@ -97,7 +97,7 @@ namespace dbtools
 
     namespace
     {
-        //................................................................
+
         void lcl_clear_nothrow( FormattedColumnValue_Data& _rData )
         {
             _rData.m_xFormatter.clear();
@@ -110,7 +110,7 @@ namespace dbtools
             _rData.m_xColumnUpdate.clear();
         }
 
-        //................................................................
+
         void lcl_initColumnDataValue_nothrow( FormattedColumnValue_Data& _rData,
             const Reference< XNumberFormatter >& i_rNumberFormatter, const Reference< XPropertySet >& _rxColumn )
         {
@@ -183,7 +183,7 @@ namespace dbtools
             }
         }
 
-        //................................................................
+
         void lcl_initColumnDataValue_nothrow( const Reference<XComponentContext>& i_rContext, FormattedColumnValue_Data& i_rData,
             const Reference< XRowSet >& i_rRowSet, const Reference< XPropertySet >& i_rColumn )
         {
@@ -211,9 +211,9 @@ namespace dbtools
         }
     }
 
-    //====================================================================
+
     //= FormattedColumnValue
-    //====================================================================
+
 
     FormattedColumnValue::FormattedColumnValue( const Reference< XComponentContext >& _rxContext,
             const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& i_rColumn )
@@ -321,8 +321,8 @@ namespace dbtools
         return sStringValue;
     }
 
-//........................................................................
+
 } // namespace dbtools
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

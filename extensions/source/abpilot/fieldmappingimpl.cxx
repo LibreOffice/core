@@ -34,10 +34,10 @@
 #include <unotools/confignode.hxx>
 #include "sal/macros.h"
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
@@ -63,10 +63,10 @@ namespace abp
         return s_sAddressBookNodeName;
     }
 
-    //.....................................................................
+
     namespace fieldmapping
     {
-    //.....................................................................
+
 
 
         sal_Bool invokeDialog( const Reference< XComponentContext >& _rxORB, class Window* _pParent,
@@ -81,7 +81,7 @@ namespace abp
 
             try
             {
-                // ........................................................
+
                 // create an instance of the dialog service
                 Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface( _pParent );
                 OUString sTitle(ModuleRes(RID_STR_FIELDDIALOGTITLE).toString());
@@ -287,14 +287,14 @@ namespace abp
             aAddressBookSettings.commit();
         }
 
-    //.....................................................................
-    }   // namespace fieldmapping
-    //.....................................................................
 
-    //.....................................................................
+    }   // namespace fieldmapping
+
+
+
     namespace addressconfig
     {
-    //.....................................................................
+
 
 
         void writeTemplateAddressSource( const Reference< XComponentContext >& _rxContext,
@@ -332,12 +332,12 @@ namespace abp
             aAddressBookSettings.commit();
         }
 
-    //.....................................................................
-    }   // namespace addressconfig
-    //.....................................................................
 
-//.........................................................................
+    }   // namespace addressconfig
+
+
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

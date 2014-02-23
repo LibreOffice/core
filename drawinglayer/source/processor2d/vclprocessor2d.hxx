@@ -27,7 +27,7 @@
 #include <basegfx/color/bcolormodifier.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 class OutputDevice;
 
@@ -54,7 +54,7 @@ namespace drawinglayer { namespace primitive2d {
     class SvgRadialAtomPrimitive2D;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -86,7 +86,7 @@ namespace drawinglayer
             // PolygonStrokePrimitive2D's decompositions (normally only one)
             sal_uInt32                                              mnPolygonStrokePrimitive2D;
 
-            //////////////////////////////////////////////////////////////////////////////
+
             // common VCL rendering support
 
             void RenderTextSimpleOrDecoratedPortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
@@ -108,7 +108,7 @@ namespace drawinglayer
             void RenderSvgRadialAtomPrimitive2D(const primitive2d::SvgRadialAtomPrimitive2D& rCandidate);
             void RenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rPolygonCandidate);
 
-            /////////////////////////////////////////////////////////////////////////////
+
             // DrawMode adaption support
             void adaptLineToFillDrawMode() const;
             void adaptTextToFillDrawMode() const;
@@ -126,7 +126,7 @@ namespace drawinglayer
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 

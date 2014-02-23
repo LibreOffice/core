@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
-// ============================================================================
+
 
 namespace accessibility {
 
@@ -218,11 +218,11 @@ protected:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
 };
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLTABLEBASE_HXX
 

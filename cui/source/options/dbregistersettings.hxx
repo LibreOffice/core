@@ -26,10 +26,10 @@
 
 #include <svl/poolitem.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     struct DatabaseRegistration
     {
@@ -63,9 +63,9 @@ namespace svx
 
     typedef ::std::map< OUString, DatabaseRegistration > DatabaseRegistrations;
 
-    //====================================================================
+
     //= DatabaseMapItem
-    //====================================================================
+
     class DatabaseMapItem : public SfxPoolItem
     {
     protected:
@@ -83,9 +83,9 @@ namespace svx
                                 getRegistrations() const { return m_aRegistrations; }
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

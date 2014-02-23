@@ -44,7 +44,7 @@ namespace cppu
 extern uno_Sequence g_emptySeq;
 extern typelib_TypeDescriptionReference * g_pVoidType;
 
-//--------------------------------------------------------------------------------------------------
+
 inline void * _map(
     void * p,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
@@ -69,7 +69,7 @@ inline void * _map(
     }
     return pRet;
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void _acquire( void * p, uno_AcquireFunc acquire ) SAL_THROW(())
 {
     if (p)
@@ -84,7 +84,7 @@ inline void _acquire( void * p, uno_AcquireFunc acquire ) SAL_THROW(())
         }
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void _release( void * p, uno_ReleaseFunc release ) SAL_THROW(())
 {
     if (p)
@@ -100,7 +100,7 @@ inline void _release( void * p, uno_ReleaseFunc release ) SAL_THROW(())
     }
 }
 
-//------------------------------------------------------------------------------
+
 inline sal_uInt32 calcSeqMemSize(
     sal_Int32 nElementSize, sal_Int32 nElements )
 {
@@ -113,13 +113,13 @@ inline sal_uInt32 calcSeqMemSize(
         return (sal_uInt32) nSize;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 inline uno_Sequence * createEmptySequence() SAL_THROW(())
 {
     osl_atomic_increment( &g_emptySeq.nRefCount );
     return &g_emptySeq;
 }
-//--------------------------------------------------------------------------------------------------
+
 inline typelib_TypeDescriptionReference * _getVoidType()
     SAL_THROW(())
 {
@@ -131,7 +131,7 @@ inline typelib_TypeDescriptionReference * _getVoidType()
     return g_pVoidType;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 #if OSL_DEBUG_LEVEL > 0
 #define CONSTRUCT_EMPTY_ANY( pAny ) \
 (pAny)->pType = _getVoidType(); \
@@ -142,15 +142,15 @@ inline typelib_TypeDescriptionReference * _getVoidType()
 (pAny)->pData = (pAny);
 #endif
 
-//--------------------------------------------------------------------------------------------------
+
 #define TYPE_ACQUIRE( pType ) \
     osl_atomic_increment( &(pType)->nRefCount );
 
-//--------------------------------------------------------------------------------------------------
+
 extern "C" void * binuno_queryInterface(
     void * pUnoI, typelib_TypeDescriptionReference * pDestType );
 
-//--------------------------------------------------------------------------------------------------
+
 inline bool _type_equals(
     typelib_TypeDescriptionReference * pType1, typelib_TypeDescriptionReference * pType2 )
     SAL_THROW(())

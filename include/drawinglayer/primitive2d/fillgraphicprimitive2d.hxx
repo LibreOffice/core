@@ -25,7 +25,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // FillbitmapPrimitive2D class
 
 namespace drawinglayer
@@ -80,7 +80,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLGRAPHICPRIMITIVE2D_HXX
 

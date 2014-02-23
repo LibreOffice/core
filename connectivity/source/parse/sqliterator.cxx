@@ -254,7 +254,7 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
 
 namespace
 {
-    //.........................................................................
+
     static void impl_getRowString( const Reference< XRow >& _rxRow, const sal_Int32 _nColumnIndex, OUString& _out_rString )
     {
         _out_rString = _rxRow->getString( _nColumnIndex );
@@ -262,7 +262,7 @@ namespace
             _out_rString = "";
     }
 
-    //.........................................................................
+
     static OUString lcl_findTableInMetaData(
         const Reference< XDatabaseMetaData >& _rxDBMeta, const OUString& _rCatalog,
         const OUString& _rSchema, const OUString& _rTableName )

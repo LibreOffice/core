@@ -81,9 +81,9 @@ using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
-//====================================================================
+
 //= VCLXWindowImpl
-//====================================================================
+
 class VCLXWindowImpl
 {
 private:
@@ -336,8 +336,8 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
     return mxWindowStyleSettings;
 }
 
-//====================================================================
-//====================================================================
+
+
 
 // Uses an out-parameter instead of return value, due to the object reference
 

@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Special implementation of the VBA project for the Excel filters. */
 class ExcelVbaProject : public ::oox::ole::VbaProject
@@ -48,7 +48,7 @@ private:
                         mxDocument;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

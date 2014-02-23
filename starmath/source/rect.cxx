@@ -29,7 +29,7 @@
 #include "smmod.hxx"
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 
 // '\0' terminated Array with symbol, which should be treat as letters in
@@ -71,7 +71,7 @@ bool SmIsMathAlpha(const OUString &rText)
 }
 
 
-////////////////////////////////////////
+
 //
 // SmRect members
 //

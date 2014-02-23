@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DRAWINGLAYER_PRIMITIVETYPES2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DRAWINGLAYER_PRIMITIVETYPES2D_HXX
 
-//////////////////////////////////////////////////////////////////////////////
+
 // define ranges for other libraries
 
 #define PRIMITIVE2D_ID_RANGE_DRAWINGLAYER           (0 << 16)
@@ -29,7 +29,7 @@
 #define PRIMITIVE2D_ID_RANGE_SW                     (3 << 16)
 #define PRIMITIVE2D_ID_RANGE_SC                     (4 << 16)
 
-//////////////////////////////////////////////////////////////////////////////
+
 // local primitives
 
 #define PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D              (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 0)
@@ -104,7 +104,7 @@
 #define PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D      (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 69)
 #define PRIMITIVE2D_ID_CLIPPEDBORDERLINEPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 70)
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DRAWINGLAYER_PRIMITIVETYPES2D_HXX
 

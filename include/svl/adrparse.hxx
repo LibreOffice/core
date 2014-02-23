@@ -23,7 +23,7 @@
 #include <svl/svldllapi.h>
 #include <vector>
 
-//============================================================================
+
 struct SvAddressEntry_Impl
 {
     OUString m_aAddrSpec;
@@ -41,10 +41,10 @@ struct SvAddressEntry_Impl
     }
 };
 
-//============================================================================
+
 typedef ::std::vector< SvAddressEntry_Impl* > SvAddressList_Impl;
 
-//============================================================================
+
 class SVL_DLLPUBLIC SvAddressParser
 {
     friend class SvAddressParser_Impl;

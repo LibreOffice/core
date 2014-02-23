@@ -31,7 +31,7 @@
 namespace basic
 {
 
-//============================================================================
+
 
 class SfxDialogLibraryContainer : public SfxLibraryContainer
 {
@@ -97,7 +97,7 @@ public:
             throw( ::com::sun::star::uno::Exception );
 };
 
-//============================================================================
+
 
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::resource::XStringResourceSupplier
                             >   SfxDialogLibrary_BASE;

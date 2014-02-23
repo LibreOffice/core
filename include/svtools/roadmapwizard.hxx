@@ -23,10 +23,10 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/wizardmachine.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     struct RoadmapWizardImpl;
     class RoadmapWizard;
@@ -237,9 +237,9 @@ protected:
         SVT_DLLPRIVATE void impl_construct();
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // OOO_ INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
 

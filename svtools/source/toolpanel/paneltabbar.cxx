@@ -43,10 +43,10 @@
 // space between item icon and icon text
 #define ITEM_ICON_TEXT_DISTANCE 4
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::awt::XWindowPeer;
@@ -60,9 +60,9 @@ namespace svt
     #define ITEM_POSITION_FIRST 0x08
     #define ITEM_POSITION_LAST  0x10
 
-    //==================================================================================================================
+
     //= helper
-    //==================================================================================================================
+
     namespace
     {
         ControlState lcl_ItemToControlState( const ItemFlags i_nItemFlags )
@@ -75,9 +75,9 @@ namespace svt
         }
     }
 
-    //==================================================================================================================
+
     //= ITabBarRenderer
-    //==================================================================================================================
+
     class SAL_NO_VTABLE ITabBarRenderer
     {
     public:
@@ -99,9 +99,9 @@ namespace svt
     };
     typedef ::boost::shared_ptr< ITabBarRenderer >  PTabBarRenderer;
 
-    //==================================================================================================================
+
     //= VCLItemRenderer - declaration
-    //==================================================================================================================
+
     class VCLItemRenderer : public ITabBarRenderer
     {
     public:
@@ -124,9 +124,9 @@ namespace svt
         OutputDevice&   m_rTargetDevice;
     };
 
-    //==================================================================================================================
+
     //= VCLItemRenderer - implementation
-    //==================================================================================================================
+
 
     void VCLItemRenderer::renderBackground() const
     {
@@ -174,9 +174,9 @@ namespace svt
         }
     }
 
-    //==================================================================================================================
+
     //= NWFToolboxItemRenderer - declaration
-    //==================================================================================================================
+
     class NWFToolboxItemRenderer : public ITabBarRenderer
     {
     public:
@@ -199,9 +199,9 @@ namespace svt
         OutputDevice&   m_rTargetDevice;
     };
 
-    //==================================================================================================================
+
     //= NWFToolboxItemRenderer - implementation
-    //==================================================================================================================
+
 
     void NWFToolboxItemRenderer::renderBackground() const
     {
@@ -250,9 +250,9 @@ namespace svt
         (void)i_nItemFlags;
     }
 
-    //==================================================================================================================
+
     //= NWFTabItemRenderer - declaration
-    //==================================================================================================================
+
     class NWFTabItemRenderer : public ITabBarRenderer
     {
     public:
@@ -276,9 +276,9 @@ namespace svt
         OutputDevice&   m_rTargetDevice;
     };
 
-    //==================================================================================================================
+
     //= NWFTabItemRenderer - implementation
-    //==================================================================================================================
+
 
     void NWFTabItemRenderer::renderBackground() const
     {
@@ -336,9 +336,9 @@ namespace svt
         (void)i_nItemFlags;
     }
 
-    //==================================================================================================================
+
     //= PanelTabBar_Impl
-    //==================================================================================================================
+
     class PanelTabBar_Impl : public IToolPanelDeckListener
     {
     public:
@@ -430,9 +430,9 @@ namespace svt
         size_t                      m_nScrollPosition;
     };
 
-    //==================================================================================================================
+
     //= helper
-    //==================================================================================================================
+
     namespace
     {
 
@@ -488,9 +488,9 @@ namespace svt
         };
     }
 
-    //==================================================================================================================
+
     //= PanelTabBar_Impl - implementation
-    //==================================================================================================================
+
 
     PanelTabBar_Impl::PanelTabBar_Impl( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :m_rTabBar( i_rTabBar )
@@ -957,9 +957,9 @@ namespace svt
         return aItemRect;
     }
 
-    //==================================================================================================================
+
     //= PanelTabBar_Impl
-    //==================================================================================================================
+
 
     void PanelTabBar_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
@@ -984,9 +984,9 @@ namespace svt
         // not interested in - the notifier is a member of this instance here, so we're dying ourself at the moment
     }
 
-    //==================================================================================================================
+
     //= PanelTabBar
-    //==================================================================================================================
+
 
     PanelTabBar::PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :Control( &i_rParentWindow, 0 )
@@ -1355,8 +1355,8 @@ namespace svt
         return xWindowPeer;
     }
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

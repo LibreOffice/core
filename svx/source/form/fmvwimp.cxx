@@ -161,7 +161,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
-//========================================================================
+
 DBG_NAME(FormViewPageWindowAdapter)
 
 FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
@@ -853,7 +853,7 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
 
 namespace
 {
-    // .........................................................................
+
     void lcl_ensureControlsOfFormExist_nothrow( const SdrPage& _rPage, const SdrView& _rView, const Window& _rWindow, const Reference< XForm >& _rxForm )
     {
         try
@@ -1215,7 +1215,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         OUString sLabelPostfix;
 
-        ////////////////////////////////////////////////////////////////
+
         // nur fuer Textgroesse
         OutputDevice* pOutDev = NULL;
         if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
@@ -1248,7 +1248,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if ((DataType::BINARY == nDataType) || (DataType::VARBINARY == nDataType))
             return NULL;
 
-        //////////////////////////////////////////////////////////////////////
+
         // determine the control type by examining the data type of the bound column
         sal_uInt16 nOBJID = 0;
         sal_Bool bDateNTimeField = sal_False;
@@ -1316,7 +1316,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
             return NULL;
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         // group objects
         bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
         OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateFieldControl: why was there a label created for a check box?" );
@@ -1368,7 +1368,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         Reference< XNumberFormats > xNumberFormats;
         OUString sLabelPostfix = _rDesc.szName;
 
-        ////////////////////////////////////////////////////////////////
+
         // nur fuer Textgroesse
         OutputDevice* pOutDev = NULL;
         if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
@@ -1397,7 +1397,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         if ( !pOutDev )
             return NULL;
 
-        //////////////////////////////////////////////////////////////////////
+
         // The service name decides which control should be created
         sal_uInt16 nOBJID = OBJ_FM_EDIT;
         if(OUString(_rDesc.szServiceName).equals((OUString)FM_SUN_COMPONENT_NUMERICFIELD))
@@ -1422,7 +1422,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
                 return NULL;
             }
 
-            //////////////////////////////////////////////////////////////////////
+
             // Now build the connection between the control and the data item.
             Reference< XValueBinding > xValueBinding(_rDesc.xPropSet,UNO_QUERY);
             Reference< XBindableValue > xBindableValue(pControl->GetUnoControlModel(),UNO_QUERY);
@@ -1436,7 +1436,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             if ( bCheckbox )
                 return pControl;
 
-            //////////////////////////////////////////////////////////////////////
+
             // group objects
             SdrObjGroup* pGroup  = new SdrObjGroup();
             SdrObjList* pObjList = pGroup->GetSubList();

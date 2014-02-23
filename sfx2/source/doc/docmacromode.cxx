@@ -38,10 +38,10 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::task::XInteractionHandler;
@@ -67,9 +67,9 @@ namespace sfx2
 
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
 
-    //====================================================================
+
     //= DocumentMacroMode_Data
-    //====================================================================
+
     struct DocumentMacroMode_Data
     {
         IMacroDocumentAccess&       m_rDocumentAccess;
@@ -84,12 +84,12 @@ namespace sfx2
         }
     };
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
-        //................................................................
+
         void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& rxHandler, const sal_Int32 nSfxErrorCode, sal_Bool& rbAlreadyShown )
         {
             if ( rbAlreadyShown )
@@ -102,13 +102,13 @@ namespace sfx2
             rbAlreadyShown = sal_True;
         }
 
-        //................................................................
+
         void lcl_showMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, sal_Bool& rbAlreadyShown )
         {
             lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_MACROS_SUPPORT_DISABLED, rbAlreadyShown );
         }
 
-        //................................................................
+
         void lcl_showDocumentMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, sal_Bool& rbAlreadyShown )
         {
 #ifdef MACOSX
@@ -118,7 +118,7 @@ namespace sfx2
 #endif
         }
 
-        //................................................................
+
         sal_Bool lcl_showMacroWarning( const Reference< XInteractionHandler >& rxHandler,
             const OUString& rDocumentLocation )
         {
@@ -128,9 +128,9 @@ namespace sfx2
         }
     }
 
-    //====================================================================
+
     //= DocumentMacroMode
-    //====================================================================
+
 
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
         :m_pData( new DocumentMacroMode_Data( rDocumentAccess ) )
@@ -434,8 +434,8 @@ namespace sfx2
         return bAllow;
     }
 
-//........................................................................
+
 } // namespace sfx2
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

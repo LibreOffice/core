@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 /** Base data of a fragment.
 
@@ -54,7 +54,7 @@ struct FragmentBaseData
                             RelationsRef xRelations );
 };
 
-// ============================================================================
+
 
 /** Describes record identifiers used to create contexts in a binary stream.
 
@@ -72,7 +72,7 @@ struct RecordInfo
     sal_Int32           mnEndRecId;         ///< Record identifier for context end, -1 = no record.
 };
 
-// ============================================================================
+
 
 typedef ::cppu::ImplInheritanceHelper1< ContextHandler, ::com::sun::star::xml::sax::XFastDocumentHandler > FragmentHandler_BASE;
 
@@ -121,7 +121,7 @@ protected:
 
 typedef ::rtl::Reference< FragmentHandler > FragmentHandlerRef;
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

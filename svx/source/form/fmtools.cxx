@@ -222,7 +222,7 @@ OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& x
     return ::comphelper::getString(xControlModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
 }
 
-//========================================================================
+
 // = CursorWrapper
 
 CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned)
@@ -306,7 +306,7 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
     }
 }
 
-//==============================================================================
+
 DBG_NAME(FmXDisposeMultiplexer);
 
 FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
@@ -357,7 +357,7 @@ void FmXDisposeMultiplexer::dispose()
     }
 }
 
-//==============================================================================
+
 
 sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
 {

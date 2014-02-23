@@ -27,7 +27,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 struct LineArrowProperties
 {
@@ -39,7 +39,7 @@ struct LineArrowProperties
     void                assignUsed( const LineArrowProperties& rSourceProps );
 };
 
-// ============================================================================
+
 
 struct OOX_DLLPUBLIC LineProperties
 {
@@ -73,7 +73,7 @@ struct OOX_DLLPUBLIC LineProperties
     sal_Int32           getLineWidth() const;
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

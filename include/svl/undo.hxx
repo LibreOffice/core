@@ -28,7 +28,7 @@
 #include <vector>
 #include <limits>
 
-//====================================================================
+
 
 class SVL_DLLPUBLIC SfxRepeatTarget
 {
@@ -37,7 +37,7 @@ public:
     virtual             ~SfxRepeatTarget() = 0;
 };
 
-//====================================================================
+
 
 class SVL_DLLPUBLIC SfxUndoContext
 {
@@ -45,7 +45,7 @@ public:
     virtual             ~SfxUndoContext() = 0;
 };
 
-//====================================================================
+
 class SfxLinkUndoAction;
 
 class SVL_DLLPUBLIC SfxUndoAction
@@ -77,13 +77,13 @@ private:
     SfxUndoAction&          operator=( const SfxUndoAction& );    // n.i.!!
 };
 
-//========================================================================
+
 
 /// is a mark on the Undo stack
 typedef sal_Int32 UndoStackMark;
 #define MARK_INVALID    ::std::numeric_limits< UndoStackMark >::max()
 
-//========================================================================
+
 
 struct MarkedUndoAction
 {
@@ -129,7 +129,7 @@ public:
     }
 };
 
-//====================================================================
+
 
 /** do not make use of these implementation details, unless you
     really really have to! */
@@ -145,7 +145,7 @@ struct SVL_DLLPUBLIC SfxUndoArray
     virtual ~SfxUndoArray();
 };
 
-//=========================================================================
+
 
 /** do not make use of these implementation details, unless you
     really really have to! */
@@ -190,7 +190,7 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 
 };
 
-//=========================================================================
+
 
 /**  is a callback interface for notifications about state changes of an SfxUndoManager
 */
@@ -213,7 +213,7 @@ protected:
     ~SfxUndoListener() {}
 };
 
-//=========================================================================
+
 
 namespace svl
 {
@@ -327,7 +327,7 @@ namespace svl
    };
 }
 
-//=========================================================================
+
 
 namespace svl { namespace undo { namespace impl
 {
@@ -429,7 +429,7 @@ private:
     friend class ::svl::undo::impl::LockGuard;
 };
 
-//=========================================================================
+
 
 class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
 

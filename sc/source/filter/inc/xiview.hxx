@@ -81,7 +81,7 @@ private:
     XclTabViewData      maData;         /// Sheet view settings data.
 };
 
-// ============================================================================
+
 
 #endif
 

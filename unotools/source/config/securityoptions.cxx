@@ -34,9 +34,9 @@
 
 #include "itemholder1.hxx"
 
-//_________________________________________________________________________________________________________________
+
 //  namespaces
-//_________________________________________________________________________________________________________________
+
 
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
@@ -100,9 +100,9 @@ using namespace ::com::sun::star::uno   ;
 
 #define CFG_READONLY_DEFAULT                        false
 
-//_________________________________________________________________________________________________________________
+
 //  private declarations!
-//_________________________________________________________________________________________________________________
+
 
 class SvtSecurityOptions_Impl : public ConfigItem
 {
@@ -242,9 +242,9 @@ class SvtSecurityOptions_Impl : public ConfigItem
         void                    SetBasicMode    (           EBasicSecurityMode      eMode       )       ;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     :ConfigItem             ( ROOTNODE_SECURITY         )
     ,m_seqSecureURLs        ( DEFAULT_SECUREURL         )
@@ -306,9 +306,9 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     EnableNotification( seqNames );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtSecurityOptions_Impl::~SvtSecurityOptions_Impl()
 {
     if( IsModified() )
@@ -992,11 +992,11 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtSecurityOptions_Impl*    SvtSecurityOptions::m_pDataContainer    = NULL  ;
 sal_Int32                   SvtSecurityOptions::m_nRefCount         = 0     ;
 

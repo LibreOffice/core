@@ -90,9 +90,9 @@ public:
 };
 
 
-// -------------------------
+
 // - GraphicFilterSmooth -
-// -------------------------
+
 
 class GraphicFilterSmooth : public GraphicFilterDialog
 {
@@ -107,9 +107,9 @@ public:
     double          GetRadius() const { return mpMtrRadius->GetValue() / 10.0; }
 };
 
-// -----------------------
+
 // - GraphicFilterMosaic -
-// -----------------------
+
 
 class GraphicFilterMosaic : public GraphicFilterDialog
 {
@@ -129,9 +129,9 @@ public:
     sal_Bool        IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
 };
 
-// -------------------------
+
 // - GraphicFilterSolarize -
-// -------------------------
+
 
 class GraphicFilterSolarize : public GraphicFilterDialog
 {
@@ -149,9 +149,9 @@ public:
     sal_Bool            IsInvert() const { return mpCbxInvert->IsChecked(); }
 };
 
-// ----------------------
+
 // - GraphicFilterSepia -
-// ----------------------
+
 
 class GraphicFilterSepia : public GraphicFilterDialog
 {
@@ -167,9 +167,9 @@ public:
     }
 };
 
-// -----------------------
+
 // - GraphicFilterPoster -
-// -----------------------
+
 
 class GraphicFilterPoster : public GraphicFilterDialog
 {
@@ -183,9 +183,9 @@ public:
     sal_uInt16      GetPosterColorCount() const { return( (sal_uInt16) mpNumPoster->GetValue() ); }
 };
 
-// -----------------------
+
 // - GraphicFilterEmboss -
-// -----------------------
+
 
 class EmbossControl : public SvxRectCtl
 {

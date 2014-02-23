@@ -132,7 +132,7 @@ public:
 
 
 protected:
-    // ----------------------------------------------------------------------------
+
     virtual Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                        const Sequence< Any >& Params,
                                        Sequence<sal_Int16 >& OutParamIndex,
@@ -222,7 +222,7 @@ protected:
     // asking for the property "_environment". If it has the value "JScript"
     // (case insensitive) then the IDispatch is considered a JScript object.
     sal_Bool isJScriptObject();
-    // -------------------------------------------------------------------------------
+
 
     // If UNO interfaces are implemented in JScript objects, VB or C++ COM objects
     // and those are passed as parameter to a UNO interface function, then

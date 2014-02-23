@@ -168,10 +168,10 @@ using namespace ::comphelper;
     Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) ); \
     xTrans->parseStrict( aURL )
 
-//.........................................................................
+
 namespace sfx2
 {
-//.........................................................................
+
 
     void HandleTaskPaneList( Window* pWindow, sal_Bool bAddToList )
     {
@@ -240,10 +240,10 @@ namespace sfx2
 
         return sSearchStr;
     }
-//.........................................................................
+
 // namespace sfx2
 }
-//.........................................................................
+
 
 // struct IndexEntry_Impl ------------------------------------------------
 

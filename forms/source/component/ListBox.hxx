@@ -90,13 +90,13 @@
     than the model. E.g. the "SelectedItems" property is *display* *values*.
 */
 
-//.........................................................................
+
 namespace frm
 {
 
-//==================================================================
+
 //= OListBoxModel
-//==================================================================
+
 typedef ::std::vector< ::connectivity::ORowSetValue >   ValueList;
 
 class OListBoxModel :public OBoundControlModel
@@ -240,9 +240,9 @@ private:
     bool        impl_hasBoundComponent() const { return m_nBoundColumnType != ::com::sun::star::sdbc::DataType::SQLNULL; }
 };
 
-//==================================================================
+
 //= OListBoxControl
-//==================================================================
+
 typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XFocusListener
                             ,   ::com::sun::star::awt::XItemListener
                             ,   ::com::sun::star::awt::XListBox
@@ -331,9 +331,9 @@ private:
     DECL_LINK( OnTimeout, void* );
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_LISTBOX_HXX
 

@@ -32,7 +32,7 @@ class HelpButton;
 
 namespace sd {
 
-// --------------------------------------------------------------------
+
 
 class CustomAnimationCreateTabPage;
 class CustomAnimationPane;

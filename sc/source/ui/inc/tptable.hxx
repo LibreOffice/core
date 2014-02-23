@@ -69,7 +69,7 @@ private:
     NumericField*        m_pEdScalePageNum;
 
 private:
-    //------------------------------------
+
     // Handler:
     DECL_LINK(PageDirHdl, void *);
     DECL_LINK( PageNoHdl,       CheckBox* );

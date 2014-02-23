@@ -30,9 +30,9 @@
 namespace vcl { struct ImplControlData; struct ControlLayoutData; }
 class StyleSettings;
 
-// -----------
+
 // - Control -
-// -----------
+
 
 class VCL_DLLPUBLIC Control : public Window
 {

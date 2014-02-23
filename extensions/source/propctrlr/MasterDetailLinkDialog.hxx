@@ -20,18 +20,18 @@
 #define PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
 #include <svtools/genericunodialog.hxx>
 #include "modulepcr.hxx"
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     class MasterDetailLinkDialog;
     typedef ::svt::OGenericUnoDialog                                            MasterDetailLinkDialog_DBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< MasterDetailLinkDialog >   MasterDetailLinkDialog_PBase;
 
-    //========================================================================
+
     //= MasterDetailLinkDialog
-    //========================================================================
+
     class MasterDetailLinkDialog :   public MasterDetailLinkDialog_DBase
                                     ,public MasterDetailLinkDialog_PBase
                                     ,public PcrClient
@@ -70,9 +70,9 @@ namespace pcr
         OUString m_sMasterLabel;
     };
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 #endif // PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

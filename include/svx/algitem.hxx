@@ -27,7 +27,7 @@
 
 class SvStream;
 
-//------------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem
 {
@@ -69,7 +69,7 @@ public:
     void                    SetFromRotation( sal_Int32 nRotation, sal_Bool bStacked );
 };
 
-//------------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
 {

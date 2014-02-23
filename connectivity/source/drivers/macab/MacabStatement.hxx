@@ -40,10 +40,10 @@ namespace connectivity
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable> MacabCommonStatement_BASE;
 
-        //**************************************************************
+
         // Class MacabCommonStatement
         // is a base class for the normal statement and for the prepared statement
-        //**************************************************************
+
         class MacabCommonStatement :    public comphelper::OBaseMutex,
                         public  MacabCommonStatement_BASE,
                         public  ::cppu::OPropertySetHelper,
@@ -145,9 +145,9 @@ namespace connectivity
             inline MacabConnection* getOwnConnection() const { return m_pConnection; }
         };
 
-        //**************************************************************
+
         // Class MacabStatement
-        //**************************************************************
+
         typedef ::cppu::ImplInheritanceHelper1<
                 MacabCommonStatement, ::com::sun::star::lang::XServiceInfo > MacabStatement_BASE;
 

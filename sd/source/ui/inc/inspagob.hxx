@@ -26,7 +26,7 @@
 
 class SdDrawDocument;
 
-//------------------------------------------------------------------------
+
 
 class SdInsertPagesObjsDlg : public ModalDialog
 {

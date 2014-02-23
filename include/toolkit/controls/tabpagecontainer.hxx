@@ -90,9 +90,9 @@ public:
     void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 };
-// ===================================================================
+
 // = UnoControlTabPageContainer
-// ===================================================================
+
 typedef ::cppu::AggImplInheritanceHelper1   <   ControlContainerBase
                                             ,   ::com::sun::star::awt::tab::XTabPageContainer
                                             >   UnoControlTabPageContainer_Base;

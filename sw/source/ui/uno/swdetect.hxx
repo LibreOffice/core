@@ -65,9 +65,9 @@ public:
 
     SFX_DECL_XSERVICEINFO_NOFACTORY
 
-    //----------------------------------------------------------------------------------
+
     // XExtendedFilterDetect
-    //----------------------------------------------------------------------------------
+
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException );
 };
 

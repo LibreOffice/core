@@ -31,7 +31,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
 
-// =======================================================================
+
 
 // Standard Fontgroessen fuer scalierbare Fonts
 static const sal_IntPtr aStdSizeAry[] =
@@ -69,7 +69,7 @@ static const sal_IntPtr aStdSizeAry[] =
     0
 };
 
-// =======================================================================
+
 
 
 // - class ImplFontListFonInfo -
@@ -145,7 +145,7 @@ static sal_Int32 ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
     return pInfo1->GetStyleName().compareTo( pInfo2->GetStyleName() );
 }
 
-// =======================================================================
+
 
 static OUString ImplMakeSearchString(const OUString& rStr)
 {
@@ -336,7 +336,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
     }
 }
 
-// =======================================================================
+
 
 FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll )
 {
@@ -813,7 +813,7 @@ const sal_IntPtr* FontList::GetStdSizeAry()
     return aStdSizeAry;
 }
 
-// =======================================================================
+
 
 
 // - FontSizeNames & FsizeNameItem -

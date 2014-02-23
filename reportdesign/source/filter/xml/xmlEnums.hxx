@@ -166,9 +166,9 @@ namespace rptxml
         ,XML_TOK_FORMULA
     };
 
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 #endif // RPT_XMLENUMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -636,7 +636,7 @@ public:
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 // partial specialization for the accessor traits masked_accessor
 // selector metafunction - can employ fast mask functor for the 1bpp

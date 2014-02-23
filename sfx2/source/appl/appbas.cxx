@@ -86,7 +86,7 @@ using namespace ::com::sun::star::script;
 
 using ::basic::BasicManagerRepository;
 
-//=========================================================================
+
 sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
 {
     if ( pAppData_Impl->pBasicManager->isValid() )

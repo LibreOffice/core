@@ -30,14 +30,14 @@ namespace svt
     class ToolPanelDeck;
 }
 
-//......................................................................................................................
+
 namespace accessibility
 {
-//......................................................................................................................
 
-    //==================================================================================================================
+
+
     //= AccessibleToolPanelDeck
-    //==================================================================================================================
+
     class AccessibleToolPanelDeck_Impl;
     typedef VCLXAccessibleComponent   AccessibleToolPanelDeck_Base;
     class AccessibleToolPanelDeck : public AccessibleToolPanelDeck_Base
@@ -74,9 +74,9 @@ namespace accessibility
         ::boost::scoped_ptr< AccessibleToolPanelDeck_Impl > m_pImpl;
     };
 
-//......................................................................................................................
+
 } // namespace accessibility
-//......................................................................................................................
+
 
 #endif // ACC_ACCESSIBLETOOLPANELDECK_HXX
 

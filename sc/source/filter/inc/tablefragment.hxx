@@ -27,7 +27,7 @@ namespace xls {
 
 class Table;
 
-// ============================================================================
+
 
 class TableFragment : public WorksheetFragmentBase
 {
@@ -46,7 +46,7 @@ private:
     Table&              mrTable;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

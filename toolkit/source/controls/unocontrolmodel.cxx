@@ -1052,7 +1052,7 @@ sal_Bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYP
     }
 }
 
-// ..................................................................
+
 sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue ) throw (IllegalArgumentException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

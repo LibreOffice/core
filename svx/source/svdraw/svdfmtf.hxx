@@ -25,9 +25,9 @@
 #include <vcl/virdev.hxx>
 #include <svx/svdobj.hxx>
 
-//************************************************************
+
 // Forward Declarations
-//************************************************************
+
 
 class SfxItemSet;
 class SdrObjList;
@@ -36,9 +36,9 @@ class SdrPage;
 class SdrObject;
 class SvdProgressInfo;
 
-//************************************************************
+
 // Helper Class ImpSdrGDIMetaFileImport
-//************************************************************
+
 
 class ImpSdrGDIMetaFileImport
 {

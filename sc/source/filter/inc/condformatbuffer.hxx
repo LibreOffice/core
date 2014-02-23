@@ -41,7 +41,7 @@ namespace xls {
 
 class CondFormat;
 
-// ============================================================================
+
 
 /** Model for a single rule in a conditional formatting. */
 struct CondFormatRuleModel
@@ -144,7 +144,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 
 /** Represents a single rule in a conditional formatting. */
@@ -182,7 +182,7 @@ private:
 
 typedef ::boost::shared_ptr< CondFormatRule > CondFormatRuleRef;
 
-// ============================================================================
+
 
 /** Model for a conditional formatting object. */
 struct CondFormatModel
@@ -193,7 +193,7 @@ struct CondFormatModel
     explicit            CondFormatModel();
 };
 
-// ============================================================================
+
 
 /** Represents a conditional formatting object with a list of affected cell ranges. */
 class CondFormat : public WorksheetHelper
@@ -273,7 +273,7 @@ public:
 typedef ::boost::shared_ptr< CondFormat > CondFormatRef;
 typedef ::boost::shared_ptr< ExtCfRule > ExtCfRuleRef;
 
-// ============================================================================
+
 
 class CondFormatBuffer : public WorksheetHelper
 {
@@ -300,7 +300,7 @@ private:
     ExtCfRuleVec        maCfRules;          /// All external conditional formatting rules in a sheet.
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

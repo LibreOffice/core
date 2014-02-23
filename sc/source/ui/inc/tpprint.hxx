@@ -23,7 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 
-//===================================================================
+
 
 class ScTpPrintOptions : public SfxTabPage
 {

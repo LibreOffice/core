@@ -30,11 +30,11 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
 
-//########################################################################
+
 //#                                                                      #
 //# Childwindow-Wrapper-Class                                            #
 //#                                                                      #
-//########################################################################
+
 
 SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
 : SfxControllerItem ( _nId, rBindings )
@@ -70,11 +70,11 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 
 
-//########################################################################
+
 //#                                                                      #
 //# Hyperlink - Dialog                                                   #
 //#                                                                      #
-//########################################################################
+
 
 /*************************************************************************
 |*

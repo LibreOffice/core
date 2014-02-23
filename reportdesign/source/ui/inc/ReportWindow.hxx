@@ -223,9 +223,9 @@ namespace rptui
         */
         sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
-//==================================================================
+
 }   //rptui
-//==================================================================
+
 #endif // RPTUI_REPORT_WINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

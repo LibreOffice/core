@@ -33,10 +33,10 @@
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 
-//......................................................................................................................
+
 namespace svt { namespace table
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Reference;
@@ -53,9 +53,9 @@ namespace svt { namespace table
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 
-    //==================================================================================================================
+
     //= CachedSortIndicator
-    //==================================================================================================================
+
     class CachedSortIndicator
     {
     public:
@@ -103,9 +103,9 @@ namespace svt { namespace table
         return rBitmap;
     }
 
-    //==================================================================================================================
+
     //= GridTableRenderer_Impl
-    //==================================================================================================================
+
     struct GridTableRenderer_Impl
     {
         ITableModel&        rModel;
@@ -124,9 +124,9 @@ namespace svt { namespace table
         }
     };
 
-    //==================================================================================================================
+
     //= helper
-    //==================================================================================================================
+
     namespace
     {
         static Rectangle lcl_getContentArea( GridTableRenderer_Impl const & i_impl, Rectangle const & i_cellArea )
@@ -176,9 +176,9 @@ namespace svt { namespace table
 
     }
 
-    //==================================================================================================================
+
     //= GridTableRenderer
-    //==================================================================================================================
+
 
     GridTableRenderer::GridTableRenderer( ITableModel& _rModel )
         :m_pImpl( new GridTableRenderer_Impl( _rModel ) )
@@ -623,8 +623,8 @@ namespace svt { namespace table
         return true;
     }
 
-//......................................................................................................................
+
 } } // namespace svt::table
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

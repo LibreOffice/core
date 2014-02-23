@@ -46,10 +46,10 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/stdtext.hxx>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
     using namespace ::utl;
     using namespace ::comphelper;
@@ -63,10 +63,10 @@ namespace abp
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
 
-    //=====================================================================
+
     struct PackageAccessControl { };
 
-    //=====================================================================
+
 
     static Reference< XDatabaseContext > lcl_getDataSourceContext( const Reference< XComponentContext >& _rxContext ) SAL_THROW (( Exception ))
     {
@@ -80,21 +80,21 @@ namespace abp
         const Reference< XComponentContext >& _rxContext, const OUString& _rName,
         Reference< XPropertySet >& /* [out] */ _rxNewDataSource ) SAL_THROW (( ::com::sun::star::uno::Exception ))
     {
-        //.............................................................
+
         // get the data source context
         Reference< XDatabaseContext > xContext = lcl_getDataSourceContext( _rxContext );
 
         DBG_ASSERT( !xContext->hasByName( _rName ), "lcl_implCreateAndInsert: name already used!" );
         (void)_rName;
 
-        //.............................................................
+
         // create a new data source
         Reference< XPropertySet > xNewDataSource;
         if (xContext.is())
             xNewDataSource = Reference< XPropertySet >( xContext->createInstance(), UNO_QUERY );
         DBG_ASSERT( xNewDataSource.is(), "lcl_implCreateAndInsert: could not create a new data source!" );
 
-        //.............................................................
+
         // insert the data source into the context
         DBG_ASSERT( xContext.is(), "lcl_implCreateAndInsert: missing an interface on the context (XNamingService)!" );
         if (xContext.is())
@@ -117,7 +117,7 @@ namespace abp
             Reference< XPropertySet > xNewDataSource;
             lcl_implCreateAndInsert( _rxORB, _rName, xNewDataSource );
 
-            //.............................................................
+
             // set the URL property
             if (xNewDataSource.is())
             {
@@ -157,9 +157,9 @@ namespace abp
         }
     }
 
-    //=====================================================================
+
     //= ODataSourceContextImpl
-    //=====================================================================
+
     struct ODataSourceContextImpl
     {
         Reference< XComponentContext >      xORB;
@@ -174,9 +174,9 @@ namespace abp
         }
     };
 
-    //=====================================================================
+
     //= ODataSourceContext
-    //=====================================================================
+
 
     ODataSourceContext::ODataSourceContext(const Reference< XComponentContext >& _rxORB)
         :m_pImpl( new ODataSourceContextImpl( _rxORB ) )
@@ -298,9 +298,9 @@ namespace abp
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:dbase:" );
     }
 
-    //=====================================================================
+
     //= ODataSourceImpl
-    //=====================================================================
+
     struct ODataSourceImpl
     {
     public:
@@ -332,9 +332,9 @@ namespace abp
     {
     }
 
-    //=====================================================================
+
     //= ODataSource
-    //=====================================================================
+
 
     ODataSource::ODataSource( const ODataSource& _rSource )
         :m_pImpl( NULL )
@@ -512,7 +512,7 @@ namespace abp
             // nothing to do
             return sal_True;
 
-        // ................................................................
+
         // create the interaction handler (needed for authentication and error handling)
         Reference< XInteractionHandler > xInteractions;
         try
@@ -525,7 +525,7 @@ namespace abp
         {
         }
 
-        // ................................................................
+
         // failure to create the interaction handler is a serious issue ...
         if (!xInteractions.is())
         {
@@ -535,7 +535,7 @@ namespace abp
             return sal_False;
         }
 
-        // ................................................................
+
         // open the connection
         Any aError;
         Reference< XConnection > xConnection;
@@ -554,7 +554,7 @@ namespace abp
             OSL_FAIL( "ODataSource::connect: caught a generic exception!" );
         }
 
-        // ................................................................
+
         // handle errors
         if ( aError.hasValue() && _pMessageParent )
         {
@@ -587,7 +587,7 @@ namespace abp
         if ( !xConnection.is() )
             return sal_False;
 
-        // ................................................................
+
         // success
         m_pImpl->xConnection.reset( xConnection );
         m_pImpl->aTables.clear();
@@ -621,8 +621,8 @@ namespace abp
         return m_pImpl ? m_pImpl->xDataSource : Reference< XPropertySet >();
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

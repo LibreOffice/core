@@ -27,14 +27,14 @@ namespace comphelper
     class ResourceBasedEventLogger;
 }
 
-//........................................................................
+
 namespace connectivity { namespace jdbc
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ContextClassLoaderScope
-    //====================================================================
+
     /**
     */
     class ContextClassLoaderScope
@@ -85,9 +85,9 @@ namespace connectivity { namespace jdbc
     };
 
 
-//........................................................................
+
 } } // namespace connectivity::jdbc
-//........................................................................
+
 
 #endif // CONNECTIVITY_CONTEXTCLASSLOADER_HXX
 

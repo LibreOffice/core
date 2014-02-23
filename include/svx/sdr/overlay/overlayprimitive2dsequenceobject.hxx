@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -55,7 +55,7 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYPRIMITIVE2DSEQUENCEOBJECT_HXX
 

@@ -166,9 +166,9 @@ namespace reportdesign
             return _pShape->m_aProps.aComponent.m_xParent;
         }
     };
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 #endif // REPORTDESIGN_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

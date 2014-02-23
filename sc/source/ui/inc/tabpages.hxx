@@ -24,7 +24,7 @@
 #include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 
-//========================================================================
+
 
 class ScTabPageProtection : public SfxTabPage
 {

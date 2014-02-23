@@ -33,7 +33,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ImplPageOriginOverlay
 {
     // The OverlayObjects
@@ -95,7 +95,7 @@ void ImplPageOriginOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ImplHelpLineOverlay
 {
     // The OverlayObjects
@@ -220,7 +220,7 @@ SdrSnapView::~SdrSnapView()
     BrkDragHelpLine();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrSnapView::IsAction() const
 {
@@ -272,7 +272,7 @@ void SdrSnapView::TakeActionRect(Rectangle& rRect) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 Point SdrSnapView::GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const
 {
@@ -459,7 +459,7 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrSnapView::BegSetPageOrg(const Point& rPnt)
 {
@@ -516,7 +516,7 @@ void SdrSnapView::BrkSetPageOrg()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const
 {

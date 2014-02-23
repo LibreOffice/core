@@ -41,10 +41,10 @@ class VCLXToolBox;
 class VCLXWindow;
 class Menu;
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     /** a function which is able to create a factory for the standard Accessible/Context
         components needed for standard toolkit controls
@@ -55,9 +55,9 @@ namespace toolkit
     */
     typedef void* (SAL_CALL * GetStandardAccComponentFactory)( );
 
-    //================================================================
+
     //= IAccessibleFactory
-    //================================================================
+
     class IAccessibleFactory : public ::rtl::IReference
     {
     public:
@@ -125,9 +125,9 @@ namespace toolkit
         ~IAccessibleFactory() {}
     };
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_HELPER_ACCESSIBLEFACTORY_HXX
 

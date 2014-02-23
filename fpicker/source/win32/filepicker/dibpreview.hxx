@@ -31,7 +31,7 @@
 #pragma warning(pop)
 #endif
 
-//---------------------------------------------
+
 // A very simple wrapper for a window that does
 // display DIBs.
 // Maybe it would be better and more extensible
@@ -39,7 +39,7 @@
 // for rendering a specific image format into
 // the area of the window, but for our purpose
 // it's enough to go the simple way - KISS.
-//---------------------------------------------
+
 
 class CDIBPreview : public PreviewBase
 {

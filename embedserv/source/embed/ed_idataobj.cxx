@@ -31,9 +31,9 @@
 
 using namespace ::com::sun::star;
 
-//===============================================================================
+
 // EmbedDocument_Impl
-//===============================================================================
+
 
 sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( sal_Bool isEnhMeta )
 {

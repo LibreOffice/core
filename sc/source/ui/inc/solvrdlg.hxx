@@ -28,7 +28,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 
-//----------------------------------------------------------------------------
+
 
 enum ScSolverErr
     {
@@ -39,7 +39,7 @@ enum ScSolverErr
     };
 
 
-//============================================================================
+
 
 class ScSolverDlg : public ScAnyRefDlg
 {

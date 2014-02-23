@@ -171,9 +171,9 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
     return bEqual;
 }
 
-// ====================
+
 // class SvxChartOptions
-// ====================
+
 
 SvxChartOptions::SvxChartOptions() :
     ::utl::ConfigItem( OUString("Office.Chart") ),

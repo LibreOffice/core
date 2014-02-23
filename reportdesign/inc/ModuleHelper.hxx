@@ -24,13 +24,13 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/resmgr.hxx>
 
-//.........................................................................
+
 namespace rptui
 {
-//.........................................................................
-    //=========================================================================
+
+
     //= OModule
-    //=========================================================================
+
     class OModuleImpl;
     class REPORTDESIGN_DLLPUBLIC OModule
     {
@@ -60,9 +60,9 @@ namespace rptui
         static void ensureImpl();
     };
 
-    //=========================================================================
+
     //= OModuleClient
-    //=========================================================================
+
     /** base class for objects which uses any global module-specific resources
     */
     class REPORTDESIGN_DLLPUBLIC OModuleClient
@@ -72,9 +72,9 @@ namespace rptui
         inline ~OModuleClient() { OModule::revokeClient(); }
     };
 
-    //=========================================================================
+
     //= ModuleRes
-    //=========================================================================
+
     /** specialized ResId, using the resource manager provided by the global module
     */
     class REPORTDESIGN_DLLPUBLIC ModuleRes : public ::ResId
@@ -82,9 +82,9 @@ namespace rptui
     public:
         inline ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
-//.........................................................................
+
 }   // namespace rptui
-//.........................................................................
+
 
 #endif // _RPTUI_MODULE_HELPER_RPT_HXX_
 

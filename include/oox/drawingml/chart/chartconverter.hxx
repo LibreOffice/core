@@ -41,7 +41,7 @@ namespace chart {
 struct ChartSpaceModel;
 struct DataSequenceModel;
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC ChartConverter
 {
@@ -93,7 +93,7 @@ private:
     ChartConverter&     operator=( const ChartConverter& );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

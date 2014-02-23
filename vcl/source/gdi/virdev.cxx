@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star::uno;
 
-// =======================================================================
+
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
                                     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )

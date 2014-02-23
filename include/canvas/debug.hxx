@@ -21,7 +21,7 @@
 #define INCLUDED_CANVAS_DEBUG_HXX
 
 // shared_ptr debugging
-// --------------------
+
 
 #ifdef BOOST_SP_ENABLE_DEBUG_HOOKS
 

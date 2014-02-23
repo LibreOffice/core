@@ -19,19 +19,19 @@
 
 #include "featuredispatcher.hxx"
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
 
-    //====================================================================
+
     //= ORichTextFeatureDispatcher
-    //====================================================================
+
 
     ORichTextFeatureDispatcher::ORichTextFeatureDispatcher( EditView& _rView, const URL&  _rURL )
         :m_aFeatureURL( _rURL )
@@ -139,8 +139,8 @@ namespace frm
         }
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

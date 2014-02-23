@@ -33,7 +33,7 @@
 
 #include <svx/ifaceids.hxx>
 
-//========================================================================
+
 class FmFormModel;
 class FmFormPage;
 class FmXFormShell;
@@ -54,7 +54,7 @@ namespace svx
     class ISdrObjectFilter;
 }
 
-//========================================================================
+
 class SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
 {
     sal_Bool m_bDesignMode;
@@ -67,7 +67,7 @@ public:
     sal_Bool GetDesignMode() const { return m_bDesignMode; }
 };
 
-//========================================================================
+
 class SVX_DLLPUBLIC FmFormShell : public SfxShell
 {
     friend class FmFormView;

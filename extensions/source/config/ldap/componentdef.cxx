@@ -23,7 +23,7 @@
 
 using namespace extensions::config::ldap ;
 
-//==============================================================================
+
 
 static uno::Reference<uno::XInterface> SAL_CALL createLdapUserProfileBe(
                    const uno::Reference<uno::XComponentContext>& aContext) {

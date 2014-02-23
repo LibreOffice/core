@@ -98,9 +98,9 @@ static const char* CONFIGURATION_PROPERTIES[]           =
     0
 };
 
-//*****************************************************************************************************************
+
 //  Configuration access class for WindowState supplier implementation
-//*****************************************************************************************************************
+
 
 class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper2< XNameContainer, XContainerListener >
 {
@@ -221,7 +221,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper2< XNameCo
         std::vector< OUString >           m_aPropArray;
 };
 
-//*****************************************************************************************************************
+
 
 ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString& aModuleName, const Reference< XComponentContext >& rxContext ) :
     m_aConfigWindowAccess( "/org.openoffice.Office.UI." ),

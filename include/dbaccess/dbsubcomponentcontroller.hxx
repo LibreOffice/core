@@ -37,14 +37,14 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DBSubComponentController
-    //====================================================================
+
     class DBSubComponentController;
 
     typedef ::cppu::ImplInheritanceHelper2  <   OGenericUnoController
@@ -82,7 +82,7 @@ namespace dbaui
         sal_Bool        isEditable()            const;
         void            setEditable(sal_Bool _bEditable);
 
-        // ----------------------------------------------------------------
+
         // asking for connection-related stuff
 
         sal_Bool    isConnected() const;
@@ -90,7 +90,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
                     getMetaData( ) const;
 
-        // ----------------------------------------------------------------
+
         // access to the data source / document
         OUString getDataSourceName() const;
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&
@@ -195,9 +195,9 @@ namespace dbaui
         DBSubComponentController();    // never implemented
     };
 
-//........................................................................
+
 }   // namespace dbaui
-//........................................................................
+
 
 #endif // INCLUDED_DBACCESS_DBSUBCOMPONENTCONTROLLER_HXX
 

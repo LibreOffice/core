@@ -39,7 +39,7 @@ private:
     LotusToSc           aConv;
     sal_uInt16              nTab;           // z.Zt. bearbeitete Tabelle
     sal_Int32               nExtTab;
-    // -------------------------------------------------------------------
+
     // in WK?-Datei
     void                Bof( void );                        // 0x0000   00
     bool                BofFm3( void );                     // 0x0000   00
@@ -57,13 +57,13 @@ private:
     void                NamedSheet( void );                 //          14000
     void                RowPresentation( sal_uInt16 nRecLen );  //           2007
 
-    // -------------------------------------------------------------------
+
     // in FM?-Datei
     void                Font_Face( void );                  // 174
     void                Font_Type( void );                  // 176
     void                Font_Ysize( void );                 // 177
     void                _Row( const sal_uInt16 nRecLen );       // 197 ?
-    // -------------------------------------------------------------------
+
     inline void         Read( ScAddress& );
     inline void         Read( ScRange& );
         // fuer Addresses/Ranges im Format Row(16)/Tab(8)/Col(8)
@@ -76,7 +76,7 @@ private:
     inline void         Read( LotAttrWK3& );
     void                Read( OUString& );                  // 0-terminierten String einlesen
     inline void         Skip( const sal_uInt16 nNumBytes );
-    // -------------------------------------------------------------------
+
 public:
                         ImportLotus( SvStream&, ScDocument*, rtl_TextEncoding eSrc );
 

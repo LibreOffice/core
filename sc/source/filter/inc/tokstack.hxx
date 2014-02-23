@@ -50,7 +50,7 @@ struct TokenId
 };
 
 
-//------------------------------------------------------------------------
+
 struct ScComplexRefData;
 class TokenStack;
 

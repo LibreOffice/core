@@ -21,10 +21,10 @@
 
 #include <cppuhelper/implementationentry.hxx>
 
-//......................................................................................................................
+
 namespace ucb { namespace ucp { namespace ext
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -39,9 +39,9 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::lang::XSingleComponentFactory;
 
-    //==================================================================================================================
+
     //= descriptors for the services implemented in this component
-    //==================================================================================================================
+
     static struct ::cppu::ImplementationEntry s_aServiceEntries[] =
     {
         {
@@ -53,9 +53,9 @@ namespace ucb { namespace ucp { namespace ext
         { 0, 0, 0, 0, 0, 0 }
     };
 
-//......................................................................................................................
+
 } } }   // namespace ucb::ucp::ext
-//......................................................................................................................
+
 
 extern "C"
 {

@@ -23,7 +23,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/hatch.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class PolyPolygon;
 
@@ -64,7 +64,7 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYHATCHRECT_HXX
 

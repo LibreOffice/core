@@ -23,10 +23,10 @@
 // Forward Declarations
 class nsIAtom;
 
-// --------------------------------------------------------------------------------------
+
 // nsProfileDirServiceProvider - The nsIDirectoryServiceProvider implementation used for
 // profile-relative file locations.
-// --------------------------------------------------------------------------------------
+
 
 class nsProfileDirServiceProvider: public nsIDirectoryServiceProvider
 {
@@ -61,7 +61,7 @@ protected:
 };
 
 
-// --------------------------------------------------------------------------------------
+
 
 /**
  * Global method to create an instance of nsProfileDirServiceProvider

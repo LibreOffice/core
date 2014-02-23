@@ -55,7 +55,7 @@ class Menu;
 class SdNavigatorControllerItem;
 class SdPageNameControllerItem;
 
-//------------------------------------------------------------------------
+
 
 class NavDocInfo
 {
@@ -75,7 +75,7 @@ private:
     ::sd::DrawDocShell* mpDocShell;
 };
 
-//------------------------------------------------------------------------
+
 
 class SdNavigatorWin
     : public Window

@@ -48,9 +48,9 @@ typedef ::std::vector< DdeService* > DdeServices;
 typedef ::std::vector< long > DdeFormats;
 typedef ::std::vector< Conversation* > ConvList;
 
-// -----------
+
 // - DdeData -
-// -----------
+
 
 class SVL_DLLPUBLIC DdeData
 {
@@ -82,9 +82,9 @@ public:
     static sal_uLong GetInternalFormat( sal_uLong nFmt );
 };
 
-// ------------------
+
 // - DdeTransaction -
-// ------------------
+
 
 class SVL_DLLPUBLIC DdeTransaction
 {
@@ -132,9 +132,9 @@ private:
 
 };
 
-// -----------
+
 // - DdeLink -
-// -----------
+
 
 class SVL_DLLPUBLIC DdeLink : public DdeTransaction
 {
@@ -149,9 +149,9 @@ public:
     virtual void    Notify();
 };
 
-// ---------------
+
 // - DdeWarmLink -
-// ---------------
+
 
 class SVL_DLLPUBLIC DdeWarmLink : public DdeLink
 {
@@ -159,9 +159,9 @@ public:
             DdeWarmLink( DdeConnection&, const OUString&, long = 0 );
 };
 
-// --------------
+
 // - DdeHotLink -
-// --------------
+
 
 class SVL_DLLPUBLIC DdeHotLink : public DdeLink
 {
@@ -169,9 +169,9 @@ public:
             DdeHotLink( DdeConnection&, const OUString&, long = 0 );
 };
 
-// --------------
+
 // - DdeRequest -
-// --------------
+
 
 class SVL_DLLPUBLIC DdeRequest : public DdeTransaction
 {
@@ -179,9 +179,9 @@ public:
             DdeRequest( DdeConnection&, const OUString&, long = 0 );
 };
 
-// -----------
+
 // - DdePoke -
-// -----------
+
 
 class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 {
@@ -192,9 +192,9 @@ public:
             DdePoke( DdeConnection&, const OUString&, const OUString&, long = 0 );
 };
 
-// --------------
+
 // - DdeExecute -
-// --------------
+
 
 class SVL_DLLPUBLIC DdeExecute : public DdeTransaction
 {
@@ -202,9 +202,9 @@ public:
             DdeExecute( DdeConnection&, const OUString&, long = 0 );
 };
 
-// -----------------
+
 // - DdeConnection -
-// -----------------
+
 
 class SVL_DLLPUBLIC DdeConnection
 {
@@ -234,9 +234,9 @@ private:
     const DdeConnection&    operator= ( const DdeConnection& );
 };
 
-// -----------
+
 // - DdeItem -
-// -----------
+
 
 class SVL_DLLPUBLIC DdeItem
 {
@@ -263,9 +263,9 @@ public:
     void            NotifyClient();
 };
 
-// -----------
+
 // - DdeItem -
-// -----------
+
 
 class SVL_DLLPUBLIC DdeGetPutItem : public DdeItem
 {
@@ -279,9 +279,9 @@ public:
     virtual void    AdviseLoop( bool );     // AdviseLoop starten/stoppen
 };
 
-// ------------
+
 // - DdeTopic -
-// ------------
+
 
 class SVL_DLLPUBLIC DdeTopic
 {
@@ -348,9 +348,9 @@ private:
     const DdeTopic& operator= ( const DdeTopic& );
 };
 
-// --------------
+
 // - DdeService -
-// --------------
+
 
 class SVL_DLLPUBLIC DdeService
 {
@@ -403,9 +403,9 @@ private:
     //int             operator= ( const DdeService& );
 };
 
-// ------------------
+
 // - DdeTransaction -
-// ------------------
+
 
 inline long DdeTransaction::GetError()
 {

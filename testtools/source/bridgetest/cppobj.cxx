@@ -68,7 +68,7 @@ inline static Sequence< OUString > getSupportedServiceNames()
     return Sequence< OUString >( &aName, 1 );
 }
 
-//==================================================================================================
+
 static void assign( TestElement & rData,
                     sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
@@ -95,7 +95,7 @@ static void assign( TestElement & rData,
     rData.Interface = xTest;
     rData.Any = rAny;
 }
-//==================================================================================================
+
 static void assign( TestData & rData,
                     sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
@@ -113,7 +113,7 @@ static void assign( TestData & rData,
     rData.Sequence = rSequence;
 }
 
-//==================================================================================================
+
 class Test_Impl :
     public osl::DebugBase<Test_Impl>,
     public WeakImplHelper3< XBridgeTest2, XServiceInfo , XRecursiveCall >
@@ -1164,9 +1164,9 @@ Sequence< OUString > Test_Impl::getSupportedServiceNames()
     return bridge_object::getSupportedServiceNames();
 }
 
-// ...
 
-//==================================================================================================
+
+
 static Reference< XInterface > SAL_CALL Test_Impl_create(
     SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
 {

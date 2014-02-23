@@ -30,9 +30,9 @@
 
 #include "WinFOPImpl.hxx"
 
-//----------------------------------------------------------
+
 // class declaration
-//----------------------------------------------------------
+
 
 class CFolderPicker :
     public  cppu::WeakImplHelper2<
@@ -44,9 +44,9 @@ public:
     // ctor/dtor
     CFolderPicker( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
 
-    //------------------------------------------------------------------------------------
+
     // XExecutableDialog
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL setTitle( const OUString& aTitle )
         throw( com::sun::star::uno::RuntimeException );
@@ -54,9 +54,9 @@ public:
     virtual sal_Int16 SAL_CALL execute(  )
         throw( com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------------------------------------------
+
     // XFolderPicker functions
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
         throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
@@ -70,9 +70,9 @@ public:
     virtual void SAL_CALL setDescription( const OUString& aDescription )
         throw( com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
+
     // XServiceInfo
-    //------------------------------------------------
+
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
@@ -83,17 +83,17 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XCancellable
-    //------------------------------------------------
+
 
     virtual void SAL_CALL cancel( )
         throw(::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // overwrite base class method, which is called
     // by base class dispose function
-    //------------------------------------------------
+
 
     virtual void SAL_CALL disposing();
 

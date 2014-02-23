@@ -50,12 +50,12 @@ class FmFormView;
 class ScFieldEditEngine;
 class SdrPaintWindow;
 
-// ---------------------------------------------------------------------------
+
 
 #define SC_SCENARIO_HSPACE      60
 #define SC_SCENARIO_VSPACE      50
 
-// ---------------------------------------------------------------------------
+
 
 enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 

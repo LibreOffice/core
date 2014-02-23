@@ -26,9 +26,9 @@
 namespace connectivity
 {
 
-    //**************************************************************
+
     //************ Class: java.sql.SQLWarning
-    //**************************************************************
+
     class java_sql_Array :  public java_lang_Object,
                                                         public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XArray>
     {

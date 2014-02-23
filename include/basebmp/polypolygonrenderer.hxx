@@ -168,7 +168,7 @@ namespace basebmp
 
 
         // Perform actual scan conversion
-        //----------------------------------------------------------------------
+
 
         if( aGET.empty() )
             return;
@@ -192,7 +192,7 @@ namespace basebmp
 
 
         // now process each of the nMaxY - nMinY + 1 scanlines
-        // ------------------------------------------------------------
+
 
         for( sal_Int32 y=nMinY; y <= nMaxY; ++y )
         {
@@ -286,7 +286,7 @@ namespace basebmp
 
 
                 // prune AET from ended edges, and keep it sorted
-                // ---------------------------------------------------------
+
 
                 pAETOther->clear();
                 if( pAET->size() == 2 )

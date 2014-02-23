@@ -25,13 +25,13 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler2;
 
-// ============================================================================
-// ============================================================================
+
+
 
 WorkbookFragmentBase::WorkbookFragmentBase(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
@@ -40,7 +40,7 @@ WorkbookFragmentBase::WorkbookFragmentBase(
 {
 }
 
-// ============================================================================
+
 
 WorksheetFragmentBase::WorksheetFragmentBase(
         const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
@@ -49,8 +49,8 @@ WorksheetFragmentBase::WorksheetFragmentBase(
 {
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 BiffContextHandler::~BiffContextHandler()
 {
@@ -63,7 +63,7 @@ BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelp
 {
 }
 
-// ============================================================================
+
 
 BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName )
 {
@@ -85,7 +85,7 @@ bool BiffFragmentHandler::skipFragment()
     return !mxBiffStrm->isEof() && (mxBiffStrm->getRecId() == BIFF_ID_EOF);
 }
 
-// ============================================================================
+
 
 BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelper, const OUString& rStrmName, bool bCloneDecoder ) :
     BiffFragmentHandler( rHelper.getBaseFilter(), rStrmName ),

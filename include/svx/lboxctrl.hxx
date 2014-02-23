@@ -28,7 +28,7 @@
 class ToolBox;
 class SvxPopupWindowListBox;
 
-/////////////////////////////////////////////////////////////////
+
 
 class SvxListBoxControl : public SfxToolBoxControl
 {
@@ -52,7 +52,7 @@ public:
                                               const SfxPoolItem* pState );
 };
 
-/////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC SvxUndoRedoControl : public SvxListBoxControl
 {

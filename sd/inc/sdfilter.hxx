@@ -26,9 +26,9 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 
-// ------------
+
 // - SdFilter -
-// ------------
+
 
 class SfxMedium;
 namespace sd {

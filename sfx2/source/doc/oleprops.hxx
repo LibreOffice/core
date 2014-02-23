@@ -31,11 +31,11 @@
 #include <com/sun/star/util/Date.hpp>
 
 
-// ============================================================================
+
 
 //namespace {
 
-// ============================================================================
+
 // property type IDs
 const sal_Int32 PROPTYPE_INT16          = 2;
 const sal_Int32 PROPTYPE_INT32          = 3;
@@ -93,7 +93,7 @@ const sal_Int32 CLIPFMT_WIN             = -1;
 // predefined clipboard data format IDs
 const sal_Int32 CLIPDATAFMT_DIB         = 8;
 
-// ============================================================================
+
 
 /** Helper for classes that need text encoding settings.
 
@@ -130,7 +130,7 @@ private:
     TextEncRef          mxTextEnc;
 };
 
-// ============================================================================
+
 
 /** Helper for classes that need to load or save string values.
 
@@ -164,7 +164,7 @@ private:
     void                ImplSaveString16( SvStream& rStrm, const OUString& rValue ) const;
 };
 
-// ============================================================================
+
 
 /** Base class for all classes related to OLE property sets.
 
@@ -206,7 +206,7 @@ private:
     ErrCode             mnErrCode;      /// Current error code.
 };
 
-// ============================================================================
+
 
 /** Base class for all OLE property objects. */
 class SfxOlePropertyBase : public SfxOleObjectBase
@@ -229,7 +229,7 @@ private:
 
 typedef ::boost::shared_ptr< SfxOlePropertyBase > SfxOlePropertyRef;
 
-// ============================================================================
+
 /** Property representing the codepage used to encode bytestrings in the entire property set. */
 class SfxOleCodePageProperty : public SfxOlePropertyBase, public SfxOleTextEncoding
 {
@@ -241,7 +241,7 @@ private:
     virtual void        ImplSave( SvStream& rStrm );
 };
 
-// ============================================================================
+
 
 /** Property containing custom names for other properties in the property set. */
 class SfxOleDictionaryProperty : public SfxOlePropertyBase, public SfxOleStringHelper
@@ -268,7 +268,7 @@ private:
     SfxOlePropNameMap   maPropNameMap;
 };
 
-// ============================================================================
+
 
 /** A section in a property set. Contains properties with unique identifiers. */
 class SfxOleSection : public SfxOleObjectBase
@@ -356,7 +356,7 @@ private:
 
 typedef ::boost::shared_ptr< SfxOleSection > SfxOleSectionRef;
 
-// ============================================================================
+
 
 /** Enumerates different section types in OLE property sets. */
 enum SfxOleSectionType
@@ -366,7 +366,7 @@ enum SfxOleSectionType
     SECTION_CUSTOM          /// Custom properties.
 };
 
-// ============================================================================
+
 
 /** Represents a complete property set, may consist of several property sections. */
 class SfxOlePropertySet : public SfxOleObjectBase

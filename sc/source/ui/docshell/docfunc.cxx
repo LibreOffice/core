@@ -98,7 +98,7 @@ using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
-//========================================================================
+
 
 IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
 {

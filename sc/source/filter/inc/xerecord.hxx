@@ -43,7 +43,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpDelegatingRecord : public XclExpRecordBase
 {
@@ -56,7 +56,7 @@ private:
     XclExpRecordBase*   mpRecord;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpXmlElementRecord : public XclExpRecordBase
 {
@@ -68,7 +68,7 @@ protected:
     sal_Int32           mnElement;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpXmlStartElementRecord : public XclExpXmlElementRecord
 {
@@ -80,7 +80,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpXmlEndElementRecord : public XclExpXmlElementRecord
 {
@@ -92,7 +92,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpXmlStartSingleElementRecord : public XclExpXmlElementRecord
 {
@@ -104,7 +104,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpXmlEndSingleElementRecord : public XclExpRecordBase
 {
@@ -116,7 +116,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for single records with any content.
 
@@ -165,7 +165,7 @@ private:
     sal_uInt16          mnRecId;        /// The record ID.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A record without body. Only the record ID and the size 0 will be written. */
 class XclExpEmptyRecord : public XclExpRecord
@@ -180,7 +180,7 @@ inline XclExpEmptyRecord::XclExpEmptyRecord( sal_uInt16 nRecId ) :
 {
 }
 
-// ============================================================================
+
 
 /** A record with a single value of type Type.
     @descr  Requires operator<<( XclExpStream&, const Type& ). */
@@ -235,7 +235,7 @@ XclExpValueRecord< Type >* XclExpValueRecord< Type >::SetAttribute( sal_Int32 nI
     return this;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** A record containing an unsigned 16-bit value. */
 typedef XclExpValueRecord< sal_uInt16 >     XclExpUInt16Record;
@@ -246,7 +246,7 @@ typedef XclExpValueRecord< sal_uInt32 >     XclExpUInt32Record;
 /** A record containing a double value. */
 typedef XclExpValueRecord< double >         XclExpDoubleRecord;
 
-// ----------------------------------------------------------------------------
+
 
 /** Record which contains a Boolean value.
     @descr  The value is stored as 16-bit value: 0x0000 = sal_False, 0x0001 = TRUE. */
@@ -274,7 +274,7 @@ private:
     sal_Int32           mnAttribute;    /// The attribute to generate within SaveXml()
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Record which exports a memory data array. */
 class XclExpDummyRecord : public XclExpRecord
@@ -388,7 +388,7 @@ private:
     RecordVec           maRecs;
 };
 
-// ============================================================================
+
 
 /** Represents a complete substream of records enclosed into a pair of BOF/EOF records. */
 class XclExpSubStream : public XclExpRecordList<>
@@ -403,7 +403,7 @@ private:
     sal_uInt16          mnSubStrmType;  /// Substream type, stored in leading BOF record.
 };
 
-// ============================================================================
+
 
 #endif
 

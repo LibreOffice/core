@@ -53,7 +53,7 @@ xmlNodePtr LibXmlTreeWalker::currentNode()
     return m_pCurrentNode;
 }
 
-//======================================================
+
 
 BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
     m_Highlighter(HIGHLIGHT_BASIC)

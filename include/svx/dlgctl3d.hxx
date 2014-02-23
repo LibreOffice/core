@@ -27,7 +27,7 @@
 #include <svx/svxdllapi.h>
 #include <basegfx/vector/b3dvector.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class FmFormModel;
 class FmFormPage;
@@ -35,12 +35,12 @@ class E3dView;
 class E3dPolyScene;
 class E3dObject;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #define PREVIEW_OBJECTTYPE_SPHERE           0x0000
 #define PREVIEW_OBJECTTYPE_CUBE             0x0001
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC Svx3DPreviewControl : public Control
 {
@@ -70,7 +70,7 @@ public:
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
 {
@@ -149,7 +149,7 @@ public:
     basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC SvxLightCtl3D : public Control
 {

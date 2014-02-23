@@ -36,10 +36,10 @@ extern "C" void SAL_CALL createRegistryInfo_DefaultHelpProvider()
     ::pcr::OAutoRegistration< ::pcr::DefaultHelpProvider > aAutoRegistration;
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -57,9 +57,9 @@ namespace pcr
     using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::awt::XVclWindowPeer;
 
-    //====================================================================
+
     //= DefaultHelpProvider
-    //====================================================================
+
 
     DefaultHelpProvider::DefaultHelpProvider()
         :m_bConstructed( false )
@@ -186,8 +186,8 @@ namespace pcr
         sHelpText = pControlWindow->GetHelpText();
         return sHelpText;
     }
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

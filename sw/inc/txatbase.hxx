@@ -168,7 +168,7 @@ inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 inline const SwFmtCharFmt& SwTxtAttr::GetCharFmt() const
 {

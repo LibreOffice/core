@@ -28,9 +28,9 @@ namespace rptui
 {
 class OObjectBase;
 
-//============================================================================
+
 // OObjectListener
-//============================================================================
+
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener > TPropertyChangeListenerHelper;
 

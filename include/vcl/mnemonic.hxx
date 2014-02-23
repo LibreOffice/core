@@ -25,9 +25,9 @@
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
-// ---------------------
+
 // - ImplMnemonicTypes -
-// ---------------------
+
 
 // Mnemonic Chars, which we want support
 // Latin 0-9
@@ -51,9 +51,9 @@
 #define MNEMONIC_CHAR               ((sal_Unicode)'~')
 #define MNEMONIC_INDEX_NOTFOUND     ((sal_uInt16)0xFFFF)
 
-// -------------------------
+
 // - MnemonicGenerator -
-// -------------------------
+
 
 class VCL_DLLPUBLIC MnemonicGenerator
 {

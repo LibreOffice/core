@@ -44,7 +44,7 @@ class SfxViewShell;
 class SwPrintUIOptions;
 class SwRenderData;
 
-////////////////////////////////////////////////////////////
+
 
 
 class SwPrintData
@@ -174,7 +174,7 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////
+
 
 
 class SwPrintUIOptions : public vcl::PrinterOptionsHelper
@@ -208,7 +208,7 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////
+
 
 /** A class that stores temporary data that is needed for rendering the document.
    Usually this data is created when 'getRendererCount' is called and
@@ -300,7 +300,7 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////
+
 
 /// last remnants of swprtopt.hxx:
 #define POSTITS_NONE    0

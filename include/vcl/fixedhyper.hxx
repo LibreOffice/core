@@ -23,9 +23,9 @@
 #include <vcl/dllapi.h>
 #include <vcl/fixed.hxx>
 
-    //=====================================================================
+
     //= FixedHyperlink
-    //=====================================================================
+
     class VCL_DLLPUBLIC FixedHyperlink : public FixedText
     {
     private:

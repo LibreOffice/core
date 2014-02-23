@@ -435,7 +435,7 @@ IMPL_LINK( ToolbarMenu, HighlightHdl, Control *, pControl )
     return 0;
 }
 
-// ====================================================================
+
 
 ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, Window* pParentWindow, WinBits nBits )
 : DockingWindow(pParentWindow, nBits)

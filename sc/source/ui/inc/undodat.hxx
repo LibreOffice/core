@@ -40,7 +40,7 @@ class ScDPObject;
 class SdrUndoAction;
 class ScMarkData;
 
-//----------------------------------------------------------------------------
+
 
 class ScUndoDoOutline: public ScSimpleUndo
 {

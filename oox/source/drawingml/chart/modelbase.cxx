@@ -38,7 +38,7 @@ void NumberFormat::setAttributes( const AttributeList& rAttribs )
     mbSourceLinked = rAttribs.getBool( XML_sourceLinked, false );
 }
 
-// ============================================================================
+
 
 LayoutModel::LayoutModel() :
     mfX( 0.0 ),
@@ -58,7 +58,7 @@ LayoutModel::~LayoutModel()
 {
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

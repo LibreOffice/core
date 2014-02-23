@@ -19,14 +19,14 @@
 #ifndef INCLUDED_COMPHELPER_EVTMETHODHELPER_HXX
 #define INCLUDED_COMPHELPER_EVTMETHODHELPER_HXX
 #include <comphelper/sequence.hxx>
-//........................................................................
+
 namespace comphelper
 {
     COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString> getEventMethodsForType(const ::com::sun::star::uno::Type& type);
-//........................................................................
+
 
 }   // namespace comphelper
-//........................................................................
+
 #endif // COMPHELPER_EVENTMEHODHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

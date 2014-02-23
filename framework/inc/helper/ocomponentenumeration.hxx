@@ -55,15 +55,15 @@ namespace framework{
 class OComponentEnumeration :   public ThreadHelpBase               ,
                                 public ::cppu::WeakImplHelper2< ::com::sun::star::container::XEnumeration,::com::sun::star::lang::XEventListener >
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      constructor to initialize this enumeration
@@ -80,9 +80,9 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
          OComponentEnumeration( const css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XEventListener
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      last chance to release all references and free memory
@@ -99,9 +99,9 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XEnumeration
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      check count of accessible elements of enumeration
@@ -136,9 +136,9 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
                                                              css::lang::WrappedTargetException      ,
                                                             css::uno::RuntimeException              );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     protected:
 
@@ -178,16 +178,16 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
         virtual void impl_resetObject();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  debug methods
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      debug-method to check incoming parameter of some other mehods of this class
@@ -208,10 +208,10 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
         static sal_Bool impldbg_checkParameter_OComponentEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents   );
         static sal_Bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                             aEvent          );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

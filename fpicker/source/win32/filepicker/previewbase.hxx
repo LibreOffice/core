@@ -34,9 +34,9 @@
 #pragma warning(pop)
 #endif
 
-//---------------------------------------------
+
 // Common interface for previews
-//---------------------------------------------
+
 
 class PreviewBase
 {

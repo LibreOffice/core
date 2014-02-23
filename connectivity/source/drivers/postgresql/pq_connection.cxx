@@ -102,7 +102,7 @@ namespace pq_sdbc_driver
 {
 
 
-// ______________________________________________________________________________
+
 // Helper class for statement lifetime management
 class ClosableReference : public cppu::WeakImplHelper1< com::sun::star::uno::XReference >
 {

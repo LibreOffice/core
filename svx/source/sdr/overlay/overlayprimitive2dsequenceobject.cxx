@@ -22,7 +22,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

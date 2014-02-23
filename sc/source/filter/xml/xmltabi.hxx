@@ -65,7 +65,7 @@ public:
     virtual void EndElement();
 };
 
-// ============================================================================
+
 
 class ScXMLTableProtectionContext : public SvXMLImportContext
 {

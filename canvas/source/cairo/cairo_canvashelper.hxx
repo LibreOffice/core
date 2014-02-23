@@ -82,7 +82,7 @@ namespace cairocanvas
         void setSurface( const ::cairo::SurfaceSharedPtr& pSurface, bool bHasAlpha );
 
         // CanvasHelper functionality
-        // ==========================
+
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
@@ -211,7 +211,7 @@ namespace cairocanvas
             getDevice();
 
         // BitmapCanvasHelper functionality
-        // ================================
+
 
         void copyRect( const ::com::sun::star::rendering::XCanvas*          pCanvas,
                        const ::com::sun::star::uno::Reference<

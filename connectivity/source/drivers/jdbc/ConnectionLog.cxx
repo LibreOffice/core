@@ -26,9 +26,9 @@
 
 #include <stdio.h>
 
-//........................................................................
+
 namespace connectivity { namespace java { namespace sql {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -43,9 +43,9 @@ namespace connectivity { namespace java { namespace sql {
         }
     }
 
-    //====================================================================
+
     //= ConnectionLog
-    //====================================================================
+
 
     ConnectionLog::ConnectionLog( const ::comphelper::ResourceBasedEventLogger& _rDriverLog )
         :ConnectionLog_Base( _rDriverLog )
@@ -67,14 +67,14 @@ namespace connectivity { namespace java { namespace sql {
     {
     }
 
-//........................................................................
-} } } // namespace connectivity::java::sql
-//........................................................................
 
-//........................................................................
+} } } // namespace connectivity::java::sql
+
+
+
 namespace comphelper { namespace log { namespace convert
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -113,8 +113,8 @@ namespace comphelper { namespace log { namespace convert
         return OUString::createFromAscii( buffer );
     }
 
-//........................................................................
+
 } } }   // comphelper::log::convert
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

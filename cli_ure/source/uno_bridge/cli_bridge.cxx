@@ -256,7 +256,7 @@ void SAL_CALL cli_env_disposing( uno_Environment * uno_cli_env )
     uno_cli_env->pContext = 0;
 }
 
-//##################################################################################################
+
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cli_env )
     SAL_THROW_EXTERN_C()
 {
@@ -283,7 +283,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cl
     //member in a unmanaged class, such as Bridge.
     CliEnvHolder::g_cli_env = gcnew Cli_environment();
 }
-//##################################################################################################
+
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()

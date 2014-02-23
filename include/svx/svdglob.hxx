@@ -40,7 +40,7 @@ ResMgr* ImpGetResMgr();
 // See also SvdStr.Hrc
 SVX_DLLPUBLIC OUString ImpGetResStr(sal_uInt16 nResID);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDGLOB_HXX
 

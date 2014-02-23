@@ -33,7 +33,7 @@ namespace oox {
 
 typedef ::com::sun::star::uno::Sequence< sal_Int8 > StreamDataSequence;
 
-// ============================================================================
+
 
 /** Base class for binary stream classes.
  */
@@ -121,7 +121,7 @@ private:
     const bool          mbSeekable;     ///< True = implementation supports seeking.
 };
 
-// ============================================================================
+
 
 /** Base class for binary input and output streams wrapping a UNO stream,
     seekable via the com.sun.star.io.XSeekable interface.
@@ -149,7 +149,7 @@ private:
                         mxSeekable;     ///< Stream seeking interface.
 };
 
-// ============================================================================
+
 
 /** Base class for binary input and output streams wrapping a
     StreamDataSequence, which is always seekable.
@@ -178,7 +178,7 @@ protected:
     sal_Int32           mnPos;          ///< Current position in the sequence.
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

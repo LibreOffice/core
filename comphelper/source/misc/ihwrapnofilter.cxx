@@ -22,10 +22,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star;
 

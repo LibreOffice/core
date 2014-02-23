@@ -78,7 +78,7 @@ const sal_uInt8 WINDOWS_CHARSET_THAI        = 222;
 const sal_uInt8 WINDOWS_CHARSET_EASTERN     = 238;
 const sal_uInt8 WINDOWS_CHARSET_OEM         = 255;
 
-// ----------------------------------------------------------------------------
+
 
 const sal_Int32 API_RGB_TRANSPARENT         = -1;       ///< Transparent color for API calls.
 const sal_Int32 API_RGB_BLACK               = 0x000000;  ///< Black color for API calls.
@@ -103,7 +103,7 @@ const sal_Int16 API_ESCAPE_SUBSCRIPT        = -101;     ///< Subscript: lower ch
 const sal_Int8 API_ESCAPEHEIGHT_NONE        = 100;      ///< Relative character height if not escaped.
 const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       ///< Relative character height if escaped.
 
-// ============================================================================
+
 
 // Limitate values ------------------------------------------------------------
 
@@ -183,7 +183,7 @@ void insertValue( Type& ornBitField, InsertType nValue, sal_uInt8 nStartBit, sal
     (ornBitField &= ~(nMask << nStartBit)) |= (nNewValue << nStartBit);
 }
 
-// ============================================================================
+
 
 /** Optional value, similar to ::boost::optional<>, with convenience accessors.
  */
@@ -218,7 +218,7 @@ private:
     bool                mbHasValue;
 };
 
-// ============================================================================
+
 
 /** Provides platform independent functions to convert from or to little-endian
     byte order, e.g. for reading data from or writing data to memory or a
@@ -282,7 +282,7 @@ private:
 #endif
 };
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 inline void ByteOrderConverter::readLittleEndian( Type& ornValue, const void* pSrcBuffer )
@@ -326,7 +326,7 @@ inline void ByteOrderConverter::swap8( sal_uInt8* pnData )
 }
 #endif
 
-// ============================================================================
+
 
 } // namespace oox
 

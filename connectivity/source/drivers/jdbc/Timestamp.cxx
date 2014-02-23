@@ -24,9 +24,9 @@
 
 using namespace ::comphelper;
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.sql.Date
-//**************************************************************
+
 
 jclass java_sql_Date::theClass = 0;
 java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date( NULL, (jobject)NULL )
@@ -75,9 +75,9 @@ java_sql_Date::operator ::com::sun::star::util::Date()
     return ::dbtools::DBTypeConversion::toDate(toString());
 }
 
-//**************************************************************
+
 //************ Class: java.sql.Time
-//**************************************************************
+
 
 jclass java_sql_Time::theClass = 0;
 
@@ -126,9 +126,9 @@ java_sql_Time::operator ::com::sun::star::util::Time()
 {
     return ::dbtools::DBTypeConversion::toTime(toString());
 }
-//**************************************************************
+
 //************ Class: java.sql.Timestamp
-//**************************************************************
+
 
 jclass java_sql_Timestamp::theClass = 0;
 

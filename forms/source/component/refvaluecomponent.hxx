@@ -23,14 +23,14 @@
 #include "FormComponent.hxx"
 #include "togglestate.hxx"
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OReferenceValueComponent
-    //====================================================================
+
     /** a OBoundControlModel which features the exchange of a reference value
     */
     class OReferenceValueComponent : public OBoundControlModel
@@ -90,9 +90,9 @@ namespace frm
                                 getDefaultForReset() const;
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_REFVALUECOMPONENT_HXX
 

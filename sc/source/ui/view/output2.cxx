@@ -183,7 +183,7 @@ private:
     void        TextChanged();
 };
 
-//==================================================================
+
 
 ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     pOutput     ( pData ),
@@ -806,7 +806,7 @@ sal_uLong ScDrawStringsVars::GetResultValueFormat() const
     return nValueFormat;
 }
 
-//==================================================================
+
 
 double ScOutputData::GetStretch()
 {
@@ -834,7 +834,7 @@ double ScOutputData::GetStretch()
     }
 }
 
-//==================================================================
+
 
 //
 //  output strings

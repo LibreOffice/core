@@ -55,9 +55,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
-//***************************************************************************
+
 // SfxURLToolBoxControl_Impl
-//***************************************************************************
+
 
 SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 
@@ -76,7 +76,7 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
     return (SvtURLBox*)GetToolBox().GetItemWindow( GetId() );
 }
 
-//***************************************************************************
+
 
 void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*/ ) const
 {
@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
     return 1L;
 }
 
-//***************************************************************************
+
 
 void SfxURLToolBoxControl_Impl::StateChanged
 (

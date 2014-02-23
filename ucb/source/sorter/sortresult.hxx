@@ -44,13 +44,13 @@ namespace cppu {
     class OInterfaceContainerHelper;
 }
 
-//-----------------------------------------------------------------------------
+
 struct  SortInfo;
 struct  SortListData;
 class   SRSPropertySetInfo;
 class   PropertyChangeListeners_Impl;
 
-//-----------------------------------------------------------------------------
+
 class SortedEntryList
 {
     std::deque < SortListData* > maData;
@@ -69,7 +69,7 @@ public:
     sal_IntPtr                operator [] ( sal_IntPtr nPos ) const;
 };
 
-//-----------------------------------------------------------------------------
+
 
 class EventList
 {
@@ -87,7 +87,7 @@ public:
     css::ucb::ListAction*     GetAction( sal_IntPtr nIndex ) { return maData[ nIndex ]; }
 };
 
-//-----------------------------------------------------------------------------
+
 
 class SimpleList
 {
@@ -110,11 +110,11 @@ public:
     void            Replace( void* pData, sal_uInt32 nPos );
 };
 
-//-----------------------------------------------------------------------------
+
 
 #define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedResultSet"
 
-//-----------------------------------------------------------------------------
+
 
 class SortedResultSet:
                 public cppu::OWeakObject,

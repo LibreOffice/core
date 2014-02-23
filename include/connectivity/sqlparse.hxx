@@ -66,9 +66,9 @@ namespace connectivity
     class OSQLScanner;
     class SQLError;
 
-    //==========================================================================
+
     //= OParseContext
-    //==========================================================================
+
     class OOO_DLLPUBLIC_DBTOOLS OParseContext : public IParseContext
     {
     public:
@@ -93,10 +93,10 @@ namespace connectivity
         virtual ::com::sun::star::lang::Locale getPreferredLocale( ) const;
     };
 
-    //==========================================================================
+
     // OSQLParseNodesContainer
     // grabage collection of nodes
-    //==========================================================================
+
     class OSQLParseNodesContainer
     {
         ::osl::Mutex m_aMutex;
@@ -113,9 +113,9 @@ namespace connectivity
 
     typedef salhelper::SingletonRef<OSQLParseNodesContainer> OSQLParseNodesGarbageCollector;
 
-    //==========================================================================
+
     //= OSQLParser
-    //==========================================================================
+
     struct OSQLParser_Data
     {
         ::com::sun::star::lang::Locale  aLocale;

@@ -27,9 +27,9 @@
 #include <vcl/graph.h>
 #include <vcl/svgdata.hxx>
 
-// ---------------
+
 // - ImpSwapInfo -
-// ---------------
+
 
 struct ImpSwapInfo
 {
@@ -37,9 +37,9 @@ struct ImpSwapInfo
     Size        maPrefSize;
 };
 
-// --------------
+
 // - ImpGraphic -
-// --------------
+
 
 class   OutputDevice;
 class   GfxLink;

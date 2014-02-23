@@ -24,9 +24,9 @@
 #include <vcl/timer.hxx>
 #include <list>
 
-// -----------------------
+
 // - GraphicManagerCache -
-// -----------------------
+
 
 class GraphicAttr;
 class GraphicCacheEntry;

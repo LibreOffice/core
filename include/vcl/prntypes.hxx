@@ -23,21 +23,21 @@
 #include <tools/solar.h>
 #include <i18nutil/paper.hxx>
 
-// ---------------
+
 // - Duplex Mode -
-// ---------------
+
 
 enum DuplexMode { DUPLEX_UNKNOWN, DUPLEX_OFF, DUPLEX_LONGEDGE, DUPLEX_SHORTEDGE };
 
-// ---------------
+
 // - Orientation -
-// ---------------
+
 
 enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
 
-// -------------------
+
 // - QueueInfo-Types -
-// -------------------
+
 
 #define QUEUE_STATUS_READY              ((sal_uLong)0x00000001)
 #define QUEUE_STATUS_PAUSED             ((sal_uLong)0x00000002)
@@ -67,9 +67,9 @@ enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
 
 #define QUEUE_JOBS_DONTKNOW             ((sal_uLong)0xFFFFFFFF)
 
-// -----------------
+
 // - Printer-Types -
-// -----------------
+
 
 #define PRINTER_CAPABILITIES_SUPPORTDIALOG      ((sal_uInt16)1)
 #define PRINTER_CAPABILITIES_COPIES             ((sal_uInt16)2)

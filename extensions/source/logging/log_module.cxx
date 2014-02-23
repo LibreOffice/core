@@ -20,10 +20,10 @@
 #include "log_module.hxx"
 #include <rtl/instance.hxx>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     struct LogModuleCreator
     {
@@ -44,8 +44,8 @@ namespace logging
         return theLogModuleInstance::get().m_aLogModule;
     }
 
-//........................................................................
+
 } // namespace logging
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

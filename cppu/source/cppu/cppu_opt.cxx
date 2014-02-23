@@ -25,7 +25,7 @@
 
 using namespace ::rtl;
 
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
@@ -39,7 +39,7 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     return ret.pData;
 }
 
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
@@ -53,7 +53,7 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     return ret.pData;
 }
 
-//##############################################################################
+
 extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
     uno_Any * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()

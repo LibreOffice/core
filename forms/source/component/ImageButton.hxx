@@ -23,14 +23,14 @@
 #include "clickableimage.hxx"
 #include <com/sun/star/awt/XMouseListener.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 // OImageButtonModel
-//==================================================================
+
 class OImageButtonModel
         :public OClickableImageBaseModel
 {
@@ -55,9 +55,9 @@ protected:
     DECLARE_XCLONEABLE();
 };
 
-//==================================================================
+
 // OImageButtonControl
-//==================================================================
+
 typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XMouseListener> OImageButtonControl_BASE;
 class OImageButtonControl : public OClickableImageBaseControl,
                             public OImageButtonControl_BASE
@@ -91,9 +91,9 @@ public:
     using OClickableImageBaseControl::disposing;
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_IMAGEBUTTON_HXX
 

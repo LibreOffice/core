@@ -23,7 +23,7 @@
 #include <rtl/math.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // standard PI defines from solar.h, but we do not want to link against tools
 
 #ifndef F_PI
@@ -48,7 +48,7 @@
 #define F_2PI       (2.0*M_PI)
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
+
 // fTools defines
 
 namespace basegfx

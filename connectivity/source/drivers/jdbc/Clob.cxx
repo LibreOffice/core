@@ -23,9 +23,9 @@
 #include <connectivity/dbexception.hxx>
 
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.sql.Clob
-//**************************************************************
+
 
 jclass java_sql_Clob::theClass = 0;
 

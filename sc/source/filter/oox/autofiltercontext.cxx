@@ -27,7 +27,7 @@ namespace xls {
 
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 FilterSettingsContext::FilterSettingsContext( WorksheetContextBase& rParent, FilterSettingsBase& rFilterSettings ) :
     WorksheetContextBase( rParent ),
@@ -73,7 +73,7 @@ void FilterSettingsContext::onStartRecord( SequenceInputStream& rStrm )
     mrFilterSettings.importRecord( getCurrentElement(), rStrm );
 }
 
-// ============================================================================
+
 
 FilterColumnContext::FilterColumnContext( WorksheetContextBase& rParent, FilterColumn& rFilterColumn ) :
     WorksheetContextBase( rParent ),
@@ -119,7 +119,7 @@ void FilterColumnContext::onStartRecord( SequenceInputStream& rStrm )
     mrFilterColumn.importFilterColumn( rStrm );
 }
 
-// ============================================================================
+
 
 AutoFilterContext::AutoFilterContext( WorksheetFragmentBase& rFragment, AutoFilter& rAutoFilter ) :
     WorksheetContextBase( rFragment ),
@@ -151,7 +151,7 @@ void AutoFilterContext::onStartRecord( SequenceInputStream& rStrm )
     mrAutoFilter.importAutoFilter( rStrm, getSheetIndex() );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

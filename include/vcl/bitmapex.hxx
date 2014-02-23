@@ -32,9 +32,9 @@ namespace com { namespace sun { namespace star { namespace rendering {
     class XBitmapCanvas;
 } } } }
 
-// -------------------
+
 // - TransparentType -
-// -------------------
+
 
 enum TransparentType
 {
@@ -43,9 +43,9 @@ enum TransparentType
     TRANSPARENT_BITMAP
 };
 
-// ------------
+
 // - BitmapEx -
-// ------------
+
 
 class VCL_DLLPUBLIC BitmapEx
 {
@@ -453,7 +453,7 @@ public:
                  const Size &rSize );
 };
 
-// ------------------------------------------------------------------
+
 /** Create a blend frame as BitmapEx
 
     @param nAlpha
@@ -494,7 +494,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
     Color aColorBottomRight,
     Color aColorBottomLeft);
 
-// ------------------------------------------------------------------
+
 
 #endif // INCLUDED_VCL_BITMAPEX_HXX
 

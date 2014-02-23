@@ -41,7 +41,7 @@ namespace oox { class GraphicHelper; }
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC VbaFilterConfig
 {
@@ -63,7 +63,7 @@ private:
                         mxConfigAccess;
 };
 
-// ============================================================================
+
 
 /** Base class for objects that attach a amcro to a specific action.
 
@@ -104,7 +104,7 @@ private:
 
 typedef ::boost::shared_ptr< VbaMacroAttacherBase > VbaMacroAttacherRef;
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC VbaProject : public VbaFilterConfig
 {
@@ -205,7 +205,7 @@ private:
     VbaModuleMap maModulesByStrm;
 };
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

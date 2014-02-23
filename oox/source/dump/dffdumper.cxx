@@ -24,7 +24,7 @@
 namespace oox {
 namespace dump {
 
-// ============================================================================
+
 
 
 namespace {
@@ -48,7 +48,7 @@ const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
 
 } // namespace
 
-// ============================================================================
+
 
 bool DffStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
@@ -276,7 +276,7 @@ sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
     return dumpHex< sal_uInt16 >( "id", "DFFOPT-PROPERTY-ID" );
 }
 
-// ============================================================================
+
 
 } // namespace dump
 } // namespace oox

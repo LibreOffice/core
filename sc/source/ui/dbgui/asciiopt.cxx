@@ -29,13 +29,13 @@
 // ause
 #include "editutil.hxx"
 
-// ============================================================================
+
 
 static const sal_Char pStrFix[] = "FIX";
 static const sal_Char pStrMrg[] = "MRG";
 
 
-// ============================================================================
+
 
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),

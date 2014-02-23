@@ -80,7 +80,7 @@ public:
     SAL_DLLPRIVATE void BindInternal_Impl( sal_uInt16 nNewId, SfxBindings* );
 };
 
-//====================================================================
+
 
 class SFX2_DLLPUBLIC SfxStatusForwarder: public SfxControllerItem
 {

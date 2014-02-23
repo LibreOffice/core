@@ -18,7 +18,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
 {
@@ -51,7 +51,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
     }
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

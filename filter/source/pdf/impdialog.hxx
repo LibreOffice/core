@@ -39,9 +39,9 @@
 
 #include "com/sun/star/beans/NamedValue.hpp"
 
-// ----------------
+
 // - ImpPDFDialog -
-// ----------------
+
 
 class ImpPDFTabGeneralPage;
 class ImpPDFTabViewerPage;
@@ -72,7 +72,7 @@ class ImplErrorDialog : public ModalDialog
 class ImpPDFTabSecurityPage;
 class ImpPDFTabLinksPage;
 
-////////////////////////////////////////////////////////////////////////
+
 //class tabbed dialog
 class ImpPDFTabDialog : public SfxTabDialog
 {

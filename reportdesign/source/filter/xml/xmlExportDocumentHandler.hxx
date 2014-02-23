@@ -91,9 +91,9 @@ private:
     bool m_bExportChar;
     bool m_bCountColumnHeader;
 };
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 #endif // RPT_EXPORTDOCUMENTHANDLER_HXX_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

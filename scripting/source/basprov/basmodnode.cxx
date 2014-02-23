@@ -34,14 +34,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
 
-    // =============================================================================
+
+
     // BasicModuleNodeImpl
-    // =============================================================================
+
 
     BasicModuleNodeImpl::BasicModuleNodeImpl( const Reference< XComponentContext >& rxContext,
         const OUString& sScriptingContext, SbModule* pModule, bool isAppScript )
@@ -138,8 +138,8 @@ namespace basprov
 
 
 
-//.........................................................................
+
 }   // namespace basprov
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

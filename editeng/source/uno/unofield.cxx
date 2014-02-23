@@ -216,9 +216,9 @@ inline Time setTime( util::DateTime& rDate )
     return Time( rDate.Hours, rDate.Minutes, rDate.Seconds, rDate.NanoSeconds  );
 }
 
-// ====================================================================
+
 // class SvxUnoTextField
-// ====================================================================
+
 namespace
 {
     class theSvxUnoTextFieldUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextFieldUnoTunnelId> {};

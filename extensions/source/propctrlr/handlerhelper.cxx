@@ -41,10 +41,10 @@
 
 #include <algorithm>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -54,9 +54,9 @@ namespace pcr
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= PropertyHandlerHelper
-    //====================================================================
+
 
     void PropertyHandlerHelper::describePropertyLine( const Property& _rProperty,
         LineDescriptor& /* [out] */ _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
@@ -291,8 +291,8 @@ namespace pcr
         return pInspectorWindow;
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

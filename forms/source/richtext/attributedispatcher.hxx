@@ -23,14 +23,14 @@
 #include "rtattributes.hxx"
 #include "textattributelistener.hxx"
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OAttributeDispatcher
-    //====================================================================
+
     class OAttributeDispatcher  :public ORichTextFeatureDispatcher
                                 ,public ITextAttributeListener
     {
@@ -88,9 +88,9 @@ namespace frm
                 ) SAL_THROW (());
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_ATTRIBUTEDISPATCHER_HXX
 

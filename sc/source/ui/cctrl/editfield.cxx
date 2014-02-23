@@ -28,7 +28,7 @@
 #include <vcl/builder.hxx>
 #include "global.hxx"
 
-// ============================================================================
+
 
 namespace {
 
@@ -44,7 +44,7 @@ sal_Unicode lclGetGroupSep()
 
 } // namespace
 
-// ============================================================================
+
 
 ScDoubleField::ScDoubleField( Window* pParent, const ResId& rResId ) :
     Edit( pParent, rResId )
@@ -82,6 +82,6 @@ void ScDoubleField::SetValue( double fValue, sal_Int32 nDecPlaces, bool bEraseTr
         nDecPlaces, lclGetDecSep(), bEraseTrailingDecZeros ) );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

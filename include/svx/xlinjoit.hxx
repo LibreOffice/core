@@ -25,9 +25,9 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/LineJoint.hpp>
 
-//---------------------
+
 // class XLineJointItem
-//---------------------
+
 
 class SVX_DLLPUBLIC XLineJointItem : public SfxEnumItem
 {

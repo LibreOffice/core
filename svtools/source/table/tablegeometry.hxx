@@ -24,16 +24,16 @@
 
 #include <tools/gen.hxx>
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
+
 
     class TableControl_Impl;
 
-    //====================================================================
+
     //= TableGeometry
-    //====================================================================
+
     class TableGeometry
     {
     protected:
@@ -61,9 +61,9 @@ namespace svt { namespace table
         bool                isValid() const { return !m_aRect.GetIntersection( m_rBoundaries ).IsEmpty(); }
     };
 
-    //====================================================================
+
     //= TableRowGeometry
-    //====================================================================
+
     class TableRowGeometry : public TableGeometry
     {
     protected:
@@ -89,9 +89,9 @@ namespace svt { namespace table
         bool    impl_isValidRow( RowPos const i_row ) const;
     };
 
-    //====================================================================
+
     //= TableColumnGeometry
-    //====================================================================
+
     class TableColumnGeometry : public TableGeometry
     {
     protected:
@@ -116,9 +116,9 @@ namespace svt { namespace table
         bool    impl_isValidColumn( ColPos const i_column ) const;
     };
 
-    //====================================================================
+
     //= TableCellGeometry
-    //====================================================================
+
     /** a helper representing geometry information of a cell
     */
     class TableCellGeometry
@@ -158,9 +158,9 @@ namespace svt { namespace table
         inline  bool        moveRight()     {return m_aCol.moveRight(); }
     };
 
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TABLE_TABLEGEOMETRY_HXX
 

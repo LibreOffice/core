@@ -85,7 +85,7 @@ typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::X
 #define FORMS_UNLOAD        0x0001      // unload
 #define FORMS_ASYNC         0x0002      // do this async
 
-//==============================================================================
+
 // a class iterating through all fields of a form which are bound to a field
 // sub forms are ignored, grid columns (where the grid is a direct child of the form) are included
 class FmXBoundFormFieldIterator : public ::comphelper::IndexAccessIterator
@@ -99,7 +99,7 @@ protected:
 };
 
 class FmFormPage;
-//========================================================================
+
 struct FmLoadAction
 {
     FmFormPage* pPage;
@@ -113,7 +113,7 @@ struct FmLoadAction
     }
 };
 
-//========================================================================
+
 class SfxViewFrame;
 typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener
@@ -121,7 +121,7 @@ typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::beans::XPropertyCh
                                         ,   ::com::sun::star::form::XFormControllerListener
                                         >   FmXFormShell_BD_BASE;
 
-//========================================================================
+
 class FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
 {
     using ::com::sun::star::beans::XPropertyChangeListener::disposing;
@@ -130,13 +130,13 @@ protected:
     virtual void SAL_CALL disposing();
 };
 
-//========================================================================
+
 namespace svx
 {
     class FmTextControlShell;
 }
 
-//========================================================================
+
 typedef FmXFormShell_Base_Disambiguation    FmXFormShell_BASE;
 typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
@@ -517,7 +517,7 @@ private:
     */
     void    impl_RemoveElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
 
-    // ---------------------------------------------------
+
     // asyncronous cursor actions/navigation slot handling
 
 public:
@@ -536,13 +536,13 @@ protected:
     DECL_LINK( OnLoadForms, FmFormPage* );
 };
 
-//------------------------------------------------------------------------------
+
 inline sal_Bool FmXFormShell::IsSelectionUpdatePending()
 {
     return m_aMarkTimer.IsActive();
 }
 
-// ========================================================================
+
 // = ein Iterator, der ausgehend von einem Interface ein Objekt sucht, dessen
 // = ::com::sun::star::beans::Property-Set eine ControlSource- sowie eine BoundField-Eigenschaft hat,
 // = wobei letztere einen Wert ungleich NULL haben muss.
@@ -570,7 +570,7 @@ public:
     virtual void Invalidate() { IndexAccessIterator::Invalidate(); m_sCurrentValue = OUString(); }
 };
 
-// ========================================================================
+
 typedef boost::ptr_vector<SfxStatusForwarder> StatusForwarderArray;
 class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
 {

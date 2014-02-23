@@ -22,7 +22,7 @@
 
 #include "xlstring.hxx"
 
-// ============================================================================
+
 
 class XclExpStream;
 class XclExpXmlStream;
@@ -173,7 +173,7 @@ public:
 
     void                WriteXml( XclExpXmlStream& rStrm ) const;
 
-    // ------------------------------------------------------------------------
+
 private:
     /** Returns true, if the flag field should be written. */
     bool                IsWriteFlags() const;
@@ -265,7 +265,7 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpString& rStrin
     return rStrm;
 }
 
-// ============================================================================
+
 
 #endif
 

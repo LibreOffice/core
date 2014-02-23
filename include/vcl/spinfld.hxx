@@ -25,9 +25,9 @@
 #include <vcl/edit.hxx>
 #include <vcl/timer.hxx>
 
-// -------------
+
 // - SpinField -
-// -------------
+
 
 class VCL_DLLPUBLIC SpinField : public Edit
 {

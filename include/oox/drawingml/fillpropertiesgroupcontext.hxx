@@ -26,7 +26,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 /** Context handler that imports the a:solidFill element. */
 class SolidFillContext : public ColorContext
@@ -38,7 +38,7 @@ public:
                             FillProperties& rFillProps );
 };
 
-// ============================================================================
+
 
 /** Context handler that imports the a:gradFill element. */
 class GradientFillContext : public ::oox::core::ContextHandler2
@@ -76,7 +76,7 @@ private:
     PatternFillProperties& mrPatternProps;
 };
 
- // ============================================================================
+
 
 /** Context handler that imports the a:duotone element containing the colors
     of a bitmap duotone transformation. */
@@ -99,7 +99,7 @@ private:
     int                 mnColorIndex;
 };
 
- // ============================================================================
+
 
 /** Context handler that imports the a:clrChange element containing the colors
     of a bitmap color change transformation. */

@@ -29,14 +29,14 @@ namespace cppu {
     class OPropertySetHelper;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= FontControlModel
-    //=====================================================================
+
     class FontControlModel
     {
     private:
@@ -95,9 +95,9 @@ namespace frm
         FontControlModel& operator=( const FontControlModel& ); // never implemented
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_FORMCONTROLFONT_HXX
 

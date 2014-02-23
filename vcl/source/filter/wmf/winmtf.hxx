@@ -327,7 +327,7 @@ struct WinMtfFontStyle
     WinMtfFontStyle( LOGFONTW& rLogFont );
 };
 
-// -----------------------------------------------------------------------------
+
 
 typedef enum {
     FillStyleSolid,
@@ -394,7 +394,7 @@ struct WinMtfFillStyle
         }
 };
 
-// -----------------------------------------------------------------------------
+
 
 struct WinMtfLineStyle
 {
@@ -446,7 +446,7 @@ struct WinMtfLineStyle
     }
 };
 
-// -----------------------------------------------------------------------------
+
 
 struct XForm
 {
@@ -463,7 +463,7 @@ struct XForm
     }
 };
 
-// -----------------------------------------------------------------------------
+
 
 struct SaveStruct
 {
@@ -491,7 +491,7 @@ struct SaveStruct
 
 typedef ::boost::shared_ptr< SaveStruct > SaveStructPtr;
 
-// -----------------------------------------------------------------------------
+
 
 struct BSaveStruct
 {
@@ -515,7 +515,7 @@ struct BSaveStruct
 
 typedef ::std::vector< BSaveStruct* > BSaveStructList_impl;
 
-// -----------------------------------------------------------------------------
+
 
 enum GDIObjectType {
     GDI_DUMMY = 0,
@@ -570,7 +570,7 @@ struct GDIObj
     }
 };
 
-// -----------------------------------------------------------------------------
+
 
 class WinMtfOutput
 {
@@ -758,7 +758,7 @@ public:
     virtual             ~WinMtfOutput();
 };
 
-// -----------------------------------------------------------------------------
+
 
 class WinMtf
 {

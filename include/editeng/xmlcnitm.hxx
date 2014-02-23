@@ -25,7 +25,7 @@
 
 class SvXMLNamespaceMap;
 
-//============================================================================
+
 
 class SvXMLAttrContainerData;
 

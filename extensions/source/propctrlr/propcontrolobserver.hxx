@@ -21,14 +21,14 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IPropertyControlObserver
-    //====================================================================
+
     /** non-UNO version of the XPropertyControlObserver
     */
     class IPropertyControlObserver
@@ -41,9 +41,9 @@ namespace pcr
         ~IPropertyControlObserver() {}
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // PROPCONTROLOBSERVER_HXX
 

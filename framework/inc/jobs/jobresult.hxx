@@ -33,7 +33,7 @@
 namespace framework{
 
 
-//_______________________________________
+
 /**
     @short  represent a result of a finished job execution
     @descr  Such result instance transport all neccessarry
@@ -42,7 +42,7 @@ namespace framework{
  */
 class JobResult : private ThreadHelpBase
 {
-    //___________________________________
+
     // types
 
     public:
@@ -63,7 +63,7 @@ class JobResult : private ThreadHelpBase
             E_DISPATCHRESULT    =   4
         };
 
-    //___________________________________
+
     // member
 
     private:
@@ -105,7 +105,7 @@ class JobResult : private ThreadHelpBase
          */
         css::frame::DispatchResultEvent m_aDispatchResult;
 
-    //___________________________________
+
     // native interface
 
     public:

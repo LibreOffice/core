@@ -42,9 +42,9 @@ namespace vcl {
     class IconThemeInfo;
 }
 
-// -----------------
+
 // - ImplMouseData -
-// -----------------
+
 
 class ImplMouseData
 {
@@ -77,9 +77,9 @@ private:
     sal_uInt16                          mnWheelBehavior;
 };
 
-// -----------------
+
 // - MouseSettings -
-// -----------------
+
 
 #define MOUSE_OPTION_AUTOFOCUS      ((sal_uLong)0x00000001)
 #define MOUSE_OPTION_AUTOCENTERPOS  ((sal_uLong)0x00000002)
@@ -237,9 +237,9 @@ struct FrameStyle
 
 enum AutoState { AUTO_STATE_OFF, AUTO_STATE_ON, AUTO_STATE_AUTO };
 
-// -----------------
+
 // - ImplStyleData -
-// -----------------
+
 
 class ImplStyleData
 {
@@ -381,9 +381,9 @@ private:
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
 #define DEFAULT_WORKSPACE_GRADIENT_END_COLOR Color( 0x73, 0x7e, 0x88 )
 
-// -----------------
+
 // - StyleSettings -
-// -----------------
+
 
 #define STYLE_OPTION_MONO           ((sal_uLong)0x00000001)
 #define STYLE_OPTION_COLOR          ((sal_uLong)0x00000002)
@@ -945,9 +945,9 @@ public:
                                         { return !(*this == rSet); }
 };
 
-// ----------------
+
 // - ImplMiscData -
-// ----------------
+
 
 class ImplMiscData
 {
@@ -963,9 +963,9 @@ private:
     AutoState                       mnDisablePrinting;
 };
 
-// ----------------
+
 // - MiscSettings -
-// ----------------
+
 
 class VCL_DLLPUBLIC MiscSettings
 {
@@ -993,9 +993,9 @@ public:
                                         { return !(*this == rSet); }
 };
 
-// ----------------
+
 // - ImplHelpData -
-// ----------------
+
 
 class ImplHelpData
 {
@@ -1011,9 +1011,9 @@ private:
     sal_uLong                           mnBalloonDelay;
 };
 
-// ----------------
+
 // - HelpSettings -
-// ----------------
+
 
 class VCL_DLLPUBLIC HelpSettings
 {
@@ -1051,9 +1051,9 @@ public:
                                         { return !(*this == rSet); }
 };
 
-// -----------------------
+
 // - ImplAllSettingsData -
-// -----------------------
+
 class ImplAllSettingsData
 {
 public:
@@ -1078,9 +1078,9 @@ private:
     SvtSysLocale                            maSysLocale;
 };
 
-// ---------------
+
 // - AllSettings -
-// ---------------
+
 
 const int SETTINGS_MOUSE = 0x00000001;
 const int SETTINGS_STYLE = 0x00000002;

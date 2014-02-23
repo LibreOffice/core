@@ -40,7 +40,7 @@ class Drawing;
 struct ShapeParentAnchor;
 class ShapeContainer;
 
-// ============================================================================
+
 
 const sal_Int32 VML_CLIENTDATA_UNCHECKED        = 0;
 const sal_Int32 VML_CLIENTDATA_CHECKED          = 1;
@@ -52,7 +52,7 @@ const sal_Int32 VML_CLIENTDATA_NUMBER           = 2;
 const sal_Int32 VML_CLIENTDATA_REFERENCE        = 3;
 const sal_Int32 VML_CLIENTDATA_FORMULA          = 4;
 
-// ============================================================================
+
 
 /** The shape model structure contains all properties shared by all types of shapes. */
 struct OOX_DLLPUBLIC ShapeTypeModel
@@ -109,7 +109,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     void                assignUsed( const ShapeTypeModel& rSource );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A shape template contains all formatting properties of shapes and can serve
     as templates for several shapes in a drawing. */
@@ -148,7 +148,7 @@ protected:
     ShapeTypeModel      maTypeModel;        ///< The model structure containing shape type data.
 };
 
-// ============================================================================
+
 
 /** Excel specific shape client data (such as cell anchor). */
 struct ClientData
@@ -186,7 +186,7 @@ struct ClientData
     explicit            ClientData();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct ShapeModel
 {
@@ -217,7 +217,7 @@ struct ShapeModel
     ClientData&         createClientData();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A shape object that is part of a drawing. May inherit properties from a
     shape template. */
@@ -278,7 +278,7 @@ protected:
     ShapeModel          maShapeModel;       ///< The model structure containing shape data.
 };
 
-// ============================================================================
+
 
 /** A simple shape object based on a specific UNO shape service. */
 class SimpleShape : public ShapeBase
@@ -303,7 +303,7 @@ private:
     OUString     maService;          ///< Name of the UNO shape service.
 };
 
-// ============================================================================
+
 
 /** A rectangular shape object. */
 class RectangleShape : public SimpleShape
@@ -318,7 +318,7 @@ protected:
                             const com::sun::star::awt::Rectangle& rShapeRect) const;
 };
 
-// ============================================================================
+
 
 /** An oval shape object. */
 class EllipseShape : public SimpleShape
@@ -327,7 +327,7 @@ public:
     explicit            EllipseShape( Drawing& rDrawing );
 };
 
-// ============================================================================
+
 
 /** A polygon shape object. */
 class PolyLineShape : public SimpleShape
@@ -371,7 +371,7 @@ protected:
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 };
 
-// ============================================================================
+
 
 /** A shape object with custom geometry. */
 class CustomShape : public SimpleShape
@@ -387,7 +387,7 @@ protected:
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 };
 
-// ============================================================================
+
 
 /** A complex shape object. This can be a picture shape, a custom shape, an OLE
     object, or an ActiveX form control. */
@@ -404,7 +404,7 @@ protected:
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 };
 
-// ============================================================================
+
 
 /** A group shape that extends the basic shape by a container of child shapes. */
 class GroupShape : public ShapeBase
@@ -440,7 +440,7 @@ private:
     ShapeContainerPtr   mxChildren;         ///< Shapes and templates that are part of this group.
 };
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

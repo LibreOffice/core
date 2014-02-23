@@ -31,14 +31,14 @@ class NotifyEvent;
 
 namespace cppu { class OWeakObject; }
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= UserInputInterception
-    //====================================================================
+
     struct UserInputInterception_Data;
     /** helper class for implementing the XUserInputInterception interface
         for a controller implementation
@@ -66,9 +66,9 @@ namespace sfx2
         ::std::auto_ptr< UserInputInterception_Data >   m_pData;
     };
 
-//........................................................................
+
 } // namespace sfx2
-//........................................................................
+
 
 #endif // INCLUDED_SFX2_USERINPUTINTERCEPTION_HXX
 

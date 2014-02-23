@@ -54,7 +54,7 @@ template< typename PixelType, typename ColorType > struct RGBValueSetter :
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 template< typename PixelType > struct PixelFormatTraitsTemplate_RGBValue
 {
@@ -71,7 +71,7 @@ template< typename PixelType > struct PixelFormatTraitsTemplate_RGBValue
         getter_type, setter_type>         accessor_selector;
 };
 
-//-----------------------------------------------------------------------------
+
 
 // 24bpp RGB
 typedef PixelFormatTraitsTemplate_RGBValue<

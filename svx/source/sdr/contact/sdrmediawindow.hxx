@@ -23,9 +23,9 @@
 
 namespace sdr { namespace contact {
 
-// ------------------
+
 // - SdrMediaWindow -
-// ------------------
+
 
 class ViewObjectContactOfSdrMediaObj;
 

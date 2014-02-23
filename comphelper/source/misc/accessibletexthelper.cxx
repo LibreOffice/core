@@ -29,10 +29,10 @@
 
 #include <algorithm>
 
-//..............................................................................
+
 namespace comphelper
 {
-//..............................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -40,9 +40,9 @@ namespace comphelper
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::accessibility;
 
-    //==============================================================================
+
     // OCommonAccessibleText
-    //==============================================================================
+
 
     OCommonAccessibleText::OCommonAccessibleText()
     {
@@ -768,9 +768,9 @@ namespace comphelper
         return true;
     }
 
-    //==============================================================================
+
     // OAccessibleTextHelper
-    //==============================================================================
+
 
     OAccessibleTextHelper::OAccessibleTextHelper( IMutex* _pExternalLock )
         :OAccessibleExtendedComponentHelper( _pExternalLock )
@@ -883,8 +883,8 @@ namespace comphelper
 
 
 
-//..............................................................................
+
 }   // namespace comphelper
-//..............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

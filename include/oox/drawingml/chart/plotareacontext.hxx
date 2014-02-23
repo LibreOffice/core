@@ -26,7 +26,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct View3DModel;
 
@@ -41,7 +41,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct WallFloorModel;
 
@@ -57,7 +57,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct DataTableModel;
 
@@ -72,7 +72,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct PlotAreaModel;
 
@@ -87,7 +87,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

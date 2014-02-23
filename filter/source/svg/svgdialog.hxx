@@ -26,9 +26,9 @@
 #include <svtools/genericunodialog.hxx>
 #include <memory>
 
-// -------------
+
 // - SVGDialog -
-// -------------
+
 
 class ResMgr;
 
@@ -76,22 +76,22 @@ public:
     virtual     ~SVGDialog();
 };
 
-// -----------------------------------------------------------------------------
+
 
 OUString SVGDialog_getImplementationName ()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SVGDialog_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames(  )
     throw ( ::com::sun::star::uno::RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     SAL_CALL SVGDialog_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)

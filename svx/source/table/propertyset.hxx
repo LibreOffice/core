@@ -33,12 +33,12 @@
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
+
 
 typedef std::vector< ::com::sun::star::beans::Property > PropertyVector;
 typedef boost::unordered_map< OUString, ::sal_uInt32, OUStringHash, ::std::equal_to< OUString > > PropertyMap;
 
-// -----------------------------------------------------------------------------
+
 
 class FastPropertySetInfo : public ::cppu::WeakAggImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
 {
@@ -61,7 +61,7 @@ private:
     PropertyMap maMap;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class FastPropertySet : public ::cppu::WeakAggImplHelper3<  ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XMultiPropertySet, ::com::sun::star::beans::XFastPropertySet >
 {

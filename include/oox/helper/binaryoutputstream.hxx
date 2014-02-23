@@ -28,7 +28,7 @@ namespace com { namespace sun { namespace star {
 
 namespace oox {
 
-// ============================================================================
+
 
 /** Interface for binary output stream classes.
 
@@ -90,7 +90,7 @@ void BinaryOutputStream::writeArray( Type* opnArray, sal_Int32 nElemCount )
 
 typedef ::boost::shared_ptr< BinaryOutputStream > BinaryOutputStreamRef;
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 void BinaryOutputStream::writeValue( Type nValue )
@@ -99,7 +99,7 @@ void BinaryOutputStream::writeValue( Type nValue )
     writeMemory( &nValue, static_cast< sal_Int32 >( sizeof( Type ) ), sizeof( Type ) );
 }
 
-// ============================================================================
+
 
 /** Wraps a UNO output stream and provides convenient access functions.
 
@@ -149,7 +149,7 @@ private:
     bool                mbAutoClose;    ///< True = automatically close stream on destruction.
 };
 
-// ============================================================================
+
 
 /** Wraps a StreamDataSequence and provides convenient access functions.
 
@@ -180,7 +180,7 @@ public:
     SequenceOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

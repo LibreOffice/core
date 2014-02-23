@@ -20,9 +20,9 @@
 #include "java/sql/Ref.hxx"
 #include "java/tools.hxx"
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.sql.Ref
-//**************************************************************
+
 
 jclass java_sql_Ref::theClass = 0;
 java_sql_Ref::java_sql_Ref( JNIEnv * pEnv, jobject myObj )

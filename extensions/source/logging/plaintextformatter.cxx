@@ -33,10 +33,10 @@
 
 #include <osl/thread.h>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     using ::com::sun::star::logging::XLogFormatter;
     using ::com::sun::star::uno::XComponentContext;
@@ -47,9 +47,9 @@ namespace logging
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
 
-    //====================================================================
+
     //= PlainTextFormatter - declaration
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   XLogFormatter
                                     ,   XServiceInfo
                                     >   PlainTextFormatter_Base;
@@ -76,9 +76,9 @@ namespace logging
         static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
     };
 
-    //====================================================================
+
     //= PlainTextFormatter - implementation
-    //====================================================================
+
 
     PlainTextFormatter::PlainTextFormatter()
     {
@@ -194,8 +194,8 @@ namespace logging
         static OAutoRegistration< PlainTextFormatter > aAutoRegistration;
     }
 
-//........................................................................
+
 } // namespace logging
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

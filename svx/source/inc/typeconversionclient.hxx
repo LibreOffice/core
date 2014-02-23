@@ -22,14 +22,14 @@
 
 #include "svx/dbtoolsclient.hxx"
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OTypeConversionClient
-    //====================================================================
+
     class OTypeConversionClient : public ODbtoolsClient
     {
     protected:
@@ -40,7 +40,7 @@ namespace svxform
     public:
         OTypeConversionClient();
 
-        // --------------------------------------------------------
+
         inline ::com::sun::star::util::Date getStandardDate() const
         {
             ::com::sun::star::util::Date aReturn;
@@ -49,7 +49,7 @@ namespace svxform
             return aReturn;
         }
 
-        // --------------------------------------------------------
+
         inline double getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _rxVariant,
             const ::com::sun::star::util::Date& _rNullDate ) const
@@ -60,7 +60,7 @@ namespace svxform
             return nReturn;
         }
 
-        // --------------------------------------------------------
+
         inline OUString getFormattedValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
@@ -75,9 +75,9 @@ namespace svxform
         }
     };
 
-//........................................................................
+
 }   // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_TYPECONVERSIONCLIENT_HXX
 

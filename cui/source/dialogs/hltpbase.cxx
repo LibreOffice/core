@@ -462,7 +462,7 @@ void SvxHyperlinkTabPageBase::GetDataFromCommonFields( OUString& aStrName,
 // reset dialog-fields
 void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 {
-    ///////////////////////////////////////
+
     // Set dialog-fields from create-itemset
     maStrInitURL = aEmptyStr;
 
@@ -533,7 +533,7 @@ OUString SvxHyperlinkTabPageBase::CreateUiNameFromURL( const OUString& aStrURL )
 // Activate / Deactivate Tabpage
 void SvxHyperlinkTabPageBase::ActivatePage( const SfxItemSet& rItemSet )
 {
-    ///////////////////////////////////////
+
     // Set dialog-fields from input-itemset
     SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
                                        rItemSet.GetItem (SID_HYPERLINK_GETLINK);

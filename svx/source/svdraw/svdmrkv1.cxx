@@ -26,9 +26,9 @@
 #include <svx/svdpage.hxx>
 #include "svddrgm1.hxx"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Point Selection
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrMarkView::HasMarkablePoints() const
 {
@@ -258,7 +258,7 @@ sal_Bool SdrMarkView::MarkNextPoint(const Point& /*rPnt*/, sal_Bool /*bPrev*/)
     ForceUndirtyMrkPnt();
     sal_Bool bChgd=sal_False;
     SortMarkedObjects();
-    // ...
+
     if (bChgd) {
         MarkListHasChanged();
     }
@@ -282,9 +282,9 @@ void SdrMarkView::SetPlusHandlesAlwaysVisible(bool bOn)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // ImpSetPointsRects() is for PolyPoints and GluePoints!
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrMarkView::ImpSetPointsRects() const
 {
@@ -312,9 +312,9 @@ void SdrMarkView::ImpSetPointsRects() const
     ((SdrMarkView*)this)->bMarkedPointsRectsDirty=false;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // UndirtyMrkPnt() is for PolyPoints and GluePoints!
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrMarkView::UndirtyMrkPnt() const
 {
@@ -379,7 +379,7 @@ void SdrMarkView::UndirtyMrkPnt() const
     ((SdrMarkView*)this)->bMrkPntDirty=false;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrMarkView::HasMarkableGluePoints() const
 {
@@ -585,7 +585,7 @@ sal_Bool SdrMarkView::MarkNextGluePoint(const Point& /*rPnt*/, sal_Bool /*bPrev*
     ForceUndirtyMrkPnt();
     sal_Bool bChgd=sal_False;
     SortMarkedObjects();
-    // ...
+
     if (bChgd) {
         MarkListHasChanged();
     }

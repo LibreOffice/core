@@ -36,10 +36,10 @@ extern void createRegistryInfo_Map();
 extern void createRegistryInfo_OSimpleLogRing();
 extern void createRegistryInfo_OOfficeRestartManager();
 
-//........................................................................
+
 namespace comphelper { namespace module
 {
-//........................................................................
+
 
     namespace
     {
@@ -71,9 +71,9 @@ namespace comphelper { namespace module
         theInitializer::get();
     }
 
-//........................................................................
+
 } } // namespace comphelper::module
-//........................................................................
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL comphelp_component_getFactory(
     const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,

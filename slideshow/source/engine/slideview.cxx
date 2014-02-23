@@ -115,7 +115,7 @@ basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&    rCl
                                            const basegfx::B2DSize&           rUserSize )
 {
     // setup canvas clipping
-    // =====================
+
 
     // AW: Simplified
     const basegfx::B2DRange aClipRange(0, 0, rUserSize.getX(), rUserSize.getY());

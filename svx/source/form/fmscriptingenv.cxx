@@ -44,10 +44,10 @@
 using std::pair;
 #include <set>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::script::XEventAttacherManager;
@@ -70,9 +70,9 @@ namespace svxform
 
     class FormScriptingEnvironment;
 
-    //====================================================================
+
     //= FormScriptListener
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XScriptListener
                                     >   FormScriptListener_Base;
 
@@ -137,9 +137,9 @@ namespace svxform
         DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
     };
 
-    //====================================================================
+
     //= FormScriptingEnvironment
-    //====================================================================
+
     class FormScriptingEnvironment : public IFormScriptingEnvironment
     {
     private:
@@ -177,9 +177,9 @@ namespace svxform
         FormScriptingEnvironment& operator=( const FormScriptingEnvironment& );     // never implemented
     };
 
-    //====================================================================
+
     //= FormScriptListener
-    //====================================================================
+
 
     FormScriptListener::FormScriptListener( FormScriptingEnvironment* pScriptExecutor )
         :m_pScriptExecutor( pScriptExecutor )
@@ -803,9 +803,9 @@ namespace svxform
         return 0L;
     }
 
-    //====================================================================
+
     //= FormScriptingEnvironment
-    //====================================================================
+
 
     FormScriptingEnvironment::FormScriptingEnvironment( FmFormModel& _rModel )
         :m_refCount( 0 )
@@ -884,9 +884,9 @@ namespace svxform
 
     namespace
     {
-        //................................................................
+
         //. NewStyleUNOScript
-        //................................................................
+
         class SAL_NO_VTABLE IScript
         {
         public:
@@ -896,9 +896,9 @@ namespace svxform
         };
         typedef ::boost::shared_ptr< IScript >  PScript;
 
-        //................................................................
+
         //. NewStyleUNOScript
-        //................................................................
+
         class NewStyleUNOScript : public IScript
         {
             SfxObjectShell&         m_rObjectShell;
@@ -915,7 +915,7 @@ namespace svxform
             virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult );
         };
 
-        //................................................................
+
         void NewStyleUNOScript::invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult )
         {
             Sequence< sal_Int16 > aOutArgsIndex;
@@ -1036,8 +1036,8 @@ namespace svxform
         return new FormScriptingEnvironment( _rModel );
     }
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

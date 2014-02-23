@@ -26,7 +26,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class Region;
@@ -42,7 +42,7 @@ namespace sdr { namespace animation {
     class PrimitiveAnimation;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -140,7 +140,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 

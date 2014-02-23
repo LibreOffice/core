@@ -24,11 +24,11 @@
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 
-//########################################################################
+
 //#                                                                      #
 //# Childwindow-Wrapper-Class                                            #
 //#                                                                      #
-//########################################################################
+
 
 SFX_IMPL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper, SID_HYPERLINK_DIALOG)
 

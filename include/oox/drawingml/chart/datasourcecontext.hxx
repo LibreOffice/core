@@ -26,13 +26,13 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct DataSequenceModel;
 
 typedef ContextBase< DataSequenceModel > DataSequenceContextBase;
 
-// ============================================================================
+
 
 /** Handler for a double sequence context (c:numLit, c:numRef elements).
  */
@@ -49,7 +49,7 @@ private:
     sal_Int32           mnPtIndex;          /// Current data point index.
 };
 
-// ============================================================================
+
 
 /** Handler for a string sequence context (c:multiLvlStrRef, c:strLit,
     c:strRef elements).
@@ -67,7 +67,7 @@ private:
     sal_Int32           mnPtIndex;          /// Current data point index.
 };
 
-// ============================================================================
+
 
 struct DataSourceModel;
 
@@ -83,7 +83,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

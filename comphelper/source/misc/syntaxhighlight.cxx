@@ -37,9 +37,9 @@
 #define CHAR_SPACE              0x0100
 #define CHAR_EOL                0x0200
 
-// ##########################################################################
+
 // ATTENTION: all these words need to be in lower case
-// ##########################################################################
+
 static const char* strListBasicKeyWords[] = {
     "access",
     "alias",

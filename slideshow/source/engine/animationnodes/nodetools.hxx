@@ -42,7 +42,7 @@ namespace slideshow
     {
 
         // Tools
-        //=========================================================================
+
 
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
         int& debugGetCurrentOffset();

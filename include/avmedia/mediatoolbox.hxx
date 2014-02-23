@@ -27,9 +27,9 @@
 namespace avmedia
 {
 
-// -------------------------------
+
 // - SvxGrafFilterToolBoxControl -
-// -------------------------------
+
 
 class MediaItem;
 

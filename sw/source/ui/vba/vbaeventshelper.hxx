@@ -22,7 +22,7 @@
 
 #include <vbahelper/vbaeventshelperbase.hxx>
 
-// ============================================================================
+
 
 class SwVbaEventsHelper : public VbaEventsHelperBase
 {
@@ -39,7 +39,7 @@ protected:
     virtual OUString implGetDocumentModuleName( const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) const throw (css::lang::IllegalArgumentException);
 };
 
-// ============================================================================
+
 
 #endif
 

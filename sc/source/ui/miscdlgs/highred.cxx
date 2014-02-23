@@ -36,7 +36,7 @@
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-//============================================================================
+
 //  class ScHighlightChgDlg
 
 

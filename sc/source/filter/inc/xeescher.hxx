@@ -65,7 +65,7 @@ protected:  // for access in derived classes
     sal_uInt16          mnFlags;        /// Flags for DFF stream export.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the position (anchor) of an object in a Calc sheet. */
 class XclExpDffSheetAnchor : public XclExpDffAnchorBase
@@ -81,7 +81,7 @@ private:
     SCTAB               mnScTab;        /// Calc sheet index.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the position (anchor) of a shape in an embedded draw page. */
 class XclExpDffEmbeddedAnchor : public XclExpDffAnchorBase
@@ -100,7 +100,7 @@ private:
     sal_Int32           mnScaleY;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the position (anchor) of a note object. */
 class XclExpDffNoteAnchor : public XclExpDffAnchorBase
@@ -109,7 +109,7 @@ public:
     explicit            XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the position (anchor) of a cell dropdown object. */
 class XclExpDffDropDownAnchor : public XclExpDffAnchorBase
@@ -134,7 +134,7 @@ protected:
     sal_uInt32          mnFragmentKey;      /// The key of the DFF stream fragment to be written by this record.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** The MSODRAWINGGROUP record contains the DGGCONTAINER with global DFF data
     such as the picture container.
@@ -145,7 +145,7 @@ public:
     explicit            XclExpMsoDrawingGroup( XclEscherEx& rEscherEx );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** One or more MSODRAWING records contain the DFF stream data for a drawing
     shape.
@@ -156,7 +156,7 @@ public:
     explicit            XclExpMsoDrawing( XclEscherEx& rEscherEx );
 };
 
-// ============================================================================
+
 
 /** Provides export of bitmap data to an IMGDATA record. */
 class XclExpImgData : public XclExpRecordBase
@@ -173,7 +173,7 @@ private:
     sal_uInt16          mnRecId;        /// Record identifier for the IMGDATA record.
 };
 
-// ============================================================================
+
 
 /** Helper class for form controils to manage spreadsheet links . */
 class XclExpControlHelper : protected XclExpRoot
@@ -234,7 +234,7 @@ private:
     virtual void        WriteSubRecs( XclExpStream& rStrm );
 };
 
-// ----------------------------------------------------------------------------
+
 
 //delete for exporting OCX
 //#if EXC_EXP_OCX_CTRL
@@ -302,7 +302,7 @@ private:
 
 //#endif
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpChart;
 
@@ -331,7 +331,7 @@ private:
     XChartDocRef mxChartDoc;
 };
 
-// ============================================================================
+
 
 /** Represents a NOTE record containing the relevant data of a cell note.
 
@@ -387,7 +387,7 @@ private:
     Rectangle           maCommentTo;    /// To and To Offsets
 };
 
-// ============================================================================
+
 
 class XclExpComments : public XclExpRecord
 {
@@ -452,7 +452,7 @@ private:
     boost::shared_ptr< XclExpObjList > mxObjList;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpEmbeddedObjectManager : public XclExpObjectManager
 {
@@ -472,7 +472,7 @@ private:
     sal_Int32           mnScaleY;
 };
 
-// ============================================================================
+
 
 #endif
 

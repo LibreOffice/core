@@ -25,13 +25,13 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -52,7 +52,7 @@ void lclMapShapesById( RefMap< OUString, ShapeType >& orMap, const RefVector< Sh
 
 } // namespace
 
-// ============================================================================
+
 
 ShapeContainer::ShapeContainer( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
@@ -135,7 +135,7 @@ void ShapeContainer::convertAndInsert( const Reference< XShapes >& rxShapes, con
         (*aIt)->convertAndInsert( rxShapes, pParentAnchor );
 }
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

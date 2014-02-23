@@ -26,12 +26,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 UpDownBarsContext::UpDownBarsContext( ContextHandler2Helper& rParent, UpDownBarsModel& rModel ) :
     ContextBase< UpDownBarsModel >( rParent, rModel )
@@ -62,7 +62,7 @@ ContextHandlerRef UpDownBarsContext::onCreateContext( sal_Int32 nElement, const 
     return 0;
 }
 
-// ============================================================================
+
 
 AreaTypeGroupContext::AreaTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -100,7 +100,7 @@ ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-// ============================================================================
+
 
 BarTypeGroupContext::BarTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -151,7 +151,7 @@ ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
     return 0;
 }
 
-// ============================================================================
+
 
 BubbleTypeGroupContext::BubbleTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -195,7 +195,7 @@ ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, c
     return 0;
 }
 
-// ============================================================================
+
 
 LineTypeGroupContext::LineTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -245,7 +245,7 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-// ============================================================================
+
 
 PieTypeGroupContext::PieTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -295,7 +295,7 @@ ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
     return 0;
 }
 
-// ============================================================================
+
 
 RadarTypeGroupContext::RadarTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -328,7 +328,7 @@ ContextHandlerRef RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, co
     return 0;
 }
 
-// ============================================================================
+
 
 ScatterTypeGroupContext::ScatterTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -361,7 +361,7 @@ ContextHandlerRef ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, 
     return 0;
 }
 
-// ============================================================================
+
 
 SurfaceTypeGroupContext::SurfaceTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -389,7 +389,7 @@ ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, 
     return 0;
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

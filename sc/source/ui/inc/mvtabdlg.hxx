@@ -28,7 +28,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 
-//------------------------------------------------------------------------
+
 
 class ScMoveTableDlg : public ModalDialog
 {
@@ -76,7 +76,7 @@ private:
     bool            bRenameTable:1;
     bool            mbEverEdited:1;
 
-    //--------------------------------------
+
     void    Init            ();
     void    InitBtnRename   ();
     void    InitDocListBox  ();

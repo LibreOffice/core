@@ -26,10 +26,10 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -38,9 +38,9 @@ namespace dbtools
     using namespace ::com::sun::star::beans;
     using namespace connectivity;
 
-    //====================================================================
+
     //= FilterManager
-    //====================================================================
+
 
     FilterManager::FilterManager( )
         :m_aFilterComponents( FC_COMPONENT_COUNT )
@@ -168,8 +168,8 @@ namespace dbtools
         return aComposedFilter.makeStringAndClear();
     }
 
-//........................................................................
+
 }   // namespace dbtools
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

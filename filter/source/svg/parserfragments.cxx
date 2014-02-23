@@ -376,7 +376,7 @@ bool parseOpacity (const char* sOpacity, ARGBColor& rColor )
     return false;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
 {
@@ -492,7 +492,7 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
     return bRes;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
 {
@@ -520,7 +520,7 @@ bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
     return true;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector )
 {
@@ -544,7 +544,7 @@ bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector 
         space_p).full;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
                     std::pair<ARGBColor,bool>&          io_rColor,
@@ -570,7 +570,7 @@ bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
     return bRes;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parseXlinkHref( const char* sXlinkHref, std::string& data )
 {

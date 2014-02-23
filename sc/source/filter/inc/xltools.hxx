@@ -231,7 +231,7 @@ public:
     /** Returns the Excel macro name from a full StarBasic macro URL. */
     static OUString GetXclMacroName( const OUString& rSbMacroUrl );
 
-// ------------------------------------------------------------------------
+
 private:
     static const OUString maDefNamePrefix;      /// Prefix for built-in defined names.
     static const OUString maDefNamePrefixXml;   /// Prefix for built-in defined names for OOX
@@ -258,7 +258,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor );
     @descr  The color has the format (all values 8-bit): Red, Green, Blue, 0. */
 XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor );
 
-// ============================================================================
+
 
 #endif
 

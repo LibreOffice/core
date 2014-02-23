@@ -22,9 +22,9 @@
 #include "java/sql/ResultSet.hxx"
 
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.sql.Array
-//**************************************************************
+
 
 jclass java_sql_Array::theClass = 0;
 

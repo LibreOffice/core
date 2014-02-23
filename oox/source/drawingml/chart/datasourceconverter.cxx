@@ -28,12 +28,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 DataSequenceConverter::DataSequenceConverter( const ConverterRoot& rParent, DataSequenceModel& rModel ) :
     ConverterBase< DataSequenceModel >( rParent, rModel )
@@ -87,7 +87,7 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
     return xDataSeq;
 }
 
-// ============================================================================
+
 
 DataSourceConverter::DataSourceConverter( const ConverterRoot& rParent, DataSourceModel& rModel ) :
     ConverterBase< DataSourceModel >( rParent, rModel )
@@ -109,7 +109,7 @@ Reference< XDataSequence > DataSourceConverter::createDataSequence( const OUStri
     return xDataSeq;
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

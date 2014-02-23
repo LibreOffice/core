@@ -75,7 +75,7 @@ class GtkSalFrame : public SalFrame
 
     struct IMHandler
     {
-        //--------------------------------------------------------
+
         // Not all GTK Input Methods swallow key release
         // events.  Since they swallow the key press events and we
         // are left with the key release events, we need to

@@ -32,7 +32,7 @@
 class SvxFontListItem;
 class FontList;
 
-// -----------------------------------------------------------------------
+
 
 #define DISABLE_CASEMAP             ((sal_uInt16)0x0001)
 #define DISABLE_WORDLINE            ((sal_uInt16)0x0002)

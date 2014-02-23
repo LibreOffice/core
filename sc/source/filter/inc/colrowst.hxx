@@ -23,7 +23,7 @@
 #include "xiroot.hxx"
 #include <mdds/flat_segment_tree.hpp>
 
-// ============================================================================
+
 
 class XclImpColRowSettings : protected XclImpRoot
 {

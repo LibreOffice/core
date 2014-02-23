@@ -24,9 +24,9 @@
 
 namespace connectivity
 {
-    //==========================================================================
+
     //= OSQLInternalNode
-    //==========================================================================
+
     /** special node for avoiding memory leaks
     */
     class OOO_DLLPUBLIC_DBTOOLS OSQLInternalNode : public OSQLParseNode

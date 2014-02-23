@@ -33,15 +33,15 @@
 #include <memory>
 
 class EditEngine;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     class RichTextEngine;
-    //====================================================================
+
     //= ORichTextModel
-    //====================================================================
+
     typedef ::cppu::ImplHelper3 <   ::com::sun::star::awt::XControlModel
                                 ,   ::com::sun::star::lang::XUnoTunnel
                                 ,   ::com::sun::star::util::XModifyBroadcaster
@@ -176,9 +176,9 @@ namespace frm
         ORichTextModel& operator=( const ORichTextModel& ); // never implemented
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTMODEL_HXX
 

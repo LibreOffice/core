@@ -29,9 +29,9 @@ namespace connectivity
 {
     namespace ado
     {
-        //**************************************************************
+
         //************ Class: java.sql.CallableStatement
-        //**************************************************************
+
 
         class OCallableStatement :  public OPreparedStatement,
                                     public ::com::sun::star::sdbc::XRow,

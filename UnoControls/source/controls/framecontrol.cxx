@@ -30,9 +30,9 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 
-//______________________________________________________________________________________________________________
+
 //  namespaces
-//______________________________________________________________________________________________________________
+
 
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
@@ -46,9 +46,9 @@ using namespace ::com::sun::star::util  ;
 
 namespace unocontrols{
 
-//______________________________________________________________________________________________________________
+
 //  construct/destruct
-//______________________________________________________________________________________________________________
+
 
 FrameControl::FrameControl( const Reference< XComponentContext >& rxContext)
     : BaseControl                   ( rxContext                                                                             )
@@ -63,9 +63,9 @@ FrameControl::~FrameControl()
 {
 }
 
-//____________________________________________________________________________________________________________
+
 //  XInterface
-//____________________________________________________________________________________________________________
+
 
 Any SAL_CALL FrameControl::queryInterface( const Type& rType ) throw( RuntimeException )
 {
@@ -88,9 +88,9 @@ Any SAL_CALL FrameControl::queryInterface( const Type& rType ) throw( RuntimeExc
     return aReturn ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XInterface
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL FrameControl::acquire() throw()
 {
@@ -101,9 +101,9 @@ void SAL_CALL FrameControl::acquire() throw()
     BaseControl::acquire();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XInterface
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL FrameControl::release() throw()
 {
@@ -114,9 +114,9 @@ void SAL_CALL FrameControl::release() throw()
     BaseControl::release();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XTypeProvider
-//____________________________________________________________________________________________________________
+
 
 Sequence< Type > SAL_CALL FrameControl::getTypes() throw( RuntimeException )
 {
@@ -147,9 +147,9 @@ Sequence< Type > SAL_CALL FrameControl::getTypes() throw( RuntimeException )
     return pTypeCollection->getTypes();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XAggregation
-//____________________________________________________________________________________________________________
+
 
 Any SAL_CALL FrameControl::queryAggregation( const Type& aType ) throw( RuntimeException )
 {
@@ -175,9 +175,9 @@ Any SAL_CALL FrameControl::queryAggregation( const Type& aType ) throw( RuntimeE
     return aReturn ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControl
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
                                         const   Reference< XWindowPeer >&   xParentPeer ) throw( RuntimeException )
@@ -192,9 +192,9 @@ void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToo
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControl
-//____________________________________________________________________________________________________________
+
 
 sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException )
 {
@@ -202,9 +202,9 @@ sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xM
     return sal_False ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControl
-//____________________________________________________________________________________________________________
+
 
 Reference< XControlModel > SAL_CALL FrameControl::getModel() throw( RuntimeException )
 {
@@ -212,9 +212,9 @@ Reference< XControlModel > SAL_CALL FrameControl::getModel() throw( RuntimeExcep
     return Reference< XControlModel >();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControl
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL FrameControl::dispose() throw( RuntimeException )
 {
@@ -222,9 +222,9 @@ void SAL_CALL FrameControl::dispose() throw( RuntimeException )
     BaseControl::dispose();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XView
-//____________________________________________________________________________________________________________
+
 
 sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ ) throw( RuntimeException )
 {
@@ -232,9 +232,9 @@ sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDe
     return sal_False ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XView
-//____________________________________________________________________________________________________________
+
 
 Reference< XGraphics > SAL_CALL FrameControl::getGraphics() throw( RuntimeException )
 {
@@ -242,9 +242,9 @@ Reference< XGraphics > SAL_CALL FrameControl::getGraphics() throw( RuntimeExcept
     return Reference< XGraphics >();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XConnectionPointContainer
-//____________________________________________________________________________________________________________
+
 
 Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes() throw( RuntimeException )
 {
@@ -252,9 +252,9 @@ Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes() throw( Runtime
     return m_aConnectionPointContainer.getConnectionPointTypes();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XConnectionPointContainer
-//____________________________________________________________________________________________________________
+
 
 Reference< XConnectionPoint > SAL_CALL FrameControl::queryConnectionPoint( const Type& aType ) throw( RuntimeException )
 {
@@ -262,9 +262,9 @@ Reference< XConnectionPoint > SAL_CALL FrameControl::queryConnectionPoint( const
     return m_aConnectionPointContainer.queryConnectionPoint( aType );
 }
 
-//____________________________________________________________________________________________________________
+
 //  XConnectionPointContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL FrameControl::advise( const   Type&                       aType       ,
                                     const   Reference< XInterface >&    xListener   ) throw( RuntimeException )
@@ -273,9 +273,9 @@ void SAL_CALL FrameControl::advise( const   Type&                       aType   
     m_aConnectionPointContainer.advise( aType, xListener );
 }
 
-//____________________________________________________________________________________________________________
+
 //  XConnectionPointContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL FrameControl::unadvise(   const   Type&                       aType       ,
                                         const   Reference< XInterface >&    xListener   ) throw( RuntimeException )
@@ -284,9 +284,9 @@ void SAL_CALL FrameControl::unadvise(   const   Type&                       aTyp
     m_aConnectionPointContainer.unadvise( aType, xListener );
 }
 
-//____________________________________________________________________________________________________________
+
 //  impl but public method to register service
-//____________________________________________________________________________________________________________
+
 
 const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 {
@@ -296,18 +296,18 @@ const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
     return seqServiceNames ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  impl but public method to register service
-//____________________________________________________________________________________________________________
+
 
 const OUString FrameControl::impl_getStaticImplementationName()
 {
     return OUString(IMPLEMENTATIONNAME_FRAMECONTROL);
 }
 
-//____________________________________________________________________________________________________________
+
 //  OPropertySetHelper
-//____________________________________________________________________________________________________________
+
 
 sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedValue ,
                                                         Any&        rOldValue       ,
@@ -336,9 +336,9 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
     return bReturn ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  OPropertySetHelper
-//____________________________________________________________________________________________________________
+
 
 void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHandle ,
                                                         const   Any&        rValue  )
@@ -362,9 +362,9 @@ void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHan
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  OPropertySetHelper
-//____________________________________________________________________________________________________________
+
 
 void FrameControl::getFastPropertyValue(    Any&        rRet    ,
                                             sal_Int32   nHandle ) const
@@ -386,9 +386,9 @@ void FrameControl::getFastPropertyValue(    Any&        rRet    ,
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  OPropertySetHelper
-//____________________________________________________________________________________________________________
+
 
 IPropertyArrayHelper& FrameControl::getInfoHelper()
 {
@@ -409,9 +409,9 @@ IPropertyArrayHelper& FrameControl::getInfoHelper()
     return *pInfo ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  OPropertySetHelper
-//____________________________________________________________________________________________________________
+
 
 Reference< XPropertySetInfo > SAL_CALL FrameControl::getPropertySetInfo() throw( RuntimeException )
 {
@@ -435,9 +435,9 @@ Reference< XPropertySetInfo > SAL_CALL FrameControl::getPropertySetInfo() throw(
     return ( *pInfo ) ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  BaseControl
-//____________________________________________________________________________________________________________
+
 
 WindowDescriptor* FrameControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
@@ -452,9 +452,9 @@ WindowDescriptor* FrameControl::impl_getWindowDescriptor( const Reference< XWind
     return pDescriptor ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  private method
-//____________________________________________________________________________________________________________
+
 
 void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPeer       ,
                                         const   OUString&                   rURL        ,
@@ -509,9 +509,9 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  private method
-//____________________________________________________________________________________________________________
+
 
 void FrameControl::impl_deleteFrame()
 {
@@ -536,9 +536,9 @@ void FrameControl::impl_deleteFrame()
         xOldFrame->dispose();
 }
 
-//____________________________________________________________________________________________________________
+
 //  private method
-//____________________________________________________________________________________________________________
+
 
 const Sequence< Property > FrameControl::impl_getStaticPropertyDescriptor()
 {

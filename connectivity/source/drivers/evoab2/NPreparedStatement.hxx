@@ -58,9 +58,9 @@ namespace connectivity
             };
 
             ::std::vector< Parameter>       m_aParameters;
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
 
             // our SQL statement
             OUString                                                                 m_sSqlStatement;

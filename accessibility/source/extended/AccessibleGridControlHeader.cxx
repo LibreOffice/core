@@ -24,7 +24,7 @@
 #include <comphelper/servicehelper.hxx>
 
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -37,11 +37,11 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 using namespace ::svt::table;
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 AccessibleGridControlHeader::AccessibleGridControlHeader(
         const Reference< XAccessible >& rxParent,
@@ -278,10 +278,10 @@ Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
     return xChild;
 }
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

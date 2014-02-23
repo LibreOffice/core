@@ -25,9 +25,9 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <svx/svxdllapi.h>
 
-//==================================================================
+
 //  SvxColorListItem
-//==================================================================
+
 
 class SVX_DLLPUBLIC SvxColorListItem: public SfxPoolItem
 {
@@ -55,9 +55,9 @@ public:
 };
 
 
-//==================================================================
+
 //  SvxGradientListItem
-//==================================================================
+
 
 class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
 {
@@ -86,9 +86,9 @@ public:
 };
 
 
-//==================================================================
+
 //  SvxHatchListItem
-//==================================================================
+
 class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
 {
     XHatchListRef     pHatchList;
@@ -117,9 +117,9 @@ public:
 
 
 
-//==================================================================
+
 //  SvxBitmapListItem
-//==================================================================
+
 class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
 {
     XBitmapListRef    pBitmapList;
@@ -148,9 +148,9 @@ public:
 
 
 
-//==================================================================
+
 //  SvxDashListItem
-//==================================================================
+
 class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
 {
     XDashListRef      pDashList;
@@ -176,9 +176,9 @@ public:
 };
 
 
-//==================================================================
+
 //  SvxLineEndListItem
-//==================================================================
+
 class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
 {
     XLineEndListRef   pLineEndList;

@@ -30,7 +30,7 @@
 namespace ooo {
 namespace vba {
 
-// ============================================================================
+
 
 struct MSFILTER_DLLPUBLIC MacroResolvedInfo
 {
@@ -49,7 +49,7 @@ MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, co
 MSFILTER_DLLPUBLIC sal_Bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArgs, com::sun::star::uno::Any& aRet, const com::sun::star::uno::Any& aCaller );
 MSFILTER_DLLPUBLIC ::com::sun::star::awt::KeyEvent parseKeyEvent( const OUString& sKey ) throw (::com::sun::star::uno::RuntimeException);
 MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const ::com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxDoc, const ::com::sun::star::awt::KeyEvent& rKeyEvent, const OUString& sMacro ) throw (::com::sun::star::uno::RuntimeException);
-// ============================================================================
+
 
 typedef ::cppu::WeakImplHelper3<
     ::com::sun::star::lang::XServiceInfo,
@@ -96,7 +96,7 @@ private:
     OUString            maProjectName;
 };
 
-// ============================================================================
+
 
 } // namespace vba
 } // namespace ooo

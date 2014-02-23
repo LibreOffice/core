@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace attribute {
@@ -31,7 +31,7 @@ namespace drawinglayer { namespace attribute {
     class StrokeAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -67,7 +67,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_ATTRIBUTE_SDRFORMTEXTOUTLINEATTRIBUTE_HXX
 

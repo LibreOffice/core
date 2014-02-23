@@ -51,18 +51,18 @@ class DbCellControl;
 class Edit;
 class FmXGridCell;
 
-//==================================================================
+
 // FmMutexHelper
-//==================================================================
+
 class FmMutexHelper
 {
 protected:
     ::osl::Mutex    m_aMutex;
 };
 
-//==================================================================
+
 // DbGridColumn, Spaltenbeschreibung
-//==================================================================
+
 class DbGridColumn
 {
     friend class DbGridControl;
@@ -195,11 +195,11 @@ private:
     void    impl_toggleScriptManager_nothrow( bool _bAttach );
 };
 
-//==================================================================
+
 // DbCellControl, liefert die Daten fuer einen CellController
 // wird in der Regel nur f\FCr komplexe Controls wie z.B ComboBoxen
 // benoetigt
-//==================================================================
+
 class DbCellControl
         :public ::svxform::OTypeConversionClient
         ,public ::svxform::OStaticDataAccessTools
@@ -344,28 +344,28 @@ private:
     void implAdjustEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
-//==================================================================
-//------------------------------------------------------------------
+
+
 inline  sal_Bool    DbCellControl::isValuePropertyLocked() const
 {
     return m_bAccessingValueProperty;
 }
 
-//------------------------------------------------------------------
+
 inline  void        DbCellControl::lockValueProperty()
 {
     OSL_ENSURE( !isValuePropertyLocked(), "DbCellControl::lockValueProperty: not to be nested!" );
     m_bAccessingValueProperty = sal_True;
 }
 
-//------------------------------------------------------------------
+
 inline  void        DbCellControl::unlockValueProperty()
 {
     OSL_ENSURE( isValuePropertyLocked(), "DbCellControl::lockValueProperty: not locked so far!" );
     m_bAccessingValueProperty = sal_False;
 }
 
-//==================================================================
+
 /** a field which is bound to a column which supports the MaxTextLen property
 */
 class DbLimitedLengthField : public DbCellControl
@@ -388,7 +388,7 @@ protected:
     virtual void implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen );
 };
 
-//==================================================================
+
 class DbTextField : public DbLimitedLengthField
 {
     ::svt::IEditImplementation* m_pEdit;
@@ -422,7 +422,7 @@ protected:
     virtual void        implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen );
 };
 
-//==================================================================
+
 class DbFormattedField : public DbLimitedLengthField
 {
 protected:
@@ -450,7 +450,7 @@ protected:
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================
+
 class DbCheckBox : public DbCellControl
 {
 public:
@@ -471,7 +471,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 };
 
-//==================================================================
+
 class DbComboBox : public DbCellControl
 {
     sal_Int16         m_nKeyType;
@@ -498,7 +498,7 @@ protected:
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================
+
 class DbListBox     :public DbCellControl
 {
     sal_Bool              m_bBound  : 1;
@@ -526,7 +526,7 @@ protected:
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================
+
 class DbPatternField : public DbCellControl
 {
 public:
@@ -555,7 +555,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext>    m_xContext;
 };
 
-//==================================================================
+
 class DbSpinField : public DbCellControl
 {
 private:
@@ -579,7 +579,7 @@ protected:
                         ) = 0;
 };
 
-//==================================================================
+
 class DbDateField : public DbSpinField
 {
 public:
@@ -604,7 +604,7 @@ protected:
     virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
-//==================================================================
+
 class DbTimeField : public DbSpinField
 {
 public:
@@ -629,7 +629,7 @@ protected:
     virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
-//==================================================================
+
 class DbCurrencyField : public DbSpinField
 {
     sal_Int16  m_nScale;
@@ -658,7 +658,7 @@ protected:
     virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
-//==================================================================
+
 class DbNumericField : public DbSpinField
 {
 public:
@@ -683,7 +683,7 @@ protected:
     void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
-//==================================================================
+
 class DbFilterField
         :public DbCellControl
         ,public ::svxform::OSQLParserClient
@@ -726,9 +726,9 @@ protected:
     DECL_LINK( OnClick, void* );
 };
 
-//==================================================================
+
 // Base class providing the access to a grid cell
-//==================================================================
+
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XControl
                             ,   ::com::sun::star::form::XBoundControl
                             >   FmXGridCell_Base;
@@ -832,7 +832,7 @@ private:
     DECL_LINK( OnWindowEvent, VclWindowEvent* );
 };
 
-//==================================================================
+
 class FmXDataCell : public FmXGridCell
 {
 public:
@@ -855,7 +855,7 @@ protected:
     void UpdateFromColumn();
 };
 
-//==================================================================
+
 class FmXTextCell : public FmXDataCell
 {
 protected:
@@ -889,7 +889,7 @@ public:
             {return m_pCellControl->GetFormatText(_rxField, xFormatter, ppColor);}
 };
 
-//==================================================================
+
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XTextComponent
                             ,   ::com::sun::star::form::XChangeBroadcaster
                             >   FmXEditCell_Base;
@@ -947,7 +947,7 @@ private:
     void onTextChanged();
 };
 
-//==================================================================
+
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XCheckBox
                             ,   ::com::sun::star::awt::XButton
                             >   FmXCheckBoxCell_Base;
@@ -993,7 +993,7 @@ protected:
     virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 };
 
-//==================================================================
+
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XListBox
                             >   FmXListBoxCell_Base;
 class FmXListBoxCell    :public FmXTextCell
@@ -1047,7 +1047,7 @@ protected:
     DECL_LINK( OnDoubleClick, void* );
 };
 
-//==================================================================
+
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XComboBox
                             >   FmXComboBoxCell_Base;
 class FmXComboBoxCell   :public FmXTextCell
@@ -1090,7 +1090,7 @@ protected:
     virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 };
 
-//==================================================================
+
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XTextComponent
                             ,   ::com::sun::star::lang::XUnoTunnel
                             >   FmXFilterCell_Base;

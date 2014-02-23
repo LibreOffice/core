@@ -27,7 +27,7 @@ class ScDocument;
 struct ScDBQueryParamBase;
 struct ScQueryParamBase;
 
-// ============================================================================
+
 
 /**
  * Base class for abstracting range data backends for database functions.
@@ -88,7 +88,7 @@ private:
     RefType meType;
 };
 
-// ============================================================================
+
 
 class ScDBInternalRange : public ScDBRangeBase
 {
@@ -131,7 +131,7 @@ private:
     ScRange maRange;
 };
 
-// ============================================================================
+
 
 class ScDBExternalRange : public ScDBRangeBase
 {

@@ -25,14 +25,14 @@
 #include <vcl/fixed.hxx>
 #include "datasourcehandling.hxx"
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OAddessBookSourcePilot
-    //=====================================================================
+
     typedef ::svt::RoadmapWizard OAddessBookSourcePilot_Base;
     class OAddessBookSourcePilot : public OAddessBookSourcePilot_Base
     {
@@ -134,9 +134,9 @@ namespace abp
         void impl_updateRoadmap( AddressSourceType _eType );
     };
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 #endif // EXTENSIONS_ABSPILOT_HXX
 

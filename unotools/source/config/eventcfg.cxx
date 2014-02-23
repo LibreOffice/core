@@ -120,9 +120,9 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     EnableNotification( aNotifySeq, true );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
 {
     // We must save our current values .. if user forget it!
@@ -140,9 +140,9 @@ OUString GlobalEventConfig_Impl::GetEventName( sal_Int32 nIndex )
         return OUString();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
 {
     MutexGuard aGuard( GlobalEventConfig::GetOwnStaticMutex() );
@@ -161,9 +161,9 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void GlobalEventConfig_Impl::Commit()
 {
     //DF need to check it this is correct??
@@ -191,9 +191,9 @@ void GlobalEventConfig_Impl::Commit()
     }
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void GlobalEventConfig_Impl::initBindingInfo()
 {
     // Get ALL names of current existing list items in configuration!

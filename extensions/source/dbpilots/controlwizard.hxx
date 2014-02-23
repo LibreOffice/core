@@ -36,22 +36,22 @@
 #include "wizardcontext.hxx"
 
 class ResId;
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OControlWizardSettings
-    //=====================================================================
+
     struct OControlWizardSettings
     {
         OUString      sControlLabel;
     };
 
-    //=====================================================================
+
     //= OControlWizardPage
-    //=====================================================================
+
     class OControlWizard;
     typedef ::svt::OWizardPage OControlWizardPage_Base;
     class OControlWizardPage : public OControlWizardPage_Base
@@ -98,9 +98,9 @@ namespace dbp
     };
 
     struct OAccessRegulator;
-    //=====================================================================
+
     //= OControlWizard
-    //=====================================================================
+
     typedef ::svt::OWizardMachine OControlWizard_Base;
     class OControlWizard : public OControlWizard_Base
     {
@@ -165,9 +165,9 @@ namespace dbp
         virtual void ActivatePage();
     };
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 #endif // _EXTENSIONS_DBP_CONTROLWIZARD_HXX
 

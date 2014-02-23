@@ -33,7 +33,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
-//_______________________________________________
+
 // namespaces
 
 namespace framework{
@@ -43,7 +43,7 @@ class WindowHelper
 {
     public:
 
-//-----------------------------------------------
+
 static OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     if (!xWindow.is())
@@ -68,7 +68,7 @@ static OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& x
     return OStringToOUString(sWindowState,RTL_TEXTENCODING_UTF8);
 }
 
-//-----------------------------------------------
+
 static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
                            const OUString&                          sWindowState)
 {
@@ -99,7 +99,7 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
     // <- SOLAR SAFE ----------------------------
 }
 
-//-----------------------------------------------
+
 static ::sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     // even child frame containing top level windows (e.g. query designer of database) will be closed

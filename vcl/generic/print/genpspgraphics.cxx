@@ -562,7 +562,7 @@ void GenPspGraphics::invert(long,long,long,long,SalInvert)
     OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
 
-//==========================================================================
+
 
 class ImplPspFontData : public PhysicalFontFace
 {
@@ -593,7 +593,7 @@ ImplFontEntry* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) co
     return pEntry;
 }
 
-//==========================================================================
+
 
 class PspFontLayout : public GenericSalLayout
 {

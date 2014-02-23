@@ -39,12 +39,12 @@ namespace cppu {
     class OInterfaceContainerHelper;
 }
 
-//-----------------------------------------------------------------------------
+
 
 #define DYNAMIC_RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedDynamicResultSet"
 #define DYNAMIC_RESULTSET_FACTORY_NAME  "com.sun.star.ucb.SortedDynamicResultSetFactory"
 
-//-----------------------------------------------------------------------------
+
 class SortedDynamicResultSetListener;
 
 class SortedDynamicResultSet:
@@ -87,24 +87,24 @@ public:
 
     ~SortedDynamicResultSet();
 
-    //-----------------------------------------------------------------
+
     // XInterface
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     // XTypeProvider
-    //-----------------------------------------------------------------
+
     XTYPEPROVIDER_DECL()
 
-    //-----------------------------------------------------------------
+
     // XServiceInfo
-    //-----------------------------------------------------------------
+
     XSERVICEINFO_NOFACTORY_DECL()
 
-    //-----------------------------------------------------------------
+
     // XComponent
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     dispose() throw( css::uno::RuntimeException );
 
@@ -116,9 +116,9 @@ public:
     removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
         throw( css::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XDynamicResultSet
-    //-----------------------------------------------------------------
+
     virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
     getStaticResultSet(  )
         throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException );
@@ -138,9 +138,9 @@ public:
     getCapabilities()
         throw( css::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // own methods:
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     impl_disposing( const css::lang::EventObject& Source )
         throw( css::uno::RuntimeException );
@@ -150,7 +150,7 @@ public:
         throw( css::uno::RuntimeException );
 };
 
-//-----------------------------------------------------------------------------
+
 
 class SortedDynamicResultSetListener:
                 public cppu::OWeakObject,
@@ -163,32 +163,32 @@ public:
      SortedDynamicResultSetListener( SortedDynamicResultSet *mOwner );
     ~SortedDynamicResultSetListener();
 
-    //-----------------------------------------------------------------
+
     // XInterface
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     // XEventListener ( base of XDynamicResultSetListener )
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     disposing( const css::lang::EventObject& Source )
         throw( css::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XDynamicResultSetListener
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     notify( const css::ucb::ListEvent& Changes )
         throw( css::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // own methods:
-    //-----------------------------------------------------------------
+
     void SAL_CALL impl_OwnerDies();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class SortedDynamicResultSetFactory:
                 public cppu::OWeakObject,
@@ -206,22 +206,22 @@ public:
 
     ~SortedDynamicResultSetFactory();
 
-    //-----------------------------------------------------------------
+
     // XInterface
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     // XTypeProvider
-    //-----------------------------------------------------------------
+
     XTYPEPROVIDER_DECL()
 
-    //-----------------------------------------------------------------
+
     // XServiceInfo
-    //-----------------------------------------------------------------
+
     XSERVICEINFO_DECL()
 
-    //-----------------------------------------------------------------
+
     // XSortedDynamicResultSetFactory
 
     virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL

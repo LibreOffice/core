@@ -112,7 +112,7 @@ static const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("help"), 'h', false }
 };
 
-//==============================================================================
+
 static OptionInfo const * get_option_info(
     OUString const & opt, sal_Unicode copt = '\0' )
 {
@@ -145,7 +145,7 @@ static OptionInfo const * get_option_info(
     return 0;
 }
 
-//==============================================================================
+
 static bool is_option(
     OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -181,7 +181,7 @@ static bool is_option(
     return false;
 }
 
-//==============================================================================
+
 static inline bool read_option(
     bool * flag, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -191,7 +191,7 @@ static inline bool read_option(
     return ret;
 }
 
-//==============================================================================
+
 static bool read_argument(
     OUString * pValue, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -213,7 +213,7 @@ static bool read_argument(
     return false;
 }
 
-//==============================================================================
+
 static OUString const & path_get_working_dir()
 {
     static OUString s_workingDir;
@@ -222,7 +222,7 @@ static OUString const & path_get_working_dir()
     return s_workingDir;
 }
 
-//==============================================================================
+
 static OUString path_make_absolute_file_url( OUString const & path )
 {
     OUString file_url;
@@ -256,7 +256,7 @@ static OUString path_make_absolute_file_url( OUString const & path )
 
 using namespace ::climaker;
 
-//##############################################################################
+
 SAL_IMPLEMENT_MAIN()
 {
     sal_uInt32 nCount = osl_getCommandArgCount();

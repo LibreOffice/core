@@ -20,13 +20,13 @@
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
     namespace animation
     {
-        //////////////////////////////////////////////////////////////////////////////
+
 
         AnimationEntry::AnimationEntry()
         {
@@ -36,7 +36,7 @@ namespace drawinglayer
         {
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         AnimationEntryFixed::AnimationEntryFixed(double fDuration, double fState)
         :   mfDuration(fDuration),
@@ -84,7 +84,7 @@ namespace drawinglayer
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         AnimationEntryLinear::AnimationEntryLinear(double fDuration, double fFrequency, double fStart, double fStop)
         :   mfDuration(fDuration),
@@ -161,7 +161,7 @@ namespace drawinglayer
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         sal_uInt32 AnimationEntryList::impGetIndexAtTime(double fTime, double &rfAddedTime) const
         {
@@ -270,7 +270,7 @@ namespace drawinglayer
             return fNewTime;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         AnimationEntryLoop::AnimationEntryLoop(sal_uInt32 nRepeat)
         :   AnimationEntryList(),

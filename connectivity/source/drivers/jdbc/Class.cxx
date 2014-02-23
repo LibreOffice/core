@@ -22,9 +22,9 @@
 #include <rtl/ustring.hxx>
 
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.lang.Class
-//**************************************************************
+
 
 jclass java_lang_Class::theClass = 0;
 

@@ -22,7 +22,7 @@
 #include <vector>
 #include <set>
 
-// =======================================================================
+
 
 CmapResult::CmapResult( bool bSymbolic,
     const sal_UCS4* pRangeCodes, int nRangeCount,
@@ -35,7 +35,7 @@ CmapResult::CmapResult( bool bSymbolic,
 ,   mbRecoded( false)
 {}
 
-// =======================================================================
+
 
 ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
 :   mpRangeCodes( rCR.mpRangeCodes )
@@ -312,7 +312,7 @@ sal_UCS4 ImplFontCharMap::GetCharFromIndex( int nCharIndex ) const
     return mpRangeCodes[0];
 }
 
-// =======================================================================
+
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned Getsal_uInt16( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
@@ -602,7 +602,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     return true;
 }
 
-// =======================================================================
+
 
 FontCharMap::FontCharMap()
 :   mpImpl( ImplFontCharMap::GetDefaultMap() )
@@ -696,7 +696,7 @@ sal_UCS4 FontCharMap::GetCharFromIndex( int nIndex ) const
     return mpImpl->GetCharFromIndex( nIndex );
 }
 
-// =======================================================================
+
 
 // on some systems we have to get the font attributes from the name table
 // since neither head's macStyle nor OS/2's panose are easily available
@@ -848,6 +848,6 @@ void UpdateAttributesFromPSName( const OUString& rPSName, ImplDevFontAttributes&
     }
 }
 
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

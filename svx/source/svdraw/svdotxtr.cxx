@@ -295,7 +295,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(false);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 {
@@ -418,7 +418,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SdrObject* SdrTextObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {

@@ -43,7 +43,7 @@ namespace com{namespace sun{ namespace star{
     }
 }}}
 
-// -----------------------------------------------------------------------
+
 //Feature-Flags (only sal_uInt16!)
 #define NUM_CONTINUOUS          0x0001 // consecutive numbers possible?
 #define NUM_CHAR_TEXT_DISTANCE  0x0002 // Distance Symbol<->Text?

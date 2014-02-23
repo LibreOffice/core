@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class SetOfByte;
@@ -47,7 +47,7 @@ namespace basegfx {
     class B2DHomMatrix;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -214,7 +214,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_OBJECTCONTACT_HXX
 

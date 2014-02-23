@@ -31,9 +31,9 @@ class ImplListBoxFloatingWindow;
 class ImplListBox;
 class ImplBtn;
 
-// ------------
+
 // - ComboBox -
-// ------------
+
 
 class VCL_DLLPUBLIC ComboBox : public Edit
 {

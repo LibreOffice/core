@@ -303,7 +303,7 @@ public:
 };
 
 
-// ----------------------------------------------------------------------------
+
 
 /** This record contains the Windows country IDs for the UI and document language. */
 class XclExpCountry : public XclExpRecord
@@ -334,7 +334,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class XclExpFiltermode : public XclExpEmptyRecord
 {
@@ -342,7 +342,7 @@ public:
     explicit            XclExpFiltermode();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpAutofilterinfo : public XclExpUInt16Record
 {
@@ -356,7 +356,7 @@ private:
     ScAddress           maStartPos;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ExcFilterCondition
 {
@@ -382,7 +382,7 @@ public:
     void                    SaveText( XclExpStream& rStrm );
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
@@ -413,7 +413,7 @@ public:
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ExcAutoFilterRecs : public XclExpRecordBase, protected XclExpRoot
 {
@@ -443,7 +443,7 @@ private:
     bool mbAutoFilter;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Sheet filter manager. Contains auto filters or advanced filters from all sheets. */
 class XclExpFilterManager : protected XclExpRoot

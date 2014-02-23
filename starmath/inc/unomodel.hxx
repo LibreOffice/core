@@ -31,7 +31,7 @@
 #include <oox/mathml/export.hxx>
 #include <oox/mathml/import.hxx>
 
-////////////////////////////////////////////////////////////
+
 
 #define PRTUIOPT_TITLE_ROW          "TitleRow"
 #define PRTUIOPT_FORMULA_TEXT       "FormulaText"
@@ -46,9 +46,9 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////
 
-//-----------------------------------------------------------------------------
+
+
 class SmModel : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
                 public com::sun::star::lang::XServiceInfo,
@@ -102,7 +102,7 @@ public:
     static OUString getImplementationName_Static();
 };
 
-////////////////////////////////////////////////////////////
+
 
 #endif
 

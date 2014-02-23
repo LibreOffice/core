@@ -27,7 +27,7 @@ class SvStream;
 
 DBG_NAMEEX_VISIBILITY(SfxPointItem, SVL_DLLPUBLIC)
 
-// -----------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxPointItem: public SfxPoolItem
 {

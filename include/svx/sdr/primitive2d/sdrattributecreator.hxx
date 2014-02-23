@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 class SfxItemSet;
 class SdrText;
@@ -49,7 +49,7 @@ namespace basegfx {
     class B2DRange;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -127,7 +127,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SDRATTRIBUTECREATOR_HXX
 

@@ -21,10 +21,10 @@
 
 #include <cppuhelper/weak.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -40,9 +40,9 @@ namespace frm
     using ::com::sun::star::form::XResetListener;
     using ::com::sun::star::lang::EventObject;
 
-    //====================================================================
+
     //= ResetHelper
-    //====================================================================
+
 
     void ResetHelper::addResetListener( const Reference< XResetListener >& _listener )
     {
@@ -82,8 +82,8 @@ namespace frm
         m_aResetListeners.disposeAndClear( aEvent );
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

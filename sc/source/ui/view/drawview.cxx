@@ -662,7 +662,7 @@ SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
 }
 
 //realize multi-selection of objects
-//==================================================
+
 bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
 {
     sal_uInt16 nObjectTab = 0;

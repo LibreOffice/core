@@ -28,16 +28,16 @@
 #include "comphelper/processfactory.hxx"
 
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star;
 
-//====================================================================
+
 //= SynchronousDispatch
-//====================================================================
+
 
 uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         const uno::Reference< uno::XInterface > &xStartPoint,
@@ -79,8 +79,8 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
     return aComponent;
 }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

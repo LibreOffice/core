@@ -25,9 +25,9 @@
 
 #include <svtools/genericunodialog.hxx>
 
-// -------------
+
 // - SWFDialog -
-// -------------
+
 
 class Window;
 class ResMgr;
@@ -75,7 +75,7 @@ public:
     virtual     ~SWFDialog();
 };
 
-// -----------------------------------------------------------------------------
+
 
 #endif // SWFDialog_HXX
 

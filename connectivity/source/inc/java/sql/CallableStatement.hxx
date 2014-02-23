@@ -26,9 +26,9 @@
 namespace connectivity
 {
 
-    //**************************************************************
+
     //************ Class: java.sql.CallableStatement
-    //**************************************************************
+
 
     class java_sql_CallableStatement :  public java_sql_PreparedStatement,
                                                                                 public ::com::sun::star::sdbc::XRow,

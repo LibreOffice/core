@@ -52,9 +52,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
 
-// -------------
+
 // - PDFFilter -
-// -------------
+
 
 class PDFFilter : public cppu::WeakImplHelper4 < XFilter,
                                                  XExporter,
@@ -91,22 +91,22 @@ public:
     virtual     ~PDFFilter();
 };
 
-// -----------------------------------------------------------------------------
+
 
 OUString PDFFilter_getImplementationName ()
     throw ( RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
     throw ( RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  )
     throw ( RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XInterface >
 SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)

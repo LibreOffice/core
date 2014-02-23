@@ -15,7 +15,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 struct EffectShadowProperties
 {
@@ -28,7 +28,7 @@ struct EffectShadowProperties
     void                assignUsed( const EffectShadowProperties& rSourceProps );
 };
 
-// ============================================================================
+
 
 struct OOX_DLLPUBLIC EffectProperties
 {
@@ -43,7 +43,7 @@ struct OOX_DLLPUBLIC EffectProperties
                             const GraphicHelper& rGraphicHelper ) const;
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

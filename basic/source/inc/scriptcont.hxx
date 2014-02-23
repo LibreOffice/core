@@ -28,7 +28,7 @@
 namespace basic
 {
 
-//============================================================================
+
 
 class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPassword
 {
@@ -131,7 +131,7 @@ public:
 
 };
 
-//============================================================================
+
 typedef boost::unordered_map< OUString, ::com::sun::star::script::ModuleInfo, OUStringHash, ::std::equal_to< OUString > > ModuleInfoMap;
 
 typedef ::cppu::ImplHelper1< ::com::sun::star::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
@@ -186,7 +186,7 @@ protected:
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
 };
 
-//============================================================================
+
 
 }   // namespace basic
 

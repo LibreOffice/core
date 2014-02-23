@@ -23,14 +23,14 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OFilePickerInteractionHandler
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionHandler
                                     >   OFilePickerInteractionHandler_Base;
 
@@ -76,9 +76,9 @@ namespace svt
         ~OFilePickerInteractionHandler();
     };
 
-//........................................................................
+
 }   // namespace svt
-//........................................................................
+
 
 #endif // SVTOOLS_FILEPICKER_INTERACTION_HXX
 

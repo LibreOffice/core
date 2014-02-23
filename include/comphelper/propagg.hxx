@@ -26,19 +26,19 @@
 
 #include <map>
 
-//=========================================================================
-//= property helper classes
-//=========================================================================
 
-//.........................................................................
+//= property helper classes
+
+
+
 namespace comphelper
 {
-//.........................................................................
 
-//==================================================================
+
+
 //= OPropertyAccessor
 //= internal helper class for OPropertyArrayAggregationHelper
-//==================================================================
+
 namespace internal
 {
     struct OPropertyAccessor
@@ -61,7 +61,7 @@ namespace internal
     typedef PropertyAccessorMap::const_iterator     ConstPropertyAccessorMapIterator;
 }
 
-//==================================================================
+
 /**
  * used as callback for a OPropertyArrayAggregationHelper
  */
@@ -85,7 +85,7 @@ protected:
  */
 
 #define DEFAULT_AGGREGATE_PROPERTY_ID   10000
-//------------------------------------------------------------------
+
 class COMPHELPER_DLLPUBLIC OPropertyArrayAggregationHelper: public ::cppu::IPropertyArrayHelper
 {
     friend class OPropertySetAggregationHelper;
@@ -181,7 +181,7 @@ protected:
     const ::com::sun::star::beans::Property* findPropertyByName(const OUString& _rName) const;
 };
 
-//==================================================================
+
 namespace internal
 {
     class PropertyForwarder;
@@ -316,9 +316,9 @@ protected:
     void startListening();
 };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_PROPAGG_HXX
 

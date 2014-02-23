@@ -50,7 +50,7 @@ public:
     void SetMeasureFieldKind(SdrMeasureFieldKind eNewKind) { eMeasureFieldKind=eNewKind; }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_EDITENG_MEASFLD_HXX
 

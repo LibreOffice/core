@@ -27,7 +27,7 @@ namespace xls {
 
 class Connection;
 
-// ============================================================================
+
 
 class ConnectionContext : public WorkbookContextBase
 {
@@ -45,7 +45,7 @@ private:
     Connection&         mrConnection;
 };
 
-// ============================================================================
+
 
 class ConnectionsFragment : public WorkbookFragmentBase
 {
@@ -62,7 +62,7 @@ protected:
     virtual void        finalizeImport();
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -32,7 +32,7 @@ namespace svx {
 
 class DialControl;
 
-// ============================================================================
+
 
 struct OrientationHelper_Impl;
 
@@ -92,7 +92,7 @@ private:
     std::auto_ptr< OrientationHelper_Impl > mpImpl;
 };
 
-// ============================================================================
+
 
 /** Wrapper for usage of the stacked attribute of an OrientationHelper in item connections. */
 class SVX_DLLPUBLIC OrientStackedWrapper : public sfx::SingleControlWrapper< OrientationHelper, bool >
@@ -107,12 +107,12 @@ public:
     virtual void        SetControlValue( bool bValue );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** An item<->control connection for the stacked attribute of an OrientationHelper. */
 typedef sfx::ItemControlConnection< sfx::BoolItemWrapper, OrientStackedWrapper > OrientStackedConnection;
 
-// ============================================================================
+
 
 } // namespace
 

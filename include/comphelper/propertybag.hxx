@@ -25,15 +25,15 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     struct PropertyBag_Impl;
-    //====================================================================
+
     //= PropertyBag
-    //====================================================================
+
     /** provides a bag of properties associated with their values
 
         This class can, for instance, be used for components which need to implement
@@ -218,9 +218,9 @@ namespace comphelper
         using OPropertyContainerHelper::getFastPropertyValue;
     };
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_PROPERTYBAG_HXX
 

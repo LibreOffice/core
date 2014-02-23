@@ -26,7 +26,7 @@
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 
-//-----------------------------------------------------------------------------
+
 namespace svtools{
 
 class ExtendedColorConfig_Impl;

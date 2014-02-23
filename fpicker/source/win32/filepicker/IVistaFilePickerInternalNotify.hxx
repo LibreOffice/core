@@ -32,11 +32,11 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-//-----------------------------------------------------------------------------
-// types, const etcpp.
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+// types, const etcpp.
+
+
+
 /** todo document me
  */
 class IVistaFilePickerInternalNotify

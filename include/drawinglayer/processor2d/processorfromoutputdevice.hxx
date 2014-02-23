@@ -23,7 +23,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class OutputDevice;
@@ -32,7 +32,7 @@ namespace drawinglayer { namespace processor2d {
     class BaseProcessor2D;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -48,7 +48,7 @@ namespace drawinglayer
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSORFROMOUTPUTDEVICE_HXX
 

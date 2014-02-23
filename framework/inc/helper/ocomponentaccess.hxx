@@ -59,15 +59,15 @@ namespace framework{
 class OComponentAccess  :   private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is necessary for right initialization of objects!
                             public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumerationAccess >
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      constructor to initialize this instance
@@ -86,9 +86,9 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         OComponentAccess( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XEnumerationAccess
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      create a new enumeration of components
@@ -107,9 +107,9 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XElementAccess
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      get the type of elements in enumeration
@@ -141,9 +141,9 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     protected:
 
@@ -164,9 +164,9 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         virtual ~OComponentAccess();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
@@ -201,10 +201,10 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  debug methods
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      debug-method to check incoming parameter of some other mehods of this class
@@ -224,10 +224,10 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         static sal_Bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

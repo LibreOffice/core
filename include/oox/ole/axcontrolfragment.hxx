@@ -28,7 +28,7 @@ namespace ole {
 class ControlModelBase;
 class EmbeddedControl;
 
-// ============================================================================
+
 
 /** Context handler for ActiveX form control model properties. */
 class AxControlPropertyContext : public ::oox::core::ContextHandler2
@@ -46,7 +46,7 @@ private:
     sal_Int32           mnPropId;           ///< Identifier of currently processed property.
 };
 
-// ============================================================================
+
 
 /** Fragment handler for an embedded ActiveX form control fragment. */
 class AxControlFragment : public ::oox::core::FragmentHandler2
@@ -64,7 +64,7 @@ private:
     EmbeddedControl&    mrControl;
 };
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

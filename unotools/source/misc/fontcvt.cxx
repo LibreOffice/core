@@ -32,7 +32,7 @@
 //various holes in OpenSymbol which were filled by StarSymbol, i.e.
 //destination mapping points which are empty in OpenSymbol
 
-//=======================================================================
+
 // note: the character mappings that are only approximations
 //       are marked (with an empty comment)
 
@@ -793,7 +793,7 @@ static const sal_Unicode aAdobeSymbolToAppleSymbolTab[224] =
         0x23AB,    0x23AC,    0x23AD,    0x00FF
 };
 
-//=======================================================================
+
 
 static sal_Unicode ImplStarSymbolToStarBats( sal_Unicode c )
 {
@@ -1334,7 +1334,7 @@ StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly)
     return new StarSymbolToMSMultiFontImpl(bPerfectOnly);
 }
 
-//=======================================================================
+
 
 sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 {
@@ -1400,7 +1400,7 @@ void ConvertChar::RecodeString( OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen
     rStr = aTmpStr.makeStringAndClear();
 }
 
-//=======================================================================
+
 
 struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
 
@@ -1480,7 +1480,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
     return pCvt;
 }
 
-//=======================================================================
+
 
 FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName, sal_uLong nFlags )
 {

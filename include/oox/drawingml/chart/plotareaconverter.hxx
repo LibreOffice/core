@@ -30,7 +30,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct View3DModel;
 class TypeGroupConverter;
@@ -47,7 +47,7 @@ public:
                             TypeGroupConverter& rTypeGroup );
 };
 
-// ============================================================================
+
 
 struct WallFloorModel;
 
@@ -63,7 +63,7 @@ public:
                             ObjectType eObjType );
 };
 
-// ============================================================================
+
 
 struct DataTableModel;
 
@@ -78,7 +78,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram);
 };
 
-// ============================================================================
+
 
 struct PlotAreaModel;
 
@@ -107,7 +107,7 @@ private:
     bool                mbPieChart;
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

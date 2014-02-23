@@ -309,7 +309,7 @@ IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
     return 0;
 }
 
-// ====================================================================
+
 
 OUString SlideLayoutController_getImplementationName()
 {
@@ -357,9 +357,9 @@ Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Ref
         new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:InsertPage" , true ) );
 }
 
-//========================================================================
+
 // class SlideLayoutController
-//========================================================================
+
 
 SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentContext >& rxContext, const OUString& sCommandURL, bool bInsertPage )
 : svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), sCommandURL )

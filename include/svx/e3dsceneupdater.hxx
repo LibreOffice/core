@@ -22,7 +22,7 @@
 
 #include <svx/svxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class SdrObject;
@@ -31,7 +31,7 @@ namespace drawinglayer { namespace geometry {
     class ViewInformation3D;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 // This class is a helper to encapsulate 3D object changes which shall change the
 // scene's 2D geometry. E.g. when moving one 3D object in a scene, the visualisation
 // would not change since the scene's 2D attributes are defined by it's 2D object

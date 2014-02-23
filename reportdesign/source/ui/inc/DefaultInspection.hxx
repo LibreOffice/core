@@ -27,14 +27,14 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
     class OPropertyInfoService;
-    //====================================================================
+
     //= DefaultComponentInspectorModel
-    //====================================================================
+
     typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::inspection::XObjectInspectorModel
                                         ,   ::com::sun::star::lang::XServiceInfo
                                         ,   ::com::sun::star::lang::XInitialization
@@ -93,9 +93,9 @@ namespace rptui
         void    createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );
     };
 
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 #endif // RPT_DEFAULTINSPECTION_HXX
 

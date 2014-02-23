@@ -26,14 +26,14 @@
 
 class BasicManager;
 
-//........................................................................
+
 namespace basic
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= BasicManagerRepository
-    //====================================================================
+
     /** specifies a callback for instances which are interested in BasicManagers
         created by the BasicManagerRepository.
     */
@@ -59,9 +59,9 @@ namespace basic
         ~BasicManagerCreationListener() {}
     };
 
-    //====================================================================
+
     //= BasicManagerRepository
-    //====================================================================
+
     class BASIC_DLLPUBLIC BasicManagerRepository
     {
     public:
@@ -133,9 +133,9 @@ namespace basic
             );
     };
 
-//........................................................................
+
 } // namespace basic
-//........................................................................
+
 
 #endif // INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX
 

@@ -113,7 +113,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
     return ret;
 }
 
-//==================================================================================================
+
 void defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pCompType )
@@ -121,7 +121,7 @@ void defaultConstructStruct(
 {
     _defaultConstructStruct( pMem, pCompType );
 }
-//==================================================================================================
+
 void copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -130,7 +130,7 @@ void copyConstructStruct(
 {
     _copyConstructStruct( pDest, pSource, pTypeDescr, acquire, mapping );
 }
-//==================================================================================================
+
 void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -139,7 +139,7 @@ void destructStruct(
 {
     _destructStruct( pValue, pTypeDescr, release );
 }
-//==================================================================================================
+
 bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -148,7 +148,7 @@ bool equalStruct(
 {
     return _equalStruct( pDest, pSource, pTypeDescr, queryInterface, release );
 }
-//==================================================================================================
+
 bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -158,7 +158,7 @@ bool assignStruct(
     return _assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
 }
 
-//==============================================================================
+
 uno_Sequence * copyConstructSequence(
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
@@ -167,7 +167,7 @@ uno_Sequence * copyConstructSequence(
     return icopyConstructSequence( pSource, pElementType, acquire, mapping );
 }
 
-//==============================================================================
+
 void destructSequence(
     uno_Sequence * pSequence,
     typelib_TypeDescriptionReference * pType,
@@ -177,7 +177,7 @@ void destructSequence(
     idestructSequence( pSequence, pType, pTypeDescr, release );
 }
 
-//==================================================================================================
+
 bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
@@ -189,21 +189,21 @@ bool equalSequence(
 
 extern "C"
 {
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_constructData(
     void * pMem, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
     _defaultConstructData( pMem, pType, 0 );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_constructData(
     void * pMem, typelib_TypeDescription * pTypeDescr )
     SAL_THROW_EXTERN_C()
 {
     _defaultConstructData( pMem, pTypeDescr->pWeakRef, pTypeDescr );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
     void * pValue, typelib_TypeDescriptionReference * pType,
     uno_ReleaseFunc release )
@@ -211,7 +211,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
 {
     _destructData( pValue, pType, 0, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
     void * pValue,
     typelib_TypeDescription * pTypeDescr,
@@ -220,7 +220,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
 {
     _destructData( pValue, pTypeDescr->pWeakRef, pTypeDescr, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
@@ -229,7 +229,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyData(
 {
     _copyConstructData( pDest, pSource, pType, 0, acquire, 0 );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -238,7 +238,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_copyData(
 {
     _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
@@ -247,7 +247,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
 {
     _copyConstructData( pDest, pSource, pType, 0, 0, mapping );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -256,7 +256,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
 {
     _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_equalData(
     void * pVal1, typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, typelib_TypeDescriptionReference * pVal2Type,
@@ -268,7 +268,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_equalData(
         pVal2, pVal2Type,
         queryInterface, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_equalData(
     void * pVal1, typelib_TypeDescription * pVal1TD,
     void * pVal2, typelib_TypeDescription * pVal2TD,
@@ -280,7 +280,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_equalData(
         pVal2, pVal2TD->pWeakRef,
         queryInterface, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_assignData(
     void * pDest, typelib_TypeDescriptionReference * pDestType,
     void * pSource, typelib_TypeDescriptionReference * pSourceType,
@@ -292,7 +292,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_assignData(
         pSource, pSourceType, 0,
         queryInterface, acquire, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_assignData(
     void * pDest, typelib_TypeDescription * pDestTD,
     void * pSource, typelib_TypeDescription * pSourceTD,
@@ -304,7 +304,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_assignData(
         pSource, pSourceTD->pWeakRef, pSourceTD,
         queryInterface, acquire, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
     typelib_TypeDescriptionReference * pAssignable,
     void * pFrom, typelib_TypeDescriptionReference * pFromType,
@@ -335,9 +335,9 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 
 #if OSL_DEBUG_LEVEL > 1

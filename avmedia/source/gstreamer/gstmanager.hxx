@@ -24,9 +24,9 @@
 
 #include "com/sun/star/media/XManager.hpp"
 
-// -----------
+
 // - Manager -
-// -----------
+
 
 namespace avmedia { namespace gstreamer {
 

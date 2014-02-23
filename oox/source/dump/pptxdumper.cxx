@@ -30,7 +30,7 @@ namespace oox {
 namespace dump {
 namespace pptx {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 //using namespace ::com::sun::star::lang;
@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
 
-// ============================================================================
+
 
 RootStorageObject::RootStorageObject( const DumperBase& rParent )
 {
@@ -105,7 +105,7 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
     }
 }
 
-// ============================================================================
+
 
 #define DUMP_PPTX_CONFIG_ENVVAR "OOO_PPTXDUMPER"
 
@@ -130,7 +130,7 @@ void Dumper::implDump()
     RootStorageObject( *this ).dump();
 }
 
-// ============================================================================
+
 
 } // namespace pptx
 } // namespace dump

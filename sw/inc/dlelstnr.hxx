@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-///////////////////////////////////////////////////////////////////////////
+
 // SwLinguServiceEventListener
 // is a EventListener that triggers spellchecking
 // and hyphenation when relevant changes (to the

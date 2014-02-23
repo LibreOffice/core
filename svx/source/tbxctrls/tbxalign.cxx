@@ -78,9 +78,9 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
     return NULL;
 }
 
-//========================================================================
+
 // XSubToolbarController
-//========================================================================
+
 
 ::sal_Bool SAL_CALL SvxTbxCtlAlign::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
 {

@@ -65,7 +65,7 @@
 
 class SystemChildWindow;
 
-//==================================================================================================
+
 class PluginControl_Impl : public ::cppu::WeakAggImplHelper4<
       ::com::sun::star::awt::XControl,
       ::com::sun::star::awt::XWindow,

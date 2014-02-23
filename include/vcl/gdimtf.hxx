@@ -36,9 +36,9 @@ class Polygon;
 class PolyPolygon;
 class Gradient;
 
-// ---------------------
+
 // - GDIMetaFile-Types -
-// ---------------------
+
 
 #define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
 #define GDI_METAFILE_LABEL_NOTFOUND     ((size_t)0xFFFFFFFF)
@@ -62,9 +62,9 @@ enum MtfConversion
     MTF_CONVERSION_8BIT_GREYS = 2
 };
 
-// -----------------------------
+
 // - Color conversion routines -
-// -----------------------------
+
 
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
 typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );

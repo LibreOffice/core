@@ -55,7 +55,7 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 
-//============================================================================
+
 using namespace formula;
 using namespace com::sun::star;
 

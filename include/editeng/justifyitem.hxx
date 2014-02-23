@@ -56,7 +56,7 @@ public:
             }
 };
 
-//------------------------------------------------------------------------
+
 
 class EDITENG_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem
 {
@@ -89,7 +89,7 @@ public:
             }
 };
 
-//------------------------------------------------------------------------
+
 
 class EDITENG_DLLPUBLIC SvxJustifyMethodItem: public SfxEnumItem
 {

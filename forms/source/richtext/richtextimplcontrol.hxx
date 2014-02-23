@@ -31,17 +31,17 @@ class EditView;
 class EditStatus;
 class Window;
 class SvxScriptSetItem;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     class ITextAttributeListener;
     class ITextSelectionListener;
     class RichTextViewPort;
-    //====================================================================
+
     //= RichTextControlImpl
-    //====================================================================
+
     class RichTextControlImpl : public IEngineStatusListener
     {
         typedef ::std::map< AttributeId, AttributeState >                           StateCache;
@@ -180,9 +180,9 @@ namespace frm
         DECL_LINK( OnVScroll, ScrollBar* );
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTIMPLCONTROL_HXX
 

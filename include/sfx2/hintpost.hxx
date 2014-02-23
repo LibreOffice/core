@@ -22,11 +22,11 @@
 #include <sfx2/genlink.hxx>
 #include <tools/ref.hxx>
 
-//===================================================================
+
 
 class SfxHint;
 
-//-------------------------------------------------------------------
+
 
 class SfxHintPoster: public SvRefBase
 
@@ -59,7 +59,7 @@ public:
     void            SetEventHdl( const GenLink& rLink );
 };
 
-//-------------------------------------------------------------------
+
 
 SV_DECL_IMPL_REF(SfxHintPoster);
 

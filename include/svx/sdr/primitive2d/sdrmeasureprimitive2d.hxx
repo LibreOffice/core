@@ -23,7 +23,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace primitive2d {
@@ -40,7 +40,7 @@ namespace drawinglayer { namespace attribute {
     class SdrLineAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -118,7 +118,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SDRMEASUREPRIMITIVE2D_HXX
 

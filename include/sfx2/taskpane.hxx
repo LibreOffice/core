@@ -35,14 +35,14 @@ namespace svt
     class ToolPanelDeck;
 }
 
-//......................................................................................................................
+
 namespace sfx2
 {
-//......................................................................................................................
 
-    //==================================================================================================================
+
+
     //= ITaskPaneToolPanelAccess
-    //==================================================================================================================
+
     class SAL_NO_VTABLE ITaskPaneToolPanelAccess
     {
     public:
@@ -52,9 +52,9 @@ namespace sfx2
         ~ITaskPaneToolPanelAccess() {}
     };
 
-    //==================================================================================================================
+
     //= TaskPaneWrapper
-    //==================================================================================================================
+
     class SFX2_DLLPUBLIC TaskPaneWrapper    :public SfxChildWindow
                                             ,public ITaskPaneToolPanelAccess
     {
@@ -72,9 +72,9 @@ namespace sfx2
         virtual void ActivateToolPanel( const OUString& i_rPanelURL );
     };
 
-    //==================================================================================================================
+
     //= IToolPanelCompare
-    //==================================================================================================================
+
     class SFX2_DLLPUBLIC SAL_NO_VTABLE IToolPanelCompare
     {
     public:
@@ -95,9 +95,9 @@ namespace sfx2
         ~IToolPanelCompare() {}
     };
 
-    //==================================================================================================================
+
     //= ModuleTaskPane
-    //==================================================================================================================
+
     class ModuleTaskPane_Impl;
     /** SFX-less version of a module dependent task pane, filled with tool panels as specified in the respective
         module's configuration
@@ -152,9 +152,9 @@ namespace sfx2
         ::boost::scoped_ptr< ModuleTaskPane_Impl >  m_pImpl;
     };
 
-    //==================================================================================================================
+
     //= TaskPaneController
-    //==================================================================================================================
+
     class TaskPaneController_Impl;
     /** is a helper class for connecting a ModuleTaskPane and a TitledDockingWindow, for clients of the ModuleTaskPane
         which do not use the TaskPaneDockingWindow
@@ -178,9 +178,9 @@ namespace sfx2
         ::boost::scoped_ptr< TaskPaneController_Impl >  m_pImpl;
     };
 
-    //==================================================================================================================
+
     //= TaskPaneDockingWindow
-    //==================================================================================================================
+
     class TaskPaneDockingWindow :public TitledDockingWindow
                                 ,public ITaskPaneToolPanelAccess
     {
@@ -203,9 +203,9 @@ namespace sfx2
         TaskPaneController  m_aPaneController;
     };
 
-//......................................................................................................................
+
 } // namespace sfx2
-//......................................................................................................................
+
 
 #endif // INCLUDED_SFX2_TASKPANE_HXX
 

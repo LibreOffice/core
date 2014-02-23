@@ -55,9 +55,9 @@ static const char GLOBALSETTINGS_PROPERTY_STATESENABLED[]   = "StatesEnabled";
 namespace framework
 {
 
-//*****************************************************************************************************************
+
 //  Configuration access class for WindowState supplier implementation
-//*****************************************************************************************************************
+
 
 class GlobalSettings_Access : private ThreadHelpBase                         ,  // Struct for right initalization of mutex member! Must be first of baseclasses.
                               public ::cppu::WeakImplHelper2<
@@ -95,7 +95,7 @@ class GlobalSettings_Access : private ThreadHelpBase                         ,  
 };
 
 
-//*****************************************************************************************************************
+
 
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     ThreadHelpBase(),
@@ -272,9 +272,9 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
     return sal_False;
 }
 
-//*****************************************************************************************************************
+
 //  global class
-//*****************************************************************************************************************
+
 
 struct mutexGlobalSettings : public rtl::Static< osl::Mutex, mutexGlobalSettings > {};
 static GlobalSettings_Access* pStaticSettings = 0;

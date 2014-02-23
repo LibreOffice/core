@@ -48,9 +48,9 @@ namespace connectivity
                                             const OUString& _sDefaultName,
                                             sal_Int32& _nParameterCount);
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             const OTypeInfoMap& m_aTypeInfo;
             ADOParameters*      m_pParameters;

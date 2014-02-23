@@ -32,14 +32,14 @@
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/listenernotification.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= EventDescription
-    //====================================================================
+
     typedef sal_Int32   EventId;
     struct EventDescription
     {
@@ -68,9 +68,9 @@ namespace pcr
 
     typedef ::boost::unordered_map< OUString, EventDescription, OUStringHash >   EventMap;
 
-    //====================================================================
+
     //= EventHandler
-    //====================================================================
+
     typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::inspection::XPropertyHandler
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 >   EventHandler_Base;
@@ -247,9 +247,9 @@ namespace pcr
         EventHandler& operator=( const EventHandler& ); // never implemented
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 

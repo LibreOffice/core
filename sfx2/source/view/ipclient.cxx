@@ -66,7 +66,7 @@
 
 using namespace com::sun::star;
 
-//====================================================================
+
 // SfxEmbedResizeGuard
 class SfxBooleanFlagGuard
 {
@@ -86,7 +86,7 @@ public:
     }
 };
 
-//====================================================================
+
 // SfxInPlaceClient_Impl
 
 
@@ -603,7 +603,7 @@ IMPL_LINK_NOARG(SfxInPlaceClient_Impl, TimerHdl)
 }
 
 
-//====================================================================
+
 // SfxInPlaceClient
 
 

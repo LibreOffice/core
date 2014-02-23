@@ -25,10 +25,10 @@
 
 namespace connectivity
 {
-    //==================================================================
+
     // Derived from String, overriding GetToken/GetTokenCount methods
     // Especially true for the flat file format: Strings can be quoted
-    //==================================================================
+
     class OOO_DLLPUBLIC_FILE QuotedTokenizedString
     {
         OUString m_sString;

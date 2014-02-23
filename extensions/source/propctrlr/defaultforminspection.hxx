@@ -23,15 +23,15 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     class OPropertyInfoService;
-    //====================================================================
+
     //= DefaultFormComponentInspectorModel
-    //====================================================================
+
     class DefaultFormComponentInspectorModel : public ImplInspectorModel
     {
     private:
@@ -74,9 +74,9 @@ namespace pcr
         void    createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_DEFAULTFORMINSPECTION_HXX
 

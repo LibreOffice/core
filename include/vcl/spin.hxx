@@ -25,9 +25,9 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 
-// --------------
+
 // - SpinButton -
-// --------------
+
 
 class VCL_DLLPUBLIC SpinButton : public Control
 {

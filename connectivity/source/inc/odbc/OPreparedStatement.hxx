@@ -60,9 +60,9 @@ namespace connectivity
             };
 
             ::std::vector< Parameter>                   m_aParameters;
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             SQLSMALLINT     numParams;      // Number of parameter markers for the prepared statement
 
             OBoundParam*    boundParams;

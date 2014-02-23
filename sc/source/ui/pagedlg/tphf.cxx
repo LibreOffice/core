@@ -46,9 +46,9 @@
 
 
 
-//==================================================================
+
 // class ScHFPage
-//==================================================================
+
 
 ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
 
@@ -264,9 +264,9 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
     return 0;
 }
 
-//==================================================================
+
 // class ScHeaderPage
-//==================================================================
+
 
 ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
     : ScHFPage( pParent, rSet, SID_ATTR_PAGE_HEADERSET )
@@ -287,9 +287,9 @@ sal_uInt16* ScHeaderPage::GetRanges()
     return SvxHeaderPage::GetRanges();
 }
 
-//==================================================================
+
 // class ScFooterPage
-//==================================================================
+
 
 ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
     : ScHFPage( pParent, rSet, SID_ATTR_PAGE_FOOTERSET )

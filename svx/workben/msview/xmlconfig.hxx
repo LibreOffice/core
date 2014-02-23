@@ -24,7 +24,7 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 
-///////////////////////////////////////////////////////////////////////
+
 
 enum ElementConfigType { ECT_HEXDUMP, ECT_BYTE, ECT_UINT, ECT_UNISTRING, ETC_FLOAT, ETC_CONTAINER };
 
@@ -53,7 +53,7 @@ private:
 typedef boost::shared_ptr< ElementConfig > ElementConfigPtr;
 typedef std::list< ElementConfigPtr > ElementConfigList;
 
-///////////////////////////////////////////////////////////////////////
+
 
 class ElementValueConfig : public ElementConfig
 {
@@ -66,7 +66,7 @@ private:
     OUString maValue;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class ElementConfigContainer : public ElementConfig
 {
@@ -84,7 +84,7 @@ protected:
     ElementConfigList maElementConfigList;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class CaseElementConfig : public ElementConfigContainer
 {
@@ -97,7 +97,7 @@ private:
     OUString maValue;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class SwitchElementConfig : public ElementConfigContainer
 {
@@ -107,7 +107,7 @@ public:
     virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class AtomConfig : public ElementConfigContainer
 {

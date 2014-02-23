@@ -24,12 +24,12 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::oox::core;
 
 
-// ============================================================================
+
 
 IndexedColorsContext::IndexedColorsContext( WorkbookFragmentBase& rFragment ) :
     WorkbookContextBase( rFragment )
@@ -58,7 +58,7 @@ ContextHandlerRef IndexedColorsContext::onCreateRecordContext( sal_Int32 nRecId,
     return 0;
 }
 
-// ============================================================================
+
 
 ContextHandlerRef FontContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -67,7 +67,7 @@ ContextHandlerRef FontContext::onCreateContext( sal_Int32 nElement, const Attrib
     return 0;
 }
 
-// ============================================================================
+
 
 void BorderContext::onStartElement( const AttributeList& rAttribs )
 {
@@ -90,7 +90,7 @@ ContextHandlerRef BorderContext::onCreateContext( sal_Int32 nElement, const Attr
     return 0;
 }
 
-// ============================================================================
+
 
 ContextHandlerRef FillContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -125,7 +125,7 @@ ContextHandlerRef FillContext::onCreateContext( sal_Int32 nElement, const Attrib
     return 0;
 }
 
-// ============================================================================
+
 
 void XfContext::onStartElement( const AttributeList& rAttribs )
 {
@@ -148,7 +148,7 @@ ContextHandlerRef XfContext::onCreateContext( sal_Int32 nElement, const Attribut
     return 0;
 }
 
-// ============================================================================
+
 
 ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -172,7 +172,7 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
     return 0;
 }
 
-// ============================================================================
+
 
 StylesFragment::StylesFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )
@@ -314,7 +314,7 @@ void StylesFragment::finalizeImport()
     getStyles().finalizeImport();
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -39,10 +39,10 @@
 #include <functional>
 #include <algorithm>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -65,9 +65,9 @@ namespace svx
 
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
-    //====================================================================
+
     //= FeatureSlotTranslation
-    //====================================================================
+
     namespace
     {
         struct FeatureDescription
@@ -78,7 +78,7 @@ namespace svx
         };
         typedef ::std::vector< FeatureDescription > FeatureDescriptions;
 
-        //................................................................
+
         const FeatureDescriptions& getFeatureDescriptions()
         {
             static FeatureDescriptions s_aFeatureDescriptions;
@@ -120,7 +120,7 @@ namespace svx
 
     namespace
     {
-        //................................................................
+
         struct MatchFeatureDescriptionByURL : public ::std::unary_function< FeatureDescription, bool >
         {
             const OUString&  m_rURL;
@@ -132,7 +132,7 @@ namespace svx
             }
         };
 
-        //................................................................
+
         struct MatchFeatureDescriptionBySlotId : public ::std::unary_function< FeatureDescription, bool >
         {
             sal_Int32   m_nSlotId;
@@ -144,7 +144,7 @@ namespace svx
             }
         };
 
-        //................................................................
+
         struct MatchFeatureDescriptionByFormFeature : public ::std::unary_function< FeatureDescription, bool >
         {
             sal_Int32   m_nFormFeature;
@@ -156,7 +156,7 @@ namespace svx
             }
         };
 
-        //................................................................
+
         struct FormFeatureToSlotId : public ::std::unary_function< sal_Int16, sal_Int32 >
         {
             sal_Int32 operator()( sal_Int16 _FormFeature )
@@ -192,9 +192,9 @@ namespace svx
         return ( pos != rDescriptions.end() ) ? pos->nSlotId : -1;
     }
 
-    //====================================================================
+
     //= ControllerFeatures
-    //====================================================================
+
 
     ControllerFeatures::ControllerFeatures( IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
@@ -235,9 +235,9 @@ namespace svx
         }
     }
 
-    //====================================================================
+
     //= FormControllerHelper
-    //====================================================================
+
 
     FormControllerHelper::FormControllerHelper( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
@@ -517,8 +517,8 @@ namespace svx
         return bCanDo;
     }
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -425,7 +425,7 @@ void ScXMLTableContext::EndElement()
     }
 }
 
-// ============================================================================
+
 
 ScXMLImport& ScXMLTableProtectionContext::GetScImport()
 {

@@ -38,7 +38,7 @@ namespace oox {
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 class VbaModule
 {
@@ -99,7 +99,7 @@ private:
     bool                mbExecutable;
 };
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

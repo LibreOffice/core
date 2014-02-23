@@ -22,7 +22,7 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 namespace sdr { namespace contact {
@@ -31,7 +31,7 @@ namespace sdr { namespace contact {
 
 class SdrPage;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -56,7 +56,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFPAGEOBJ_HXX
 

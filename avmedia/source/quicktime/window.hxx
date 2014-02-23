@@ -27,9 +27,9 @@
 
 namespace avmedia { namespace quicktime {
 
-// ---------------
+
 // - Window -
-// ---------------
+
 
 class Player;
 

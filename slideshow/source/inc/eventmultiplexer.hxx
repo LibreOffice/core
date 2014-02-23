@@ -181,7 +181,7 @@ public:
     ~EventMultiplexer();
 
     // Management methods
-    // =========================================================
+
 
     /** Clear all registered handlers.
      */
@@ -189,7 +189,7 @@ public:
 
 
     // Automatic mode methods
-    // =========================================================
+
 
     /** Change automatic mode.
 
@@ -217,7 +217,7 @@ public:
     double getAutomaticTimeout() const;
 
     // Handler registration methods
-    // =========================================================
+
 
     /** Register an event handler that will be called when views are
         changed.
@@ -456,7 +456,7 @@ public:
 
 
     // External event notifications
-    // =========================================================
+
 
     /** View added.
 

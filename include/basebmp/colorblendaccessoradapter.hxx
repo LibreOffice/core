@@ -83,19 +83,19 @@ public:
         maGetterValue(val)
     {}
 
-    // -------------------------------------------------------
+
 
     void        setColor( color_type col ) { maBlendColor=col; }
     color_type  getColor() { return maBlendColor; }
     void        setGetterValue( value_type val ) { maGetterValue=val; }
     value_type  getGetterValue() { return maGetterValue; }
 
-    // -------------------------------------------------------
+
 
     WrappedAccessor const& getWrappedAccessor() const { return maWrappee; }
     WrappedAccessor&       getWrappedAccessor() { return maWrappee; }
 
-    // -------------------------------------------------------
+
 
     /// @return constant value, regardless of iterator content
     template< typename IteratorType > value_type operator()(SAL_UNUSED_PARAMETER IteratorType const& ) const
@@ -109,7 +109,7 @@ public:
         return maGetterValue;
     }
 
-    // -------------------------------------------------------
+
 
     template< typename V, typename IteratorType >
     void set(V const& value, IteratorType const& i) const

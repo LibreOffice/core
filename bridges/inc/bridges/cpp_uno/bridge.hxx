@@ -30,7 +30,7 @@
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_cppInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy ) SAL_THROW(())
 {
     cppu_cppInterfaceProxy * pThis =
@@ -48,7 +48,7 @@ inline void SAL_CALL cppu_cppInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
 #endif
     delete pThis;
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_Mapping_uno2cpp(
     uno_Mapping * pMapping, void ** ppCppI,
     void * pUnoI, typelib_InterfaceTypeDescription * pTypeDescr ) SAL_THROW(())
@@ -90,7 +90,7 @@ inline void SAL_CALL cppu_Mapping_uno2cpp(
         ::rtl_uString_release( pOId );
     }
 }
-//__________________________________________________________________________________________________
+
 inline void cppu_cppInterfaceProxy::acquireProxy() SAL_THROW(())
 {
     if (1 == osl_atomic_increment( &nRef ))
@@ -104,7 +104,7 @@ inline void cppu_cppInterfaceProxy::acquireProxy() SAL_THROW(())
         OSL_ASSERT( pThis == static_cast< ::com::sun::star::uno::XInterface * >( this ) );
     }
 }
-//__________________________________________________________________________________________________
+
 inline void cppu_cppInterfaceProxy::releaseProxy() SAL_THROW(())
 {
     if (! osl_atomic_decrement( &nRef )) // last release
@@ -114,7 +114,7 @@ inline void cppu_cppInterfaceProxy::releaseProxy() SAL_THROW(())
             pBridge->pCppEnv, static_cast< ::com::sun::star::uno::XInterface * >( this ) );
     }
 }
-//__________________________________________________________________________________________________
+
 inline cppu_cppInterfaceProxy::cppu_cppInterfaceProxy(
     cppu_Bridge * pBridge_, uno_Interface * pUnoI_,
     typelib_InterfaceTypeDescription * pTypeDescr_, const OUString & rOId_ ) SAL_THROW(())
@@ -135,12 +135,12 @@ inline cppu_cppInterfaceProxy::cppu_cppInterfaceProxy(
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
 
 
-//--------------------------------------------------------------------------------------------------
+
+
+
+
 inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy ) SAL_THROW(())
 {
     cppu_unoInterfaceProxy * pThis =
@@ -158,7 +158,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
 #endif
     delete pThis;
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) SAL_THROW(())
 {
     if (1 == osl_atomic_increment( & static_cast< cppu_unoInterfaceProxy * >( pUnoI )->nRef ))
@@ -179,7 +179,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) SAL
 #endif
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_unoInterfaceProxy_release( uno_Interface * pUnoI ) SAL_THROW(())
 {
     if (! osl_atomic_decrement( & static_cast< cppu_unoInterfaceProxy * >( pUnoI )->nRef ))
@@ -189,7 +189,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_release( uno_Interface * pUnoI ) SAL
             static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pBridge->pUnoEnv, pUnoI );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_Mapping_cpp2uno(
     uno_Mapping * pMapping, void ** ppUnoI,
     void * pCppI, typelib_InterfaceTypeDescription * pTypeDescr ) SAL_THROW(())
@@ -231,7 +231,7 @@ inline void SAL_CALL cppu_Mapping_cpp2uno(
         ::rtl_uString_release( pOId );
     }
 }
-//__________________________________________________________________________________________________
+
 inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
     cppu_Bridge * pBridge_, ::com::sun::star::uno::XInterface * pCppI_,
     typelib_InterfaceTypeDescription * pTypeDescr_, const OUString & rOId_ ) SAL_THROW(())
@@ -257,22 +257,22 @@ inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
 
 
-//--------------------------------------------------------------------------------------------------
+
+
+
+
 inline void SAL_CALL cppu_Mapping_acquire( uno_Mapping * pMapping ) SAL_THROW(())
 {
     static_cast< cppu_Mapping * >( pMapping )->pBridge->acquire();
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_Mapping_release( uno_Mapping * pMapping ) SAL_THROW(())
 {
     static_cast< cppu_Mapping * >( pMapping )->pBridge->release();
 }
-//__________________________________________________________________________________________________
+
 inline cppu_Bridge::cppu_Bridge(
     uno_ExtEnvironment * pCppEnv_, uno_ExtEnvironment * pUnoEnv_,
     sal_Bool bExportCpp2Uno_ ) SAL_THROW(())
@@ -294,18 +294,18 @@ inline cppu_Bridge::cppu_Bridge(
     (*((uno_Environment *)pCppEnv)->acquire)( (uno_Environment *)pCppEnv );
     (*((uno_Environment *)pUnoEnv)->acquire)( (uno_Environment *)pUnoEnv );
 }
-//__________________________________________________________________________________________________
+
 inline cppu_Bridge::~cppu_Bridge() SAL_THROW(())
 {
     (*((uno_Environment *)pUnoEnv)->release)( (uno_Environment *)pUnoEnv );
     (*((uno_Environment *)pCppEnv)->release)( (uno_Environment *)pCppEnv );
 }
-//__________________________________________________________________________________________________
+
 inline void SAL_CALL cppu_Bridge_free( uno_Mapping * pMapping ) SAL_THROW(())
 {
     delete static_cast< cppu_Mapping * >( pMapping )->pBridge;
 }
-//__________________________________________________________________________________________________
+
 inline void cppu_Bridge::acquire() SAL_THROW(())
 {
     if (1 == osl_atomic_increment( &nRef ))
@@ -326,7 +326,7 @@ inline void cppu_Bridge::acquire() SAL_THROW(())
         }
     }
 }
-//__________________________________________________________________________________________________
+
 inline void cppu_Bridge::release() SAL_THROW(())
 {
     if (! osl_atomic_decrement( &nRef ))
@@ -335,7 +335,7 @@ inline void cppu_Bridge::release() SAL_THROW(())
     }
 }
 
-//##################################################################################################
+
 inline void SAL_CALL cppu_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo ) SAL_THROW(())
 {
@@ -375,12 +375,12 @@ inline void SAL_CALL cppu_ext_getMapping(
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 // environment init stuff
-//--------------------------------------------------------------------------------------------------
+
 inline const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
 {
     static OUString * s_pStaticOidPart = 0;
@@ -405,7 +405,7 @@ inline const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
     return *s_pStaticOidPart;
 }
 // functions set at environment init
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface ) SAL_THROW(())
 {
@@ -448,19 +448,19 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
         }
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_cppenv_acquireInterface( uno_ExtEnvironment *, void * pCppI ) SAL_THROW(())
 {
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->acquire();
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_cppenv_releaseInterface( uno_ExtEnvironment *, void * pCppI ) SAL_THROW(())
 {
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_cppenv_environmentDisposing( uno_Environment * ) SAL_THROW(()) {}
-//--------------------------------------------------------------------------------------------------
+
 inline void SAL_CALL cppu_cppenv_initEnvironment( uno_Environment * pCppEnv ) SAL_THROW(())
 {
     OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );

@@ -46,9 +46,9 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XCloseable,
                                                     ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
 
-        //**************************************************************
+
         //************ Class: java.sql.Statement
-        //**************************************************************
+
         class OStatement_Base       :   public comphelper::OBaseMutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,

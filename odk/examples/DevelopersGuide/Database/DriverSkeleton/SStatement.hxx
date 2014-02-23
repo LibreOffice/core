@@ -60,10 +60,10 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XCloseable,
                                                     ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
 
-        //**************************************************************
+
         //************ Class: OStatement_Base
         // is a base class for the normal statement and for the prepared statement
-        //**************************************************************
+
         class OStatement_Base       :   public OBase_Mutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,

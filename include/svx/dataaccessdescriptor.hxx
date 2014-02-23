@@ -24,10 +24,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/svxdllapi.h>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     class ODADescriptorImpl;
 
@@ -126,9 +126,9 @@ namespace svx
         void setDataSource(const OUString& _sDataSourceNameOrLocation);
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_DATAACCESSDESCRIPTOR_HXX
 

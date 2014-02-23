@@ -62,9 +62,9 @@ using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::std::vector;
 
-// ============================================================================
+
 // Pivot cache
-// ============================================================================
+
 
 XclImpPCItem::XclImpPCItem( XclImpStream& rStrm )
 {
@@ -173,7 +173,7 @@ void XclImpPCItem::ReadSxempty( XclImpStream& rStrm )
     SetEmpty();
 }
 
-// ============================================================================
+
 
 XclImpPCField::XclImpPCField( const XclImpRoot& rRoot, XclImpPivotCache& rPCache, sal_uInt16 nFieldIdx ) :
     XclPCField( EXC_PCFIELD_UNKNOWN, nFieldIdx ),
@@ -582,7 +582,7 @@ const sal_Int16* XclImpPCField::GetDateGroupStep() const
     return 0;
 }
 
-// ============================================================================
+
 
 XclImpPivotCache::XclImpPivotCache( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -880,9 +880,9 @@ bool XclImpPivotCache::IsValid() const
     return maSrcRange.IsValid();
 }
 
-// ============================================================================
+
 // Pivot table
-// ============================================================================
+
 
 XclImpPTItem::XclImpPTItem( const XclImpPCField* pCacheField ) :
     mpCacheField( pCacheField )
@@ -915,7 +915,7 @@ void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim ) const
     }
 }
 
-// ============================================================================
+
 
 XclImpPTField::XclImpPTField( const XclImpPivotTable& rPTable, sal_uInt16 nCacheIdx ) :
     mrPTable( rPTable )
@@ -1191,7 +1191,7 @@ void XclImpPTField::ConvertItems( ScDPSaveDimension& rSaveDim ) const
         (*aIt)->ConvertItem( rSaveDim );
 }
 
-// ============================================================================
+
 
 XclImpPivotTable::XclImpPivotTable( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -1525,7 +1525,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     }
 }
 
-// ============================================================================
+
 
 XclImpPivotTableManager::XclImpPivotTableManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -1648,6 +1648,6 @@ void XclImpPivotTableManager::MaybeRefreshPivotTables()
         (*aIt)->MaybeRefresh();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

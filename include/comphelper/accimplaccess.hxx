@@ -30,14 +30,14 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessibleContext;
 }}}}
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OAccessibleImplementationAccess
-    //=====================================================================
+
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XUnoTunnel
                                 >   OAccImpl_Base;
     struct OAccImpl_Impl;
@@ -130,9 +130,9 @@ namespace comphelper
         COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 
 #endif // INCLUDED_COMPHELPER_ACCIMPLACCESS_HXX

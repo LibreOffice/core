@@ -20,9 +20,9 @@
 #define _CONNECTIVITY_JAVA_LANG_BOOLEAN_HXX_
 
 #include "java/lang/Object.hxx"
-//**************************************************************
+
 //************ Class: java.lang.Boolean
-//**************************************************************
+
 namespace connectivity
 {
     class java_lang_Boolean : public java_lang_Object

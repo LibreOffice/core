@@ -81,7 +81,7 @@ void StructListBox::LoseFocus()
     SvTreeListBox::LoseFocus();
 }
 
-//==============================================================================
+
 
 StructPage::StructPage(Window* pParent):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_STRUCT)),

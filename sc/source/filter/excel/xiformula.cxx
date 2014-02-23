@@ -114,6 +114,6 @@ const ScTokenArray* XclImpFormulaCompiler::CreateFormula(
     return mxImpl->CreateFormula(eType, rXclTokArr);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

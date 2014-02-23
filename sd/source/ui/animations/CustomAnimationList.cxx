@@ -198,7 +198,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText = true )
     return aDescription;
 }
 
-// ====================================================================
+
 
 class CustomAnimationListEntryItem : public SvLBoxString
 {
@@ -316,7 +316,7 @@ void CustomAnimationListEntryItem::Clone( SvLBoxItem* )
 {
 }
 
-// ====================================================================
+
 
 class CustomAnimationListEntry : public SvTreeListEntry
 {
@@ -350,7 +350,7 @@ CustomAnimationListEntry::~CustomAnimationListEntry()
 {
 }
 
-// ====================================================================
+
 
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
@@ -454,7 +454,7 @@ void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 {
 }
 
-// ====================================================================
+
 
 CustomAnimationList::CustomAnimationList( ::Window* pParent )
     : SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT )

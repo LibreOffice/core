@@ -1294,7 +1294,7 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+
 //
 //  DLL-calls
 
@@ -2988,7 +2988,7 @@ void SbiRuntime::StepJUMPF( sal_uInt32 nOp1 )
 // ONJUMP 2
 // JUMP target1
 // JUMP target2
-// ...
+
 // if 0x8000 is set in the operand, push the return address (ON..GOSUB)
 
 void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )

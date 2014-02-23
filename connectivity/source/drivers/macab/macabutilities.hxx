@@ -33,7 +33,7 @@ namespace connectivity
 {
     namespace macab
     {
-        // -------------------------------------------------------------------------
+
         inline OUString CFStringToOUString(const CFStringRef sOrig)
         {
             /* Copied all-but directly from code by Florian Heckl in
@@ -60,7 +60,7 @@ namespace connectivity
             return OUString(unichars);
         }
 
-        // -------------------------------------------------------------------------
+
         inline CFStringRef OUStringToCFString(const OUString& aString)
         {
             /* Copied directly from code by Florian Heckl in
@@ -73,7 +73,7 @@ namespace connectivity
             return ref;
         }
 
-        // -------------------------------------------------------------------------
+
         inline com::sun::star::util::DateTime CFDateToDateTime(const CFDateRef _cfDate)
         {
                 /* Carbon can give us the time since 2001 of any CFDateRef,
@@ -96,7 +96,7 @@ namespace connectivity
             return nRet;
         }
 
-        // -------------------------------------------------------------------------
+
         inline OUString fixLabel(const OUString _originalLabel)
         {
             /* Get the length, and make sure that there is actually a string
@@ -110,7 +110,7 @@ namespace connectivity
             return _originalLabel;
         }
 
-        // -------------------------------------------------------------------------
+
         inline sal_Int32 ABTypeToDataType(const ABPropertyType _abType)
         {
             sal_Int32 dataType;

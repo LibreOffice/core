@@ -2315,7 +2315,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_equ
              rtl_ustr_compare( p1->pTypeName->buffer, p2->pTypeName->buffer ) == 0));
 }
 
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_assign(
     typelib_TypeDescriptionReference ** ppDest,
     typelib_TypeDescriptionReference * pSource )
@@ -2329,7 +2329,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_assign(
     }
 }
 
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
     SAL_THROW_EXTERN_C()
 {
@@ -2367,7 +2367,7 @@ static const sal_Bool s_aAssignableFromTab[11][11] =
 /* TypeClass_DOUBLE */          { 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1 }
 };
 
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     typelib_TypeDescriptionReference * pAssignable,
     typelib_TypeDescriptionReference * pFrom )
@@ -2439,7 +2439,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_isA
     }
     return sal_False;
 }
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
     typelib_TypeDescription * pAssignable,
     typelib_TypeDescription * pFrom )
@@ -2449,7 +2449,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_isAssignable
         pAssignable->pWeakRef, pFrom->pWeakRef );
 }
 
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_complete(
     typelib_TypeDescription ** ppTypeDescr )
     SAL_THROW_EXTERN_C()

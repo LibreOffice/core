@@ -26,7 +26,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct UpDownBarsModel;
 
@@ -41,12 +41,12 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct TypeGroupModel;
 typedef ContextBase< TypeGroupModel > TypeGroupContextBase;
 
-// ============================================================================
+
 
 /** Handler for area type group contexts (c:area3DChart, c:areaChart elements).
  */
@@ -59,7 +59,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for bar type group contexts (c:bar3DChart, c:barChart elements).
  */
@@ -72,7 +72,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for bubble type group context (c:bubbleChart element).
  */
@@ -85,7 +85,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for line type group contexts (c:line3DChart, c:lineChart,
     c:stockChart elements).
@@ -99,7 +99,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for pie type group contexts (c:doughnutChart, c:ofPieChart,
     c:pie3DChart, c:pieChart elements).
@@ -113,7 +113,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for radar type group context (c:radarChart element).
  */
@@ -126,7 +126,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for scatter type group context (c:scatterChart element).
  */
@@ -139,7 +139,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for surface type group contexts (c:surface3DChart, c:surfaceChart
     elements).
@@ -153,7 +153,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

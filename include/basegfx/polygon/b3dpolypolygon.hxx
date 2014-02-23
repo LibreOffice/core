@@ -34,7 +34,7 @@ namespace basegfx
     class B2DHomMatrix;
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {

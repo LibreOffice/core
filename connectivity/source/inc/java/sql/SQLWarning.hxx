@@ -26,9 +26,9 @@ namespace connectivity
 {
     //  namespace starsdbc  = ::com::sun::star::sdbc;
     //  namespace ::com::sun::star::uno = ::com::sun::star::uno;
-    //**************************************************************
+
     //************ Class: java.sql.SQLWarning
-    //**************************************************************
+
     class java_sql_SQLWarning_BASE : public java_sql_SQLException_BASE
     {
     protected:

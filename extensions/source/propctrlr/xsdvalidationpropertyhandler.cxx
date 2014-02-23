@@ -52,10 +52,10 @@ extern "C" void SAL_CALL createRegistryInfo_XSDValidationPropertyHandler()
     ::pcr::XSDValidationPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -68,9 +68,9 @@ namespace pcr
 
     using ::com::sun::star::beans::PropertyAttribute::MAYBEVOID;
 
-    //====================================================================
+
     //= XSDValidationPropertyHandler
-    //====================================================================
+
     DBG_NAME( XSDValidationPropertyHandler )
 
     XSDValidationPropertyHandler::XSDValidationPropertyHandler( const Reference< XComponentContext >& _rxContext )
@@ -675,8 +675,8 @@ namespace pcr
         }
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

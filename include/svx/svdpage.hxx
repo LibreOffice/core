@@ -38,7 +38,7 @@
 #include <svx/svdobj.hxx>
 #include <boost/scoped_ptr.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace reportdesign { class OSection; }
@@ -72,7 +72,7 @@ public:
     SdrInsertReasonKind GetReason() const         { return eReason; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 // class SdrObjList
 
 class SVX_DLLPUBLIC SdrObjList
@@ -313,7 +313,7 @@ Objektes abgefragt sowie direkt gesetzt werden.
 // Used for all methods which return a page number
 #define SDRPAGE_NOTFOUND 0xFFFF
 
-//////////////////////////////////////////////////////////////////////////////
+
 // class SdrPageGridFrame
 
 // Fuer das Fangraster/Punkgitter im Writer
@@ -366,7 +366,7 @@ public:
     const SdrPageGridFrame& operator[](sal_uInt16 nPos) const              { return *GetObject(nPos); }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // class SdrPageProperties
 
 class SVX_DLLPUBLIC SdrPageProperties : public SfxListener, public svl::StyleSheetUser
@@ -405,12 +405,12 @@ public:
     SfxStyleSheet* GetStyleSheet() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // class SdrPage
 
 class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage >
 {
-    ///////////////////////////////////////////////////////////////////////////////
+
     // start PageUser section
 private:
     // #111111# PageUser section
@@ -420,10 +420,10 @@ public:
     void AddPageUser(sdr::PageUser& rNewUser);
     void RemovePageUser(sdr::PageUser& rOldUser);
 
-    ///////////////////////////////////////////////////////////////////////////////
+
     // end PageUser section
 
-    ///////////////////////////////////////////////////////////////////////////////
+
     // #110094# DrawContact section
 private:
     sdr::contact::ViewContact*                                      mpViewContact;
@@ -582,7 +582,7 @@ public:
 
 typedef tools::WeakReference< SdrPage > SdrPageWeakRef;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // use new redirector instead of pPaintProc
 
 class SVX_DLLPUBLIC StandardCheckVisisbilityRedirector : public ::sdr::contact::ViewObjectContactRedirector
@@ -598,7 +598,7 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo);
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDPAGE_HXX
 

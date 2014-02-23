@@ -38,9 +38,9 @@
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
-// ---------------------
+
 // - InformationDialog -
-// ---------------------
+
 class InformationDialog : public UnoDialog, public ConfigurationAccess
 {
 public :

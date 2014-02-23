@@ -27,9 +27,9 @@ namespace rptui
 class OReportWindow;
 class OReportSection;
 
-//============================================================================
+
 // OSectionView
-//============================================================================
+
 
 class OSectionView : public SdrView
 {

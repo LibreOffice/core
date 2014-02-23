@@ -49,7 +49,7 @@ namespace comphelper
 class SfxObjectShell;
 class SvxMacro;
 
-//--------------------------------------------------------------------------------------------------------
+
 
 class SfxEvents_Impl : public ::cppu::WeakImplHelper2< css::container::XNameReplace, css::document::XEventListener  >
 {

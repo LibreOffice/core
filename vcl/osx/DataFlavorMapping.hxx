@@ -56,7 +56,7 @@ public:
 typedef std::auto_ptr<DataProvider> DataProviderPtr_t;
 
 
-//################################
+
 
 
 class DataFlavorMapper

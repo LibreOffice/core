@@ -27,14 +27,14 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OSingleFeatureDispatcher
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XDispatch
                                     >   OSingleFeatureDispatcher_Base;
 
@@ -121,9 +121,9 @@ namespace svx
         void    getUnoState( ::com::sun::star::frame::FeatureStateEvent& /* [out] */ _rState ) const;
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif
 

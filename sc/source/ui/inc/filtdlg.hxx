@@ -38,7 +38,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
-//----------------------------------------------------------------------------
+
 
 class ScFilterOptionsMgr;
 class ScViewData;
@@ -74,22 +74,22 @@ private:
     ListBox*         pLbField1;
     ListBox*         pLbCond1;
     ComboBox*        pEdVal1;
-    //----------------------------
+
     ListBox*         pLbConnect2;
     ListBox*         pLbField2;
     ListBox*         pLbCond2;
     ComboBox*        pEdVal2;
-    //----------------------------
+
     ListBox*         pLbConnect3;
     ListBox*         pLbField3;
     ListBox*         pLbCond3;
     ComboBox*        pEdVal3;
-    //----------------------------
+
     ListBox*         pLbConnect4;
     ListBox*         pLbField4;
     ListBox*         pLbCond4;
     ComboBox*        pEdVal4;
-    //----------------------------
+
     ScrollBar*       pScrollBar;
     VclExpander*     pExpander;
 

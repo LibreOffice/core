@@ -32,7 +32,7 @@
 #include "smdll.hxx"
 
 
-////////////////////////////////////////////////////////////
+
 
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.
@@ -45,7 +45,7 @@ SmViewShell * SmGetActiveView()
 }
 
 
-////////////////////////////////////////////////////////////
+
 
 
 /**************************************************************************/
@@ -232,7 +232,7 @@ void SmFontPickListBox::Remove(const Font &rFont)
     return;
 }
 
-////////////////////////////////////////
+
 
 bool IsItalic( const Font &rFont )
 {

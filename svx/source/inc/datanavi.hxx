@@ -56,11 +56,11 @@
 
 class FmFormShell;
 
-//========================================================================
-//............................................................................
+
+
 namespace svxform
 {
-//............................................................................
+
 
     enum DataGroupType
     {
@@ -111,7 +111,7 @@ namespace svxform
     typedef std::vector< XContainer_ref >                           ContainerList;
     typedef std::vector< XEventTarget_ref >                         EventTargetList;
 
-    //========================================================================
+
     class DataTreeListBox : public SvTreeListBox
     {
     private:
@@ -230,7 +230,7 @@ namespace svxform
         }
     };
 
-    //========================================================================
+
     class XFormsPage : public TabPage
     {
     private:
@@ -300,7 +300,7 @@ namespace svxform
         inline XFormsUIHelper1_ref GetXFormsHelper( void ) const { return m_xUIHelper; }
     };
 
-    //========================================================================
+
 
     typedef std::vector< XFormsPage* >          PageList;
     typedef ::rtl::Reference < DataListener >   DataListener_ref;
@@ -370,7 +370,7 @@ namespace svxform
         inline void                 DisableNotify( bool _bDisable ) { m_bIsNotifyDisabled = _bDisable; }
     };
 
-    //========================================================================
+
     class DataNavigator : public SfxDockingWindow, public SfxControllerItem
     {
     private:
@@ -395,7 +395,7 @@ namespace svxform
                                                   const SfxPoolItem* pState );
     };
 
-    //========================================================================
+
     class SVX_DLLPUBLIC DataNavigatorManager : public SfxChildWindow
     {
     public:
@@ -404,7 +404,7 @@ namespace svxform
         SFX_DECL_CHILDWINDOW( DataNavigatorManager );
     };
 
-    //========================================================================
+
     class AddDataItemDialog : public ModalDialog
     {
     private:
@@ -461,7 +461,7 @@ namespace svxform
         void                InitText( DataItemType _eType );
     };
 
-    //========================================================================
+
     class AddConditionDialog : public ModalDialog
     {
     private:
@@ -494,7 +494,7 @@ namespace svxform
         }
     };
 
-    //========================================================================
+
     class NamespaceItemDialog : public ModalDialog
     {
     private:
@@ -522,7 +522,7 @@ namespace svxform
         ~NamespaceItemDialog();
     };
 
-    //========================================================================
+
     class ManageNamespaceDialog : public ModalDialog
     {
     private:
@@ -546,7 +546,7 @@ namespace svxform
         OUString GetURL() const { return m_pUrlED->GetText(); }
     };
 
-    //========================================================================
+
     class AddSubmissionDialog : public ModalDialog
     {
     private:
@@ -584,7 +584,7 @@ namespace svxform
         inline const XSubmission_ref& GetNewSubmission() const { return m_xNewSubmission; }
     };
 
-    //========================================================================
+
     class AddModelDialog : public ModalDialog
     {
     private:
@@ -601,7 +601,7 @@ namespace svxform
         void             SetModifyDoc( const bool bModify ) { m_pModifyCB->Check( bModify ); }
     };
 
-    //========================================================================
+
     class AddInstanceDialog : public ModalDialog
     {
     private:
@@ -633,16 +633,16 @@ namespace svxform
         void             SetLinkInstance( bool _bLink ) { m_pLinkInstanceCB->Check( _bLink != false ); }
     };
 
-    //========================================================================
+
     class LinkedInstanceWarningBox : public MessBox
     {
     public:
         LinkedInstanceWarningBox( Window* pParent );
     };
 
-//............................................................................
+
 }   // namespace svxform
-//............................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 

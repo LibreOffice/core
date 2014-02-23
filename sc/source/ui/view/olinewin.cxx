@@ -27,7 +27,7 @@
 #include "dbfunc.hxx"
 #include "sc.hrc"
 
-// ============================================================================
+
 
 const long SC_OL_BITMAPSIZE                 = 12;
 const long SC_OL_POSOFFSET                  = 2;
@@ -40,7 +40,7 @@ const sal_uInt16 SC_OL_IMAGE_MINUS              = SC_OL_IMAGE_PLUS + 1;
 const sal_uInt16 SC_OL_IMAGE_NOTPRESSED         = SC_OL_IMAGE_MINUS + 1;
 const sal_uInt16 SC_OL_IMAGE_PRESSED            = SC_OL_IMAGE_NOTPRESSED + 1;
 
-// ============================================================================
+
 
 ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eMode, ScViewData* pViewData, ScSplitPos eWhich ) :
     Window( pParent ),
@@ -1023,6 +1023,6 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,14 +26,14 @@
 
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ReportFormula
-    //====================================================================
+
     class REPORTDESIGN_DLLPUBLIC ReportFormula
     {
     public:
@@ -103,23 +103,23 @@ namespace rptui
         void    impl_construct( const OUString& _rFormula );
     };
 
-    //--------------------------------------------------------------------
+
     inline OUString ReportFormula::getFieldName() const
     {
         OSL_PRECOND( getType() == Field, "ReportFormula::getFieldName: not bound to a field!" );
         return getUndecoratedContent();
     }
 
-    //--------------------------------------------------------------------
+
     inline OUString ReportFormula::getExpression() const
     {
         OSL_PRECOND( getType() == Expression, "ReportFormula::getExpression: not bound to an expression!" );
         return getUndecoratedContent();
     }
 
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 #endif // REPORTFORMULA_HXX
 

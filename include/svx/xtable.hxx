@@ -51,9 +51,9 @@ extern sal_Unicode pszStandard[]; // "standard"
 // enum COL_NAME nicht verglichen werden kann.
 SVX_DLLPUBLIC Color RGB_Color( ColorData nColorName );
 
-// ------------------
+
 // class XColorEntry
-// ------------------
+
 
 class SVX_DLLPUBLIC XColorEntry : public XPropertyEntry
 {
@@ -70,9 +70,9 @@ public:
     }
 };
 
-// --------------------
+
 // class XLineEndEntry
-// --------------------
+
 
 class SVX_DLLPUBLIC XLineEndEntry : public XPropertyEntry
 {
@@ -89,9 +89,9 @@ public:
     }
 };
 
-// ------------------
+
 // class XDashEntry
-// ------------------
+
 
 class SVX_DLLPUBLIC XDashEntry : public XPropertyEntry
 {
@@ -108,9 +108,9 @@ public:
     }
 };
 
-// ------------------
+
 // class XHatchEntry
-// ------------------
+
 
 class SVX_DLLPUBLIC XHatchEntry : public XPropertyEntry
 {
@@ -127,9 +127,9 @@ public:
     }
 };
 
-// ---------------------
+
 // class XGradientEntry
-// ---------------------
+
 
 class SVX_DLLPUBLIC XGradientEntry : public XPropertyEntry
 {
@@ -146,9 +146,9 @@ public:
     }
 };
 
-// ---------------------
+
 // class XBitmapEntry
-// ---------------------
+
 
 class SVX_DLLPUBLIC XBitmapEntry : public XPropertyEntry
 {
@@ -165,9 +165,9 @@ public:
     }
 };
 
-// --------------------
+
 // class XPropertyList
-// --------------------
+
 
 enum XPropertyListType {
     XCOLOR_LIST,
@@ -272,9 +272,9 @@ public:
     inline XGradientListRef AsGradientList();
 };
 
-// ------------------
+
 // class XColorList
-// ------------------
+
 
 class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
@@ -298,9 +298,9 @@ public:
     static XColorListRef GetStdColorList(); // returns a singleton
 };
 
-// -------------------
+
 // class XLineEndList
-// -------------------
+
 
 class SVX_DLLPUBLIC XLineEndList : public XPropertyList
 {
@@ -319,9 +319,9 @@ public:
     virtual bool Create();
 };
 
-// -------------------
+
 // class XDashList
-// -------------------
+
 
 class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
@@ -358,9 +358,9 @@ public:
     OUString GetStringForUiNoLine() const;
 };
 
-// -------------------
+
 // class XHatchList
-// -------------------
+
 
 class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
@@ -381,9 +381,9 @@ public:
     virtual bool Create();
 };
 
-// -------------------
+
 // class XGradientList
-// -------------------
+
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
 protected:
@@ -403,9 +403,9 @@ public:
     virtual bool Create();
 };
 
-// -------------------
+
 // class XBitmapList
-// -------------------
+
 
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {

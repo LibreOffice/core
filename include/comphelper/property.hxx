@@ -28,21 +28,21 @@
 #include <comphelper/comphelperdllapi.h>
 #include <cppu/unotype.hxx>
 
-//=========================================================================
+
 //= property helper classes
-//=========================================================================
+
 
 //... namespace comphelper .......................................................
 namespace comphelper
 {
-//.........................................................................
+
 
     namespace starbeans = ::com::sun::star::beans;
     namespace staruno   = ::com::sun::star::uno;
 
 /** compare two properties by name
 */
-    //--------------------------------------------------------------------------
+
     // comparing two property instances
     struct PropertyCompareByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
     {
@@ -52,23 +52,23 @@ namespace comphelper
         }
     };
 
-    //--------------------------------------------------------------------------
+
     /** compare two properties by name
      */
     struct PropertyStringEqualFunctor : ::std::binary_function< ::com::sun::star::beans::Property, OUString, bool >
     {
-        // ................................................................
+
         inline bool operator()( const ::com::sun::star::beans::Property& lhs, const OUString& rhs ) const
         {
             return lhs.Name == rhs ;
         }
-        // ................................................................
+
         inline bool operator()( const OUString& lhs, const ::com::sun::star::beans::Property& rhs ) const
         {
             return lhs == rhs.Name ;
         }
     };
-    //--------------------------------------------------------------------------
+
     // comparing two property instances
     struct PropertyEqualByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
     {
@@ -78,11 +78,11 @@ namespace comphelper
         }
     };
 
-//------------------------------------------------------------------
+
 /// remove the property with the given name from the given sequence
 COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>& seqProps, const OUString& _rPropName);
 
-//------------------------------------------------------------------
+
 /** within the given property sequence, modify attributes of a special property
     @param  _rProps         the sequence of properties to search in
     @param  _sPropName      the name of the property which's attributes should be modified
@@ -91,21 +91,21 @@ COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>&
 */
 COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
 
-//------------------------------------------------------------------
+
 /** check if the given set has the given property.
 */
 COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
 
-//------------------------------------------------------------------
+
 /** copy properties between property sets, in compliance with the property
     attributes of the target object
 */
 COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource,
                     const staruno::Reference<starbeans::XPropertySet>& _rxDest);
 
-//==================================================================
+
 //= property conversion helpers
-//==================================================================
+
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
     @param          _rConvertedValue    the conversion result (if successful)
@@ -196,7 +196,7 @@ inline bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any
 */
 COMPHELPER_DLLPUBLIC bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, const staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
 
-//.........................................................................
+
 }
 //... namespace comphelper .......................................................
 

@@ -117,11 +117,11 @@ typedef _LPOPENFILENAMEA _LPOPENFILENAME;
 #endif // (_WIN32_WINNT >= 0x0500)
 
 
-//-------------------------------------------------------------
+
 // A simple wrapper class around the Win32 GetOpenFileName API.
 // This class is not thread-safe and only one instance at a
 // time is allowed
-//-------------------------------------------------------------
+
 
 class CFileOpenDialog
 {

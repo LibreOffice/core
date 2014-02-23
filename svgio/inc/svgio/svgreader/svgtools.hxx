@@ -26,7 +26,7 @@
 #include <svgio/svgreader/svgpaint.hxx>
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -229,7 +229,7 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_SVGIO_SVGREADER_SVGTOOLS_HXX
 

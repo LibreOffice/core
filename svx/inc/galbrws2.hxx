@@ -33,9 +33,9 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-// ----------------------
+
 // - GalleryBrowserMode -
-// ----------------------
+
 
 enum GalleryBrowserMode
 {
@@ -45,9 +45,9 @@ enum GalleryBrowserMode
     GALLERYBROWSERMODE_PREVIEW = 3
 };
 
-// -----------------
+
 // - GalleryTravel -
-// -----------------
+
 
 enum GalleryBrowserTravel
 {
@@ -58,17 +58,17 @@ enum GalleryBrowserTravel
     GALLERYBROWSERTRAVEL_NEXT = 4
 };
 
-// ------------------------
+
 // - GalleryItemTextFlags -
-// ------------------------
+
 
 #define GALLERY_ITEM_THEMENAME  0x00000001
 #define GALLERY_ITEM_TITLE      0x00000002
 #define GALLERY_ITEM_PATH       0x00000004
 
-// ------------------
+
 // - GalleryToolBox -
-// ------------------
+
 
 class GalleryToolBox : public ToolBox
 {
@@ -82,9 +82,9 @@ public:
                     ~GalleryToolBox();
 };
 
-// -------------------
+
 // - GalleryBrowser2 -
-// -------------------
+
 
 class Gallery;
 class GalleryTheme;

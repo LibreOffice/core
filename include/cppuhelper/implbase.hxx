@@ -146,7 +146,7 @@ CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_TH
 // settle down beavis, here comes the macro template hell :]
 //
 
-//==================================================================================================
+
 
 #if defined _MSC_VER // public -> protected changes mangled names there
 #define CPPUHELPER_DETAIL_IMPLHELPER_PROTECTED public
@@ -281,7 +281,7 @@ ClassData##N WeakAggImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 2 );
 */
 #define __DEF_IMPLHELPER_POST_C( N ) \
 }
-//==================================================================================================
+
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
 */
 #define __DEF_IMPLHELPER_POST( N ) \

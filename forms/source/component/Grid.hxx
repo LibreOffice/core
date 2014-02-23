@@ -31,16 +31,16 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase7.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
 class OGridColumn;
 
-//==================================================================
+
 // ColumnDescription
-//==================================================================
+
 
     struct ColumnDescription : public ElementDescription
     {
@@ -48,9 +48,9 @@ class OGridColumn;
         OGridColumn*                pColumn;        // not owned by this instance! only to prevent duplicate XUnoTunnel usage
     };
 
-//==================================================================
+
 // OGridControlModel
-//==================================================================
+
 typedef ::cppu::ImplHelper7 <   ::com::sun::star::awt::XControlModel
                             ,   ::com::sun::star::form::XGridColumnFactory
                             ,   ::com::sun::star::form::XReset
@@ -201,9 +201,9 @@ protected:
     void cloneColumns( const OGridControlModel* _pOriginalContainer );
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

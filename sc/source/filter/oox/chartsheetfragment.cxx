@@ -29,12 +29,12 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::oox::core;
 
 
-// ============================================================================
+
 
 ChartsheetFragment::ChartsheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath )

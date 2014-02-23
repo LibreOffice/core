@@ -60,10 +60,10 @@ using ::com::sun::star::uno::RuntimeException;
 
 using ::sd::framework::FrameworkHelper;
 
-// ____________________________
+
 //
 // ::sd::impl::TransitionEffect
-// ____________________________
+
 
 namespace sd
 {
@@ -232,10 +232,10 @@ struct TransitionEffect
 } // namespace impl
 } // namespace sd
 
-// ______________________
+
 //
 // Local Helper Functions
-// ______________________
+
 
 namespace
 {
@@ -421,10 +421,10 @@ void lcl_FillSoundListBox(
 namespace sd
 {
 
-// ___________________
+
 //
 // SlideTransitionPane
-// ___________________
+
 
 SlideTransitionPane::SlideTransitionPane(
     ::Window * pParent,

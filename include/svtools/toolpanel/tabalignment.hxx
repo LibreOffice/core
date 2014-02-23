@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SVTOOLS_TOOLPANEL_TABALIGNMENT_HXX
 #define INCLUDED_SVTOOLS_TOOLPANEL_TABALIGNMENT_HXX
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     enum TabAlignment
     {
@@ -33,9 +33,9 @@ namespace svt
         TABS_BOTTOM
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TABALIGNMENT_HXX
 

@@ -35,14 +35,14 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <unotools/configitem.hxx>
 
-// .......................................................................
+
 namespace svt
 {
-// .......................................................................
 
-    // ===================================================================
+
+
     // = AddressBookSourceDialog
-    // ===================================================================
+
     struct AddressBookSourceDialogData;
     class SVT_DLLPUBLIC AddressBookSourceDialog : public ModalDialog
     {
@@ -136,9 +136,9 @@ namespace svt
     };
 
 
-// .......................................................................
+
 }   // namespace svt
-// .......................................................................
+
 
 #endif // INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
 

@@ -33,10 +33,10 @@
 namespace connectivity
 {
 
-    //==========================================================================
+
     //= OConnectionWrapper - wraps all methods to the real connection from the driver
     //= but when disposed it doesn't dispose the real connection
-    //==========================================================================
+
     typedef ::cppu::ImplHelper2<        ::com::sun::star::lang::XServiceInfo,
                                         ::com::sun::star::lang::XUnoTunnel
                                 > OConnection_BASE;

@@ -334,7 +334,7 @@ double ArrayImpl::GetVerDiagAngle( size_t nCol, size_t nRow, bool bSimple ) cons
     return (fAngle > 0.0) ? (F_PI2 - fAngle) : 0.0;
 }
 
-// ============================================================================
+
 
 class MergedCellIterator
 {
@@ -377,7 +377,7 @@ MergedCellIterator& MergedCellIterator::operator++()
     return *this;
 }
 
-// ============================================================================
+
 
 #define DBG_FRAME_CHECK( cond, funcname, error )        DBG_ASSERT( cond, "svx::frame::Array::" funcname " - " error )
 #define DBG_FRAME_CHECK_COL( col, funcname )            DBG_FRAME_CHECK( (col) < GetColCount(), funcname, "invalid column index" )
@@ -1351,7 +1351,7 @@ void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
 #undef DBG_FRAME_CHECK_COL
 #undef DBG_FRAME_CHECK
 
-// ============================================================================
+
 
 } // namespace frame
 } // namespace svx

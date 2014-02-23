@@ -31,10 +31,10 @@
 
 class PushButton;
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     class PanelTabBar_Impl;
     class IToolPanelDeck;
@@ -87,9 +87,9 @@ namespace svt
         ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_PANELTABBAR_HXX
 

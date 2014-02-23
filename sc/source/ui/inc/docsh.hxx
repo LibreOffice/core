@@ -76,7 +76,7 @@ struct DocShell_Impl;
 
 typedef ::boost::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
-//==================================================================
+
 
 //enum ScDBFormat { SC_FORMAT_SDF, SC_FORMAT_DBF };
 

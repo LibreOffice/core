@@ -123,7 +123,7 @@ const SmFontStyles & GetFontStyles()
     return aImpl;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 void SetFontStyle(const OUString &rStyleName, Font &rFont)
 {
@@ -1350,7 +1350,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 void SmSymbolDialog::FillSymbolSets(bool bDeleteText)
     // populate the entries of possible SymbolsSets in the dialog with
@@ -1563,7 +1563,7 @@ const SmSym * SmSymbolDialog::GetSymbol() const
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 
 void SmShowChar::Paint(const Rectangle &rRect)
@@ -1608,7 +1608,7 @@ void SmShowChar::SetSymbol( sal_UCS4 cChar, const Font &rFont )
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
 {

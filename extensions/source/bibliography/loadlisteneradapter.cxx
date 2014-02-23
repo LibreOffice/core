@@ -21,18 +21,18 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 
-//.........................................................................
+
 namespace bib
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::form;
 
-    //=====================================================================
+
     //= OComponentListener
-    //=====================================================================
+
 
     OComponentListener::~OComponentListener()
     {
@@ -69,9 +69,9 @@ namespace bib
         }
     }
 
-    //=====================================================================
+
     //= OComponentAdapterBase
-    //=====================================================================
+
 
     OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp, sal_Bool _bAutoRelease )
         :m_xComponent( _rxComp )
@@ -144,9 +144,9 @@ namespace bib
             m_xComponent = NULL;
     }
 
-    //=====================================================================
+
     //= OLoadListenerAdapter
-    //=====================================================================
+
 
     OLoadListenerAdapter::OLoadListenerAdapter( const Reference< XLoadable >& _rxLoadable, sal_Bool _bAutoRelease )
         :OComponentAdapterBase( Reference< XComponent >( _rxLoadable, UNO_QUERY ), _bAutoRelease )
@@ -223,8 +223,8 @@ namespace bib
             getLoadListener( )->_reloaded( _rEvent );
     }
 
-//.........................................................................
+
 }   // namespace bib
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

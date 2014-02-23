@@ -30,9 +30,9 @@ using namespace connectivity;
 #define THROW_WHERE ""
 #endif
 
-//**************************************************************
+
 //************ Class: java.io.InputStream
-//**************************************************************
+
 
 jclass java_io_InputStream::theClass = 0;
 java_io_InputStream::java_io_InputStream( JNIEnv * pEnv, jobject myObj )

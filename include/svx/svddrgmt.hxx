@@ -47,7 +47,7 @@ public:
     bool getAddToTransparent() const { return mbAddToTransparent; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC SdrDragEntryPolyPolygon : public SdrDragEntry
 {
@@ -61,7 +61,7 @@ public:
     virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SdrDragEntrySdrObject : public SdrDragEntry
 {
@@ -84,7 +84,7 @@ public:
     virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SdrDragEntryPrimitive2DSequence : public SdrDragEntry
 {
@@ -100,7 +100,7 @@ public:
     virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SdrDragEntryPointGlueDrag : public SdrDragEntry
 {
@@ -115,7 +115,7 @@ public:
     virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC SdrDragMethod
 {
@@ -219,7 +219,7 @@ inline const Rectangle& SdrDragMethod::GetMarkedRect() const
            getSdrDragView().GetMarkedObjRect();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragMove
 
 class SVX_DLLPUBLIC SdrDragMove : public SdrDragMethod
@@ -249,7 +249,7 @@ public:
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragResize
 
 class SVX_DLLPUBLIC SdrDragResize : public SdrDragMethod
@@ -272,7 +272,7 @@ public:
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //   SdrDragObjOwn
 
 class SVX_DLLPUBLIC SdrDragObjOwn : public SdrDragMethod

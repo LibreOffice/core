@@ -138,7 +138,7 @@ struct SfxItemPool_Impl
                       SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** pArr);
 };
 
-// -----------------------------------------------------------------------
+
 
 // IBM-C-Set mag keine doppelten Defines
 #ifdef DBG

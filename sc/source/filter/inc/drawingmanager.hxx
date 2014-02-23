@@ -33,13 +33,13 @@ namespace oox { namespace drawingml { class ShapePropertyMap; } }
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 const sal_uInt16 BIFF_OBJ_INVALID_ID        = 0;
 
-// ============================================================================
+
 // Model structures for BIFF OBJ record data
-// ============================================================================
+
 
 /** This structure contains line formatting attributes from an OBJ record. */
 struct BiffObjLineModel
@@ -52,7 +52,7 @@ struct BiffObjLineModel
     explicit            BiffObjLineModel();
 };
 
-// ============================================================================
+
 
 /** This structure contains fill formatting attributes from an OBJ record. */
 struct BiffObjFillModel
@@ -65,15 +65,15 @@ struct BiffObjFillModel
     explicit            BiffObjFillModel();
 };
 
-// ============================================================================
+
 // BIFF drawing objects
-// ============================================================================
+
 
 class BiffDrawingBase;
 class BiffDrawingObjectBase;
 typedef ::boost::shared_ptr< BiffDrawingObjectBase > BiffDrawingObjectRef;
 
-// ----------------------------------------------------------------------------
+
 
 class BiffDrawingObjectContainer
 {
@@ -93,7 +93,7 @@ private:
     BiffDrawingObjectVector maObjects;
 };
 
-// ============================================================================
+
 
 /** Base class for all BIFF drawing objects (OBJ records). */
 class BiffDrawingObjectBase : public WorksheetHelper
@@ -161,9 +161,9 @@ private:
     bool                mbCustomDff;    /// True = recreate UNO shape in DFF import (BIFF8 only).
 };
 
-// ============================================================================
+
 // BIFF drawing page
-// ============================================================================
+
 
 /** Base class for a container for all objects on a drawing page (in a
     spreadsheet or in an embedded chart object).
@@ -208,7 +208,7 @@ private:
     BiffObjIdVector     maSkipObjs;         /// Identifiers of all objects to be skipped.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Drawing manager of a single sheet. */
 class BiffSheetDrawing : public BiffDrawingBase
@@ -222,7 +222,7 @@ public:
                             const ::com::sun::star::awt::Rectangle& rShapeRect );
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

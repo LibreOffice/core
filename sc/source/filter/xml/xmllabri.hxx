@@ -24,7 +24,7 @@
 class ScXMLImport;
 
 
-//___________________________________________________________________
+
 
 class ScXMLLabelRangesContext : public SvXMLImportContext
 {
@@ -50,7 +50,7 @@ public:
 };
 
 
-//___________________________________________________________________
+
 
 class ScXMLLabelRangeContext : public SvXMLImportContext
 {

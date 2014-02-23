@@ -65,7 +65,7 @@ template <typename T> struct remove_const<const T>
     typedef T type;
 };
 
-//--------------------------------------------------------------
+
 
 /// Base class for an adaptable ternary functor
 template< typename A1, typename A2, typename A3, typename R > struct TernaryFunctorBase
@@ -76,7 +76,7 @@ template< typename A1, typename A2, typename A3, typename R > struct TernaryFunc
     typedef R  result_type;
 };
 
-//--------------------------------------------------------------
+
 
 /** template meta function: ensure that given integer type is unsigned
 
@@ -107,7 +107,7 @@ template< typename T > inline typename make_unsigned<T>::type unsigned_cast( T v
     return static_cast< typename make_unsigned<T>::type >(value);
 }
 
-//--------------------------------------------------------------
+
 
 /// returns true, if given number is strictly less than 0
 template< typename T > inline bool is_negative( T x )
@@ -122,7 +122,7 @@ inline bool is_negative( int x )
     return static_cast<unsigned int>(x) >> (sizeof(int)*8-1);
 }
 
-//--------------------------------------------------------------
+
 
 /// Results in VigraTrueType, if T is of integer type and scalar
 template< typename T, typename trueCase, typename falseCase >
@@ -166,7 +166,7 @@ struct ifBothScalarIntegral
         falseCase >::type type;
 };
 
-//--------------------------------------------------------------
+
 
 /// Count number of trailing zeros
 template< unsigned int val > struct numberOfTrailingZeros
@@ -182,7 +182,7 @@ template<> struct numberOfTrailingZeros<0>
     enum { value = 0 };
 };
 
-//--------------------------------------------------------------
+
 
 /// Count number of one bits
 template< unsigned int val > struct bitcount
@@ -196,7 +196,7 @@ template<> struct bitcount<0>
     enum { value = 0 };
 };
 
-//--------------------------------------------------------------
+
 
 /// Shift left for positive shift value, and right otherwise
 template< typename T > inline T shiftLeft( T v, int shift )
@@ -210,7 +210,7 @@ template< typename T > inline T shiftRight( T v, int shift )
     return shift > 0 ? v >> shift : v << (-shift);
 }
 
-//--------------------------------------------------------------
+
 
 /// Replace non-std project2nd from SGI extensions
 template< typename T1, typename T2 >

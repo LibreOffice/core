@@ -25,7 +25,7 @@
 
 class SfxItemSet;
 
-//--------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxItemSetHint: public SfxHint
 {

@@ -1880,9 +1880,9 @@ stardiv_Toolkit_UnoGroupBoxControl_get_implementation(
     return cppu::acquire(new UnoGroupBoxControl());
 }
 
-// =====================================================================================================================
+
 // = UnoControlListBoxModel_Data
-// =====================================================================================================================
+
 struct ListItem
 {
     OUString ItemText;
@@ -1982,9 +1982,9 @@ private:
     ::std::vector< ListItem >   m_aListItems;
 };
 
-// =====================================================================================================================
+
 // = UnoControlListBoxModel
-// =====================================================================================================================
+
 
 UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XComponentContext >& rxContext, ConstructorMode const i_mode )
     :UnoControlListBoxModel_Base( rxContext )

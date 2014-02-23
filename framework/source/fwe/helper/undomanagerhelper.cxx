@@ -34,10 +34,10 @@
 #include <queue>
 #include <boost/function.hpp>
 
-//......................................................................................................................
+
 namespace framework
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -65,9 +65,9 @@ namespace framework
     using ::com::sun::star::util::XModifyListener;
     using ::svl::IUndoManager;
 
-    //==================================================================================================================
+
     //= UndoActionWrapper
-    //==================================================================================================================
+
     class UndoActionWrapper : public SfxUndoAction
     {
     public:
@@ -141,9 +141,9 @@ namespace framework
         return false;
     }
 
-    //==================================================================================================================
+
     //= UndoManagerRequest
-    //==================================================================================================================
+
     class UndoManagerRequest : public ::comphelper::AnyEvent
     {
     public:
@@ -197,9 +197,9 @@ namespace framework
 
 
 
-    //==================================================================================================================
+
     //= UndoManagerHelper_Impl
-    //==================================================================================================================
+
     class UndoManagerHelper_Impl : public SfxUndoListener
     {
     private:
@@ -241,13 +241,13 @@ namespace framework
         {
         }
 
-        //..............................................................................................................
+
         IUndoManager& getUndoManager() const
         {
             return m_rUndoManagerImplementation.getImplUndoManager();
         }
 
-        //..............................................................................................................
+
         Reference< XUndoManager > getXUndoManager() const
         {
             return m_rUndoManagerImplementation.getThis();
@@ -921,9 +921,9 @@ namespace framework
         // TODO: do we need to care? Or is this the responsibility of our owner?
     }
 
-    //==================================================================================================================
+
     //= UndoManagerHelper
-    //==================================================================================================================
+
 
     UndoManagerHelper::UndoManagerHelper( IUndoManagerImplementation& i_undoManagerImpl )
         :m_pImpl( new UndoManagerHelper_Impl( i_undoManagerImpl ) )
@@ -1032,7 +1032,7 @@ namespace framework
 
     namespace
     {
-        //..............................................................................................................
+
         OUString lcl_getCurrentActionTitle( UndoManagerHelper_Impl& i_impl, const bool i_undo )
         {
             // SYNCHRONIZED --->
@@ -1054,7 +1054,7 @@ namespace framework
             // <--- SYNCHRONIZED
         }
 
-        //..............................................................................................................
+
         Sequence< OUString > lcl_getAllActionTitles( UndoManagerHelper_Impl& i_impl, const bool i_undo )
         {
             // SYNCHRONIZED --->
@@ -1170,8 +1170,8 @@ namespace framework
             m_pImpl->removeModifyListener( i_listener );
     }
 
-//......................................................................................................................
+
 } // namespace framework
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

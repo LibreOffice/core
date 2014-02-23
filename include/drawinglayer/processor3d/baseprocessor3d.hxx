@@ -25,7 +25,7 @@
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -68,7 +68,7 @@ namespace drawinglayer
     } // end of namespace processor3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 

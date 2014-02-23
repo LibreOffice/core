@@ -47,7 +47,7 @@ namespace vml {
 class ShapeBase;
 struct ClientData;
 
-// ============================================================================
+
 
 /** Enumerates different types of VML drawings. */
 enum DrawingType
@@ -57,7 +57,7 @@ enum DrawingType
     VMLDRAWING_POWERPOINT       ///< PowerPoint: OLE objects are part of DrawingML.
 };
 
-// ============================================================================
+
 
 /** Contains information about an OLE object embedded in a draw page. */
 struct OOX_DLLPUBLIC OleObjectInfo : public ::oox::ole::OleObjectInfo
@@ -88,7 +88,7 @@ struct OOX_DLLPUBLIC ControlInfo
     void                setShapeId( sal_Int32 nShapeId );
 };
 
-// ============================================================================
+
 
 /** Represents the collection of VML shapes for a complete draw page. */
 class OOX_DLLPUBLIC Drawing
@@ -203,7 +203,7 @@ private:
     const DrawingType   meType;             ///< Application type containing the drawing.
 };
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

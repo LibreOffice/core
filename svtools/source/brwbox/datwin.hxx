@@ -27,13 +27,13 @@
 #include <svtools/transfer.hxx>
 #include <vector>
 
-//===================================================================
+
 
 #define MIN_COLUMNWIDTH  2
 
 typedef ::std::vector< Rectangle* > RectangleList;
 
-//===================================================================
+
 
 class ButtonFrame
 {
@@ -63,7 +63,7 @@ public:
     void    Draw( OutputDevice& rDev );
 };
 
-//===================================================================
+
 
 class BrowserColumn
 {
@@ -95,7 +95,7 @@ public:
     void                ZoomChanged(const Fraction& rNewZoom);
 };
 
-//===================================================================
+
 
 class BrowserDataWin
             :public Control
@@ -181,7 +181,7 @@ protected:
     sal_Bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
 };
 
-//-------------------------------------------------------------------
+
 
 inline void BrowserDataWin::Repaint()
 {
@@ -190,7 +190,7 @@ inline void BrowserDataWin::Repaint()
     Paint( Rectangle( Point(), GetOutputSizePixel() ) );
 }
 
-//===================================================================
+
 
 class BrowserScrollBar: public ScrollBar
 {
@@ -212,12 +212,12 @@ public:
     virtual void    EndScroll();
 };
 
-//===================================================================
+
 
 void InitSettings_Impl( Window *pWin,
          sal_Bool bFont = sal_True, sal_Bool bForeground = sal_True, sal_Bool bBackground = sal_True );
 
-//===================================================================
+
 
 #endif
 

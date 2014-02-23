@@ -37,7 +37,7 @@
 class SvXMLUnitConverter;
 class XMLPropertyHandler;
 
-///////////////////////////////////////////////////////////////////////////
+
 //
 /** Helper-class for XML-im/export:
     - Holds a pointer to a given array of XMLPropertyMapEntry

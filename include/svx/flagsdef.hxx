@@ -90,7 +90,7 @@ enum SvxModeType
 #define TABFILL_SPECIAL     0x0100
 #define TABFILL_ALL         0x01F0
 
-//-----
+
 
 #endif
 

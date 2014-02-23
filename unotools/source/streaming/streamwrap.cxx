@@ -28,9 +28,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-//==================================================================
+
 //= OInputStreamWrapper
-//==================================================================
+
 DBG_NAME(OInputStreamWrapper)
 
 OInputStreamWrapper::OInputStreamWrapper( SvStream& _rStream )
@@ -157,9 +157,9 @@ void OInputStreamWrapper::checkError() const
         throw stario::NotConnectedException(OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
 
-//==================================================================
+
 //= OSeekableInputStreamWrapper
-//==================================================================
+
 
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream& _rStream)
 {
@@ -211,9 +211,9 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  ) throw (IOException
     return (sal_Int64)nEndPos;
 }
 
-//==================================================================
+
 //= OOutputStreamWrapper
-//==================================================================
+
 
 OOutputStreamWrapper::OOutputStreamWrapper(SvStream& _rStream):
     rStream(_rStream)
@@ -253,9 +253,9 @@ void OOutputStreamWrapper::checkError() const
         throw stario::NotConnectedException(OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
 
-//==================================================================
+
 //= OSeekableOutputStreamWrapper
-//==================================================================
+
 
 OSeekableOutputStreamWrapper::OSeekableOutputStreamWrapper(SvStream& _rStream)
     :OOutputStreamWrapper(_rStream)

@@ -26,7 +26,7 @@
 #include <tools/shl.hxx>
 #include <vcl/outdev.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // ExchangeFormat-Id der DrawingEngine holen. Daten koennen dann per
 //   static sal_Bool CopyData(pData,nLen,nFormat);
@@ -108,7 +108,7 @@ class SfxItemSet;
 // Bei XFILL_NONE gibt's sal_False und rCol bleibt unveraendert.
 SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // Ein ItemSet auf Outliner- bzw. EditEngine-Items durchsuchen
 // Liefert sal_True, wenn der Set solchen Items enthaelt.
@@ -118,7 +118,7 @@ sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal
 // man dann irgendwann mit delete platthauen muss.
 sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 class Link;
 
@@ -250,13 +250,13 @@ namespace sdr
     SVX_DLLPUBLIC OUString GetResourceString(sal_uInt16 nResID);
 }
 
-/////////////////////////////////////////////////////////////////////
+
 // #i101872# isolated GetTextEditBackgroundColor for tooling
 class SdrObjEditView;
 
 SVX_DLLPUBLIC Color GetTextEditBackgroundColor(const SdrObjEditView& rView);
 
-/////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDETC_HXX
 

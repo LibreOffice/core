@@ -34,14 +34,14 @@ class SvXMLImportContext;
 class SvXMLStylesContext;
 class XMLPropStyleContext;
 
-//.........................................................................
+
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OFormLayerXMLImport
-    //=====================================================================
+
     class OFormLayerXMLImport_Impl;
     /** allows you to import a &lt;form:form&gt; element
     */
@@ -127,9 +127,9 @@ namespace xmloff
         void documentDone( );
     };
 
-//.........................................................................
+
 }   // namespace xmloff
-//.........................................................................
+
 
 #endif // INCLUDED_XMLOFF_FORMLAYERIMPORT_HXX
 

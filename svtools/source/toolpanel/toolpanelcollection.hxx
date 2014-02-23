@@ -24,16 +24,16 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     struct ToolPanelCollection_Data;
 
-    //====================================================================
+
     //= ToolPanelCollection
-    //====================================================================
+
     class ToolPanelCollection : public IToolPanelDeck
     {
     public:
@@ -55,9 +55,9 @@ namespace svt
         ::std::auto_ptr< ToolPanelCollection_Data > m_pData;
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELCOLLECTION_HXX
 

@@ -66,7 +66,7 @@ namespace slideshow
                 ::com::sun::star::drawing::XShape > getXShape() const;
 
             // animation methods
-            //------------------------------------------------------------------
+
 
             virtual void play();
             virtual void stop();
@@ -75,7 +75,7 @@ namespace slideshow
             virtual void setMediaTime(double);
 
             // render methods
-            //------------------------------------------------------------------
+
 
             virtual bool update() const;
             virtual bool render() const;
@@ -83,7 +83,7 @@ namespace slideshow
 
 
             // Shape attributes
-            //------------------------------------------------------------------
+
 
             virtual ::basegfx::B2DRectangle getBounds() const;
             virtual ::basegfx::B2DRectangle getDomBounds() const;

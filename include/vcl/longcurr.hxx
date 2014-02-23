@@ -26,9 +26,9 @@
 
 class LocaleDataWrapper;
 
-// -------------------------
+
 // - LongCurrencyFormatter -
-// -------------------------
+
 
 class VCL_DLLPUBLIC LongCurrencyFormatter : public FormatterBase
 {
@@ -75,9 +75,9 @@ public:
     BigInt                  GetCorrectedValue() const { return mnCorrectedValue; }
 };
 
-// ---------------------
+
 // - LongCurrencyField -
-// ---------------------
+
 
 class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFormatter
 {
@@ -109,9 +109,9 @@ public:
     BigInt          GetSpinSize() const { return mnSpinSize; }
 };
 
-// -------------------
+
 // - LongCurrencyBox -
-// -------------------
+
 
 class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormatter
 {

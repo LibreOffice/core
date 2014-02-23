@@ -29,7 +29,7 @@
 
 using namespace com::sun::star;
 
-//==================================================================
+
 
 sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts )
 {

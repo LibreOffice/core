@@ -54,9 +54,9 @@ class SwView;
 
 
 
-//----------------------------------------------------------------------------
+
 //
-//----------------------------------------------------------------------------
+
 
 class SwTbxInsertCtrl : public SfxToolBoxControl
 {
@@ -80,9 +80,9 @@ public:
     virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
 };
 
-//----------------------------------------------------------------------------
+
 //
-//----------------------------------------------------------------------------
+
 
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
 {
@@ -130,9 +130,9 @@ public:
 
 
 
-//----------------------------------------------------------------------------
+
 //
-//----------------------------------------------------------------------------
+
 
 class SwScrollNaviToolBox : public ToolBox
 {
@@ -171,9 +171,9 @@ public:
     void                GrabFocus(){aToolBox.GrabFocus();}
 };
 
-//----------------------------------------------------------------------------
+
 //  ImageButtons have to set the HelpText themselves if needed
-//----------------------------------------------------------------------------
+
 
 class SwHlpImageButton : public ImageButton
 {

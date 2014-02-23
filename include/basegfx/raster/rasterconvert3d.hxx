@@ -28,7 +28,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 namespace basegfx
@@ -37,7 +37,7 @@ namespace basegfx
     class B3DPolyPolygon;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // interpolators for double precision
 
 namespace basegfx
@@ -122,7 +122,7 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 // InterpolatorProvider3D to have a common source for allocating interpolators
 // which may then be addressed using the index to the vectors
 
@@ -307,7 +307,7 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 // RasterConversionLineEntry3D for Raterconversion of 3D PolyPolygons
 
 namespace basegfx
@@ -404,7 +404,7 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 // the basic RaterConverter itself. Only one method needs to be overloaded. The
 // class itself is strictly virtual
 
@@ -443,7 +443,7 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 

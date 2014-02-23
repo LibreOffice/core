@@ -21,7 +21,7 @@
 #include "comphelper/serviceinfohelper.hxx"
 #include <stdarg.h>
 
-// #####################################################################
+
 
 namespace comphelper
 {

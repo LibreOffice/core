@@ -26,9 +26,9 @@
 #include <vcl/bitmapex.hxx>
 #include <vector>
 
-// -------------
+
 // - PNGWriter -
-// -------------
+
 
 namespace vcl
 {

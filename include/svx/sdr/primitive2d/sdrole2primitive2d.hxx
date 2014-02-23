@@ -24,10 +24,10 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/attribute/sdrlinefillshadowtextattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -63,7 +63,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SDROLE2PRIMITIVE2D_HXX
 

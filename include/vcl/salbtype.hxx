@@ -30,18 +30,18 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 
-// ----------
+
 // - Memory -
-// ----------
+
 
 typedef sal_uInt8*      HPBYTE;
 typedef HPBYTE      Scanline;
 typedef const sal_uInt8*    ConstHPBYTE;
 typedef ConstHPBYTE ConstScanline;
 
-// ------------------
+
 // - Bitmap formats -
-// ------------------
+
 
 #define BMP_FORMAT_BOTTOM_UP                        0x00000000UL
 #define BMP_FORMAT_TOP_DOWN                         0x80000000UL
@@ -73,7 +73,7 @@ typedef ConstHPBYTE ConstScanline;
 #define BMP_SCANLINE_ADJUSTMENT( Mac_nBmpFormat )   ( (Mac_nBmpFormat) & 0x80000000UL )
 #define BMP_SCANLINE_FORMAT( Mac_nBmpFormat )       ( (Mac_nBmpFormat) & 0x7FFFFFFFUL )
 
-// ------------------------------------------------------------------
+
 
 #define MASK_TO_COLOR( d_nVal, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS, d_Col )                          \
 sal_uLong _def_cR = (sal_uInt8) ( d_RS < 0L ? ( (d_nVal) & d_RM ) << -d_RS : ( (d_nVal) & d_RM ) >> d_RS ); \
@@ -83,7 +83,7 @@ d_Col = BitmapColor( (sal_uInt8) ( _def_cR | ( ( _def_cR & mnROr ) >> mnROrShift
                      (sal_uInt8) ( _def_cG | ( ( _def_cG & mnGOr ) >> mnGOrShift ) ),                   \
                      (sal_uInt8) ( _def_cB | ( ( _def_cB & mnBOr ) >> mnBOrShift ) ) );
 
-// ------------------------------------------------------------------
+
 
 #define COLOR_TO_MASK( d_rCol, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS ) \
 ( ( ( ( d_RS < 0L ) ? ( (sal_uInt32) (d_rCol).GetRed() >> -d_RS ) :     \
@@ -93,9 +93,9 @@ d_Col = BitmapColor( (sal_uInt8) ( _def_cR | ( ( _def_cR & mnROr ) >> mnROrShift
   ( ( ( d_BS < 0L ) ? ( (sal_uInt32) (d_rCol).GetBlue() >> -d_BS ) :    \
     ( (sal_uInt32) (d_rCol).GetBlue() << d_BS ) ) & d_BM ) )
 
-// ---------------
+
 // - BitmapColor -
-// ---------------
+
 
 class Color;
 
@@ -155,9 +155,9 @@ public:
     inline sal_uLong        GetColorError( const BitmapColor& rBitmapColor ) const;
 };
 
-// ---------------
+
 // - BitmapPalette -
-// ---------------
+
 
 class Palette;
 
@@ -198,9 +198,9 @@ public:
     bool                        IsGreyPalette() const;
 };
 
-// ---------------
+
 // - ColorMask -
-// ---------------
+
 
 class VCL_DLLPUBLIC ColorMask
 {
@@ -244,9 +244,9 @@ public:
     inline void         SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
 };
 
-// ---------------
+
 // - BitmapBuffer -
-// ---------------
+
 
 struct VCL_DLLPUBLIC BitmapBuffer
 {
@@ -263,15 +263,15 @@ struct VCL_DLLPUBLIC BitmapBuffer
                     ~BitmapBuffer() {}
 };
 
-// ---------------------
+
 // - StretchAndConvert -
-// ---------------------
+
 
 VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
     sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal = NULL, const ColorMask* pDstMask = NULL );
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor::BitmapColor() :
             mcBlueOrIndex   ( 0 ),
@@ -281,7 +281,7 @@ inline BitmapColor::BitmapColor() :
 {
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor::BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue ) :
             mcBlueOrIndex   ( cBlue ),
@@ -291,7 +291,7 @@ inline BitmapColor::BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBl
 {
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor::BitmapColor( const BitmapColor& rBitmapColor ) :
             mcBlueOrIndex   ( rBitmapColor.mcBlueOrIndex ),
@@ -301,7 +301,7 @@ inline BitmapColor::BitmapColor( const BitmapColor& rBitmapColor ) :
 {
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor::BitmapColor( const Color& rColor ) :
             mcBlueOrIndex   ( rColor.GetBlue() ),
@@ -311,7 +311,7 @@ inline BitmapColor::BitmapColor( const Color& rColor ) :
 {
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor::BitmapColor( sal_uInt8 cIndex ) :
             mcBlueOrIndex   ( cIndex ),
@@ -321,7 +321,7 @@ inline BitmapColor::BitmapColor( sal_uInt8 cIndex ) :
 {
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
 {
@@ -330,14 +330,14 @@ inline bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
             ( mcGreen == rBitmapColor.mcGreen && mcRed == rBitmapColor.mcRed ) ) );
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapColor::operator!=( const BitmapColor& rBitmapColor ) const
 {
     return !( *this == rBitmapColor );
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor& BitmapColor::operator=( const BitmapColor& rBitmapColor )
 {
@@ -349,14 +349,14 @@ inline BitmapColor& BitmapColor::operator=( const BitmapColor& rBitmapColor )
     return *this;
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapColor::IsIndex() const
 {
     return mbIndex;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt8 BitmapColor::GetRed() const
 {
@@ -364,7 +364,7 @@ inline sal_uInt8 BitmapColor::GetRed() const
     return mcRed;
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapColor::SetRed( sal_uInt8 cRed )
 {
@@ -372,7 +372,7 @@ inline void BitmapColor::SetRed( sal_uInt8 cRed )
     mcRed = cRed;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt8 BitmapColor::GetGreen() const
 {
@@ -380,7 +380,7 @@ inline sal_uInt8 BitmapColor::GetGreen() const
     return mcGreen;
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapColor::SetGreen( sal_uInt8 cGreen )
 {
@@ -388,7 +388,7 @@ inline void BitmapColor::SetGreen( sal_uInt8 cGreen )
     mcGreen = cGreen;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt8 BitmapColor::GetBlue() const
 {
@@ -396,7 +396,7 @@ inline sal_uInt8 BitmapColor::GetBlue() const
     return mcBlueOrIndex;
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapColor::SetBlue( sal_uInt8 cBlue )
 {
@@ -404,7 +404,7 @@ inline void BitmapColor::SetBlue( sal_uInt8 cBlue )
     mcBlueOrIndex = cBlue;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt8 BitmapColor::GetIndex() const
 {
@@ -412,7 +412,7 @@ inline sal_uInt8 BitmapColor::GetIndex() const
     return mcBlueOrIndex;
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapColor::SetIndex( sal_uInt8 cIndex )
 {
@@ -420,7 +420,7 @@ inline void BitmapColor::SetIndex( sal_uInt8 cIndex )
     mcBlueOrIndex = cIndex;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor::operator Color() const
 {
@@ -428,7 +428,7 @@ inline BitmapColor::operator Color() const
     return Color( mcRed, mcGreen, mcBlueOrIndex );
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt8 BitmapColor::GetBlueOrIndex() const
 {
@@ -436,7 +436,7 @@ inline sal_uInt8 BitmapColor::GetBlueOrIndex() const
     return mcBlueOrIndex;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor& BitmapColor::Invert()
 {
@@ -446,7 +446,7 @@ inline BitmapColor& BitmapColor::Invert()
     return *this;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt8 BitmapColor::GetLuminance() const
 {
@@ -454,7 +454,7 @@ inline sal_uInt8 BitmapColor::GetLuminance() const
     return( (sal_uInt8) ( ( mcBlueOrIndex * 28UL + mcGreen * 151UL + mcRed * 77UL ) >> 8UL ) );
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor& BitmapColor::IncreaseLuminance( sal_uInt8 cGreyInc )
 {
@@ -466,7 +466,7 @@ inline BitmapColor& BitmapColor::IncreaseLuminance( sal_uInt8 cGreyInc )
     return *this;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor& BitmapColor::DecreaseLuminance( sal_uInt8 cGreyDec )
 {
@@ -478,7 +478,7 @@ inline BitmapColor& BitmapColor::DecreaseLuminance( sal_uInt8 cGreyDec )
     return *this;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uInt8 cTransparency )
 {
@@ -491,7 +491,7 @@ inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uIn
     return *this;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor& BitmapColor::Merge( sal_uInt8 cR, sal_uInt8 cG, sal_uInt8 cB, sal_uInt8 cTransparency )
 {
@@ -503,7 +503,7 @@ inline BitmapColor& BitmapColor::Merge( sal_uInt8 cR, sal_uInt8 cG, sal_uInt8 cB
     return *this;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uLong BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) const
 {
@@ -514,7 +514,7 @@ inline sal_uLong BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) c
                       labs( mcRed - rBitmapColor.mcRed ) ) );
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapPalette::BitmapPalette() :
             mpBitmapColor   ( NULL ),
@@ -522,7 +522,7 @@ inline BitmapPalette::BitmapPalette() :
 {
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
             mnCount( rBitmapPalette.mnCount )
@@ -537,7 +537,7 @@ inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
         mpBitmapColor = NULL;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
             mnCount( nCount )
@@ -552,14 +552,14 @@ inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
         mpBitmapColor = NULL;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapPalette::~BitmapPalette()
 {
     delete[] (sal_uInt8*) mpBitmapColor;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPalette )
 {
@@ -578,7 +578,7 @@ inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPale
     return *this;
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapPalette::operator==( const BitmapPalette& rBitmapPalette ) const
 {
@@ -601,28 +601,28 @@ inline bool BitmapPalette::operator==( const BitmapPalette& rBitmapPalette ) con
     return bRet;
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapPalette::operator!=( const BitmapPalette& rBitmapPalette ) const
 {
     return !( *this == rBitmapPalette );
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapPalette::operator!()
 {
     return( !mnCount || !mpBitmapColor );
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt16 BitmapPalette::GetEntryCount() const
 {
     return mnCount;
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapPalette::SetEntryCount( sal_uInt16 nCount )
 {
@@ -647,7 +647,7 @@ inline void BitmapPalette::SetEntryCount( sal_uInt16 nCount )
     }
 }
 
-// ------------------------------------------------------------------
+
 
 inline const BitmapColor& BitmapPalette::operator[]( sal_uInt16 nIndex ) const
 {
@@ -655,7 +655,7 @@ inline const BitmapColor& BitmapPalette::operator[]( sal_uInt16 nIndex ) const
     return mpBitmapColor[ nIndex ];
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor& BitmapPalette::operator[]( sal_uInt16 nIndex )
 {
@@ -663,14 +663,14 @@ inline BitmapColor& BitmapPalette::operator[]( sal_uInt16 nIndex )
     return mpBitmapColor[ nIndex ];
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor* BitmapPalette::ImplGetColorBuffer() const
 {
     DBG_ASSERT( mpBitmapColor, "No color buffer available!" );
     return mpBitmapColor;
 }
-// ------------------------------------------------------------------
+
 
 inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
 {
@@ -697,7 +697,7 @@ inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
     return nRetIndex;
 }
 
-// ------------------------------------------------------------------
+
 
 inline ColorMask::ColorMask( sal_uLong nRedMask, sal_uLong nGreenMask, sal_uLong nBlueMask ) :
             mnRMask( nRedMask ),
@@ -715,7 +715,7 @@ inline ColorMask::ColorMask( sal_uLong nRedMask, sal_uLong nGreenMask, sal_uLong
     mnBShift = ( mnBMask ? ImplCalcMaskShift( mnBMask, mnBOr, mnBOrShift ) : 0L );
 }
 
-// ------------------------------------------------------------------
+
 
 inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_uLong& rOrShift ) const
 {
@@ -742,28 +742,28 @@ inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_u
     return( nRet -= 7 );
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uLong ColorMask::GetRedMask() const
 {
     return mnRMask;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uLong ColorMask::GetGreenMask() const
 {
     return mnGMask;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uLong ColorMask::GetBlueMask() const
 {
     return mnBMask;
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::GetColorFor8Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
@@ -771,14 +771,14 @@ inline void ColorMask::GetColorFor8Bit( BitmapColor& rColor, ConstHPBYTE pPixel 
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::SetColorFor8Bit( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
     *pPixel = (sal_uInt8) COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::GetColorFor16BitMSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
@@ -791,7 +791,7 @@ inline void ColorMask::GetColorFor16BitMSB( BitmapColor& rColor, ConstHPBYTE pPi
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::SetColorFor16BitMSB( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
@@ -805,7 +805,7 @@ inline void ColorMask::SetColorFor16BitMSB( const BitmapColor& rColor, HPBYTE pP
 #endif
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::GetColorFor16BitLSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
@@ -818,7 +818,7 @@ inline void ColorMask::GetColorFor16BitLSB( BitmapColor& rColor, ConstHPBYTE pPi
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::SetColorFor16BitLSB( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
@@ -833,7 +833,7 @@ inline void ColorMask::SetColorFor16BitLSB( const BitmapColor& rColor, HPBYTE pP
 }
 
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::GetColorFor24Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
@@ -841,7 +841,7 @@ inline void ColorMask::GetColorFor24Bit( BitmapColor& rColor, ConstHPBYTE pPixel
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::SetColorFor24Bit( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
@@ -849,7 +849,7 @@ inline void ColorMask::SetColorFor24Bit( const BitmapColor& rColor, HPBYTE pPixe
     pPixel[ 0 ] = (sal_uInt8) nVal; pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL ); pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
@@ -863,7 +863,7 @@ inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8& rAlpha, ConstHPBYTE pPixel ) const
 {
@@ -878,7 +878,7 @@ inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8&
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixel ) const
 {

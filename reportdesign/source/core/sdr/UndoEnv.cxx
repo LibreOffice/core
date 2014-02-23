@@ -653,8 +653,8 @@ sal_Bool OXUndoEnvironment::IsUndoMode() const
 {
     return m_pImpl->m_bIsUndo;
 }
-//============================================================================
+
 } // rptui
-//============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,7 +37,7 @@ namespace oox {
 
 struct PropertyNameVector;
 
-// ============================================================================
+
 
 typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapBase;
 
@@ -102,7 +102,7 @@ private:
     const PropertyNameVector* mpPropNames;
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

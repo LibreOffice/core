@@ -40,13 +40,13 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <comphelper/types.hxx>
 
-// .......................................................................
+
 namespace svt
 {
-// .......................................................................
+
     namespace
     {
-        //..............................................................
+
         sal_uInt16 getRealGetFocusFlags( Window* _pWindow )
         {
             sal_uInt16 nFlags = 0;
@@ -62,15 +62,15 @@ namespace svt
     using namespace ::com::sun::star::uno;
     using namespace com::sun::star::accessibility::AccessibleEventId;
     using  com::sun::star::accessibility::XAccessible;
-    //==================================================================
+
 
     IEditImplementation::~IEditImplementation()
     {
     }
 
-    //==================================================================
+
     //= EditBrowserHeader
-    //==================================================================
+
 
     void EditBrowserHeader::DoubleClick()
     {
@@ -87,9 +87,9 @@ namespace svt
     }
 
 
-    //==================================================================
+
     //= EditBrowseBox
-    //==================================================================
+
 
     void EditBrowseBox::BrowserMouseEventPtr::Clear()
     {
@@ -154,7 +154,7 @@ namespace svt
         impl_construct();
     }
 
-    //==================================================================
+
     EditBrowseBox::EditBrowseBox( Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode _nMode )
                   :BrowseBox( pParent, nBits, _nMode )
                   ,nStartEvent(0)
@@ -1334,7 +1334,7 @@ namespace svt
     {
         Controller()->resume();
     }
-    //===============================================================================
+
 
     DBG_NAME(CellController);
 
@@ -1402,8 +1402,8 @@ namespace svt
     {
         return sal_True;
     }
-// .......................................................................
+
 }   // namespace svt
-// .......................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/svdhlpln.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -53,7 +53,7 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYHELPLINE_HXX
 

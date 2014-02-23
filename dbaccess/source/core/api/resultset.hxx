@@ -58,9 +58,9 @@ namespace dbaccess
 
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ONoWeakStatement;
 
-    //************************************************************
+
     //  OResultSet
-    //************************************************************
+
     class OResultSet :  public comphelper::OBaseMutex,
                         public OResultSetBase,
                         public ::cppu::OPropertySetHelper,

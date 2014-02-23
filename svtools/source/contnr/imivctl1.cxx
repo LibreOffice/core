@@ -3085,7 +3085,7 @@ SvxIconChoiceCtrlTextMode SvxIconChoiceCtrl_Impl::GetEntryTextModeSmart( const S
     return eMode;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+
 //
 // Draw my own focusrect, because the focusrect of the outputdevice has got the inverted color
 // of the background. But what will we see, if the backgroundcolor is gray ? - We will see
@@ -3142,7 +3142,7 @@ sal_Bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, sal_uLong& r
 }
 
 //
-////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId )
 {

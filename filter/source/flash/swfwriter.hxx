@@ -105,12 +105,12 @@ const sal_uInt8 TAG_FRAMELABEL      = 43;
 
 const sal_uInt8 TAG_HEADER          = 0xff;
 
-///////////////////////////////////////////////////////////////////////
+
 
 /** converts a double to a 16.16 flash fixed value */
 sal_uInt32 getFixed( double fValue );
 
-///////////////////////////////////////////////////////////////////////
+
 
 typedef ::std::map<sal_uInt32, sal_uInt16> ChecksumCache;
 
@@ -123,7 +123,7 @@ struct ltuint16
   }
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 /** container class to create bit structures */
 class BitStream
@@ -146,7 +146,7 @@ private:
     sal_uInt8 mnCurrentByte;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 /** this class collects all used glyphs for a given fonts and maps
     characters to glyph ids.
@@ -175,7 +175,7 @@ private:
 
 typedef std::vector<FlashFont*> FontMap;
 
-///////////////////////////////////////////////////////////////////////
+
 
 /** this class helps creating flash tags */
 class Tag : public SvMemoryStream
@@ -206,7 +206,7 @@ private:
     sal_uInt8 mnTagId;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 /** this class helps to define flash sprites */
 class Sprite
@@ -227,7 +227,7 @@ private:
     sal_uInt32  mnFrames;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 /** this class stores a flash fill style for shapes */
 class FillStyle
@@ -257,7 +257,7 @@ private:
     Rectangle       maBoundRect;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 /** this class creates a flash movie from vcl geometry */
 class Writer
@@ -445,7 +445,7 @@ private:
     sal_Int32 mnJPEGCompressMode;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 }
 

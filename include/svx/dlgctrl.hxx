@@ -353,7 +353,7 @@ public:
     void    Modify( const XLineEndEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap, bool bStart = true );
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SdrObject;
 class SdrPathObj;

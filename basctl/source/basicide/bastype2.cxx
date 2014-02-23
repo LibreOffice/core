@@ -181,7 +181,7 @@ bool EntryDescriptor::operator == (EntryDescriptor const& rDesc) const
 
 //
 // TreeListBox
-// ===========
+
 //
 
 TreeListBox::TreeListBox (Window* pParent, ResId const& rRes)

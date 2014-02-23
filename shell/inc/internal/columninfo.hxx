@@ -36,9 +36,9 @@ public:
     CColumnInfo(long RefCnt = 1);
     virtual ~CColumnInfo();
 
-    //-----------------------------
+
     // IUnknown methods
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
@@ -48,9 +48,9 @@ public:
 
     virtual ULONG STDMETHODCALLTYPE Release( void);
 
-    //-----------------------------
+
     // IColumnProvider
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE Initialize(LPCSHCOLUMNINIT psci);
 

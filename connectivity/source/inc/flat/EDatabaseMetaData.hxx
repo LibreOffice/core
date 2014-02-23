@@ -26,9 +26,9 @@ namespace connectivity
 {
     namespace flat
     {
-        //**************************************************************
+
         //************ Class: java.sql.DatabaseMetaDataDate
-        //**************************************************************
+
 
         class OFlatDatabaseMetaData :   public file::ODatabaseMetaData
         {

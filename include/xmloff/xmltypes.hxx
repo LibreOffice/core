@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_XMLTYPES_HXX
 #define INCLUDED_XMLOFF_XMLTYPES_HXX
 
-///////////////////////////////////////////////////////////////////////////////
+
 // Flags to specify how to im/export the property
 //
 // OLD:
@@ -104,7 +104,7 @@
 #define XML_TYPE_PROP_CHART (0xe << XML_TYPE_PROP_SHIFT)
 #define XML_TYPE_PROP_END (0xf << XML_TYPE_PROP_SHIFT)
 
-///////////////////////////////////////////////////////////////////////////////
+
 //
 // XML-data-type-ID's
 //

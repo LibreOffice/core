@@ -28,7 +28,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 const sal_Char* const AX_GUID_CFONT         = "{AFC20920-DA4E-11CE-B943-00AA006887B4}";
 

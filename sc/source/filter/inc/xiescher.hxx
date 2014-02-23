@@ -202,7 +202,7 @@ private:
     bool                mbCustomDff;    /// true = Recreate SdrObject in DFF import.
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclImpDrawObjVector : public ::std::vector< XclImpDrawObjRef >
 {
@@ -216,7 +216,7 @@ public:
     sal_Size            GetProgressSize() const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A placeholder object for unknown object types. */
 class XclImpPhObj : public XclImpDrawObjBase
@@ -225,7 +225,7 @@ public:
     explicit            XclImpPhObj( const XclImpRoot& rRoot );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A group object. */
 class XclImpGroupObj : public XclImpDrawObjBase
@@ -253,7 +253,7 @@ protected:
     sal_uInt16          mnFirstUngrouped;   /// Object identfier of first object not grouped into this group.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A line object. */
 class XclImpLineObj : public XclImpDrawObjBase
@@ -277,7 +277,7 @@ protected:
     sal_uInt8           mnStartPoint;   /// Starting point.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A rectangle or oval object. */
 class XclImpRectObj : public XclImpDrawObjBase
@@ -307,7 +307,7 @@ protected:
     sal_uInt16          mnFrameFlags;   /// Additional flags.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** An oval object. */
 class XclImpOvalObj : public XclImpRectObj
@@ -320,7 +320,7 @@ protected:
     virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** An arc object. */
 class XclImpArcObj : public XclImpDrawObjBase
@@ -344,7 +344,7 @@ protected:
     sal_uInt8           mnQuadrant;     /// Visible quadrant of the circle.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A polygon object. */
 class XclImpPolygonObj : public XclImpRectObj
@@ -370,7 +370,7 @@ protected:
     sal_uInt16          mnPointCount;   /// Polygon point count.
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclImpObjTextData
 {
@@ -383,7 +383,7 @@ struct XclImpObjTextData
     void                ReadFormats( XclImpStream& rStrm );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A drawing object supporting text contents. Used for all simple objects in BIFF8. */
 class XclImpTextObj : public XclImpRectObj
@@ -410,7 +410,7 @@ protected:
     XclImpObjTextData   maTextData;     /// Textbox data from BIFF5 OBJ or BIFF8 TXO record.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A chart object. This is the drawing object wrapper for the chart data. */
 class XclImpChartObj : public XclImpRectObj
@@ -449,7 +449,7 @@ private:
     bool                mbOwnTab;       /// true = own sheet; false = embedded object.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A note object, which is a specialized text box objext. */
 class XclImpNoteObj : public XclImpTextObj
@@ -469,7 +469,7 @@ private:
     sal_uInt16          mnNoteFlags;    /// Flags from NOTE record.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Helper base class for TBX and OCX form controls to manage spreadsheet links. */
 class XclImpControlHelper
@@ -516,7 +516,7 @@ private:
     XclCtrlBindMode              meBindMode; /// Value binding mode.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for textbox based form controls. */
 class XclImpTbxObjBase : public XclImpTextObj, public XclImpControlHelper
@@ -550,7 +550,7 @@ protected:
     virtual XclTbxEventType DoGetEventType() const = 0;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A button control. */
 class XclImpButtonObj : public XclImpTbxObjBase
@@ -567,7 +567,7 @@ protected:
     virtual XclTbxEventType DoGetEventType() const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A checkbox control. */
 class XclImpCheckBoxObj : public XclImpTbxObjBase
@@ -592,7 +592,7 @@ protected:
     sal_uInt16          mnCheckBoxFlags;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** An option button control. */
 class XclImpOptionButtonObj : public XclImpCheckBoxObj
@@ -618,7 +618,7 @@ protected:
     sal_uInt16          mnFirstInGroup;     /// 1 = Button is the first in a group.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A label control. */
 class XclImpLabelObj : public XclImpTbxObjBase
@@ -635,7 +635,7 @@ protected:
     virtual XclTbxEventType DoGetEventType() const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A groupbox control. */
 class XclImpGroupBoxObj : public XclImpTbxObjBase
@@ -659,7 +659,7 @@ protected:
     sal_uInt16          mnGroupBoxFlags;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A dialog control. */
 class XclImpDialogObj : public XclImpTbxObjBase
@@ -676,7 +676,7 @@ protected:
     virtual XclTbxEventType DoGetEventType() const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** An edit control. */
 class XclImpEditObj : public XclImpTbxObjBase
@@ -706,7 +706,7 @@ protected:
     sal_uInt16          mnListBoxObjId;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class of scrollable form controls (spin button, scrollbar, listbox, dropdown). */
 class XclImpTbxObjScrollableBase : public XclImpTbxObjBase
@@ -732,7 +732,7 @@ protected:
     sal_uInt16          mnScrollFlags;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A spinbutton control. */
 class XclImpSpinButtonObj : public XclImpTbxObjScrollableBase
@@ -751,7 +751,7 @@ protected:
     virtual XclTbxEventType DoGetEventType() const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A scrollbar control. */
 class XclImpScrollBarObj : public XclImpTbxObjScrollableBase
@@ -770,7 +770,7 @@ protected:
     virtual XclTbxEventType DoGetEventType() const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for list controls (listbox, dropdown). */
 class XclImpTbxObjListBase : public XclImpTbxObjScrollableBase
@@ -792,7 +792,7 @@ protected:
     bool                mbHasDefFontIdx;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A listbox control. */
 class XclImpListBoxObj : public XclImpTbxObjListBase
@@ -819,7 +819,7 @@ protected:
     ScfUInt8Vec         maSelection;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A dropdown listbox control. */
 class XclImpDropDownObj : public XclImpTbxObjListBase
@@ -855,7 +855,7 @@ protected:
     sal_uInt16          mnMinWidth;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A picture, an embedded or linked OLE object, or an OCX form control. */
 class XclImpPictureObj : public XclImpRectObj, public XclImpControlHelper
@@ -956,7 +956,7 @@ private:
     XclImpSdrObjMap     maSdrObjMap;    /// Maps SdrObjects to shape IDs.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Simple implementation of the SVX DFF manager. Implements resolving palette
     colors. Used by XclImpDffPropSet (as is), extended by XclImpDffConverter.
@@ -972,7 +972,7 @@ protected:
     virtual bool        GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** This is the central instance for converting binary DFF data into shape
     objects. Used for all sheet shapes and shapes embedded in chart objects.
@@ -1166,7 +1166,7 @@ private:
     bool                mbOleObjs;          /// True = draw model supports OLE objects.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Drawing manager of a single sheet. */
 class XclImpSheetDrawing : public XclImpDrawing
@@ -1227,7 +1227,7 @@ public:
     /** Returns the name of overridden name ( or zero length string ) for
         associated object id. */
     OUString GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
-    // ------------------------------------------------------------------------
+
 private:
 
     /** Reads and returns a bitmap from WMF/PICT format. */
@@ -1250,7 +1250,7 @@ private:
     /** Returns the size of the progress bar shown while processing all objects. */
     sal_Size            GetProgressSize() const;
 
-    // ------------------------------------------------------------------------
+
 private:
     typedef ::std::map< sal_uInt16, OUString >          DefObjNameMap;
     typedef boost::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;
@@ -1294,7 +1294,7 @@ private:
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclImpDffPropSet& rPropSet );
 
-// ============================================================================
+
 
 #endif
 

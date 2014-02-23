@@ -85,8 +85,8 @@ void InterpolateFixedBitmap( FixedBitmap * pBitmap )
 }
 
 
-// ====================================================================
-// ====================================================================
+
+
 
 const char* PageHelpIds[] =
 {
@@ -97,7 +97,7 @@ const char* PageHelpIds[] =
     HID_SD_AUTOPILOT_PAGE5
 };
 
-// ====================================================================
+
 
 class PasswordEntry
 {
@@ -106,7 +106,7 @@ public:
     OUString maPath;
 };
 
-// ====================================================================
+
 
 /** A simple wrapper that looks like a PushButton and is used to force the
     broadcasting of focus events primarly for accessibility tools.
@@ -132,7 +132,7 @@ private:
 
 
 
-// ====================================================================
+
 
 class AssistentDlgImpl : public SfxListener
 {
@@ -346,7 +346,7 @@ public:
 
 
 
-// ====================================================================
+
 
 AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, sal_Bool bAutoPilot ) :
     mpTemplateRegion(NULL),
@@ -1818,7 +1818,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 }
 
 
-//////////////////////////////////////////////
+
 
 AssistentDlg::AssistentDlg(Window* pParent, sal_Bool bAutoPilot) :
     ModalDialog(pParent,SdResId(DLG_ASS))

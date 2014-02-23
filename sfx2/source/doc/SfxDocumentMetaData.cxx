@@ -458,8 +458,8 @@ const char* s_stdMeta[] = {
     "dc:date",                  // dateTime
     "meta:print-date",          // dateTime
     "meta:template",            // XLink
-    "meta:auto-reload",         // ...
-    "meta:hyperlink-behaviour", // ...
+    "meta:auto-reload",
+    "meta:hyperlink-behaviour",
     "dc:language",              // language
     "meta:editing-cycles",      // nonNegativeInteger
     "meta:editing-duration",    // duration

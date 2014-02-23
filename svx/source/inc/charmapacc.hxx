@@ -87,9 +87,9 @@ namespace svx
 
 
     class SvxShowCharSetItemAcc;
-    // ----------------
+
     // - SvxShowCharSetItem -
-    // ----------------
+
     /** Simple struct to hold some information about the single items of the table.
     */
     struct SvxShowCharSetItem
@@ -109,14 +109,14 @@ namespace svx
          void                                                                                       ClearAccessible();
     };
 
-    // -----------------------------------------------------------------------------
+
 
     typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessible,
                                     ::com::sun::star::accessibility::XAccessibleTable
                                 >   OAccessibleHelper_Base;
-    // ---------------
+
     // - SvxShowCharSetAcc -
-    // ---------------
+
     /** The table implemtentation of the vcl control.
     */
 
@@ -203,9 +203,9 @@ namespace svx
         virtual ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
     };
 
-    // ----------------
+
     // - SvxShowCharSetItemAcc -
-    // ----------------
+
     /** The child implementation of the table.
     */
     class SvxShowCharSetItemAcc : public ::comphelper::OAccessibleComponentHelper,

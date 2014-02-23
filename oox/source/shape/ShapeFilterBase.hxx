@@ -30,7 +30,7 @@
 namespace oox {
 namespace shape {
 
-// ============================================================================
+
 
 class ShapeFilterBase : public core::XmlFilterBase
 {
@@ -70,7 +70,7 @@ private:
     ::oox::drawingml::ThemePtr mpTheme;
 };
 
-// ============================================================================
+
 
 } // namespace shape
 } // namespace oox

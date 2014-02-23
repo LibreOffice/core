@@ -270,7 +270,7 @@ class SW_DLLPUBLIC SwDoc :
 
     //---------------- private Member --------------------------------
 
-    // -------------------------------------------------------------------
+
     ::boost::scoped_ptr<SwNodes> m_pNodes;  ///< document content (Nodes Array)
     SwAttrPool* mpAttrPool;             ///< the attribute pool
     SwPageDescs maPageDescs;             ///< PageDescriptors
@@ -293,7 +293,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
 
-    // -------------------------------------------------------------------
+
     // Pointer
 
     SwFrmFmt        *mpDfltFrmFmt;       ///< Default formats.
@@ -397,7 +397,7 @@ private:
 
     ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
-    // -------------------------------------------------------------------
+
     // other
 
     sal_uInt16  mnUndoCnt;           ///< Count of Undo Actions.

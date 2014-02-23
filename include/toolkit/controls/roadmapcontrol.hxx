@@ -39,10 +39,10 @@
 
 #include <comphelper/uno3.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     typedef GraphicControlModel UnoControlRoadmapModel_Base;
 
@@ -68,9 +68,9 @@ namespace toolkit
                                  css::awt::XItemEventBroadcaster>    SVTXRoadmap_Base;
 
 
-    // ===================================================================
+
     // = UnoControlRoadmapModel
-    // ===================================================================
+
     class UnoControlRoadmapModel : public UnoControlRoadmapModel_Base,
                                    public UnoControlRoadmapModel_IBase
 
@@ -143,9 +143,9 @@ namespace toolkit
     };
 
 
-    // ===================================================================
+
     // = UnoRoadmapControl
-    // ===================================================================
+
     class UnoRoadmapControl : public UnoControlRoadmap_Base,
                               public UnoControlRoadmap_IBase
     {
@@ -182,9 +182,9 @@ namespace toolkit
     DECLIMPL_SERVICEINFO_DERIVED( UnoRoadmapControl, UnoControlBase, szServiceName2_UnoControlRoadmap )
     };
 
-//........................................................................
+
 } // toolkit
-//........................................................................
+
 
 
 

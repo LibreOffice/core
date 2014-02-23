@@ -50,7 +50,7 @@ using namespace ::com::sun::star::frame;
 
 class SvxPopupWindowListBox;
 
-/////////////////////////////////////////////////////////////////
+
 
 class SvxPopupWindowListBox : public SfxPopupWindow
 {
@@ -85,7 +85,7 @@ public:
     /*virtual*/Window*                     GetPreferredKeyInputWindow();
 };
 
-/////////////////////////////////////////////////////////////////
+
 
 SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
@@ -144,7 +144,7 @@ Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
     return pListBox->GetPreferredKeyInputWindow();
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxUndoRedoControl, SfxStringItem );
 

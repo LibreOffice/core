@@ -25,10 +25,10 @@
 #include "accessibility/extended/accessiblebrowseboxcell.hxx"
 #include <cppuhelper/implbase2.hxx>
 #include <tools/wintypes.hxx>
-// ============================================================================
+
 namespace accessibility
 {
-// ============================================================================
+
     typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessible,
                                     ::com::sun::star::accessibility::XAccessibleValue
                                 >   AccessibleCheckBoxCell_BASE;

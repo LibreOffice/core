@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class SetOfByte;
@@ -40,7 +40,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -161,7 +161,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACT_HXX
 

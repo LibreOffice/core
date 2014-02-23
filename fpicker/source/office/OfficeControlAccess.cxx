@@ -30,10 +30,10 @@
 #include <algorithm>
 #include <functional>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
     // helper -------------------------------------------------------------
 
@@ -59,7 +59,7 @@ namespace svt
         #define PROPERTY_FLAG_CHECKED               0x00000080
 
 
-        // ................................................................
+
         struct ControlDescription
         {
             const sal_Char* pControlName;
@@ -67,11 +67,11 @@ namespace svt
             sal_Int32       nPropertyFlags;
         };
 
-        // ................................................................
+
         typedef const ControlDescription* ControlDescIterator;
         typedef ::std::pair< ControlDescIterator, ControlDescIterator > ControlDescRange;
 
-        // ......................................................................
+
         #define PROPERTY_FLAGS_COMMON       ( PROPERTY_FLAG_ENDBALED | PROPERTY_FLAG_VISIBLE | PROPERTY_FLAG_HELPURL )
         #define PROPERTY_FLAGS_LISTBOX      ( PROPERTY_FLAG_LISTITEMS | PROPERTY_FLAG_SELECTEDITEM | PROPERTY_FLAG_SELECTEDITEMINDEX )
         #define PROPERTY_FLAGS_CHECKBOX     ( PROPERTY_FLAG_CHECKED | PROPERTY_FLAG_TEXT )
@@ -106,13 +106,13 @@ namespace svt
             { "VersionListLabel",       LISTBOX_VERSION_LABEL,          PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          }
         };
 
-        // ................................................................
+
         static const sal_Int32 s_nControlCount = sizeof( aDescriptions ) / sizeof( aDescriptions[0] );
 
         static ControlDescIterator s_pControls = aDescriptions;
         static ControlDescIterator s_pControlsEnd = aDescriptions + s_nControlCount;
 
-        // ................................................................
+
         struct ControlDescriptionLookup
         {
             bool operator()( const ControlDescription& _rDesc1, const ControlDescription& _rDesc2 )
@@ -122,7 +122,7 @@ namespace svt
         };
 
 
-        // ................................................................
+
         struct ControlProperty
         {
             const sal_Char* pPropertyName;
@@ -131,7 +131,7 @@ namespace svt
 
         typedef const ControlProperty* ControlPropertyIterator;
 
-        // ................................................................
+
         static const ControlProperty aProperties[] =  {
             { "Text",               PROPERTY_FLAG_TEXT              },
             { "Enabled",            PROPERTY_FLAG_ENDBALED          },
@@ -143,13 +143,13 @@ namespace svt
             { "Checked",            PROPERTY_FLAG_CHECKED           }
         };
 
-        // ................................................................
+
         static const int s_nPropertyCount = sizeof( aProperties ) / sizeof( aProperties[0] );
 
         static ControlPropertyIterator s_pProperties = aProperties;
         static ControlPropertyIterator s_pPropertiesEnd = aProperties + s_nPropertyCount;
 
-        // ................................................................
+
         struct ControlPropertyLookup
         {
             OUString m_sLookup;
@@ -765,8 +765,8 @@ namespace svt
         return aReturn;
     }
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

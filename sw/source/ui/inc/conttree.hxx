@@ -43,8 +43,8 @@ class SdrObject;
 #define EDIT_MODE_DELETE        4
 #define EDIT_MODE_RENAME        5
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
+
 
 class SwContentTree : public SvTreeListBox
 {
@@ -205,9 +205,9 @@ public:
 };
 
 
-//----------------------------------------------------------------------------
+
 // TreeListBox for global documents
-//----------------------------------------------------------------------------
+
 
 class SwLBoxString : public SvLBoxString
 {

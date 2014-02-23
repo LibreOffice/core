@@ -72,7 +72,7 @@ class SwDbtoolsClient;
 class SwXMailMerge;
 class SwMailMergeConfigItem;
 
-// -----------------------------------------------------------------------
+
 
 enum DBMgrOptions
 {
@@ -85,7 +85,7 @@ enum DBMgrOptions
     DBMGR_MERGE_SINGLE_FILE  ///< Save merge as single file.
 };
 
-// -----------------------------------------------------------------------
+
 
 /*--------------------------------------------------------------------
      Administration of (new) logical databases.

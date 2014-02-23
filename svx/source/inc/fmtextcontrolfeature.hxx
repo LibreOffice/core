@@ -27,14 +27,14 @@
 #include <cppuhelper/implbase1.hxx>
 #include "fmslotinvalidator.hxx"
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= FmTextControlFeature
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XStatusListener
                                     >   FmTextControlFeature_Base;
 
@@ -87,9 +87,9 @@ namespace svx
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
     };
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
 

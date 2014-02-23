@@ -24,10 +24,10 @@
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
 
-//............................................................................
+
 namespace svxform
 {
-//............................................................................
+
 
     class DataNavigatorWindow;
 
@@ -63,9 +63,9 @@ namespace svxform
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
     };
 
-//............................................................................
+
 }   // namespace svxform
-//............................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_DATALISTENER_HXX
 

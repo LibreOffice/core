@@ -103,7 +103,7 @@ template< typename ValueType,
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 template< typename ColorType > struct ColorTraits
 {

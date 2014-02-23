@@ -34,7 +34,7 @@ namespace ucb_impl {
 template< typename Val > class RegexpMap;
 template< typename Val > class RegexpMapIter;
 
-//============================================================================
+
 template< typename Val >
 class RegexpMapEntry
 {
@@ -54,7 +54,7 @@ private:
     Val * m_pValue;
 };
 
-//============================================================================
+
 
 template< typename Val >
 struct Entry
@@ -66,10 +66,10 @@ struct Entry
         m_aRegexp(rTheRegexp), m_aValue(rTheValue) {}
 };
 
-//============================================================================
+
 template< typename Val > class List: public std::list< Entry< Val > > {};
 
-//============================================================================
+
 template< typename Val >
 struct RegexpMapImpl
 {
@@ -81,7 +81,7 @@ struct RegexpMapImpl
     ~RegexpMapImpl() { delete m_pDefault; }
 };
 
-//============================================================================
+
 template< typename Val >
 class RegexpMapIterImpl
 {
@@ -246,7 +246,7 @@ RegexpMapEntry< Val > & RegexpMapIterImpl< Val >::get()
     return m_aEntry;
 }
 
-//============================================================================
+
 template< typename Val >
 class RegexpMapConstIter
 {
@@ -344,7 +344,7 @@ bool RegexpMapConstIter< Val >::equals(RegexpMapConstIter const & rOther)
     return *m_pImpl == *rOther.m_pImpl;
 }
 
-//============================================================================
+
 template< typename Val >
 class RegexpMapIter: public RegexpMapConstIter< Val >
 {
@@ -413,7 +413,7 @@ RegexpMapEntry< Val > const * RegexpMapIter< Val >::operator ->() const
     return &this->m_pImpl->get();
 }
 
-//============================================================================
+
 template< typename Val >
 class RegexpMap
 {
@@ -643,7 +643,7 @@ Val const * RegexpMap< Val >::map(rtl::OUString const & rString,
 
 }
 
-//============================================================================
+
 template< typename Val >
 inline bool operator ==(ucb_impl::RegexpMapConstIter< Val > const & rIter1,
                         ucb_impl::RegexpMapConstIter< Val > const & rIter2)

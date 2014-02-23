@@ -74,7 +74,7 @@ namespace vclcanvas
 
 
         // Overridden CanvasHelper functionality
-        // =====================================
+
 
         void disposing();
 

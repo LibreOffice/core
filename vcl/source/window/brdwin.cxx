@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 // useful caption height for title bar buttons
 #define MIN_CAPTION_HEIGHT 18
 
-// =======================================================================
+
 
 static void ImplGetPinImage( sal_uInt16 nStyle, bool bPinIn, Image& rImage )
 {
@@ -149,7 +149,7 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
 }
 
 
-// =======================================================================
+
 
 
 // - ImplBorderWindowView -
@@ -1016,7 +1016,7 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
     return nTitleWidth;
 }
 
-// =======================================================================
+
 
 
 // - ImplNoBorderWindowView -
@@ -1056,13 +1056,13 @@ void ImplNoBorderWindowView::DrawWindow( sal_uInt16, OutputDevice*, const Point*
 {
 }
 
-// =======================================================================
+
 
 
 // - ImplSmallBorderWindowView -
 
 
-// =======================================================================
+
 
 ImplSmallBorderWindowView::ImplSmallBorderWindowView( ImplBorderWindow* pBorderWindow )
     : mpBorderWindow(pBorderWindow)
@@ -1414,7 +1414,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
     }
 }
 
-// =======================================================================
+
 
 
 // - ImplStdBorderWindowView -
@@ -1847,7 +1847,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
 }
 
 
-// =======================================================================
+
 void ImplBorderWindow::ImplInit( Window* pParent,
                                  WinBits nStyle, sal_uInt16 nTypeStyle,
                                  const ::com::sun::star::uno::Any& )
@@ -1933,7 +1933,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     InitView();
 }
 
-// =======================================================================
+
 
 ImplBorderWindow::ImplBorderWindow( Window* pParent,
                                     SystemParentData* pSystemParentData,

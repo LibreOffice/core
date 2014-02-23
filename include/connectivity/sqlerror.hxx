@@ -27,14 +27,14 @@
 #include <boost/optional.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ErrorCondition
-    //====================================================================
+
     /** the type of error codes to be used in SQLExceptions
 
         @see com::sun::star::sdbc::SQLException::ErrorCode
@@ -45,9 +45,9 @@ namespace connectivity
     */
     typedef ::sal_Int32 ErrorCondition;
 
-    //====================================================================
+
     //= SQLError
-    //====================================================================
+
     class SQLError_Impl;
 
     /** a class which provides helpers for working with SQLErrors
@@ -62,9 +62,9 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS SQLError
     {
     public:
-        // --------------------------------------------------------------------
+
         // - optional
-        // --------------------------------------------------------------------
+
         /** convenience wrapper around boost::optional, allowing implicit construction
         */
         class ParamValue : public ::boost::optional< OUString >
@@ -308,9 +308,9 @@ namespace connectivity
         ::boost::shared_ptr< SQLError_Impl > m_pImpl;
     };
 
-//........................................................................
+
 } // namespace connectivity
-//........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_SQLERROR_HXX
 

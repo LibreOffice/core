@@ -1488,7 +1488,7 @@ public:
     */
     // Initialisier-Dummy:
     sal_uInt8    nDataStart;
-    //-------------------------
+
     bool        fFacingPages : 1;   // 1 when facing pages should be printed
 
     bool        fWidowControl : 1;  //a: orig 97 docs say
@@ -1500,9 +1500,9 @@ public:
     sal_uInt16  grfSuppression : 2; // 0 Default line suppression storage; 0= form letter line suppression; 1= no line suppression; default=0
     sal_uInt16  fpc : 2;            // 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
     sal_uInt16  : 1;                // 0 unused
-    //-------------------------
+
     sal_uInt16  grpfIhdt : 8;           // 0 specification of document headers and footers. See explanation under Headers and Footers topic.
-    //-------------------------
+
     sal_uInt16  rncFtn : 2;         // 0 restart index for footnotes, 0 don't restart note numbering, 1 section, 2 page
     sal_uInt16  nFtn : 14;          // 1 initial footnote number for document
     bool        fOutlineDirtySave : 1; // when 1, indicates that information in the hPLCFpad should be refreshed since outline has been dirtied

@@ -27,15 +27,15 @@
 
 #include <map>
 
-// ------------------------------------------------------------------------
+
 
 #define CLIPBOARDMANAGER_IMPLEMENTATION_NAME "com.sun.star.comp.datatransfer.ClipboardManager"
 
-// ------------------------------------------------------------------------
+
 
 typedef ::std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > > ClipboardMap;
 
-// ------------------------------------------------------------------------
+
 
 namespace dtrans
 {
@@ -108,7 +108,7 @@ namespace dtrans
 
 }
 
-// ------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames();
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ClipboardManager_createInstance(

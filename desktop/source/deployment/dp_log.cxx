@@ -41,7 +41,7 @@ namespace dp_log {
 
 typedef ::cppu::WeakComponentImplHelper1<ucb::XProgressHandler> t_log_helper;
 
-//==============================================================================
+
 class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper
 {
     Reference<io::XOutputStream> m_xLogFile;

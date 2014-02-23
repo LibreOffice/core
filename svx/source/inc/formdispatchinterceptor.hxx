@@ -26,14 +26,14 @@
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/uno3.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DispatchInterceptor
-    //====================================================================
+
     class DispatchInterceptor
     {
     public:
@@ -48,9 +48,9 @@ namespace svxform
         ~DispatchInterceptor() {}
     };
 
-    //====================================================================
+
     //=
-    //====================================================================
+
     typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::frame::XDispatchProviderInterceptor
                                             ,   ::com::sun::star::lang::XEventListener
                                             >   DispatchInterceptionMultiplexer_BASE;
@@ -106,9 +106,9 @@ namespace svxform
         void ImplDetach();
     };
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FORMDISPATCHINTERCEPTOR_HXX
 

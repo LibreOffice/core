@@ -25,9 +25,9 @@
 
 namespace connectivity
 {
-    //==========================================================================
+
     //= OSQLScanner
-    //==========================================================================
+
     /** Scanner for SQL92
     */
     class OOO_DLLPUBLIC_DBTOOLS OSQLScanner

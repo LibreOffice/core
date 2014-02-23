@@ -27,9 +27,9 @@
 class EditEngine;
 class EditView;
 
-// -----------------------------------------------------------------------
+
 // EditUndoDelContent
-// ------------------------------------------------------------------------
+
 class EditUndoDelContent : public EditUndo
 {
 private:
@@ -46,9 +46,9 @@ public:
     virtual void    Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoConnectParas
-// ------------------------------------------------------------------------
+
 class EditUndoConnectParas : public EditUndo
 {
 private:
@@ -75,9 +75,9 @@ public:
     virtual void    Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoSplitPara
-// ------------------------------------------------------------------------
+
 class EditUndoSplitPara : public EditUndo
 {
 private:
@@ -92,9 +92,9 @@ public:
     virtual void    Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoInsertChars
-// ------------------------------------------------------------------------
+
 class EditUndoInsertChars : public EditUndo
 {
 private:
@@ -113,9 +113,9 @@ public:
     virtual bool    Merge( SfxUndoAction *pNextAction );
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoRemoveChars
-// ------------------------------------------------------------------------
+
 class EditUndoRemoveChars : public EditUndo
 {
 private:
@@ -132,9 +132,9 @@ public:
     virtual void    Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoInsertFeature
-// ------------------------------------------------------------------------
+
 class EditUndoInsertFeature : public EditUndo
 {
 private:
@@ -149,9 +149,9 @@ public:
     virtual void    Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoMoveParagraphs
-// ------------------------------------------------------------------------
+
 class EditUndoMoveParagraphs: public EditUndo
 {
 private:
@@ -166,9 +166,9 @@ public:
     virtual void    Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoSetStyleSheet
-// ------------------------------------------------------------------------
+
 class EditUndoSetStyleSheet: public EditUndo
 {
 private:
@@ -190,9 +190,9 @@ public:
     virtual void    Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoSetParaAttribs
-// ------------------------------------------------------------------------
+
 class EditUndoSetParaAttribs: public EditUndo
 {
 private:
@@ -208,9 +208,9 @@ public:
     virtual void    Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoSetAttribs
-// ------------------------------------------------------------------------
+
 class EditUndoSetAttribs: public EditUndo
 {
 private:
@@ -245,9 +245,9 @@ public:
     void AppendContentInfo(ContentAttribsInfo* pNew);
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoTransliteration
-// ------------------------------------------------------------------------
+
 class EditUndoTransliteration: public EditUndo
 {
 private:
@@ -270,9 +270,9 @@ public:
     virtual void        Redo();
 };
 
-// -----------------------------------------------------------------------
+
 // EditUndoMarkSelection
-// ------------------------------------------------------------------------
+
 class EditUndoMarkSelection: public EditUndo
 {
 private:

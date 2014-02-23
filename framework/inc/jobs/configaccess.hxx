@@ -32,7 +32,7 @@
 namespace framework{
 
 
-//_______________________________________
+
 /**
     @short  implements a simple configuration access
     @descr  Sometimes it's better to have direct config access
@@ -56,7 +56,7 @@ class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
             E_READWRITE
         };
 
-    //___________________________________
+
     // member
 
     private:
@@ -76,7 +76,7 @@ class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
         /** represent the current open mode */
         EOpenMode m_eMode;
 
-    //___________________________________
+
     // native interface methods
 
     public:

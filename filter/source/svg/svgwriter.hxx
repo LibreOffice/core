@@ -59,7 +59,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 
-// -----------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -70,7 +70,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::svg;
 using namespace ::com::sun::star::xml::sax;
 
-// -----------------------------------------------------------------------------
+
 
 #define SVG_DTD_STRING            OUString( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" )
 #define SVG_TINY_DTD_STRING       OUString( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG Tiny 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-tiny.dtd\">" )
@@ -80,9 +80,9 @@ using namespace ::com::sun::star::xml::sax;
 #define SVGWRITER_WRITE_TEXT    0x00000002
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
 
-// ----------------------
+
 // - SVGAttributeWriter -
-// ----------------------
+
 
 class SVGActionWriter;
 class SVGExport;
@@ -138,7 +138,7 @@ struct SVGShapeDescriptor
     basegfx::B2DLineJoin                maLineJoin;
     com::sun::star::drawing::LineCap    maLineCap;
 
-    // -------------------------------------------------------------------------
+
 
     SVGShapeDescriptor() :
         maShapeFillColor( Color( COL_TRANSPARENT ) ),
@@ -157,9 +157,9 @@ class SVGExport;
 class GDIMetaFile;
 
 
-// ---------------------------
+
 // - BulletListItemInfo -
-// ---------------------------
+
 struct BulletListItemInfo
 {
     long nFontSize;
@@ -168,9 +168,9 @@ struct BulletListItemInfo
     sal_Unicode cBulletChar;
 };
 
-// ---------------------------
+
 // - OUStringHasher -
-// ---------------------------
+
 
 struct OUStringHasher
 {
@@ -178,9 +178,9 @@ struct OUStringHasher
 };
 
 
-// -------------------
+
 // - SVGTextWriter -
-// -------------------
+
 class SVGTextWriter
 {
   public:
@@ -297,9 +297,9 @@ class SVGTextWriter
 
 };
 
-// -------------------
+
 // - SVGActionWriter -
-// -------------------
+
 
 class SVGActionWriter
 {

@@ -45,10 +45,10 @@
 #include <algorithm>
 #include "UndoActions.hxx"
 
-// .............................................................................
+
 namespace rptui
 {
-// .............................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -61,9 +61,9 @@ namespace rptui
 
     using namespace ::com::sun::star::report;
 
-    //========================================================================
+
     // UpdateLocker
-    //========================================================================
+
     class UpdateLocker
     {
         Window& m_rWindow;
@@ -80,9 +80,9 @@ namespace rptui
         }
     };
 
-    //========================================================================
+
     // class ConditionalFormattingDialog
-    //========================================================================
+
     ConditionalFormattingDialog::ConditionalFormattingDialog(
             Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
         :ModalDialog( _pParent, ModuleRes(RID_CONDFORMAT) )
@@ -602,8 +602,8 @@ namespace rptui
             impl_scrollTo( _nCondIndex - MAX_CONDITIONS + 1 );
     }
 
-// .............................................................................
+
 } // rptui
-// .............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

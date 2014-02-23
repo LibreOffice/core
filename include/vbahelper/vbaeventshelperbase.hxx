@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
 } } }
 
-// ============================================================================
+
 
 typedef ::cppu::WeakImplHelper3<
     css::script::vba::XVBAEventProcessor,
@@ -77,7 +77,7 @@ public:
         { checkArgument( rArgs, nIndex ); if( !rArgs[ nIndex ].has< Type >() ) throw css::lang::IllegalArgumentException(); }
 
 protected:
-    // ------------------------------------------------------------------------
+
 
     struct EventHandlerInfo
     {
@@ -102,7 +102,7 @@ protected:
             sal_Int32 nCancelIndex = -1,
             const css::uno::Any& rUserData = css::uno::Any() );
 
-    // ------------------------------------------------------------------------
+
 
     struct EventQueueEntry
     {
@@ -177,7 +177,7 @@ private:
     bool mbDisposed;
 };
 
-// ============================================================================
+
 
 #endif
 

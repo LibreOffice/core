@@ -36,8 +36,8 @@ FltError ImportLotus::Read()
         S_START,        // analyse first BOF
         S_WK1,          // in WK1-Stream
         S_WK3,          // in WK3-Section
-        S_WK4,          // ...
-        S_FM3,          // ...
+        S_WK4,
+        S_FM3,
         S_END           // Import finished
     };
 

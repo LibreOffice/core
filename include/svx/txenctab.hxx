@@ -25,9 +25,9 @@
 #include <tools/resary.hxx>
 
 
-//========================================================================
+
 //  class SvxTextEncodingTable
-//========================================================================
+
 
 class SVX_DLLPUBLIC SvxTextEncodingTable : public ResStringArray
 {

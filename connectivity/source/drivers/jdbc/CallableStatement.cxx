@@ -40,9 +40,9 @@ using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(java_sql_CallableStatement,"com.sun.star.sdbcx.ACallableStatement","com.sun.star.sdbc.CallableStatement");
 
-//**************************************************************
+
 //************ Class: java.sql.CallableStatement
-//**************************************************************
+
 java_sql_CallableStatement::java_sql_CallableStatement( JNIEnv * pEnv, java_sql_Connection& _rCon,const OUString& sql )
     : java_sql_PreparedStatement( pEnv, _rCon, sql )
 {

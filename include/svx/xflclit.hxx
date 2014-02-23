@@ -27,9 +27,9 @@
 //                           Fuellattribute
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//---------------------
+
 // class XFillColorItem
-//---------------------
+
 class SVX_DLLPUBLIC XFillColorItem : public XColorItem
 {
 public:

@@ -2531,7 +2531,7 @@ sal_Bool SvXMLExport::SetNullDateOnUnitConverter()
     return mpImpl->mbNullDateInitialized;
 }
 
-//=============================================================================
+
 
 void SvXMLElementExport::StartElement(
     const sal_uInt16 nPrefixKey,

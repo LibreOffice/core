@@ -180,7 +180,7 @@ public:
     static void setConfiguredComplexFallback( LanguageType nLang );
     static void setConfiguredAsianFallback( LanguageType nLang );
 
-// ---------------------------------------------------------------------------
+
 
     /** Encapsulated methods that shall only be accessed through
         class LanguageTag.
@@ -197,7 +197,7 @@ public:
         I18NLANGTAG_DLLPRIVATE static void setConfiguredSystemLanguage( LanguageType nLang );
     };
 
-// ---------------------------------------------------------------------------
+
 
     struct LanguagetagMapping
     {
@@ -213,7 +213,7 @@ public:
      */
     static ::std::vector< LanguagetagMapping > getDefinedLanguagetags();
 
-// ---------------------------------------------------------------------------
+
 
     /** Encapsulated conversion methods used by LanguageTag and conversions,
         not to be used by anything else.

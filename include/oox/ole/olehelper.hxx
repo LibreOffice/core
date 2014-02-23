@@ -55,13 +55,13 @@ typedef ::boost::shared_ptr< oox::BinaryXInputStream > BinaryXInputStreamRef;
 namespace ole {
 
 
-// ============================================================================
+
 
 #define OLE_GUID_STDFONT "{0BE35203-8F91-11CE-9DE3-00AA004BB851}"
 #define OLE_GUID_STDPIC  "{0BE35204-8F91-11CE-9DE3-00AA004BB851}"
 #define OLE_GUID_STDHLINK "{79EAC9D0-BAF9-11CE-8C82-00AA004BA90B}"
 
-// ============================================================================
+
 
 const sal_uInt16 OLE_STDFONT_NORMAL     = 400;
 const sal_uInt16 OLE_STDFONT_BOLD       = 700;
@@ -88,7 +88,7 @@ struct StdFontInfo
                             sal_uInt8 nFlags = 0 );
 };
 
-// ============================================================================
+
 
 /** Stores data about a StdHlink hyperlink. */
 struct StdHlinkInfo
@@ -99,7 +99,7 @@ struct StdHlinkInfo
     OUString     maFrame;
 };
 
-// ============================================================================
+
 
 /** Static helper functions for OLE import/export. */
 class OOX_DLLPUBLIC OleHelper
@@ -197,7 +197,7 @@ public:
 };
 
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

@@ -23,7 +23,7 @@
 #include <vcl/msgbox.hxx>
 
 
-// ============================================================================
+
 
 /** Message box with warning image and "Do not show again" checkbox. */
 class ScCbWarningBox : public WarningBox
@@ -45,7 +45,7 @@ public:
 };
 
 
-// ----------------------------------------------------------------------------
+
 
 /** Warning box for "Replace cell contents?". */
 class ScReplaceWarnBox : public ScCbWarningBox
@@ -60,7 +60,7 @@ public:
 };
 
 
-// ============================================================================
+
 
 #endif
 

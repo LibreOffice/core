@@ -40,10 +40,10 @@
 #include <functional>
 #include <algorithm>
 
-//........................................................................
+
 namespace toolkitform
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -277,7 +277,7 @@ namespace toolkitform
                 // if we survived classifyFormControl, then it's a real form control, and they all have
                 // service infos
 
-            // ================================
+
             // set the common widget properties
 
 
@@ -347,7 +347,7 @@ namespace toolkitform
 
             // text style
             _rpDescriptor->TextStyle = 0;
-            // ............................
+
             // multi line and word break
             // The MultiLine property of the control is mapped to both the "MULTILINE" and
             // "WORDBREAK" style flags
@@ -359,7 +359,7 @@ namespace toolkitform
                 if ( bMultiLine )
                     _rpDescriptor->TextStyle |= TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
             }
-            // ............................
+
             // horizontal alignment
             static const OUString FM_PROP_ALIGN("Align");
             if ( xPSI->hasPropertyByName( FM_PROP_ALIGN ) )
@@ -377,7 +377,7 @@ namespace toolkitform
                     OSL_FAIL( "describePDFControl: invalid text align!" );
                 }
             }
-            // ............................
+
             // vertical alignment
             {
                 OUString sVertAlignPropertyName( "VerticalAlign" );
@@ -414,17 +414,17 @@ namespace toolkitform
                 _rpDescriptor->TabOrder = nIndex;
             }
 
-            // ================================
+
             // special widget properties
 
             // edits
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::Edit )
             {
                 ::vcl::PDFWriter::EditWidget* pEditWidget = static_cast< ::vcl::PDFWriter::EditWidget* >( _rpDescriptor.get() );
-                // ............................
+
                 // multiline (already flagged in the TextStyle)
                 pEditWidget->MultiLine = ( _rpDescriptor->TextStyle & TEXT_DRAW_MULTILINE ) != 0;
-                // ............................
+
                 // password input
                 OUString sEchoCharPropName( "EchoChar" );
                 if ( xPSI->hasPropertyByName( sEchoCharPropName ) )
@@ -433,12 +433,12 @@ namespace toolkitform
                     if ( ( xModelProps->getPropertyValue( sEchoCharPropName ) >>= nEchoChar ) && ( nEchoChar != 0 ) )
                         pEditWidget->Password = true;
                 }
-                // ............................
+
                 // file select
                 static const OUString FM_SUN_COMPONENT_FILECONTROL("com.sun.star.form.component.FileControl");
                 if ( xSI->supportsService( FM_SUN_COMPONENT_FILECONTROL ) )
                     pEditWidget->FileSelect = true;
-                // ............................
+
                 // maximum text length
                 static const OUString FM_PROP_MAXTEXTLEN("MaxTextLen");
                 if ( xPSI->hasPropertyByName( FM_PROP_MAXTEXTLEN ) )
@@ -552,14 +552,14 @@ namespace toolkitform
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::ListBox )
             {
                 ::vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< ::vcl::PDFWriter::ListBoxWidget* >( _rpDescriptor.get() );
-                // ............................
+
                 // drop down
                 static const OUString FM_PROP_DROPDOWN("Dropdown");
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_DROPDOWN ) >>= pListWidget->DropDown );
-                // ............................
+
                 // multi selection
                 OSL_VERIFY( xModelProps->getPropertyValue("MultiSelection") >>= pListWidget->MultiSelect );
-                // ............................
+
                 // entries
                 getStringItemVector( xModelProps, pListWidget->Entries );
                 // since we explicitly list the entries in the order in which they appear, they should not be
@@ -586,14 +586,14 @@ namespace toolkitform
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::ComboBox )
             {
                 ::vcl::PDFWriter::ComboBoxWidget* pComboWidget = static_cast< ::vcl::PDFWriter::ComboBoxWidget* >( _rpDescriptor.get() );
-                // ............................
+
                 // entries
                 getStringItemVector( xModelProps, pComboWidget->Entries );
                 // same reasoning as above
                 pComboWidget->Sort = false;
             }
 
-            // ================================
+
             // some post-processing
 
             // text line ends
@@ -606,8 +606,8 @@ namespace toolkitform
         }
     }
 
-//........................................................................
+
 } // namespace toolkitform
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -126,9 +126,9 @@ namespace svxform
                                                     ,   ::com::sun::star::form::runtime::XFeatureInvalidation
                                                     >   FormController_BASE;
 
-    //==================================================================
+
     // FormController
-    //==================================================================
+
     class ColumnInfoCache;
     class FormController :public ::comphelper::OBaseMutex
                                         ,public FormController_BASE

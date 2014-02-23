@@ -181,7 +181,7 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-//==============================================================================================================
+
 
 LicenseDialogImpl::LicenseDialogImpl(
     Window * pParent,
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(LicenseDialogImpl, EndReachedHdl)
     return 0;
 }
 
-//=================================================================================
+
 
 
 

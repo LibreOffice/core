@@ -28,14 +28,14 @@
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OPredicateInputController
-    //=====================================================================
+
     /** A class which allows input of an SQL predicate for a row set column
         into a edit field.
     */
@@ -116,9 +116,9 @@ namespace dbtools
         OUString implParseNode(::connectivity::OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const;
     };
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX
 

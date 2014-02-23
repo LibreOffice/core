@@ -41,14 +41,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -183,7 +183,7 @@ Any lclConvertReference( const Any& rRefAny, const CellAddress& rBaseAddr, sal_u
 
 } // namespace
 
-// ============================================================================
+
 
 DefinedNameModel::DefinedNameModel() :
     mnSheet( -1 ),
@@ -195,7 +195,7 @@ DefinedNameModel::DefinedNameModel() :
 {
 }
 
-// ============================================================================
+
 
 DefinedNameBase::DefinedNameBase( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -256,7 +256,7 @@ ApiTokenSequence DefinedNameBase::importBiffFormula( sal_Int16 nBaseSheet, BiffI
         getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
 }
 
-// ============================================================================
+
 
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
@@ -462,7 +462,7 @@ bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
     return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
 }
 
-// ============================================================================
+
 
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -537,7 +537,7 @@ DefinedNameRef DefinedNamesBuffer::createDefinedName()
     return xDefName;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

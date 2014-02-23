@@ -43,9 +43,9 @@ namespace sd {
 #define ICON_OFFSET         72
 #define RIGHT_ICON_OFFSET    5
 #define SPACE_BETWEEN        3
-//------------------------------------------------------------------------------
+
 //                          struct ClientBoxEntry
-//------------------------------------------------------------------------------
+
 struct ClientBoxEntry;
 struct ClientInfo;
 
@@ -62,13 +62,13 @@ struct ClientBoxEntry
 
 };
 
-//------------------------------------------------------------------------------
+
 //                          class ExtensionBox_Impl
-//------------------------------------------------------------------------------
+
 
 class ClientBox;
 
-//------------------------------------------------------------------------------
+
 class ClientRemovedListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
     ClientBox   *m_pParent;
@@ -78,14 +78,14 @@ public:
     ClientRemovedListener( ClientBox *pParent ) { m_pParent = pParent; }
    ~ClientRemovedListener();
 
-    //===================================================================================
+
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
         throw (::com::sun::star::uno::RuntimeException);
 };
 
 
-//------------------------------------------------------------------------------
+
 class ClientBox:
     public Control
 {
@@ -130,7 +130,7 @@ class ClientBox:
     bool            HandleCursorKey( sal_uInt16 nKeyCode );
     void            DeleteRemoved();
 
-    //-----------------
+
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
 
     //Index starts with 1.
@@ -162,7 +162,7 @@ public:
     void    RecalcAll();
     void            RemoveUnlocked();
 
-    //-----------------
+
     void    selectEntry( const long nPos );
     long            addEntry( ClientInfo* pClientInfo );
     void            updateEntry( const ClientInfo* rPackageInfo );

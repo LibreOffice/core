@@ -29,9 +29,9 @@ namespace connectivity
     {
         class WpADOConnection;
         class OConnection;
-        //**************************************************************
+
         //************ Class: ODatabaseMetaData
-        //**************************************************************
+
 
         class ODatabaseMetaData : public ODatabaseMetaDataBase
         {

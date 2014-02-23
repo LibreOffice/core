@@ -26,10 +26,10 @@ class SimpleResMgr;
 
 #define ACC_RES_STRING(id) ResourceManager::loadString(id)
 
-//==================================================================
+
 //= ResourceManager
 //= handling ressources within the FormLayer library
-//==================================================================
+
 class ResourceManager
 {
     static SimpleResMgr*    m_pImpl;

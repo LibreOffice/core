@@ -32,7 +32,7 @@ namespace vba {
     and from other VBA implementation modules such as vbahelper.
  */
 
-// ============================================================================
+
 
 /** Locks or unlocks the controllers of all documents that have the same type
     as the specified document.
@@ -52,7 +52,7 @@ BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
     sal_Bool bLockControllers );
 
-// ============================================================================
+
 
 /** Enables or disables the container windows of all controllers of all
     documents that have the same type as the specified document.
@@ -73,7 +73,7 @@ BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
     sal_Bool bEnableWindows );
 
-// ============================================================================
+
 
 /** Registers the passed path as working directory for the application the
     passed document belongs to.
@@ -89,7 +89,7 @@ BASIC_DLLPUBLIC void registerCurrentDirectory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
     const OUString& rPath );
 
-// ============================================================================
+
 
 } // namespace vba
 } // namespace basic

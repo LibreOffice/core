@@ -23,11 +23,11 @@
 #include <svx/svxdllapi.h>
 
 
-//------------------------------------------------------------
+
 // class SdrOnOffItem
 // here GetValueTextByVal() returns "an" or "aus" instead
 // of "TRUE" or "FALSE"
-//------------------------------------------------------------
+
 class SVX_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
 public:
     TYPEINFO();

@@ -256,7 +256,7 @@ sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
     return sal_False;
 }
 
-//*****************************************************************
+
 class ImplIntroTest : public ImplIntroTestHelper
 {
       Reference< XMultiServiceFactory > mxMgr;
@@ -844,7 +844,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
     OString aErrorStr;
 
-    //******************************************************
+
 
     // create test object
     Any aObjAny = getIntrospectionTestObject( xMgr );

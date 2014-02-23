@@ -76,7 +76,7 @@ typedef std::vector< migration_step > migrations_v;
 typedef std::auto_ptr< migrations_v > migrations_vr;
 typedef std::vector< supported_migration > migrations_available;
 
-//__________________________________________
+
 /**
     define the item, e.g.:menuitem, toolbaritem, to be migrated. we keep the information
     of the command URL, the previous sibling node and the parent node of a item
@@ -143,7 +143,7 @@ struct MigrationItemInfo
     }
 };
 
-//__________________________________________
+
 /**
     information for the UI elements to be migrated for one module
 */
@@ -156,7 +156,7 @@ struct MigrationModuleInfo
     MigrationModuleInfo():bHasMenubar(sal_False){};
 };
 
-//__________________________________________
+
 /**
     get the information before copying the ui configuration files of old version to new version
 */

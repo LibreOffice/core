@@ -30,7 +30,7 @@
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -67,7 +67,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

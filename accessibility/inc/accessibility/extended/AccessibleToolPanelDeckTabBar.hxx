@@ -31,14 +31,14 @@ namespace svt
     class PanelTabBar;
 }
 
-//......................................................................................................................
+
 namespace accessibility
 {
-//......................................................................................................................
 
-    //==================================================================================================================
+
+
     //= AccessibleToolPanelTabBar
-    //==================================================================================================================
+
     class AccessibleToolPanelTabBar_Impl;
     typedef VCLXAccessibleComponent   AccessibleToolPanelTabBar_Base;
     class AccessibleToolPanelTabBar : public AccessibleToolPanelTabBar_Base
@@ -75,9 +75,9 @@ namespace accessibility
         ::boost::scoped_ptr< AccessibleToolPanelTabBar_Impl > m_pImpl;
     };
 
-//......................................................................................................................
+
 } // namespace accessibility
-//......................................................................................................................
+
 
 #endif // ACC_ACCESSIBLETOOLPANELTABBAR_HXX
 

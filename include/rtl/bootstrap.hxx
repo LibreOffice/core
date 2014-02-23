@@ -148,9 +148,9 @@ namespace rtl
             SAL_THROW(());
     };
 
-    //----------------------------------------------------------------------------
+
     // IMPLEMENTATION
-    //----------------------------------------------------------------------------
+
     inline void Bootstrap::setIniFilename( const ::rtl::OUString &sFile )
     {
         rtl_bootstrap_setIniFileName( sFile.pData );

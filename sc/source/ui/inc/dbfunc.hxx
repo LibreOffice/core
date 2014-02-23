@@ -36,7 +36,7 @@ class ScDPSaveData;
 struct ScDPNumGroupInfo;
 struct ScSubTotalParam;
 
-// ---------------------------------------------------------------------------
+
 
 class ScDBFunc : public ScViewFunc
 {

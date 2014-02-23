@@ -22,10 +22,10 @@
 
 #include "uistrings.hrc"
 
-//=====================================================================
+
 namespace rptui
 {
-//=====================================================================
+
 OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
 : Window(_pParent)
 ,m_sColorEntry(_sColorEntry)
@@ -85,8 +85,8 @@ void OColorListener::setMarked(sal_Bool _bMark)
         Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
     }
 }
-// =======================================================================
+
 }
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

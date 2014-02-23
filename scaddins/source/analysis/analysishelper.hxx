@@ -144,7 +144,7 @@ double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int
 
 
 
-//-----------------------------------------------------------------------------
+
 
 
 
@@ -254,7 +254,7 @@ public:
 
 
 
-//-----------------------------------------------------------------------------
+
 
 /// sorted list with unique sal_Int32 values
 class SortedIndividualInt32List
@@ -300,7 +300,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
+
 
 class ScaDoubleList
 {
@@ -359,7 +359,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
+
 
 /// stores double values >0.0, throws exception for double values <0.0, does nothing for 0.0
 class ScaDoubleListGT0 : public ScaDoubleList
@@ -370,7 +370,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
+
 
 /// stores double values >=0.0, throws exception for double values <0.0
 class ScaDoubleListGE0 : public ScaDoubleList
@@ -381,7 +381,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
+
 
 class Complex
 {
@@ -744,7 +744,7 @@ inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, doubl
 
 
 
-//-----------------------------------------------------------------------------
+
 
 /// Helper class for date calculation for various financial functions
 class ScaDate
@@ -836,7 +836,7 @@ inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( css::lang::IllegalA
 }
 
 
-//-----------------------------------------------------------------------------
+
 
 /// Helper class for Any->double conversion, using current language settings
 class ScaAnyConverter
@@ -924,7 +924,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
+
 
 
 #endif

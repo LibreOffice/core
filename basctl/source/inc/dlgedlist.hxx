@@ -29,9 +29,9 @@ namespace basctl
 
 class DlgEdObj;
 
-//============================================================================
+
 // DlgEdPropListenerImpl
-//============================================================================
+
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
@@ -52,9 +52,9 @@ public:
 
 };
 
-//============================================================================
+
 // DlgEdEvtContListenerImpl
-//============================================================================
+
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener > ContainerListenerHelper;
 

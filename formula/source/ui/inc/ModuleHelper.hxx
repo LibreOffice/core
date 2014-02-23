@@ -22,13 +22,13 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/resmgr.hxx>
-//.........................................................................
+
 namespace formula
 {
-//.........................................................................
-    //=========================================================================
+
+
     //= OModule
-    //=========================================================================
+
     class OModuleClient;
     class OModuleImpl;
     class OModule
@@ -59,9 +59,9 @@ namespace formula
         static void ensureImpl();
     };
 
-    //=========================================================================
+
     //= ModuleRes
-    //=========================================================================
+
     /** specialized ResId, using the resource manager provided by the global module
     */
     class ModuleRes : public ::ResId
@@ -69,9 +69,9 @@ namespace formula
     public:
         ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
-//.........................................................................
+
 }   // namespace formula
-//.........................................................................
+
 
 #endif // FORMULA_MODULE_HELPER_RPT_HXX_
 

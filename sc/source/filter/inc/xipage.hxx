@@ -68,7 +68,7 @@ private:
     bool                mbValidPaper;   /// true = Paper size and orientation valid.
 };
 
-// ============================================================================
+
 
 #endif
 

@@ -36,14 +36,14 @@
 #include <vector>
 #include <set>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= PropertyComposer
-    //====================================================================
+
     typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::inspection::XPropertyHandler
                                                 ,   ::com::sun::star::beans::XPropertyChangeListener
                                                 >   PropertyComposer_Base;
@@ -142,9 +142,9 @@ namespace pcr
         };
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYCOMPOSER_HXX
 

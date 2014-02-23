@@ -25,9 +25,9 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 
-// -------------
+
 // - FixedInfo -
-// -------------
+
 
 class SVT_DLLPUBLIC FixedInfo : public FixedText
 {

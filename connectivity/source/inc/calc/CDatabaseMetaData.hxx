@@ -26,9 +26,9 @@ namespace connectivity
 {
     namespace calc
     {
-        //**************************************************************
+
         //************ Class: java.sql.DatabaseMetaDataDate
-        //**************************************************************
+
 
         class OCalcDatabaseMetaData :   public file::ODatabaseMetaData
         {

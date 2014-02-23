@@ -26,12 +26,12 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 Svx3DPercentDiagonalItem::Svx3DPercentDiagonalItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, nVal)
 {}
@@ -60,7 +60,7 @@ Svx3DDoubleSidedItem::Svx3DDoubleSidedItem(sal_Bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bVal)
 {}
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
 
@@ -86,7 +86,7 @@ SfxPoolItem* Svx3DReducedLineGeometryItem::Create(SvStream& rIn, sal_uInt16 nIte
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 Svx3DNormalsKindItem::Svx3DNormalsKindItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal)
@@ -260,7 +260,7 @@ Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nVal)
 {}
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #107245#
 
 Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(sal_Bool bVal)
@@ -285,7 +285,7 @@ SfxPoolItem* Svx3DSmoothNormalsItem::Create(SvStream& rIn, sal_uInt16 nItemVersi
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #107245#
 
 Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(sal_Bool bVal)
@@ -310,7 +310,7 @@ SfxPoolItem* Svx3DSmoothLidsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion)
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #107245#
 
 Svx3DCharacterModeItem::Svx3DCharacterModeItem(sal_Bool bVal)
@@ -335,7 +335,7 @@ SfxPoolItem* Svx3DCharacterModeItem::Create(SvStream& rIn, sal_uInt16 nItemVersi
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #107245#
 
 Svx3DCloseFrontItem::Svx3DCloseFrontItem(sal_Bool bVal)
@@ -360,7 +360,7 @@ SfxPoolItem* Svx3DCloseFrontItem::Create(SvStream& rIn, sal_uInt16 nItemVersion)
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #107245#
 
 Svx3DCloseBackItem::Svx3DCloseBackItem(sal_Bool bVal)
@@ -385,7 +385,7 @@ SfxPoolItem* Svx3DCloseBackItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) 
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 // Svx3DNormalsKindItem: use drawing::NormalsKind
 bool Svx3DNormalsKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const

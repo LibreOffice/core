@@ -32,15 +32,15 @@ using namespace ::com::sun::star::datatransfer;
 #define getDataWindow() ((BrowserDataWin*)pDataWin)
 
 
-//===================================================================
+
 
 DBG_NAMEEX(BrowseBox)
 
-//===================================================================
+
 
 extern const char* BrowseBoxCheckInvariants( const void * pVoid );
 
-//===================================================================
+
 
 void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel */ )
 {
@@ -48,7 +48,7 @@ void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel *
     // not interested in this event
 }
 
-//===================================================================
+
 
 sal_Int8 BrowseBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
@@ -58,7 +58,7 @@ sal_Int8 BrowseBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     return pDataWindow->AcceptDrop( aTransformed );
 }
 
-//===================================================================
+
 
 sal_Int8 BrowseBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
@@ -68,7 +68,7 @@ sal_Int8 BrowseBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return pDataWindow->ExecuteDrop( aTransformed );
 }
 
-//===================================================================
+
 
 sal_Int8 BrowseBox::AcceptDrop( const BrowserAcceptDropEvent& )
 {
@@ -77,7 +77,7 @@ sal_Int8 BrowseBox::AcceptDrop( const BrowserAcceptDropEvent& )
     return DND_ACTION_NONE;
 }
 
-//===================================================================
+
 
 sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& )
 {
@@ -86,7 +86,7 @@ sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& )
     return DND_ACTION_NONE;
 }
 
-//===================================================================
+
 
 void* BrowseBox::implGetDataFlavors() const
 {
@@ -95,7 +95,7 @@ void* BrowseBox::implGetDataFlavors() const
     return &GetDataFlavorExVector();
 }
 
-//===================================================================
+
 
 sal_Bool BrowseBox::IsDropFormatSupported( SotFormatStringId _nFormat )
 {
@@ -105,14 +105,14 @@ sal_Bool BrowseBox::IsDropFormatSupported( SotFormatStringId _nFormat )
     return DropTargetHelper::IsDropFormatSupported( _nFormat );
 }
 
-//===================================================================
+
 
 sal_Bool BrowseBox::IsDropFormatSupported( SotFormatStringId _nFormat ) const
 {
     return const_cast< BrowseBox* >( this )->IsDropFormatSupported( _nFormat );
 }
 
-//===================================================================
+
 
 sal_Bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor )
 {
@@ -122,14 +122,14 @@ sal_Bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor )
     return DropTargetHelper::IsDropFormatSupported( _rFlavor );
 }
 
-//===================================================================
+
 
 sal_Bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor ) const
 {
     return const_cast< BrowseBox* >( this )->IsDropFormatSupported( _rFlavor );
 }
 
-//===================================================================
+
 
 void BrowseBox::Command( const CommandEvent& rEvt )
 {
@@ -137,7 +137,7 @@ void BrowseBox::Command( const CommandEvent& rEvt )
         Control::Command( rEvt );
 }
 
-//===================================================================
+
 
 void BrowseBox::StateChanged( StateChangedType nStateChange )
 {
@@ -213,7 +213,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
     }
 }
 
-//===================================================================
+
 
 void BrowseBox::Select()
 {

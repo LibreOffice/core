@@ -29,11 +29,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const Primitive2DSequence& rSequence,
@@ -91,7 +91,7 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     return aRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SvgData::ensureReplacement()
 {
@@ -103,7 +103,7 @@ void SvgData::ensureReplacement()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SvgData::ensureSequenceAndRange()
 {
@@ -160,7 +160,7 @@ void SvgData::ensureSequenceAndRange()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const OUString& rPath)
 :   maSvgDataArray(rSvgDataArray),
@@ -172,7 +172,7 @@ SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLeng
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 SvgData::SvgData(const OUString& rPath):
     maSvgDataArray(),
     mnSvgDataArrayLength(0),
@@ -200,7 +200,7 @@ SvgData::SvgData(const OUString& rPath):
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 const basegfx::B2DRange& SvgData::getRange() const
 {
@@ -209,7 +209,7 @@ const basegfx::B2DRange& SvgData::getRange() const
     return maRange;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 const Primitive2DSequence& SvgData::getPrimitive2DSequence() const
 {
@@ -218,7 +218,7 @@ const Primitive2DSequence& SvgData::getPrimitive2DSequence() const
     return maSequence;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 const BitmapEx& SvgData::getReplacement() const
 {

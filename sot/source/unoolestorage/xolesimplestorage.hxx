@@ -78,17 +78,17 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
 
 
-    //____________________________________________________________________________________________________
+
     //  XInitialization
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw ( ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException);
 
-    //____________________________________________________________________________________________________
+
     //  XNameContainer
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
@@ -124,9 +124,9 @@ public:
     virtual sal_Bool SAL_CALL hasElements()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
+
     //  XComponent
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL dispose()
         throw ( ::com::sun::star::uno::RuntimeException );
@@ -139,9 +139,9 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
+
     //  XTransactedObject
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL commit()
         throw ( ::com::sun::star::io::IOException,
@@ -153,9 +153,9 @@ public:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
+
     //  XClassifiedObject
-    //____________________________________________________________________________________________________
+
 
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getClassID()
         throw ( ::com::sun::star::uno::RuntimeException );
@@ -168,9 +168,9 @@ public:
         throw ( ::com::sun::star::lang::NoSupportException,
                 ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
+
     //  XServiceInfo
-    //____________________________________________________________________________________________________
+
 
     virtual OUString SAL_CALL getImplementationName()
         throw ( ::com::sun::star::uno::RuntimeException );

@@ -31,7 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class OutputDevice;
@@ -45,7 +45,7 @@ namespace basegfx {
     class B2DRange;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -144,7 +144,7 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGER_HXX
 

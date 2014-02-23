@@ -28,9 +28,9 @@
 namespace avmedia { namespace quicktime {
 
 /*
-// ----------
+
 // - Player -
-// ----------
+
 */
 
 class Player : public ::cppu::WeakImplHelper2< ::com::sun::star::media::XPlayer,

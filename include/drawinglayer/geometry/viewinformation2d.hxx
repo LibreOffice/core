@@ -28,7 +28,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace geometry {
@@ -40,7 +40,7 @@ namespace basegfx {
     class B2DRange;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -171,7 +171,7 @@ namespace drawinglayer
     } // end of namespace geometry
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 

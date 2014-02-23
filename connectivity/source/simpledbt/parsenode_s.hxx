@@ -23,15 +23,15 @@
 #include <connectivity/virtualdbtools.hxx>
 #include "refbase.hxx"
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     class OSQLParseNode;
-    //================================================================
+
     //= OSimpleParseNode
-    //================================================================
+
     class OSimpleParseNode
             :public simple::ISQLParseNode
             ,public ORefBase
@@ -65,9 +65,9 @@ namespace connectivity
         virtual oslInterlockedCount SAL_CALL release();
     };
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 #endif // CONNECTIVITY_PARSENODE_SIMPLE_HXX
 

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SVTOOLS_TOOLPANEL_TABITEMCONTENT_HXX
 #define INCLUDED_SVTOOLS_TOOLPANEL_TABITEMCONTENT_HXX
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     enum TabItemContent
     {
@@ -34,9 +34,9 @@ namespace svt
         TABITEM_AUTO
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TABITEMCONTENT_HXX
 

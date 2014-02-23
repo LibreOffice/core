@@ -26,7 +26,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 /** A vector that contains all predefined property names used in the filters. */
 struct PropertyNameVector : public ::std::vector< OUString > { PropertyNameVector(); };
@@ -34,7 +34,7 @@ struct PropertyNameVector : public ::std::vector< OUString > { PropertyNameVecto
 /** Thread-save singleton of a vector of all supported property names. */
 struct StaticPropertyNameVector : public ::rtl::Static< PropertyNameVector, StaticPropertyNameVector > {};
 
-// ============================================================================
+
 
 } // namespace oox
 

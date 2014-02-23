@@ -30,16 +30,16 @@
 class EditView;
 class EditEngine;
 class SfxItemSet;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     class RichTextControlImpl;
     class RichTextEngine;
-    //====================================================================
+
     //= RichTextControl
-    //====================================================================
+
     class RichTextControl : public Control, public IMultiAttributeDispatcher
     {
     private:
@@ -122,9 +122,9 @@ namespace frm
         Window&      getViewport() const;
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTVCLCONTROL_HXX
 

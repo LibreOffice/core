@@ -42,13 +42,13 @@ sal_Char* createName( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt );
 
 sal_uInt32 AStringLen( const sal_Char *pAStr );
 
-//------------------------------------------------------------------------
+
 
 bool AStringNIsValid( const sal_Char   *pAStr,
                           const sal_uInt32  nStrLen
                         );
 
-//------------------------------------------------------------------------
+
 
 sal_Int32 AStringToUStringCompare( const sal_Unicode *pUStr,
                                    const sal_Char    *pAStr

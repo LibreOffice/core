@@ -56,7 +56,7 @@
 #include <plugin/plcom.hxx>
 #include <vcl/threadex.hxx>
 
-//==================================================================================================
+
 class PluginComm_Impl :
     public PluginComm,
     public ::vcl::SolarThreadExecutor

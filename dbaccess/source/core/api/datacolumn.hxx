@@ -28,9 +28,9 @@
 #include <resultcolumn.hxx>
 namespace dbaccess
 {
-    //************************************************************
+
     //  ODataColumn
-    //************************************************************
+
     class ODataColumn : public OResultColumn,
                         public ::com::sun::star::sdb::XColumn,
                         public ::com::sun::star::sdb::XColumnUpdate

@@ -29,7 +29,7 @@ class SvxFrameDirectionItem;
 
 namespace svx {
 
-// ============================================================================
+
 
 /** This listbox contains entries to select horizontal text direction.
 
@@ -66,7 +66,7 @@ private:
 
 typedef FrameDirectionListBox FrameDirListBox;
 
-// ============================================================================
+
 
 /** Wrapper for usage of a FrameDirectionListBox in item connections. */
 class SVX_DLLPUBLIC FrameDirListBoxWrapper : public sfx::SingleControlWrapper< FrameDirListBox, SvxFrameDirection >
@@ -87,7 +87,7 @@ typedef sfx::ValueItemWrapper< SvxFrameDirectionItem, SvxFrameDirection, sal_uIn
 /** An item<->control connection for a FrameDirectionListBox. */
 typedef sfx::ItemControlConnection< FrameDirItemWrapper, FrameDirListBoxWrapper > FrameDirListBoxConnection;
 
-// ============================================================================
+
 
 } // namespace svx
 

@@ -26,14 +26,14 @@
 
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    // ===================================================================
+
+
     // = UnoControlFormattedFieldModel
-    // ===================================================================
+
     class UnoControlFormattedFieldModel : public UnoControlModel
     {
     protected:
@@ -99,9 +99,9 @@ namespace toolkit
         void    impl_updateCachedFormatKey_nothrow();
     };
 
-    // ===================================================================
+
     // = UnoFormattedFieldControl
-    // ===================================================================
+
     class UnoFormattedFieldControl : public UnoSpinFieldControl
     {
     public:
@@ -115,9 +115,9 @@ namespace toolkit
         DECLIMPL_SERVICEINFO_DERIVED( UnoFormattedFieldControl, UnoEditControl, szServiceName2_UnoControlFormattedField )
     };
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_FORMATTEDCONTROL_HXX
 

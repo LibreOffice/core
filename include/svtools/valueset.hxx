@@ -176,9 +176,9 @@ to be set (before Show) with SetStyle().
 
 *************************************************************************/
 
-// ------------------
+
 // - ValueSet types -
-// ------------------
+
 
 #define WB_RADIOSEL             ((WinBits)0x00008000)
 #define WB_ITEMBORDER           ((WinBits)0x00010000)
@@ -189,9 +189,9 @@ to be set (before Show) with SetStyle().
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #define WB_MENUSTYLEVALUESET    ((WinBits)0x08000000)
 
-// ------------
+
 // - ValueSet -
-// ------------
+
 
 #define VALUESET_APPEND         ((sal_uInt16)-1)
 #define VALUESET_ITEM_NOTFOUND  ((sal_uInt16)-1)

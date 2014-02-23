@@ -26,14 +26,14 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OABSPilotUno
-    //=====================================================================
+
     class OABSPilotUno;
     typedef ::svt::OGenericUnoDialog                                OABSPilotUno_DBase;
     typedef ::cppu::ImplHelper1< ::com::sun::star::task::XJob >     OABSPilotUno_JBase;
@@ -88,9 +88,9 @@ namespace abp
         virtual void executedDialog(sal_Int16 _nExecutionResult);
     };
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 #endif // EXTENSIONS_ABP_UNODIALOG_HXX
 

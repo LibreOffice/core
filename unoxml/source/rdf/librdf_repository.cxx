@@ -92,7 +92,7 @@ typedef std::map< OUString, ::rtl::Reference<librdf_NamedGraph> >
 const char s_sparql [] = "sparql";
 const char s_nsOOo  [] = "http://openoffice.org/2004/office/rdfa/";
 
-////////////////////////////////////////////////////////////////////////////
+
 
 //FIXME: this approach is not ideal. can we use blank nodes instead?
 bool isInternalContext(librdf_node *i_pNode) throw ()
@@ -119,7 +119,7 @@ bool isInternalContext(librdf_node *i_pNode) throw ()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 // n.b.: librdf destructor functions dereference null pointers!
 //       so they need to be wrapped to be usable with boost::shared_ptr.
@@ -170,7 +170,7 @@ static void safe_librdf_free_uri(librdf_uri *const uri)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 /** converts between librdf types and UNO API types.
  */
@@ -266,7 +266,7 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 /** implements the repository service.
  */
@@ -450,7 +450,7 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 /** result of operations that return a graph, i.e.,
     an XEnumeration of statements.
@@ -565,7 +565,7 @@ throw (uno::RuntimeException, container::NoSuchElementException,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 /** result of tuple queries ("SELECT").
  */
@@ -691,7 +691,7 @@ librdf_QuerySelectResult::getBindingNames() throw (uno::RuntimeException)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 /** represents a named graph, and forwards all the work to repository.
  */
@@ -848,7 +848,7 @@ throw (uno::RuntimeException,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 boost::shared_ptr<librdf_world> librdf_Repository::m_pWorld;
 sal_uInt32 librdf_Repository::m_NumInstances = 0;
@@ -994,7 +994,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     // exceptions are propagated
     i_xInStream->readBytes( buf, static_cast<sal_Int32>( sz ) );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     if (m_NamedGraphs.find(contextU) != m_NamedGraphs.end()) {
         throw container::ElementExistException(
@@ -1242,7 +1242,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             *this);
     }
 
-    g.clear(); // release Mutex before calling i_xOutStream methods //////////
+    g.clear(); // release Mutex before calling i_xOutStream methods
 
     addChaffWhenEncryptedStorage(i_xOutStream, pBuf.get(), length);
 }
@@ -1297,7 +1297,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "librdf_Repository::createGraph: URI is reserved", *this, 0);
     }
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     // NB: librdf does not have a concept of graphs as such;
     //     a librdf named graph exists iff the model contains a statement with
@@ -1325,7 +1325,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     const NamedGraphMap_t::iterator iter( clearGraph_Lock(contextU, false) );
     m_NamedGraphs.erase(iter);
@@ -1358,7 +1358,7 @@ throw (uno::RuntimeException, rdf::RepositoryException)
         m_TypeConverter.extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement_Lock(m_pWorld.get(), stmt),
@@ -1593,7 +1593,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     removeStatementRDFa(i_xObject); // not atomic with insertion?
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     if (i_rRDFaContent.isEmpty()) {
         m_RDFaXHTMLContentSet.erase(sXmlId);
@@ -1674,7 +1674,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         }
     }
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >(
             ret.getAsConstList(), 0 != m_RDFaXHTMLContentSet.count(sXmlId));
@@ -1720,7 +1720,7 @@ throw (uno::RuntimeException, rdf::RepositoryException)
         m_TypeConverter.extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement_Lock(m_pWorld.get(), stmt),
@@ -1833,7 +1833,7 @@ void librdf_Repository::addStatementGraph_NoLock(
 
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     addStatementGraph_Lock(stmt, contextU, i_Internal);
 }
@@ -1907,7 +1907,7 @@ void librdf_Repository::removeStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     if (m_NamedGraphs.find(contextU) == m_NamedGraphs.end()) {
         throw container::NoSuchElementException(
@@ -1987,7 +1987,7 @@ librdf_Repository::getStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked //////
+    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     if (!i_Internal && (m_NamedGraphs.find(contextU) == m_NamedGraphs.end())) {
         throw container::NoSuchElementException(

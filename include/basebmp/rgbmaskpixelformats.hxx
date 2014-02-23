@@ -191,7 +191,7 @@ template< typename     PixelType,
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 template< typename     PixelType,
           unsigned int RedMask,
@@ -220,7 +220,7 @@ template< typename     PixelType,
         getter_type, setter_type>               accessor_selector;
 };
 
-//-----------------------------------------------------------------------------
+
 
 // Hopefully this is an understandable plaintext explanation that matches
 // reality...
@@ -251,7 +251,7 @@ template< typename     PixelType,
 # endif
 #endif
 
-//-----------------------------------------------------------------------------
+
 
 // 16bpp MSB RGB
 typedef PixelFormatTraitsTemplate_RGBMask<

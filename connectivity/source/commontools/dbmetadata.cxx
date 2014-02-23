@@ -43,10 +43,10 @@
 
 #include <boost/optional.hpp>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
@@ -72,9 +72,9 @@ namespace dbtools
 
     namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 
-    //====================================================================
+
     //= DatabaseMetaData_Impl
-    //====================================================================
+
     struct DatabaseMetaData_Impl
     {
         Reference< XConnection >        xConnection;
@@ -97,7 +97,7 @@ namespace dbtools
 
     namespace
     {
-        //................................................................
+
         static void lcl_construct( DatabaseMetaData_Impl& _metaDataImpl, const Reference< XConnection >& _connection )
         {
             _metaDataImpl.xConnection = _connection;
@@ -109,7 +109,7 @@ namespace dbtools
                 throw IllegalArgumentException();
         }
 
-        //................................................................
+
         static void lcl_checkConnected( const DatabaseMetaData_Impl& _metaDataImpl )
         {
             if ( !_metaDataImpl.xConnection.is() || !_metaDataImpl.xConnectionMetaData.is() )
@@ -120,7 +120,7 @@ namespace dbtools
             }
         }
 
-        //................................................................
+
         static bool lcl_getDriverSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             lcl_checkConnected( _metaData );
@@ -131,7 +131,7 @@ namespace dbtools
             return true;
         }
 
-        //................................................................
+
         static bool lcl_getConnectionSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             try
@@ -162,7 +162,7 @@ namespace dbtools
             return false;
         }
 
-        //................................................................
+
         static const OUString& lcl_getConnectionStringSetting(
             const DatabaseMetaData_Impl& _metaData, ::boost::optional< OUString >& _cachedSetting,
             OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
@@ -180,9 +180,9 @@ namespace dbtools
         }
     }
 
-    //====================================================================
+
     //= DatabaseMetaData
-    //====================================================================
+
 
     DatabaseMetaData::DatabaseMetaData()
         :m_pImpl( new DatabaseMetaData_Impl )
@@ -431,8 +431,8 @@ namespace dbtools
         return bSupported;
     }
 
-//........................................................................
+
 } // namespace dbtools
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

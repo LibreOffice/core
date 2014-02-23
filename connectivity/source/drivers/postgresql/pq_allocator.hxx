@@ -43,7 +43,7 @@
          out.
  */
 
-//######################################################
+
 // This is no general purpose STL allocator but one
 // necessary to use STL for some implementation but
 // avoid linking sal against the STLPort library!!!
@@ -67,49 +67,49 @@ public:
     typedef ::std::size_t size_type;
     typedef ::std::ptrdiff_t difference_type;
 
-    //-----------------------------------------
+
     template<class U>
     struct rebind
     {
         typedef Allocator<U> other;
     };
 
-    //-----------------------------------------
+
     pointer address (reference value) const
     {
         return &value;
     }
 
-    //-----------------------------------------
+
     const_pointer address (const_reference value) const
     {
         return &value;
     }
 
-    //-----------------------------------------
+
     Allocator() SAL_THROW(())
     {}
 
-    //-----------------------------------------
+
     template<class U>
     Allocator (const Allocator<U>&) SAL_THROW(())
     {}
 
-    //-----------------------------------------
+
     Allocator(const Allocator&) SAL_THROW(())
     {}
 
-    //-----------------------------------------
+
     ~Allocator() SAL_THROW(())
     {}
 
-    //-----------------------------------------
+
     size_type max_size() const SAL_THROW(())
     {
         return size_type(-1)/sizeof(T);
     }
 
-    //-----------------------------------------
+
     /* Normally the code for allocate should
        throw a std::bad_alloc exception if the
        requested memory could not be allocated:
@@ -136,13 +136,13 @@ public:
             rtl_allocateMemory(sal_uInt32(n * sizeof(T))));
     }
 
-    //-----------------------------------------
+
     void deallocate (pointer p, SAL_UNUSED_PARAMETER size_type)
     {
         rtl_freeMemory(p);
     }
 
-    //-----------------------------------------
+
     void construct (pointer p, const T& value)
     {
         new ((void*)p)T(value);
@@ -151,13 +151,13 @@ public:
     // LEM: GNU libstdc++ vectors expect this one to exist,
     // at least if one intends to create vectors by giving
     // only a size and no initialising value.
-    //-----------------------------------------
+
     void construct (pointer p)
     {
         new ((void*)p)T;
     }
 
-    //-----------------------------------------
+
     void destroy (pointer p)
     {
         p->~T();
@@ -167,7 +167,7 @@ public:
     }
 };
 
-//######################################################
+
 // Custom STL allocators must be stateless (see
 // references above) that's why the operators below
 // return always true or false

@@ -123,9 +123,9 @@ namespace rptui
 
         void scrollChildren(long _nThumbPosX);
     };
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 #endif // RPTUI_SECTIONWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

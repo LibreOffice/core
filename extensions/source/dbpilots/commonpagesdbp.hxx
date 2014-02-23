@@ -25,14 +25,14 @@
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OTableSelectionPage
-    //=====================================================================
+
     class OTableSelectionPage : public OControlWizardPage
     {
     protected:
@@ -71,9 +71,9 @@ namespace dbp
         virtual bool    canAdvance() const;
     };
 
-    //=====================================================================
+
     //= OMaybeListSelectionPage
-    //=====================================================================
+
     class OMaybeListSelectionPage : public OControlWizardPage
     {
     protected:
@@ -102,9 +102,9 @@ namespace dbp
         void implCommit(OUString& _rSelection);
     };
 
-    //=====================================================================
+
     //= ODBFieldPage
-    //=====================================================================
+
     class ODBFieldPage : public OMaybeListSelectionPage
     {
     protected:
@@ -129,9 +129,9 @@ namespace dbp
         virtual OUString& getDBFieldSetting() = 0;
     };
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 
 #endif // _EXTENSIONS_DBP_COMMONPAGESDBP_HXX_

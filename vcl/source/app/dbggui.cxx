@@ -61,7 +61,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 static const sal_Char* pDbgHelpText[] =
 {
@@ -275,7 +275,7 @@ static const sal_Char* pDbgHelpText[] =
 NULL
 };
 
-// =======================================================================
+
 
 namespace
 {
@@ -330,7 +330,7 @@ namespace
     }
 }
 
-// =======================================================================
+
 
 // -------------
 // - DbgWindow -
@@ -425,12 +425,12 @@ public:
     void            RequestHelp( const HelpEvent& rHEvt );
 };
 
-// =======================================================================
+
 
 static sal_Char aDbgInfoBuf[12288];
 static sal_Char aDbgOutBuf[DBG_BUF_MAXLEN];
 
-// =======================================================================
+
 
 DbgWindow::DbgWindow() :
     WorkWindow( NULL, WB_STDWORK ),
@@ -580,7 +580,7 @@ void DbgWindow::InsertLine( const OUString& rLine )
     maLstBox.Update();
 }
 
-// =======================================================================
+
 
 DbgDialog::DbgDialog() :
     ModalDialog( NULL, WB_STDMODAL | WB_SYSTEMWINDOW ),
@@ -1046,7 +1046,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-// =======================================================================
+
 
 DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
     ModalDialog( pParent, WB_STDMODAL ),
@@ -1121,7 +1121,7 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
     maListBox.SetUpdateMode( true );
 }
 
-// =======================================================================
+
 
 void DbgDialogTest( Window* pWindow )
 {
@@ -1481,7 +1481,7 @@ void DbgDialogTest( Window* pWindow )
     delete [] pRectAry;
 }
 
-// =======================================================================
+
 #ifndef WNT
 #define USE_VCL_MSGBOX
 #define COPY_BUTTON_ID 25
@@ -1671,14 +1671,14 @@ void DbgAbort( char const * i_message )
     Application::Abort( message );
 }
 
-// =======================================================================
+
 
 void ImplDbgTestSolarMutex()
 {
     assert(ImplGetSVData()->mpDefInst->CheckYieldMutex());
 }
 
-// =======================================================================
+
 
 void DbgGUIInit()
 {

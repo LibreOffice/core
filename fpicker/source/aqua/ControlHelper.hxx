@@ -39,34 +39,34 @@ class ControlHelper {
 
 public:
 
-    //------------------------------------------------------------------------------------
+
     // Constructor / Destructor
-    //------------------------------------------------------------------------------------
+
     ControlHelper();
     virtual ~ControlHelper();
 
-    //------------------------------------------------
+
     // XInitialization delegate
-    //------------------------------------------------
+
     void       initialize( sal_Int16 templateId );
 
-    //------------------------------------------------------------------------------------
+
     // XFilePickerControlAccess function delegates
-    //------------------------------------------------------------------------------------
+
     void       setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue );
     uno::Any   getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const;
     void       enableControl( sal_Int16 nControlId, sal_Bool bEnable ) const;
     OUString   getLabel( sal_Int16 nControlId );
     void       setLabel( sal_Int16 nControlId, NSString* aLabel );
 
-    //------------------------------------------------------------------------------------
+
     // other stuff
-    //------------------------------------------------------------------------------------
+
     void       updateFilterUI();
 
-    //------------------------------------------------------------------------------------
+
     // Type definitions
-    //------------------------------------------------------------------------------------
+
     enum ToggleType {
         AUTOEXTENSION, //but autoextension is handled differently on MacOSX
         PASSWORD,
@@ -85,9 +85,9 @@ public:
         LIST_LAST
     };
 
-    //------------------------------------------------------------------------------------
+
     // inline functions
-    //------------------------------------------------------------------------------------
+
     inline NSView* getUserPane() {
         if (m_bIsUserPaneLaidOut == false) {
             createUserPane();
@@ -119,9 +119,9 @@ public:
     }
 
 private:
-    //------------------------------------------------------------------------------------
+
     // private member variables
-    //------------------------------------------------------------------------------------
+
 
     /** the native view object */
     NSView*    m_pUserPane;
@@ -165,9 +165,9 @@ private:
     /** the save or open panel's delegate */
     AquaFilePickerDelegate *m_pDelegate;
 
-    //------------------------------------------------------------------------------------
+
     // private methods
-    //------------------------------------------------------------------------------------
+
     void HandleSetListValue(const NSControl* pControl, const sal_Int16 nControlAction, const uno::Any& rValue);
     uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction) const;
 

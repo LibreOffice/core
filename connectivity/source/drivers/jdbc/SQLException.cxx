@@ -26,9 +26,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//**************************************************************
+
 //************ Class: java.sql.SQLException
-//**************************************************************
+
 java_sql_SQLException::java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const Reference< XInterface> & _rContext)
     : starsdbc::SQLException(   _rException.getMessage(),
                                 _rContext,

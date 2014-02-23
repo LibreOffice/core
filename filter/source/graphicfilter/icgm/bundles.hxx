@@ -25,7 +25,7 @@
 #include <vcl/salbtype.hxx>
 #include <vector>
 
-// ---------------------------------------------------------------
+
 
 class Bundle
 {
@@ -50,7 +50,7 @@ public:
     virtual            ~Bundle() {} ;
 };
 
-// ---------------------------------------------------------------
+
 
 class LineBundle : public Bundle
 {
@@ -68,7 +68,7 @@ public:
     LineBundle& operator=( LineBundle& rLineBundle );
 };
 
-// ---------------------------------------------------------------
+
 
 class MarkerBundle : public Bundle
 {
@@ -87,7 +87,7 @@ public:
     virtual             ~MarkerBundle() {};
 };
 
-// ---------------------------------------------------------------
+
 
 class EdgeBundle : public Bundle
 {
@@ -104,7 +104,7 @@ public:
     EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
 };
 
-// ---------------------------------------------------------------
+
 
 class TextBundle : public Bundle
 {
@@ -127,7 +127,7 @@ public:
     virtual             ~TextBundle() {};
 };
 
-// ---------------------------------------------------------------
+
 
 class FillBundle : public Bundle
 {
@@ -147,7 +147,7 @@ public:
 };
 
 
-// ---------------------------------------------------------------
+
 
 class FontEntry
 {
@@ -163,7 +163,7 @@ public:
                         ~FontEntry();
 };
 
-// ---------------------------------------------------------------
+
 
 typedef ::std::vector< FontEntry* > FontEntryList;
 

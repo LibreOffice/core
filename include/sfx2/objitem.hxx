@@ -25,7 +25,7 @@
 
 #include <sfx2/shell.hxx>
 
-//------------------------------------------------------------------------
+
 
 class SFX2_DLLPUBLIC SfxObjectItem: public SfxPoolItem
 {

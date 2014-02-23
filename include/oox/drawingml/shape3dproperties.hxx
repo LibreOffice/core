@@ -34,7 +34,7 @@ namespace oox { namespace core { class ModelObjectContainer; } }
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 struct Shape3DPropertyNames
 {
@@ -59,7 +59,7 @@ struct Shape3DPropertyNames
     Shape3DPropertyNames();
 };
 
-// ============================================================================
+
 
 struct Shape3DProperties
 {
@@ -115,7 +115,7 @@ struct Shape3DProperties
                             sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const;
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

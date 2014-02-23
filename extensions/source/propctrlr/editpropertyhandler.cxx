@@ -34,10 +34,10 @@ extern "C" void SAL_CALL createRegistryInfo_EditPropertyHandler()
     ::pcr::EditPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -46,9 +46,9 @@ namespace pcr
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= EditPropertyHandler
-    //====================================================================
+
     DBG_NAME( EditPropertyHandler )
 
     EditPropertyHandler::EditPropertyHandler( const Reference< XComponentContext >& _rxContext )
@@ -305,8 +305,8 @@ namespace pcr
         }
     }
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

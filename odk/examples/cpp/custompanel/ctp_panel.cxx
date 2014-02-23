@@ -32,10 +32,10 @@
 
 #include <osl/diagnose.h>
 
-//......................................................................................................................
+
 namespace sd { namespace colortoolpanel
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -68,9 +68,9 @@ namespace sd { namespace colortoolpanel
     namespace PosSize = ::com::sun::star::awt::PosSize;
     namespace UIElementType = ::com::sun::star::ui::UIElementType;
 
-    //==================================================================================================================
+
     //= helpers
-    //==================================================================================================================
+
     namespace
     {
         Reference< XWindow > lcl_createPlainWindow_nothrow( const Reference< XComponentContext >& i_rContext,
@@ -97,9 +97,9 @@ namespace sd { namespace colortoolpanel
             return NULL;
         }
     }
-    //==================================================================================================================
+
     //= class SingleColorPanel
-    //==================================================================================================================
+
 
     SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow, const ::sal_Int32 i_nPanelColor )
         :SingleColorPanel_Base( m_aMutex )
@@ -195,9 +195,9 @@ namespace sd { namespace colortoolpanel
         m_xWindow.clear();
     }
 
-    //==================================================================================================================
+
     //= PanelUIElement
-    //==================================================================================================================
+
 
     PanelUIElement::PanelUIElement( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow,
         const OUString& i_rResourceURL, const ::sal_Int32 i_nPanelColor )
@@ -248,8 +248,8 @@ namespace sd { namespace colortoolpanel
         xPanelComponent->dispose();
     }
 
-//......................................................................................................................
+
 } } // namespace sd::colortoolpanel
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

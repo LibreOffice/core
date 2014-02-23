@@ -26,7 +26,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 //
 class CondFormatContext;
 
@@ -85,7 +85,7 @@ private:
     CondFormatRuleRef   mxRule;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -201,9 +201,9 @@ class SvtMenuOptions_Impl : public ConfigItem
         static Sequence< OUString > impl_GetPropertyNames();
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     // Init baseclasses first
     :   ConfigItem                  ( ROOTNODE_MENU                     )
@@ -274,9 +274,9 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     EnableNotification( seqNames );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
 {
     // Flush data to configuration!
@@ -287,9 +287,9 @@ SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
     // Use given list of updated properties to get his values from configuration directly!
@@ -346,9 +346,9 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
         iter->Call( this );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtMenuOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
@@ -385,9 +385,9 @@ void SvtMenuOptions_Impl::Commit()
     PutProperties( seqNames, seqValues );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
 {
     // Build static list of configuration key names.
@@ -421,17 +421,17 @@ void SvtMenuOptions_Impl::RemoveListenerLink( const Link& rLink )
     }
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtMenuOptions_Impl*    SvtMenuOptions::m_pDataContainer    = NULL  ;
 sal_Int32               SvtMenuOptions::m_nRefCount         = 0     ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtMenuOptions::SvtMenuOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -447,9 +447,9 @@ SvtMenuOptions::SvtMenuOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtMenuOptions::~SvtMenuOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -465,36 +465,36 @@ SvtMenuOptions::~SvtMenuOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Bool SvtMenuOptions::IsEntryHidingEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsEntryHidingEnabled();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Int16 SvtMenuOptions::GetMenuIconsState() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetMenuIconsState();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtMenuOptions::SetMenuIconsState( sal_Int16 bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetMenuIconsState( bState );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Mutex& SvtMenuOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!

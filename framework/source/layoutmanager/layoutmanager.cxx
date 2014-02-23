@@ -2821,7 +2821,7 @@ throw ( RuntimeException )
     }
 }
 
-// ______________________________________________
+
 
 void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
 throw( RuntimeException )

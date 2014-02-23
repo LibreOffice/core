@@ -1676,7 +1676,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL
     return rProperties;
 }
 
-//=========================================================================
+
 
 RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > rModel,
                               uno::Sequence< beans::PropertyValue > rProperties )
@@ -1711,7 +1711,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     return m_lContinuations;
 }
 
-//=========================================================================
+
 class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< task::XInteractionRequest >
 {
     uno::Any m_aRequest;
@@ -1781,7 +1781,7 @@ com::sun::star::uno::Reference < task::XInteractionRequest > RequestPackageRepar
     return com::sun::star::uno::Reference < task::XInteractionRequest >(pImp);
 }
 
-//=========================================================================
+
 class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< task::XInteractionRequest >
 {
     uno::Any m_aRequest;

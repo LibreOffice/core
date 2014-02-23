@@ -24,9 +24,9 @@
 namespace connectivity
 {
 
-    //**************************************************************
+
     //************ Class: java.lang.Exception
-    //**************************************************************
+
     class java_lang_Exception : public java_lang_Throwable{
     protected:
     // statis Data for the class

@@ -33,9 +33,9 @@
 #pragma warning(pop)
 #endif
 
-//---------------------------------------------
+
 // declaration
-//---------------------------------------------
+
 
 /*
     A simple popup window similary to the one the

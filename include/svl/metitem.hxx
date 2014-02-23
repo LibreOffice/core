@@ -24,7 +24,7 @@
 
 DBG_NAMEEX_VISIBILITY(SfxMetricItem, SVL_DLLPUBLIC)
 
-// -----------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxMetricItem: public SfxInt32Item
 {

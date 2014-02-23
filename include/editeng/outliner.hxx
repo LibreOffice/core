@@ -81,7 +81,7 @@ namespace svl
 #include <editeng/paragraphdata.hxx>
 
 class SvxFieldData;
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;

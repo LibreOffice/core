@@ -1471,9 +1471,9 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             }
             break;
         }
-        // ############################################################################
+
         // IN OUT parameter
-        // ############################################################################
+
     case 100:
         {
             Reference<XSimple> xSimple= static_cast<XSimple*>(this);
@@ -1688,9 +1688,9 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         break;
         }
 
-    // ############################################################################
+
     // IN parameter
-    // ############################################################################
+
 
     case 200:
 
@@ -1720,10 +1720,10 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         break;
     }
 
-    // ############################################################################
+
     // Call a COM object that has not been passed as parameter to a UNO component and
     // hence no type information are available in the COM wrapper
-    // ############################################################################
+
     case 300:
         {
             Reference<XInterface> xIntFact = m_rFactory->createInstance(L"com.sun.star.bridge.oleautomation.Factory");
@@ -1886,9 +1886,9 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
             break;
         }
-    // ############################################################################
+
     // Attributes
-    // ############################################################################
+
 
     case 400:
         Reference<XSimple> simple=  xCallback->getsimple();

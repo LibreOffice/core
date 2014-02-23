@@ -28,9 +28,9 @@
 #include <cstdio>
 #include <vector>
 
-// ---------------------
+
 // - GalleryThemeEntry -
-// ---------------------
+
 
 class SvStream;
 
@@ -86,9 +86,9 @@ public:
 
 typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
 
-// -----------
+
 // - Gallery -
-// -----------
+
 
 class SfxListener;
 class GalleryTheme;

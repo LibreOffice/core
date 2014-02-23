@@ -48,9 +48,9 @@ using namespace ::com::sun::star::frame;
 using ::com::sun::star::beans::XPropertySet;
 
 
-//========================================================================
+
 // class SvxFmAbsRecWin
-//========================================================================
+
 
 
 SvxFmAbsRecWin::SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pController )
@@ -112,9 +112,9 @@ void SvxFmAbsRecWin::KeyInput( const KeyEvent& rKeyEvent )
         NumericField::KeyInput( rKeyEvent );
 }
 
-//========================================================================
+
 // class SvxFmTbxCtlConfig
-//========================================================================
+
 
 struct MapSlotToCmd
 {
@@ -223,7 +223,7 @@ SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
 
 void SvxFmTbxCtlConfig::Select( sal_uInt16 /*nModifier*/ )
 {
-    //////////////////////////////////////////////////////////////////////
+
     // Click auf den Button SID_FM_CONFIG in der ObjectBar
     if ( nLastSlot )
     {
@@ -245,9 +245,9 @@ void SvxFmTbxCtlConfig::Select( sal_uInt16 /*nModifier*/ )
 }
 
 
-//========================================================================
+
 // class SvxFmTbxCtlAbsRec
-//========================================================================
+
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
 DBG_NAME(SvxFmTbxCtlAbsRec);
@@ -284,7 +284,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
     if (!bEnable)
         pWin->SetText(OUString());
 
-    //////////////////////////////////////////////////////////////////////
+
     // Enablen/disablen des Fensters
     pToolBox->EnableItem(nId, bEnable);
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
@@ -299,9 +299,9 @@ Window* SvxFmTbxCtlAbsRec::CreateItemWindow( Window* pParent )
 }
 
 
-//========================================================================
+
 // SvxFmTbxCtlRecText
-//========================================================================
+
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecText, SfxBoolItem );
 DBG_NAME(SvxFmTbxCtlRecText);
@@ -333,9 +333,9 @@ Window* SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
 }
 
 
-//========================================================================
+
 // SvxFmTbxCtlRecFromText
-//========================================================================
+
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecFromText, SfxBoolItem );
 DBG_NAME(SvxFmTbxCtlRecFromText);
@@ -366,9 +366,9 @@ Window* SvxFmTbxCtlRecFromText::CreateItemWindow( Window* pParent )
 }
 
 
-//========================================================================
+
 // SvxFmTbxCtlRecTotal
-//========================================================================
+
 DBG_NAME(SvxFmTbxCtlRecTotal);
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecTotal, SfxStringItem );
 
@@ -402,7 +402,7 @@ Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
 
 void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    //////////////////////////////////////////////////////////////////////
+
     // Setzen des FixedTextes
     if (GetSlotId() != SID_FM_RECORD_TOTAL)
         return;
@@ -420,9 +420,9 @@ void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
 
-//========================================================================
+
 // SvxFmTbxNextRec
-//========================================================================
+
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxNextRec, SfxBoolItem );
 
 
@@ -438,9 +438,9 @@ SvxFmTbxNextRec::SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& r
     rTbx.SetSettings(aSettings, sal_True);
 }
 
-//========================================================================
+
 // SvxFmTbxPrevRec
-//========================================================================
+
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxPrevRec, SfxBoolItem );
 
 

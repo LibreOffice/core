@@ -27,14 +27,14 @@
 
 #include <map>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
 
-    // =============================================================================
+
+
     // = ConditionalExpression
-    // =============================================================================
+
     class REPORTDESIGN_DLLPUBLIC ConditionalExpression
     {
     private:
@@ -63,18 +63,18 @@ namespace rptui
         bool                matchExpression( const OUString& _rExpression, const OUString& _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const;
     };
 
-    //========================================================================
+
     //= ConditionType
-    //========================================================================
+
     enum ConditionType
     {
         eFieldValueComparison   = 0,
         eExpression             = 1
     };
 
-    //========================================================================
+
     //= ComparisonOperation
-    //========================================================================
+
     enum ComparisonOperation
     {
         eBetween        = 0,
@@ -90,9 +90,9 @@ namespace rptui
     typedef ::boost::shared_ptr< ConditionalExpression >                PConditionalExpression;
     typedef ::std::map< ComparisonOperation, PConditionalExpression >   ConditionalExpressions;
 
-    // =============================================================================
+
     // = ConditionalExpressionFactory
-    // =============================================================================
+
     class REPORTDESIGN_DLLPUBLIC ConditionalExpressionFactory
     {
     public:
@@ -104,9 +104,9 @@ namespace rptui
         ConditionalExpressionFactory( const ConditionalExpressionFactory& );            // never implemented
         ConditionalExpressionFactory& operator=( const ConditionalExpressionFactory& ); // never implemented
     };
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 #endif // CONDITIONALEXPRESSION_HXX
 

@@ -24,13 +24,13 @@
 
 namespace package_ucp {
 
-//=========================================================================
+
 
 #define PACKAGE_URL_SCHEME          "vnd.sun.star.pkg"
 #define PACKAGE_ZIP_URL_SCHEME      "vnd.sun.star.zip"
 #define PACKAGE_URL_SCHEME_LENGTH   16
 
-//=========================================================================
+
 
 class PackageUri
 {

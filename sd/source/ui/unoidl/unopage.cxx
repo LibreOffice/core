@@ -1862,9 +1862,9 @@ Reference< XAnimationNode > SAL_CALL SdGenericDrawPage::getAnimationNode() throw
     return pSdPage->getAnimationNode();
 }
 
-//========================================================================
+
 // SdPageLinkTargets
-//========================================================================
+
 
 SdPageLinkTargets::SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) throw()
 {
@@ -2021,9 +2021,9 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
     return aSeq;
 }
 
-//========================================================================
+
 // SdDrawPage
-//========================================================================
+
 
 SdDrawPage::SdDrawPage(  SdXImpressDocument* pModel, SdPage* pPage ) throw()
 : SdGenericDrawPage( pModel, pPage, ImplGetDrawPagePropertySet( pModel->IsImpressDocument(), pPage->GetPageKind() ) )
@@ -2674,9 +2674,9 @@ Any SdGenericDrawPage::getNavigationOrder()
     }
 }
 
-//========================================================================
+
 // class SdMasterPage
-//========================================================================
+
 
 SdMasterPage::SdMasterPage( SdXImpressDocument* pModel, SdPage* pPage ) throw()
 : SdGenericDrawPage( pModel, pPage, ImplGetMasterPagePropertySet( pPage ? pPage->GetPageKind() : PK_STANDARD ) )

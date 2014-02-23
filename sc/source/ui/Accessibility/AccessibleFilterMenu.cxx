@@ -51,7 +51,7 @@ using ::com::sun::star::uno::RuntimeException;
 using ::std::for_each;
 using ::std::vector;
 
-// ============================================================================
+
 
 namespace {
 
@@ -82,7 +82,7 @@ private:
 
 }
 
-// ============================================================================
+
 
 ScAccessibleFilterMenu::ScAccessibleFilterMenu(const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :
     ScAccessibleContextBase(rxParent, AccessibleRole::MENU),

@@ -27,14 +27,14 @@
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 
-//........................................................................
+
 namespace offapp
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DriverPooling
-    //====================================================================
+
     struct DriverPooling
     {
         OUString            sName;
@@ -47,9 +47,9 @@ namespace offapp
         sal_Bool operator != (const DriverPooling& _rR) const { return !operator ==(_rR); }
     };
 
-    //====================================================================
+
     //= DriverPoolingSettings
-    //====================================================================
+
     class DriverPoolingSettings
     {
     protected:
@@ -74,9 +74,9 @@ namespace offapp
         void push_back(const DriverPooling& _rElement) { m_aDrivers.push_back(_rElement); }
     };
 
-    //====================================================================
+
     //= DriverPoolingSettingsItem
-    //====================================================================
+
     class DriverPoolingSettingsItem : public SfxPoolItem
     {
     protected:
@@ -93,9 +93,9 @@ namespace offapp
         const DriverPoolingSettings& getSettings() const    { return m_aSettings; }
     };
 
-//........................................................................
+
 }   // namespace offapp
-//........................................................................
+
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLSETTINGS_HXX
 

@@ -304,7 +304,7 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
     } return 0.0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
@@ -375,7 +375,7 @@ void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, 
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
@@ -401,7 +401,7 @@ void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rR
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 long GetAngle(const Point& rPnt)
 {
@@ -466,7 +466,7 @@ long GetLen(const Point& rPnt)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void GeoStat::RecalcSinCos()
 {
@@ -490,7 +490,7 @@ void GeoStat::RecalcTan()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
 {
@@ -546,7 +546,7 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
     rRect=Rectangle(aPt0,aRU);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho)
 {
@@ -577,7 +577,7 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 long BigMulDiv(long nVal, long nMul, long nDiv)
 {
@@ -628,7 +628,7 @@ void Kuerzen(Fraction& rF, unsigned nDigits)
     rF=Fraction(nMul,nDiv);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // How many eU units fit into a mm, respectively an inch?
 // Or: How many mm, respectively inches, are there in an eU (and then give me the inverse)
 
@@ -712,7 +712,7 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     return aRet;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     // 1 mile    =  8 furlong = 63.360" = 1.609.344,0mm
     // 1 furlong = 10 chains  =  7.920" =   201.168,0mm
@@ -1103,7 +1103,7 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

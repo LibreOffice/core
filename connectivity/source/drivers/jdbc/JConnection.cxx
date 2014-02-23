@@ -252,9 +252,9 @@ bool loadClass(
 
 IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com.sun.star.sdbc.Connection");
 
-//**************************************************************
+
 //************ Class: java.sql.Connection
-//**************************************************************
+
 jclass java_sql_Connection::theClass = 0;
 
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )

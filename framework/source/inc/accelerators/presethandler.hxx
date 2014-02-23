@@ -64,12 +64,12 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         static OUString RESOURCETYPE_ACCELERATOR();
         static OUString RESOURCETYPE_STATUSBAR();
 
-    //-------------------------------------------
+
     // types
 
     public:
 
-        //---------------------------------------
+
         /** @short  this handler can provide different
                     types of configuration.
 
@@ -85,7 +85,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
     private:
 
-        //---------------------------------------
+
         /** @short  because a concurrent access to the same storage from different implementations
                     isnt supported, we have to share it with others.
 
@@ -112,23 +112,23 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                 virtual ~TSharedStorages() {};
         };
 
-    //-------------------------------------------
+
     // member
 
     private:
 
-        //---------------------------------------
+
         /** @short  can be used to create on needed uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        //---------------------------------------
+
         /** @short  knows the type of provided configuration.
 
             @descr  e.g. global, modules, ...
          */
         EConfigType m_eConfigType;
 
-        //---------------------------------------
+
         /** @short  specify the type of resource, which configuration sets
                     must be provided here.
 
@@ -136,7 +136,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
          */
         OUString m_sResourceType;
 
-        //---------------------------------------
+
         /** @short  specify the application module for a module
                     dependend configuration.
 
@@ -146,19 +146,19 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
          */
         OUString m_sModule;
 
-        //---------------------------------------
+
         /** @short  provides access to the:
                     a) shared root storages
                     b) shared "inbetween" storages
                     of the share and user layer. */
         ::salhelper::SingletonRef< TSharedStorages > m_aSharedStorages;
 
-        //---------------------------------------
+
         /** @short  if we run in document mode, we cant use the global root storages!
                     We have to use a special document storage explicitly. */
         StorageHolder m_lDocumentStorages;
 
-        //---------------------------------------
+
         /** @short  holds the folder storage of the share layer alive,
                     where the current configuration set exists.
 
@@ -171,12 +171,12 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
          */
         css::uno::Reference< css::embed::XStorage > m_xWorkingStorageShare;
 
-        //---------------------------------------
+
         /** @short  global language-independent storage
          */
         css::uno::Reference< css::embed::XStorage > m_xWorkingStorageNoLang;
 
-        //---------------------------------------
+
         /** @short  holds the folder storage of the user layer alive,
                     where the current configuration set exists.
 
@@ -189,17 +189,17 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
          */
         css::uno::Reference< css::embed::XStorage > m_xWorkingStorageUser;
 
-        //---------------------------------------
+
         /** @short  knows the names of all presets inside the current
                     working storage of the share layer. */
         OUStringList m_lPresets;
 
-        //---------------------------------------
+
         /** @short  knows the names of all targets inside the current
                     working storage of the user layer. */
         OUStringList m_lTargets;
 
-        //---------------------------------------
+
         /** @short  its the current office locale and will be used
                     to handle localized presets.
 
@@ -207,18 +207,18 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     localized handling inside this class! */
         LanguageTag m_aLanguageTag;
 
-        //---------------------------------------
+
         /** @short  knows the relative path from the root. */
         OUString m_sRelPathShare;
         OUString m_sRelPathNoLang;
         OUString m_sRelPathUser;
 
-    //-------------------------------------------
+
     // native interface
 
     public:
 
-        //---------------------------------------
+
         /** @short  does nothing real.
 
             @descr  Because this class should be useable in combination
@@ -231,19 +231,19 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
          */
         PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-        //---------------------------------------
+
         /** @short  copy ctor */
         PresetHandler(const PresetHandler& rCopy);
 
-        //---------------------------------------
+
         /** @short  closes all open storages ... if user forgot that .-) */
         virtual ~PresetHandler();
 
-        //---------------------------------------
+
         /** @short  free all currently cache(!) storages. */
         void forgetCachedStorages();
 
-        //---------------------------------------
+
         /** @short  return access to the internally used and cached root storage.
 
             @descr  These root storages are the base of all further opened
@@ -261,7 +261,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         css::uno::Reference< css::embed::XStorage > getOrCreateRootStorageShare();
         css::uno::Reference< css::embed::XStorage > getOrCreateRootStorageUser();
 
-        //---------------------------------------
+
         /** @short  provides access to the current working storages.
 
             @descr  Working storages are the "lowest" storages, where the
@@ -273,7 +273,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         css::uno::Reference< css::embed::XStorage > getWorkingStorageShare();
         css::uno::Reference< css::embed::XStorage > getWorkingStorageUser();
 
-        //---------------------------------------
+
         /** @short  check if there is a parent storage well known for
                     the specified child storage and return it.
 
@@ -286,7 +286,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         css::uno::Reference< css::embed::XStorage > getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& xChild);
         css::uno::Reference< css::embed::XStorage > getParentStorageUser (const css::uno::Reference< css::embed::XStorage >& xChild);
 
-        //---------------------------------------
+
         /** @short  free all internal structures and let this handler
                     work on a new type of configuration sets.
 
@@ -327,7 +327,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                const css::uno::Reference< css::embed::XStorage >& xDocumentRoot ,
                                const LanguageTag&                                 rLanguageTag  = LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE));
 
-        //---------------------------------------
+
         /** @short  try to copy the specified preset from the share
                     layer to the user layer and establish it as the
                     specified target.
@@ -351,7 +351,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         void copyPresetToTarget(const OUString& sPreset,
                                 const OUString& sTarget);
 
-        //---------------------------------------
+
         /** @short  open the specified preset as stream object
                     and return it.
 
@@ -369,7 +369,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         css::uno::Reference< css::io::XStream > openPreset(const OUString& sPreset,
                                                            sal_Bool bUseNoLangGlobal = sal_False);
 
-        //---------------------------------------
+
         /** @short  open the specified target as stream object
                     and return it.
 
@@ -391,7 +391,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         css::uno::Reference< css::io::XStream > openTarget(const OUString& sTarget         ,
                                                                  sal_Bool         bCreateIfMissing);
 
-        //---------------------------------------
+
         /** @short  do anything which is necessary to flush all changes
                     back to disk.
 
@@ -401,17 +401,17 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
          */
         void commitUserChanges();
 
-        //---------------------------------------
+
         /** TODO */
         void addStorageListener(IStorageListener* pListener);
         void removeStorageListener(IStorageListener* pListener);
 
-    //-------------------------------------------
+
     // helper
 
     private:
 
-        //---------------------------------------
+
         /** @short  open a config path ignoring errors (catching exceptions).
 
             @descr  We catch only normal exceptions here - no runtime exceptions.
@@ -431,7 +431,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                                                                       sal_Int32        eMode ,
                                                                                       sal_Bool         bShare);
 
-        //---------------------------------------
+
         /** @short  try to find the specified locale inside list of possible ones.
 
             @descr  The lits of possible locale values was e.g. retrieved from the system
@@ -458,7 +458,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                                                                                OUString&             rLanguageTag         ,
                                                                                                sal_Bool                          bAllowFallbacks );
 
-        //---------------------------------------
+
         /** @short  open a config path ignoring errors (catching exceptions).
 
             @descr  We catch only normal exceptions here - no runtime exceptions.
@@ -492,7 +492,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                                                                          OUString&             rLanguageTag  ,
                                                                                          sal_Bool              bAllowFallback);
 
-        //---------------------------------------
+
         /** @short  returns the names of all sub storages of specified storage.
 
             @param  xFolder

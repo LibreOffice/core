@@ -26,9 +26,9 @@
 namespace connectivity
 {
 
-//**************************************************************
+
 //************ Class: java.sql.DriverPropertyInfo
-//**************************************************************
+
     class java_sql_DriverPropertyInfo : public java_lang_Object
     {
     protected:

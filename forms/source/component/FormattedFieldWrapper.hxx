@@ -25,14 +25,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-//.........................................................................
+
 namespace frm
 {
 
 class OEditModel;
-//==================================================================
+
 //= OFormattedFieldWrapper
-//==================================================================
+
 typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::io::XPersistObject
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::util::XCloneable
@@ -86,9 +86,9 @@ protected:
     void ensureAggregate();
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELDWRAPPER_HXX
 

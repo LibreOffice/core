@@ -23,7 +23,7 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 namespace sdr { namespace contact {
@@ -41,7 +41,7 @@ namespace basegfx {
 
 class E3dObject;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -69,7 +69,7 @@ namespace sdr
             drawinglayer::primitive2d::Primitive2DSequence impCreateWithGivenPrimitive3DSequence(
                 const drawinglayer::primitive3d::Primitive3DSequence& rxContent3D) const;
 
-            //////////////////////////////////////////////////////////////////////////////
+
             // primitive stuff
 
         protected:
@@ -102,7 +102,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3D_HXX
 

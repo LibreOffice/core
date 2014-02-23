@@ -88,7 +88,7 @@ public:
     */
     inline void clear();
 };
-//__________________________________________________________________________________________________
+
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::LRU_Cache( sal_Int32 nCachedElements )
 #ifdef __CACHE_DIAGNOSE
@@ -110,13 +110,13 @@ inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::LRU_Cache( sal_Int32 nC
         }
     }
 }
-//__________________________________________________________________________________________________
+
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::~LRU_Cache()
 {
     delete [] _pBlock;
 }
-//__________________________________________________________________________________________________
+
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront( CacheEntry * pEntry ) const
 {
@@ -138,7 +138,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront( CacheEntr
         _pHead        = pEntry;
     }
 }
-//__________________________________________________________________________________________________
+
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline sal_Bool LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::hasValue( const t_Key & rKey ) const
 {
@@ -146,7 +146,7 @@ inline sal_Bool LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::hasValue( cons
     const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
     return (iFind != _aKey2Element.end());
 }
-//__________________________________________________________________________________________________
+
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue( const t_Key & rKey ) const
 {
@@ -165,7 +165,7 @@ inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue( const t
     }
     return t_Val();
 }
-//__________________________________________________________________________________________________
+
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
     const t_Key & rKey, const t_Val & rValue )
@@ -203,7 +203,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
         toFront( pEntry );
     }
 }
-//__________________________________________________________________________________________________
+
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
 {
@@ -220,7 +220,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
 #endif
 }
 
-//==================================================================================================
+
 struct FctHashOUString : public ::std::unary_function< const OUString &, size_t >
 {
     size_t operator()( const OUString & rKey ) const

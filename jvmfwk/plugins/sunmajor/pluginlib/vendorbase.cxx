@@ -39,7 +39,7 @@ rtl::Reference<VendorBase> createInstance(createInstance_func pFunc,
 
 
 
-//##############################################################################
+
 
 MalformedVersionException::MalformedVersionException()
 {}
@@ -54,7 +54,7 @@ MalformedVersionException::operator =(
 {
     return *this;
 }
-//##############################################################################
+
 
 
 VendorBase::VendorBase(): m_bAccessibility(false)

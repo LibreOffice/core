@@ -25,9 +25,9 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-// -------------
+
 // - PDFDialog -
-// -------------
+
 
 class Window;
 
@@ -72,7 +72,7 @@ public:
     virtual     ~PDFDialog();
 };
 
-// -----------------------------------------------------------------------------
+
 
 OUString PDFDialog_getImplementationName () throw (RuntimeException);
 Sequence< sal_Int8 > SAL_CALL PDFDialog_getImplementationId() throw(RuntimeException);

@@ -39,10 +39,10 @@ extern "C" void SAL_CALL createRegistryInfo_ORichTextModel()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ORichTextModel >   aRegisterModel;
 }
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -55,9 +55,9 @@ namespace frm
 
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-    //====================================================================
+
     //= ORichTextModel
-    //====================================================================
+
 
     ORichTextModel::ORichTextModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel       ( _rxFactory, OUString() )
@@ -612,8 +612,8 @@ namespace frm
         }
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

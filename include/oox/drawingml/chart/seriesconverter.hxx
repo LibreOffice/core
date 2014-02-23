@@ -37,7 +37,7 @@ class TypeGroupConverter;
 // #i66858# enable this when Chart2 supports smoothed lines per data series
 #define OOX_CHART_SMOOTHED_PER_SERIES 0
 
-// ============================================================================
+
 
 class DataLabelConverter : public ConverterBase< DataLabelModel >
 {
@@ -59,7 +59,7 @@ public:
                             bool bDataSeriesLabel );
 };
 
-// ============================================================================
+
 
 class DataLabelsConverter : public ConverterBase< DataLabelsModel >
 {
@@ -73,7 +73,7 @@ public:
                             const TypeGroupConverter& rTypeGroup );
 };
 
-// ============================================================================
+
 
 class ErrorBarConverter : public ConverterBase< ErrorBarModel >
 {
@@ -90,7 +90,7 @@ private:
                         createLabeledDataSequence( ErrorBarModel::SourceType eSourceType );
 };
 
-// ============================================================================
+
 
 class TrendlineLabelConverter : public ConverterBase< TrendlineLabelModel >
 {
@@ -102,7 +102,7 @@ public:
     void                convertFromModel( PropertySet& rPropSet );
 };
 
-// ============================================================================
+
 
 class TrendlineConverter : public ConverterBase< TrendlineModel >
 {
@@ -115,7 +115,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries );
 };
 
-// ============================================================================
+
 
 class DataPointConverter : public ConverterBase< DataPointModel >
 {
@@ -130,7 +130,7 @@ public:
                             const SeriesModel& rSeries );
 };
 
-// ============================================================================
+
 
 class SeriesConverter : public ConverterBase< SeriesModel >
 {
@@ -156,7 +156,7 @@ private:
                             bool bUseTextLabel );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

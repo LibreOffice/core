@@ -33,12 +33,12 @@
 #include <svx/galmisc.hxx>
 #include <vector>
 
-// -----------------
+
 // - GalleryObject -
-// -----------------
-// --------------
+
+
 // - SgaObjKind -
-// --------------
+
 
 struct GalleryObject
 {
@@ -61,9 +61,9 @@ class SgaObject;
 class FmFormModel;
 class ListBox;
 
-// -----------------
+
 // - GalDragParams -
-// -----------------
+
 
 struct GalDragParams
 {
@@ -74,9 +74,9 @@ struct GalDragParams
     SgaObjKind  eObjKind;
 };
 
-// ----------------
+
 // - GalleryTheme -
-// ----------------
+
 
 class Gallery;
 class GalleryProgress;

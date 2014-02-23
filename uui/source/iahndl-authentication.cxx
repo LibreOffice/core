@@ -203,7 +203,7 @@ handleAuthenticationRequest_(
     if (xSupplyAuthentication.is())
         xSupplyAuthentication2.set(xSupplyAuthentication, uno::UNO_QUERY);
 
-    //////////////////////////
+
     // First, try to obtain credentials from password container service.
     uui::PasswordContainerHelper aPwContainerHelper(xContext);
     if (aPwContainerHelper.handleAuthenticationRequest(rRequest,
@@ -215,7 +215,7 @@ handleAuthenticationRequest_(
         return;
     }
 
-    //////////////////////////
+
     // Second, try to obtain credentials from user via password dialog.
     ucb::RememberAuthentication eDefaultRememberMode
         = ucb::RememberAuthentication_SESSION;
@@ -318,7 +318,7 @@ handleAuthenticationRequest_(
             xSupplyAuthentication->select();
         }
 
-        //////////////////////////
+
         // Third, store credentials in password container.
 
           if ( aInfo.GetIsUseSystemCredentials() )

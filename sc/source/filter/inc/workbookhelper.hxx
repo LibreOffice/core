@@ -66,7 +66,7 @@ namespace xls {
 
 class ExcelFilter;
 
-// ============================================================================
+
 
 /** An enumeration for all supported spreadsheet filter types. */
 enum FilterType
@@ -76,7 +76,7 @@ enum FilterType
     FILTER_UNKNOWN      /// Unknown filter type.
 };
 
-// ============================================================================
+
 
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
@@ -84,7 +84,7 @@ struct IgnoreCaseCompare
     bool operator()( const OUString& rName1, const OUString& rName2 ) const;
 };
 
-// ============================================================================
+
 
 class AddressConverter;
 class BiffCodecHelper;
@@ -290,7 +290,7 @@ private:
     WorkbookGlobals&    mrBookGlob;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

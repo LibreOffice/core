@@ -26,7 +26,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-//***************************************************************************************
+
 //
 // registry functions
 extern "C" void SAL_CALL createRegistryInfo_OTableFilterDialog();
@@ -55,7 +55,7 @@ extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard();
 extern "C" void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_LimitBoxController();
 
-//***************************************************************************************
+
 extern "C" void SAL_CALL createRegistryInfo_DBU()
 {
     static sal_Bool bInit = sal_False;

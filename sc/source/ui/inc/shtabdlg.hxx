@@ -25,7 +25,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 
-//------------------------------------------------------------------------
+
 
 class ScShowTabDlg : public ModalDialog
 {

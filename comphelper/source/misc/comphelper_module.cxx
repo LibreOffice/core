@@ -20,10 +20,10 @@
 
 #include "comphelper_module.hxx"
 
-//........................................................................
+
 namespace comphelper { namespace module
 {
-//........................................................................
+
 
     struct ComphelperModuleCreator
     {
@@ -44,8 +44,8 @@ namespace comphelper { namespace module
         return theComphelperModuleInstance::get().m_aComphelperModule;
     }
 
-//........................................................................
+
 } } // namespace comphelper::module
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

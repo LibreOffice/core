@@ -61,7 +61,7 @@ const sal_Unicode EXC_BUILTIN_SHEETTITLE        = '\x0C';
 const sal_Unicode EXC_BUILTIN_FILTERDATABASE    = '\x0D';
 const sal_Unicode EXC_BUILTIN_UNKNOWN           = '\x0E';
 
-// ============================================================================
+
 
 #endif
 

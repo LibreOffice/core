@@ -58,9 +58,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(java_sql_ResultSet,"com.sun.star.sdbcx.JResultSet","com.sun.star.sdbc.ResultSet");
-//**************************************************************
+
 //************ Class: java.sql.ResultSet
-//**************************************************************
+
 
 jclass java_sql_ResultSet::theClass = 0;
 java_sql_ResultSet::java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,java_sql_Connection& _rConnection, java_sql_Statement_Base* pStmt)

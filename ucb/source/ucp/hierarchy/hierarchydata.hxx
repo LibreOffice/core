@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
 namespace hierarchy_ucp
 {
 
-//=========================================================================
+
 
 class HierarchyEntryData
 {
@@ -70,7 +70,7 @@ private:
     Type          m_aType;      // Type
 };
 
-//=========================================================================
+
 
 class HierarchyContentProvider;
 class HierarchyUri;

@@ -32,23 +32,23 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-//-----------------------------------------------------------------------------
+
 /** @todo document me
  */
 class Request
 {
-    //-------------------------------------------------------------------------
+
     public:
 
         static const ::sal_Int32 WAIT_INFINITE = 0;
 
-    //-------------------------------------------------------------------------
+
     // interface
-    //-------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------
+
         explicit Request()
             : m_aJoiner   (  )
             , m_nRequest  (-1)
@@ -57,28 +57,28 @@ class Request
             m_aJoiner.reset();
         }
 
-        //---------------------------------------------------------------------
+
         virtual ~Request() {};
 
-        //---------------------------------------------------------------------
+
         void setRequest(::sal_Int32 nRequest)
         {
             m_nRequest = nRequest;
         }
 
-        //---------------------------------------------------------------------
+
         ::sal_Int32 getRequest()
         {
             return m_nRequest;
         }
 
-        //---------------------------------------------------------------------
+
         void clearArguments()
         {
             m_lArguments.clear();
         }
 
-        //---------------------------------------------------------------------
+
         template< class TArgumentType >
         void setArgument(const OUString& sName ,
                          const TArgumentType&   aValue)
@@ -86,7 +86,7 @@ class Request
             m_lArguments[sName] <<= aValue;
         }
 
-        //---------------------------------------------------------------------
+
         template< class TArgumentType >
         TArgumentType getArgumentOrDefault(const OUString& sName   ,
                                            const TArgumentType&   aDefault)
@@ -94,17 +94,17 @@ class Request
             return m_lArguments.getUnpackedValueOrDefault(sName, aDefault);
         }
 
-        //---------------------------------------------------------------------
+
         void wait(::sal_Int32 nMilliSeconds = WAIT_INFINITE);
 
         void waitProcessMessages();
 
-        //---------------------------------------------------------------------
+
         void notify();
 
-    //-------------------------------------------------------------------------
+
     // member
-    //-------------------------------------------------------------------------
+
 
     private:
 
@@ -116,7 +116,7 @@ class Request
 typedef ::boost::shared_ptr< Request > RequestRef;
 typedef ::std::queue< RequestRef >  RequestQueue;
 
-//-----------------------------------------------------------------------------
+
 class RequestHandler
 {
     public:
@@ -127,7 +127,7 @@ class RequestHandler
 
 typedef ::boost::shared_ptr< RequestHandler > RequestHandlerRef;
 
-//-----------------------------------------------------------------------------
+
 /** @todo document me
  */
 class AsyncRequests : private ::cppu::BaseMutex
@@ -138,7 +138,7 @@ class AsyncRequests : private ::cppu::BaseMutex
         static const ::sal_Int16  BLOCKED       = 1;
         static const ::sal_Int16  NON_BLOCKED   = 0;
 
-        //---------------------------------------------------------------------
+
         /** creates the new asynchronous request executor.
          */
         explicit AsyncRequests(const RequestHandlerRef& rHandler);
@@ -151,32 +151,32 @@ class AsyncRequests : private ::cppu::BaseMutex
         /// ensure the execution thread gets going.
         void triggerJobExecution();
 
-        //---------------------------------------------------------------------
+
         /** does nothing special / excepting to make sure our class wont be inline .-)
          */
         virtual ~AsyncRequests();
 
-        //---------------------------------------------------------------------
+
         /** @todo document me
          */
         void triggerRequestProcessMessages (const RequestRef& rRequest);
 
-        //---------------------------------------------------------------------
+
         /** @todo document me
          */
         void triggerRequestBlocked(const RequestRef& rRequest);
 
-        //---------------------------------------------------------------------
+
         /** @todo document me
          */
         void triggerRequestNonBlocked(const RequestRef& rRequest);
 
-        //---------------------------------------------------------------------
+
         /** @todo document me
          */
         void triggerRequestDirectly(const RequestRef& rRequest);
 
-        //---------------------------------------------------------------------
+
         /** @todo document me
          */
         void triggerRequestThreadAware(const RequestRef& rRequest,
@@ -184,7 +184,7 @@ class AsyncRequests : private ::cppu::BaseMutex
 
     private:
 
-        //---------------------------------------------------------------------
+
         /** our STA .-)
          *  Will run between start() & finish(). Internally it runs a loop ...
          *  waiting for requests. Every request will be executed synchronously

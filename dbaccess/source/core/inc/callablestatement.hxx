@@ -25,9 +25,9 @@
 
 namespace dbaccess
 {
-    //************************************************************
+
     //  OCallableStatement
-    //************************************************************
+
     class OCallableStatement : public OPreparedStatement,
                                public ::com::sun::star::sdbc::XRow,
                                public ::com::sun::star::sdbc::XOutParameters

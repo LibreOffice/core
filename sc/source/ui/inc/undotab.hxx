@@ -42,7 +42,7 @@ class ScDocProtection;
 class ScTableProtection;
 class ScMarkData;
 
-//----------------------------------------------------------------------------
+
 
 class ScUndoInsertTab : public ScSimpleUndo
 {
@@ -351,7 +351,7 @@ private:
     void DoChange( bool bShow ) const;
 };
 
-// ============================================================================
+
 
 /** This class implements undo & redo of document protect & unprotect
     operations. */
@@ -378,7 +378,7 @@ private:
     void    DoProtect(bool bProtect);
 };
 
-// ============================================================================
+
 
 /** This class implements undo & redo of both protect and unprotect of
     sheet. */

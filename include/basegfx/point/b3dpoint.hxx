@@ -129,7 +129,7 @@ namespace basegfx
     };
 
     // external operators
-    //////////////////////////////////////////////////////////////////////////
+
 
     /** Transform B3DPoint by given transformation matrix.
 

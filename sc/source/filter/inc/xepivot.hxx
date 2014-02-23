@@ -33,9 +33,9 @@ class ScDPSaveGroupDimension;
 class ScDPSaveNumGroupDimension;
 struct ScDPNumGroupInfo;
 
-// ============================================================================
+
 // Pivot cache
-// ============================================================================
+
 
 /** Represents a data item in a pivot cache containing data of any type. */
 class XclExpPCItem : public XclExpRecord, public XclPCItem
@@ -61,7 +61,7 @@ private:
     sal_uInt16          mnTypeFlag;         /// Data type flag.
 };
 
-// ============================================================================
+
 
 class XclExpPivotCache;
 
@@ -164,7 +164,7 @@ private:
     sal_uInt16          mnTypeFlags;        /// Collected item data type flags.
 };
 
-// ============================================================================
+
 
 class XclExpPivotCache : protected XclExpRoot
 {
@@ -239,16 +239,16 @@ private:
     bool                mbValid;            /// true = The cache is valid for export.
 };
 
-// ============================================================================
+
 // Pivot table
-// ============================================================================
+
 
 class XclExpPivotTable;
 
 /** Data field position specifying the pivot table field index (first) and data info index (second). */
 typedef ::std::pair< sal_uInt16, sal_uInt16 > XclPTDataFieldPos;
 
-// ============================================================================
+
 
 class XclExpPTItem : public XclExpRecord
 {
@@ -271,7 +271,7 @@ private:
     XclPTItemInfo       maItemInfo;         /// General data for this item.
 };
 
-// ============================================================================
+
 
 class XclExpPTField : public XclExpRecordBase
 {
@@ -312,7 +312,7 @@ public:
     /** Writes the entire pivot table field. */
     virtual void        Save( XclExpStream& rStrm );
 
-    // ------------------------------------------------------------------------
+
 private:
     /** Returns an item by its name. */
     XclExpPTItem*       GetItemAcc( const OUString& rName );
@@ -338,7 +338,7 @@ private:
     XclExpPTItemList    maItemList;         /// List of all items of this field.
 };
 
-// ============================================================================
+
 
 class XclExpPivotTable : public XclExpRecordBase, protected XclExpRoot
 {
@@ -365,7 +365,7 @@ public:
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
-    // ------------------------------------------------------------------------
+
 private:
     /** Returns a pivot table field by its name. */
     XclExpPTField*      GetFieldAcc( const OUString& rName );
@@ -403,7 +403,7 @@ private:
     /** Writes the SX_AUTOFORMAT records with the autoformat id and header layout */
     void                WriteSxViewEx9( XclExpStream& rStrm ) const;
 
-    // ------------------------------------------------------------------------
+
 private:
     typedef XclExpRecordList< XclExpPTField >   XclExpPTFieldList;
     typedef XclExpPTFieldList::RecordRefType    XclExpPTFieldRef;
@@ -425,7 +425,7 @@ private:
     size_t              mnId;               /// Stream ID
 };
 
-// ============================================================================
+
 
 /** The main class for pivot table export.
 
@@ -470,7 +470,7 @@ private:
     bool                mbShareCaches;      /// true = Tries to share caches between tables.
 };
 
-// ============================================================================
+
 
 #endif
 

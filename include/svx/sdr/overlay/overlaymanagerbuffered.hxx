@@ -24,7 +24,7 @@
 #include <basegfx/range/b2irange.hxx>
 #include <vcl/virdev.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -91,7 +91,7 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGERBUFFERED_HXX
 

@@ -71,9 +71,9 @@ namespace formula
                                                       sal_uInt16        nArgs,
                                                       ::std::vector< OUString >&      _rArgs ) const;
     };
-// =============================================================================
+
 } // formula
-// =============================================================================
+
 
 #endif // INCLUDED_FORMULA_FORMULAHELPER_HXX
 

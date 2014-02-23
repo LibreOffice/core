@@ -75,7 +75,7 @@ public:
     void                    SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
 };
 
-//--------------------------------------------------------------------
+
 
 class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 {

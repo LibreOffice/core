@@ -25,7 +25,7 @@
 
 namespace oox { namespace ppt {
 
-// ---------------------------------------------------------------------
+
 
 class BackgroundPropertiesContext : public ::oox::core::FragmentHandler2
 {

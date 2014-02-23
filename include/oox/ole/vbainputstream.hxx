@@ -26,7 +26,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 /** A non-seekable input stream that implements run-length decompression. */
 class VbaInputStream : public BinaryInputStream
@@ -64,7 +64,7 @@ private:
     size_t              mnChunkPos;
 };
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

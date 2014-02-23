@@ -145,7 +145,7 @@ namespace basegfx
         }
 
         // comparators with tolerance
-        //////////////////////////////////////////////////////////////////////
+
 
         bool equalZero() const
         {
@@ -182,7 +182,7 @@ namespace basegfx
         }
 
         // operators
-        //////////////////////////////////////////////////////////////////////
+
 
         B3DTuple& operator+=( const B3DTuple& rTup )
         {
@@ -298,7 +298,7 @@ namespace basegfx
     };
 
     // external operators
-    //////////////////////////////////////////////////////////////////////////
+
 
     inline B3DTuple minimum(const B3DTuple& rTupA, const B3DTuple& rTupB)
     {

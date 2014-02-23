@@ -32,7 +32,7 @@ namespace svx {
 
 class FrameSelector;
 
-// ============================================================================
+
 
 /** Creates an item connection object that connects an SvxLineItem with an
     svx::FrameSelector control. */
@@ -53,7 +53,7 @@ sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
         ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor,
         sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
 
-// ============================================================================
+
 
 } // namespace svx
 

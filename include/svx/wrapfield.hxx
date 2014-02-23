@@ -25,7 +25,7 @@
 
 namespace svx {
 
-// ============================================================================
+
 
 /** A numeric spin field that wraps around the value on limits.
     @descr  Note: Use type "NumericField" in resources. */
@@ -41,7 +41,7 @@ protected:
     virtual void        Down();
 };
 
-// ============================================================================
+
 
 } // namespace svx
 

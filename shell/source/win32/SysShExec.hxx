@@ -27,9 +27,9 @@
 
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
-//----------------------------------------------------------
+
 // class declaration
-//----------------------------------------------------------
+
 
 class CSysShExecBase
 {
@@ -49,16 +49,16 @@ class CSysShExec :
 public:
     CSysShExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
 
-    //------------------------------------------------
+
     // XSystemShellExecute
-    //------------------------------------------------
+
 
     virtual void SAL_CALL execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException, ::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XServiceInfo
-    //------------------------------------------------
+
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);

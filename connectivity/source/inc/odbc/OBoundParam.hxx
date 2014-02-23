@@ -43,11 +43,11 @@ namespace connectivity
             {
                 free(binaryData);
             }
-            //--------------------------------------------------------------------
+
             // allocBindDataBuffer
             // Allocates and returns a new bind data buffer of the specified
             // length
-            //--------------------------------------------------------------------
+
             void* allocBindDataBuffer (sal_Int32 bufLen)
             {
                 // Reset the input stream and sequence, we are doing a new bind
@@ -60,28 +60,28 @@ namespace connectivity
                 return binaryData;
             }
 
-            //--------------------------------------------------------------------
+
             // getBindDataBuffer
             // Returns the data buffer to be used when binding to a parameter
-            //--------------------------------------------------------------------
+
             void* getBindDataBuffer ()
             {
                 return binaryData;
             }
 
-            //--------------------------------------------------------------------
+
             // getBindLengthBuffer
             // Returns the length buffer to be used when binding to a parameter
-            //--------------------------------------------------------------------
+
             SQLLEN* getBindLengthBuffer ()
             {
                 return &paramLength;
             }
 
-            //--------------------------------------------------------------------
+
             // setInputStream
             // Sets the input stream for the bound parameter
-            //--------------------------------------------------------------------
+
             void setInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& inputStream,
                                 sal_Int32 len)
             {
@@ -94,58 +94,58 @@ namespace connectivity
                 aSequence = _aSequence;
             }
 
-            //--------------------------------------------------------------------
+
             // getInputStream
             // Gets the input stream for the bound parameter
-            //--------------------------------------------------------------------
+
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> getInputStream ()
             {
                 return paramInputStream;
             }
 
-            //--------------------------------------------------------------------
+
             // getInputStreamLen
             // Gets the input stream length for the bound parameter
-            //--------------------------------------------------------------------
+
             sal_Int32 getInputStreamLen ()
             {
                 return paramInputStreamLen;
             }
 
-            //--------------------------------------------------------------------
+
             // setSqlType
             // Sets the Java sql type used to register an OUT parameter
-            //--------------------------------------------------------------------
+
 
             void setSqlType(sal_Int32 type)
             {
                 sqlType = type;
             }
 
-            //--------------------------------------------------------------------
+
             // getSqlType
             // Gets the Java sql type used to register an OUT parameter
-            //--------------------------------------------------------------------
+
 
             sal_Int32 getSqlType ()
             {
                 return sqlType;
             }
 
-            //--------------------------------------------------------------------
+
             // setOutputParameter
             // Sets the flag indicating if this is an OUTPUT parameter
-            //--------------------------------------------------------------------
+
 
             void setOutputParameter (sal_Bool output)
             {
                 outputParameter = output;
             }
 
-            //--------------------------------------------------------------------
+
             // isOutputParameter
             // Gets the OUTPUT parameter flag
-            //--------------------------------------------------------------------
+
 
             sal_Bool isOutputParameter ()
             {
@@ -153,9 +153,9 @@ namespace connectivity
             }
 
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
 
             void  *binaryData;       // Storage area to be used
                                      // when binding the parameter

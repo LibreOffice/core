@@ -102,7 +102,7 @@ class JobData : private ThreadHelpBase
             {}
         };
 
-    //___________________________________
+
     // member
 
     private:
@@ -179,7 +179,7 @@ class JobData : private ThreadHelpBase
          */
         JobResult m_aLastExecutionResult;
 
-    //___________________________________
+
     // native interface
 
     public:
@@ -217,7 +217,7 @@ class JobData : private ThreadHelpBase
                                                const OUString&                                                 sEvent ,
                                                      ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  );
 
-    //___________________________________
+
     // private helper
 
     private:

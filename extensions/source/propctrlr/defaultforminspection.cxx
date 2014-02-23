@@ -37,10 +37,10 @@ extern "C" void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel()
     ::pcr::OAutoRegistration< ::pcr::DefaultFormComponentInspectorModel > aAutoRegistration;
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
@@ -55,9 +55,9 @@ namespace pcr
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::lang::IllegalArgumentException;
 
-    //====================================================================
+
     //= DefaultFormComponentInspectorModel
-    //====================================================================
+
 
     DefaultFormComponentInspectorModel::DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers )
         :ImplInspectorModel()
@@ -245,8 +245,8 @@ namespace pcr
         m_bConstructed = true;
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

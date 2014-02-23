@@ -24,9 +24,9 @@ using namespace ::com::sun::star::sdb;
 using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
-//==================================================================
+
 // OIndexIterator
-//==================================================================
+
 
 OIndexIterator::~OIndexIterator()
 {

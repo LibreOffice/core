@@ -24,7 +24,7 @@
 #include <editeng/editund2.hxx>
 #include <tools/link.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC SdrUndoManager : public EditUndoManager
 {
@@ -63,7 +63,7 @@ public:
     bool isEndTextEditTriggeredFromUndo() { return mbEndTextEditTriggeredFromUndo; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDRUNDOMANAGER_HXX
 // eof

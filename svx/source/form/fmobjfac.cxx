@@ -63,7 +63,7 @@ FmFormObjFactory::FmFormObjFactory()
     {
         SdrObjFactory::InsertMakeObjectHdl(LINK(this, FmFormObjFactory, MakeObject));
 
-        //////////////////////////////////////////////////////////////////////
+
         // Konfigurations-::com::sun::star::frame::Controller und NavigationBar registrieren
         SvxFmTbxCtlConfig::RegisterControl( SID_FM_CONFIG );
         SvxFmTbxCtlAbsRec::RegisterControl( SID_FM_RECORD_ABSOLUTE );
@@ -81,7 +81,7 @@ FmFormObjFactory::FmFormObjFactory()
         DataNavigatorManager::RegisterChildWindow();
         FmFilterNavigatorWinMgr::RegisterChildWindow();
 
-        //////////////////////////////////////////////////////////////////////
+
         // Interface fuer die Formshell registrieren
         FmFormShell::RegisterInterface(0);
 

@@ -27,7 +27,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 struct TableModel
 {
@@ -43,7 +43,7 @@ struct TableModel
     explicit            TableModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class Table : public WorkbookHelper
 {
@@ -92,7 +92,7 @@ private:
 
 typedef ::boost::shared_ptr< Table > TableRef;
 
-// ============================================================================
+
 
 class TableBuffer : public WorkbookHelper
 {
@@ -125,7 +125,7 @@ private:
     TableNameMap        maNameTables;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

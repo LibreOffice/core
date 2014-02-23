@@ -442,7 +442,7 @@ private:
     ContainerT  maListeners;
 };
 
-////////////////////////////////////////////////////////////////////////////
+
 
 /** ListenerContainer variant that serialized access
 
@@ -459,7 +459,7 @@ class ThreadSafeListenerContainer : public ListenerContainerBase<ListenerT,
 {
 };
 
-////////////////////////////////////////////////////////////////////////////
+
 
 /** ListenerContainer variant that does not serialize access
 

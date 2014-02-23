@@ -116,7 +116,7 @@ bool    g_bLoadReport = false;
 #define REPORT_PORT     g_uReportPort
 
 
-//***************************************************************************
+
 // tmpfile from msvcrt creates the temporary file in the root of the current
 // volume and can fail.
 
@@ -157,7 +157,7 @@ static FILE *_tmpfile(void)
 
     return fp;
 }
-//***************************************************************************
+
 
 static BOOL GetCrashDataPath( LPTSTR szBuffer )
 {
@@ -203,7 +203,7 @@ static FILE *_open_reportfile( LPCTSTR lpExt, LPCTSTR lpMode )
     return fp;
 }
 
-//***************************************************************************
+
 
 struct CrashReportParams
 {
@@ -225,7 +225,7 @@ struct CrashReportParams
 bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams );
 BOOL WriteCommentFile( LPCTSTR lpComment );
 
-//***************************************************************************
+
 
 LONG RegReadValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, LPVOID lpData, DWORD cbData )
 {
@@ -243,7 +243,7 @@ LONG RegReadValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, LPVOID 
     return lResult;
 }
 
-//***************************************************************************
+
 
 LONG RegWriteValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD dwType, LPCVOID lpData, DWORD cbData )
 {
@@ -261,7 +261,7 @@ LONG RegWriteValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD 
     return lResult;
 }
 
-//***************************************************************************
+
 
 CrashReportParams::CrashReportParams()
 {
@@ -274,7 +274,7 @@ CrashReportParams::CrashReportParams()
     sProxyPort = TEXT("");
 }
 
-//***************************************************************************
+
 
 void CrashReportParams::ReadFromRegistry()
 {
@@ -324,7 +324,7 @@ void CrashReportParams::ReadFromRegistry()
         sizeof(uInternetConnection) );
 }
 
-//***************************************************************************
+
 
 void CrashReportParams::WriteToRegistry()
 {
@@ -368,7 +368,7 @@ void CrashReportParams::WriteToRegistry()
         sizeof(TCHAR) * (sEmail.length() + 1) );
 }
 
-//***************************************************************************
+
 
 void CrashReportParams::ReadFromEnvironment()
 {
@@ -437,7 +437,7 @@ void CrashReportParams::ReadFromEnvironment()
     }
 }
 
-//***************************************************************************
+
 
 typedef BOOL (WINAPI *MiniDumpWriteDump_PROC)(
     IN HANDLE hProcess,
@@ -449,21 +449,21 @@ typedef BOOL (WINAPI *MiniDumpWriteDump_PROC)(
     IN CONST PMINIDUMP_CALLBACK_INFORMATION CallbackParam OPTIONAL
     );
 
-//***************************************************************************
+
 
 static BOOL WINAPI InitRichEdit()
 {
     return (NULL != LoadLibrary( RICHEDIT ));
 }
 
-//***************************************************************************
+
 
 static BOOL WINAPI DeinitRichEdit()
 {
     return FreeLibrary( GetModuleHandle( RICHEDIT ) );
 }
 
-//***************************************************************************
+
 
 static string trim_string( const string& rString )
 {
@@ -483,7 +483,7 @@ static string trim_string( const string& rString )
     return temp;
 }
 
-//***************************************************************************
+
 
 static int LoadAndFormatString( HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, int nBufferMax )
 {
@@ -525,7 +525,7 @@ static int LoadAndFormatString( HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, 
 }
 
 
-//***************************************************************************
+
 
 static string wstring2utf8( const wstring &rString )
 {
@@ -538,7 +538,7 @@ static string wstring2utf8( const wstring &rString )
     return string( pBuffer );
 }
 
-//***************************************************************************
+
 
 static string xml_encode( const string &rString )
 {
@@ -560,7 +560,7 @@ static string xml_encode( const string &rString )
     return temp;
 }
 
-//***************************************************************************
+
 
 static size_t fcopy( FILE *fpin, FILE *fpout )
 {
@@ -579,7 +579,7 @@ static size_t fcopy( FILE *fpin, FILE *fpout )
     return nBytesWritten;
 }
 
-//***************************************************************************
+
 
 static string GetModuleDirectory( HMODULE hModule )
 {
@@ -601,7 +601,7 @@ static string GetModuleDirectory( HMODULE hModule )
     return string( szModuleNameUTF8 );
 }
 
-//***************************************************************************
+
 
 string GetFileDirectory( const string& rFilePath )
 {
@@ -616,7 +616,7 @@ string GetFileDirectory( const string& rFilePath )
     return aDir;
 }
 
-//***************************************************************************
+
 
 string GetFileName( const string& rFilePath )
 {
@@ -629,7 +629,7 @@ string GetFileName( const string& rFilePath )
         return aName;
 }
 
-//***************************************************************************
+
 
 BOOL WriteReportFile( CrashReportParams *pParams )
 {
@@ -728,7 +728,7 @@ BOOL WriteReportFile( CrashReportParams *pParams )
     return fSuccess;
 }
 
-//***************************************************************************
+
 
 static BOOL SaveDumpFile( HWND hwndOwner )
 {
@@ -752,7 +752,7 @@ static BOOL SaveDumpFile( HWND hwndOwner )
     return FALSE;
 }
 
-//***************************************************************************
+
 
 static BOOL ScreenToClientRect( HWND hwnd, LPRECT lprc )
 {
@@ -946,7 +946,7 @@ BOOL CALLBACK PreviewDialogProc(
 
     return FALSE;
 }
-//***************************************************************************
+
 
 static void PreviewReport( HWND hwndParent, CrashReportParams *pParams )
 {
@@ -964,7 +964,7 @@ static void PreviewReport( HWND hwndParent, CrashReportParams *pParams )
 
     DeleteFileA( g_szReportFileNameA );
 }
-//***************************************************************************
+
 void UpdateOptionsDialogControls( HWND hwndDlg )
 {
     if ( Button_GetCheck( GetDlgItem(hwndDlg, IDC_RADIO_MANUAL) ) & BST_CHECKED )
@@ -979,7 +979,7 @@ void UpdateOptionsDialogControls( HWND hwndDlg )
     }
 }
 
-//***************************************************************************
+
 
 BOOL CALLBACK OptionsDialogProc(
     HWND hwndDlg,
@@ -1081,7 +1081,7 @@ BOOL CALLBACK OptionsDialogProc(
     return FALSE;
 }
 
-//***************************************************************************
+
 
 static void OptionsDialog( HWND hwndParent, CrashReportParams *pParams )
 {
@@ -1097,7 +1097,7 @@ static void OptionsDialog( HWND hwndParent, CrashReportParams *pParams )
         pParams->WriteToRegistry();
 
 }
-//***************************************************************************
+
 
 void UpdateReportDialogControls( HWND hwndDlg )
 {
@@ -1109,7 +1109,7 @@ void UpdateReportDialogControls( HWND hwndDlg )
         Button_GetCheck(GetDlgItem(hwndDlg, IDC_ALLOW_CONTACT)) & BST_CHECKED ? TRUE : FALSE );
 }
 
-//***************************************************************************
+
 
 BOOL CALLBACK ReportDialogProc(
     HWND hwndDlg,
@@ -1235,7 +1235,7 @@ BOOL CALLBACK ReportDialogProc(
 
     return FALSE;
 }
-//***************************************************************************
+
 
 BOOL CALLBACK WelcomeDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -1325,7 +1325,7 @@ BOOL CALLBACK WelcomeDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
     return FALSE;
 }
-//***************************************************************************
+
 
 BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -1453,9 +1453,9 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
 
 
 
-//*****************************************************************************
+
 //* Generate MD5 checksum
-//*****************************************************************************
+
 
 #define MAGIC_DESCRIPTION_FILLER    'x'
 #define MAGIC_DESCRIPTION_COUNT     80
@@ -1595,7 +1595,7 @@ static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum
     return nBytesProcessed;
 }
 
-//***************************************************************************
+
 
 static bool WriteStackFile( FILE *fout, boost::unordered_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
 {
@@ -1755,7 +1755,7 @@ bool WriteChecksumFile( FILE *fchksum, const boost::unordered_map< string, strin
     return success;
 }
 
-//***************************************************************************
+
 
 BOOL FindDumpFile()
 {
@@ -1881,7 +1881,7 @@ BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, D
     return fSuccess;
 }
 
-//***************************************************************************
+
 
 static DWORD FindProcessForImage( LPCTSTR lpImagePath )
 {
@@ -1921,7 +1921,7 @@ static DWORD FindProcessForImage( LPCTSTR lpImagePath )
 
     return dwProcessId;
 }
-//***************************************************************************
+
 
 static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppException, LPDWORD pdwThreadId )
 {
@@ -2069,7 +2069,7 @@ static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppExcep
     return bSuccess;
 }
 
-//***************************************************************************
+
 
 BOOL WriteCommentFile( LPCTSTR lpComment )
 {
@@ -2112,7 +2112,7 @@ BOOL WriteCommentFile( LPCTSTR lpComment )
     return fSuccess;
 }
 
-//***************************************************************************
+
 
 static int _tsetenv( const _TCHAR *lpVar, const _TCHAR *lpValue )
 {
@@ -2301,7 +2301,7 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
     return bSuccess;
 }
 
-//***************************************************************************
+
 
 bool SendHTTPRequest(
                 FILE *fp,
@@ -2398,7 +2398,7 @@ bool SendHTTPRequest(
     return success;
 }
 
-//***************************************************************************
+
 
 static void WriteSOAPRequest( FILE *fp )
 {
@@ -2473,7 +2473,7 @@ static void WriteSOAPRequest( FILE *fp )
         );
 }
 
-//***************************************************************************
+
 
 struct RequestParams
 {
@@ -2495,7 +2495,7 @@ void _cdecl SendingThread( void *lpArgs )
     PostMessage( pParams->hwndStatus, WM_COMMAND, IDOK, 0 );
 }
 
-//***************************************************************************
+
 
 BOOL CALLBACK SendingStatusDialogProc(
     HWND hwndDlg,
@@ -2549,7 +2549,7 @@ BOOL CALLBACK SendingStatusDialogProc(
     return FALSE;
 }
 
-//***************************************************************************
+
 
 bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
 {
@@ -2716,7 +2716,7 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
     return success;
 }
 
-//***************************************************************************
+
 
 #ifdef __MINGW32__
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR /*lpCmdLine*/, int )

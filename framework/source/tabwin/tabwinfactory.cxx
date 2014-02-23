@@ -43,9 +43,9 @@ using namespace com::sun::star::util;
 namespace framework
 {
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   TabWinFactory                                   ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TABWINFACTORY                       ,

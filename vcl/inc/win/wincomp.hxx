@@ -22,9 +22,9 @@
 
 #include <string.h>
 
-// ----------
+
 // - Strict -
-// ----------
+
 
 // Anpassungen fuer TypeChecking
 
@@ -173,9 +173,9 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
     return (HINSTANCE)GetWindowLongPtr( hWnd, GWLP_HINSTANCE );
 }
 
-// ------------------------
+
 // - ZMouse Erweiterungen -
-// ------------------------
+
 
 #define MSH_MOUSEWHEEL "MSWHEEL_ROLLMSG"
 
@@ -204,18 +204,18 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
 #endif
 
 
-// -----------------------------
+
 // - SystemAgent Erweiterungen -
-// -----------------------------
+
 
 #define ENABLE_AGENT            1
 #define DISABLE_AGENT           2
 #define GET_AGENT_STATUS        3
 typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
 
-// ---------------------
+
 // - 5.0-Erweiterungen -
-// ---------------------
+
 
 #ifndef COLOR_GRADIENTACTIVECAPTION
 #define COLOR_GRADIENTACTIVECAPTION     27
@@ -238,10 +238,10 @@ typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
 #define CS_DROPSHADOW       0x00020000
 #endif
 
-// -------------------------------------------------------
+
 // MT 12/03: From winuser.h, only needed in salframe.cxx
 // Better change salframe.cxx to include winuser.h
-// -------------------------------------------------------
+
 
 #define WS_EX_LAYERED           0x00080000
 

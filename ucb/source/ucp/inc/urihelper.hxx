@@ -24,7 +24,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
 
-//=========================================================================
+
 
 namespace ucb_impl { namespace urihelper {
 

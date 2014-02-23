@@ -27,9 +27,9 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <framework/fwedllapi.h>
-//_________________________________________________________________________________________________________________
+
 //  types, enums, ...
-//_________________________________________________________________________________________________________________
+
 
 /*-************************************************************************************************************//**
     @descr          The method GetAddonsMenu() returns a list of property values.
@@ -113,9 +113,9 @@ struct FWE_DLLPUBLIC MergeStatusbarInstruction
 
 typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionContainer;
 
-//_________________________________________________________________________________________________________________
+
 //  forward declarations
-//_________________________________________________________________________________________________________________
+
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation

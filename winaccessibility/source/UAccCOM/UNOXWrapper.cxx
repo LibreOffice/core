@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CUNOXWrapper
 
 STDMETHODIMP CUNOXWrapper::put_XInterface(hyper nXInterface)

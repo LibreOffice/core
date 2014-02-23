@@ -28,14 +28,14 @@
 
 namespace formula
 {
-//============================================================================
+
 #define STRUCT_END    1
 #define STRUCT_FOLDER 2
 #define STRUCT_ERROR  3
 
 enum FormulaDlgMode { FORMULA_FORMDLG_FORMULA, FORMULA_FORMDLG_ARGS, FORMULA_FORMDLG_EDIT };
 
-//============================================================================
+
 
 class FormulaDlg_Impl;
 class IControlReferenceHandler;
@@ -45,7 +45,7 @@ class FormulaHelper;
 class RefEdit;
 class RefButton;
 class FormEditData;
-//============================================================================
+
 class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog, public formula::IFormulaEditorHelper
 {
     friend class FormulaDlg_Impl;

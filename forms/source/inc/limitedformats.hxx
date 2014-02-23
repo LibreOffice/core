@@ -25,14 +25,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OLimitedFormats
-    //=====================================================================
+
     /** maintains translation tables format key <-> enum value
         <p>Used for controls which provide a limited number for (standard) formats, which
         should be available as format keys.</p>
@@ -89,9 +89,9 @@ namespace frm
         static void clearTable(const sal_Int16 _nTableId);
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_LIMITEDFORMATS_HXX
 

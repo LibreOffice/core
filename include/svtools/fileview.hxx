@@ -211,9 +211,9 @@ struct SvtContentEntry
 
 namespace svtools {
 
-// -----------------------------------------------------------------------
+
 // QueryDeleteDlg_Impl
-// -----------------------------------------------------------------------
+
 
 enum QueryDeleteResult_Impl
 {

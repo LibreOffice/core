@@ -24,18 +24,18 @@
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 
-// ----------------------
+
 // - InputContext-Flags -
-// ----------------------
+
 
 #define INPUTCONTEXT_TEXT               ((sal_uLong)0x00000001)
 #define INPUTCONTEXT_EXTTEXTINPUT       ((sal_uLong)0x00000002)
 #define INPUTCONTEXT_EXTTEXTINPUT_ON    ((sal_uLong)0x00000004)
 #define INPUTCONTEXT_EXTTEXTINPUT_OFF   ((sal_uLong)0x00000008)
 
-// ----------------
+
 // - InputContext -
-// ----------------
+
 
 class VCL_DLLPUBLIC InputContext
 {

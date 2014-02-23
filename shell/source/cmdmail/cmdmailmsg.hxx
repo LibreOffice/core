@@ -28,9 +28,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-//----------------------------------------------------------
+
 // class declaration
-//----------------------------------------------------------
+
 
 class CmdMailMsg :
     public  cppu::WeakImplHelper2<
@@ -51,9 +51,9 @@ public:
 
     CmdMailMsg() {};
 
-    //------------------------------------------------
+
     // XSimpleMailMessage
-    //------------------------------------------------
+
 
     virtual void SAL_CALL setBody( const OUString& aBody )
         throw (::com::sun::star::uno::RuntimeException);
@@ -97,9 +97,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAttachement(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XNameAccess
-    //------------------------------------------------
+
 
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -110,9 +110,9 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XElementAccess
-    //------------------------------------------------
+
 
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
         throw (::com::sun::star::uno::RuntimeException);

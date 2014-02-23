@@ -66,7 +66,7 @@ class SmCursor;
 class SmDocShell;
 class EditEngine;
 
-////////////////////////////////////////////////////////////
+
 
 class SmPrinterAccess
 {
@@ -80,11 +80,11 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////
+
 
 void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool);
 
-////////////////////////////////////////////////////////////
+
 
 class SmDocShell : public SfxObjectShell, public SfxListener
 {

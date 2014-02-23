@@ -38,7 +38,7 @@ class ScCsvViewForwarder;
 class ScAccessibleCell;
 
 
-// ============================================================================
+
 
 class ScAccessibleTextData : public SfxListener
 {
@@ -67,7 +67,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class ScAccessibleCellBaseTextData : public ScAccessibleTextData,
                                      public ScCellTextData
@@ -85,7 +85,7 @@ public:
 };
 
 
-// ============================================================================
+
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -122,7 +122,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class ScAccessibleEditObjectTextData : public ScAccessibleTextData
 {
@@ -155,7 +155,7 @@ protected:
 };
 
 
-// ============================================================================
+
 
 class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
 {
@@ -179,7 +179,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class ScAccessiblePreviewCellTextData : public ScAccessibleCellBaseTextData
 {
@@ -208,7 +208,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextData
 {
@@ -240,7 +240,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class ScAccessibleHeaderTextData : public ScAccessibleTextData
 {
@@ -273,7 +273,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class ScAccessibleNoteTextData : public ScAccessibleTextData
 {
@@ -306,7 +306,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class ScAccessibleCsvTextData : public ScAccessibleTextData
 {
@@ -345,7 +345,7 @@ public:
 };
 
 
-// ============================================================================
+
 
 #endif
 

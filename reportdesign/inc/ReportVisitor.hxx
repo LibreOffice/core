@@ -55,9 +55,9 @@ namespace reportdesign
         void start(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReportDefinition);
         void start(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup);
     };
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 #endif // INCLUDED_REPORT_VISTITOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

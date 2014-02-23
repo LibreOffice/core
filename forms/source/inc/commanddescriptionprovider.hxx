@@ -25,14 +25,14 @@
 
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ICommandDescriptionProvider
-    //====================================================================
+
     class SAL_NO_VTABLE ICommandDescriptionProvider
     {
     public:
@@ -43,18 +43,18 @@ namespace frm
 
     typedef ::boost::shared_ptr< const ICommandDescriptionProvider >  PCommandDescriptionProvider;
 
-    //=====================================================================
+
     //= factory
-    //=====================================================================
+
     PCommandDescriptionProvider
         createDocumentCommandDescriptionProvider(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
         );
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_COMMANDDESCRIPTIONPROVIDER_HXX
 

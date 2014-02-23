@@ -85,7 +85,7 @@ public:
     void            SetReadOnly( sal_Bool bReadOnly = sal_True )    { maEdit.SetReadOnly( bReadOnly ); }
     sal_Bool            IsReadOnly() const                      { return maEdit.IsReadOnly(); }
 
-    //------
+
     //use this to manipulate the dialog bevore executing it:
     void            SetDialogCreatedHdl( const Link& rLink ) { maDialogCreatedHdl = rLink; }
     const Link&     GetDialogCreatedHdl() const { return maDialogCreatedHdl; }

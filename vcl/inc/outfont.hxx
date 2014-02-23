@@ -45,9 +45,9 @@ class Size;
 
 namespace com { namespace sun { namespace star { namespace lang { struct Locale; }}}}
 
-// ----------------------
+
 // - ImplFontAttributes -
-// ----------------------
+
 // device independent font properties
 
 class ImplFontAttributes
@@ -86,9 +86,9 @@ private:
     bool            mbSymbolFlag;
 };
 
-// -------------------------
+
 // - ImplDevFontAttributes -
-// -------------------------
+
 // device dependent font properties
 
 class ImplDevFontAttributes : public ImplFontAttributes
@@ -110,9 +110,9 @@ public: // TODO: hide members behind accessor methods
     bool               mbEmbeddable;     // true: the font can be embedded
 };
 
-// ----------------
+
 // - PhysicalFontFace -
-// ----------------
+
 // TODO: no more direct access to members
 // TODO: add reference counting
 // TODO: get rid of height/width for scalable fonts
@@ -202,9 +202,9 @@ public: // TODO: change to private
     void copyAttributes(const FontSelectPatternAttributes &rAttributes);
 };
 
-// -------------------
+
 // - ImplDevFontList -
-// -------------------
+
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
 
@@ -267,9 +267,9 @@ private:
     mutable int                     mnFallbackCount;
 };
 
-// -----------------------
+
 // - ImplFontMetricData -
-// -----------------------
+
 
 class ImplFontMetricData : public ImplFontAttributes
 {
@@ -325,9 +325,9 @@ public: // TODO: hide members behind accessor methods
     long                mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
 };
 
-// -----------------
+
 // - ImplFontEntry -
-// ------------------
+
 // TODO: rename ImplFontEntry to LogicalFontInstance
 // TODO: allow sharing of metrics for related fonts
 

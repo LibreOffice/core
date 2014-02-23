@@ -28,7 +28,7 @@ namespace oox { class ModelObjectHelper; }
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 /** Enumeration for various properties related to drawing shape formatting.
 
@@ -66,7 +66,7 @@ enum ShapePropertyId
     SHAPEPROP_END
 };
 
-// ============================================================================
+
 
 struct OOX_DLLPUBLIC ShapePropertyInfo
 {
@@ -89,7 +89,7 @@ struct OOX_DLLPUBLIC ShapePropertyInfo
     sal_Int32    operator[]( ShapePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
 };
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC ShapePropertyMap : public PropertyMap
 {
@@ -138,7 +138,7 @@ private:
     ShapePropertyInfo   maShapePropInfo;
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

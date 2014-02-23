@@ -27,9 +27,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
-// ----------------
+
 // - PPPOptimizer -
-// ----------------
+
 
 class PPPOptimizer : public cppu::WeakImplHelper2<
                                     com::sun::star::frame::XDispatchProvider,

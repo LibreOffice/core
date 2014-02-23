@@ -22,7 +22,7 @@
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #define PRIMITIVE2D_ID_SDRCAPTIONPRIMITIVE2D            (PRIMITIVE2D_ID_RANGE_SVX| 0)
 #define PRIMITIVE2D_ID_SDRCONNECTORPRIMITIVE2D          (PRIMITIVE2D_ID_RANGE_SVX| 1)
@@ -49,7 +49,7 @@
 #define PRIMITIVE2D_ID_SDROLECONTENTPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_SVX| 22)
 #define PRIMITIVE2D_ID_SDRAUTOFITTEXTPRIMITIVE2D        (PRIMITIVE2D_ID_RANGE_SVX| 23)
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SVX_PRIMITIVETYPES2D_HXX
 

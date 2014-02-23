@@ -115,7 +115,7 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
     }
 }
 
-// ====================================================================
+
 
 SvtSysLocale::SvtSysLocale()
 {

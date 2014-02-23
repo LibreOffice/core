@@ -32,7 +32,7 @@ namespace oox {
 
 class BinaryOutputStream;
 
-// ============================================================================
+
 
 /** Interface for binary input stream classes.
 
@@ -223,7 +223,7 @@ protected:
 
 typedef ::boost::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 void BinaryInputStream::readValue( Type& ornValue )
@@ -266,7 +266,7 @@ void BinaryInputStream::skipArray( sal_Int32 nElemCount )
     skip( nSkipSize, sizeof( Type ) );
 }
 
-// ============================================================================
+
 
 /** Wraps a UNO input stream and provides convenient access functions.
 
@@ -318,7 +318,7 @@ private:
     bool                mbAutoClose;    ///< True = automatically close stream on destruction.
 };
 
-// ============================================================================
+
 
 /** Wraps a StreamDataSequence and provides convenient access functions.
 
@@ -358,7 +358,7 @@ private:
                             { return getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mpData->getLength() - mnPos ); }
 };
 
-// ============================================================================
+
 
 /** Wraps a BinaryInputStream and provides access to a specific part of the
     stream data.
@@ -429,7 +429,7 @@ private:
     sal_Int64           mnSize;
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

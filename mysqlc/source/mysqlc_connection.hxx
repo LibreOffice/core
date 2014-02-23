@@ -100,9 +100,9 @@ namespace connectivity
             ::com::sun::star::uno::Reference< com::sun::star::util::XStringSubstitution > m_xParameterSubstitution;
         protected:
 
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
 
             OWeakRefArray   m_aStatements;  // vector containing a list

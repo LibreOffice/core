@@ -26,12 +26,12 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/texture/texture.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace basegfx { class B2DPolygon; }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // FillGradientPrimitive2D class
 
 namespace drawinglayer
@@ -103,7 +103,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLGRADIENTPRIMITIVE2D_HXX
 

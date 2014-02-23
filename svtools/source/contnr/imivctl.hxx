@@ -38,7 +38,7 @@ class SvxIconChoiceCtrlEntry;
 class IcnViewEdit_Impl;
 class IcnGridMap_Impl;
 
-///////////////////////////////////////////////////////////////////////////////
+
 //
 // some defines
 //
@@ -76,7 +76,7 @@ class IcnGridMap_Impl;
 
 #define VIEWMODE_MASK   (WB_ICON | WB_SMALLICON | WB_DETAILS)
 
-///////////////////////////////////////////////////////////////////////////////
+
 //
 //
 //
@@ -87,7 +87,7 @@ enum IcnViewFieldType
     IcnViewFieldTypeText = 2
 };
 
-///////////////////////////////////////////////////////////////////////////////
+
 //
 // Data about the focus of entries
 //
@@ -100,7 +100,7 @@ struct LocalFocus
     LocalFocus() { bOn = sal_False; }
 };
 
-///////////////////////////////////////////////////////////////////////////////
+
 //
 // Entry-List
 //
@@ -143,7 +143,7 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
+
 //
 // Implementation-class of IconChoiceCtrl
 //
@@ -560,7 +560,7 @@ public:
                         }
 };
 
-// ----------------------------------------------------------------------------------------------
+
 
 typedef std::map<sal_uInt16, SvxIconChoiceCtrlEntryPtrVec> IconChoiceMap;
 
@@ -617,7 +617,7 @@ public:
     static void             DestroyGridAdjustData( IconChoiceMap& rLists );
 };
 
-// ----------------------------------------------------------------------------------------------
+
 
 typedef sal_uLong GridId;
 

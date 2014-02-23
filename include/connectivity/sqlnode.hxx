@@ -71,9 +71,9 @@ namespace connectivity
                          SQL_NODE_PUNCTUATION, SQL_NODE_AMMSC, SQL_NODE_ACCESS_DATE,SQL_NODE_DATE,SQL_NODE_CONCAT};
 
     typedef ::std::set< OUString >   QueryNameSet;
-    //==================================================================
+
     //= SQLParseNodeParameter
-    //==================================================================
+
     struct OOO_DLLPUBLIC_DBTOOLS SQLParseNodeParameter
     {
         const ::com::sun::star::lang::Locale&   rLocale;
@@ -107,9 +107,9 @@ namespace connectivity
         ~SQLParseNodeParameter();
     };
 
-    //==========================================================================
+
     //= OSQLParseNode
-    //==========================================================================
+
     class OOO_DLLPUBLIC_DBTOOLS OSQLParseNode
     {
         friend class OSQLParser;
@@ -441,7 +441,7 @@ namespace connectivity
         void parseLeaf(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
     };
 
-    //-----------------------------------------------------------------------------
+
     inline OSQLParseNode* OSQLParseNode::getChild(sal_uInt32 nPos) const
     {
         OSL_ENSURE(nPos < m_aChildren.size(), "Invalid Position");

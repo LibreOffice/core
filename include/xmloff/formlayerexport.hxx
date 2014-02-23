@@ -35,17 +35,17 @@ namespace com { namespace sun { namespace star { namespace awt {
 } } } }
 
 class SvXMLExport;
-//.........................................................................
+
 namespace xmloff
 {
-//.........................................................................
+
 
     class OFormLayerXMLExport_Impl;
     class OFormsRootExport;
 
-    //=====================================================================
+
     //= OFormLayerXMLExport
-    //=====================================================================
+
     /** provides functionallity for exporting a complete form layer.
     */
     class XMLOFF_DLLPUBLIC OFormLayerXMLExport
@@ -166,9 +166,9 @@ namespace xmloff
         void excludeFromExport( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > _rxControl );
     };
 
-    //=========================================================================
+
     //= OOfficeFormsExport
-    //=========================================================================
+
     /// export helper for the office::forms element
     class XMLOFF_DLLPUBLIC OOfficeFormsExport
     {
@@ -180,9 +180,9 @@ namespace xmloff
         ~OOfficeFormsExport();
     };
 
-//.........................................................................
+
 }   // namespace xmloff
-//.........................................................................
+
 
 #endif // INCLUDED_XMLOFF_FORMLAYEREXPORT_HXX
 

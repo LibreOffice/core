@@ -20,10 +20,10 @@
 #include "sbmodule.hxx"
 #include <rtl/instance.hxx>
 
-//........................................................................
+
 namespace basic
 {
-//........................................................................
+
 
     struct BasicModuleCreator
     {
@@ -44,9 +44,9 @@ namespace basic
         return theBasicModuleInstance::get().m_aBasicModule;
     }
 
-//........................................................................
+
 } // namespace basic
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

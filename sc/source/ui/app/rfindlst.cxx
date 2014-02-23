@@ -27,7 +27,7 @@ static const ColorData aColNames[SC_RANGECOLORS] =
     { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_GREEN,
         COL_BLUE, COL_RED, COL_MAGENTA, COL_BROWN };
 
-//==================================================================
+
 
 ScRangeFindList::ScRangeFindList(const OUString& rName) :
     aDocName( rName ),
@@ -55,6 +55,6 @@ ColorData ScRangeFindList::GetColorName( const size_t nIndex )
     return aColNames[nIndex % SC_RANGECOLORS];
 }
 
-//==================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

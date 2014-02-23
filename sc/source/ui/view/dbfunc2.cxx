@@ -24,7 +24,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-//==================================================================
+
 
 void ScDBFunc::UpdateCharts( bool bAllCharts )
 {

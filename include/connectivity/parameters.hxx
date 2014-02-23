@@ -38,17 +38,17 @@
 #include <comphelper/implementationreference.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     typedef ::utl::SharedUNOComponent< ::com::sun::star::sdb::XSingleSelectQueryComposer, ::utl::DisposableComponent >
             SharedQueryComposer;
 
-    //====================================================================
+
     //= ParameterManager
-    //====================================================================
+
     class FilterManager;
     class OOO_DLLPUBLIC_DBTOOLS ParameterManager
     {
@@ -408,9 +408,9 @@ namespace dbtools
         ParameterManager& operator=( const ParameterManager& );   // never implemented
     };
 
-//........................................................................
+
 } // namespacefrm
-//........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_PARAMETERS_HXX
 

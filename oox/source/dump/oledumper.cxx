@@ -34,12 +34,12 @@
 namespace oox {
 namespace dump {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 OUString OleInputObjectBase::dumpAnsiString32( const String& rName )
 {
@@ -81,8 +81,8 @@ sal_uInt32 OleInputObjectBase::dumpOleColor( const String& rName )
     return nOleColor;
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 StdFontObject::StdFontObject( const InputObjectBase& rParent )
 {
@@ -99,7 +99,7 @@ void StdFontObject::implDump()
     dumpCharArray( "name", mxStrm->readuInt8(), RTL_TEXTENCODING_ASCII_US );
 }
 
-// ============================================================================
+
 
 StdPicObject::StdPicObject( const InputObjectBase& rParent )
 {
@@ -113,15 +113,15 @@ void StdPicObject::implDump()
     dumpBinary( "image-data", nSize );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 OleStreamObject::OleStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
     construct( rParent, rxStrm, rSysFileName );
 }
 
-// ============================================================================
+
 
 OleCompObjObject::OleCompObjObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName ) :
     OleStreamObject( rParent, rxStrm, rSysFileName )
@@ -154,8 +154,8 @@ void OleCompObjObject::implDump()
     dumpRemainingStream();
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 namespace {
 
@@ -195,7 +195,7 @@ const sal_uInt32 AX_STRING_COMPRESSED   = 0x80000000;
 
 } // namespace
 
-// ============================================================================
+
 
 OlePropertyStreamObject::OlePropertyStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
@@ -515,7 +515,7 @@ void OlePropertyStreamObject::writePropertyHeader( sal_Int32 nPropId, sal_uInt32
     writeDecItem( "id", nPropId, mxPropIds );
 }
 
-// ============================================================================
+
 
 OleStorageObject::OleStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath )
 {
@@ -537,8 +537,8 @@ void OleStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, 
         BinaryStreamObject( *this, rxStrm, rSysFileName ).dump();
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ComCtlObjectBase::ComCtlObjectBase( const InputObjectBase& rParent,
         sal_uInt32 nDataId5, sal_uInt32 nDataId6, sal_uInt16 nVersion, bool bCommonPart, bool bComplexPart ) :
@@ -646,7 +646,7 @@ bool ComCtlObjectBase::dumpComCtlComplex()
     return false;
 }
 
-// ============================================================================
+
 
 ComCtlScrollBarObject::ComCtlScrollBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :
     ComCtlObjectBase( rParent, SAL_MAX_UINT32, 0x99470A83, nVersion, true, true )
@@ -663,7 +663,7 @@ void ComCtlScrollBarObject::implDumpProperties()
     dumpDec< sal_Int32 >( "value" );
 }
 
-// ============================================================================
+
 
 ComCtlProgressBarObject::ComCtlProgressBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :
     ComCtlObjectBase( rParent, 0xE6E17E84, 0x97AB8A01, nVersion, true, true )
@@ -681,7 +681,7 @@ void ComCtlProgressBarObject::implDumpProperties()
     }
 }
 
-// ============================================================================
+
 
 ComCtlSliderObject::ComCtlSliderObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :
     ComCtlObjectBase( rParent, 0xE6E17E86, 0x0A2BAE11, nVersion, true, true )
@@ -706,7 +706,7 @@ void ComCtlSliderObject::implDumpProperties()
         dumpBool< sal_Int32 >( "tooltip-below" );
 }
 
-// ============================================================================
+
 
 ComCtlUpDownObject::ComCtlUpDownObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :
     ComCtlObjectBase( rParent, 0xFF3626A0, 0xFF3626A0, nVersion, false, false )
@@ -728,7 +728,7 @@ void ComCtlUpDownObject::implDumpProperties()
     dumpUnknown( 4 );
 }
 
-// ============================================================================
+
 
 ComCtlImageListObject::ComCtlImageListObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :
     ComCtlObjectBase( rParent, 0xE6E17E80, 0xE6E17E80, nVersion, true, false )
@@ -774,7 +774,7 @@ void ComCtlImageListObject::implDumpCommonTrailing()
     }
 }
 
-// ============================================================================
+
 
 ComCtlTabStripObject::ComCtlTabStripObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :
     ComCtlObjectBase( rParent, 0xE6E17E8A, 0xD12A7AC1, nVersion, true, true )
@@ -815,7 +815,7 @@ void ComCtlTabStripObject::implDumpCommonExtra( sal_Int64 /*nEndPos*/ )
     }
 }
 
-// ============================================================================
+
 
 ComCtlTreeViewObject::ComCtlTreeViewObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :
     ComCtlObjectBase( rParent, 0xE6E17E8E, 0x6AC13CB1, nVersion, true, true ),
@@ -842,7 +842,7 @@ void ComCtlTreeViewObject::implDumpCommonExtra( sal_Int64 /*nEndPos*/ )
     dumpUniString32( "path-separator" );
 }
 
-// ============================================================================
+
 
 ComCtlStatusBarObject::ComCtlStatusBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :
     ComCtlObjectBase( rParent, 0xE6E17E88, SAL_MAX_UINT32, nVersion, true, true )
@@ -891,8 +891,8 @@ void ComCtlStatusBarObject::implDumpCommonTrailing()
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 void AxPropertyObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName, const String& rPropNameList, bool b64BitPropFlags )
@@ -1198,7 +1198,7 @@ void AxPropertyObjectBase::dumpLargeProperties()
     }
 }
 
-// ============================================================================
+
 
 AxCFontNewObject::AxCFontNewObject( const InputObjectBase& rParent )
 {
@@ -1217,7 +1217,7 @@ void AxCFontNewObject::implDumpShortProperties()
     dumpDecProperty< sal_uInt16 >( 400, "FONT-WEIGHT" );
 }
 
-// ============================================================================
+
 
 AxColumnInfoObject::AxColumnInfoObject( const InputObjectBase& rParent )
 {
@@ -1229,7 +1229,7 @@ void AxColumnInfoObject::implDumpShortProperties()
     dumpDecProperty< sal_Int32 >( -1, "CONV-HMM-TO-CM" );
 }
 
-// ============================================================================
+
 
 AxCommandButtonObject::AxCommandButtonObject( const InputObjectBase& rParent )
 {
@@ -1256,7 +1256,7 @@ void AxCommandButtonObject::implDumpExtended()
     dumpEmbeddedFont();
 }
 
-// ============================================================================
+
 
 AxMorphControlObject::AxMorphControlObject( const InputObjectBase& rParent )
 {
@@ -1320,7 +1320,7 @@ void AxMorphControlObject::dumpColumnInfos()
     }
 }
 
-// ============================================================================
+
 
 AxLabelObject::AxLabelObject( const InputObjectBase& rParent )
 {
@@ -1349,7 +1349,7 @@ void AxLabelObject::implDumpExtended()
     dumpEmbeddedFont();
 }
 
-// ============================================================================
+
 
 AxImageObject::AxImageObject( const InputObjectBase& rParent )
 {
@@ -1375,7 +1375,7 @@ void AxImageObject::implDumpShortProperties()
     dumpStreamProperty();
 }
 
-// ============================================================================
+
 
 AxScrollBarObject::AxScrollBarObject( const InputObjectBase& rParent )
 {
@@ -1403,7 +1403,7 @@ void AxScrollBarObject::implDumpShortProperties()
     dumpStreamProperty();
 }
 
-// ============================================================================
+
 
 AxSpinButtonObject::AxSpinButtonObject( const InputObjectBase& rParent )
 {
@@ -1429,7 +1429,7 @@ void AxSpinButtonObject::implDumpShortProperties()
     dumpMousePtrProperty();
 }
 
-// ============================================================================
+
 
 AxTabStripObject::AxTabStripObject( const InputObjectBase& rParent )
 {
@@ -1478,8 +1478,8 @@ void AxTabStripObject::implDumpExtended()
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 FormControlStreamObject::FormControlStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName, const OUString* pProgId )
 {
@@ -1561,8 +1561,8 @@ void FormControlStreamObject::constructFormCtrlStrmObj( const OUString* pProgId 
         maProgId = *pProgId;
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 VbaFormClassInfoObject::VbaFormClassInfoObject( const InputObjectBase& rParent, VbaFormSharedData& rFormData ) :
     mrFormData( rFormData )
@@ -1590,7 +1590,7 @@ void VbaFormClassInfoObject::implDumpShortProperties()
     dumpDecProperty< sal_uInt16 >( 0 );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1646,7 +1646,7 @@ void VbaFormSiteObject::implDumpShortProperties()
     mrFormData.maSiteInfos.push_back( aSiteInfo );
 }
 
-// ============================================================================
+
 
 VbaFormDesignExtObject::VbaFormDesignExtObject( const InputObjectBase& rParent )
 {
@@ -1662,7 +1662,7 @@ void VbaFormDesignExtObject::implDumpShortProperties()
     dumpDecProperty< sal_Int8 >( 0, "VBA-FORMDESIGNEXT-DBLCLICKCTRLMODE" );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1798,7 +1798,7 @@ void VbaFStreamObject::dumpDesignExtender()
     }
 }
 
-// ============================================================================
+
 
 VbaOStreamObject::VbaOStreamObject( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName, VbaFormSharedData& rFormData ) :
@@ -1824,7 +1824,7 @@ void VbaOStreamObject::implDump()
     dumpRemainingStream();
 }
 
-// ============================================================================
+
 
 VbaPageObject::VbaPageObject( const InputObjectBase& rParent )
 {
@@ -1838,7 +1838,7 @@ void VbaPageObject::implDumpShortProperties()
     dumpDecProperty< sal_uInt32 >( 0, "AX-CONV-MS" );
 }
 
-// ============================================================================
+
 
 VbaMultiPageObject::VbaMultiPageObject( const InputObjectBase& rParent )
 {
@@ -1865,7 +1865,7 @@ void VbaMultiPageObject::implDumpExtended()
     }
 }
 
-// ============================================================================
+
 
 VbaXStreamObject::VbaXStreamObject( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName, VbaFormSharedData& rFormData ) :
@@ -1893,7 +1893,7 @@ void VbaXStreamObject::implDump()
     dumpRemainingStream();
 }
 
-// ============================================================================
+
 
 VbaContainerStorageObject::VbaContainerStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath ) :
     OleStorageObject( rParent, rxStrg, rSysPath )
@@ -1937,8 +1937,8 @@ bool VbaContainerStorageObject::isFormStorage( const OUString& rStrgPath ) const
     return false;
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 VbaSharedData::VbaSharedData() :
     meTextEnc( RTL_TEXTENCODING_MS_1252 )
@@ -1956,7 +1956,7 @@ sal_Int32 VbaSharedData::getStreamOffset( const OUString& rStrmName ) const
     return (aIt == maStrmOffsets.end()) ? 0 : aIt->second;
 }
 
-// ============================================================================
+
 
 VbaDirStreamObject::VbaDirStreamObject( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName, VbaSharedData& rVbaData ) :
@@ -2095,7 +2095,7 @@ OUString VbaDirStreamObject::dumpByteStringWithLength( const String& rName )
     return dumpCharArray( rName, mxStrm->readInt32(), mrVbaData.meTextEnc );
 }
 
-// ============================================================================
+
 
 VbaModuleStreamObject::VbaModuleStreamObject(
         const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm,
@@ -2116,7 +2116,7 @@ void VbaModuleStreamObject::implDump()
     TextLineStreamObject( *this, xVbaStrm, mrVbaData.meTextEnc ).dump();
 }
 
-// ============================================================================
+
 
 VbaStorageObject::VbaStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath, VbaSharedData& rVbaData ) :
     OleStorageObject( rParent, rxStrg, rSysPath ),
@@ -2135,7 +2135,7 @@ void VbaStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, 
         OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
 }
 
-// ============================================================================
+
 
 VbaFormStorageObject::VbaFormStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath, VbaSharedData& rVbaData ) :
     VbaContainerStorageObject( rParent, rxStrg, rSysPath ),
@@ -2151,7 +2151,7 @@ void VbaFormStorageObject::implDumpStream( const Reference< XInputStream >& rxSt
         VbaContainerStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
 }
 
-// ============================================================================
+
 
 VbaProjectStorageObject::VbaProjectStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath ) :
     OleStorageObject( rParent, rxStrg, rSysPath )
@@ -2175,8 +2175,8 @@ void VbaProjectStorageObject::implDumpStorage( const StorageRef& rxStrg, const O
         VbaFormStorageObject( *this, rxStrg, rSysPath, maVbaData ).dump();
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ActiveXStorageObject::ActiveXStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath ) :
     VbaContainerStorageObject( rParent, rxStrg, rSysPath )
@@ -2188,8 +2188,8 @@ void ActiveXStorageObject::implDumpBaseStream( const BinaryInputStreamRef& rxStr
     FormControlStreamObject( *this, rxStrm, rSysFileName ).dump();
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 } // namespace dump
 } // namespace oox

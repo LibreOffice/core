@@ -27,14 +27,14 @@
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
 #include <com/sun/star/awt/AdjustmentType.hpp>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= UnoControlScrollBarModel
-    //====================================================================
+
     class UnoControlScrollBarModel : public UnoControlModel
     {
     protected:
@@ -57,9 +57,9 @@ namespace toolkit
         DECLIMPL_SERVICEINFO_DERIVED( UnoControlScrollBarModel, UnoControlModel, szServiceName2_UnoControlScrollBarModel )
     };
 
-    //====================================================================
+
     //= UnoControlScrollBarModel
-    //====================================================================
+
     class UnoScrollBarControl : public UnoControlBase,
                                 public ::com::sun::star::awt::XAdjustmentListener,
                                 public ::com::sun::star::awt::XScrollBar
@@ -109,9 +109,9 @@ namespace toolkit
 
 
 
-//........................................................................
+
 } // namespacetoolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
 

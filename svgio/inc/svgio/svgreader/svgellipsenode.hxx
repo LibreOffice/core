@@ -23,7 +23,7 @@
 #include <svgio/svgreader/svgnode.hxx>
 #include <svgio/svgreader/svgstyleattributes.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -75,7 +75,7 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_SVGIO_SVGREADER_SVGELLIPSENODE_HXX
 

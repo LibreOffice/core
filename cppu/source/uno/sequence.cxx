@@ -672,7 +672,7 @@ static inline bool ireallocSequence(
 extern "C"
 {
 
-//##############################################################################
+
 sal_Bool SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
@@ -717,7 +717,7 @@ sal_Bool SAL_CALL uno_type_sequence_construct(
     return ret;
 }
 
-//##############################################################################
+
 sal_Bool SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
@@ -756,7 +756,7 @@ sal_Bool SAL_CALL uno_sequence_construct(
     return ret;
 }
 
-//##############################################################################
+
 sal_Bool SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -778,7 +778,7 @@ sal_Bool SAL_CALL uno_type_sequence_realloc(
     return ret;
 }
 
-//##############################################################################
+
 sal_Bool SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -797,7 +797,7 @@ sal_Bool SAL_CALL uno_sequence_realloc(
     return ret;
 }
 
-//##############################################################################
+
 sal_Bool SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
@@ -844,7 +844,7 @@ sal_Bool SAL_CALL uno_type_sequence_reference2One(
     return ret;
 }
 
-//##############################################################################
+
 sal_Bool SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
@@ -888,7 +888,7 @@ sal_Bool SAL_CALL uno_sequence_reference2One(
     return ret;
 }
 
-//##############################################################################
+
 void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
@@ -904,7 +904,7 @@ void SAL_CALL uno_sequence_assign(
     }
 }
 
-//##############################################################################
+
 void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,

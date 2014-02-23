@@ -22,14 +22,14 @@
 
 #include <tools/link.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DelayedEvent
-    //====================================================================
+
     /** small class which encapsulates posting a Link instance as ApplicationUserEvent
 
         No thread safety at all here, just a little saving of code to type multiple times
@@ -73,9 +73,9 @@ namespace svxform
         DelayedEvent& operator=( const DelayedEvent& );   // never implemented
     };
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_DELAYEDEVENT_HXX
 

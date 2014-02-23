@@ -25,9 +25,9 @@
 #include <boost/optional.hpp>
 namespace dbaccess
 {
-    //************************************************************
+
     //  OResultColumn
-    //************************************************************
+
     class OResultColumn : public OColumn,
                           public ::comphelper::OPropertyArrayUsageHelper < OResultColumn >
     {

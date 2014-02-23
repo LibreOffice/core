@@ -78,12 +78,12 @@
 
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #define ANSI_CHARSET            0
 #define SYMBOL_CHARSET          2
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 /* Font Families */
 #define FF_ROMAN                0x10
@@ -92,7 +92,7 @@ using namespace ::com::sun::star;
 #define FF_SCRIPT               0x40
 #define FF_DECORATIVE           0x50
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
@@ -633,7 +633,7 @@ sal_Bool PropValue::GetPropertyValue(
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        //...
+
     }
     return eRetValue;
 }

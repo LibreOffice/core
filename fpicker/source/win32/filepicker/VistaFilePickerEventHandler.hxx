@@ -44,11 +44,11 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-//-----------------------------------------------------------------------------
-// types, const etcpp.
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+// types, const etcpp.
+
+
+
 /** todo document me
  */
 class VistaFilePickerEventHandler : public ::cppu::BaseMutex
@@ -57,24 +57,24 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
 {
     public:
 
-        //------------------------------------------------------------------------------------
+
         // ctor/dtor
-        //------------------------------------------------------------------------------------
+
 
                  VistaFilePickerEventHandler(IVistaFilePickerInternalNotify* pInternalNotify);
         virtual ~VistaFilePickerEventHandler();
 
-        //------------------------------------------------------------------------------------
+
         // IUnknown
-        //------------------------------------------------------------------------------------
+
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID rIID    ,
                                                          void** ppObject);
         virtual ULONG STDMETHODCALLTYPE AddRef();
         virtual ULONG STDMETHODCALLTYPE Release();
 
-        //------------------------------------------------------------------------------------
+
         // IFileDialogEvents
-        //------------------------------------------------------------------------------------
+
 
         STDMETHODIMP OnFileOk(IFileDialog* pDialog);
 
@@ -95,9 +95,9 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
                                  IShellItem*             pItem    ,
                                  FDE_OVERWRITE_RESPONSE* pResponse);
 
-        //------------------------------------------------------------------------------------
+
         // IFileDialogControlEvents
-        //------------------------------------------------------------------------------------
+
 
         STDMETHODIMP OnItemSelected(IFileDialogCustomize* pCustomize,
                                     DWORD                 nIDCtl    ,
@@ -113,9 +113,9 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         STDMETHODIMP OnControlActivating(IFileDialogCustomize* pCustomize,
                                          DWORD                 nIDCtl    );
 
-        //------------------------------------------------------------------------------------
+
         // XFilePickerNotifier
-        //------------------------------------------------------------------------------------
+
 
         virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
             throw( css::uno::RuntimeException );
@@ -123,11 +123,11 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
             throw( css::uno::RuntimeException );
 
-        //------------------------------------------------------------------------------------
-        // native interface
-        //------------------------------------------------------------------------------------
 
-        //------------------------------------------------------------------------------------
+        // native interface
+
+
+
         /** start listening for file picker events on the given file open dialog COM object.
          *
          *  The broadcaster will be cached internally so deregistration will be easy.
@@ -142,7 +142,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
          */
         void startListening( const TFileDialog& pBroadcaster );
 
-        //------------------------------------------------------------------------------------
+
         /** stop listening for file picker events on the internally cached dialog COM object.
          *
          *  The  COM dialog provided on the startListeneing() call was cached internally.
@@ -164,29 +164,29 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
 
     private:
 
-        //------------------------------------------------------------------------------------
+
         /// @todo document me
         void impl_sendEvent(  EEventType eEventType,
                             ::sal_Int16  nControlID);
 
     private:
 
-        //------------------------------------------------------------------------------------
+
         /// ref count for AddRef/Release()
         oslInterlockedCount m_nRefCount;
 
-        //------------------------------------------------------------------------------------
+
         /// unique handle for this listener provided by the broadcaster on registration time
         DWORD m_nListenerHandle;
 
-        //------------------------------------------------------------------------------------
+
         /// cached file dialog instance (there we listen for events)
         TFileDialog m_pDialog;
 
-        //---------------------------------------------------------------------
+
         IVistaFilePickerInternalNotify* m_pInternalNotify;
 
-        //---------------------------------------------------------------------
+
         /** used to inform file picker listener asynchronously.
          *  Those listener must be called asynchronously .. because
          *  every request will block the caller thread. Mostly that will be

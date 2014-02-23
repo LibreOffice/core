@@ -28,10 +28,10 @@
 #include "RptDef.hxx"
 
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
     typedef ::cppu::WeakComponentImplHelper1<   ::com::sun::star::beans::XPropertyChangeListener
                                     >   OPropertyForward_Base;
 
@@ -77,9 +77,9 @@ namespace rptui
          */
         void startListening();
     };
-//........................................................................
+
 }   // namespace rptui
-//........................................................................
+
 #endif // RPTUI_PROPERTYSETFORWARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

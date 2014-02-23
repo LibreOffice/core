@@ -25,14 +25,14 @@
 
 class TransferableClipboardListener;
 class TransferableDataHelper;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OClipboardDispatcher
-    //====================================================================
+
     class OClipboardDispatcher : public ORichTextFeatureDispatcher
     {
     public:
@@ -66,9 +66,9 @@ namespace frm
         virtual sal_Bool implIsEnabled( ) const;
     };
 
-    //====================================================================
+
     //= OPasteClipboardDispatcher
-    //====================================================================
+
     class OPasteClipboardDispatcher : public OClipboardDispatcher
     {
     private:
@@ -91,9 +91,9 @@ namespace frm
         DECL_LINK( OnClipboardChanged, TransferableDataHelper* );
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_CLIPBOARDDISPATCHER_HXX
 

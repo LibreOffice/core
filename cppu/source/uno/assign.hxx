@@ -30,12 +30,12 @@
 namespace cppu
 {
 
-//##################################################################################################
+
 //#### assignment ##################################################################################
-//##################################################################################################
 
 
-//--------------------------------------------------------------------------------------------------
+
+
 inline void _assignInterface(
     void ** ppDest, void * pSource,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -46,7 +46,7 @@ inline void _assignInterface(
     *ppDest = pSource;
     _release( pToBeReleased, release );
 }
-//--------------------------------------------------------------------------------------------------
+
 inline void * _queryInterface(
     void * pSource,
     typelib_TypeDescriptionReference * pDestType,
@@ -61,13 +61,13 @@ inline void * _queryInterface(
     }
     return pSource;
 }
-//==================================================================================================
+
 bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW(());
-//--------------------------------------------------------------------------------------------------
+
 inline bool _assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -100,7 +100,7 @@ inline bool _assignStruct(
     }
     return true;
 }
-//--------------------------------------------------------------------------------------------------
+
 inline bool _assignData(
     void * pDest,
     typelib_TypeDescriptionReference * pDestType, typelib_TypeDescription * pDestTypeDescr,

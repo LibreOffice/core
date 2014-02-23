@@ -258,9 +258,9 @@ private:
         }
     }
 
-    //==================================================================================================================
+
     //= SortableGridDataModel
-    //==================================================================================================================
+
     DBG_NAME( SortableGridDataModel )
 
     SortableGridDataModel::SortableGridDataModel( Reference< XComponentContext > const & rxContext )

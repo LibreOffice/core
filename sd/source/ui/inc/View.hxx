@@ -55,9 +55,9 @@ class ViewShell;
 class Window;
 class ViewClipboard;
 
-// -------------------
+
 // - SdViewRedrawRec -
-// -------------------
+
 
 struct SdViewRedrawRec
 {

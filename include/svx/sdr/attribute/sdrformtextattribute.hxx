@@ -24,7 +24,7 @@
 #include <svx/xenum.hxx>
 #include <tools/color.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class SfxItemSet;
@@ -34,7 +34,7 @@ namespace drawinglayer { namespace attribute {
     class SdrFormTextOutlineAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -76,7 +76,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_ATTRIBUTE_SDRFORMTEXTATTRIBUTE_HXX
 

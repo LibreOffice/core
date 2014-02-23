@@ -25,10 +25,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     class IFeatureDispatcher;
     class ICommandImageProvider;
@@ -36,9 +36,9 @@ namespace frm
 
     class ImplNavToolBar;
 
-    //=====================================================================
+
     //= NavigationToolBar
-    //=====================================================================
+
     class NavigationToolBar : public Window
     {
     public:
@@ -154,9 +154,9 @@ namespace frm
         void enableItemRTL( sal_uInt16 /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const;
     };
 
-    //=====================================================================
+
     //= RecordPositionInput
-    //=====================================================================
+
     class RecordPositionInput : public NumericField
     {
     private:
@@ -179,9 +179,9 @@ namespace frm
         void FirePosition( sal_Bool _bForce );
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
 

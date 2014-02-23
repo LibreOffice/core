@@ -18,7 +18,7 @@
 
 #include <svx/sdrundomanager.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoManager::SdrUndoManager(sal_uInt16 nMaxUndoActionCount)
     : EditUndoManager(nMaxUndoActionCount)
@@ -131,5 +131,5 @@ bool SdrUndoManager::isTextEditActive() const
     return maEndTextEditHdl.IsSet();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eof

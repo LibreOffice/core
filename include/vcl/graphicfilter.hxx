@@ -118,9 +118,9 @@ struct ConvertData;
 #define GFF_MOV ( (sal_uInt16)0x00fa )
 #define GFF_XXX ( (sal_uInt16)0xffff )
 
-// ---------------------
+
 // - GraphicDescriptor -
-// ---------------------
+
 
 class VCL_DLLPUBLIC GraphicDescriptor
 {

@@ -30,10 +30,10 @@
 #include "FormatCondition.hxx"
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include "ReportHelperImpl.hxx"
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 uno::Sequence< OUString > lcl_getFixedTextOptionals()
@@ -324,8 +324,8 @@ OUString SAL_CALL OFixedText::getShapeType(  ) throw (uno::RuntimeException)
 }
 
 
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

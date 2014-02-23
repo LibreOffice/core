@@ -25,7 +25,7 @@
 
 #include <vcl/button.hxx>
 
-//========================================================================
+
 class SvxFmAbsRecWin : public NumericField
 {
     SfxToolBoxControl*  m_pController;
@@ -42,7 +42,7 @@ protected:
 };
 
 
-//========================================================================
+
 class SvxFmConfigWin : public SfxPopupWindow
 {
 private:
@@ -57,7 +57,7 @@ public:
 };
 
 
-//========================================================================
+
 class SvxFmTbxCtlConfig : public SfxToolBoxControl
 {
 private:
@@ -79,7 +79,7 @@ public:
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
-//========================================================================
+
 class FixedText;
 class SvxFmTbxCtlAbsRec : public SfxToolBoxControl
 {
@@ -95,7 +95,7 @@ public:
                                   const SfxPoolItem* pState );
 };
 
-//========================================================================
+
 class SvxFmTbxCtlRecText : public SfxToolBoxControl
 {
 public:
@@ -107,7 +107,7 @@ public:
     virtual Window* CreateItemWindow( Window* pParent );
 };
 
-//========================================================================
+
 class SvxFmTbxCtlRecFromText : public SfxToolBoxControl
 {
 public:
@@ -119,7 +119,7 @@ public:
     virtual Window* CreateItemWindow( Window* pParent );
 };
 
-//========================================================================
+
 class SvxFmTbxCtlRecTotal : public SfxToolBoxControl
 {
     FixedText* pFixedText;
@@ -135,7 +135,7 @@ public:
                                   const SfxPoolItem* pState );
 };
 
-//========================================================================
+
 class SvxFmTbxNextRec : public SfxToolBoxControl
 {
 public:
@@ -143,7 +143,7 @@ public:
     SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-//========================================================================
+
 class SvxFmTbxPrevRec : public SfxToolBoxControl
 {
 public:

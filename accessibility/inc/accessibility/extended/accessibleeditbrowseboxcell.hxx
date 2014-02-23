@@ -31,9 +31,9 @@
 
 namespace accessibility
 {
-    // =============================================================================
+
     // = EditBrowseBoxTableCell
-    // =============================================================================
+
     class EditBrowseBoxTableCell    :public AccessibleBrowseBoxCell
                                     ,public ::comphelper::OAccessibleContextWrapperHelper
     {
@@ -93,9 +93,9 @@ namespace accessibility
         EditBrowseBoxTableCell& operator=( const EditBrowseBoxTableCell& ); // never implemented
     };
 
-    // =============================================================================
+
     // = EditBrowseBoxTableCell
-    // =============================================================================
+
     typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::accessibility::XAccessible
                                                 >   EditBrowseBoxTableCellAccess_Base;
     // XAccessible providing an EditBrowseBoxTableCell

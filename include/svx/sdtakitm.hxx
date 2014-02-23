@@ -23,9 +23,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//------------------------------
+
 // class SdrTextAniKindItem
-//------------------------------
+
 
 enum SdrTextAniKind {SDRTEXTANI_NONE,
                      SDRTEXTANI_BLINK,

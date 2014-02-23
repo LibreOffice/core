@@ -28,9 +28,9 @@ namespace connectivity
 {
     namespace odbc
     {
-        //**************************************************************
+
         //************ Class: ODatabaseMetaData
-        //**************************************************************
+
 
         class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaData :
             public ODatabaseMetaDataBase

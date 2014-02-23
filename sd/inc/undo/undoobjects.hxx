@@ -30,7 +30,7 @@ class SdPage;
 
 namespace sd
 {
-///////////////////////////////////////////////////////////////////////
+
 
 class UndoRemovePresObjectImpl
 {
@@ -47,7 +47,7 @@ private:
     SfxUndoAction*  mpUndoPresObj;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class UndoRemoveObject : public SdrUndoRemoveObj, public UndoRemovePresObjectImpl
 {
@@ -61,7 +61,7 @@ private:
     SdrObjectWeakRef mxSdrObject;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class UndoDeleteObject : public SdrUndoDelObj, public UndoRemovePresObjectImpl
 {
@@ -75,7 +75,7 @@ private:
     SdrObjectWeakRef mxSdrObject;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
 {
@@ -89,7 +89,7 @@ private:
     SdrObjectWeakRef mxSdrObject;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class UndoObjectSetText : public SdrUndoObjSetText
 {
@@ -106,7 +106,7 @@ private:
     SdrObjectWeakRef mxSdrObject;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Undo for SdrObject::SetUserCall()
 
 class UndoObjectUserCall : public SdrUndoObj
@@ -123,7 +123,7 @@ protected:
     SdrObjectWeakRef mxSdrObject;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
 class UndoObjectPresentationKind : public SdrUndoObj
@@ -141,7 +141,7 @@ protected:
     SdrObjectWeakRef mxSdrObject;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Restores correct position and size for presentation shapes with user call
 // on undo
 
@@ -157,7 +157,7 @@ protected:
     SdrPageWeakRef mxPage;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class UndoGeoObject : public SdrUndoGeoObj
 {
@@ -172,7 +172,7 @@ protected:
     SdrObjectWeakRef mxSdrObject;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class UndoAttrObject : public SdrUndoAttrObj
 {

@@ -27,14 +27,14 @@
 
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //=====================================================================
+
+
     //= ICommandImageProvider
-    //=====================================================================
+
     typedef OUString                                 CommandURL;
     typedef ::com::sun::star::uno::Sequence< CommandURL >   CommandURLs;
     typedef ::std::vector< Image >                          CommandImages;
@@ -52,18 +52,18 @@ namespace frm
 
     typedef ::boost::shared_ptr< const ICommandImageProvider >  PCommandImageProvider;
 
-    //=====================================================================
+
     //= factory
-    //=====================================================================
+
     PCommandImageProvider
         createDocumentCommandImageProvider(
             const css::uno::Reference<css::uno::XComponentContext>& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
         );
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_COMMANDIMAGEPROVIDER_HXX
 

@@ -36,9 +36,9 @@ namespace connectivity
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > my_XResultSetRef;
         using ::com::sun::star::uno::Any;
 
-        //**************************************************************
+
         //************ Class: ODatabaseMetaData
-        //**************************************************************
+
 
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
 

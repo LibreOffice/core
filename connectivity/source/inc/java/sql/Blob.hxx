@@ -27,9 +27,9 @@
 namespace connectivity
 {
 
-    //**************************************************************
+
     //************ Class: java.sql.SQLWarning
-    //**************************************************************
+
     class java_sql_Blob :   public java_lang_Object,
                             public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XBlob>
     {

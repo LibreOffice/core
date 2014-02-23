@@ -19,12 +19,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_DRAWMODELWRAPPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_DRAWMODELWRAPPER_HXX
 
-//----
+
 #include <svx/svdmodel.hxx>
 // header for class SdrObject
 #include <svx/svdobj.hxx>
 
-//----
+
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>

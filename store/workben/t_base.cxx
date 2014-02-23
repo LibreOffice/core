@@ -237,7 +237,7 @@ struct MyFindData
 
 static void __store_testUnicode (const sal_Char *pszFilename)
 {
-    // ...
+
     rtl_TextToUnicodeConverter hConvert;
     hConvert = rtl_createTextToUnicodeConverter (RTL_TEXTENCODING_UTF8);
 
@@ -255,13 +255,13 @@ static void __store_testUnicode (const sal_Char *pszFilename)
 
     rtl_destroyTextToUnicodeConverter (hConvert);
 
-    // ...
+
     rtl_String  *pszFileA = NULL;
     rtl_uString *pszFileW = NULL;
 
     // rtl_uString_newFromAscii (&pszFileW, pszFilename);
 
-    // ...
+
     rtl_string_newFromStr (&pszFileA, pszFilename);
 
     rtl_string2UString (
@@ -272,11 +272,11 @@ static void __store_testUnicode (const sal_Char *pszFilename)
 
     rtl_string_release (pszFileA);
 
-    // ...
+
     OStorePageKey aKey;
     __store_namei (pszFileW->buffer, pszFileW->buffer, aKey);
 
-    // ...
+
     rtl_uString2String (
         &pszFileA,
         pszFileW->buffer, pszFileW->length,
@@ -285,7 +285,7 @@ static void __store_testUnicode (const sal_Char *pszFilename)
 
     rtl_uString_release (pszFileW);
 
-    // ...
+
     rtl_string_release (pszFileA);
 }
 

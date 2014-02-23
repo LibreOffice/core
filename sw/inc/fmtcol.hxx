@@ -180,7 +180,7 @@ enum Master_CollConditions
     PARA_IN_FOOTER      = 0x0080,
     PARA_IN_HEADER      = 0x0100,
     PARA_IN_ENDNOTE     = 0x0200,
-    // ...
+
     USRFLD_EXPRESSION   = (int)0x8000
 };
 
