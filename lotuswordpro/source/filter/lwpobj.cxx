@@ -84,9 +84,9 @@ LwpObject::~LwpObject()
 void LwpObject::QuickRead()
 {
     Read();
-    m_pObjStrm->ReadComplete();
     if(m_pObjStrm)
     {
+        m_pObjStrm->ReadComplete();
         delete m_pObjStrm;
         m_pObjStrm = NULL;
     }
