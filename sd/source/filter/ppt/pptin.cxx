@@ -1506,7 +1506,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
             }
         }
         DffRecordHeader aPageRecHd;
-        if ( pPage && SeekToAktPage( &aPageRecHd ) )
+        if ( SeekToAktPage( &aPageRecHd ) )
         {
             sal_uLong nPageRecEnd = aPageRecHd.GetRecEndFilePos();
 
