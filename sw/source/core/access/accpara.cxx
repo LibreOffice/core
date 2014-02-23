@@ -1364,7 +1364,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
 // XAccesibleText
 
 sal_Int32 SwAccessibleParagraph::getCaretPosition()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
