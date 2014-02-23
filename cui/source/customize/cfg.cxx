@@ -1695,13 +1695,13 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         bool bURLToSelectFound = false;
         if ( !m_aURLToSelect.isEmpty() )
         {
-            if ( pDocData != NULL && pDocData->HasURL( m_aURLToSelect ) )
+            if ( pDocData && pDocData->HasURL( m_aURLToSelect ) )
             {
                 aSaveInListBox.SelectEntryPos( nPos, true );
                 pCurrentSaveInData = pDocData;
                 bURLToSelectFound = true;
             }
-            else if ( pModuleData->HasURL( m_aURLToSelect ) )
+            else if ( pModuleData && pModuleData->HasURL( m_aURLToSelect ) )
             {
                 aSaveInListBox.SelectEntryPos( 0, true );
                 pCurrentSaveInData = pModuleData;
