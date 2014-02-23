@@ -126,7 +126,7 @@ public:
 
     virtual Any SAL_CALL getTransferData( const DataFlavor& aFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException);
     virtual Sequence< DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(RuntimeException);
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
+    virtual bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
 };
 
 
@@ -178,7 +178,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     if( xDropTarget.is() )
     {
         xDropTarget->addDropTargetListener( xListener );
-        xDropTarget->setActive( sal_True );
+        xDropTarget->setActive( true );
     }
 
     Reference< XDragGestureRecognizer > xRecognizer = GetDragGestureRecognizer();
@@ -247,7 +247,7 @@ void SAL_CALL MyDragAndDropListener::dragGestureRecognized( const DragGestureEve
 
 void SAL_CALL MyDragAndDropListener::drop( const DropTargetDropEvent& dtde ) throw(RuntimeException)
 {
-    dtde.Context->dropComplete( sal_True );
+    dtde.Context->dropComplete( true );
 }
 
 
@@ -324,7 +324,7 @@ MyInfoBox::MyInfoBox( Window* pParent ) : InfoBox( pParent,
     if( xDropTarget.is() )
     {
         xDropTarget->addDropTargetListener( xListener );
-        xDropTarget->setActive( sal_True );
+        xDropTarget->setActive( true );
     }
 
     Reference< XDragGestureRecognizer > xRecognizer = GetDragGestureRecognizer();
@@ -342,7 +342,7 @@ MyListBox::MyListBox( Window* pParent ) : ListBox( pParent )
     if( xDropTarget.is() )
     {
         xDropTarget->addDropTargetListener( xListener );
-        xDropTarget->setActive( sal_True );
+        xDropTarget->setActive( true );
     }
 
     Reference< XDragGestureRecognizer > xRecognizer = GetDragGestureRecognizer();
@@ -368,10 +368,10 @@ Sequence< DataFlavor > SAL_CALL StringTransferable::getTransferDataFlavors(  )
 
 
 
-sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& )
+bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& )
     throw(RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclDnDTest);

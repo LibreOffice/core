@@ -101,7 +101,7 @@ namespace sfx2
         virtual void SetText( const OUString& i_rText );
 
         // DockingWindow overridables
-        void EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
+        void EndDocking( const Rectangle& rRect, bool bFloatMode );
 
         // own overridables
         virtual void onLayoutDone();

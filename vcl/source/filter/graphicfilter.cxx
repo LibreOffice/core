@@ -300,7 +300,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         nSecondLong=(nSecondLong<<8)|(sal_uLong)sFirstBytes[i+4];
     }
 
-    // The following variable is used when bTest == true. It remains sal_False
+    // The following variable is used when bTest == true. It remains false
     // if the format (rFormatExtension) has not yet been set.
     bool bSomethingTested = false;
 
@@ -2119,7 +2119,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 #endif
                 if( pFunc )
                 {
-                    if ( !(*pFunc)( rOStm, aGraphic, &aConfigItem, sal_False ) )
+                    if ( !(*pFunc)( rOStm, aGraphic, &aConfigItem, false ) )
                         nStatus = GRFILTER_FORMATERROR;
                     break;
                 }

@@ -56,7 +56,7 @@ KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nState ) :
 {
 }
 
-void KDESalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
+void KDESalFrame::Show( bool bVisible, bool bNoActivate )
 {
     if ( !GetParent() && ! (GetStyle() & SAL_FRAME_STYLE_INTRO) )
     {

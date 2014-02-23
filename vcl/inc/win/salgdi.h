@@ -171,7 +171,7 @@ public:
     ImplFontAttrCache*      mpFontAttrCache;    // Cache font attributes from files in so/share/fonts
     BYTE*                   mpFontCharSets;     // All Charsets for the current font
     BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
-    sal_Bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
+    bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
     KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
     sal_uIntPtr                 mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite

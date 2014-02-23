@@ -42,7 +42,7 @@
 
 // SalInstance member to create and destroy a SalObject
 
-SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
+SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )
 {
     return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 }
@@ -382,7 +382,7 @@ X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 
 void
-X11SalObject::Show( sal_Bool bVisible )
+X11SalObject::Show( bool bVisible )
 {
     if  ( ! maSystemChildData.aWindow )
         return;

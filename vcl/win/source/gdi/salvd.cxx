@@ -78,7 +78,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
 
     HDC     hDC = NULL;
     HBITMAP hBmp = NULL;
-    sal_Bool    bOk = FALSE;
+    bool    bOk = FALSE;
 
     if( pData )
     {

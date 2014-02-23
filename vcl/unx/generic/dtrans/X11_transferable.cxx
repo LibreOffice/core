@@ -114,9 +114,9 @@ sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFla
     for( int i = 0; i < aFlavors.getLength(); i++ )
         if( aFlavor.MimeType.equalsIgnoreAsciiCase( aFlavors.getConstArray()[i].MimeType ) &&
             aFlavor.DataType == aFlavors.getConstArray()[i].DataType )
-            return sal_True;
+            return true;
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

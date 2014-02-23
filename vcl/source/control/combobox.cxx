@@ -652,7 +652,7 @@ void ComboBox::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_STYLE )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
-        mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? sal_True : sal_False );
+        mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? true : false );
     }
     else if( nType == STATE_CHANGE_MIRRORING )
     {

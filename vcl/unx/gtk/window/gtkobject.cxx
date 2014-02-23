@@ -156,7 +156,7 @@ void GtkSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
     }
 }
 
-void GtkSalObject::Show( sal_Bool bVisible )
+void GtkSalObject::Show( bool bVisible )
 {
     if( m_pSocket )
     {
@@ -202,7 +202,7 @@ void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
     }
 }
 
-void GtkSalObject::SetForwardKey( sal_Bool bEnable )
+void GtkSalObject::SetForwardKey( bool bEnable )
 {
     if( bEnable )
         gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE );

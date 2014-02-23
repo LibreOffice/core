@@ -41,7 +41,7 @@ static DWORD myerr=0;
 
 
 
-sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
+bool SalData::IsKnownMenuHandle( HMENU hMenu )
 {
     if( mhMenuSet.find( hMenu ) == mhMenuSet.end() )
         return FALSE;
@@ -53,7 +53,7 @@ sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
 
 // WinSalInst factory methods
 
-SalMenu* WinSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* )
+SalMenu* WinSalInstance::CreateMenu( bool bMenuBar, Menu* )
 {
     WinSalMenu *pSalMenu = new WinSalMenu();
 
@@ -288,13 +288,13 @@ void WinSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     }
 }
 
-void WinSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
+void WinSalMenu::CheckItem( unsigned nPos, bool bCheck )
 {
     if( static_cast<unsigned>( -1 ) != ::CheckMenuItem( mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED) ) )
         ImplDrawMenuBar( this );
 }
 
-void WinSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
+void WinSalMenu::EnableItem( unsigned nPos, bool bEnable )
 {
     if( -1 != ::EnableMenuItem( mhMenu, nPos, MF_BYPOSITION|(bEnable ? MF_ENABLED : (MF_DISABLED|MF_GRAYED) ) ) )
         ImplDrawMenuBar( this );

@@ -79,7 +79,7 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual bool            PostEvent( void* pData );
+    virtual bool                PostEvent( void* pData );
 
     virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
@@ -87,8 +87,8 @@ public:
     virtual void                DrawMenuBar();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
-    virtual void                Enable( sal_Bool bEnable );
+    virtual void                Show( bool bVisible, bool bNoActivate = sal_False );
+    virtual void                Enable( bool bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
@@ -96,21 +96,21 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual bool            GetWindowState( SalFrameState* pState );
+    virtual bool                GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
-    virtual void                StartPresentation( sal_Bool bStart );
-    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
+    virtual void                StartPresentation( bool bStart );
+    virtual void                SetAlwaysOnTop( bool bOnTop );
     virtual void                ToTop( sal_uInt16 nFlags );
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( sal_Bool bMouse );
+    virtual void                CaptureMouse( bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
     using SalFrame::Flush;
     virtual void                Flush();
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
-    virtual OUString       GetKeyName( sal_uInt16 nKeyCode );
-    virtual bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual OUString            GetKeyName( sal_uInt16 nKeyCode );
+    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
     virtual void                Beep();

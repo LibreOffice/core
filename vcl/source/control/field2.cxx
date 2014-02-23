@@ -158,38 +158,38 @@ static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
     {
         SAL_WARN( "vcl.control", "ImplIsPatternChar: Exception caught!" );
         DBG_UNHANDLED_EXCEPTION();
-        return sal_False;
+        return false;
     }
 
     if ( (cEditMask == EDITMASK_ALPHA) || (cEditMask == EDITMASK_UPPERALPHA) )
     {
         if( !CharClass::isLetterType( nType ) )
-            return sal_False;
+            return false;
     }
     else if ( cEditMask == EDITMASK_NUM )
     {
         if( !CharClass::isNumericType( nType ) )
-            return sal_False;
+            return false;
     }
     else if ( (cEditMask == EDITMASK_ALPHANUM) || (cEditMask == EDITMASK_UPPERALPHANUM) )
     {
         if( !CharClass::isLetterNumericType( nType ) )
-            return sal_False;
+            return false;
     }
     else if ( (cEditMask == EDITMASK_ALLCHAR) || (cEditMask == EDITMASK_UPPERALLCHAR) )
     {
         if ( cChar < 32 )
-            return sal_False;
+            return false;
     }
     else if ( cEditMask == EDITMASK_NUMSPACE )
     {
         if ( !CharClass::isNumericType( nType ) && ( cChar != ' ' ) )
-            return sal_False;
+            return false;
     }
     else
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
@@ -212,12 +212,12 @@ static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 static int ImplCommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
 {
     if ( c1 == c2 )
-        return sal_True;
+        return true;
     else if ( ((c1 == '.') || (c1 == ',')) &&
               ((c2 == '.') || (c2 == ',')) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 static OUString ImplPatternReformat( const OUString& rStr,

@@ -62,9 +62,7 @@ public:
   virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
     throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
-
   // Helper functions not part of the XTransferable interface
-
 
   void initClipboardItemList();
 

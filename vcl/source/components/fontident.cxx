@@ -106,8 +106,8 @@ Any SAL_CALL FontIdentificator::getMaterial() throw(RuntimeException, std::excep
     aFD.Underline           = 0;
     aFD.Strikeout           = 0;
     aFD.Orientation         = 0;
-    aFD.Kerning             = sal_False;
-    aFD.WordLineMode        = sal_False;
+    aFD.Kerning             = false;
+    aFD.WordLineMode        = false;
     aFD.Type                = 0;
     switch( m_aFont.GetFamily() )
     {

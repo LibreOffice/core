@@ -104,7 +104,7 @@ public:
     void        Paint( const Rectangle& rRect );
     void        Resize();
 
-    sal_Bool        Close();
+    bool        Close();
 
     void parseList( const OString& rList );
     OString processCommand( const OString& rCommand );
@@ -149,9 +149,9 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aQuitButton.Show();
 }
 
-sal_Bool MyWin::Close()
+bool MyWin::Close()
 {
-    sal_Bool bRet = WorkWindow::Close();
+    bool bRet = WorkWindow::Close();
     if( bRet )
         Application::Quit();
     return bRet;

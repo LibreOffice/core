@@ -40,7 +40,7 @@ void SvpSalObject::BeginSetClipRegion( sal_uLong ) {}
 void SvpSalObject::UnionClipRegion( long, long, long, long ) {}
 void SvpSalObject::EndSetClipRegion() {}
 void SvpSalObject::SetPosSize( long, long, long, long ) {}
-void SvpSalObject::Show( sal_Bool ) {}
+void SvpSalObject::Show( bool ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
 
 // SalI18NImeStatus

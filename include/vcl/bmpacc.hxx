@@ -254,7 +254,7 @@ inline Point BitmapReadAccess::BottomRight() const
 inline bool BitmapReadAccess::IsTopDown() const
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
-    return( mpBuffer ? sal::static_int_cast<sal_Bool>( BMP_SCANLINE_ADJUSTMENT( mpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN ) : sal_False );
+    return( mpBuffer ? sal::static_int_cast<bool>( BMP_SCANLINE_ADJUSTMENT( mpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN ) : false );
 }
 
 // ------------------------------------------------------------------

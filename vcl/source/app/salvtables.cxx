@@ -63,7 +63,7 @@ void SalInstance::FillFontPathList( std::list< OString >& )
     // do nothing
 }
 
-SalMenu* SalInstance::CreateMenu( sal_Bool, Menu* )
+SalMenu* SalInstance::CreateMenu( bool, Menu* )
 {
     // default: no native menus
     return NULL;

@@ -544,7 +544,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
 
     // inform application that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,
-    // so we need to call XRenderadble::render one last time with IsLastPage = sal_True
+    // so we need to call XRenderadble::render one last time with IsLastPage = true
     i_rController.setLastPage( true );
     GDIMetaFile aPageFile;
     if( mrContext )
@@ -560,16 +560,12 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
     return bSuccess;
 }
 
-
-
 bool AquaSalInfoPrinter::EndJob()
 {
     mnStartPageOffsetX = mnStartPageOffsetY = 0;
     mbJob = false;
     return true;
 }
-
-
 
 bool AquaSalInfoPrinter::AbortJob()
 {
@@ -578,8 +574,6 @@ bool AquaSalInfoPrinter::AbortJob()
     // FIXME: implementation
     return false;
 }
-
-
 
 SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData )
 {
@@ -592,8 +586,6 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_b
 
     return mpGraphics;
 }
-
-
 
 bool AquaSalInfoPrinter::EndPage()
 {
@@ -662,7 +654,7 @@ bool AquaSalPrinter::AbortJob()
 
 
 
-SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData )
+SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData )
 {
     return mpInfoPrinter->StartPage( i_pSetupData, i_bNewJobData );
 }

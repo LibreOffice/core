@@ -293,11 +293,11 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
                     pRun++;
             }
             else if( bProtect && *pRun == '`' )
-                CopyUntil( pLeap, pRun, '`', sal_True );
+                CopyUntil( pLeap, pRun, '`', true );
             else if( bProtect && *pRun == '\'' )
-                CopyUntil( pLeap, pRun, '\'', sal_True );
+                CopyUntil( pLeap, pRun, '\'', true );
             else if( bProtect && *pRun == '"' )
-                CopyUntil( pLeap, pRun, '"', sal_True );
+                CopyUntil( pLeap, pRun, '"', true );
             else
             {
                 *pLeap = *pRun;
@@ -349,11 +349,11 @@ OString WhitespaceToSpace(const OString& rLine, bool bProtect)
                     pRun++;
             }
             else if( bProtect && *pRun == '`' )
-                CopyUntil( pLeap, pRun, '`', sal_True );
+                CopyUntil( pLeap, pRun, '`', true );
             else if( bProtect && *pRun == '\'' )
-                CopyUntil( pLeap, pRun, '\'', sal_True );
+                CopyUntil( pLeap, pRun, '\'', true );
             else if( bProtect && *pRun == '"' )
-                CopyUntil( pLeap, pRun, '"', sal_True );
+                CopyUntil( pLeap, pRun, '"', true );
             else
             {
                 *pLeap = *pRun;

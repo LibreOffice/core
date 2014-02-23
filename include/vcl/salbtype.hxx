@@ -277,7 +277,7 @@ inline BitmapColor::BitmapColor() :
             mcBlueOrIndex   ( 0 ),
             mcGreen         ( 0 ),
             mcRed           ( 0 ),
-            mbIndex         ( sal_False )
+            mbIndex         ( false )
 {
 }
 
@@ -287,7 +287,7 @@ inline BitmapColor::BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBl
             mcBlueOrIndex   ( cBlue ),
             mcGreen         ( cGreen ),
             mcRed           ( cRed ),
-            mbIndex         ( sal_False )
+            mbIndex         ( false )
 {
 }
 
@@ -317,7 +317,7 @@ inline BitmapColor::BitmapColor( sal_uInt8 cIndex ) :
             mcBlueOrIndex   ( cIndex ),
             mcGreen         ( 0 ),
             mcRed           ( 0 ),
-            mbIndex         ( sal_True )
+            mbIndex         ( true )
 {
 }
 

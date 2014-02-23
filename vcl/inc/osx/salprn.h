@@ -143,7 +143,7 @@ class AquaSalPrinter : public SalPrinter
 
     virtual bool                    EndJob();
     virtual bool                    AbortJob();
-    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData );
+    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData );
     virtual bool                    EndPage();
     virtual sal_uLong                   GetErrorCode();
 

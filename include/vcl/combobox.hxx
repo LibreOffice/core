@@ -86,7 +86,7 @@ protected:
 
 protected:
     explicit            ComboBox( WindowType nType );
-    bool            IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
+    bool            IsDropDownBox() const { return mpFloatWin ? true : false; }
 
     virtual void  FillLayoutData() const;
 public:

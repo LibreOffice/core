@@ -49,12 +49,12 @@ class WinSalGraphics;
 class WinSalInfoPrinter : public SalInfoPrinter
 {
 public:
-    WinSalGraphics*         mpGraphics;             // current Printer graphics
+    WinSalGraphics*        mpGraphics;             // current Printer graphics
     OUString               maDriverName;           // printer driver name
     OUString               maDeviceName;           // printer device name
     OUString               maPortName;             // printer port name
-    HDC                     mhDC;                   // printer hdc
-    sal_Bool                    mbGraphics;             // is Graphics used
+    HDC                    mhDC;                   // printer hdc
+    bool                   mbGraphics;             // is Graphics used
 public:
     WinSalInfoPrinter();
     virtual ~WinSalInfoPrinter();
@@ -88,8 +88,8 @@ public:
     HDC                     mhDC;                   // printer hdc
     sal_uIntPtr                 mnError;                // Error Code
     sal_uIntPtr                 mnCopies;               // Kopien
-    sal_Bool                    mbCollate;              // Sortierte Kopien
-    sal_Bool                    mbAbort;                // Job Aborted
+    bool                    mbCollate;              // Sortierte Kopien
+    bool                    mbAbort;                // Job Aborted
 
     bool                    mbValid;
 
@@ -107,7 +107,7 @@ public:
                                               ImplJobSetup* pSetupData );
     virtual bool                    EndJob();
     virtual bool                    AbortJob();
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData );
+    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData );
     virtual bool                    EndPage();
     virtual sal_uIntPtr                 GetErrorCode();
 

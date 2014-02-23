@@ -863,8 +863,8 @@ void ListBox::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_STYLE )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
-        mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? sal_True : sal_False );
-        bool bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? sal_True : sal_False;
+        mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? true : false );
+        bool bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? true : false;
         mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
     }
     else if( nType == STATE_CHANGE_MIRRORING )
@@ -1185,7 +1185,7 @@ void ListBox::EnableMultiSelection( bool bMulti, bool bStackSelection )
     // WB_SIMPLEMODE:
     // The MultiListBox behaves just like a normal ListBox
     // MultiSelection is possible via corresponding additional keys
-    bool bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? sal_True : sal_False;
+    bool bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? true : false;
     mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
 
     // In a MultiSelection, we can't see us travelling without focus

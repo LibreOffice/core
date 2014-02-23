@@ -264,7 +264,7 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
 /*
  * IsNativeControlSupported()
  * --------------------------
- * Returns sal_True if the platform supports native
+ * Returns true if the platform supports native
  * drawing of the control defined by nPart.
  *
  */
@@ -398,7 +398,7 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
 /*
  * HitTestNativeControl()
  *
- *  If the return value is sal_True, bIsInside contains information whether
+ *  If the return value is true, bIsInside contains information whether
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
@@ -409,7 +409,7 @@ bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
     {
         Rectangle aRect;
         bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion, aRect );
-        rIsInside = bValid ? aRect.IsInside( rPos ) : sal_False;
+        rIsInside = bValid ? aRect.IsInside( rPos ) : false;
         if( NSAppKitVersionNumber < NSAppKitVersionNumber10_7 &&
             GetSalData()->mbIsScrollbarDoubleMax )
         {
@@ -1200,7 +1200,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 /*
  * GetNativeControlRegion()
  *
- *  If the return value is sal_True, rNativeBoundingRegion
+ *  If the return value is true, rNativeBoundingRegion
  *  contains the true bounding region covered by the control
  *  including any adornment, while rNativeContentRegion contains the area
  *  within the control that can be safely drawn into without drawing over

@@ -991,7 +991,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             }
             else if(bPage && (HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
                                            aControlRegion, rMousePos, bIsInside ) ?
-                bIsInside : sal_True) )
+                bIsInside : true) )
             {
                 nTrackFlags = STARTTRACK_BUTTONREPEAT;
 

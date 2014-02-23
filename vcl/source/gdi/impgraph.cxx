@@ -1517,7 +1517,7 @@ GfxLink ImpGraphic::ImplGetLink()
 
 bool ImpGraphic::ImplIsLink() const
 {
-    return ( mpGfxLink != NULL ) ? sal_True : sal_False;
+    return ( mpGfxLink != NULL ) ? true : false;
 }
 
 sal_uLong ImpGraphic::ImplGetChecksum() const

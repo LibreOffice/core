@@ -255,7 +255,7 @@ public:
 
     virtual void    CreateAnchor();
 
-    virtual bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = sal_False );
+    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false );
 
     virtual bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();

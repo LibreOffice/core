@@ -324,7 +324,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
 //            {
 //                maMnemonics[nMnemonicIndex] = 0;
 //                rKey.Insert( MNEMONIC_CHAR, nIndex );
-//                bChanged = sal_True;
+//                bChanged = true;
 //                break;
 //            }
 

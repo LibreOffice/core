@@ -127,8 +127,8 @@ public:
 
     // Before the window is visible, a resize event
     // must be sent with the correct size
-    virtual void            Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False ) = 0;
-    virtual void            Enable( sal_Bool bEnable ) = 0;
+    virtual void            Show( bool bVisible, bool bNoActivate = false ) = 0;
+    virtual void            Enable( bool bEnable ) = 0;
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
     virtual void            SetMinClientSize( long nWidth, long nHeight ) = 0;
@@ -146,9 +146,9 @@ public:
     virtual void            ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) = 0;
 
     // Enable/Disable ScreenSaver, SystemAgents, ...
-    virtual void            StartPresentation( sal_Bool bStart ) = 0;
+    virtual void            StartPresentation( bool bStart ) = 0;
     // Show Window over all other Windows
-    virtual void            SetAlwaysOnTop( sal_Bool bOnTop ) = 0;
+    virtual void            SetAlwaysOnTop( bool bOnTop ) = 0;
 
     // Window to top and grab focus
     virtual void            ToTop( sal_uInt16 nFlags ) = 0;
@@ -156,7 +156,7 @@ public:
     // this function can call with the same
     // pointer style
     virtual void            SetPointer( PointerStyle ePointerStyle ) = 0;
-    virtual void            CaptureMouse( sal_Bool bMouse ) = 0;
+    virtual void            CaptureMouse( bool bMouse ) = 0;
     virtual void            SetPointerPos( long nX, long nY ) = 0;
 
     // flush output buffer
@@ -171,7 +171,7 @@ public:
     virtual OUString        GetKeyName( sal_uInt16 nKeyCode ) = 0;
 
     // returns in 'rKeyCode' the single keycode that translates to the given unicode when using a keyboard layout of language 'aLangType'
-    // returns sal_False if no mapping exists or function not supported
+    // returns false if no mapping exists or function not supported
     // this is required for advanced menu support
     virtual bool        MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) = 0;
 

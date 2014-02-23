@@ -66,7 +66,7 @@ public:
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                    EndSetClipRegion();
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( sal_Bool bVisible );
+    virtual void                    Show( bool bVisible );
     virtual const SystemEnvData*    GetSystemData() const;
 };
 

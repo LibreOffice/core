@@ -228,7 +228,7 @@ void ImplSalYieldMutexAcquireWithWait()
     if ( pSalData->mnAppThreadId == nThreadId )
     {
         // wait till we get the Mutex
-        sal_Bool bAcquire = FALSE;
+        bool bAcquire = FALSE;
         do
         {
             if ( pInst->mpSalYieldMutex->tryToAcquire() )
@@ -261,7 +261,7 @@ void ImplSalYieldMutexAcquireWithWait()
 
 
 
-sal_Bool ImplSalYieldMutexTryToAcquire()
+bool ImplSalYieldMutexTryToAcquire()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
@@ -647,7 +647,7 @@ static void ImplSalDispatchMessage( MSG* pMsg )
 
 
 
-void ImplSalYield( sal_Bool bWait, sal_Bool bHandleAllCurrentEvents )
+void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
@@ -741,7 +741,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_THREADYIELD:
-            ImplSalYield( (sal_Bool)wParam, (sal_Bool)lParam );
+            ImplSalYield( (bool)wParam, (bool)lParam );
             rDef = FALSE;
             break;
         // If we get this message, because another GetMessage() call
@@ -1004,7 +1004,7 @@ void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
-                                         sal_Bool /*bShow*/ )
+                                         bool /*bShow*/ )
 {
     // to switch to Main-Thread
     return (SalObject*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );

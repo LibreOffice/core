@@ -90,7 +90,7 @@ public:
                                               vcl::PrinterController& i_rController );
     virtual bool                    EndJob();
     virtual bool                    AbortJob();
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData );
+    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData );
     virtual bool                    EndPage();
     virtual sal_uIntPtr                 GetErrorCode();
 };
