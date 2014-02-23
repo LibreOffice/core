@@ -157,6 +157,18 @@ int macxp_resolveAlias(char *path, int buflen)
   (void) buflen;
   return 0;
 #else
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+  FSRef aFSRef;
+  OSStatus nErr;
+  Boolean bFolder;
+  Boolean bAliased;
+#else
+  CFStringRef cfpath;
+  CFURLRef cfurl;
+  CFErrorRef cferror;
+  CFDataRef cfbookmark;
+#endif
+
   char *unprocessedPath = path;
 
   if ( *unprocessedPath == '/' )
@@ -169,61 +181,57 @@ int macxp_resolveAlias(char *path, int buflen)
       if ( unprocessedPath )
           *unprocessedPath = '\0';
 
-      CFStringRef cfpath = CFStringCreateWithCString( NULL, path, kCFStringEncodingUTF8 );
-      CFURLRef cfurl = CFURLCreateWithFileSystemPath( NULL, cfpath, kCFURLPOSIXPathStyle, false );
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+      nErr = noErr;
+      bFolder = FALSE;
+      bAliased = FALSE;
+
+      /* ... */
+#else
+      cfpath = CFStringCreateWithCString( NULL, path, kCFStringEncodingUTF8 );
+      cfurl = CFURLCreateWithFileSystemPath( NULL, cfpath, kCFURLPOSIXPathStyle, false );
       CFRelease( cfpath );
-      CFErrorRef cferror = NULL;
-      CFDataRef cfbookmark = CFURLCreateBookmarkDataFromFile( NULL, cfurl, &cferror );
+      cferror = NULL;
+      cfbookmark = CFURLCreateBookmarkDataFromFile( NULL, cfurl, &cferror );
       CFRelease( cfurl );
-      if ( cfbookmark == NULL )
+
+      /* ... */
+#endif
+
+      if ( FSPathMakeRef( (const UInt8 *)path, &aFSRef, 0 ) == noErr )
       {
-          if(cferror)
+          nErr = FSResolveAliasFileWithMountFlags( &aFSRef, TRUE, &bFolder, &bAliased, kResolveAliasFileNoUI );
+          if ( nErr == nsvErr )
           {
-              CFRelease( cferror );
+              errno = ENOENT;
+              nRet = -1;
           }
-      }
-      else
-      {
-          Boolean isStale;
-          cfurl = CFURLCreateByResolvingBookmarkData( NULL, cfbookmark, kCFBookmarkResolutionWithoutUIMask,
-                                                      NULL, NULL, &isStale, &cferror );
-          CFRelease( cfbookmark );
-          if ( cfurl == NULL )
+          else if ( nErr == noErr && bAliased )
           {
-              CFRelease( cferror );
-          }
-          else
-          {
-              cfpath = CFURLCopyFileSystemPath( cfurl, kCFURLPOSIXPathStyle );
-              CFRelease( cfurl );
-              if ( cfpath != NULL )
+              char tmpPath[ PATH_MAX ];
+              if ( FSRefMakePath( &aFSRef, (UInt8 *)tmpPath, PATH_MAX ) == noErr )
               {
-                  char tmpPath[ PATH_MAX ];
-                  if ( CFStringGetCString( cfpath, tmpPath, PATH_MAX, kCFStringEncodingUTF8 ) )
+                  int nLen = strlen( tmpPath ) + ( unprocessedPath ? strlen( unprocessedPath + 1 ) + 1 : 0 );
+                  if ( nLen < buflen && nLen < PATH_MAX )
                   {
-                      int nLen = strlen( tmpPath ) + ( unprocessedPath ? strlen( unprocessedPath + 1 ) + 1 : 0 );
-                      if ( nLen < buflen && nLen < PATH_MAX )
+                      if ( unprocessedPath )
                       {
-                          if ( unprocessedPath )
-                          {
-                              int nTmpPathLen = strlen( tmpPath );
-                              strcat( tmpPath, "/" );
-                              strcat( tmpPath, unprocessedPath + 1 );
-                              strcpy( path, tmpPath);
-                              unprocessedPath = path + nTmpPathLen;
-                          }
-                          else if ( !unprocessedPath )
-                          {
-                              strcpy( path, tmpPath );
-                          }
+                          int nTmpPathLen = strlen( tmpPath );
+                          strcat( tmpPath, "/" );
+                          strcat( tmpPath, unprocessedPath + 1 );
+                          strcpy( path, tmpPath);
+                          unprocessedPath = path + nTmpPathLen;
                       }
-                      else
+                      else if ( !unprocessedPath )
                       {
-                          errno = ENAMETOOLONG;
-                          nRet = -1;
+                          strcpy( path, tmpPath);
                       }
                   }
-                  CFRelease( cfpath );
+                  else
+                  {
+                      errno = ENAMETOOLONG;
+                      nRet = -1;
+                  }
               }
           }
       }
