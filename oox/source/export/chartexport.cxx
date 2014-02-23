@@ -1396,8 +1396,6 @@ void ChartExport::exportDoughnutChart( Reference< chart2::XChartType > xChartTyp
             XML_val, I32S( nHoleSize ),
             FSEND );
 
-    exportAxesId( nAttachedAxis );
-
     pFS->endElement( FSNS( XML_c, XML_doughnutChart ) );
 }
 
