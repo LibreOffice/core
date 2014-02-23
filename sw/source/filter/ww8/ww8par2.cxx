@@ -2815,6 +2815,8 @@ void WW8TabDesc::EndMiserableHackForUnsupportedDirection(short nWwCol)
 bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 {
     OSL_ENSURE( pActBand, "pActBand ist 0" );
+    if (!pActBand)
+        return false;
 
     sal_uInt16 nCol = pActBand->transCell(nWwCol);
 
