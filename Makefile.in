@@ -269,7 +269,7 @@ else
 ifeq ($(DISABLE_LINKOO),TRUE)
 	@ooinstall $(DEVINSTALLDIR)/opt
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-	@macosx-codesign-app-bundle $(DEVINSTALLDIR)/opt/LibreOffice.app
+	@macosx-codesign-app-bundle $(DEVINSTALLDIR)/opt/"LibreOffice from Collabora.app"
 endif
 	@install-gdb-printers -L
 else
@@ -290,9 +290,9 @@ else ifeq ($(OS),MACOSX)
 	@echo
 	@echo "Developer installation finished, you can now run:"
 	@echo
-	@echo "  open $(BUILDDIR)/install/LibreOffice.app"
+	@echo "  open '$(BUILDDIR)/install/LibreOffice from Collabora.app'"
 	@echo
-	@echo "To debug: gdb install/LibreOffice.app/Contents/MacOS/soffice"
+	@echo "To debug: gdb 'install/LibreOffice from Collabora.app/Contents/MacOS/soffice'"
 endif
 
 dev-install-nocheck: build-nocheck
