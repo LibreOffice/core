@@ -1290,6 +1290,8 @@ const char* getSourceString(GLenum source)
     return "unknown";
 }
 
+#if 0
+
 const char* getTypeString(GLenum type)
 {
     switch(type)
@@ -1316,6 +1318,8 @@ const char* getTypeString(GLenum type)
 
     return "unkown";
 }
+
+#endif
 
 extern "C" void
 #if defined _WIN32
