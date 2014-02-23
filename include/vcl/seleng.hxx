@@ -50,9 +50,9 @@ public:
     virtual void    DestroyAnchor() = 0;
 
     // move cursor, at the same time match cursor position to the selection
-    // starting at anchor. sal_True == Ok
+    // starting at anchor. true == Ok
     virtual bool    SetCursorAtPoint( const Point& rPointPixel,
-                                          sal_Bool bDontSelectAtCursor = sal_False ) = 0;
+                                          bool bDontSelectAtCursor = false ) = 0;
 
     virtual bool    IsSelectionAtPoint( const Point& rPointPixel ) = 0;
     virtual void        DeselectAtPoint( const Point& rPointPixel ) = 0;
@@ -96,7 +96,7 @@ public:
                                          sal_uLong nAutoRepeatInterval = SELENG_AUTOREPEAT_INTERVAL );
                         ~SelectionEngine();
 
-    // sal_True: Event was processed by Selection Engine
+    // true: Event was processed by Selection Engine
     bool                SelMouseButtonDown( const MouseEvent& rMEvt );
     bool                SelMouseButtonUp( const MouseEvent& rMEvt );
     bool                SelMouseMove( const MouseEvent& rMEvt );

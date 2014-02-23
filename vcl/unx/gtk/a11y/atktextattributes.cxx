@@ -591,7 +591,7 @@ Bool2String( const uno::Any& rAny )
 {
     int n = 1;
 
-    if( rAny.get<sal_Bool>() )
+    if( rAny.get<bool>() )
         n = 0;
 
     return g_strdup( bool_values[n] );
@@ -755,7 +755,7 @@ get_font_effect(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 {
     if( nContourIndex != -1 )
     {
-        if( rAttributeList[nContourIndex].Value.get<sal_Bool>() )
+        if( rAttributeList[nContourIndex].Value.get<bool>() )
             return g_strdup(outline);
     }
 
@@ -799,7 +799,7 @@ get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 
     if( nBlinkIndex != -1 )
     {
-        if( rAttributeList[nBlinkIndex].Value.get<sal_Bool>() )
+        if( rAttributeList[nBlinkIndex].Value.get<bool>() )
             value_list[count++] = const_cast <gchar *> (decorations[DECORATION_BLINK]);
     }
     if( nUnderlineIndex != -1 )
@@ -833,7 +833,7 @@ Bool2Shadow( const uno::Any& rAny )
 {
     int n = 0;
 
-    if( rAny.get<sal_Bool>() )
+    if( rAny.get<bool>() )
         n = 1;
 
     return g_strdup( shadow_values[n] );

@@ -187,9 +187,9 @@ public:
 
     /** starts the detection
 
-        if bExtendedInfo == sal_True the file header is used to derive
+        if bExtendedInfo == true the file header is used to derive
         as many properties as possible (size, color, etc.) */
-    virtual bool    Detect( sal_Bool bExtendedInfo = sal_False );
+    virtual bool    Detect( bool bExtendedInfo = false );
 
     /** @return the file format, GFF_NOT if no format was recognized */
     sal_uInt16          GetFileFormat() const { return nFormat; }

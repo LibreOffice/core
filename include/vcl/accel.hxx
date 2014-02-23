@@ -45,7 +45,7 @@ private:
     sal_uInt16      mnCurId;
     sal_uInt16      mnCurRepeat;
     bool        mbIsCancel;
-    sal_Bool*       mpDel;
+    bool*       mpDel;
 
     SAL_DLLPRIVATE  void        ImplInit();
     SAL_DLLPRIVATE  void        ImplCopyData( ImplAccelData& rAccelData );

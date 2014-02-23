@@ -35,15 +35,15 @@ public:
     virtual void RemoveItem( unsigned nPos );
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
     virtual void SetFrame( const SalFrame* pFrame );
-    virtual void CheckItem( unsigned nPos, sal_Bool bCheck );
-    virtual void EnableItem( unsigned nPos, sal_Bool bEnable );
+    virtual void CheckItem( unsigned nPos, bool bCheck );
+    virtual void EnableItem( unsigned nPos, bool bEnable );
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText );
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage );
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
 
     HMENU mhMenu;           // the menu handle
-    sal_Bool  mbMenuBar;        // true for menu bars
+    bool  mbMenuBar;        // true for menu bars
     HWND  mhWnd;            // the window handle where the menubar is attached, may be NULL
     WinSalMenu *mpParentMenu;  // the parent menu
 };

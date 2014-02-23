@@ -76,7 +76,7 @@ public:
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
     virtual void updateGraphics( bool bClear );
     virtual void UpdateSettings( AllSettings& rSettings );
-    virtual void Show( sal_Bool bVisible, sal_Bool bNoActivate );
+    virtual void Show( bool bVisible, bool bNoActivate );
 };
 
 class TDESalInstance : public X11SalInstance

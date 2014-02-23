@@ -197,7 +197,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                     pFunctionSet->DeselectAll();
                 else
                     pFunctionSet->DestroyAnchor();
-                   nFlags &= (~SELENG_HAS_ANCH); // bHasAnchor = sal_False;
+                   nFlags &= (~SELENG_HAS_ANCH); // bHasAnchor = false;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
             // Sonderbehandlung Single-Selection, damit Select+Drag
@@ -246,7 +246,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             if ( pFunctionSet->IsSelectionAtPoint( aPos ) )
             {
                 pFunctionSet->DeselectAtPoint( aPos );
-                pFunctionSet->SetCursorAtPoint( aPos, sal_True );
+                pFunctionSet->SetCursorAtPoint( aPos, true );
             }
             else
             {
@@ -261,7 +261,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                 nFlags &= (~SELENG_IN_SEL);
                 return false;
             }
-            nFlags |= SELENG_IN_ADD; //bIsInAddMode = sal_True;
+            nFlags |= SELENG_IN_ADD; //bIsInAddMode = true;
             if ( !(nFlags & SELENG_HAS_ANCH) )
             {
                 pFunctionSet->CreateAnchor();
@@ -310,7 +310,7 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
             }
             pFunctionSet->DeselectAtPoint( aLastMove.GetPosPixel() );
             nFlags &= (~SELENG_HAS_ANCH); // nix Anker
-            pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), sal_True );
+            pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), true );
         }
         else
         {

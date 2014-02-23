@@ -317,7 +317,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             aBox.Execute();
         }
         pController->setValue( OUString( "IsDirect" ),
-                               makeAny( sal_False ) );
+                               makeAny( false ) );
     }
 
     // setup printer
@@ -497,7 +497,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             else if( aDlg.isSingleJobs() )
             {
                 pController->setValue( OUString( "PrintCollateAsSingleJobs" ),
-                                       makeAny( sal_True ) );
+                                       makeAny( true ) );
             }
         }
         catch (const std::bad_alloc&)
@@ -865,7 +865,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         {
             bool bVal = false;
             i_rProps[ nProperty ].Value >>= bVal;
-            aPageSize.bFullPaper = static_cast<bool>(bVal);
+            aPageSize.bFullPaper = bVal;
         }
         else if ( i_rProps[ nProperty ].Name == "PrinterPaperTray" )
         {

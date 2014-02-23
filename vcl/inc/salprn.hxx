@@ -99,7 +99,7 @@ public:
                                               ImplJobSetup* pSetupData ) = 0;
 
     // implement for pull model print systems only,
-    // default implementations (see salvtables.cxx) just returns sal_False
+    // default implementations (see salvtables.cxx) just returns false
     virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
@@ -108,7 +108,7 @@ public:
 
     virtual bool                    EndJob() = 0;
     virtual bool                    AbortJob() = 0;
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData ) = 0;
+    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
     virtual bool                    EndPage() = 0;
     virtual sal_uLong                   GetErrorCode() = 0;
 

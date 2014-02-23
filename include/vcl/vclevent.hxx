@@ -192,7 +192,7 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_WINDOW_STARTDOCKING            1227    // pData = DockingData
 #define VCLEVENT_WINDOW_DOCKING                 1228
 #define VCLEVENT_WINDOW_ENDDOCKING              1229    // pData = EndDockingData
-#define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1230    // pData = sal_Bool
+#define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1230    // pData = bool
 #define VCLEVENT_WINDOW_TOGGLEFLOATING          1231
 #define VCLEVENT_WINDOW_ENDPOPUPMODE            1232    // pData = EndPopupModeData
 
@@ -261,8 +261,8 @@ public:
     void Call( VclSimpleEvent* pEvent ) const;
 
     // stops notifying when any handler has processed the event
-    // and returns sal_True in that case
-    // a handler must return sal_True to signal that it has processed the event
+    // and returns true in that case
+    // a handler must return true to signal that it has processed the event
     bool Process( VclSimpleEvent* pEvent ) const;
     void addListener( const Link& rListener );
     void removeListener( const Link& rListener );

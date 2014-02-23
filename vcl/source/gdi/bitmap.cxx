@@ -270,7 +270,7 @@ sal_uInt16 Bitmap::GetBitCount() const
 bool Bitmap::HasGreyPalette() const
 {
     const sal_uInt16    nBitCount = GetBitCount();
-    bool            bRet = nBitCount == 1 ? sal_True : sal_False;
+    bool            bRet = nBitCount == 1 ? true : false;
 
     BitmapReadAccess* pRAcc = ( (Bitmap*) this )->AcquireReadAccess();
 

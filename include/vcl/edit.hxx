@@ -183,7 +183,7 @@ public:
     void                SetEchoChar( sal_Unicode c );
     sal_Unicode         GetEchoChar() const { return mcEchoChar; }
 
-    virtual void        SetReadOnly( sal_Bool bReadOnly = sal_True );
+    virtual void        SetReadOnly( bool bReadOnly = true );
     virtual bool        IsReadOnly() const { return mbReadOnly; }
 
     void                SetInsertMode( bool bInsert );

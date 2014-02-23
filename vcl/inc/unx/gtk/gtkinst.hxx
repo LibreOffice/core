@@ -71,11 +71,11 @@ public:
 
     virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uLong nStyle );
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
     virtual SalSystem*          CreateSalSystem();
     virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup);
     virtual SalPrinter*         CreatePrinter( SalInfoPrinter* pInfoPrinter );
-    virtual SalMenu*            CreateMenu( sal_Bool, Menu* );
+    virtual SalMenu*            CreateMenu( bool, Menu* );
     virtual void                DestroyMenu( SalMenu* pMenu );
     virtual SalMenuItem*        CreateMenuItem( const SalItemParams* );
     virtual void                DestroyMenuItem( SalMenuItem* pItem );

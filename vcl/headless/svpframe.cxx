@@ -218,7 +218,7 @@ void SvpSalFrame::SetExtendedFrameStyle( SalExtStyle )
 {
 }
 
-void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
+void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
 {
     if( bVisible && ! m_bVisible )
     {
@@ -241,7 +241,7 @@ void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
     }
 }
 
-void SvpSalFrame::Enable( sal_Bool )
+void SvpSalFrame::Enable( bool )
 {
 }
 
@@ -372,11 +372,11 @@ void SvpSalFrame::ShowFullScreen( bool, sal_Int32 )
                 SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
 
-void SvpSalFrame::StartPresentation( sal_Bool )
+void SvpSalFrame::StartPresentation( bool )
 {
 }
 
-void SvpSalFrame::SetAlwaysOnTop( sal_Bool )
+void SvpSalFrame::SetAlwaysOnTop( bool )
 {
 }
 
@@ -389,7 +389,7 @@ void SvpSalFrame::SetPointer( PointerStyle )
 {
 }
 
-void SvpSalFrame::CaptureMouse( sal_Bool )
+void SvpSalFrame::CaptureMouse( bool )
 {
 }
 

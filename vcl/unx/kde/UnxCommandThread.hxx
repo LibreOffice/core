@@ -117,7 +117,7 @@ public:
 protected:
     virtual void SAL_CALL       run();
 
-    virtual void SAL_CALL       handleCommand( const OUString &rCommand/*, sal_Bool &rQuit*/ );
+    virtual void SAL_CALL       handleCommand( const OUString &rCommand/*, bool &rQuit*/ );
     ::std::list< OUString > SAL_CALL tokenize( const OUString &rCommand );
 };
 

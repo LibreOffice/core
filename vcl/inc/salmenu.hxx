@@ -65,15 +65,15 @@ public:
     SalMenu() {}
     virtual ~SalMenu();
 
-    virtual bool VisibleMenuBar() = 0;  // must return sal_True to actually DISPLAY native menu bars
+    virtual bool VisibleMenuBar() = 0;  // must return true to actually DISPLAY native menu bars
                                             // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) = 0;
     virtual void RemoveItem( unsigned nPos ) = 0;
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) = 0;
     virtual void SetFrame( const SalFrame* pFrame ) = 0;
-    virtual void CheckItem( unsigned nPos, sal_Bool bCheck ) = 0;
-    virtual void EnableItem( unsigned nPos, sal_Bool bEnable ) = 0;
+    virtual void CheckItem( unsigned nPos, bool bCheck ) = 0;
+    virtual void EnableItem( unsigned nPos, bool bEnable ) = 0;
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText )= 0;
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) = 0;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName ) = 0;
@@ -83,7 +83,7 @@ public:
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
 
     // TODO: implement show/hide for the Win/Mac VCL native backends
-    virtual void ShowItem( unsigned nPos, sal_Bool bShow ) { EnableItem( nPos, bShow ); }
+    virtual void ShowItem( unsigned nPos, bool bShow ) { EnableItem( nPos, bShow ); }
 
     // return an empty rectangle if not implemented
     // return Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) if menu bar buttons implemented

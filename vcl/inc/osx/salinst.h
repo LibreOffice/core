@@ -88,7 +88,7 @@ public:
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
     virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle );
     virtual void            DestroyFrame( SalFrame* pFrame );
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
     virtual void            DestroyObject( SalObject* pObject );
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
@@ -114,7 +114,7 @@ public:
     virtual bool                CheckYieldMutex();
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool                AnyInput( sal_uInt16 nType );
-    virtual SalMenu*            CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu );
+    virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* pVCLMenu );
     virtual void                DestroyMenu( SalMenu* );
     virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData );
     virtual void                DestroyMenuItem( SalMenuItem* );

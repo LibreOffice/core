@@ -443,7 +443,7 @@ sal_uInt16 ImplEntryList::GetSelectEntryPos( sal_uInt16 nIndex ) const
 bool ImplEntryList::IsEntryPosSelected( sal_uInt16 nIndex ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nIndex );
-    return pImplEntry ? pImplEntry->mbIsSelected : sal_False;
+    return pImplEntry ? pImplEntry->mbIsSelected : false;
 }
 
 bool ImplEntryList::IsEntrySelectable( sal_uInt16 nPos ) const
@@ -969,7 +969,7 @@ void ImplListBoxWindow::SelectEntry( sal_uInt16 nPos, bool bSelect )
                 sal_uInt16 nDeselect = GetEntryList()->GetSelectEntryPos( 0 );
                 if( nDeselect != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    //SelectEntryPos( nDeselect, sal_False );
+                    //SelectEntryPos( nDeselect, false );
                     GetEntryList()->SelectEntry( nDeselect, false );
                     if ( IsUpdateMode() && IsReallyVisible() )
                         ImplPaint( nDeselect, true );
@@ -1047,7 +1047,7 @@ bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, b
             // Space for selection change
             if( !bShift && ( ( eLET == LET_KEYSPACE ) || ( eLET == LET_MBDOWN ) ) )
             {
-                bool bSelect = ( mbStackMode && IsMouseMoveSelect() ) ? sal_True : !mpEntryList->IsEntryPosSelected( nSelect );
+                bool bSelect = ( mbStackMode && IsMouseMoveSelect() ) ? true : !mpEntryList->IsEntryPosSelected( nSelect );
                 if ( mbStackMode )
                 {
                     sal_uInt16 n;

@@ -208,7 +208,7 @@ SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLon
     return new GtkSalFrame( pParentData );
 }
 
-SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
+SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )
 {
     EnsureInit();
 #if !GTK_CHECK_VERSION(3,0,0)
@@ -368,7 +368,7 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 
 #ifdef ENABLE_GMENU_INTEGRATION
 
-SalMenu* GtkInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
+SalMenu* GtkInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
 {
     EnsureInit();
     GtkSalMenu* pSalMenu = new GtkSalMenu( bMenuBar );
@@ -396,7 +396,7 @@ void GtkInstance::DestroyMenuItem( SalMenuItem* pItem )
 
 #else // not ENABLE_GMENU_INTEGRATION
 
-SalMenu*     GtkInstance::CreateMenu( sal_Bool, Menu* )          { return NULL; }
+SalMenu*     GtkInstance::CreateMenu( bool, Menu* )          { return NULL; }
 void         GtkInstance::DestroyMenu( SalMenu* )                {}
 SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* ) { return NULL; }
 void         GtkInstance::DestroyMenuItem( SalMenuItem* )        {}

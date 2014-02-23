@@ -117,7 +117,7 @@ using namespace ::com::sun::star::beans;
 
 const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYSTEM_WINDOW_ACTIVATED");
 
-sal_Bool WinSalFrame::mbInReparent = FALSE;
+bool WinSalFrame::mbInReparent = FALSE;
 
 
 
@@ -136,7 +136,7 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
     // save position, size and state for GetWindowState()
     if ( !pFrame->mbFullScreen )
     {
-        sal_Bool bVisible = (GetWindowStyle( pFrame->mhWnd ) & WS_VISIBLE) != 0;
+        bool bVisible = (GetWindowStyle( pFrame->mhWnd ) & WS_VISIBLE) != 0;
         if ( IsIconic( pFrame->mhWnd ) )
         {
             pFrame->maState.mnState |= WINDOWSTATE_STATE_MINIMIZED;
@@ -291,7 +291,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     HWND        hWnd;
     DWORD       nSysStyle = 0;
     DWORD       nExSysStyle = 0;
-    sal_Bool        bSubFrame = FALSE;
+    bool        bSubFrame = FALSE;
 
     static const char* pEnvSynchronize = getenv("SAL_SYNCHRONIZE");
     if ( pEnvSynchronize )   // no buffering of drawing commands
@@ -507,7 +507,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
 
 // helper that only creates the HWND
 // to allow for easy reparenting of system windows, (i.e. destroy and create new)
-HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, sal_Bool bAsChild )
+HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild )
 {
     HINSTANCE hInstance = GetSalData()->mhInst;
     sal_uLong nSysStyle     = GetWindowLong( oldhWnd, GWL_STYLE );
@@ -826,7 +826,7 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
 
 
 
-static void ImplSalFrameFullScreenPos( WinSalFrame* pFrame, sal_Bool bAlways = FALSE )
+static void ImplSalFrameFullScreenPos( WinSalFrame* pFrame, bool bAlways = FALSE )
 {
     if ( bAlways || !IsIconic( pFrame->mhWnd ) )
     {
@@ -1099,7 +1099,7 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool WinSalFrame::PostEvent( void* pData )
 {
-    return (sal_Bool)ImplPostMessage( mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData );
+    return (bool)ImplPostMessage( mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData );
 }
 
 
@@ -1170,7 +1170,7 @@ SalFrame* WinSalFrame::GetParent() const
 
 
 
-static void ImplSalShow( HWND hWnd, sal_Bool bVisible, sal_Bool bNoActivate )
+static void ImplSalShow( HWND hWnd, bool bVisible, bool bNoActivate )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -1255,7 +1255,7 @@ void WinSalFrame::SetExtendedFrameStyle( SalExtStyle )
 
 
 
-void WinSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
+void WinSalFrame::Show( bool bVisible, bool bNoActivate )
 {
     // Post this Message to the window, because this only works
     // in the thread of the window, which has create this window.
@@ -1268,7 +1268,7 @@ void WinSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 
 
 
-void WinSalFrame::Enable( sal_Bool bEnable )
+void WinSalFrame::Enable( bool bEnable )
 {
     EnableWindow( mhWnd, bEnable );
 }
@@ -1292,7 +1292,7 @@ void WinSalFrame::SetMaxClientSize( long nWidth, long nHeight )
 void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
                                                    sal_uInt16 nFlags )
 {
-    sal_Bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
+    bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
     if ( !bVisible )
     {
         Window *pClientWin = GetWindow()->ImplGetClientWindow();
@@ -1459,7 +1459,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
 
     // Adjust Window in the screen
-    sal_Bool bCheckOffScreen = TRUE;
+    bool bCheckOffScreen = TRUE;
 
     // but don't do this for floaters or ownerdraw windows that are currently moved interactively
     if( (mnStyle & SAL_FRAME_STYLE_FLOAT) && !(mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
@@ -1502,7 +1502,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
 
 
-static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool bAsChild )
+static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAsChild )
 {
     // save hwnd, will be overwritten in WM_CREATE during createwindow
     HWND hWndOld = pThis->mhWnd;
@@ -1535,8 +1535,8 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
         pObject = pObject->mpNextObject;
     }
 
-    sal_Bool bNeedGraphics = pThis->mbGraphics;
-    sal_Bool bNeedCacheDC  = FALSE;
+    bool bNeedGraphics = pThis->mbGraphics;
+    bool bNeedCacheDC  = FALSE;
 
     HFONT   hFont   = NULL;
     HPEN    hPen    = NULL;
@@ -1775,8 +1775,8 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     GetWindowPlacement( mhWnd, &aPlacement );
 
     // set State
-    sal_Bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
-    sal_Bool bUpdateHiddenFramePos = FALSE;
+    bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
+    bool bUpdateHiddenFramePos = FALSE;
     if ( !bVisible )
     {
         aPlacement.showCmd = SW_HIDE;
@@ -1979,7 +1979,7 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
     {
         // when the ShowState has to be reset, hide the window first to
         // reduce flicker
-        sal_Bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
+        bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
         if ( bVisible && (mnShowState != mnFullScreenShowState) )
             ShowWindow( mhWnd, SW_HIDE );
 
@@ -2011,7 +2011,7 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 
 
 
-void WinSalFrame::StartPresentation( sal_Bool bStart )
+void WinSalFrame::StartPresentation( bool bStart )
 {
     if ( mbPresentation == bStart )
         return;
@@ -2066,7 +2066,7 @@ void WinSalFrame::StartPresentation( sal_Bool bStart )
 
 
 
-void WinSalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
+void WinSalFrame::SetAlwaysOnTop( bool bOnTop )
 {
     HWND hWnd;
     if ( bOnTop )
@@ -2282,7 +2282,7 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
 
 
 
-void WinSalFrame::CaptureMouse( sal_Bool bCapture )
+void WinSalFrame::CaptureMouse( bool bCapture )
 {
     // Send this Message to the window, because CaptureMouse() only work
     // in the thread of the window, which has create this window
@@ -2324,7 +2324,7 @@ void WinSalFrame::Sync()
 static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pContext )
 {
     WinSalFrame*   pFrame = GetWindowPtr( hWnd );
-    sal_Bool        bIME = (pContext->mnOptions & SAL_INPUTCONTEXT_TEXT) != 0;
+    bool        bIME = (pContext->mnOptions & SAL_INPUTCONTEXT_TEXT) != 0;
     if ( bIME )
     {
         if ( !pFrame->mbIME )
@@ -3179,7 +3179,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     SalMouseEvent   aMouseEvt;
     long            nRet;
     sal_uInt16          nEvent = 0;
-    sal_Bool            bCall = TRUE;
+    bool            bCall = TRUE;
 
     aMouseEvt.mnX       = (short)LOWORD( lParam );
     aMouseEvt.mnY       = (short)HIWORD( lParam );
@@ -3480,7 +3480,7 @@ LanguageType WinSalFrame::GetInputLanguage()
 
 bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode )
 {
-    sal_Bool bRet = FALSE;
+    bool bRet = FALSE;
     sal_IntPtr nLangType = aLangType;
     // just use the passed language identifier, do not try to load additional keyboard support
     HKL hkl = (HKL) nLangType;
@@ -3519,7 +3519,7 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
 static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
-    static sal_Bool     bIgnoreCharMsg  = FALSE;
+    static bool     bIgnoreCharMsg  = FALSE;
     static WPARAM   nDeadChar       = 0;
     static WPARAM   nLastVKChar     = 0;
     static sal_uInt16   nLastChar       = 0;
@@ -3695,7 +3695,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             MSG             aCharMsg;
             BOOL        bCharPeek = FALSE;
             UINT            nCharMsg = WM_CHAR;
-            sal_Bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
+            bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
             nLastModKeyCode = 0; // make sure no modkey messages are sent if they belong to a hotkey (see above)
             aKeyEvt.mnCharCode = 0;
@@ -3824,7 +3824,7 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
         {
             SalKeyEvent     aKeyEvt;
             sal_uInt16          nEvent;
-            sal_Bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
+            bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
             // convert KeyCode
             aKeyEvt.mnCode      = ImplSalGetKeyCode( wParam );
@@ -3893,7 +3893,7 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 static bool ImplHandlePaintMsg( HWND hWnd )
 {
-    sal_Bool bMutex = FALSE;
+    bool bMutex = FALSE;
     if ( ImplSalYieldMutexTryToAcquire() )
         bMutex = TRUE;
 
@@ -4344,7 +4344,7 @@ static void ImplHandleForcePalette( HWND hWnd )
 
 
 
-static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
+static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
                                   WPARAM wParam, LPARAM lParam, int& rDef )
 {
     SalData*    pSalData = GetSalData();
@@ -4362,7 +4362,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
             return 0;
     }
 
-    sal_Bool bReleaseMutex = FALSE;
+    bool bReleaseMutex = FALSE;
     if ( (nMsg == WM_QUERYNEWPALETTE) || (nMsg == WM_PALETTECHANGED) )
     {
         // as Windows can send these messages also, we have to use
@@ -4381,8 +4381,8 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
     HDC                 hDC;
     HPALETTE            hOldPal;
     UINT                nCols;
-    sal_Bool                bStdDC;
-    sal_Bool                bUpdate;
+    bool                bStdDC;
+    bool                bUpdate;
 
     pSalData->mbInPalChange = TRUE;
 
@@ -4575,7 +4575,7 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
 // the pointer is stored in every item, so if no position
 // is specified we just use the first item (ie, pos=0)
 // if bByPosition is FALSE then nPos denotes a menu id instead of a position
-static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, sal_Bool bByPosition=TRUE )
+static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, bool bByPosition=TRUE )
 {
     MENUITEMINFOW mi;
     memset(&mi, 0, sizeof(mi));
@@ -4723,9 +4723,9 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         COLORREF clrPrevText, clrPrevBkgnd;
         HFONT hfntOld;
         HBRUSH hbrOld;
-        sal_Bool    fChecked = (pDI->itemState & ODS_CHECKED) ? TRUE : FALSE;
-        sal_Bool    fSelected = (pDI->itemState & ODS_SELECTED) ? TRUE : FALSE;
-        sal_Bool    fDisabled = (pDI->itemState & (ODS_DISABLED | ODS_GRAYED)) ? TRUE : FALSE;
+        bool    fChecked = (pDI->itemState & ODS_CHECKED) ? TRUE : FALSE;
+        bool    fSelected = (pDI->itemState & ODS_SELECTED) ? TRUE : FALSE;
+        bool    fDisabled = (pDI->itemState & (ODS_DISABLED | ODS_GRAYED)) ? TRUE : FALSE;
 
         // Set the appropriate foreground and background colors.
         RECT aRect = pDI->rcItem;
@@ -4866,7 +4866,7 @@ static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM )
 
     HMENU hMenu = (HMENU) wParam;
     // WORD nPos = LOWORD (lParam);
-    // sal_Bool bWindowMenu = (sal_Bool) HIWORD(lParam);
+    // bool bWindowMenu = (bool) HIWORD(lParam);
 
     // Send activate and deactivate together, so we have not keep track of opened menus
     // this will be enough to have the menus updated correctly
@@ -4901,7 +4901,7 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
     if( !GetSalData()->IsKnownMenuHandle( hMenu ) )
         return 0;
 
-    sal_Bool bByPosition = FALSE;
+    bool bByPosition = FALSE;
     if( nFlags & MF_POPUP )
         bByPosition = TRUE;
 
@@ -5156,9 +5156,9 @@ static void ImplUpdateIMECursorPos( WinSalFrame* pFrame, HIMC hIMC )
 
 
 
-static sal_Bool ImplHandleIMEStartComposition( HWND hWnd )
+static bool ImplHandleIMEStartComposition( HWND hWnd )
 {
-    sal_Bool bDef = TRUE;
+    bool bDef = TRUE;
 
     ImplSalYieldMutexAcquireWithWait();
 
@@ -5186,10 +5186,10 @@ static sal_Bool ImplHandleIMEStartComposition( HWND hWnd )
 
 
 
-static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
+static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                                                HIMC hIMC, LPARAM lParam )
 {
-    sal_Bool bDef = TRUE;
+    bool bDef = TRUE;
 
     // Init Event
     SalExtTextInputEvent    aEvt;
@@ -5317,9 +5317,9 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
 
 
 
-static sal_Bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
+static bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
 {
-    sal_Bool bDef = TRUE;
+    bool bDef = TRUE;
     ImplSalYieldMutexAcquireWithWait();
 
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -5364,9 +5364,9 @@ static sal_Bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
 
 
 
-static sal_Bool ImplHandleIMEEndComposition( HWND hWnd )
+static bool ImplHandleIMEEndComposition( HWND hWnd )
 {
-    sal_Bool bDef = TRUE;
+    bool bDef = TRUE;
 
     ImplSalYieldMutexAcquireWithWait();
 
@@ -5491,7 +5491,7 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
     // IA2 should be enabled automatically
     AllSettings aSettings = Application::GetSettings();
     MiscSettings aMisc = aSettings.GetMiscSettings();
-    aMisc.SetEnableATToolSupport( sal_True );
+    aMisc.SetEnableATToolSupport( true );
     aSettings.SetMiscSettings( aMisc );
     Application::SetSettings( aSettings );
 
@@ -6012,7 +6012,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
         case SAL_MSG_SHOW:
-            ImplSalShow( hWnd, (sal_Bool)wParam, (sal_Bool)lParam );
+            ImplSalShow( hWnd, (bool)wParam, (bool)lParam );
             rDef = FALSE;
             break;
         case SAL_MSG_SETINPUTCONTEXT:
@@ -6171,11 +6171,11 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 
 
 
-sal_Bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult )
+bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult )
 {
     // handle all messages concerning all frames so they get processed only once
     // Must work for Unicode and none Unicode
-    sal_Bool bResult = FALSE;
+    bool bResult = FALSE;
     if ( (nMsg == WM_PALETTECHANGED) || (nMsg == SAL_MSG_POSTPALCHANGED) )
     {
         int bDef = TRUE;
@@ -6194,7 +6194,7 @@ sal_Bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam
 
 
 
-sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
+bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
 {
     static int first=1;
     // if VCL_LOGFILE_ENABLED is set, Win32 API error messages can be written
@@ -6202,7 +6202,7 @@ sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
     static char *logEnabled = getenv("VCL_LOGFILE_ENABLED");
     if( logEnabled )
     {
-        sal_Bool bSuccess = FALSE;
+        bool bSuccess = FALSE;
         static char *szTmp = getenv("TMP");
         if( !szTmp || !*szTmp )
             szTmp = getenv("TEMP");

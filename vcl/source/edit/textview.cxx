@@ -197,7 +197,7 @@ TextView::TextView( TextEngine* pEng, Window* pWindow ) :
     mpImpl->mbClickedInSelection = false;
     mpImpl->mbSupportProtectAttribute = false;
     mpImpl->mbCursorAtEndOfLine = false;
-//  mbInSelection = sal_False;
+//  mbInSelection = false;
 
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
 
@@ -227,7 +227,7 @@ TextView::TextView( TextEngine* pEng, Window* pWindow ) :
         pWindow->GetDragGestureRecognizer()->addDragGestureListener( xDGL );
         uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
         pWindow->GetDropTarget()->addDropTargetListener( xDTL );
-        pWindow->GetDropTarget()->setActive( sal_True );
+        pWindow->GetDropTarget()->setActive( true );
         pWindow->GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
     }
 }
@@ -862,7 +862,7 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                 HideSelection();
                 TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject(  mpImpl->maSelection.GetEnd().GetPara() );
                 uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-                i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+                i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
                 TextSelection aNewSel( mpImpl->maSelection );
                 aNewSel.GetStart().GetIndex() = (sal_uInt16)aBoundary.startPos;
                 aNewSel.GetEnd().GetIndex() = (sal_uInt16)aBoundary.endPos;
@@ -1421,7 +1421,7 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
     {
         TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
         uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-        i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+        i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
         if ( aBoundary.startPos >= rPaM.GetIndex() )
             aBoundary = xBI->previousWord( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
         aPaM.GetIndex() = ( aBoundary.startPos != -1 ) ? (sal_uInt16)aBoundary.startPos : 0;
@@ -1473,7 +1473,7 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
         {
             TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject(  aEndPaM.GetPara() );
             uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-            i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+            i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
             if ( aBoundary.startPos == mpImpl->maSelection.GetEnd().GetIndex() )
                 aBoundary = xBI->previousWord( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
             // #i63506# startPos is -1 when the paragraph starts with a tab
@@ -1855,7 +1855,7 @@ bool TextView::SetCursorAtPoint( const Point& rPosPixel )
         ShowSelection( aTmpNewSel );
     }
 
-    bool bForceCursor =  mpImpl->mpDDInfo ? sal_False : sal_True; // && !mbInSelection
+    bool bForceCursor =  mpImpl->mpDDInfo ? false : true; // && !mbInSelection
     ImpShowCursor( mpImpl->mbAutoScroll, bForceCursor, false );
     return true;
 }
@@ -1863,14 +1863,14 @@ bool TextView::SetCursorAtPoint( const Point& rPosPixel )
 bool TextView::IsSelectionAtPoint( const Point& rPosPixel )
 {
 //  if ( !Rectangle( Point(), mpImpl->mpWindow->GetOutputSizePixel() ).IsInside( rPosPixel ) && !mbInSelection )
-//      return sal_False;
+//      return false;
 
     Point aDocPos = GetDocPos( rPosPixel );
     TextPaM aPaM = mpImpl->mpTextEngine->GetPaM( aDocPos, false );
     // For Hyperlinks D&D also start w/o a selection.
     // BeginDrag is only called, however, if IsSelectionAtPoint()
     // Problem: IsSelectionAtPoint is not called by Command()
-    // if before MBDown returned sal_False.
+    // if before MBDown returned false.
     return ( IsInSelection( aPaM ) ||
             ( /* mpImpl->mpSelEngine->IsInCommand() && */ mpImpl->mpTextEngine->FindAttrib( aPaM, TEXTATTR_HYPERLINK ) ) );
 }
@@ -2058,7 +2058,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
 
         bool bStarterOfDD = false;
         for ( sal_uInt16 nView = mpImpl->mpTextEngine->GetViewCount(); nView && !bStarterOfDD; )
-            bStarterOfDD = mpImpl->mpTextEngine->GetView( --nView )->mpImpl->mpDDInfo ? mpImpl->mpTextEngine->GetView( nView )->mpImpl->mpDDInfo->mbStarterOfDD : sal_False;
+            bStarterOfDD = mpImpl->mpTextEngine->GetView( --nView )->mpImpl->mpDDInfo ? mpImpl->mpTextEngine->GetView( nView )->mpImpl->mpDDInfo->mbStarterOfDD : false;
 
         HideSelection();
         ImpSetSelection( mpImpl->mpDDInfo->maDropPos );
@@ -2294,7 +2294,7 @@ void TextSelFunctionSet::CreateAnchor()
     mpView->ImpSetSelection( mpView->mpImpl->maSelection.GetEnd() );
 }
 
-bool TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
+bool TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool )
 {
     return mpView->SetCursorAtPoint( rPointPixel );
 }

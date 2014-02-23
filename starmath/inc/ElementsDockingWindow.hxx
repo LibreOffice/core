@@ -135,7 +135,7 @@ public:
                              Window* pParent );
     ~SmElementsDockingWindow();
 
-    virtual void EndDocking( const Rectangle& rReactangle, sal_Bool bFloatMode);
+    virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode);
     virtual void ToggleFloatingMode();
 };
 

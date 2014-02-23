@@ -84,7 +84,7 @@ private:
 public:
     VisualStylesAPI();
     ~VisualStylesAPI();
-    sal_Bool IsAvailable()  { return (mhModule != NULL); }
+    bool IsAvailable()  { return (mhModule != NULL); }
 
     HTHEME OpenThemeData( HWND hwnd, LPCWSTR pszClassList );
     HRESULT CloseThemeData( HTHEME hTheme );
@@ -360,7 +360,7 @@ bool WinSalGraphics::hitTestNativeControl( ControlType,
     return FALSE;
 }
 
-sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
+bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
 {
     HRESULT hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
 
@@ -515,7 +515,7 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
     }
 }
 
-sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
+bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
                             ControlState nState,
@@ -655,7 +655,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
             RECT rect;
             ImplConvertSpinbuttonValues( pValue->mnUpperPart, pValue->mnUpperState, pValue->maUpperRect, &iPart, &iState, &rect );
-            sal_Bool bOk = ImplDrawTheme( hTheme, hDC, iPart, iState, rect, aCaption);
+            bool bOk = ImplDrawTheme( hTheme, hDC, iPart, iState, rect, aCaption);
 
             if( bOk )
             {
@@ -679,7 +679,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
                 RECT rect;
                 ImplConvertSpinbuttonValues( pValue->mnUpperPart, pValue->mnUpperState, pValue->maUpperRect, &iPart, &iState, &rect );
-                sal_Bool bOk = ImplDrawTheme( hTheme, hDC, iPart, iState, rect, aCaption);
+                bool bOk = ImplDrawTheme( hTheme, hDC, iPart, iState, rect, aCaption);
 
                 if( bOk )
                 {
@@ -780,7 +780,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == CTRL_RADIOBUTTON )
     {
         iPart = BP_RADIOBUTTON;
-        sal_Bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
+        bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
 
         if( nState & CTRL_STATE_PRESSED )
             iState = bChecked ? RBS_CHECKEDPRESSED : RBS_UNCHECKEDPRESSED;
@@ -911,7 +911,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON )
         {
             iPart = TP_BUTTON;
-            sal_Bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
+            bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
             if( !(nState & CTRL_STATE_ENABLED) )
                 //iState = TS_DISABLED;
                 // disabled buttons are typically not painted at all but we need visual
@@ -945,7 +945,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
             {
                 impl_drawAeroToolbar( hDC, rc, nPart == PART_DRAW_BACKGROUND_HORZ );
-                return sal_True;
+                return true;
             }
 
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
@@ -965,7 +965,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
                 {
                     impl_drawAeroToolbar( hDC, rc, true );
-                    return sal_True;
+                    return true;
                 }
             }
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
@@ -1170,7 +1170,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                             const ImplControlValue& aValue,
                             const OUString& aCaption )
 {
-    sal_Bool bOk = false;
+    bool bOk = false;
     HTHEME hTheme = NULL;
 
     switch( nType )
@@ -1305,7 +1305,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 Rectangle &rNativeBoundingRegion,
                                 Rectangle &rNativeContentRegion )
 {
-    sal_Bool bRet = FALSE;
+    bool bRet = FALSE;
 
     HDC hDC = GetDC( mhWnd );
     if( nType == CTRL_TOOLBAR )

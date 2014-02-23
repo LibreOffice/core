@@ -131,7 +131,7 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
             pWin->SetFillColor( pDev->GetSettings().GetStyleSettings().GetWindowColor() );
             pWin->SetLineColor();
             pWin->DrawRect( rRect );
-            pWin->DrawSelectionBackground( rRect, 2, (nState & BUTTON_DRAW_PRESSED) ? sal_True : sal_False,
+            pWin->DrawSelectionBackground( rRect, 2, (nState & BUTTON_DRAW_PRESSED) ? true : false,
                                             true, false );
         }
         aTempRect = rRect;
@@ -1881,7 +1881,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
         {
             mpWindowImpl->mbOverlapWin  = true;
             mpWindowImpl->mbFrame       = true;
-            mbFrameBorder   = (nOrgStyle & WB_NOBORDER) ? sal_False : sal_True;
+            mbFrameBorder   = (nOrgStyle & WB_NOBORDER) ? false : true;
         }
         else
         {

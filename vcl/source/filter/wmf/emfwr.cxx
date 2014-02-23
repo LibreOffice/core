@@ -292,8 +292,8 @@ bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConf
     // don't work with pixel as destination map mode -> higher resolution preferrable
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
     mpFilterConfigItem = pFilterConfigItem;
-    mpHandlesUsed = new sal_Bool[ MAXHANDLES ];
-    memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( sal_Bool ) );
+    mpHandlesUsed = new bool[ MAXHANDLES ];
+    memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( bool ) );
     mnHandleCount = mnLastPercent = mnRecordCount = mnRecordPos = mnRecordPlusPos = 0;
     mbRecordOpen = mbRecordPlusOpen = false;
     mbLineChanged = mbFillChanged = mbTextChanged = false;
@@ -378,7 +378,7 @@ sal_uLong EMFWriter::ImplAcquireHandle()
     {
         if( !mpHandlesUsed[ i ] )
         {
-            mpHandlesUsed[ i ] = sal_True;
+            mpHandlesUsed[ i ] = true;
 
             if( ( nHandle = i ) == mnHandleCount )
                 mnHandleCount++;
@@ -392,7 +392,7 @@ sal_uLong EMFWriter::ImplAcquireHandle()
 void EMFWriter::ImplReleaseHandle( sal_uLong nHandle )
 {
     DBG_ASSERT( nHandle && ( nHandle < MAXHANDLES ), "Handle out of range" );
-    mpHandlesUsed[ nHandle - 1 ] = sal_False;
+    mpHandlesUsed[ nHandle - 1 ] = false;
 }
 
 void EMFWriter::ImplBeginRecord( sal_uInt32 nType )

@@ -1314,7 +1314,7 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
         else if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
-            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), sal_False, true );
+            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, true );
         }
         else if( (nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
         {
@@ -1362,9 +1362,9 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 
     if( bDecoHandling )
     {
-        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? sal_True : FALSE );
+        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? true : FALSE );
         if( ( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ) )
-            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), sal_False, false );
+            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, false );
     }
 }
 
@@ -1605,7 +1605,7 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
     pSalAlpha->ReleaseBuffer( pAlpha, true );
 
     return gdk_pixbuf_new_from_data( pPixbufData,
-                                     GDK_COLORSPACE_RGB, sal_True, 8,
+                                     GDK_COLORSPACE_RGB, true, 8,
                                      aSize.Width(), aSize.Height(),
                                      aSize.Width() * 4,
                                      (GdkPixbufDestroyNotify) g_free,
@@ -1768,7 +1768,7 @@ static void initClientId()
 #endif
 }
 
-void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
+void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
 {
     if( m_pWindow )
     {
@@ -1880,7 +1880,7 @@ void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
     }
 }
 
-void GtkSalFrame::Enable( sal_Bool /*bEnable*/ )
+void GtkSalFrame::Enable( bool /*bEnable*/ )
 {
     // Not implemented by X11SalFrame either
 }
@@ -2303,7 +2303,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     bool bResize = false;
     bool bVisible = IS_WIDGET_MAPPED( m_pWindow );
     if( bVisible )
-        Show( sal_False );
+        Show( false );
 
     if( eType == SET_FULLSCREEN )
     {
@@ -2371,7 +2371,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     CallCallback( SALEVENT_MOVERESIZE, NULL );
 
     if( bVisible )
-        Show( sal_True );
+        Show( true );
 }
 
 void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
@@ -2577,7 +2577,7 @@ dbus_uninhibit_gsm (guint cookie)
 }
 #endif
 
-void GtkSalFrame::StartPresentation( sal_Bool bStart )
+void GtkSalFrame::StartPresentation( bool bStart )
 {
     setAutoLock( !bStart );
 
@@ -2622,7 +2622,7 @@ void GtkSalFrame::StartPresentation( sal_Bool bStart )
     }
 }
 
-void GtkSalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
+void GtkSalFrame::SetAlwaysOnTop( bool bOnTop )
 {
     if( m_pWindow )
         gtk_window_set_keep_above( GTK_WINDOW( m_pWindow ), bOnTop );
@@ -2751,7 +2751,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
 #endif
 }
 
-void GtkSalFrame::CaptureMouse( sal_Bool bCapture )
+void GtkSalFrame::CaptureMouse( bool bCapture )
 {
     getDisplay()->CaptureMouse( bCapture ? this : NULL );
 }
@@ -2933,7 +2933,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, SalX11S
 {
     bool bWasVisible = m_pWindow ? IS_WIDGET_MAPPED(m_pWindow) : false;
     if( bWasVisible )
-        Show( sal_False );
+        Show( false );
 
     if( (int)nXScreen.getXScreen() >= getDisplay()->GetXScreenCount() )
         nXScreen = m_nXScreen;
@@ -3019,7 +3019,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, SalX11S
         SetTitle( m_aTitle );
 
     if( bWasVisible )
-        Show( sal_True );
+        Show( true );
 
     std::list< GtkSalFrame* > aChildren = m_aChildren;
     m_aChildren.clear();
@@ -3154,7 +3154,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             GdkEventFocus aEvent;
             aEvent.type = GDK_FOCUS_CHANGE;
             aEvent.window = widget_get_window( m_pWindow );
-            aEvent.send_event = sal_True;
+            aEvent.send_event = true;
             aEvent.in = gint16(pEvent->xclient.data.l[1] == 1);
             signalFocus( m_pWindow, &aEvent, this );
         }
@@ -3178,14 +3178,14 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
             nEventType = SALEVENT_MOUSEBUTTONUP;
             break;
         default:
-            return sal_False;
+            return false;
     }
     switch( pEvent->button )
     {
         case 1: aEvent.mnButton = MOUSE_LEFT;   break;
         case 2: aEvent.mnButton = MOUSE_MIDDLE; break;
         case 3: aEvent.mnButton = MOUSE_RIGHT;  break;
-        default: return sal_False;
+        default: return false;
     }
     aEvent.mnTime   = pEvent->time;
     aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
@@ -3251,7 +3251,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
@@ -3285,7 +3285,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
 
     pThis->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
 
-    return sal_False;
+    return false;
 }
 
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
@@ -3327,7 +3327,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpointer frame )
@@ -3342,7 +3342,7 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
 
     pThis->CallCallback( (pEvent->type == GDK_ENTER_NOTIFY) ? SALEVENT_MOUSEMOVE : SALEVENT_MOUSELEAVE, &aEvent );
 
-    return sal_True;
+    return true;
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -3534,7 +3534,7 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
 
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
 
-    return sal_False;
+    return false;
 }
 
 gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer frame )
@@ -3569,7 +3569,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     if( m_nFloats == 0 )
         pThis->CallCallback( pEvent->in ? SALEVENT_GETFOCUS : SALEVENT_LOSEFOCUS, NULL );
 
-    return sal_False;
+    return false;
 }
 
 #if !GTK_CHECK_VERSION(3,8,0)
@@ -3641,7 +3641,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
-    return sal_False;
+    return false;
 }
 
 gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
@@ -3650,7 +3650,7 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
-    return sal_False;
+    return false;
 }
 
 gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gpointer frame )
@@ -3668,7 +3668,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      */
     if( (pThis->m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) &&
         pThis->getDisplay()->GetCaptureFrame() == pThis )
-        return sal_False;
+        return false;
 
     /* #i31785# claims we cannot trust the x,y members of the event;
      * they are e.g. not set correctly on maximize/demaximize;
@@ -3734,7 +3734,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
     else if( bSized )
         pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
-    return sal_False;
+    return false;
 }
 
 gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame )
@@ -3746,7 +3746,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
     if( pThis->m_pIMHandler )
     {
         if( pThis->m_pIMHandler->handleKeyEvent( pEvent ) )
-            return sal_True;
+            return true;
     }
 
     // handle modifiers
@@ -3850,7 +3850,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
     if( !aDel.isDeleted() && pThis->m_pIMHandler )
         pThis->m_pIMHandler->updateIMSpotLocation();
 
-    return sal_True;
+    return true;
 }
 
 gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
@@ -3859,7 +3859,7 @@ gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
 
     pThis->CallCallback( SALEVENT_CLOSE, NULL );
 
-    return sal_True;
+    return true;
 }
 
 void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer frame )
@@ -3927,7 +3927,7 @@ gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame 
     }
     #endif
 
-    return sal_False;
+    return false;
 }
 
 gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* pEvent, gpointer frame )
@@ -3935,7 +3935,7 @@ gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* pEvent, 
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     pThis->m_nVisibility = pEvent->state;
 
-    return sal_False;
+    return false;
 }
 
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )

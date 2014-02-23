@@ -353,7 +353,7 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
         xDGR->addDragGestureListener( xDGL );
         uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( mxDnDListener, uno::UNO_QUERY );
         GetDropTarget()->addDropTargetListener( xDTL );
-        GetDropTarget()->setActive( sal_True );
+        GetDropTarget()->setActive( true );
         GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
     }
 }
@@ -720,7 +720,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
             {
                 i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Min(),
-                        GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+                        GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
                 if ( aBoundary.startPos == aSelection.Min() )
                     aBoundary = xBI->previousWord( maText.toString(), aSelection.Min(),
                             GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
@@ -1356,7 +1356,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
         {
             uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
             i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Max(),
-                     GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+                     GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
             ImplSetSelection( Selection( aBoundary.startPos, aBoundary.endPos ) );
             ImplCopyToSelectionClipboard();
         }
@@ -1584,7 +1584,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         if ( bWord )
                         {
                             i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSel.Max(),
-                                    GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+                                    GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
                             if ( aBoundary.startPos == aSel.Max() )
                                 aBoundary = xBI->previousWord( maText.toString(), aSel.Max(),
                                         GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
@@ -1716,7 +1716,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 
                     // Wurde nichts veraendert, dann TAB fuer DialogControl
                     if ( GetSelection().Len() )
-                        bDone = sal_True;
+                        bDone = true;
                 }
             }
             break;
@@ -2412,7 +2412,7 @@ void Edit::SetEchoChar( sal_Unicode c )
         mpSubEdit->SetEchoChar( c );
 }
 
-void Edit::SetReadOnly( sal_Bool bReadOnly )
+void Edit::SetReadOnly( bool bReadOnly )
 {
     if ( mbReadOnly != bool(bReadOnly) )
     {

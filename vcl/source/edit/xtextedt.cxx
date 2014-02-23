@@ -249,7 +249,7 @@ bool ExtTextView::MatchGroup()
     if ( aMatchSel.HasRange() )
         SetSelection( aMatchSel );
 
-    return aMatchSel.HasRange() ? sal_True : sal_False;
+    return aMatchSel.HasRange() ? true : false;
 }
 
 bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, bool bForward )

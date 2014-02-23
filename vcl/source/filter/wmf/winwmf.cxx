@@ -645,7 +645,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             {
                 if ( nWinROP == PATCOPY )
                     pWMF->ReadUInt16( nUsage );    // i don't know anything of this parameter, so its called nUsage
-                                        // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), sal_False );
+                                        // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), false );
 
                 Size aDestSize( ReadYXExt() );
                 if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
@@ -814,7 +814,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             sal_uInt16  nStyle = 0;
             pWMF->ReadUInt16( nStyle );
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? sal_True : sal_False ) );
+            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? true : false ) );
         }
         break;
 
@@ -1490,7 +1490,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     {
                         if ( nWinROP == PATCOPY )
                             pStm->ReadUInt16( nUsage );    // i don't know anything of this parameter, so its called nUsage
-                                                // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), sal_False );
+                                                // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), false );
 
                         Size aDestSize( ReadYXExt() );
                         if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps

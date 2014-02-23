@@ -53,35 +53,35 @@ public:
     int                     mnFullScreenShowState;  // fullscreen restore show state
     UINT                    mnInputLang;            // current Input Language
     UINT                    mnInputCodePage;        // current Input CodePage
-    sal_uIntPtr                   mnStyle;                // style
-    sal_Bool                    mbGraphics;             // is Graphics used
-    sal_Bool                    mbCaption;              // has window a caption
-    sal_Bool                    mbBorder;               // has window a border
-    sal_Bool                    mbFixBorder;            // has window a fixed border
-    sal_Bool                    mbSizeBorder;           // has window a sizeable border
-    sal_Bool                    mbNoIcon;               // is an window without an icon
-    sal_Bool                    mbFloatWin;             // is a FloatingWindow
+    sal_uIntPtr             mnStyle;                // style
+    bool                    mbGraphics;             // is Graphics used
+    bool                    mbCaption;              // has window a caption
+    bool                    mbBorder;               // has window a border
+    bool                    mbFixBorder;            // has window a fixed border
+    bool                    mbSizeBorder;           // has window a sizeable border
+    bool                    mbNoIcon;               // is an window without an icon
+    bool                    mbFloatWin;             // is a FloatingWindow
     bool                    mbFullScreen;           // TRUE: in full screen mode
-    sal_Bool                    mbPresentation;         // TRUE: Presentation Mode running
-    sal_Bool                    mbInShow;               // innerhalb eines Show-Aufrufs
-    sal_Bool                    mbRestoreMaximize;      // Restore-Maximize
-    sal_Bool                    mbInMoveMsg;            // Move-Message wird verarbeitet
-    sal_Bool                    mbInSizeMsg;            // Size-Message wird verarbeitet
-    sal_Bool                    mbFullScreenToolWin;    // WS_EX_TOOLWINDOW reset in FullScreenMode
-    sal_Bool                    mbDefPos;               // default-position
-    sal_Bool                    mbOverwriteState;       // TRUE: WindowState darf umgesetzt werden
-    sal_Bool                    mbIME;                  // TRUE: We are in IME Mode
-    sal_Bool                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
-    sal_Bool                    mbSpezIME;              // TRUE: Spez IME
-    sal_Bool                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
-    sal_Bool                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
-    static sal_Bool             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
+    bool                    mbPresentation;         // TRUE: Presentation Mode running
+    bool                    mbInShow;               // innerhalb eines Show-Aufrufs
+    bool                    mbRestoreMaximize;      // Restore-Maximize
+    bool                    mbInMoveMsg;            // Move-Message wird verarbeitet
+    bool                    mbInSizeMsg;            // Size-Message wird verarbeitet
+    bool                    mbFullScreenToolWin;    // WS_EX_TOOLWINDOW reset in FullScreenMode
+    bool                    mbDefPos;               // default-position
+    bool                    mbOverwriteState;       // TRUE: WindowState darf umgesetzt werden
+    bool                    mbIME;                  // TRUE: We are in IME Mode
+    bool                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
+    bool                    mbSpezIME;              // TRUE: Spez IME
+    bool                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
+    bool                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
+    static bool             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
 
-    RGNDATA*                    mpClipRgnData;
-    RECT*                       mpNextClipRect;
-    sal_Bool                    mbFirstClipRect;
-    sal_Int32                   mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
-    sal_Bool                    mbPropertiesStored;     // has values stored in the window property store
+    RGNDATA*                mpClipRgnData;
+    RECT*                   mpNextClipRect;
+    bool                    mbFirstClipRect;
+    sal_Int32               mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
+    bool                    mbPropertiesStored;     // has values stored in the window property store
 
     void updateScreenNumber();
 public:
@@ -96,8 +96,8 @@ public:
     virtual void                                SetMenu( SalMenu* pSalMenu );
     virtual void                                DrawMenuBar();
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = FALSE );
-    virtual void                Enable( sal_Bool bEnable );
+    virtual void                Show( bool bVisible, bool bNoActivate = FALSE );
+    virtual void                Enable( bool bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
@@ -107,11 +107,11 @@ public:
     virtual void                SetWindowState( const SalFrameState* pState );
     virtual bool                GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
-    virtual void                StartPresentation( sal_Bool bStart );
-    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
+    virtual void                StartPresentation( bool bStart );
+    virtual void                SetAlwaysOnTop( bool bOnTop );
     virtual void                ToTop( sal_uInt16 nFlags );
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( sal_Bool bMouse );
+    virtual void                CaptureMouse( bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
     using SalFrame::Flush;
     virtual void                Flush();

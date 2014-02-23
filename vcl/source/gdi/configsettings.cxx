@@ -66,7 +66,7 @@ void SettingsConfigItem::Commit()
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
         OUString aKeyName( group->first );
-        /*sal_Bool bAdded =*/ AddNode( OUString(), aKeyName );
+        /*bool bAdded =*/ AddNode( OUString(), aKeyName );
         Sequence< PropertyValue > aValues( group->second.size() );
         PropertyValue* pValues = aValues.getArray();
         int nIndex = 0;

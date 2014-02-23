@@ -8127,7 +8127,7 @@ void Window::SetWindowPeer( ::com::sun::star::uno::Reference< ::com::sun::star::
     {
         UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
         if ( pWrapper )
-            mpWindowImpl->mxWindowPeer = pWrapper->GetWindowInterface( this, sal_True );
+            mpWindowImpl->mxWindowPeer = pWrapper->GetWindowInterface( this, true );
     }
     return mpWindowImpl->mxWindowPeer;
 }

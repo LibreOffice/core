@@ -39,7 +39,7 @@ public:
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
     virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle );
     virtual void            DestroyFrame( SalFrame* pFrame );
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
     virtual void            DestroyObject( SalObject* pObject );
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
@@ -66,7 +66,7 @@ public:
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool                AnyInput( sal_uInt16 nType );
-    virtual SalMenu*            CreateMenu( sal_Bool bMenuBar, Menu* );
+    virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* );
     virtual void                DestroyMenu( SalMenu* );
     virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData );
     virtual void                DestroyMenuItem( SalMenuItem* );
@@ -79,8 +79,8 @@ public:
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, sal_uIntPtr nSalFrameStyle );
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent );
-HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, sal_Bool bAsChild );
-void ImplSalStartTimer( sal_uIntPtr nMS, sal_Bool bMutex = sal_False );
+HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild );
+void ImplSalStartTimer( sal_uIntPtr nMS, bool bMutex = false );
 void ImplSalPrinterAbortJobAsync( HDC hPrnDC );
 
 #endif // INCLUDED_VCL_INC_WIN_SALINST_H

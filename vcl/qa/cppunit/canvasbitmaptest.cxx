@@ -110,7 +110,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             bool(xBmp->hasAlpha()) == aContainedBmpEx.IsTransparent());
 
     CPPUNIT_ASSERT_MESSAGE( "getScaledBitmap() failed",
-                            xBmp->getScaledBitmap( geometry::RealSize2D(500,500), sal_False ).is());
+                            xBmp->getScaledBitmap( geometry::RealSize2D(500,500), false ).is());
 
     rendering::IntegerBitmapLayout aLayout;
     uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
@@ -196,7 +196,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                                 xPal->getNumberOfEntries() == 1L << nOriginalDepth);
         uno::Sequence<double> aIndex;
         CPPUNIT_ASSERT_MESSAGE( "Palette is not read-only",
-                                xPal->setIndex(aIndex,sal_True,0) == sal_False);
+                                xPal->setIndex(aIndex,true,0) == false);
         CPPUNIT_ASSERT_MESSAGE( "Palette entry 0 is not opaque",
                                 xPal->getIndex(aIndex,0));
         CPPUNIT_ASSERT_MESSAGE( "Palette has no valid color space",
@@ -348,7 +348,7 @@ private:
         return 255;
     }
 
-    virtual ::sal_Bool SAL_CALL getIndex( uno::Sequence< double >& entry,
+    virtual sal_Bool SAL_CALL getIndex( uno::Sequence< double >& entry,
                                           ::sal_Int32 nIndex )
         throw (lang::IndexOutOfBoundsException,
                uno::RuntimeException,
@@ -363,11 +363,11 @@ private:
                   sal_uInt8(nIndex),
                   sal_uInt8(nIndex)) );
 
-        return sal_True; // no palette transparency here.
+        return true; // no palette transparency here.
     }
 
-    virtual ::sal_Bool SAL_CALL setIndex( const uno::Sequence< double >&,
-                                          ::sal_Bool,
+    virtual sal_Bool SAL_CALL setIndex( const uno::Sequence< double >&,
+                                          sal_Bool,
                                           ::sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException,
                                                                       lang::IllegalArgumentException,
                                                                       uno::RuntimeException,
@@ -377,7 +377,7 @@ private:
                                 getPalette().is());
         CPPUNIT_ASSERT_MESSAGE( "setIndex: index out of range",
                                 nIndex >= 0 && nIndex < 256);
-        return sal_False;
+        return false;
     }
 
     struct PaletteColorSpaceHolder: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
@@ -679,7 +679,7 @@ public:
         maLayout.PlaneStride    = 0;
         maLayout.ColorSpace.clear();
         maLayout.Palette.clear();
-        maLayout.IsMsbFirst     = sal_False;
+        maLayout.IsMsbFirst     = false;
     }
 };
 
