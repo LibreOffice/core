@@ -407,7 +407,7 @@ HtmlExport::~HtmlExport()
 /** get common export parameters from item set */
 void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams )
 {
-    mbImpress = mpDoc && mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+    mbImpress = mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 
     sal_Int32 nArgs = rParams.getLength();
     const PropertyValue* pParams = rParams.getConstArray();
