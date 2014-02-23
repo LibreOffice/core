@@ -951,7 +951,7 @@ bool PspSalPrinter::StartJob(
 #endif
     m_aPrinterGfx.Init( m_aJobData );
 
-    return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? sal_True : sal_False;
+    return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? true : false;
 }
 
 bool PspSalPrinter::EndJob()
@@ -986,12 +986,12 @@ bool PspSalPrinter::EndJob()
 
 bool PspSalPrinter::AbortJob()
 {
-    bool bAbort = m_aPrintJob.AbortJob() ? sal_True : sal_False;
+    bool bAbort = m_aPrintJob.AbortJob() ? true : false;
     GetSalData()->m_pInstance->jobEndedPrinterUpdate();
     return bAbort;
 }
 
-SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, sal_Bool )
+SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, bool )
 {
     OSL_TRACE("PspSalPrinter::StartPage");
 
@@ -1018,7 +1018,7 @@ bool PspSalPrinter::EndPage()
     bool bResult = m_aPrintJob.EndPage();
     m_aPrinterGfx.Clear();
     OSL_TRACE("PspSalPrinter::EndPage");
-    return bResult ? sal_True : sal_False;
+    return bResult ? true : false;
 }
 
 sal_uLong PspSalPrinter::GetErrorCode()

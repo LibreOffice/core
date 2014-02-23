@@ -57,7 +57,7 @@ public:
     void        CreateAnchor();
     void        DestroyAnchor();
     bool        SetCursorAtPoint( const Point& rPoint,
-                    sal_Bool bDontSelectAtCursor=sal_False );
+                    bool bDontSelectAtCursor=false );
     bool        IsSelectionAtPoint( const Point& rPoint );
     void        DeselectAtPoint( const Point& rPoint );
     void        DeselectAll();

@@ -161,7 +161,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
             }
             else
             {
-                mpAccess = aBmp.AcquireReadAccess();    // sal_True RGB with alphachannel
+                mpAccess = aBmp.AcquireReadAccess();    // true RGB with alphachannel
                 if( mpAccess )
                 {
                     if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) )

@@ -137,10 +137,10 @@ struct ImplSVAppData
     bool                mbInAppMain;                    // is Application::Main() on stack
     bool                mbInAppExecute;                 // is Application::Execute() on stack
     bool                mbAppQuit;                      // is Application::Quit() called
-    bool                mbSettingsInit;                 // sal_True: Settings are initialized
+    bool                mbSettingsInit;                 // true: Settings are initialized
     bool                mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
-    Application::DialogCancelMode meDialogCancel;           // sal_True: All Dialog::Execute() calls will be terminated immediately with return sal_False
+    Application::DialogCancelMode meDialogCancel;           // true: All Dialog::Execute() calls will be terminated immediately with return false
     long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
                                                             // in window arrangers
 
@@ -175,7 +175,7 @@ struct ImplSVGDIData
     long                    mnRealAppFontX;     // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
     long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
-    bool                    mbFontSubChanged;   // sal_True: FontSubstitution was changed between Begin/End
+    bool                    mbFontSubChanged;   // true: FontSubstitution was changed between Begin/End
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };
@@ -200,9 +200,9 @@ struct ImplSVWinData
     Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
     sal_uInt16              mnTrackFlags;       // tracking flags
     sal_uInt16              mnAutoScrollFlags;  // auto scroll flags
-    bool                mbNoDeactivate;     // sal_True: do not execute Deactivate
-    bool                mbNoSaveFocus;      // sal_True: menus must not save/restore focus
-    bool                mbNoSaveBackground; // sal_True: save background is unnecessary or even less performant
+    bool                mbNoDeactivate;     // true: do not execute Deactivate
+    bool                mbNoSaveFocus;      // true: menus must not save/restore focus
+    bool                mbNoSaveBackground; // true: save background is unnecessary or even less performant
 };
 
 
@@ -318,8 +318,8 @@ struct ImplSVData
     ResMgr*                 mpResMgr;           // SV-Resource-Manager
     sal_uLong                   mnTimerPeriod;      // current timer period
     sal_uLong                   mnTimerUpdate;      // TimerCallbackProcs on stack
-    bool                    mbNotAllTimerCalled;// sal_True: Es muessen noch Timer abgearbeitet werden
-    bool                    mbNoCallTimer;      // sal_True: No Timeout calls
+    bool                    mbNotAllTimerCalled;// true: Es muessen noch Timer abgearbeitet werden
+    bool                    mbNoCallTimer;      // true: No Timeout calls
     ImplSVAppData           maAppData;          // indepen data for class Application
     ImplSVGDIData           maGDIData;          // indepen data for Output classes
     ImplSVWinData           maWinData;          // indepen data for Windows classes

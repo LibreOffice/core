@@ -70,7 +70,7 @@ protected:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
-    bool               IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
+    bool               IsDropDownBox() const { return mpFloatWin ? true : false; }
 
 protected:
     explicit            ListBox( WindowType nType );

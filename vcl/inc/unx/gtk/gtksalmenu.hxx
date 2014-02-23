@@ -66,9 +66,9 @@ public:
     virtual void                SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
     virtual void                SetFrame( const SalFrame* pFrame );
     virtual const GtkSalFrame*  GetFrame() const;
-    virtual void                CheckItem( unsigned nPos, sal_Bool bCheck );
-    virtual void                EnableItem( unsigned nPos, sal_Bool bEnable );
-    virtual void                ShowItem( unsigned nPos, sal_Bool bShow );
+    virtual void                CheckItem( unsigned nPos, bool bCheck );
+    virtual void                EnableItem( unsigned nPos, bool bEnable );
+    virtual void                ShowItem( unsigned nPos, bool bShow );
     virtual void                SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText );
     virtual void                SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
     virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName );

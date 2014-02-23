@@ -368,8 +368,8 @@ public:
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     // Before the window is visible, a resize event
     // must be sent with the correct size
-    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
-    virtual void                Enable( sal_Bool bEnable );
+    virtual void                Show( bool bVisible, bool bNoActivate = false );
+    virtual void                Enable( bool bEnable );
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
     virtual void                SetMinClientSize( long nWidth, long nHeight );
@@ -382,9 +382,9 @@ public:
     virtual bool            GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
     // Enable/Disable ScreenSaver, SystemAgents, ...
-    virtual void                StartPresentation( sal_Bool bStart );
+    virtual void                StartPresentation( bool bStart );
     // Show Window over all other Windows
-    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
+    virtual void                SetAlwaysOnTop( bool bOnTop );
 
     // Window to top and grab focus
     virtual void                ToTop( sal_uInt16 nFlags );
@@ -392,7 +392,7 @@ public:
     // this function can call with the same
     // pointer style
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( sal_Bool bMouse );
+    virtual void                CaptureMouse( bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
 
     // flush output buffer

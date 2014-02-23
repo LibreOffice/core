@@ -855,7 +855,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
 #else
     (void)rOutFile; (void)rGfx; (void)bAllowType42; (void)rSuppliedFonts;
 #  warning FIXME: Missing OpenTTFontFile outside of Unix ...
-    return sal_False;
+    return false;
 #endif
 }
 

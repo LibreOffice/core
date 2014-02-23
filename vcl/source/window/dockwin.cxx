@@ -129,14 +129,14 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
     {
         // i43499 CTRL disables docking now
         mpDockWin->GetParent()->ImplGetFrameWindow()->HideTracking();
-        mpDockWin->EndDocking( maDockRect, sal_True );
+        mpDockWin->EndDocking( maDockRect, true );
         if( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
             maDockTimer.Start();
     }
     else if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
         mpDockWin->GetParent()->ImplGetFrameWindow()->HideTracking();
-        mpDockWin->EndDocking( maDockRect, sal_False );
+        mpDockWin->EndDocking( maDockRect, false );
     }
     else
     {
@@ -177,7 +177,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
         {
             mpDockWin->GetParent()->ImplGetFrameWindow()->HideTracking();
             maDockTimer.Stop();
-            mpDockWin->EndDocking( maDockRect, sal_True );
+            mpDockWin->EndDocking( maDockRect, true );
         }
     }
     mbInMove = false;
@@ -608,7 +608,7 @@ bool DockingWindow::Docking( const Point&, Rectangle& )
     return IsFloatingMode();
 }
 
-void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
+void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
     if ( !IsDockingCanceled() )
     {

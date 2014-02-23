@@ -42,9 +42,9 @@ public:
     HBITMAP                 mhDefBmp;               // Default Bitmap
     WinSalGraphics*         mpGraphics;             // current VirDev graphics
     WinSalVirtualDevice*    mpNext;                 // next VirDev
-    sal_uInt16                  mnBitCount;             // BitCount (0 or 1)
-    sal_Bool                    mbGraphics;             // is Graphics used
-    sal_Bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
+    sal_uInt16              mnBitCount;             // BitCount (0 or 1)
+    bool                    mbGraphics;             // is Graphics used
+    bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
 
     WinSalVirtualDevice();
     virtual ~WinSalVirtualDevice();

@@ -195,10 +195,10 @@ void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, s
         if ( !mbSysChild )
         {
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
-                mpWindowImpl->mpFrame->SetAlwaysOnTop( sal_True );
+                mpWindowImpl->mpFrame->SetAlwaysOnTop( true );
             if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
                 ToTop();
-            mpWindowImpl->mpFrame->StartPresentation( sal_True );
+            mpWindowImpl->mpFrame->StartPresentation( true );
         }
 
         if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
@@ -209,9 +209,9 @@ void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, s
         Show( mbPresentationVisible );
         if ( !mbSysChild )
         {
-            mpWindowImpl->mpFrame->StartPresentation( sal_False );
+            mpWindowImpl->mpFrame->StartPresentation( false );
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
-                mpWindowImpl->mpFrame->SetAlwaysOnTop( sal_False );
+                mpWindowImpl->mpFrame->SetAlwaysOnTop( false );
         }
         ShowFullScreenMode( mbPresentationFull, nDisplayScreen );
 

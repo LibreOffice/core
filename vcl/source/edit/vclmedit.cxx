@@ -337,7 +337,7 @@ IMPL_LINK( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
         nDiffX = mpTextWindow->GetTextView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
 
     mpTextWindow->GetTextView()->Scroll( nDiffX, nDiffY );
-    // mpTextWindow->GetTextView()->ShowCursor( sal_False, sal_True );
+    // mpTextWindow->GetTextView()->ShowCursor( false, true );
 
     return 0;
 }
@@ -843,7 +843,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         }
 //      if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.Len() ) )
 //      {
-//          pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, sal_False );
+//          pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, false );
 //      }
         if ( !Edit::GetGetSpecialCharsFunction() )
         {
@@ -1112,7 +1112,7 @@ void VclMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
     }
 }
 
-void VclMultiLineEdit::SetReadOnly( sal_Bool bReadOnly )
+void VclMultiLineEdit::SetReadOnly( bool bReadOnly )
 {
     pImpVclMEdit->SetReadOnly( bReadOnly );
     Edit::SetReadOnly( bReadOnly );

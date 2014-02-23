@@ -119,9 +119,9 @@ sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlav
 {
     for (sal_Int32 i = 0; i < mFlavorList.getLength(); i++)
       if (compareDataFlavors(aFlavor, mFlavorList[i]))
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 

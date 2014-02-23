@@ -226,7 +226,7 @@ Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, cons
         if ( mpWindow && bHorz )
         {
             // get size of item window and check if it fits
-            // no windows in vertical toolbars (the default is mbShowWindow=sal_False)
+            // no windows in vertical toolbars (the default is mbShowWindow=false)
             Size aWinSize = mpWindow->GetSizePixel();
             if ( !bCheckMaxWidth || (aWinSize.Width() <= maxWidth) )
             {
@@ -1489,7 +1489,7 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
             if ( nPos != mnCurPos )
             {
                 mnCurPos = nPos;
-                ImplDrawItem( mnCurPos, sal_True );
+                ImplDrawItem( mnCurPos, true );
                 Flush();
             }
         }
@@ -1497,7 +1497,7 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
         {
             if ( nPos == mnCurPos )
             {
-                ImplDrawItem( mnCurPos, sal_False );
+                ImplDrawItem( mnCurPos, false );
                 Flush();
                 mnCurPos = TOOLBOX_ITEM_NOTFOUND;
             }
@@ -1799,7 +1799,7 @@ void ToolBox::ImplFillLayoutData() const
 
         // only draw, if the rectangle is within PaintRectangle
         if ( !pItem->maRect.IsEmpty() )
-            const_cast<ToolBox*>(this)->ImplDrawItem( i, sal_False, false, true );
+            const_cast<ToolBox*>(this)->ImplDrawItem( i, false, false, true );
     }
 }
 
@@ -1871,7 +1871,7 @@ void ToolBox::SetMenuType( sal_uInt16 aType )
             // the menu button may have to be moved into the decoration which changes the layout
             ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
             if( pWrapper )
-                pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) ? sal_True : sal_False );
+                pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) ? true : false );
 
             mbFormat = true;
             ImplFormat();
@@ -2145,7 +2145,7 @@ bool ToolBox::AlwaysLocked()
         }
     }
 
-    return nAlwaysLocked == 1 ? sal_True : sal_False;
+    return nAlwaysLocked == 1 ? true : false;
 }
 
 bool ToolBox::WillUsePopupMode() const

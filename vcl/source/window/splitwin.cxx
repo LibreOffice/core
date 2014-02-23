@@ -2423,8 +2423,8 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
 
         if ( bSplit )
         {
-            bool    bPropSmaller = (mnMouseModifier & KEY_SHIFT) ? sal_True : sal_False;
-            bool    bPropGreater = (mnMouseModifier & KEY_MOD1) ? sal_True : sal_False;
+            bool    bPropSmaller = (mnMouseModifier & KEY_SHIFT) ? true : false;
+            bool    bPropGreater = (mnMouseModifier & KEY_MOD1) ? true : false;
             long    nDelta = mnMSplitPos-mnMStartPos;
 
             if ( (mnSplitTest & SPLIT_WINDOW) && !mpMainSet->mpItems )

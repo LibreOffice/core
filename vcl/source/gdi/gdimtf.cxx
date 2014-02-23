@@ -307,7 +307,7 @@ void GDIMetaFile::Record( OutputDevice* pOut )
     nCurrentActionElement = aList.empty() ? 0 : (aList.size() - 1);
     pOutDev = pOut;
     bRecord = true;
-    Linker( pOut, sal_True );
+    Linker( pOut, true );
 }
 
 void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
@@ -597,12 +597,12 @@ void GDIMetaFile::Pause( bool _bPause )
         if( _bPause )
         {
             if( !bPause )
-                Linker( pOutDev, sal_False );
+                Linker( pOutDev, false );
         }
         else
         {
             if( bPause )
-                Linker( pOutDev, sal_True );
+                Linker( pOutDev, true );
         }
 
         bPause = _bPause;
@@ -616,7 +616,7 @@ void GDIMetaFile::Stop()
         bRecord = false;
 
         if( !bPause )
-            Linker( pOutDev, sal_False );
+            Linker( pOutDev, false );
         else
             bPause = false;
     }

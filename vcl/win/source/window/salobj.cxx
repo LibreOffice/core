@@ -33,7 +33,7 @@
 
 
 
-static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
+static bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 {
     if ( hWndParent == hWndChild )
         return TRUE;
@@ -151,7 +151,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 
 
 
-sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
+bool ImplSalPreDispatchMsg( MSG* pMsg )
 {
     // Used for Unicode and none Unicode
     SalData*        pSalData = GetSalData();
@@ -174,7 +174,7 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
         // process KeyEvents even if the control does not process them itself
         // SysKeys are processed as WM_SYSCOMMAND
         // Char-Events are not processed, as they are not accelerator-relevant
-        sal_Bool bWantedKeyCode = FALSE;
+        bool bWantedKeyCode = FALSE;
         // A-Z, 0-9 nur in Verbindung mit Control-Taste
         if ( ((pMsg->wParam >= 65) && (pMsg->wParam <= 90)) ||
              ((pMsg->wParam >= 48) && (pMsg->wParam <= 57)) )
@@ -208,7 +208,7 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
              ((nKeyCode >= 65) && (nKeyCode <= 90)) ||
              ((nKeyCode >= 97) && (nKeyCode <= 122)) )
         {
-            sal_Bool bRet = FALSE;
+            bool bRet = FALSE;
             ImplSalYieldMutexAcquireWithWait();
             pObject = ImplFindSalObject( pMsg->hwnd );
             if ( pObject )
@@ -731,7 +731,7 @@ void WinSalObject::EndSetClipRegion()
 void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
     sal_uLong nStyle = 0;
-    sal_Bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
+    bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
     if ( bVisible )
     {
         ShowWindow( mhWnd, SW_HIDE );
@@ -744,7 +744,7 @@ void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 
 
-void WinSalObject::Show( sal_Bool bVisible )
+void WinSalObject::Show( bool bVisible )
 {
     if ( bVisible )
         ShowWindow( mhWnd, SW_SHOWNORMAL );
@@ -754,7 +754,7 @@ void WinSalObject::Show( sal_Bool bVisible )
 
 
 
-void WinSalObject::Enable( sal_Bool bEnable )
+void WinSalObject::Enable( bool bEnable )
 {
     EnableWindow( mhWnd, bEnable );
 }

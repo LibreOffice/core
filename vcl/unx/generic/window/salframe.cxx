@@ -731,7 +731,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
     mnExtStyle                  = 0;
     bAlwaysOnTop_               = false;
 
-    // set bViewable_ to sal_True: hack GetClientSize to report something
+    // set bViewable_ to true: hack GetClientSize to report something
     // different to 0/0 before first map
     bViewable_                  = true;
     bMapped_                    = false;
@@ -803,7 +803,7 @@ X11SalFrame::~X11SalFrame()
     ShowFullScreen( false, 0 );
 
     if( bMapped_ )
-        Show( sal_False );
+        Show( false );
 
     if( mpInputContext )
     {
@@ -914,7 +914,7 @@ void X11SalFrame::updateGraphics( bool bClear )
         pFreeGraphics_->SetDrawable( aDrawable, m_nXScreen );
 }
 
-void X11SalFrame::Enable( sal_Bool /*bEnable*/ )
+void X11SalFrame::Enable( bool /*bEnable*/ )
 {
     // NYI: enable/disable frame
 }
@@ -1080,7 +1080,7 @@ void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 // Show + Pos (x,y,z) + Size (width,height)
 
-void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
+void X11SalFrame::Show( bool bVisible, bool bNoActivate )
 {
     if( ( bVisible && bMapped_ )
         || ( !bVisible && !bMapped_ ) )
@@ -1110,12 +1110,12 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
                 if( pFrame->nStyle_ & SAL_FRAME_STYLE_INTRO )
                 {
                     if( pFrame->bMapped_ )
-                        const_cast<X11SalFrame*>(pFrame)->Show( sal_False );
+                        const_cast<X11SalFrame*>(pFrame)->Show( false );
                 }
             }
         }
 
-        // update NET_WM_STATE which may have been deleted due to earlier Show(sal_False)
+        // update NET_WM_STATE which may have been deleted due to earlier Show(false)
         if( nShowState_ == SHOWSTATE_HIDDEN )
             GetDisplay()->getWMAdaptor()->frameIsMapping( this );
 
@@ -1124,7 +1124,7 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
          *  with the basic dialogue editor,
          *  which shows a frame and instantly hides it again. After that the
          *  editor window is shown and the WM takes this as an opportunity
-         *  to show our hidden transient frame also. So Show( sal_False ) must
+         *  to show our hidden transient frame also. So Show( false ) must
          *  withdraw the frame AND delete the WM_TRANSIENT_FOR property.
          *  In case the frame is shown again, the transient hint must be restored here.
          */
@@ -1257,7 +1257,7 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
          *  plugged windows don't necessarily get the
          *  focus on show because the parent may already be mapped
          *  and have the focus. So try to set the focus
-         *  to the child on Show(sal_True)
+         *  to the child on Show(true)
          */
         if( (nStyle_ & SAL_FRAME_STYLE_PLUG) && ! m_bXEmbed )
             XSetInputFocus( GetXDisplay(),
@@ -1545,7 +1545,7 @@ void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     bDefaultPosition_ = False;
 }
 
-void X11SalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
+void X11SalFrame::SetAlwaysOnTop( bool bOnTop )
 {
     if( ! IsOverrideRedirect() )
     {
@@ -2009,22 +2009,22 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
         Rectangle aNewScreenRect( GetDisplay()->GetXineramaScreens()[nNewScreen] );
         bool bVisible = bMapped_;
         if( bVisible )
-            Show( sal_False );
+            Show( false );
         maGeometry.nX = aNewScreenRect.Left() + (maGeometry.nX - aOldScreenRect.Left());
         maGeometry.nY = aNewScreenRect.Top() + (maGeometry.nY - aOldScreenRect.Top());
         createNewWindow( None, m_nXScreen );
         if( bVisible )
-            Show( sal_True );
+            Show( true );
         maGeometry.nDisplayScreenNumber = nNewScreen;
     }
     else if( nNewScreen < GetDisplay()->GetXScreenCount() )
     {
         bool bVisible = bMapped_;
         if( bVisible )
-            Show( sal_False );
+            Show( false );
         createNewWindow( None, SalX11Screen( nNewScreen ) );
         if( bVisible )
-            Show( sal_True );
+            Show( true );
         maGeometry.nDisplayScreenNumber = nNewScreen;
     }
 }
@@ -2074,7 +2074,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             nStyle_ |= SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
             bool bVisible = bMapped_;
             if( bVisible )
-                Show( sal_False );
+                Show( false );
             maGeometry.nX = aRect.Left();
             maGeometry.nY = aRect.Top();
             maGeometry.nWidth = aRect.GetWidth();
@@ -2087,7 +2087,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             else
                 GetDisplay()->getWMAdaptor()->showFullScreen( this, true );
             if( bVisible )
-                Show(sal_True);
+                Show(true);
 
         }
         else
@@ -2098,14 +2098,14 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             Rectangle aRect = maRestorePosSize;
             maRestorePosSize = Rectangle();
             if( bVisible )
-                Show( sal_False );
+                Show( false );
             createNewWindow( None, m_nXScreen );
             if( !aRect.IsEmpty() )
                 SetPosSize( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
                             SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y |
                             SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
             if( bVisible )
-                Show( sal_True );
+                Show( true );
         }
     }
     else
@@ -2118,12 +2118,12 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             if( mbFullScreen )
                 pDisplay_->getWMAdaptor()->showFullScreen( this, false );
             if( bVisible )
-                Show( sal_False );
+                Show( false );
             createNewWindow( None, SalX11Screen( nScreen ) );
             if( mbFullScreen )
                 pDisplay_->getWMAdaptor()->showFullScreen( this, true );
             if( bVisible )
-                Show( sal_True );
+                Show( true );
         }
         if( mbFullScreen == (bool)bFullScreen )
             return;
@@ -2207,7 +2207,7 @@ MessageToXAutoLock( Display *p_display, int n_message )
     return True;
 }
 
-void X11SalFrame::StartPresentation( sal_Bool bStart )
+void X11SalFrame::StartPresentation( bool bStart )
 {
     I18NStatus::get().show( !bStart, I18NStatus::presentation );
     if ( bStart )
@@ -2486,7 +2486,7 @@ void X11SalFrame::UpdateSettings( AllSettings& rSettings )
     rSettings.SetStyleSettings( aStyleSettings );
 }
 
-void X11SalFrame::CaptureMouse( sal_Bool bCapture )
+void X11SalFrame::CaptureMouse( bool bCapture )
 {
     nCaptured_ = pDisplay_->CaptureMouse( bCapture ? this : NULL );
 }
@@ -2515,7 +2515,7 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, SalX11Screen nXScreen
 {
     bool bWasVisible = bMapped_;
     if( bWasVisible )
-        Show( sal_False );
+        Show( false );
 
     if( nXScreen.getXScreen() >= GetDisplay()->GetXScreenCount() )
         nXScreen = m_nXScreen;
@@ -2582,7 +2582,7 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, SalX11Screen nXScreen
     }
 
     if( bWasVisible )
-        Show( sal_True );
+        Show( true );
 
     std::list< X11SalFrame* > aChildren = maChildren;
     for( std::list< X11SalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
@@ -2792,7 +2792,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
             }
             if( ! bInside )
             {
-                // need not take care of the XUngrabPointer in Show( sal_False )
+                // need not take care of the XUngrabPointer in Show( false )
                 // because XUngrabPointer does not produce errors if pointer
                 // is not grabbed
                 XUngrabPointer( GetXDisplay(), CurrentTime );
@@ -3663,8 +3663,8 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
             hWM_Parent = GetShellWindow();
             break;
         }
-         /* this sometimes happens if a Show(sal_True) is
-         *  immediately followed by Show(sal_False) (which is braindead anyway)
+         /* this sometimes happens if a Show(true) is
+         *  immediately followed by Show(false) (which is braindead anyway)
          */
         if( hDummy == hWM_Parent )
             hDummy = hRoot;
@@ -3942,7 +3942,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
 
     if( -1 == nCaptured_ )
     {
-        CaptureMouse( sal_True );
+        CaptureMouse( true );
 #ifdef DBG_UTIL
         if( -1 != nCaptured_ )
             pDisplay_->DbgPrintDisplayEvent("Captured", pEvent);
@@ -4015,7 +4015,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     }
                     bMapped_   = true;
                     bViewable_ = true;
-                    nRet = sal_True;
+                    nRet = true;
                     if ( mpInputContext != NULL )
                         mpInputContext->Map( this );
                     CallCallback( SALEVENT_RESIZE, NULL );
@@ -4075,7 +4075,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                 {
                     bMapped_   = false;
                     bViewable_ = false;
-                    nRet = sal_True;
+                    nRet = true;
                     if ( mpInputContext != NULL )
                         mpInputContext->Unmap( this );
                     CallCallback( SALEVENT_RESIZE, NULL );
@@ -4090,7 +4090,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
 
             case VisibilityNotify:
                 nVisibility_ = pEvent->xvisibility.state;
-                nRet = sal_True;
+                nRet = true;
                 if( bAlwaysOnTop_
                     && bMapped_
                     && ! GetDisplay()->getWMAdaptor()->isAlwaysOnTopOK()

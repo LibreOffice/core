@@ -69,7 +69,7 @@ public:
     virtual void    BeginDrag();
     virtual void    CreateAnchor();
     virtual void    DestroyAnchor();
-    virtual bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = false );
+    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false );
     virtual bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();
@@ -100,7 +100,7 @@ public:
     virtual void    BeginDrag();
     virtual void    CreateAnchor();
     virtual void    DestroyAnchor();
-    virtual bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = false );
+    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false );
     virtual bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();

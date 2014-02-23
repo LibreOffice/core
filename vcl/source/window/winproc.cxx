@@ -107,7 +107,7 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
 // Erstmal ausgebaut als Hack fuer Bug 53378
 //                        if ( nPopupFlags & FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK )
-//                            return sal_False;
+//                            return false;
 //                        else
                             return true;
                     }
@@ -518,7 +518,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                                     nMouseX,
                                     nMouseY,
                                     nClicks,
-                                    sal_False );
+                                    false );
 
                                 sal_uLong nCount = Application::ReleaseSolarMutex();
 
@@ -903,7 +903,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     sal_uInt16      nEvCode = aKeyCode.GetCode();
 
     // allow application key listeners to remove the key event
-    // but make sure we're not forwarding external KeyEvents, (ie where bForward is sal_False)
+    // but make sure we're not forwarding external KeyEvents, (ie where bForward is false)
     // because those are coming back from the listener itself and MUST be processed
     KeyEvent aKeyEvent( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     if( bForward )

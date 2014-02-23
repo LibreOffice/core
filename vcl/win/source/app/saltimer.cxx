@@ -34,7 +34,7 @@
 
 
 
-void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
+void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
 {
     SalData* pSalData = GetSalData();
 

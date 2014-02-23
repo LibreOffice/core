@@ -49,7 +49,7 @@ public:
     /// set the timeout in milliseconds
     void            SetTimeout( sal_uLong nTimeoutMs );
     sal_uLong       GetTimeout() const { return mnTimeout; }
-    bool        IsActive() const { return mbActive ? sal_True : sal_False; }
+    bool        IsActive() const { return mbActive ? true : false; }
 
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }

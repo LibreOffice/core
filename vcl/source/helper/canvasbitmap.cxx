@@ -127,7 +127,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     m_aLayout.PlaneStride    = 0;
     m_aLayout.ColorSpace.clear();
     m_aLayout.Palette.clear();
-    m_aLayout.IsMsbFirst     = sal_False;
+    m_aLayout.IsMsbFirst     = false;
 
     if( m_pBmpAcc )
     {
@@ -142,42 +142,42 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 1;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-                m_aLayout.IsMsbFirst = sal_True;
+                m_aLayout.IsMsbFirst = true;
                 break;
 
             case BMP_FORMAT_1BIT_LSB_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 1;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-                m_aLayout.IsMsbFirst = sal_False;
+                m_aLayout.IsMsbFirst = false;
                 break;
 
             case BMP_FORMAT_4BIT_MSN_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 4;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-                m_aLayout.IsMsbFirst = sal_True;
+                m_aLayout.IsMsbFirst = true;
                 break;
 
             case BMP_FORMAT_4BIT_LSN_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 4;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-                m_aLayout.IsMsbFirst = sal_False;
+                m_aLayout.IsMsbFirst = false;
                 break;
 
             case BMP_FORMAT_8BIT_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 8;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
                 break;
 
             case BMP_FORMAT_8BIT_TC_MASK:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 8;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -187,7 +187,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 16;
                 m_nEndianness        = util::Endianness::BIG;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -197,7 +197,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 16;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -207,7 +207,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
                 setComponentInfo( 0xff0000LL,
                                   0x00ff00LL,
                                   0x0000ffLL );
@@ -217,7 +217,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
                 setComponentInfo( 0x0000ffLL,
                                   0x00ff00LL,
                                   0xff0000LL );
@@ -227,7 +227,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -238,7 +238,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
 
                 m_aComponentTags.realloc(4);
                 sal_Int8* pTags = m_aComponentTags.getArray();
@@ -266,7 +266,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
 
                 m_aComponentTags.realloc(4);
                 sal_Int8* pTags = m_aComponentTags.getArray();
@@ -294,7 +294,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
 
                 m_aComponentTags.realloc(4);
                 sal_Int8* pTags = m_aComponentTags.getArray();
@@ -322,7 +322,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
 
                 m_aComponentTags.realloc(4);
                 sal_Int8* pTags = m_aComponentTags.getArray();
@@ -349,7 +349,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = false; // doesn't matter
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -438,7 +438,7 @@ geometry::IntegerSize2D SAL_CALL VclCanvasBitmap::getSize() throw (uno::RuntimeE
     return integerSize2DFromSize( m_aBitmap.GetSizePixel() );
 }
 
-::sal_Bool SAL_CALL VclCanvasBitmap::hasAlpha() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VclCanvasBitmap::hasAlpha() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return m_aBmpEx.IsTransparent();

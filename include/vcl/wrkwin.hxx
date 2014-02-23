@@ -72,7 +72,7 @@ public:
     void            ShowFullScreenMode( bool bFullScreenMode,
                                         sal_Int32 nDisplayScreen );
     /**
-     @overload void ShowFullScreenMode(sal_Bool bFullScreenMode, sal_Int32 nDisplayScreen)
+     @overload void ShowFullScreenMode(bool bFullScreenMode, sal_Int32 nDisplayScreen)
     */
     void            ShowFullScreenMode( bool bFullScreenMode = true );
     void            EndFullScreenMode() { ShowFullScreenMode( false ); }
@@ -82,7 +82,7 @@ public:
                                            sal_uInt16 nFlags,
                                            sal_Int32  nDisplayScreen );
     /**
-     @overload void StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlags, sal_uInt32 nDisplayScreen)
+     @overload void StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, sal_uInt32 nDisplayScreen)
     */
     void            StartPresentationMode( bool   bPresentation = true,
                                            sal_uInt16 nFlags = 0 );

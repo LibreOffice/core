@@ -865,7 +865,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     {
                         pWMF->ReadUInt32( nStyle );
-                        pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? sal_True : sal_False ) );
+                        pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? true : false ) );
                     }
                 }
                 break;

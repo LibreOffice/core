@@ -136,7 +136,7 @@ void setupMethodStubs( functor_vector_type& res )
     const Wallpaper   aWallpaper( aWhiteColor );
 
     GDIMetaFile       aMtf;
-    aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),sal_True) );
+    aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),true) );
     aMtf.AddAction( new MetaRectAction(aRect) );
 
     /* void DrawTextArray( const Point& rStartPt, const OUString& rStr,

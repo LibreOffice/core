@@ -29,7 +29,7 @@
 /*
  * IsNativeControlSupported()
  *
- *  Returns sal_True if the platform supports native
+ *  Returns true if the platform supports native
  *  drawing of the control defined by nPart
  */
 bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
@@ -41,7 +41,7 @@ bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
 /*
  * HitTestNativeControl()
  *
- *  If the return value is sal_True, bIsInside contains information whether
+ *  If the return value is true, bIsInside contains information whether
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
@@ -77,8 +77,8 @@ bool SalGraphics::drawNativeControl(    ControlType,
 /*
  * GetNativeControlRegion()
  *
- *  If the return value is sal_True, rNativeBoundingRegion
- *  contains the sal_True bounding region covered by the control
+ *  If the return value is true, rNativeBoundingRegion
+ *  contains the true bounding region covered by the control
  *  including any adornment, while rNativeContentRegion contains the area
  *  within the control that can be safely drawn into without drawing over
  *  the borders of the control.

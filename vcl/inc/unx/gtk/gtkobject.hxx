@@ -51,9 +51,9 @@ public:
     virtual void                    EndSetClipRegion();
 
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( sal_Bool bVisible );
+    virtual void                    Show( bool bVisible );
 
-    virtual void                                    SetForwardKey( sal_Bool bEnable );
+    virtual void                                    SetForwardKey( bool bEnable );
 
     virtual const SystemEnvData*    GetSystemData() const;
 };

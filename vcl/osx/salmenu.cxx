@@ -205,7 +205,7 @@ static void initAppMenu()
 
 
 
-SalMenu* AquaSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
+SalMenu* AquaSalInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
 {
     initAppMenu();
 
@@ -343,7 +343,7 @@ sal_Int32 removeUnusedItemsRunner(NSMenu * pMenu)
 
 bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags)
 {
-    // do not use native popup menu when AQUA_NATIVE_MENUS is set to sal_False
+    // do not use native popup menu when AQUA_NATIVE_MENUS is set to false
     if( ! VisibleMenuBar() ) {
         return false;
     }
@@ -633,7 +633,7 @@ void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsi
     }
 }
 
-void AquaSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
+void AquaSalMenu::CheckItem( unsigned nPos, bool bCheck )
 {
     if( nPos < maItems.size() )
     {
@@ -642,7 +642,7 @@ void AquaSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
     }
 }
 
-void AquaSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
+void AquaSalMenu::EnableItem( unsigned nPos, bool bEnable )
 {
     if( nPos < maItems.size() )
     {

@@ -74,7 +74,7 @@ public:
     explicit        SpinField( Window* pParent, const ResId& );
     virtual         ~SpinField();
 
-    virtual bool    ShowDropDown( sal_Bool bShow );
+    virtual bool    ShowDropDown( bool bShow );
 
     virtual void    Up();
     virtual void    Down();

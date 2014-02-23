@@ -321,7 +321,7 @@ GenericDragSource::~GenericDragSource()
 
 sal_Bool GenericDragSource::isDragImageSupported() throw(std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 GenericDragSource::getDefaultCursor( sal_Int8 ) throw(std::exception)
@@ -337,7 +337,7 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
 {
     datatransfer::dnd::DragSourceDropEvent aEv;
     aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_COPY;
-    aEv.DropSuccess = sal_False;
+    aEv.DropSuccess = false;
     listener->dragDropEnd( aEv );
 }
 
@@ -444,7 +444,7 @@ void GenericDropTarget::removeDropTargetListener( const Reference< ::com::sun::s
 
 sal_Bool GenericDropTarget::isActive() throw(std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void GenericDropTarget::setActive( sal_Bool ) throw(std::exception)

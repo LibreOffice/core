@@ -2485,7 +2485,7 @@ void CalendarField::Select()
 
 
 
-bool CalendarField::ShowDropDown( sal_Bool bShow )
+bool CalendarField::ShowDropDown( bool bShow )
 {
     if ( bShow )
     {

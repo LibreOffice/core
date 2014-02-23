@@ -2780,9 +2780,9 @@ namespace svt { namespace table
     }
 
 
-    bool TableFunctionSet::SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor)
+    bool TableFunctionSet::SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor)
     {
-        sal_Bool bHandled = sal_False;
+        bool bHandled = false;
         // newRow is the row which includes the point, getCurRow() is the last selected row, before the mouse click
         RowPos newRow = m_pTableControl->getRowAtPoint( rPoint );
         if ( newRow == ROW_COL_HEADERS )
@@ -2799,7 +2799,7 @@ namespace svt { namespace table
         {
             if ( m_pTableControl->getSelectedRowCount() > 1 )
                 m_pTableControl->getSelEngine()->AddAlways(true);
-            bHandled = sal_True;
+            bHandled = true;
         }
         else if ( m_pTableControl->getAnchor() == m_pTableControl->getCurRow() )
         {
@@ -2829,7 +2829,7 @@ namespace svt { namespace table
                 m_pTableControl->setAnchor( m_pTableControl->getAnchor() - 1 );
             }
             m_pTableControl->invalidateSelectedRegion( m_pTableControl->getCurRow(), newRow );
-            bHandled = sal_True;
+            bHandled = true;
         }
         //no region selected
         else
@@ -2852,7 +2852,7 @@ namespace svt { namespace table
                 m_pTableControl->getSelEngine()->AddAlways(true);
 
             m_pTableControl->invalidateRow( newRow );
-            bHandled = sal_True;
+            bHandled = true;
         }
         m_pTableControl->goTo( newCol, newRow );
         return bHandled;

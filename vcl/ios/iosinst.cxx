@@ -302,10 +302,10 @@ IMPL_LINK( IosSalInstance, DisplayConfigurationChanged, void*, )
     for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
          it != getFrames().end();
          it++ ) {
-        (*it)->Show( sal_False, sal_False );
+        (*it)->Show( false, false );
         (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, 0 );
         (*it)->SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
-        (*it)->Show( sal_True, sal_False );
+        (*it)->Show( true, false );
     }
 
     touch_ui_damaged( 0, 0, viewWidth, viewHeight );

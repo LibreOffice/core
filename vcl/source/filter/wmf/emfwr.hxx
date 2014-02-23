@@ -37,7 +37,7 @@ private:
     MapMode             maDestMapMode;
     FilterConfigItem*   mpFilterConfigItem;
     SvStream& m_rStm;
-    sal_Bool*               mpHandlesUsed;
+    bool*               mpHandlesUsed;
     sal_uLong               mnHandleCount;
     sal_uLong               mnLastPercent;
     sal_uLong               mnRecordCount;

@@ -980,7 +980,7 @@ void Menu::ImplInit()
     mpSalMenu       = NULL;
     nMenuFlags      = 0;
     nDefaultItem    = 0;
-    //bIsMenuBar      = sal_False;  // this is now set in the ctor, must not be changed here!!!
+    //bIsMenuBar      = false;  // this is now set in the ctor, must not be changed here!!!
     nSelectedId     = 0;
     pItemList       = new MenuItemList;
     pLogo           = NULL;
@@ -2179,7 +2179,7 @@ bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
             bVisible = false;
         else if ( pData->eType != MENUITEM_SEPARATOR ) // separators handled above
         {
-            // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( sal_True ) );
+            // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( true ) );
             bVisible = pData->bEnabled; // do not check submenus as they might be filled at Activate().
         }
     }
@@ -3478,7 +3478,7 @@ bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId ) const
 
 
 
-// sal_Bool PopupMenu::bAnyPopupInExecute = sal_False;
+// bool PopupMenu::bAnyPopupInExecute = false;
 
 PopupMenu::PopupMenu()
 {
@@ -3505,7 +3505,7 @@ PopupMenu::~PopupMenu()
 
 bool PopupMenu::IsInExecute()
 {
-    return GetActivePopupMenu() ? sal_True : sal_False;
+    return GetActivePopupMenu() ? true : false;
 }
 
 PopupMenu* PopupMenu::GetActivePopupMenu()
@@ -4161,7 +4161,7 @@ IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd)
         {
             //DBG_ASSERT( !pActivePopup->ImplGetWindow(), "PopupEnd, obwohl pActivePopup MIT Window!" );
             KillActivePopup(); // should be ok to just remove it
-            //pActivePopup->bCanceled = sal_True;
+            //pActivePopup->bCanceled = true;
         }
         bInExecute = false;
         pMenu->bInCallback = true;
@@ -4257,7 +4257,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
             Menu* pTest = pActivePopup;
             sal_uLong nOldFlags = GetPopupModeFlags();
             SetPopupModeFlags( GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
-            sal_uInt16 nRet = pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_RIGHT, pMenu, pTimer ? sal_False : sal_True  );
+            sal_uInt16 nRet = pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_RIGHT, pMenu, pTimer ? false : true  );
             SetPopupModeFlags( nOldFlags );
 
             // nRet != 0, wenn es waerend Activate() abgeschossen wurde...
@@ -4307,7 +4307,7 @@ void MenuFloatingWindow::Execute()
     pSVData->maAppData.mpActivePopupMenu = (PopupMenu*)pMenu;
 
     bInExecute = true;
-//  bCallingSelect = sal_False;
+//  bCallingSelect = false;
 
     while ( bInExecute )
         Application::Yield();

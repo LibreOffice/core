@@ -339,14 +339,14 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 
 void ImplDrawBitmap( HDC hDC,
                      const SalTwoRect& rPosAry, const WinSalBitmap& rSalBitmap,
-                     sal_Bool bPrinter, int nDrawMode )
+                     bool bPrinter, int nDrawMode )
 {
     if( hDC )
     {
         HGLOBAL     hDrawDIB;
         HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
         WinSalBitmap*   pTmpSalBmp = NULL;
-        sal_Bool        bPrintDDB = ( bPrinter && hDrawDDB );
+        bool        bPrintDDB = ( bPrinter && hDrawDDB );
 
         if( bPrintDDB )
         {
@@ -380,7 +380,7 @@ void ImplDrawBitmap( HDC hDC,
             HDC         hBmpDC = ImplGetCachedDC( CACHED_HDC_DRAW, hDrawDDB );
             COLORREF    nOldBkColor = RGB(0xFF,0xFF,0xFF);
             COLORREF    nOldTextColor = RGB(0,0,0);
-            sal_Bool        bMono = ( rSalBitmap.GetBitCount() == 1 );
+            bool        bMono = ( rSalBitmap.GetBitCount() == 1 );
 
             if( bMono )
             {
@@ -700,7 +700,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     HDC     hDC = getHDC();
     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
     HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
-    sal_Bool    bRet;
+    bool    bRet;
 
     bRet = BitBlt( hBmpDC, 0, 0, (int) nDX, (int) nDY, hDC, (int) nX, (int) nY, SRCCOPY ) ? TRUE : FALSE;
     ImplReleaseCachedDC( CACHED_HDC_1 );

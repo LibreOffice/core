@@ -207,7 +207,7 @@ void SvpSalInstance::DestroyFrame( SalFrame* pFrame )
     delete pFrame;
 }
 
-SalObject* SvpSalInstance::CreateObject( SalFrame*, SystemWindowData*, sal_Bool )
+SalObject* SvpSalInstance::CreateObject( SalFrame*, SystemWindowData*, bool )
 {
     return new SvpSalObject();
 }

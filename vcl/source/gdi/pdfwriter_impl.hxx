@@ -1147,7 +1147,7 @@ public:
     void setTextFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( rColor );
-        m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) ? sal_True : sal_False );
+        m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) ? true : false );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
     void setTextFillColor()

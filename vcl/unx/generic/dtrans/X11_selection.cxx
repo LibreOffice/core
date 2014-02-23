@@ -1791,12 +1791,12 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         if( aNotify.xselection.property != None )
         {
             dsde.DropAction         = DNDConstants::ACTION_COPY;
-            dsde.DropSuccess        = sal_True;
+            dsde.DropSuccess        = true;
         }
         else
         {
             dsde.DropAction         = DNDConstants::ACTION_NONE;
-            dsde.DropSuccess        = sal_False;
+            dsde.DropSuccess        = false;
         }
         css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         m_xDragSourceListener.clear();
@@ -2729,7 +2729,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
-            dsde.DropSuccess        = sal_False;
+            dsde.DropSuccess        = false;
             css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
             aGuard.clear();
@@ -2870,7 +2870,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
-            dsde.DropSuccess        = sal_False;
+            dsde.DropSuccess        = false;
             css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
             aGuard.clear();
@@ -2921,7 +2921,7 @@ void SelectionManager::reject( XLIB_Window aDropWindow, XLIB_Time )
             dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
-            dsde.DropSuccess        = sal_False;
+            dsde.DropSuccess        = false;
             m_xDragSourceListener->dragDropEnd( dsde );
             m_xDragSourceListener.clear();
         }
@@ -2934,7 +2934,7 @@ void SelectionManager::reject( XLIB_Window aDropWindow, XLIB_Time )
 
 sal_Bool SelectionManager::isDragImageSupported() throw(std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -3201,7 +3201,7 @@ void SelectionManager::startDrag(
     aDragFailedEvent.DragSource         = static_cast< XDragSource* >(this);
     aDragFailedEvent.DragSourceContext  = new DragSourceContext( None, CurrentTime, *this );
     aDragFailedEvent.DropAction         = DNDConstants::ACTION_NONE;
-    aDragFailedEvent.DropSuccess        = sal_False;
+    aDragFailedEvent.DropSuccess        = false;
 
     if( m_aDragRunning.check() )
     {
@@ -3483,7 +3483,7 @@ void SelectionManager::dragDoDispatch()
         dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
         dsde.DragSource         = static_cast< XDragSource* >(this);
         dsde.DropAction         = DNDConstants::ACTION_NONE;
-        dsde.DropSuccess        = sal_False;
+        dsde.DropSuccess        = false;
 
         // cleanup after drag
         if( m_bWaitingForPrimaryConversion )
@@ -3889,7 +3889,7 @@ sal_Bool SelectionManager::handleEvent( const Any& event ) throw(std::exception)
         #endif
         shutdown();
     }
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL SelectionManager::disposing( const ::com::sun::star::lang::EventObject& rEvt )
@@ -4038,7 +4038,7 @@ void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
         dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
         dsde.DragSource         = static_cast< XDragSource* >(this);
         dsde.DropAction         = DNDConstants::ACTION_NONE;
-        dsde.DropSuccess        = sal_False;
+        dsde.DropSuccess        = false;
         css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         m_xDragSourceListener.clear();
         aGuard.clear();
@@ -4123,7 +4123,7 @@ void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) thro
 
 sal_Bool SelectionManagerHolder::isDragImageSupported() throw(std::exception)
 {
-    return m_xRealDragSource.is() ? m_xRealDragSource->isDragImageSupported() : sal_False;
+    return m_xRealDragSource.is() ? m_xRealDragSource->isDragImageSupported() : false;
 }
 
 

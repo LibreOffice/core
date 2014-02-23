@@ -43,7 +43,7 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( "types.rdb", "applicat.rdb", sal_True );
+    xMS = cppu::createRegistryServiceFactory( "types.rdb", "applicat.rdb", true );
 
     comphelper::setProcessServiceFactory( xMS );
 

@@ -71,7 +71,7 @@ static void expandexpanders(GtkContainer *pWidget)
         if (GTK_IS_CONTAINER(GTK_WIDGET(p->data)))
             expandexpanders(GTK_CONTAINER(GTK_WIDGET(p->data)));
         if (GTK_IS_EXPANDER(GTK_WIDGET(p->data)))
-            gtk_expander_set_expanded(GTK_EXPANDER(GTK_WIDGET(p->data)), sal_True);
+            gtk_expander_set_expanded(GTK_EXPANDER(GTK_WIDGET(p->data)), true);
     }
     g_list_free(pChildren);
 }
@@ -142,18 +142,18 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 
 #if ENABLE_GNOME_VFS || ENABLE_GIO
-    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
+    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), false );
 #endif
-    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
+    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), false );
 
-    m_pVBox = gtk_vbox_new( sal_False, 0 );
+    m_pVBox = gtk_vbox_new( false, 0 );
 
     // We don't want clickable items to have a huge hit-area
-    GtkWidget *pHBox = gtk_hbox_new( sal_False, 0 );
-    GtkWidget *pThinVBox = gtk_vbox_new( sal_False, 0 );
+    GtkWidget *pHBox = gtk_hbox_new( false, 0 );
+    GtkWidget *pThinVBox = gtk_vbox_new( false, 0 );
 
-    gtk_box_pack_end (GTK_BOX( m_pVBox ), pHBox, sal_False, sal_False, 0);
-    gtk_box_pack_start (GTK_BOX( pHBox ), pThinVBox, sal_False, sal_False, 0);
+    gtk_box_pack_end (GTK_BOX( m_pVBox ), pHBox, false, false, 0);
+    gtk_box_pack_start (GTK_BOX( pHBox ), pThinVBox, false, false, 0);
     gtk_widget_show( pHBox );
     gtk_widget_show( pThinVBox );
 
@@ -183,12 +183,12 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
                 break;
         }
 
-        gtk_box_pack_end( GTK_BOX( pThinVBox ), m_pToggles[i], sal_False, sal_False, 0 );
+        gtk_box_pack_end( GTK_BOX( pThinVBox ), m_pToggles[i], false, false, 0 );
     }
 
     for( i = 0; i < LIST_LAST; i++ )
     {
-        m_pHBoxs[i] = gtk_hbox_new( sal_False, 0 );
+        m_pHBoxs[i] = gtk_hbox_new( false, 0 );
 
         m_pAligns[i] = gtk_alignment_new(0, 0, 0, 1);
 
@@ -220,18 +220,18 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         }
 
         gtk_container_add( GTK_CONTAINER( m_pAligns[i]), m_pLists[i] );
-        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pAligns[i], sal_False, sal_False, 0 );
+        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pAligns[i], false, false, 0 );
 
-        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], sal_False, sal_False, 0 );
+        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], false, false, 0 );
 
-        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pHBoxs[i], sal_False, sal_False, 0 );
+        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pHBoxs[i], false, false, 0 );
     }
 
     aLabel = getResString( FILE_PICKER_FILE_TYPE );
     m_pFilterExpander = gtk_expander_new_with_mnemonic(
         OUStringToOString( aLabel, RTL_TEXTENCODING_UTF8 ).getStr());
 
-    gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pFilterExpander, sal_False, sal_True, 0 );
+    gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pFilterExpander, false, true, 0 );
 
     GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -249,11 +249,11 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         case 0:
             break;
         case 1:
-            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), sal_True);
+            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), true);
             break;
         case 2:
             expandexpanders(GTK_CONTAINER(m_pDialog));
-            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), sal_True);
+            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), true);
             break;
     }
 
@@ -270,8 +270,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     {
         column = gtk_tree_view_column_new ();
         cell = gtk_cell_renderer_text_new ();
-        gtk_tree_view_column_set_expand (column, sal_True);
-        gtk_tree_view_column_pack_start (column, cell, sal_False);
+        gtk_tree_view_column_set_expand (column, true);
+        gtk_tree_view_column_pack_start (column, cell, false);
         gtk_tree_view_column_set_attributes (column, cell, "text", i, (char *)NULL);
         gtk_tree_view_append_column (GTK_TREE_VIEW(m_pFilterView), column);
     }
@@ -1399,12 +1399,12 @@ throw( uno::RuntimeException, std::exception )
         if( bEnable )
         {
             OSL_TRACE( "enable" );
-            gtk_widget_set_sensitive( pWidget, sal_True );
+            gtk_widget_set_sensitive( pWidget, true );
         }
         else
         {
             OSL_TRACE( "disable" );
-            gtk_widget_set_sensitive( pWidget, sal_False );
+            gtk_widget_set_sensitive( pWidget, false );
         }
     }
     else
@@ -1443,7 +1443,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
     }
     else if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         g_object_set( pWidget, "label", aTxt.getStr(),
-                      "use_underline", sal_True, (char *)NULL );
+                      "use_underline", true, (char *)NULL );
     else
         OSL_TRACE("Can't set label on list");
 }
@@ -1586,7 +1586,7 @@ void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFi
     GtkWidget *preview;
     char *filename;
     GdkPixbuf *pixbuf;
-    gboolean have_preview = sal_False;
+    gboolean have_preview = false;
 
     preview = pobjFP->m_pPreview;
     filename = gtk_file_chooser_get_preview_filename( file_chooser );
@@ -1865,22 +1865,22 @@ extern "C"
 static gboolean
 case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 {
-    gboolean bRetval = sal_False;
+    gboolean bRetval = false;
     const char *pFilter = (const char *) data;
 
-    g_return_val_if_fail( data != NULL, sal_False );
-    g_return_val_if_fail( filter_info != NULL, sal_False );
+    g_return_val_if_fail( data != NULL, false );
+    g_return_val_if_fail( filter_info != NULL, false );
 
     if( !filter_info->uri )
-        return sal_False;
+        return false;
 
     const char *pExtn = strrchr( filter_info->uri, '.' );
     if( !pExtn )
-        return sal_False;
+        return false;
     pExtn++;
 
     if( !g_ascii_strcasecmp( pFilter, pExtn ) )
-        bRetval = sal_True;
+        bRetval = true;
 
     SAL_INFO( "vcl.gtk", "'" << filter_info->uri << "' match extn '" << pExtn << "' vs '" << pFilter << "' yeilds " << bRetval );
 
