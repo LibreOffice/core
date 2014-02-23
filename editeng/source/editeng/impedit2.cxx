@@ -3021,9 +3021,10 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, sal_Bool bSmart )
                 nPortion++;
                 pPortion = GetParaPortions().SafeGetObject( nPortion );
             }
-            OSL_ENSURE( pPortion, "No visible paragraph found: GetPaM" );
-            aPaM = GetPaM( pPortion, aDocPos, bSmart );
-            return aPaM;
+            assert(pPortion); //No visible paragraph found: GetPaM
+            if (!pPortion)
+                return aPaM;
+            return GetPaM(pPortion, aDocPos, bSmart);
 
         }
     }
