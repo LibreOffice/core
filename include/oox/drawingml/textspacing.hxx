@@ -24,6 +24,7 @@
 
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 namespace oox { namespace drawingml {
 
@@ -53,7 +54,7 @@ namespace oox { namespace drawingml {
         sal_Int32 toMargin( float fFontSize ) const
             {
                 if ( nUnit == PERCENT )
-                    return (sal_Int32) ((((fFontSize*nValue)/1000)*254 + 360)/720);
+                    return GetTextSpacingPoint(static_cast<sal_Int32>((fFontSize*nValue)/1000));
                 else
                     return nValue;
             }
