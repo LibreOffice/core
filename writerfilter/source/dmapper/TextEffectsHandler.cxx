@@ -161,6 +161,9 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
             maElementName = "shadow";
             break;
         case NS_ooxml::LN_reflection_reflection:
+            maPropertyId = PROP_CHAR_REFLECTION_TEXT_EFFECT;
+            maElementName = "reflection";
+            break;
         case NS_ooxml::LN_textOutline_textOutline:
         case NS_ooxml::LN_textFill_textFill:
         case NS_ooxml::LN_scene3d_scene3d:
@@ -224,27 +227,50 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
             }
             break;
         case NS_ooxml::LN_CT_Shadow_blurRad:
+        case NS_ooxml::LN_CT_Reflection_blurRad:
             mpGrabBagStack->addInt32("blurRad", sal_Int32(aValue.getInt()));
             break;
+        case NS_ooxml::LN_CT_Reflection_stA:
+            mpGrabBagStack->addInt32("stA", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_Reflection_stPos:
+            mpGrabBagStack->addInt32("stPos", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_Reflection_endA:
+            mpGrabBagStack->addInt32("endA", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_Reflection_endPos:
+            mpGrabBagStack->addInt32("endPos", sal_Int32(aValue.getInt()));
+            break;
         case NS_ooxml::LN_CT_Shadow_dist:
+        case NS_ooxml::LN_CT_Reflection_dist:
             mpGrabBagStack->addInt32("dist", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_dir:
+        case NS_ooxml::LN_CT_Reflection_dir:
             mpGrabBagStack->addInt32("dir", sal_Int32(aValue.getInt()));
             break;
+        case NS_ooxml::LN_CT_Reflection_fadeDir:
+            mpGrabBagStack->addInt32("fadeDir", sal_Int32(aValue.getInt()));
+            break;
         case NS_ooxml::LN_CT_Shadow_sx:
+        case NS_ooxml::LN_CT_Reflection_sx:
             mpGrabBagStack->addInt32("sx", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_sy:
+        case NS_ooxml::LN_CT_Reflection_sy:
             mpGrabBagStack->addInt32("sy", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_kx:
+        case NS_ooxml::LN_CT_Reflection_kx:
             mpGrabBagStack->addInt32("kx", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_ky:
+        case NS_ooxml::LN_CT_Reflection_ky:
             mpGrabBagStack->addInt32("ky", sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_algn:
+        case NS_ooxml::LN_CT_Reflection_algn:
             {
                 uno::Any aAny = makeAny(getRectAlignmentString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement("algn", aAny);
