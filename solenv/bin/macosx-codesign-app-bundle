@@ -39,7 +39,7 @@ find "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.dylib.*' -or -name '*.so' \
         -or -name '*.jar' -or -name '*.jnilib' -or -name 'LICENSE' -or -name 'LICENSE.html' \
         -or -name '*.applescript' \) ! -type l | grep -v "LibreOfficePython\.framework" |
 while read dylib; do
-    id=`basename "$dylib"`
+    id=`echo ${dylib#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
     codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$dylib"
 done
 
