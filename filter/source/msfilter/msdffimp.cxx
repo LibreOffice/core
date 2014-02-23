@@ -6116,7 +6116,7 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
 
         // restore old alte FilePos of the stream(s)
         rStCtrl.Seek( nOldPosCtrl );
-        if( &rStCtrl != pStData )
+        if( &rStCtrl != pStData && pStData )
             pStData->Seek( nOldPosData );
         return ( 0 != rpShape );
     }
