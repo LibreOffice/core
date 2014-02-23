@@ -3063,7 +3063,7 @@ const char* getErrorBarStyle(sal_Int32 nErrorBarStyle)
         default:
             assert(false); // can't happen
     }
-    return "";
+    return NULL;
 }
 
 Reference< chart2::data::XDataSequence>  getLabeledSequence(
@@ -3100,6 +3100,12 @@ Reference< chart2::data::XDataSequence>  getLabeledSequence(
 
 void ChartExport::exportErrorBar(Reference< XPropertySet> xErrorBarProps, bool bYError)
 {
+    sal_Int32 nErrorBarStyle = cssc::ErrorBarStyle::NONE;
+    xErrorBarProps->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle;
+    const char* pErrorBarStyle = getErrorBarStyle(nErrorBarStyle);
+    if(!pErrorBarStyle)
+        return;
+
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_errBars ),
             FSEND );
@@ -3125,10 +3131,6 @@ void ChartExport::exportErrorBar(Reference< XPropertySet> xErrorBarProps, bool b
     pFS->singleElement( FSNS( XML_c, XML_errBarType ),
             XML_val, pErrBarType,
             FSEND );
-
-    sal_Int32 nErrorBarStyle = cssc::ErrorBarStyle::NONE;
-    xErrorBarProps->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle;
-    const char* pErrorBarStyle = getErrorBarStyle(nErrorBarStyle);
     pFS->singleElement( FSNS( XML_c, XML_errValType ),
             XML_val, pErrorBarStyle,
             FSEND );
