@@ -136,7 +136,9 @@ public:
     virtual void SAL_CALL rehearseTimings(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XPresentation2
-    virtual void SAL_CALL startWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL startWithArguments(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual ::sal_Bool SAL_CALL isRunning(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > SAL_CALL getController(  ) throw (::com::sun::star::uno::RuntimeException);
 

@@ -834,7 +834,8 @@ void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException)
 // XPresentation2
 
 
-void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rArguments ) throw (RuntimeException)
+void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rArguments)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ThrowIfDisposed();
