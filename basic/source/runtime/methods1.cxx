@@ -982,7 +982,7 @@ RTLFUNC(FindPropertyObject)
 static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                                       sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
 {
-    sal_uIntPtr nFPos = pStrm->Tell();
+    size_t nFPos = pStrm->Tell();
 
     sal_Bool bIsVariant = !rVar.IsFixed();
     SbxDataType eType = rVar.GetType();
@@ -1089,7 +1089,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
     double aDouble;
 
-    sal_uIntPtr nFPos = pStrm->Tell();
+    size_t nFPos = pStrm->Tell();
 
     sal_Bool bIsVariant = !rVar.IsFixed();
     SbxDataType eVarType = rVar.GetType();
@@ -1259,7 +1259,7 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
 
     if( bHasRecordNo )
     {
-        sal_uIntPtr nFilePos = bRandom ? (sal_uIntPtr)(nBlockLen*nRecordNo) : (sal_uIntPtr)nRecordNo;
+        size_t nFilePos = bRandom ? (size_t)(nBlockLen * nRecordNo) : (size_t)nRecordNo;
         pStrm->Seek( nFilePos );
     }
 
@@ -1275,7 +1275,7 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
 
     if( pArr )
     {
-        sal_uIntPtr nFPos = pStrm->Tell();
+        size_t nFPos = pStrm->Tell();
         short nDims = pArr->GetDims();
         short* pDims = new short[ nDims ];
         bRet = lcl_WriteReadSbxArray(*pArr,pStrm,!bRandom,nDims,pDims,bPut);

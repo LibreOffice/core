@@ -79,13 +79,13 @@ SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
 {
     sal_uInt32 nSize = 0;
-    sal_uLong nActRead = 0;
+    size_t nActRead = 0;
     sal_Char cTmpBuf[MAX_BUF];
     SvMemoryStream aNewStream;
     rStream.ReadUInt32( nSize );
 
     do {
-        sal_uLong nToRead;
+        size_t nToRead;
         if( (nSize - nActRead) > MAX_BUF )
             nToRead = MAX_BUF;
         else
@@ -148,7 +148,7 @@ bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) c
         else
             return false;
 
-        sal_uLong nRead = 0;
+        size_t nRead = 0;
         com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
 
         _xVal->ReadAt( 0, aSeq.getArray(), nLen, &nRead );

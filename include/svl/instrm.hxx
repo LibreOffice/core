@@ -39,19 +39,19 @@ class SVL_DLLPUBLIC SvInputStream: public SvStream
     com::sun::star::uno::Reference< com::sun::star::io::XSeekable >
         m_xSeekable;
     SvDataPipe_Impl * m_pPipe;
-    sal_uLong m_nSeekedFrom;
+    size_t m_nSeekedFrom;
 
     SVL_DLLPRIVATE bool open();
 
-    SVL_DLLPRIVATE virtual sal_uLong GetData(void * pData, sal_uLong nSize);
+    SVL_DLLPRIVATE virtual size_t GetData(void * pData, size_t nSize);
 
-    SVL_DLLPRIVATE virtual sal_uLong PutData(void const *, sal_uLong);
+    SVL_DLLPRIVATE virtual size_t PutData(void const *, size_t);
 
-    SVL_DLLPRIVATE virtual sal_uLong SeekPos(sal_uLong nPos);
+    SVL_DLLPRIVATE virtual size_t SeekPos(size_t nPos);
 
     SVL_DLLPRIVATE virtual void FlushData();
 
-    SVL_DLLPRIVATE virtual void SetSize(sal_uLong);
+    SVL_DLLPRIVATE virtual void SetSize(size_t);
 
 public:
     SvInputStream(

@@ -28,9 +28,9 @@
 class StgInternalStream : public SvStream
 {
     BaseStorageStream* pStrm;
-    virtual sal_uLong GetData( void* pData, sal_uLong nSize );
-    virtual sal_uLong PutData( const void* pData, sal_uLong nSize );
-    virtual sal_uLong SeekPos( sal_uLong nPos );
+    virtual size_t GetData( void* pData, size_t nSize );
+    virtual size_t PutData( const void* pData, size_t nSize );
+    virtual size_t SeekPos( size_t nPos );
     virtual void      FlushData();
 public:
     StgInternalStream( BaseStorage&, const OUString&, bool );

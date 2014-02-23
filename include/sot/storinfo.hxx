@@ -31,14 +31,14 @@ class SvStorageInfo
 friend class SvStorage;
     OUString        aName;
     SvGlobalName    aClassName;
-    sal_uLong       nSize;
+    size_t          nSize;
     bool            bStream;
     bool            bStorage;
 
                             SvStorageInfo(){}; // Fuer SvStorage
 public:
                             SvStorageInfo( const StgDirEntry& );
-                            SvStorageInfo( const OUString& rName, sal_uLong nSz, bool bIsStorage )
+                            SvStorageInfo( const OUString& rName, size_t nSz, bool bIsStorage )
                                 : aName( rName )
                                 , nSize( nSz )
                                 , bStream( !bIsStorage )
@@ -49,7 +49,7 @@ public:
     const OUString &        GetName() const { return aName; }
     bool                    IsStream() const { return bStream; }
     bool                    IsStorage() const { return bStorage; }
-    sal_uLong               GetSize() const { return nSize;      }
+    size_t                  GetSize() const { return nSize;      }
 };
 
 typedef ::std::vector< SvStorageInfo > SvStorageInfoList;

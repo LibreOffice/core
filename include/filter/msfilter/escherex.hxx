@@ -1647,7 +1647,7 @@ public:
     void            SetEditAs( OUString rEditAs );
     rtl::OUString   GetEditAs() { return mEditAs; }
     SvStream&       GetStream() const   { return *mpOutStrm; }
-    sal_uLong       GetStreamPos() const    { return mpOutStrm->Tell(); }
+    size_t         GetStreamPos() const    { return mpOutStrm->Tell(); }
 
                 // features during the creation of the following Containers:
                 //
