@@ -150,10 +150,10 @@ namespace pcr
         if ( m_pControlWindow )
             m_pControlWindow->SetZOrder( (Window*)&m_aFtTitle, WINDOW_ZORDER_BEHIND );
 
-        if ( m_pBrowseButton )
+        if ( m_pBrowseButton && m_pControlWindow )
             m_pBrowseButton->SetZOrder( m_pControlWindow, WINDOW_ZORDER_BEHIND );
 
-        if ( m_pAdditionalBrowseButton )
+        if ( m_pAdditionalBrowseButton && m_pBrowseButton )
             m_pAdditionalBrowseButton->SetZOrder( m_pBrowseButton, WINDOW_ZORDER_BEHIND );
     }
 
