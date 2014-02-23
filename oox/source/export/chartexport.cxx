@@ -1758,16 +1758,20 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
 
                     exportTrendlines( aSeriesSeq[nSeriesIdx] );
 
-                    //export error bars here
-                    Reference< XPropertySet > xSeriesPropSet( xSource, uno::UNO_QUERY );
-                    Reference< XPropertySet > xErrorBarYProps;
-                    xSeriesPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
-                    if(xErrorBarYProps.is())
-                        exportErrorBar(xErrorBarYProps, true);
-                    Reference< XPropertySet > xErrorBarXProps;
-                    xSeriesPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarXProps;
-                    if(xErrorBarXProps.is())
-                        exportErrorBar(xErrorBarXProps, false);
+                    if( eChartType != chart::TYPEID_PIE &&
+                            eChartType != chart::TYPEID_RADARLINE )
+                    {
+                        //export error bars here
+                        Reference< XPropertySet > xSeriesPropSet( xSource, uno::UNO_QUERY );
+                        Reference< XPropertySet > xErrorBarYProps;
+                        xSeriesPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+                        if(xErrorBarYProps.is())
+                            exportErrorBar(xErrorBarYProps, true);
+                        Reference< XPropertySet > xErrorBarXProps;
+                        xSeriesPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarXProps;
+                        if(xErrorBarXProps.is())
+                            exportErrorBar(xErrorBarXProps, false);
+                    }
 
                     // export categories
                     if( eChartType != chart::TYPEID_SCATTER && mxCategoriesValues.is() )
