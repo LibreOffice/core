@@ -1290,8 +1290,6 @@ const char* getSourceString(GLenum source)
     return "unknown";
 }
 
-#if 0
-
 const char* getTypeString(GLenum type)
 {
     switch(type)
@@ -1319,8 +1317,6 @@ const char* getTypeString(GLenum type)
     return "unkown";
 }
 
-#endif
-
 extern "C" void
 #if defined _WIN32
 APIENTRY
@@ -1329,7 +1325,7 @@ debug_callback(GLenum source, GLenum type, GLuint id,
         GLenum severity, GLsizei , const GLchar* message, GLvoid* )
 {
     SAL_WARN("chart2.opengl", "OpenGL debug message: source: " << getSourceString(source) << ", type: "
-            << type << ", id: " << id << ", severity: " << getSeverityString(severity) << " with message: " << message);
+            << getTypeString(type) << ", id: " << id << ", severity: " << getSeverityString(severity) << " with message: " << message);
 }
 
 }
