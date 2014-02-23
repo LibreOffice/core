@@ -5568,6 +5568,10 @@
         </optional>
       </define>
 
+      <define name="CT_TextOutlineEffect">
+        <empty/>
+      </define>
+
       <define name="glow">
         <element name="glow">
           <ref name="CT_Glow"/>
@@ -5588,7 +5592,7 @@
 
       <define name="textOutline">
         <element name="textOutline">
-          <empty/>
+          <ref name="CT_TextOutlineEffect"/>
         </element>
       </define>
 
@@ -17403,7 +17407,7 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <optional>
+        <!--<optional>
           <element name="w14:reflection">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -17452,7 +17456,7 @@
           <element name="w14:cntxtAlts">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
-        </optional>
+        </optional>-->
       </define>
       <define name="EG_RPrContent">
         <optional>
@@ -23422,7 +23426,7 @@
       <element name="oMath" tokenid="ooxml:EG_RPrBase_oMath"/>
       <element name="w14:glow" tokenid="ooxml:EG_RPrBase_w14_glow"/>
       <element name="w14:shadow" tokenid="ooxml:EG_RPrBase_w14_shadow"/>
-      <element name="w14:reflection" tokenid="ooxml:EG_RPrBase_w14_reflection"/>
+      <!--<element name="w14:reflection" tokenid="ooxml:EG_RPrBase_w14_reflection"/>
       <element name="w14:textOutline" tokenid="ooxml:EG_RPrBase_w14_textOutline"/>
       <element name="w14:textFill" tokenid="ooxml:EG_RPrBase_w14_textFill"/>
       <element name="w14:scene3d" tokenid="ooxml:EG_RPrBase_w14_scene3d"/>
@@ -23431,7 +23435,7 @@
       <element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
       <element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
       <element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
-      <element name="w14:cntxtAlts" tokenid="ooxml:EG_RPrBase_w14_cntxtAlts"/>
+      <element name="w14:cntxtAlts" tokenid="ooxml:EG_RPrBase_w14_cntxtAlts"/>-->
     </resource>
     <resource name="EG_RPrContent" resource="Properties" tag="character">
       <element name="rPrChange" tokenid="ooxml:EG_RPrContent_rPrChange"/>
