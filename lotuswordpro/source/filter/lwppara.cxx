@@ -685,7 +685,7 @@ void LwpPara::RegisterStyle()
                             }
                         }
 
-                        if (pPara && pPara->GetPrevious())
+                        if (pPara->GetPrevious())
                             pPrePara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj(VO_PARA));
                         else
                             pPrePara=NULL;
