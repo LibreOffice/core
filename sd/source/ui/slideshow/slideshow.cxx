@@ -678,7 +678,8 @@ WorkWindow *SlideShow::GetWorkWindow()
     return dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
 }
 
-void SAL_CALL SlideShow::end() throw(RuntimeException)
+void SAL_CALL SlideShow::end()
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

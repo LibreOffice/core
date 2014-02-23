@@ -132,7 +132,9 @@ public:
 
     // XPresentation
     virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL end(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL end()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL rehearseTimings(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XPresentation2
