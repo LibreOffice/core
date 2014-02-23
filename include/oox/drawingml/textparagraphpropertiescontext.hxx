@@ -43,8 +43,6 @@ public:
 protected:
     TextParagraphProperties& mrTextParagraphProperties;
     TextSpacing     maLineSpacing;
-    TextSpacing&    mrSpaceBefore;
-    TextSpacing&    mrSpaceAfter;
     BulletList&     mrBulletList;
     ::std::list< ::com::sun::star::style::TabStop >  maTabList;
     ::boost::shared_ptr< BlipFillProperties > mxBlipProps;

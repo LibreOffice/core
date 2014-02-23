@@ -47,8 +47,6 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
                                                                 TextParagraphProperties& rTextParagraphProperties )
 : ContextHandler2( rParent )
 , mrTextParagraphProperties( rTextParagraphProperties )
-, mrSpaceBefore( rTextParagraphProperties.getParaTopMargin() )
-, mrSpaceAfter( rTextParagraphProperties.getParaBottomMargin() )
 , mrBulletList( rTextParagraphProperties.getBulletList() )
 {
     OUString sValue;
@@ -171,9 +169,9 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( lnSpc ):          // CT_TextSpacing
             return new TextSpacingContext( *this, maLineSpacing );
         case A_TOKEN( spcBef ):         // CT_TextSpacing
-            return new TextSpacingContext( *this, mrSpaceBefore );
+            return new TextSpacingContext( *this, mrTextParagraphProperties.getParaTopMargin() );
         case A_TOKEN( spcAft ):         // CT_TextSpacing
-            return new TextSpacingContext( *this, mrSpaceAfter );
+            return new TextSpacingContext( *this, mrTextParagraphProperties.getParaBottomMargin() );
         // EG_TextBulletColor
         case A_TOKEN( buClrTx ):        // CT_TextBulletColorFollowText ???
             mrBulletList.mbBulletColorFollowText <<= sal_True;
