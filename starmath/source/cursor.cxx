@@ -882,7 +882,7 @@ bool SmCursor::InsertRow() {
         }
     }
     //If we're in the context of a matrix
-    else if(pMatrix) {
+    else {
         //Find position after insert and patch the list
         PosAfterInsert = PatchLineList(pLineList, it);
         //Move other children
@@ -898,8 +898,7 @@ bool SmCursor::InsertRow() {
             pMatrix->SetSubNode(i, pNewLine);
         }
         pMatrix->SetRowCol(rows + 1, cols);
-    } else
-        SAL_WARN("starmath", "We must be either the context of a table or matrix!");
+    }
 
     //Finish editing
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
