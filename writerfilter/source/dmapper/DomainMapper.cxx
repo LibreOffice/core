@@ -2348,15 +2348,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_stylisticSets_stylisticSets:
     case NS_ooxml::LN_cntxtAlts_cntxtAlts:
     {
-        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if( pProperties.get())
+        TextEffectsHandlerPtr pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
+        boost::optional<PropertyIds> aPropertyId = pTextEffectsHandlerPtr->getGrabBagPropertyId();
+        if(aPropertyId)
         {
-            TextEffectsHandlerPtr pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
-            boost::optional<PropertyIds> aPropertyId = pTextEffectsHandlerPtr->getGrabBagPropertyId();
-
-            if(aPropertyId)
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get())
             {
                 pProperties->resolve(*pTextEffectsHandlerPtr);
+
                 rContext->Insert(*aPropertyId, uno::makeAny(pTextEffectsHandlerPtr->getInteropGrabBag()), true, CHAR_GRAB_BAG);
             }
         }
