@@ -261,7 +261,7 @@ unoidl::detail::SourceProviderEntity * findEntity_(
     assert(name != 0);
     OUString n;
     if (!name->startsWith(".", &n)) {
-        for (std::vector<OUString>::const_reverse_iterator i(data->modules.rbegin());
+        for (std::vector<OUString>::reverse_iterator i(data->modules.rbegin());
              i != data->modules.rend(); ++i)
         {
             n = *i + "." + *name;
