@@ -23116,10 +23116,10 @@
       <element name="bCs" tokenid="ooxml:EG_RPrBase_bCs"/>
       <element name="i" tokenid="ooxml:EG_RPrBase_i"/>
       <element name="iCs" tokenid="ooxml:EG_RPrBase_iCs"/>
-      <element name="caps" tokenid="sprm:CFCaps"/>
-      <element name="smallCaps" tokenid="sprm:CFSmallCaps"/>
-      <element name="strike" tokenid="sprm:CFStrike"/>
-      <element name="dstrike" tokenid="sprm:CFDStrike"/>
+      <element name="caps" tokenid="ooxml:EG_RPrBase_caps"/>
+      <element name="smallCaps" tokenid="ooxml:EG_RPrBase_smallCaps"/>
+      <element name="strike" tokenid="ooxml:EG_RPrBase_strike"/>
+      <element name="dstrike" tokenid="ooxml:EG_RPrBase_dstrike"/>
       <element name="outline" tokenid="sprm:CFOutline"/>
       <element name="shadow" tokenid="sprm:CFShadow"/>
       <element name="emboss" tokenid="sprm:CFEmboss"/>

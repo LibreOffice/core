@@ -1312,13 +1312,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_EG_RPrBase_bCs:
     case NS_ooxml::LN_EG_RPrBase_i:
     case NS_ooxml::LN_EG_RPrBase_iCs:
-    case NS_sprm::LN_CFStrike: //sprmCFStrike
+    case NS_ooxml::LN_EG_RPrBase_strike:
+    case NS_ooxml::LN_EG_RPrBase_dstrike:
     case NS_sprm::LN_CFOutline: //sprmCFOutline
     case NS_sprm::LN_CFShadow: //sprmCFShadow
-    case NS_sprm::LN_CFSmallCaps: //sprmCFSmallCaps
-    case NS_sprm::LN_CFCaps: //sprmCFCaps
+    case NS_ooxml::LN_EG_RPrBase_caps:
+    case NS_ooxml::LN_EG_RPrBase_smallCaps:
     case NS_sprm::LN_CFVanish: //sprmCFVanish
-    case NS_sprm::LN_CFDStrike:   // sprmCFDStrike
         {
             PropertyIds ePropertyId = PROP_CHAR_WEIGHT; //initialized to prevent warning!
             switch( nSprmId )
@@ -1331,8 +1331,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             case NS_ooxml::LN_EG_RPrBase_iCs:
                 ePropertyId = nSprmId == NS_ooxml::LN_EG_RPrBase_i ? PROP_CHAR_POSTURE : PROP_CHAR_POSTURE_COMPLEX;
                 break;
-            case NS_sprm::LN_CFStrike: /*sprmCFStrike*/
-            case NS_sprm::LN_CFDStrike : /*sprmCFDStrike double strike through*/
+            case NS_ooxml::LN_EG_RPrBase_strike:
+            case NS_ooxml::LN_EG_RPrBase_dstrike:
                 ePropertyId = PROP_CHAR_STRIKEOUT;
                 break;
             case NS_sprm::LN_CFOutline: /*sprmCFOutline*/
@@ -1341,8 +1341,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             case NS_sprm::LN_CFShadow: /*sprmCFShadow*/
                 ePropertyId = PROP_CHAR_SHADOWED;
                 break;
-            case NS_sprm::LN_CFSmallCaps: /*sprmCFSmallCaps*/
-            case NS_sprm::LN_CFCaps: /*sprmCFCaps*/
+            case NS_ooxml::LN_EG_RPrBase_caps:
+            case NS_ooxml::LN_EG_RPrBase_smallCaps:
                 ePropertyId = PROP_CHAR_CASE_MAP;
                 break;
             case NS_sprm::LN_CFVanish: /*sprmCFVanish*/
@@ -1416,11 +1416,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "i", OUString::number(nIntValue));
                     }
                     break;
-                    case NS_sprm::LN_CFStrike: /*sprmCFStrike*/
+                    case NS_ooxml::LN_EG_RPrBase_strike:
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
                     break;
-                    case NS_sprm::LN_CFDStrike : /*sprmCFDStrike double strike through*/
+                    case NS_ooxml::LN_EG_RPrBase_dstrike:
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? awt::FontStrikeout::DOUBLE : awt::FontStrikeout::NONE ) );
                     break;
@@ -1429,13 +1429,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     case NS_sprm::LN_CFVanish: /*sprmCFVanish*/
                         rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? true : false ));
                     break;
-                    case NS_sprm::LN_CFSmallCaps: /*sprmCFSmallCaps*/
+                    case NS_ooxml::LN_EG_RPrBase_smallCaps:
                         // If smallcaps would be just disabled and an other casemap is already inserted, don't do anything.
                         if (nIntValue || rContext->find(ePropertyId) == rContext->end())
                             rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? style::CaseMap::SMALLCAPS : style::CaseMap::NONE));
                         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "smallCaps", OUString::number(nIntValue));
                     break;
-                    case NS_sprm::LN_CFCaps: /*sprmCFCaps*/
+                    case NS_ooxml::LN_EG_RPrBase_caps:
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? style::CaseMap::UPPERCASE : style::CaseMap::NONE));
                         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "caps", OUString::number(nIntValue));

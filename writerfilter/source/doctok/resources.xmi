@@ -286,37 +286,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCKcd-->
-        <!--SPRM sprmCFStrike-->
-        <UML:Class xmi.id="sprmCFStrike" name="sprmCFStrike">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x0837</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmCFStrike</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmCFStrike-->
         <!--SPRM sprmCFOutline-->
         <UML:Class xmi.id="sprmCFOutline" name="sprmCFOutline">
           <UML:ModelElement.stereotype>
@@ -379,68 +348,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFShadow-->
-        <!--SPRM sprmCFSmallCaps-->
-        <UML:Class xmi.id="sprmCFSmallCaps" name="sprmCFSmallCaps">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x083A</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmCFSmallCaps</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmCFSmallCaps-->
-        <!--SPRM sprmCFCaps-->
-        <UML:Class xmi.id="sprmCFCaps" name="sprmCFCaps">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x083B</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmCFCaps</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmCFCaps-->
         <!--SPRM sprmCFVanish-->
         <UML:Class xmi.id="sprmCFVanish" name="sprmCFVanish">
           <UML:ModelElement.stereotype>
@@ -813,37 +720,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCCharScale-->
-        <!--SPRM sprmCFDStrike-->
-        <UML:Class xmi.id="sprmCFDStrike" name="sprmCFDStrike">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x2A53</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmCFDStrike</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmCFDStrike-->
         <!--SPRM sprmCFImprint-->
         <UML:Class xmi.id="sprmCFImprint" name="sprmCFImprint">
           <UML:ModelElement.stereotype>
