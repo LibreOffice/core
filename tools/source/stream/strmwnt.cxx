@@ -139,7 +139,7 @@ sal_uInt16 SvFileStream::IsA() const
 }
 
 /// Does not check for EOF, makes isEof callable
-sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
+size_t SvFileStream::GetData( void* pData, size_t nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -151,10 +151,10 @@ sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
             SetError(::GetSvError( nTestError ) );
         }
     }
-    return (DWORD)nCount;
+    return (size_t)nCount;
 }
 
-sal_uIntPtr SvFileStream::PutData( const void* pData, sal_uIntPtr nSize )
+size_t SvFileStream::PutData( const void* pData, size_t nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -162,10 +162,10 @@ sal_uIntPtr SvFileStream::PutData( const void* pData, sal_uIntPtr nSize )
         if(!WriteFile(pInstanceData->hFile,(LPVOID)pData,nSize,&nCount,NULL))
             SetError(::GetSvError( GetLastError() ) );
     }
-    return nCount;
+    return (size_t)nCount;
 }
 
-sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
+size_t SvFileStream::SeekPos( size_t nPos )
 {
     DWORD nNewPos = 0;
     if( IsOpen() )
@@ -184,7 +184,7 @@ sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
     }
     else
         SetError( SVSTREAM_GENERALERROR );
-    return (sal_uIntPtr)nNewPos;
+    return (size_t)nNewPos;
 }
 
 void SvFileStream::FlushData()
@@ -196,7 +196,7 @@ void SvFileStream::FlushData()
     }
 }
 
-bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
+bool SvFileStream::LockRange( size_t nByteOffset, size_t nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -208,7 +208,7 @@ bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
     return bRetVal;
 }
 
-bool SvFileStream::UnlockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
+bool SvFileStream::UnlockRange( size_t nByteOffset, size_t nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -410,7 +410,7 @@ void SvFileStream::ResetError()
     SvStream::ClearError();
 }
 
-void SvFileStream::SetSize( sal_uIntPtr nSize )
+void SvFileStream::SetSize( size_t nSize )
 {
 
     if( IsOpen() )

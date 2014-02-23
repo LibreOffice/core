@@ -28,7 +28,7 @@ namespace
 
         bool checkStream( const SotStorageRef &xObjStor,
                           const OUString &rStreamName,
-                          sal_uLong nSize );
+                          size_t nSize );
         bool checkStorage( const SotStorageRef &xObjStor );
 
         virtual bool load(const OUString &,
@@ -44,17 +44,17 @@ namespace
 
     bool SotTest::checkStream( const SotStorageRef &xObjStor,
                                const OUString &rStreamName,
-                               sal_uLong nSize )
+                               size_t nSize )
     {
         unsigned char *pData = (unsigned char*)malloc( nSize );
-        sal_uLong nReadableSize = 0;
+        size_t nReadableSize = 0;
         if( !pData )
             return true;
 
         {   // Read the data in one block
             SotStorageStreamRef xStream( xObjStor->OpenSotStream( rStreamName ) );
             xStream->Seek(0);
-            sal_uLong nRemaining = xStream->GetSize() - xStream->Tell();
+            size_t nRemaining = xStream->GetSize() - xStream->Tell();
 
             CPPUNIT_ASSERT_MESSAGE( "check size", nRemaining == nSize );
             CPPUNIT_ASSERT_MESSAGE( "check size #2", xStream->remainingSize() == nSize );
@@ -65,7 +65,7 @@ namespace
         }
         {   // Read the data backwards as well
             SotStorageStreamRef xStream( xObjStor->OpenSotStream( rStreamName ) );
-            for( sal_uLong i = nReadableSize; i > 0; i-- )
+            for( size_t i = nReadableSize; i > 0; i-- )
             {
                 CPPUNIT_ASSERT_MESSAGE( "sot reading error", !xStream->GetError() );
                 unsigned char c;

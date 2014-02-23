@@ -79,14 +79,14 @@ using namespace ::com::sun::star::i18n;
 
 namespace
 {
-sal_Int32 lcl_getFileSize(SvStream& _rStream)
+size_t lcl_getFileSize(SvStream& _rStream)
 {
     sal_Int32 nFileSize = 0;
     _rStream.Seek(STREAM_SEEK_TO_END);
     _rStream.SeekRel(-1);
     char cEOL;
     _rStream.ReadChar( cEOL );
-    nFileSize = _rStream.Tell();
+    nFileSize = (sal_Int32)_rStream.Tell();
     if ( cEOL == DBF_EOL )
         nFileSize -= 1;
     return nFileSize;
@@ -527,7 +527,7 @@ void ODbaseTable::construct()
         }
         fillColumns();
 
-        sal_uInt32 nFileSize = lcl_getFileSize(*m_pFileStream);
+        size_t nFileSize = lcl_getFileSize(*m_pFileStream);
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
         if ( m_aHeader.db_anz == 0 && ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng) > 0) // seems to be empty or someone wrote bullshit into the dbase file
             m_aHeader.db_anz = ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng);
@@ -1505,7 +1505,7 @@ sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Ref
     sal_Bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols, true );
     if ( bInsertRow )
     {
-        sal_uInt32 nFileSize = 0, nMemoFileSize = 0;
+        size_t nFileSize = 0, nMemoFileSize = 0;
 
         nFileSize = lcl_getFileSize(*m_pFileStream);
 

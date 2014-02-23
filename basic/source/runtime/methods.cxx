@@ -3392,7 +3392,7 @@ RTLFUNC(Loc)
             return;
         }
         SvStream* pSvStrm = pSbStrm->GetStrm();
-        sal_uIntPtr nPos;
+        size_t nPos;
         if( pSbStrm->IsRandom())
         {
             short nBlockLen = pSbStrm->GetBlockLen();
@@ -3440,8 +3440,8 @@ RTLFUNC(Lof)
             return;
         }
         SvStream* pSvStrm = pSbStrm->GetStrm();
-        sal_uIntPtr nOldPos = pSvStrm->Tell();
-        sal_uIntPtr nLen = pSvStrm->Seek( STREAM_SEEK_TO_END );
+        size_t nOldPos = pSvStrm->Tell();
+        size_t nLen = pSvStrm->Seek( STREAM_SEEK_TO_END );
         pSvStrm->Seek( nOldPos );
         rPar.Get(0)->PutLong( (sal_Int32)nLen );
     }
@@ -3472,7 +3472,7 @@ RTLFUNC(Seek)
 
     if ( nArgs == 2 )   // Seek-Function
     {
-        sal_uIntPtr nPos = pStrm->Tell();
+        size_t nPos = pStrm->Tell();
         if( pSbStrm->IsRandom() )
         {
             nPos = nPos / pSbStrm->GetBlockLen();
@@ -3494,7 +3494,7 @@ RTLFUNC(Seek)
         {
             nPos *= pSbStrm->GetBlockLen();
         }
-        pStrm->Seek( (sal_uIntPtr)nPos );
+        pStrm->Seek((size_t)nPos );
         pSbStrm->SetExpandOnWriteTo( nPos );
     }
 }

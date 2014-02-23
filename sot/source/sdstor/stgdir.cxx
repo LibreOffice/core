@@ -495,7 +495,7 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
     sal_Int32 n = GetSize();
     if( rDest.SetSize( n ) && n )
     {
-        sal_uLong Pos = rDest.Tell();
+        size_t Pos = rDest.Tell();
         sal_uInt8 aTempBytes[ 4096 ];
         void* p = static_cast<void*>( aTempBytes );
         Seek( 0L );
@@ -609,7 +609,7 @@ bool StgDirEntry::Strm2Tmp()
 {
     if( !pTmpStrm )
     {
-        sal_uLong n = 0;
+        size_t n = 0;
         if( pCurStrm )
         {
             // It was already commited once
@@ -635,10 +635,10 @@ bool StgDirEntry::Strm2Tmp()
                     pStgStrm->Pos2Page( 0L );
                     while( n )
                     {
-                        sal_uLong nn = n;
+                        size_t nn = n;
                         if( nn > 4096 )
                             nn = 4096;
-                        if( (sal_uLong) pStgStrm->Read( p, nn ) != nn )
+                        if( pStgStrm->Read( p, nn ) != (sal_Int32)nn )
                             break;
                         if( pTmpStrm->Write( p, nn ) != nn )
                             break;
@@ -678,10 +678,10 @@ bool StgDirEntry::Tmp2Strm()
         OSL_ENSURE( pStgStrm, "The pointer may not be NULL!" );
         if ( !pStgStrm )
             return false;
-        sal_uLong n = pTmpStrm->GetSize();
+        size_t n = pTmpStrm->GetSize();
         StgStrm* pNewStrm;
         StgIo& rIo = pStgStrm->GetIo();
-        sal_uLong nThreshold = (sal_uLong) rIo.aHdr.GetThreshold();
+        size_t nThreshold = (size_t) rIo.aHdr.GetThreshold();
         if( n < nThreshold )
             pNewStrm = new StgSmallStrm( rIo, STG_EOF, 0 );
         else
@@ -692,12 +692,12 @@ bool StgDirEntry::Tmp2Strm()
             pTmpStrm->Seek( 0L );
             while( n )
             {
-                sal_uLong nn = n;
+                size_t nn = n;
                 if( nn > 4096 )
                     nn = 4096;
                 if( pTmpStrm->Read( p, nn ) != nn )
                     break;
-                if( (sal_uLong) pNewStrm->Write( p, nn ) != nn )
+                if( pNewStrm->Write( p, nn ) != (sal_Int32)nn )
                     break;
                 n -= nn;
             }

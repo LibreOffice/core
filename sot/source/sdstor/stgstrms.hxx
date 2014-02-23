@@ -148,17 +148,17 @@ class StgTmpStrm : public SvMemoryStream
     OUString aName;
     SvFileStream* pStrm;
     using SvMemoryStream::GetData;
-    virtual sal_uLong GetData( void* pData, sal_uLong nSize );
-    virtual sal_uLong PutData( const void* pData, sal_uLong nSize );
-    virtual sal_uLong SeekPos( sal_uLong nPos );
+    virtual size_t GetData( void* pData, size_t nSize );
+    virtual size_t PutData( const void* pData, size_t nSize );
+    virtual size_t SeekPos( size_t nPos );
     virtual void FlushData();
 
 public:
-    StgTmpStrm( sal_uLong=16 );
+    StgTmpStrm( size_t=16 );
    ~StgTmpStrm();
     bool Copy( StgTmpStrm& );
-    void SetSize( sal_uLong );
-    sal_uLong GetSize() const;
+    void SetSize( size_t );
+    size_t GetSize() const;
 };
 
 #endif
