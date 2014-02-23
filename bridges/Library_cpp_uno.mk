@@ -140,6 +140,12 @@ bridge_noncallexception_noopt_objects := callvirtualmethod
 bridge_exception_objects := abi cpp2uno except uno2cpp
 endif
 
+else ifeq ($(OS)-$(CPUNAME),MACOSX-POWERPC)
+
+bridges_SELECTED_BRIDGE := gcc3_macosx_powerpc
+bridge_noopt_objects := uno2cpp
+bridge_exception_objects := cpp2uno except
+
 else ifeq ($(OS)-$(CPUNAME),SOLARIS-INTEL)
 
 bridges_SELECTED_BRIDGE := gcc3_solaris_intel
