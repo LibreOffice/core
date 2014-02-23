@@ -286,7 +286,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
 
                 ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
 
-                if (pViewSh)
+                if (pViewSh && pDoc)
                 {
                     // AutoLayouts have to be finished
                     pDoc->StopWorkStartupDelay();
