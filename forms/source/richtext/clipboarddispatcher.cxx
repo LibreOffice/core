@@ -176,10 +176,14 @@ namespace frm
     void OPasteClipboardDispatcher::disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
     {
         OSL_ENSURE( getEditView() && getEditView()->GetWindow(), "OPasteClipboardDispatcher::disposing: EditView should not (yet) be disfunctional here!" );
-        if ( getEditView() && getEditView()->GetWindow() && m_pClipListener )
-            m_pClipListener->AddRemoveListener( getEditView()->GetWindow(), sal_False );
-        m_pClipListener->release();
-        m_pClipListener = NULL;
+        if (m_pClipListener)
+        {
+            if (getEditView() && getEditView()->GetWindow())
+                m_pClipListener->AddRemoveListener( getEditView()->GetWindow(), sal_False );
+
+            m_pClipListener->release();
+            m_pClipListener = NULL;
+        }
 
         OClipboardDispatcher::disposing( _rClearBeforeNotify );
     }
