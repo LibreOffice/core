@@ -3150,8 +3150,18 @@ void ScInterpreter::ScMacro()
     //  Funktion ueber den einfachen Namen suchen,
     //  dann aBasicStr, aMacroStr fuer SfxObjectShell::CallBasic zusammenbauen
 
-    StarBASIC* pRoot = pDocSh->GetBasic();
-    SbxVariable* pVar = pRoot->Find( aMacro, SbxCLASS_METHOD );
+    StarBASIC* pRoot;
+
+    try
+    {
+        pRoot = pDocSh->GetBasic();
+    }
+    catch (...)
+    {
+        pRoot = NULL;
+    }
+
+    SbxVariable* pVar = pRoot ? pRoot->Find(aMacro, SbxCLASS_METHOD) : NULL;
     if( !pVar || pVar->GetType() == SbxVOID || !pVar->ISA(SbMethod) )
     {
         PushError( errNoMacro );
