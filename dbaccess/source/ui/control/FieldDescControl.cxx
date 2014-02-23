@@ -305,8 +305,7 @@ void OFieldDescControl::CheckScrollBars()
     for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
         getMaxXPosition(ppAggregates[i],lMaxXPosition);
 
-    if (m_pHorzScroll)
-        lMaxXPosition += m_pHorzScroll->GetThumbPos() * HSCROLL_STEP;
+    lMaxXPosition += m_pHorzScroll->GetThumbPos() * HSCROLL_STEP;
 
     long lMaxXAvailable = szOverallSize.Width();
     bNeedHScrollBar = lMaxXPosition > lMaxXAvailable;
