@@ -260,7 +260,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 
 extern "C"
 {
-//==================================================================================================
+
 sal_Bool SAL_CALL component_writeInfo(
     void * /*pServiceManager*/, void * pRegistryKey )
 {
@@ -287,7 +287,7 @@ sal_Bool SAL_CALL component_writeInfo(
     }
     return sal_False;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {

@@ -55,7 +55,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
     SdrObjEditView(pModel1,pOut)

@@ -22,7 +22,7 @@
 #include <algorithm>
 
 
-// ============================================================================
+
 
 bool ScCsvSplits::Insert( sal_Int32 nPos )
 {
@@ -102,6 +102,6 @@ sal_uInt32 ScCsvSplits::GetIterIndex( const_iterator aIter ) const
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

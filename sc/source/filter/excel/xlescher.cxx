@@ -287,7 +287,7 @@ void XclObjTextData::ReadTxo8( XclImpStream& rStrm )
     rStrm >> mnFlags >> mnOrient >> mnButtonFlags >> mnShortcut >> mnShortcutEA >> mnTextLen >> mnFormatSize;
 }
 
-// ============================================================================
+
 
 Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape > xShape )
 {
@@ -342,6 +342,6 @@ OUString XclControlHelper::ExtractFromMacroDescriptor(
     return OUString();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

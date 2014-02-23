@@ -48,9 +48,9 @@ namespace pcr
     using namespace ::com::sun::star::form::binding;
     using namespace ::comphelper;
 
-    //====================================================================
+
     //= CellBindingPropertyHandler
-    //====================================================================
+
     DBG_NAME( CellBindingPropertyHandler )
 
     CellBindingPropertyHandler::CellBindingPropertyHandler( const Reference< XComponentContext >& _rxContext )

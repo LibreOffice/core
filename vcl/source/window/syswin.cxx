@@ -36,7 +36,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-// =======================================================================
+
 class SystemWindow::ImplData
 {
 public:
@@ -61,7 +61,7 @@ SystemWindow::ImplData::~ImplData()
         delete mpTaskPaneList;
 }
 
-// =======================================================================
+
 
 SystemWindow::SystemWindow( WindowType nType ) :
     Window( nType )

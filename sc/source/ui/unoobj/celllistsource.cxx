@@ -44,9 +44,9 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
+
     //= OCellListSource
-    //=====================================================================
+
     DBG_NAME( OCellListSource )
 
 #ifdef DBG_UTIL

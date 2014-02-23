@@ -36,9 +36,9 @@ namespace svxform
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::form::validation;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
 
     static void setUnderline( const Reference< XVclWindowPeer >& _rxPeer, const UnderlineDescriptor& _rUnderline )
     {
@@ -83,9 +83,9 @@ namespace svxform
         _rxPeer->setProperty( FM_PROP_BORDERCOLOR, makeAny( _rBoder.nBorderColor ) );
     }
 
-    //====================================================================
+
     //= ControlBorderManager
-    //====================================================================
+
 
     ControlBorderManager::ControlBorderManager()
         :m_nFocusColor    ( 0x000000FF )

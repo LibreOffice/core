@@ -41,9 +41,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-//==================================================================
+
 //= OCheckBoxControl
-//==================================================================
+
 
 
 OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactory)
@@ -68,11 +68,11 @@ StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com
     return aSupported;
 }
 
-//==================================================================
-//= OCheckBoxModel
-//==================================================================
 
-//==================================================================
+//= OCheckBoxModel
+
+
+
 InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OCheckBoxModel( comphelper::getComponentContext(_rxFactory) ));
@@ -211,7 +211,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
 {
     Any aValue;
 
-    //////////////////////////////////////////////////////////////////
+
     // Set value in ControlModel
     bool bValue = bool(); // avoid warning
     if(DbUseBool())

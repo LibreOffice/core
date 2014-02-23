@@ -31,9 +31,9 @@ namespace frm
 {
 //.........................................................................
 
-//==================================================================
+
 //= PropertyInfoService
-//==================================================================
+
 PropertyInfoService::PropertyMap PropertyInfoService::s_AllKnownProperties;
 
 sal_Int32 PropertyInfoService::getPropertyId(const OUString& _rName)

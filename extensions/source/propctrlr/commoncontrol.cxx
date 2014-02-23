@@ -36,9 +36,9 @@ namespace pcr
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::inspection::XPropertyControl;
 
-    //==================================================================
+
     //= ControlHelper
-    //==================================================================
+
 
     ControlHelper::ControlHelper( Window* _pControlWindow, sal_Int16 _nControlType, XPropertyControl& _rAntiImpl, IModifyListener* _pModifyListener )
         :m_pControlWindow( _pControlWindow )

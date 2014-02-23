@@ -25,14 +25,14 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // - Defines -
 
 #define DIBCOREHEADERSIZE       ( 12UL )
 #define DIBINFOHEADERSIZE       ( sizeof(DIBInfoHeader) )
 #define DIBV5HEADERSIZE         ( sizeof(DIBV5Header) )
 
-//////////////////////////////////////////////////////////////////////////////
+
 // - Compression defines
 
 #define COMPRESS_OWN                ('S'|('D'<<8UL))
@@ -42,7 +42,7 @@
 #define BITFIELDS                   ( 3UL )
 #define ZCOMPRESS                   ( COMPRESS_OWN | 0x01000000UL ) /* == 'SD01' (binary) */
 
-//////////////////////////////////////////////////////////////////////////////
+
 // - DIBInfoHeader and DIBV5Header
 
 typedef sal_Int32 FXPT2DOT30;
@@ -148,7 +148,7 @@ struct DIBV5Header : public DIBInfoHeader
     {}
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -165,7 +165,7 @@ namespace
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown)
 {
@@ -1315,7 +1315,7 @@ bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDI
     return( rOStm.GetError() == 0UL );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool ImplReadDIB(
     Bitmap& rTarget, Bitmap*
@@ -1424,7 +1424,7 @@ bool ImplWriteDIB(
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool ReadDIB(
     Bitmap& rTarget,
@@ -1522,7 +1522,7 @@ bool ReadDIBV5(
     return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool WriteDIB(
     const Bitmap& rSource,

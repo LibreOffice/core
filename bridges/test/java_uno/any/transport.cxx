@@ -36,7 +36,7 @@ using ::test::java_uno::anytest::XTransport;
 
 namespace
 {
-//==================================================================================================
+
 class Transport : public ::cppu::WeakImplHelper1< XTransport >
 {
 public:

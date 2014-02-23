@@ -65,7 +65,7 @@ using namespace ::sdr::contact;
 
 #include <cppuhelper/implbase1.hxx>
 
-// =============================================================================
+
 class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
 protected:
@@ -105,14 +105,14 @@ void SdrControlEventListenerImpl::StartListening(const uno::Reference< lang::XCo
         xComp->addEventListener(this);
 }
 
-// =============================================================================
+
 struct SdrUnoObjDataHolder
 {
     mutable ::rtl::Reference< SdrControlEventListenerImpl >
                                     pEventListener;
 };
 
-// =============================================================================
+
 namespace
 {
     void lcl_ensureControlVisibility( SdrView* _pView, const SdrUnoObj* _pObject, bool _bVisible )

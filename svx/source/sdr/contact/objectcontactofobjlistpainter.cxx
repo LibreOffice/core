@@ -28,7 +28,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -45,7 +45,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -167,7 +167,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

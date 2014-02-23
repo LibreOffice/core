@@ -78,9 +78,9 @@ namespace offapp
         return s_sNodeName;
     }
 
-    //====================================================================
+
     //= ConnectionPoolConfig
-    //====================================================================
+
 
     void ConnectionPoolConfig::GetOptions(SfxItemSet& _rFillItems)
     {

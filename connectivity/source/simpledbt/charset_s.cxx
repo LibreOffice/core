@@ -26,9 +26,9 @@ namespace connectivity
 
     using namespace ::dbtools;
 
-    //====================================================================
+
     //= ODataAccessCharSet
-    //====================================================================
+
 
     oslInterlockedCount SAL_CALL ODataAccessCharSet::acquire()
     {

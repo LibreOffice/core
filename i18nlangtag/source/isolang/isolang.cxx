@@ -27,7 +27,7 @@
 
 using namespace com::sun::star;
 
-// =======================================================================
+
 
 static const LanguageType kSAME = 0xffff;
 
@@ -896,7 +896,7 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
     { LANGUAGE_DONTKNOW,                    NULL             }  // marks end of table
 };
 
-// =======================================================================
+
 
 // static
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
@@ -1125,7 +1125,7 @@ com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageS
     return aLastResortFallbackEntry.getLocale();
 }
 
-// =======================================================================
+
 
 // static
 LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& rPriv )

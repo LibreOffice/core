@@ -32,16 +32,16 @@ namespace dbtools
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     static const OUString& getActiveConnectionPropertyName()
     {
         static const OUString s_sActiveConnectionPropertyName( "ActiveConnection" );
         return s_sActiveConnectionPropertyName;
     }
 
-    //=====================================================================
+
     //= OAutoConnectionDisposer
-    //=====================================================================
+
 
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
         :m_xRowSet( _rxRowSet )

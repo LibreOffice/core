@@ -33,7 +33,7 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

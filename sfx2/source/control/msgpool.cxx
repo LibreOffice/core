@@ -46,7 +46,7 @@ SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
         _pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
 }
 
-//====================================================================
+
 
 SfxSlotPool::~SfxSlotPool()
 {
@@ -57,7 +57,7 @@ SfxSlotPool::~SfxSlotPool()
     delete _pGroups;
 }
 
-//====================================================================
+
 // registers the availability of the Interface of functions
 
 void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
@@ -98,7 +98,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
     }
 }
 
-//====================================================================
+
 
 TypeId SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
 {
@@ -106,7 +106,7 @@ TypeId SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
     return pSlot ? pSlot->GetType()->Type() : 0;
 }
 
-//====================================================================
+
 // unregisters the availability of the Interface of functions
 
 void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )

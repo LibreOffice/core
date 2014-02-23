@@ -43,9 +43,9 @@ namespace svx
     using namespace ::com::sun::star::datatransfer;
     using namespace ::comphelper;
 
-    //====================================================================
+
     //= OComponentTransferable
-    //====================================================================
+
 
     OComponentTransferable::OComponentTransferable(const OUString& _rDatasourceOrLocation
             ,const Reference< XContent>& _xContent)

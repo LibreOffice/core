@@ -36,7 +36,7 @@ using ::std::list;
 using ::std::for_each;
 using ::std::pair;
 
-// ============================================================================
+
 
 /**
  * A simple container to keep track of cells that depend on basic modules
@@ -92,7 +92,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 ScMacroManager::ScMacroManager(ScDocument* pDoc) :
     mpDepTracker(new ScUserMacroDepTracker),

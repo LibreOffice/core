@@ -21,7 +21,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 PropertyNameVector::PropertyNameVector()
 {
@@ -38,7 +38,7 @@ PropertyNameVector::PropertyNameVector()
         push_back( OUString::createFromAscii( sppcPropertyNames[ nIndex ] ) );
 }
 
-// ============================================================================
+
 
 } // namespace oox
 

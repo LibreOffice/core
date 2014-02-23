@@ -42,9 +42,9 @@ namespace abp
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::sdbc;
 
-    //=====================================================================
+
     //= OAdminDialogInvokation
-    //=====================================================================
+
 
     OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource

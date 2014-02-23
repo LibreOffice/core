@@ -488,7 +488,7 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
     return OUString( rTokenStr.getStr() + nTokenStart, nTokenLen );
 }
 
-// =======================================================================
+
 
 static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
 {
@@ -522,7 +522,7 @@ void AddTokenFontName( OUString& rName, const OUString& rNewToken )
         ImplAppendFontToken( rName, rNewToken );
 }
 
-// =======================================================================
+
 
 OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
 {

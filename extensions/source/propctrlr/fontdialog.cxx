@@ -65,9 +65,9 @@ namespace pcr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-    //========================================================================
+
     //= OFontPropertyExtractor
-    //========================================================================
+
     class OFontPropertyExtractor
     {
     protected:
@@ -167,9 +167,9 @@ namespace pcr
             _rSet.InvalidateItem(_nItemId);
     }
 
-    //========================================================================
+
     //= ControlCharacterDialog
-    //========================================================================
+
 
     ControlCharacterDialog::ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet)
         : SfxTabDialog(_pParent, "ControlFontDialog",

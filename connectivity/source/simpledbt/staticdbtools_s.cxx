@@ -36,9 +36,9 @@ namespace connectivity
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //================================================================
+
     //= ODataAccessStaticTools
-    //================================================================
+
 
     ODataAccessStaticTools::ODataAccessStaticTools()
     {

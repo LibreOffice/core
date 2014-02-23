@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

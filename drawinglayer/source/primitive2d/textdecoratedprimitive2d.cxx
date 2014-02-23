@@ -29,7 +29,7 @@
 #include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

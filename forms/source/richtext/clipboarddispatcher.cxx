@@ -35,7 +35,7 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     namespace
     {
         static URL createClipboardURL( OClipboardDispatcher::ClipboardFunc _eFunc )
@@ -57,9 +57,9 @@ namespace frm
         }
     }
 
-    //====================================================================
+
     //= OClipboardDispatcher
-    //====================================================================
+
 
     OClipboardDispatcher::OClipboardDispatcher( EditView& _rView, ClipboardFunc _eFunc )
         :ORichTextFeatureDispatcher( _rView, createClipboardURL( _eFunc ) )
@@ -132,9 +132,9 @@ namespace frm
         }
     }
 
-    //====================================================================
+
     //= OPasteClipboardDispatcher
-    //====================================================================
+
 
     OPasteClipboardDispatcher::OPasteClipboardDispatcher( EditView& _rView )
         :OClipboardDispatcher( _rView, ePaste )

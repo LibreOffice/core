@@ -63,9 +63,9 @@ namespace svt { namespace table
     using ::com::sun::star::awt::grid::XSortableGridData;
     using ::com::sun::star::beans::Pair;
 
-    //==================================================================================================================
+
     //= UnoControlTableModel_Impl
-    //==================================================================================================================
+
     typedef ::std::vector< PTableModelListener >    ModellListeners;
     typedef ::std::vector< PColumnModel >           ColumnModels;
     struct UnoControlTableModel_Impl
@@ -123,9 +123,9 @@ namespace svt { namespace table
         }
     };
 
-    //==================================================================================================================
+
     //= UnoControlTableModel
-    //==================================================================================================================
+
 #ifdef DBG_UTIL
     const char* UnoControlTableModel_checkInvariants( const void* _pInstance )
     {

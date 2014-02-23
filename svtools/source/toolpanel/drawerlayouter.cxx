@@ -34,9 +34,9 @@ namespace svt
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::accessibility::XAccessible;
 
-    //==================================================================================================================
+
     //= DrawerDeckLayouter
-    //==================================================================================================================
+
 
     DrawerDeckLayouter::DrawerDeckLayouter( ::Window& i_rParentWindow, IToolPanelDeck& i_rPanels )
         :m_rParentWindow( i_rParentWindow )

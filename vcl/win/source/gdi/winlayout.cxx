@@ -62,7 +62,7 @@ typedef boost::unordered_map<int,int> IntMap;
 
 #include <config_mingw.h>
 
-// =======================================================================
+
 
 // win32 specific physical font instance
 class ImplWinFontEntry : public ImplFontEntry
@@ -117,7 +117,7 @@ inline int ImplWinFontEntry::GetCachedGlyphWidth( int nCharCode ) const
     return it->second;
 }
 
-// =======================================================================
+
 
 class WinLayout : public SalLayout
 {
@@ -141,7 +141,7 @@ protected:
     ImplWinFontEntry&   mrWinFontEntry;
 };
 
-// =======================================================================
+
 
 class SimpleWinLayout : public WinLayout
 {
@@ -187,7 +187,7 @@ private:
     BYTE            mnCharSet;
 };
 
-// =======================================================================
+
 
 WinLayout::WinLayout( HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE )
 :   mhDC( hDC ),
@@ -229,7 +229,7 @@ HFONT WinLayout::DisableFontScaling() const
     return SelectFont( mhDC, hHugeFont );
 }
 
-// =======================================================================
+
 
 SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
     const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
@@ -974,7 +974,7 @@ void SimpleWinLayout::Simplify( bool /*bIsBase*/ )
         mnWidth = mnBaseAdv = 0;
 }
 
-// =======================================================================
+
 
 struct VisualItem
 {
@@ -2896,7 +2896,7 @@ void GraphiteWinLayout::Simplify( bool is_base )
     maImpl.Simplify(is_base);
 }
 #endif // ENABLE_GRAPHITE
-// =======================================================================
+
 
 SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
@@ -2961,7 +2961,7 @@ int    WinSalGraphics::GetMinKashidaWidth()
     return nMinKashida;
 }
 
-// =======================================================================
+
 
 ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
@@ -3045,7 +3045,7 @@ bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
     return true;
 }
 
-// =======================================================================
+
 
 PhysicalFontFace* ImplWinFontData::Clone() const
 {
@@ -3067,6 +3067,6 @@ ImplFontEntry* ImplWinFontData::CreateFontInstance( FontSelectPattern& rFSD ) co
     return pEntry;
 }
 
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,13 +28,13 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -80,7 +80,7 @@ void ValueRangeSet::insert( const ValueRange& rRange )
     }
 }
 
-// ============================================================================
+
 
 OUString ContainerHelper::getUnusedName(
         const Reference< XNameAccess >& rxNameAccess, const OUString& rSuggestedName,
@@ -147,7 +147,7 @@ OUString ContainerHelper::insertByUnusedName(
     return aNewName;
 }
 
-// ============================================================================
+
 
 } // namespace oox
 

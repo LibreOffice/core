@@ -40,9 +40,9 @@ namespace comphelper
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::accessibility;
 
-    //==============================================================================
+
     // OCommonAccessibleText
-    //==============================================================================
+
 
     OCommonAccessibleText::OCommonAccessibleText()
     {
@@ -768,9 +768,9 @@ namespace comphelper
         return true;
     }
 
-    //==============================================================================
+
     // OAccessibleTextHelper
-    //==============================================================================
+
 
     OAccessibleTextHelper::OAccessibleTextHelper( IMutex* _pExternalLock )
         :OAccessibleExtendedComponentHelper( _pExternalLock )

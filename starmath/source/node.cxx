@@ -41,7 +41,7 @@
 #include <float.h>
 
 
-////////////////////////////////////////
+
 // SmTmpDevice
 // Allows for font and color changes. The original settings will be restored
 // in the destructor.
@@ -121,7 +121,7 @@ void SmTmpDevice::SetFont(const Font &rNewFont)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
@@ -650,7 +650,7 @@ long SmNode::GetFormulaBaseline() const
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
+
 
 SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
     SmNode( rNode.GetType(), rNode.GetToken() )
@@ -759,7 +759,7 @@ void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 bool SmVisibleNode::IsVisible() const
@@ -780,14 +780,14 @@ SmNode * SmVisibleNode::GetSubNode(sal_uInt16 /*nIndex*/)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
     rText.append(GetToken().aText);
 }
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 void SmExpressionNode::CreateTextFromNode(OUString &rText)
@@ -815,7 +815,7 @@ void SmExpressionNode::CreateTextFromNode(OUString &rText)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one column

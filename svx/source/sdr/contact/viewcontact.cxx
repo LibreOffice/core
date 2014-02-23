@@ -28,7 +28,7 @@
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <tools/debug.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -255,7 +255,7 @@ namespace sdr
             return 0L;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // primitive stuff
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContact::createViewIndependentPrimitive2DSequence() const

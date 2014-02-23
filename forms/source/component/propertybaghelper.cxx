@@ -57,9 +57,9 @@ namespace frm
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
 
@@ -70,9 +70,9 @@ namespace frm
         }
     }
 
-    //====================================================================
+
     //= PropertyBagHelper
-    //====================================================================
+
 
     PropertyBagHelper::PropertyBagHelper( IPropertyBagHelperContext& _rContext )
         :m_rContext( _rContext )

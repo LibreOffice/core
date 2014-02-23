@@ -1714,9 +1714,9 @@ ShowLicenseDialog::ShowLicenseDialog( Window * pParent,
     m_pLicenseText->SetText(xPackage->getLicenseText());
 }
 
-//=================================================================================
+
 // UpdateRequiredDialogService
-//=================================================================================
+
 UpdateRequiredDialogService::UpdateRequiredDialogService( uno::Sequence< uno::Any > const&,
                                                           uno::Reference< uno::XComponentContext > const& xComponentContext )
     : m_xComponentContext( xComponentContext )

@@ -55,9 +55,9 @@ namespace pcr
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::lang::IllegalArgumentException;
 
-    //====================================================================
+
     //= DefaultFormComponentInspectorModel
-    //====================================================================
+
 
     DefaultFormComponentInspectorModel::DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers )
         :ImplInspectorModel()

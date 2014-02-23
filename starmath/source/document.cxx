@@ -104,7 +104,7 @@ using namespace ::com::sun::star::uno;
 #define SmDocShell
 #include "smslots.hxx"
 
-////////////////////////////////////////////////////////////
+
 
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
@@ -523,7 +523,7 @@ SmCursor& SmDocShell::GetCursor(){
     return *pCursor;
 }
 
-////////////////////////////////////////
+
 
 SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
 {
@@ -587,7 +587,7 @@ SmPrinterAccess::~SmPrinterAccess()
         pRefDev->Pop();
 }
 
-////////////////////////////////////////
+
 
 Printer* SmDocShell::GetPrt()
 {

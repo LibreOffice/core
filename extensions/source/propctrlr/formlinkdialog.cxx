@@ -57,9 +57,9 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //========================================================================
+
     //= FieldLinkRow
-    //========================================================================
+
     class FieldLinkRow : public Window
     {
     private:
@@ -143,9 +143,9 @@ namespace pcr
         return 0L;
     }
 
-    //========================================================================
+
     //= FormLinkDialog
-    //========================================================================
+
 
     FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
             const Reference< XPropertySet >& _rxMasterForm, const Reference< XComponentContext >& _rxContext,

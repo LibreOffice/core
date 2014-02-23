@@ -32,9 +32,9 @@ namespace logging
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::util::DateTime;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
 
     namespace
     {

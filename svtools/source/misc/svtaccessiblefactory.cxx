@@ -55,9 +55,9 @@ namespace svt
         static GetSvtAccessibilityComponentFactory      s_pAccessibleFactoryFunc = NULL;
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
 
-        //====================================================================
+
         //= AccessibleDummyFactory
-        //====================================================================
+
         class AccessibleDummyFactory : public IAccessibleFactory
         {
         public:
@@ -248,9 +248,9 @@ namespace svt
         }
     }
 
-    //====================================================================
+
     //= AccessibleFactoryAccess
-    //====================================================================
+
 
     AccessibleFactoryAccess::AccessibleFactoryAccess()
         :m_bInitialized( false )

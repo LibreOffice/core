@@ -32,9 +32,9 @@ namespace connectivity
 {
 //........................................................................
 
-    //================================================================
+
     //= OSimpleParseNode
-    //================================================================
+
 
     OSimpleParseNode::OSimpleParseNode(const OSQLParseNode* _pNode, sal_Bool _bTakeOwnership)
         :m_pFullNode(_pNode)

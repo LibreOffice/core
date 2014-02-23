@@ -33,9 +33,9 @@ namespace utl
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     //= OEventListenerImpl
-    //=====================================================================
+
     class OEventListenerImpl : public ::cppu::WeakImplHelper1< XEventListener >
     {
     protected:
@@ -93,18 +93,18 @@ namespace utl
         m_pAdapter->_disposing(_rSource);
     }
 
-    //=====================================================================
+
     //= OEventListenerAdapterImpl
-    //=====================================================================
+
     struct OEventListenerAdapterImpl
     {
     public:
         ::std::vector< void* >  aListeners;
     };
 
-    //=====================================================================
+
     //= OEventListenerAdapter
-    //=====================================================================
+
 
     OEventListenerAdapter::OEventListenerAdapter()
         :m_pImpl(new OEventListenerAdapterImpl)

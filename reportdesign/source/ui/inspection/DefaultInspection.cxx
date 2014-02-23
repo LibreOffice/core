@@ -47,9 +47,9 @@ namespace rptui
     using namespace com::sun::star;
     using com::sun::star::inspection::PropertyCategoryDescriptor;
 
-    //====================================================================
+
     //= DefaultComponentInspectorModel
-    //====================================================================
+
 
     DefaultComponentInspectorModel::DefaultComponentInspectorModel( const Reference< XComponentContext >& _rxContext)
         :m_xContext( _rxContext )

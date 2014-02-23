@@ -52,9 +52,9 @@ namespace svt
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::uno;
 
-    //=====================================================================
+
     //= helpers
-    //=====================================================================
+
 
     SvStream& WriteDateTime( SvStream& _rStorage, const util::DateTime& _rDate )
     {
@@ -107,9 +107,9 @@ namespace svt
         return !( _rLHS == _rRHS );
     }
 
-    //=====================================================================
+
     //= TemplateContent
-    //=====================================================================
+
     struct TemplateContent;
     typedef ::std::vector< ::rtl::Reference< TemplateContent > >    TemplateFolderContent;
     typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
@@ -177,9 +177,9 @@ namespace svt
         DBG_DTOR( TemplateContent, NULL );
     }
 
-    //=====================================================================
+
     //= stl helpers
-    //=====================================================================
+
 
     /// compares two TemplateContent by URL
     struct TemplateContentURLLess
@@ -438,9 +438,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= TemplateFolderCacheImpl
-    //=====================================================================
+
     class TemplateFolderCacheImpl
     {
     private:
@@ -842,9 +842,9 @@ namespace svt
         return m_xOfficeInstDirs;
     }
 
-    //=====================================================================
+
     //= TemplateFolderCache
-    //=====================================================================
+
 
     TemplateFolderCache::TemplateFolderCache( sal_Bool _bAutoStoreState )
         :m_pImpl( new TemplateFolderCacheImpl( _bAutoStoreState ) )

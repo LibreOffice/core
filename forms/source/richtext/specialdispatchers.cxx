@@ -34,9 +34,9 @@ namespace frm
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= OSelectAllDispatcher
-    //====================================================================
+
 
     OSelectAllDispatcher::OSelectAllDispatcher( EditView& _rView, const URL&  _rURL )
         :ORichTextFeatureDispatcher( _rView, _rURL )
@@ -86,9 +86,9 @@ namespace frm
         return aEvent;
     }
 
-    //====================================================================
+
     //= OParagraphDirectionDispatcher
-    //====================================================================
+
 
     OParagraphDirectionDispatcher::OParagraphDirectionDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL,
             IMultiAttributeDispatcher* _pMasterDispatcher )
@@ -109,9 +109,9 @@ namespace frm
         return aEvent;
     }
 
-    //====================================================================
+
     //= OTextDirectionDispatcher
-    //====================================================================
+
 
     OTextDirectionDispatcher::OTextDirectionDispatcher( EditView& _rView, const URL& _rURL )
         :ORichTextFeatureDispatcher( _rView, _rURL )
@@ -149,9 +149,9 @@ namespace frm
         return aEvent;
     }
 
-    //====================================================================
+
     //= OAsianFontLayoutDispatcher
-    //====================================================================
+
 
     OAsianFontLayoutDispatcher::OAsianFontLayoutDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL, IMultiAttributeDispatcher* _pMasterDispatcher )
         :OParametrizedAttributeDispatcher( _rView, _nAttributeId, _rURL, _pMasterDispatcher )

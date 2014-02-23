@@ -37,9 +37,9 @@ namespace basprov
 {
 //.........................................................................
 
-    // =============================================================================
+
     // BasicLibraryNodeImpl
-    // =============================================================================
+
 
     BasicLibraryNodeImpl::BasicLibraryNodeImpl( const Reference< XComponentContext >& rxContext,
          const OUString& sScriptingContext, BasicManager* pBasicManager,

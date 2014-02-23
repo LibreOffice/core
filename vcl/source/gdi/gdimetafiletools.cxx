@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graphictools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helpers
 
 namespace
@@ -255,7 +255,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #i121267# Tooling to internally clip geometry against internal clip regions
 
 void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
@@ -1064,7 +1064,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource)
 {

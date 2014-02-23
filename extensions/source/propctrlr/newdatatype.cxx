@@ -28,9 +28,9 @@ namespace pcr
 {
 //........................................................................
 
-    //====================================================================
+
     //= NewDataTypeDialog
-    //====================================================================
+
 
     NewDataTypeDialog::NewDataTypeDialog( Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames )
         :ModalDialog( _pParent, PcrRes( RID_DLG_NEW_DATA_TYPE ) )

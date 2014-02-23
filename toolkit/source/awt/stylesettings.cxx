@@ -51,9 +51,9 @@ namespace toolkit
     using ::com::sun::star::awt::FontDescriptor;
     using ::com::sun::star::awt::XStyleChangeListener;
 
-    //==================================================================================================================
+
     //= WindowStyleSettings_Data
-    //==================================================================================================================
+
     struct WindowStyleSettings_Data
     {
         VCLXWindow*                         pOwningWindow;
@@ -84,9 +84,9 @@ namespace toolkit
         return 1L;
     }
 
-    //==================================================================================================================
+
     //= StyleMethodGuard
-    //==================================================================================================================
+
     class StyleMethodGuard
     {
     public:
@@ -104,9 +104,9 @@ namespace toolkit
         SolarMutexGuard  m_aGuard;
     };
 
-    //==================================================================================================================
+
     //= WindowStyleSettings
-    //==================================================================================================================
+
 
     WindowStyleSettings::WindowStyleSettings(::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
         :m_pData( new WindowStyleSettings_Data(i_rListenerMutex, i_rOwningWindow ) )

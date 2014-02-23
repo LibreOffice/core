@@ -43,9 +43,9 @@ namespace svx
     using namespace ::com::sun::star::datatransfer;
     using namespace ::comphelper;
 
-    //====================================================================
+
     //= OColumnTransferable
-    //====================================================================
+
 
     OColumnTransferable::OColumnTransferable(const OUString& _rDatasource
                                             ,const OUString& _rConnectionResource
@@ -380,9 +380,9 @@ namespace svx
         }
     }
 
-    //====================================================================
+
     //= ODataAccessObjectTransferable
-    //====================================================================
+
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(
             const OUString&  _rDatasource
             ,const OUString& _rConnectionResource

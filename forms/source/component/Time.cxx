@@ -44,13 +44,13 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-//==================================================================
-//=
-//==================================================================
 
-//==================================================================
+//=
+
+
+
 //= OTimeControl
-//==================================================================
+
 
 OTimeControl::OTimeControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_TIMEFIELD)
@@ -80,9 +80,9 @@ StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//==================================================================
+
 //= OTimeModel
-//==================================================================
+
 
 InterfaceRef SAL_CALL OTimeModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {

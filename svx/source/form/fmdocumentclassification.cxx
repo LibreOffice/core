@@ -74,8 +74,8 @@ namespace svxform
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
 
-    //====================================================================
-    //====================================================================
+
+
     namespace
     {
 
@@ -105,9 +105,9 @@ namespace svxform
         }
     }
 
-    //====================================================================
+
     //= DocumentClassification
-    //====================================================================
+
 
     DocumentType DocumentClassification::classifyDocument( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
     {

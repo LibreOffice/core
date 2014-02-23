@@ -33,9 +33,9 @@ namespace offapp
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
 
-    //====================================================================
+
     //= ODriverEnumerationImpl
-    //====================================================================
+
     class ODriverEnumerationImpl
     {
     protected:
@@ -73,9 +73,9 @@ namespace offapp
         }
     }
 
-    //====================================================================
+
     //= ODriverEnumeration
-    //====================================================================
+
 
     ODriverEnumeration::ODriverEnumeration() throw()
         :m_pImpl(new ODriverEnumerationImpl)

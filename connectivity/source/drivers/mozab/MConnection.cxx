@@ -64,9 +64,9 @@ using namespace com::sun::star::sdbcx;
 
 namespace connectivity { namespace mozab {
 
-// =====================================================================
+
 // = ConnectionImplData
-// =====================================================================
+
 struct ConnectionImplData
 {
     ::boost::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;

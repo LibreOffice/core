@@ -40,9 +40,9 @@ namespace toolkit
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::lang::EventObject;
 
-    //==================================================================================================================
+
     //= GridEventForwarder
-    //==================================================================================================================
+
 
     GridEventForwarder::GridEventForwarder( UnoGridControl& i_parent )
         :m_parent( i_parent )

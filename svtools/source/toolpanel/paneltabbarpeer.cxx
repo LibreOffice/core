@@ -45,9 +45,9 @@ namespace svt
     using ::com::sun::star::accessibility::XAccessibleContext;
     using ::com::sun::star::lang::DisposedException;
 
-    //==================================================================================================================
+
     //= PanelTabBarPeer
-    //==================================================================================================================
+
 
     PanelTabBarPeer::PanelTabBarPeer( PanelTabBar& i_rTabBar )
         :VCLXWindow()

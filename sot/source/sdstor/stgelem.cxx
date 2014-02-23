@@ -33,7 +33,7 @@ static const sal_uInt16 nMaxLegalStr = 31;
 
 static const sal_uInt8 cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1 };
 
-////////////////////////////// struct ClsId  /////////////////////////////
+////////////////////////////// struct ClsId
 
 SvStream& ReadClsId( SvStream& r, ClsId& rId )
 {
@@ -67,7 +67,7 @@ SvStream& WriteClsId( SvStream& r, const ClsId& rId )
          .WriteUChar( (sal_uInt8) rId.n11 );
 }
 
-///////////////////////////// class StgHeader ////////////////////////////
+///////////////////////////// class StgHeader
 
 StgHeader::StgHeader()
 : nVersion( 0 )
@@ -256,7 +256,7 @@ void StgHeader::SetMasters( sal_Int32 n )
     if( n != nMaster ) bDirty = sal_True, nMaster = n;
 }
 
-///////////////////////////// class StgEntry /////////////////////////////
+///////////////////////////// class StgEntry
 
 bool StgEntry::Init()
 {

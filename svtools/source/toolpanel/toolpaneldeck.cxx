@@ -60,9 +60,9 @@ namespace svt
         ACTION_TOGGLE_FOCUS,
     };
 
-    //====================================================================
+
     //= ToolPanelDeck_Impl
-    //====================================================================
+
     class ToolPanelDeck_Impl : public IToolPanelDeckListener
     {
     public:
@@ -338,9 +338,9 @@ namespace svt
         // are dying, and we already sent this notification in our dtor.
     }
 
-    //====================================================================
+
     //= ToolPanelDeck
-    //====================================================================
+
 
     ToolPanelDeck::ToolPanelDeck( Window& i_rParent, const WinBits i_nStyle )
         :Control( &i_rParent, i_nStyle )

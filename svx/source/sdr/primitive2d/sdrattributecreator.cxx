@@ -76,7 +76,7 @@
 #include <svx/sdr/attribute/sdrfilltextattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -210,7 +210,7 @@ namespace drawinglayer
     } // end of anonymous namespace
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

@@ -42,9 +42,9 @@ namespace svt
 
     static const int s_nIndentationWidth = 16;
 
-    //==================================================================================================================
+
     //= DrawerVisualization
-    //==================================================================================================================
+
 
     DrawerVisualization::DrawerVisualization( ToolPanelDrawer& i_rParent )
         :Window( &i_rParent )
@@ -67,9 +67,9 @@ namespace svt
         m_rDrawer.Paint();
     }
 
-    //==================================================================================================================
+
     //= ToolPanelDrawer
-    //==================================================================================================================
+
 
     ToolPanelDrawer::ToolPanelDrawer( Window& i_rParent, const OUString& i_rTitle )
         :Window( &i_rParent, WB_TABSTOP )

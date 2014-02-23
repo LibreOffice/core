@@ -32,9 +32,9 @@ namespace pcr
     using namespace ::com::sun::star::lang;
 
 
-    //========================================================================
+
     //= class OPropertyBrowserView
-    //========================================================================
+
     DBG_NAME(OPropertyBrowserView)
 
     OPropertyBrowserView::OPropertyBrowserView(Window* _pParent, WinBits nBits)

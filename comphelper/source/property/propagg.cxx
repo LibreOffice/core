@@ -57,9 +57,9 @@ namespace comphelper
             return pResult;
         }
     }
-//==================================================================
+
 //= OPropertyArrayAggregationHelper
-//==================================================================
+
 
 
 OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
@@ -349,9 +349,9 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     return nHitCount;
 }
 
-//==================================================================
+
 //= PropertyForwarder
-//==================================================================
+
 namespace internal
 {
     class PropertyForwarder
@@ -435,9 +435,9 @@ namespace internal
     }
 }
 
-//==================================================================
+
 //= OPropertySetAggregationHelper
-//==================================================================
+
 
 
 OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHlp )

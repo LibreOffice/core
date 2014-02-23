@@ -39,7 +39,7 @@ using namespace com::sun::star;
 namespace ucbhelper
 {
 
-//=========================================================================
+
 void cancelCommandExecution( const uno::Any & rException,
                              const uno::Reference<
                                         ucb::XCommandEnvironment > & xEnv )
@@ -80,7 +80,7 @@ void cancelCommandExecution( const uno::Any & rException,
 }
 
 
-//=========================================================================
+
 void cancelCommandExecution( const ucb::IOErrorCode eError,
                              const uno::Sequence< uno::Any > & rArgs,
                              const uno::Reference<

@@ -25,9 +25,9 @@ namespace comphelper
 {
 //.........................................................................
 
-//==================================================================
+
 //= OEnumerationByName
-//==================================================================
+
 
 OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess)
     :m_aNames(_rxAccess->getElementNames())
@@ -140,9 +140,9 @@ void OEnumerationByName::impl_stopDisposeListening()
     --m_refCount;
 }
 
-//==================================================================
+
 //= OEnumerationByIndex
-//==================================================================
+
 
 OEnumerationByIndex::OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess)
     :m_nPos(0)
@@ -243,9 +243,9 @@ void OEnumerationByIndex::impl_stopDisposeListening()
     --m_refCount;
 }
 
-//==================================================================
+
 //= OAnyEnumeration
-//==================================================================
+
 
 
 OAnyEnumeration::OAnyEnumeration(const staruno::Sequence< staruno::Any >& lItems)

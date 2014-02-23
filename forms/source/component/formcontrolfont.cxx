@@ -119,9 +119,9 @@ namespace frm
         }
     }
 
-    //=====================================================================
+
     //= FontControlModel
-    //=====================================================================
+
 
     FontControlModel::FontControlModel( bool _bToolkitCompatibleDefaults )
         :m_nFontRelief( FontRelief::NONE )

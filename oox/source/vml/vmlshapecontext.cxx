@@ -28,7 +28,7 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 
@@ -36,7 +36,7 @@ using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 namespace {
 
@@ -134,7 +134,7 @@ bool lclDecodeVmlxBool( const OUString& rValue, bool bDefaultForEmpty )
 
 } // namespace
 
-// ============================================================================
+
 
 ShapeLayoutContext::ShapeLayoutContext( ContextHandler2Helper& rParent, Drawing& rDrawing ) :
     ContextHandler2( rParent ),
@@ -163,7 +163,7 @@ ContextHandlerRef ShapeLayoutContext::onCreateContext( sal_Int32 nElement, const
     return 0;
 }
 
-// ============================================================================
+
 
 ClientDataContext::ClientDataContext( ContextHandler2Helper& rParent,
         ClientData& rClientData, const AttributeList& rAttribs ) :
@@ -225,7 +225,7 @@ void ClientDataContext::onEndElement()
     }
 }
 
-// ============================================================================
+
 
 ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
     ContextHandler2( rParent )
@@ -271,7 +271,7 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& r
     return 0;
 }
 
-// ============================================================================
+
 
 ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& rShapeType, const AttributeList& rAttribs ) :
     ShapeContextBase( rParent ),
@@ -428,7 +428,7 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
     }
 }
 
-// ============================================================================
+
 
 ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, const AttributeList& rAttribs ) :
     ShapeTypeContext( rParent, rShape, rAttribs ),
@@ -520,7 +520,7 @@ void ShapeContext::setVmlPath( const OUString& rPath )
 }
 
 
-// ============================================================================
+
 
 GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent, GroupShape& rShape, const AttributeList& rAttribs ) :
     ShapeContext( rParent, rShape, rAttribs ),
@@ -536,7 +536,7 @@ ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const 
     return xContext.get() ? xContext : ShapeContext::onCreateContext( nElement, rAttribs );
 }
 
-// ============================================================================
+
 
 RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, RectangleShape& rShape ) :
     ShapeContext( rParent, rShape, rAttribs )
@@ -548,7 +548,7 @@ ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, co
     // The parent class's context is fine
     return ShapeContext::onCreateContext( nElement, rAttribs );
 }
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

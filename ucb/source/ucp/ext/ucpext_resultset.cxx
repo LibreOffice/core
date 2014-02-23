@@ -46,9 +46,9 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::ucb::OpenCommandArgument2;
     using ::com::sun::star::ucb::XCommandEnvironment;
 
-    //==================================================================================================================
+
     //= ResultSet
-    //==================================================================================================================
+
 
     ResultSet::ResultSet( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent,
             const OpenCommandArgument2& i_rCommand, const Reference< XCommandEnvironment >& i_rEnv )

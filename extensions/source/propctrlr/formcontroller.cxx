@@ -69,9 +69,9 @@ namespace pcr
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
+
     //= FormController
-    //====================================================================
+
 
     FormController::FormController( const Reference< XComponentContext >& _rxContext, ServiceDescriptor _aServiceDescriptor,
             bool _bUseFormFormComponentHandlers )
@@ -252,9 +252,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
+
     //= DialogController
-    //====================================================================
+
 
     OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
     {

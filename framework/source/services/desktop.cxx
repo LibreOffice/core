@@ -215,7 +215,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  ) throw(css::u
     );
 }
 
-//=============================================================================
+
 sal_Bool SAL_CALL Desktop::terminate()
     throw( css::uno::RuntimeException )
 {
@@ -377,7 +377,7 @@ bool SAL_CALL Desktop::terminateQuickstarterToo()
     return terminate();
 }
 
-//=============================================================================
+
 void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
     throw( css::uno::RuntimeException )
 {
@@ -420,7 +420,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
 }
 
-//=============================================================================
+
 void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
     throw( css::uno::RuntimeException )
 {
@@ -1722,7 +1722,7 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
     return lPropertyDescriptor;
 }
 
-//=============================================================================
+
 void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,
                                              ::sal_Bool&                      bVeto          )
 {
@@ -1763,7 +1763,7 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
     }
 }
 
-//=============================================================================
+
 void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerList& lCalledListener)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1788,7 +1788,7 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
     }
 }
 
-//=============================================================================
+
 void Desktop::impl_sendNotifyTerminationEvent()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1819,7 +1819,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
     }
 }
 
-//=============================================================================
+
 ::sal_Bool Desktop::impl_closeFrames(::sal_Bool bAllowUI)
 {
     ReadGuard aReadLock( m_aLock ); // start synchronize

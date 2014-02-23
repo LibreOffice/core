@@ -54,7 +54,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-//==================================================================================================
+
 
 #define SERVICENAME     "com.sun.star.linguistic2.LanguageGuessing"
 #define IMPLNAME        "com.sun.star.lingu2.LanguageGuessing"

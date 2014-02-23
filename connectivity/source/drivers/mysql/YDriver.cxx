@@ -60,9 +60,9 @@ namespace connectivity
         }
     }
 
-    //====================================================================
+
     //= ODriverDelegator
-    //====================================================================
+
 
     ODriverDelegator::ODriverDelegator(const Reference< XComponentContext >& _rxContext)
         : ODriverDelegator_BASE(m_aMutex)

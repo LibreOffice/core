@@ -46,9 +46,9 @@ namespace svxform
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::lang::EventObject;
 
-    //========================================================================
+
     //= DispatchInterceptionMultiplexer
-    //========================================================================
+
 
     DBG_NAME(DispatchInterceptionMultiplexer)
 

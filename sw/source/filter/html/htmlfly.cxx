@@ -63,7 +63,7 @@
 #include "htmlfly.hxx"
 
 using namespace ::com::sun::star;
-////////////////////////////////////////////////////////////
+
 
 const sal_uLong HTML_FRMOPTS_IMG_ALL        =
     HTML_FRMOPT_ALT |

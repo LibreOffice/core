@@ -45,7 +45,7 @@
 // *** edit engine ***
 
 
-// ============================================================================
+
 
 struct Func_SetType
 {
@@ -64,7 +64,7 @@ struct Func_Select
 };
 
 
-// ============================================================================
+
 
 ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
@@ -1365,6 +1365,6 @@ ScAccessibleCsvControl* ScCsvGrid::ImplCreateAccessible()
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

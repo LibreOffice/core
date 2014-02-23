@@ -36,7 +36,7 @@ static const struct ::cppu::ImplementationEntry g_entries_unodialogs_chinesetran
 // component exports
 extern "C"
 {
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL textconversiondlgs_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
@@ -44,6 +44,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL textconversiondlgs_component_getFactory(
         pImplName, pServiceManager, pRegistryKey , g_entries_unodialogs_chinesetranslation );
 }
 }
-//=========================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

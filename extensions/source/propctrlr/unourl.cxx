@@ -31,9 +31,9 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
 
-    //====================================================================
+
     //= UnoURL
-    //====================================================================
+
     UnoURL::UnoURL( const OUString& _rCompleteURL, const Reference< XMultiServiceFactory >& _rxORB )
     {
         m_aURL.Complete = _rCompleteURL;

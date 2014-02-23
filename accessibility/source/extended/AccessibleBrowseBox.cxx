@@ -24,12 +24,12 @@
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-// ============================================================================
+
 
 namespace accessibility
 {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 
-// ============================================================================
+
 class AccessibleBrowseBoxImpl
 {
 public:
@@ -318,9 +318,9 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
         pHeaderBar->commitEvent(_nEventId,_rNewValue,_rOldValue);
 }
 
-// ============================================================================
+
 // = AccessibleBrowseBoxAccess
-// ============================================================================
+
 AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox )
         :m_xParent( _rxParent )
         ,m_rBrowseBox( _rBrowseBox )
@@ -367,7 +367,7 @@ bool AccessibleBrowseBoxAccess::isContextAlive() const
     return  ( NULL != m_pContext ) && m_pContext->isAlive();
 }
 
-// ============================================================================
+
 
 }   // namespace accessibility
 

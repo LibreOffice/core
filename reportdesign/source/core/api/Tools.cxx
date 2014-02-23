@@ -21,10 +21,10 @@
 #include "core_resource.hxx"
 #include <comphelper/property.hxx>
 
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
 using namespace com::sun::star;
 
 uno::Reference< report::XSection> lcl_getSection(const uno::Reference< uno::XInterface>& _xReportComponent)
@@ -62,8 +62,8 @@ uno::Reference< util::XCloneable > cloneObject(const uno::Reference< report::XRe
 }
 
 
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include <vcl/spin.hxx>
 #include <vcl/settings.hxx>
 
-// =======================================================================
+
 
 void SpinButton::ImplInit( Window* pParent, WinBits nStyle )
 {

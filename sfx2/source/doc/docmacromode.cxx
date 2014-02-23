@@ -67,9 +67,9 @@ namespace sfx2
 
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
 
-    //====================================================================
+
     //= DocumentMacroMode_Data
-    //====================================================================
+
     struct DocumentMacroMode_Data
     {
         IMacroDocumentAccess&       m_rDocumentAccess;
@@ -84,9 +84,9 @@ namespace sfx2
         }
     };
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
         //................................................................
@@ -128,9 +128,9 @@ namespace sfx2
         }
     }
 
-    //====================================================================
+
     //= DocumentMacroMode
-    //====================================================================
+
 
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
         :m_pData( new DocumentMacroMode_Data( rDocumentAccess ) )

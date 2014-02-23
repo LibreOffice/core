@@ -26,7 +26,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
 
-// ============================================================================
+
 
 class OOXMLFormulaParserImpl : private FormulaFinalizer
 {
@@ -103,7 +103,7 @@ const FunctionInfo* OOXMLFormulaParserImpl::resolveBadFuncName( const OUString& 
     return 0;
 }
 
-// ============================================================================
+
 
 Sequence< OUString > OOXMLFormulaParser_getSupportedServiceNames()
 {
@@ -122,7 +122,7 @@ Reference< XInterface > OOXMLFormulaParser_create( const Reference< XComponentCo
     return static_cast< ::cppu::OWeakObject* >( new OOXMLFormulaParser );
 }
 
-// ============================================================================
+
 
 OOXMLFormulaParser::OOXMLFormulaParser()
 {
@@ -185,7 +185,7 @@ OUString SAL_CALL OOXMLFormulaParser::printFormula(
     throw RuntimeException();
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

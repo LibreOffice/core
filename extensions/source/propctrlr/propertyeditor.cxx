@@ -37,9 +37,9 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::Reference;
 
-    //==================================================================
+
     // class OPropertyEditor
-    //==================================================================
+
     DBG_NAME(OPropertyEditor)
 
     OPropertyEditor::OPropertyEditor( Window* pParent, WinBits nWinStyle)

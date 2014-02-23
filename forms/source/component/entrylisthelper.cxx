@@ -35,9 +35,9 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
+
     //= OEntryListHelper
-    //=====================================================================
+
 
     OEntryListHelper::OEntryListHelper( OControlModel& _rControlModel )
         :m_rControlModel( _rControlModel )

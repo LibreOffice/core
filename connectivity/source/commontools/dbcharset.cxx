@@ -27,9 +27,9 @@ namespace dbtools
 {
 //.........................................................................
 
-    //=========================================================================
+
     //= OCharsetMap
-    //=========================================================================
+
 
     OCharsetMap::OCharsetMap()
     {
@@ -128,9 +128,9 @@ namespace dbtools
         return CharsetIterator( this, m_aEncodings.end() );
     }
 
-    //=========================================================================
+
     //= CharsetIteratorDerefHelper
-    //=========================================================================
+
 
     CharsetIteratorDerefHelper::CharsetIteratorDerefHelper( const CharsetIteratorDerefHelper& _rSource )
         :m_eEncoding( _rSource.m_eEncoding )
@@ -145,9 +145,9 @@ namespace dbtools
     {
     }
 
-    //=========================================================================
+
     //= OCharsetMap::CharsetIterator
-    //=========================================================================
+
 
     OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos )
         :m_pContainer( _pContainer )

@@ -29,7 +29,7 @@
 #include "miscdlgs.hrc"
 
 
-//==================================================================
+
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);

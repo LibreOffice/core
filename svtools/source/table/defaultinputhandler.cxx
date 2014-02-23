@@ -40,9 +40,9 @@ namespace svt { namespace table
         MouseFunctions  aMouseFunctions;
     };
 
-    //==================================================================================================================
+
     //= DefaultInputHandler
-    //==================================================================================================================
+
 
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )

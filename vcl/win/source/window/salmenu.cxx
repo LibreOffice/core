@@ -39,7 +39,7 @@
 
 static DWORD myerr=0;
 
-// =======================================================================
+
 
 sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
 {
@@ -49,7 +49,7 @@ sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
         return TRUE;
 }
 
-// =======================================================================
+
 
 // WinSalInst factory methods
 
@@ -125,7 +125,7 @@ void WinSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 }
 
 
-// =======================================================================
+
 
 static void ImplDrawMenuBar( SalMenu *pMenu )
 {
@@ -140,7 +140,7 @@ static void ImplDrawMenuBar( SalMenu *pMenu )
     }
 }
 
-// =======================================================================
+
 
 
 /*
@@ -377,7 +377,7 @@ void WinSalMenu::GetSystemMenuData( SystemMenuData* pData )
         pData->hMenu = mhMenu;
 }
 
-// =======================================================================
+
 
 /*
  * SalMenuItem

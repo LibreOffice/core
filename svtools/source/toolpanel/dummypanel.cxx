@@ -28,9 +28,9 @@ namespace svt
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::accessibility::XAccessible;
 
-    //====================================================================
+
     //= DummyPanel
-    //====================================================================
+
 
     DummyPanel::DummyPanel()
     {

@@ -40,7 +40,7 @@
 #include <boost/unordered_map.hpp>
 #include <vector>
 
-// =======================================================================
+
 
 struct ImplTabItem
 {
@@ -89,7 +89,7 @@ struct ImplTabCtrlData
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
 
-// =======================================================================
+
 
 void TabControl::ImplInit( Window* pParent, WinBits nStyle )
 {

@@ -31,9 +31,9 @@ namespace frm
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::util;
 
-    //====================================================================
+
     //= OCloneableAggregation
-    //====================================================================
+
 
     Reference< XAggregation > OCloneableAggregation::createAggregateClone( const OCloneableAggregation* _pOriginal )
     {

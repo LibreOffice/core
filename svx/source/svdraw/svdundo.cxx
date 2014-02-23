@@ -42,7 +42,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // iterates over all views and unmarks this SdrObject if it is marked
 static void ImplUnmarkObject( SdrObject* pObj )
@@ -54,7 +54,7 @@ static void ImplUnmarkObject( SdrObject* pObj )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrUndoAction,SfxUndoAction);
 
@@ -95,7 +95,7 @@ OUString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
     return OUString();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
 :   SdrUndoAction(rNewMod),
@@ -552,7 +552,7 @@ OUString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoMoveObj::~SdrUndoMoveObj() {}
 
@@ -596,7 +596,7 @@ OUString SdrUndoMoveObj::GetSdrRepeatComment(SdrView& /*rView*/) const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
      : SdrUndoObj(rNewObj)
@@ -676,7 +676,7 @@ OUString SdrUndoGeoObj::GetComment() const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 class SdrUndoObjList::ObjListListener : public SfxListener
 {
@@ -788,7 +788,7 @@ void SdrUndoObjList::SetOrdNum(sal_uInt32 nOrdNum_)
     nOrdNum = nOrdNum_;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoRemoveObj::Undo()
 {
@@ -840,7 +840,7 @@ SdrUndoRemoveObj::~SdrUndoRemoveObj()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoInsertObj::Undo()
 {
@@ -890,7 +890,7 @@ void SdrUndoInsertObj::Redo()
     ImpShowPageOfThisObject();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoDelObj::TryToFlushGraphicContent()
 {
@@ -962,7 +962,7 @@ OUString SdrUndoDelObj::GetSdrRepeatComment(SdrView& /*rView*/) const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoNewObj::Undo()
 {
@@ -1082,7 +1082,7 @@ void SdrUndoReplaceObj::SetOldOwner(bool bNew)
     bOldOwner = bNew;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 OUString SdrUndoCopyObj::GetComment() const
 {
@@ -1091,7 +1091,7 @@ OUString SdrUndoCopyObj::GetComment() const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i11702#
 
 SdrUndoObjectLayerChange::SdrUndoObjectLayerChange(SdrObject& rObj, SdrLayerID aOldLayer, SdrLayerID aNewLayer)
@@ -1113,7 +1113,7 @@ void SdrUndoObjectLayerChange::Redo()
     ImpShowPageOfThisObject();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoObjOrdNum::SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
     : SdrUndoObj(rNewObj)
@@ -1157,7 +1157,7 @@ OUString SdrUndoObjOrdNum::GetComment() const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
     : SdrUndoObj(rNewObj)
@@ -1383,7 +1383,7 @@ SdrUndoLayer::~SdrUndoLayer()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoNewLayer::Undo()
 {
@@ -1408,7 +1408,7 @@ OUString SdrUndoNewLayer::GetComment() const
     return ImpGetResStr(STR_UndoNewLayer);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoDelLayer::Undo()
 {
@@ -1433,7 +1433,7 @@ OUString SdrUndoDelLayer::GetComment() const
     return ImpGetResStr(STR_UndoDelLayer);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoMoveLayer::Undo()
 {
@@ -1523,7 +1523,7 @@ void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, 
     rStr = ImpGetResStr(nStrCacheID);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoPageList::SdrUndoPageList(SdrPage& rNewPg)
     : SdrUndoPage(rNewPg)
@@ -1540,7 +1540,7 @@ SdrUndoPageList::~SdrUndoPageList()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
     : SdrUndoPageList(rNewPg)
@@ -1623,7 +1623,7 @@ bool SdrUndoDelPage::CanSdrRepeat(SdrView& /*rView*/) const
     return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoNewPage::Undo()
 {
@@ -1646,7 +1646,7 @@ OUString SdrUndoNewPage::GetComment() const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 OUString SdrUndoCopyPage::GetComment() const
 {
@@ -1672,7 +1672,7 @@ bool SdrUndoCopyPage::CanSdrRepeat(SdrView& /*rView*/) const
     return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrUndoSetPageNum::Undo()
 {
@@ -1707,7 +1707,7 @@ SdrUndoPageMasterPage::~SdrUndoPageMasterPage()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoPageRemoveMasterPage::SdrUndoPageRemoveMasterPage(SdrPage& rChangedPage)
 :   SdrUndoPageMasterPage(rChangedPage)
@@ -1735,7 +1735,7 @@ OUString SdrUndoPageRemoveMasterPage::GetComment() const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrUndoPageChangeMasterPage::SdrUndoPageChangeMasterPage(SdrPage& rChangedPage)
 :   SdrUndoPageMasterPage(rChangedPage),
@@ -1780,7 +1780,7 @@ OUString SdrUndoPageChangeMasterPage::GetComment() const
     return aStr;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 SdrUndoFactory::~SdrUndoFactory(){}
 // shapes
 SdrUndoAction* SdrUndoFactory::CreateUndoMoveObject( SdrObject& rObject )

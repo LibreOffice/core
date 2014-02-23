@@ -39,9 +39,9 @@ namespace dbtools
     using namespace ::comphelper;
     using namespace ::connectivity;
 
-//==============================================================================
+
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
-//==============================================================================
+
 
 SQLExceptionInfo::SQLExceptionInfo()
     :m_eType(UNDEFINED)
@@ -262,9 +262,9 @@ void SQLExceptionInfo::doThrow()
     throw RuntimeException();
 }
 
-//==============================================================================
+
 //= SQLExceptionIteratorHelper
-//==============================================================================
+
 
 
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& _rChainStart )

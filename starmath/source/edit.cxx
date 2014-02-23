@@ -57,7 +57,7 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-////////////////////////////////////////
+
 
 
 void SmGetLeftSelectionPart(const ESelection &rSel,
@@ -82,7 +82,7 @@ bool SmEditWindow::IsInlineEditEnabled()
     return pView ? pView->IsInlineEditEnabled() : false;
 }
 
-////////////////////////////////////////
+
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin),

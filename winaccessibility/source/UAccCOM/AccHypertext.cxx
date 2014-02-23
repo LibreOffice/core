@@ -29,7 +29,7 @@
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 
-/////////////////////////////////////////////////////////////////////////////
+
 //
 /**
    * Get special selection.

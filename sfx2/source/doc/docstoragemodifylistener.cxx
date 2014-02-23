@@ -36,9 +36,9 @@ namespace sfx2
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::lang::EventObject;
 
-    //====================================================================
+
     //=
-    //====================================================================
+
 
     DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, comphelper::SolarMutex& _rMutex )
         :m_pDocument( &_rDocument )

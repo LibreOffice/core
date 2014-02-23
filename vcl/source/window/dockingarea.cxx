@@ -27,7 +27,7 @@
 
 #include <map>
 
-// =======================================================================
+
 
 class DockingAreaWindow::ImplData
 {
@@ -47,7 +47,7 @@ DockingAreaWindow::ImplData::~ImplData()
 {
 }
 
-// =======================================================================
+
 
 static void ImplInitBackground( DockingAreaWindow* pThis )
 {

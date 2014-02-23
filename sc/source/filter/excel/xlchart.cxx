@@ -1231,7 +1231,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMod
     return maHatchHlpCommon;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1343,6 +1343,6 @@ Reference< XShape > XclChRootData::GetTitleShape( const XclChTextKey& rTitleKey 
     return xTitleShape;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

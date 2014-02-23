@@ -36,7 +36,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

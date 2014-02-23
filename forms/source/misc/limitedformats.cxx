@@ -40,9 +40,9 @@ namespace frm
     ::osl::Mutex                            OLimitedFormats::s_aMutex;
     Reference< XNumberFormatsSupplier >     OLimitedFormats::s_xStandardFormats;
 
-    //=====================================================================
+
     //=
-    //=====================================================================
+
 
     enum LocaleType
     {
@@ -127,9 +127,9 @@ namespace frm
         return NULL;
     }
 
-    //=====================================================================
+
     //= OLimitedFormats
-    //=====================================================================
+
 
     OLimitedFormats::OLimitedFormats(const Reference< XComponentContext >& _rxContext, const sal_Int16 _nClassId)
         :m_nFormatEnumPropertyHandle(-1)

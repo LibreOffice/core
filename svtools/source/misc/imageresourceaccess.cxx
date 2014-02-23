@@ -43,9 +43,9 @@ namespace svt
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::graphic;
 
-    //====================================================================
+
     //= StreamSupplier
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   XStream
                                     ,   XSeekable
                                     >   StreamSupplier_Base;
@@ -120,9 +120,9 @@ namespace svt
         return m_xSeekable->getLength();
     }
 
-    //====================================================================
+
     //= GraphicAccess
-    //====================================================================
+
 
     bool GraphicAccess::isSupportedURL( const OUString& _rURL )
     {

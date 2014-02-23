@@ -32,9 +32,9 @@ namespace pcr
 
     using namespace ::com::sun::star::util;
 
-    //========================================================================
+
     //= HelpIdUrl
-    //========================================================================
+
 
     OString HelpIdUrl::getHelpId( const OUString& _rHelpURL )
     {

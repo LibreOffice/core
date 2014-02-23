@@ -40,9 +40,9 @@ namespace toolkit
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::accessibility;
 
-    //====================================================================
+
     //= OAccessibleControlContext
-    //====================================================================
+
 
     OAccessibleControlContext::OAccessibleControlContext()
         : OAccessibleControlContext_Base(new VCLExternalSolarLock)

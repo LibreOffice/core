@@ -32,9 +32,9 @@ namespace dbtools
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
 
-    //====================================================================
+
     //= WarningsContainer
-    //====================================================================
+
 
     static void lcl_concatWarnings( Any& _rChainLeft, const Any& _rChainRight )
     {

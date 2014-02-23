@@ -30,11 +30,11 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -59,7 +59,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -318,7 +318,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -604,7 +604,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -917,7 +917,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // SvgLinearAtomPrimitive2D class
 
 namespace drawinglayer
@@ -1004,7 +1004,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // SvgRadialAtomPrimitive2D class
 
 namespace drawinglayer

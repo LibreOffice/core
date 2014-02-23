@@ -100,11 +100,11 @@ const transition* transition::find( const OUString& rName )
     return NULL;
 }
 
-// ====================================================================
 
 
 
-// ====================================================================
+
+
 
 SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
 {
@@ -120,7 +120,7 @@ SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
     return rIn;
 }
 
-// ====================================================================
+
 
 static bool convertMeasure( OUString& rString )
 {
@@ -158,7 +158,7 @@ static bool convertMeasure( OUString& rString )
 }
 
 
-// ====================================================================
+
 
 bool PropertySet::hasProperty( sal_Int32 nProperty ) const
 {
@@ -176,7 +176,7 @@ Any PropertySet::getProperty( sal_Int32 nProperty ) const
         return Any();
 }
 
-// ====================================================================
+
 
 /** this adds an any to another any.
     if rNewValue is empty, rOldValue is returned.
@@ -213,7 +213,7 @@ static Any addToSequence( const Any& rOldValue, const Any& rNewValue )
     }
 }
 
-// ====================================================================
+
 
 AnimationImporter::AnimationImporter( ImplSdPPTImport* pPPTImport, SvStream& rStCtrl )
 : mpPPTImport( pPPTImport ), mrStCtrl( rStCtrl )
@@ -3171,7 +3171,7 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
     }
 }
 
-// ====================================================================
+
 
 #ifdef DBG_ANIM_LOG
 void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend )

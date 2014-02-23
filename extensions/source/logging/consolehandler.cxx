@@ -60,9 +60,9 @@ namespace logging
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    //====================================================================
+
     //= ConsoleHandler - declaration
-    //====================================================================
+
 
     typedef ::cppu::WeakComponentImplHelper3    <   XConsoleHandler
                                                 ,   XServiceInfo
@@ -116,9 +116,9 @@ namespace logging
         void    leaveMethod( MethodGuard::Access );
     };
 
-    //====================================================================
+
     //= ConsoleHandler - implementation
-    //====================================================================
+
 
     ConsoleHandler::ConsoleHandler( const Reference< XComponentContext >& _rxContext )
         :ConsoleHandler_Base( m_aMutex )

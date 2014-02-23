@@ -39,11 +39,11 @@
 #include <sfx2/printer.hxx>
 #include <vcl/waitobj.hxx>
 
-//========================================================================
+
 
 #define MORE_BTN(x) pMoreBt->x
 
-//========================================================================
+
 
 void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
 {

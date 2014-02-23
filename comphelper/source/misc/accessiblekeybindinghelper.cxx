@@ -30,9 +30,9 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    //==============================================================================
+
     // OAccessibleKeyBindingHelper
-    //==============================================================================
+
 
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper()
     {

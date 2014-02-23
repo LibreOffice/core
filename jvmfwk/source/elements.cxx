@@ -168,7 +168,7 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 }
 
 
-//====================================================================
+
 VersionInfo::VersionInfo(): arVersions(NULL)
 {
 }
@@ -204,7 +204,7 @@ sal_Int32 VersionInfo::getExcludeVersionSize()
 {
     return vecExcludeVersions.size();
 }
-//==================================================================
+
 
 NodeJava::NodeJava(Layer layer):
     m_layer(layer)
@@ -797,7 +797,7 @@ bool NodeJava::createSettingsDocument() const
     return true;
 }
 
-//=====================================================================
+
 CNodeJavaInfo::CNodeJavaInfo() :
     m_bEmptyNode(false), bNil(true), bAutoSelect(true),
     nFeatures(0), nRequirements(0)
@@ -1048,7 +1048,7 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
     return pInfo;
 }
 
-//================================================================================
+
 MergedSettings::MergedSettings():
     m_bEnabled(false),
     m_sClassPath(),

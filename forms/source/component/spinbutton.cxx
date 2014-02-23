@@ -41,18 +41,18 @@ namespace frm
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::form::binding;
 
-    //====================================================================
+
     //= OSpinButtonModel
-    //====================================================================
+
     // implemented elsewhere
     Any translateExternalDoubleToControlIntValue(
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
         const OUString& _rMinValueName, const OUString& _rMaxValueName );
     Any translateControlIntToExternalDoubleValue( const Any& _rControlIntValue );
 
-    //====================================================================
+
     //= OSpinButtonModel
-    //====================================================================
+
 
 
     OSpinButtonModel::OSpinButtonModel( const Reference<XComponentContext>& _rxFactory )

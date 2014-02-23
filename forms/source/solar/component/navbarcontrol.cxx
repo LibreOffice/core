@@ -65,9 +65,9 @@ namespace frm
         xTypedPeer->method( param1 );  \
     }
 
-    //==================================================================
+
     // ONavigationBarControl
-    //==================================================================
+
 
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)
         :UnoControl(), m_xContext(_rxORB)
@@ -229,9 +229,9 @@ namespace frm
         FORWARD_TO_PEER_1( XVclWindowPeer, setDesignMode, _bOn );
     }
 
-    //==================================================================
+
     // ONavigationBarPeer
-    //==================================================================
+
 
     ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
         Window* _pParentWindow, const Reference< XControlModel >& _rxModel )

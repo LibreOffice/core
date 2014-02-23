@@ -90,9 +90,9 @@ namespace svt
         }
     }
 
-    // ===================================================================
+
     // = IAssigmentData
-    // ===================================================================
+
     class IAssigmentData
     {
     public:
@@ -129,9 +129,9 @@ namespace svt
     {
     }
 
-    // ===================================================================
+
     // = AssigmentTransientData
-    // ===================================================================
+
     class AssigmentTransientData : public IAssigmentData
     {
     protected:
@@ -267,9 +267,9 @@ public:
         OSL_FAIL( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
 
-    // ===================================================================
+
     // = AssignmentPersistentData
-    // ===================================================================
+
     class AssignmentPersistentData
             :public ::utl::ConfigItem
             ,public IAssigmentData
@@ -483,9 +483,9 @@ void AssignmentPersistentData::Commit()
         return getInt32Property( "CommandType" );
     }
 
-    // ===================================================================
+
     // = AddressBookSourceDialogData
-    // ===================================================================
+
     struct AddressBookSourceDialogData
     {
         FixedText*      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
@@ -541,9 +541,9 @@ void AssignmentPersistentData::Commit()
 
     };
 
-    // ===================================================================
+
     // = AddressBookSourceDialog
-    // ===================================================================
+
 
 
     AddressBookSourceDialog::AddressBookSourceDialog(Window* _pParent,

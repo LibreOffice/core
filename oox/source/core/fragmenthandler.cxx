@@ -24,14 +24,14 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 
-// ============================================================================
+
 
 FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef xRelations ) :
     mrFilter( rFilter ),
@@ -40,7 +40,7 @@ FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFra
 {
 }
 
-// ============================================================================
+
 
 FragmentHandler::FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath ) :
     FragmentHandler_BASE( FragmentBaseDataRef( new FragmentBaseData( rFilter, rFragmentPath, rFilter.importRelations( rFragmentPath ) ) ) )
@@ -126,7 +126,7 @@ const RecordInfo* FragmentHandler::getRecordInfos() const
     return 0;
 }
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

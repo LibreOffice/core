@@ -26,7 +26,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

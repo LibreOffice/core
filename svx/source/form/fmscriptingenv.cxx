@@ -70,9 +70,9 @@ namespace svxform
 
     class FormScriptingEnvironment;
 
-    //====================================================================
+
     //= FormScriptListener
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XScriptListener
                                     >   FormScriptListener_Base;
 
@@ -137,9 +137,9 @@ namespace svxform
         DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
     };
 
-    //====================================================================
+
     //= FormScriptingEnvironment
-    //====================================================================
+
     class FormScriptingEnvironment : public IFormScriptingEnvironment
     {
     private:
@@ -177,9 +177,9 @@ namespace svxform
         FormScriptingEnvironment& operator=( const FormScriptingEnvironment& );     // never implemented
     };
 
-    //====================================================================
+
     //= FormScriptListener
-    //====================================================================
+
 
     FormScriptListener::FormScriptListener( FormScriptingEnvironment* pScriptExecutor )
         :m_pScriptExecutor( pScriptExecutor )
@@ -803,9 +803,9 @@ namespace svxform
         return 0L;
     }
 
-    //====================================================================
+
     //= FormScriptingEnvironment
-    //====================================================================
+
 
     FormScriptingEnvironment::FormScriptingEnvironment( FmFormModel& _rModel )
         :m_refCount( 0 )

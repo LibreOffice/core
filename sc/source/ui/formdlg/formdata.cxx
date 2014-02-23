@@ -19,7 +19,7 @@
 
 #include "formdata.hxx"
 
-//============================================================================
+
 
 ScFormEditData::ScFormEditData() : formula::FormEditData()
 {

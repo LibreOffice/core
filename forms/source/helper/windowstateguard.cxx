@@ -41,9 +41,9 @@ namespace frm
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
+
     //= WindowStateGuard_Impl
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XWindowListener2
                                     >   WindowStateGuard_Impl_Base;
     class WindowStateGuard_Impl : public WindowStateGuard_Impl_Base
@@ -186,9 +186,9 @@ namespace frm
         dispose();
     }
 
-    //====================================================================
+
     //= WindowStateGuard
-    //====================================================================
+
 
     WindowStateGuard::WindowStateGuard()
     {

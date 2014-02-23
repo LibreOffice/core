@@ -105,7 +105,7 @@ void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyV
     }
 }
 
-//===============================================
+
 void SAL_CALL PPPOptimizer::addStatusListener( const Reference< XStatusListener >&, const URL& )
     throw( RuntimeException )
 {
@@ -113,7 +113,7 @@ void SAL_CALL PPPOptimizer::addStatusListener( const Reference< XStatusListener 
     OSL_FAIL( "PPPOptimizer::addStatusListener()\nNot implemented yet!" );
 }
 
-//===============================================
+
 void SAL_CALL PPPOptimizer::removeStatusListener( const Reference< XStatusListener >&, const URL& )
     throw( RuntimeException )
 {

@@ -86,17 +86,17 @@ namespace pcr
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    //====================================================================
+
     //= ISQLCommandAdapter
-    //====================================================================
+
 
     ISQLCommandAdapter::~ISQLCommandAdapter()
     {
     }
 
-    //====================================================================
+
     //= SQLCommandDesigner
-    //====================================================================
+
 
     SQLCommandDesigner::SQLCommandDesigner( const Reference< XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,

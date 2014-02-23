@@ -22,7 +22,7 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-//=========================================================================
+
 SimpleInteractionRequest::SimpleInteractionRequest(
                                     const uno::Any & rRequest,
                                     const sal_Int32 nContinuations )
@@ -86,7 +86,7 @@ SimpleInteractionRequest::SimpleInteractionRequest(
     setContinuations( aContinuations );
 }
 
-//=========================================================================
+
 sal_Int32 SimpleInteractionRequest::getResponse() const
 {
     rtl::Reference< InteractionContinuation > xSelection = getSelection();

@@ -22,9 +22,9 @@
 
 namespace rptui
 {
-//============================================================================
+
 // OObjectListener
-//============================================================================
+
 
 
 OObjectListener::OObjectListener(OObjectBase* _pObject)
@@ -55,9 +55,9 @@ void SAL_CALL OObjectListener::propertyChange( const  ::com::sun::star::beans::P
 
 
 
-//============================================================================
+
 // DlgEdHint
-//============================================================================
+
 
 TYPEINIT1( DlgEdHint, SfxHint );
 

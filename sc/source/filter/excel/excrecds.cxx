@@ -538,7 +538,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
     }
 }
-// ============================================================================
+
 
 XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :
     XclExpRecord(EXC_ID_PASSWORD, 2),
@@ -560,7 +560,7 @@ void XclExpPassHash::WriteBody(XclExpStream& rStrm)
     rStrm << mnHash;
 }
 
-// ============================================================================
+
 
 XclExpFiltermode::XclExpFiltermode() :
     XclExpEmptyRecord( EXC_ID_FILTERMODE )
@@ -1103,6 +1103,6 @@ bool XclExpFilterManager::HasFilterMode( SCTAB nScTab )
     return false;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

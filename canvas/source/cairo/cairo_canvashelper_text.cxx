@@ -129,7 +129,7 @@ namespace cairocanvas
         // state and change only when update is necessary
 
         // accumulate non-empty clips into one region
-        // ==========================================
+
 
         Region aClipRegion;
 

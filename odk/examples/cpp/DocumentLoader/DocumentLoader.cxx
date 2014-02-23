@@ -70,7 +70,7 @@ using namespace com::sun::star::registry;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-//============================================================================
+
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     OUString sConnectionString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");

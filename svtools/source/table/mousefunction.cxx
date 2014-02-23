@@ -29,9 +29,9 @@ namespace svt { namespace table
 {
 //......................................................................................................................
 
-    //==================================================================================================================
+
     //= MouseFunction
-    //==================================================================================================================
+
 
     oslInterlockedCount MouseFunction::acquire()
     {
@@ -50,9 +50,9 @@ namespace svt { namespace table
         return newCount;
     }
 
-    //==================================================================================================================
+
     //= ColumnResize
-    //==================================================================================================================
+
 
     FunctionResult ColumnResize::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
@@ -180,9 +180,9 @@ namespace svt { namespace table
         return DeactivateFunction;
     }
 
-    //==================================================================================================================
+
     //= RowSelection
-    //==================================================================================================================
+
 
     FunctionResult RowSelection::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
@@ -234,9 +234,9 @@ namespace svt { namespace table
         return SkipFunction;
     }
 
-    //==================================================================================================================
+
     //= ColumnSortHandler
-    //==================================================================================================================
+
 
     FunctionResult ColumnSortHandler::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
     {

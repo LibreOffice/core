@@ -39,9 +39,9 @@ namespace svt
 
     typedef std::vector< RoadmapItem* > HL_Vector;
 
-    //=====================================================================
+
     //= ColorChanger
-    //=====================================================================
+
     class IDLabel :  public FixedText
     {
     public:
@@ -50,9 +50,9 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     };
 
-    //=====================================================================
+
     //= ColorChanger
-    //=====================================================================
+
     class ColorChanger
     {
     protected:
@@ -73,9 +73,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= RoadmapItem
-    //=====================================================================
+
     class RoadmapItem : public RoadmapTypes
     {
     private:
@@ -114,9 +114,9 @@ namespace svt
         void                    ImplUpdatePosSize();
     };
 
-    //=====================================================================
+
     //= RoadmapImpl
-    //=====================================================================
+
     class RoadmapImpl : public RoadmapTypes
     {
     protected:
@@ -187,9 +187,9 @@ namespace svt
         m_aItemSizePixel = aLabelSize;
     }
 
-    //=====================================================================
+
     //= Roadmap
-    //=====================================================================
+
 
     ORoadmap::ORoadmap( Window* _pParent, WinBits _nWinStyle )
         :Control( _pParent, _nWinStyle )

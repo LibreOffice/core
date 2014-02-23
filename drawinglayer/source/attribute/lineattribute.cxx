@@ -21,7 +21,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

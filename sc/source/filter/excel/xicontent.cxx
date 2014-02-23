@@ -1329,6 +1329,6 @@ XclImpSheetProtectBuffer::Sheet* XclImpSheetProtectBuffer::GetSheetItem( SCTAB n
     return &itr->second;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

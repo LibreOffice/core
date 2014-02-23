@@ -43,9 +43,9 @@ namespace pcr
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= ButtonNavigationHandler
-    //====================================================================
+
     DBG_NAME( ButtonNavigationHandler )
 
     ButtonNavigationHandler::ButtonNavigationHandler( const Reference< XComponentContext >& _rxContext )

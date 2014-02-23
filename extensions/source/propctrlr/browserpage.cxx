@@ -29,9 +29,9 @@ namespace pcr
     #define LAYOUT_BORDER_RIGHT     3
     #define LAYOUT_BORDER_BOTTOM    3
 
-    //==================================================================
+
     // class OBrowserPage
-    //==================================================================
+
 
     OBrowserPage::OBrowserPage(Window* pParent,WinBits nWinStyle)
             :TabPage(pParent,nWinStyle)

@@ -101,7 +101,7 @@ bool jarManifestHeaderPresent(
         && readLine( &line, name, manifestContent, RTL_TEXTENCODING_ASCII_US );
 }
 
-//==============================================================================
+
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class ComponentPackageImpl : public ::dp_registry::backend::Package

@@ -36,7 +36,7 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
 
-// =======================================================================
+
 
 inline double toRadian(int nDegree)
 {
@@ -228,7 +228,7 @@ void CoreTextStyle::SetTextColor( const RGBAColor& rColor )
     CFRelease( pCGColor);
 }
 
-// =======================================================================
+
 
 PhysicalFontFace* CoreTextFontData::Clone( void ) const
 {
@@ -284,7 +284,7 @@ int CoreTextFontData::GetFontTable( const char pTagName[5], unsigned char* pResu
     return (int)nByteLength;
 }
 
-// =======================================================================
+
 
 ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFontEnabled )
 {
@@ -417,7 +417,7 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     }
 }
 
-// =======================================================================
+
 
 SystemFontList::SystemFontList()
 :   mpCTFontCollection( NULL )
@@ -486,7 +486,7 @@ bool SystemFontList::Init( void )
     return true;
 }
 
-// =======================================================================
+
 
 SystemFontList* GetCoretextFontList( void )
 {

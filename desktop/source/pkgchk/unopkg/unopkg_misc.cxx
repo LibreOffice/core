@@ -66,7 +66,7 @@ OUString toString( OptionInfo const * info )
     return buf.makeStringAndClear();
 }
 
-//==============================================================================
+
 OptionInfo const * getOptionInfo(
     OptionInfo const * list,
     OUString const & opt, sal_Unicode copt )
@@ -97,7 +97,7 @@ OptionInfo const * getOptionInfo(
     return 0;
 }
 
-//==============================================================================
+
 bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
     OSL_ASSERT( option_info != 0 );
@@ -128,7 +128,7 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
     }
     return false;
 }
-//==============================================================================
+
 
 bool isBootstrapVariable(sal_uInt32 * pIndex)
 {
@@ -144,7 +144,7 @@ bool isBootstrapVariable(sal_uInt32 * pIndex)
     return false;
 }
 
-//==============================================================================
+
 bool readArgument(
     OUString * pValue, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -186,19 +186,19 @@ struct ProcessWorkingDir : public rtl::StaticWithInit<
 };
 } // anon namespace
 
-//==============================================================================
+
 OUString const & getExecutableDir()
 {
     return ExecutableDir::get();
 }
 
-//==============================================================================
+
 OUString const & getProcessWorkingDir()
 {
     return ProcessWorkingDir::get();
 }
 
-//==============================================================================
+
 OUString makeAbsoluteFileUrl(
     OUString const & sys_path, OUString const & base_url, bool throw_exc )
 {
@@ -320,7 +320,7 @@ void printf_unaccepted_licenses(
         dp_misc::writeConsole("License not accepted\n\n");
 }
 
-//==============================================================================
+
 void printf_packages(
     ::std::vector< Reference<deployment::XPackage> > const & allExtensions,
     ::std::vector<bool> const & vecUnaccepted,
@@ -437,7 +437,7 @@ OUString getLockFilePath()
 
     return ret;
 }
-//==============================================================================
+
 Reference<XComponentContext> getUNO(
     bool verbose, bool shared, bool bGui,
     Reference<XComponentContext> & out_localContext)

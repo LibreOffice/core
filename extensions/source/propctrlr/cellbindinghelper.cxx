@@ -75,9 +75,9 @@ namespace pcr
         };
     }
 
-    //========================================================================
+
     //= CellBindingHelper
-    //========================================================================
+
 
     CellBindingHelper::CellBindingHelper( const Reference< XPropertySet >& _rxControlModel, const Reference< XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )

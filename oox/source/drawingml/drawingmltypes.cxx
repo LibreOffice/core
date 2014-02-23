@@ -35,7 +35,7 @@ using namespace ::com::sun::star::style;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue )
@@ -380,7 +380,7 @@ IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttr
     return r;
 }
 
-// ============================================================================
+
 
 /** converts the attributes from an CT_Size2D into an awt Size with 1/100thmm */
 awt::Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
@@ -396,7 +396,7 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
     return range;
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

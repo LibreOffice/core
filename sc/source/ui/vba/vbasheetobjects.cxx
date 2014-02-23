@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-// ============================================================================
+
 
 namespace {
 
@@ -60,9 +60,9 @@ inline double lclPointsToHmm( const uno::Any& rPoints ) throw (uno::RuntimeExcep
 
 } // namespace
 
-// ============================================================================
+
 // Base implementations
-// ============================================================================
+
 
 /** Container for a specific type of drawing object in a spreadsheet.
 
@@ -239,7 +239,7 @@ void ScVbaObjectContainer::implOnShapeCreated( const uno::Reference< drawing::XS
 {
 }
 
-// ============================================================================
+
 
 class ScVbaObjectEnumeration : public SimpleEnumerationBase
 {
@@ -264,7 +264,7 @@ uno::Any ScVbaObjectEnumeration::createCollectionObject( const uno::Any& rSource
     return mxContainer->createCollectionObject( rSource );
 }
 
-// ============================================================================
+
 
 ScVbaSheetObjectsBase::ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (css::uno::RuntimeException) :
     ScVbaSheetObjects_BASE( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
@@ -308,9 +308,9 @@ uno::Any ScVbaSheetObjectsBase::getItemByStringIndex( const OUString& rIndex ) t
     return mxContainer->getItemByStringIndex( rIndex );
 }
 
-// ============================================================================
+
 // Graphic object containers supporting ooo.vba.excel.XGraphicObject
-// ============================================================================
+
 
 ScVbaGraphicObjectsBase::ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (uno::RuntimeException) :
     ScVbaGraphicObjects_BASE( rxContainer )
@@ -340,9 +340,9 @@ uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno
     return uno::Any( uno::Reference< excel::XSheetObject >( xVbaObject.get() ) );
 }
 
-// ============================================================================
+
 // Drawing controls
-// ============================================================================
+
 
 class ScVbaControlContainer : public ScVbaObjectContainer
 {
@@ -455,9 +455,9 @@ void ScVbaControlContainer::implOnShapeCreated( const uno::Reference< drawing::X
     xControlShape->setControl( xControlModel );
 }
 
-// ============================================================================
+
 // Push button
-// ============================================================================
+
 
 class ScVbaButtonContainer : public ScVbaControlContainer
 {
@@ -501,7 +501,7 @@ bool ScVbaButtonContainer::implCheckProperties( const uno::Reference< beans::XPr
     return lclGetProperty( bToggle, rxModelProps, "Toggle" ) && !bToggle;
 }
 
-// ============================================================================
+
 
 ScVbaButtons::ScVbaButtons(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -514,6 +514,6 @@ ScVbaButtons::ScVbaButtons(
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButtons, "ooo.vba.excel.Buttons" )
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

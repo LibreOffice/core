@@ -55,9 +55,9 @@ namespace svxform
 
     using namespace ::com::sun::star;
 
-    //====================================================================
+
     //= LegacyFormController
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   form::XFormController
                                     ,   XServiceInfo
                                     >   LegacyFormController_Base;

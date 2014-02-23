@@ -26,9 +26,9 @@
 
 
 #define WID_CHAOS_START 500
-//=========================================================================
+
 // class CntStaticPoolDefaults_Impl
-//=========================================================================
+
 
 class CntItemPool;
 
@@ -55,7 +55,7 @@ public:
 
 
 
-//=========================================================================
+
 
 class CntItemPool: public SfxItemPool
 {
@@ -89,9 +89,9 @@ sal_uInt16 NoChaos::ReleaseItemPool()
     return CntItemPool::Release();
 }
 
-//=========================================================================
+
 //  CntItemPool implementation
-//=========================================================================
+
 
 static CntStaticPoolDefaults_Impl* pPoolDefs_Impl = NULL;
 
@@ -159,9 +159,9 @@ sal_uInt16 CntItemPool::Release()
     return nRefs;
 }
 
-//=========================================================================
+
 // CntStaticPoolDefaults_Impl implementation.
-//=========================================================================
+
 
 inline void CntStaticPoolDefaults_Impl::Insert(
          SfxPoolItem* pItem,        /* Static Pool Default Item */

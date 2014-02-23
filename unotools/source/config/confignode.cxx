@@ -49,9 +49,9 @@ namespace utl
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::configuration;
 
-    //========================================================================
+
     //= OConfigurationNode
-    //========================================================================
+
 
     OConfigurationNode::OConfigurationNode(const Reference< XInterface >& _rxNode )
         :m_bEscapeNames(false)
@@ -475,9 +475,9 @@ namespace utl
         m_xContainerAccess.clear();
     }
 
-    //========================================================================
+
     //= helper
-    //========================================================================
+
     namespace
     {
 

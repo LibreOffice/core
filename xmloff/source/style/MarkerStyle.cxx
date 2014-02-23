@@ -181,7 +181,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                     aBezier));
             const basegfx::B2DRange aPolyPolygonRange(aPolyPolygon.getB2DRange());
 
-            /////////////////
+
             // Viewbox (viewBox="0 0 1500 1000")
 
             SdXMLImExViewBox aViewBox(

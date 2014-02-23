@@ -41,9 +41,9 @@ namespace svt
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     //= SmartContent
-    //====================================================================
+
 
     SmartContent::SmartContent()
         :m_pContent( NULL )

@@ -27,7 +27,7 @@
 #include "subtdlg.hxx"
 
 
-//==================================================================
+
 
 ScSubTotalDlg::ScSubTotalDlg(Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialog(pParent, "SubTotalDialog",

@@ -62,15 +62,15 @@ namespace svt
     using namespace ::com::sun::star::uno;
     using namespace com::sun::star::accessibility::AccessibleEventId;
     using  com::sun::star::accessibility::XAccessible;
-    //==================================================================
+
 
     IEditImplementation::~IEditImplementation()
     {
     }
 
-    //==================================================================
+
     //= EditBrowserHeader
-    //==================================================================
+
 
     void EditBrowserHeader::DoubleClick()
     {
@@ -87,9 +87,9 @@ namespace svt
     }
 
 
-    //==================================================================
+
     //= EditBrowseBox
-    //==================================================================
+
 
     void EditBrowseBox::BrowserMouseEventPtr::Clear()
     {
@@ -154,7 +154,7 @@ namespace svt
         impl_construct();
     }
 
-    //==================================================================
+
     EditBrowseBox::EditBrowseBox( Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode _nMode )
                   :BrowseBox( pParent, nBits, _nMode )
                   ,nStartEvent(0)
@@ -1334,7 +1334,7 @@ namespace svt
     {
         Controller()->resume();
     }
-    //===============================================================================
+
 
     DBG_NAME(CellController);
 

@@ -59,9 +59,9 @@ void throwNoSuchElementException() throw(NoSuchElementException)
     throw NoSuchElementException();
 }
 
-//==========================================================================
+
 //= ODriverEnumeration
-//==========================================================================
+
 class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
     friend class OSDBCDriverManager;
@@ -108,9 +108,9 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     return makeAny( *m_aPos++ );
 }
 
-    //=====================================================================
+
     //= helper
-    //=====================================================================
+
 
     /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
     struct EnsureDriver : public ::std::unary_function< DriverAccess, DriverAccess >
@@ -244,9 +244,9 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         }
     };
 
-//==========================================================================
+
 //= OSDBCDriverManager
-//==========================================================================
+
 
 OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
     :m_xContext( _rxContext )

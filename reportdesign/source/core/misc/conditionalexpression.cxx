@@ -21,9 +21,9 @@
 //........................................................................
 namespace rptui
 {
-    // =============================================================================
+
     // = ConditionalExpression
-    // =============================================================================
+
 
     ConditionalExpression::ConditionalExpression( const sal_Char* _pAsciiPattern )
         :m_sPattern( OUString::createFromAscii( _pAsciiPattern ) )
@@ -162,9 +162,9 @@ namespace rptui
         return true;
     }
 
-    // =============================================================================
+
     // = ConditionalExpressionFactory
-    // =============================================================================
+
 
     size_t ConditionalExpressionFactory::getKnownConditionalExpressions( ConditionalExpressions& _out_rCondExp )
     {

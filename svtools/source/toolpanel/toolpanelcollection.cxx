@@ -30,9 +30,9 @@ namespace svt
 {
 //........................................................................
 
-    //====================================================================
+
     //= ToolPanelCollection_Data
-    //====================================================================
+
     struct ToolPanelCollection_Data
     {
         ::std::vector< PToolPanel >                 aPanels;
@@ -40,9 +40,9 @@ namespace svt
         PanelDeckListeners                          aListeners;
     };
 
-    //====================================================================
+
     //= ToolPanelCollection
-    //====================================================================
+
 
     ToolPanelCollection::ToolPanelCollection()
         :m_pData( new ToolPanelCollection_Data )

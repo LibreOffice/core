@@ -692,7 +692,7 @@ bool ScFilterDlg::IsRefInputMode() const
 
 
 // Handler:
-// ========
+
 
 IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 {

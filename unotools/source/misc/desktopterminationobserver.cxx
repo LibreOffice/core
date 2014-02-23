@@ -56,9 +56,9 @@ namespace utl
             return s_aData;
         }
 
-        //================================================================
+
         //= OObserverImpl
-        //================================================================
+
         class OObserverImpl : public ::cppu::WeakImplHelper1< XTerminateListener >
         {
         public:
@@ -169,9 +169,9 @@ namespace utl
         }
     }
 
-    //====================================================================
+
     //= DesktopTerminationObserver
-    //====================================================================
+
 
     void DesktopTerminationObserver::registerTerminationListener( ITerminationListener* _pListener )
     {

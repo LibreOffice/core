@@ -180,7 +180,7 @@ namespace slideshow
             EventEntryVector().swap( maNextEvents );
 
             // perform topmost, ready-to-execute event
-            // =======================================
+
 
             const double nCurrTime( mpTimer->getElapsedTime() );
 

@@ -114,9 +114,9 @@ namespace sfx2
 
     }
 
-    //====================================================================
+
     //= UserInputInterception
-    //====================================================================
+
 
     UserInputInterception::UserInputInterception( ::cppu::OWeakObject& _rControllerImpl, ::osl::Mutex& _rMutex )
         :m_pData( new UserInputInterception_Data( _rControllerImpl, _rMutex ) )

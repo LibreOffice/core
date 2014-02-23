@@ -34,7 +34,7 @@
 
 using namespace usr;
 
-//==================================================================================================
+
 class Listener_Impl
     : public UsrObject
     , public XMouseListener
@@ -185,7 +185,7 @@ void Listener_Impl::windowPaint( const PaintEvent& evt )
 void Listener_Impl::disposing( const EventObject& evt )     {}
 
 
-//==================================================================================================
+
 class FrameControlApplication
     : public Application
 {

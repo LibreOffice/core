@@ -29,21 +29,21 @@
 #include <svx/svddrgv.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
 {
     return rRefObj.GetProperties();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i27224#
 sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfVirtObj(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrVirtObj,SdrObject);
 
@@ -60,7 +60,7 @@ SdrVirtObj::~SdrVirtObj()
     rRefObj.DelReference(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 const SdrObject& SdrVirtObj::GetReferencedObj() const
 {
@@ -86,7 +86,7 @@ void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
     aAnchor=rAnchorPos;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::SetModel(SdrModel* pNewModel)
 {
@@ -203,7 +203,7 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
     return aPolyPolygon;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt32 SdrVirtObj::GetHdlCount() const
 {
@@ -273,7 +273,7 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrVirtObj::hasSpecialDrag() const
 {
@@ -328,7 +328,7 @@ OUString SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     return rRefObj.getSpecialDragComment(rDrag);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrVirtObj::BegCreate(SdrDragStat& rStat)
 {
@@ -361,7 +361,7 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     // TODO: we don't handle offsets yet!
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::NbcMove(const Size& rSiz)
 {
@@ -393,7 +393,7 @@ void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
     SetRectsDirty();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::Move(const Size& rSiz)
 {
@@ -444,7 +444,7 @@ void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::RecalcSnapRect()
 {
@@ -479,7 +479,7 @@ void SdrVirtObj::NbcSetSnapRect(const Rectangle& rRect)
     rRefObj.NbcSetSnapRect(aR);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 const Rectangle& SdrVirtObj::GetLogicRect() const
 {
@@ -506,7 +506,7 @@ void SdrVirtObj::NbcSetLogicRect(const Rectangle& rRect)
     rRefObj.NbcSetLogicRect(aR);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 long SdrVirtObj::GetRotateAngle() const
 {
@@ -518,7 +518,7 @@ long SdrVirtObj::GetShearAngle(bool bVertical) const
     return rRefObj.GetShearAngle(bVertical);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt32 SdrVirtObj::GetSnapPointCount() const
 {
@@ -555,7 +555,7 @@ void SdrVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
     SetRectsDirty();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObjGeoData* SdrVirtObj::NewGeoData() const
 {
@@ -573,7 +573,7 @@ void SdrVirtObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetRectsDirty();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObjGeoData* SdrVirtObj::GetGeoData() const
 {
@@ -588,7 +588,7 @@ void SdrVirtObj::SetGeoData(const SdrObjGeoData& rGeo)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::NbcReformatText()
 {
@@ -600,7 +600,7 @@ void SdrVirtObj::ReformatText()
     rRefObj.ReformatText();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrVirtObj::HasMacro() const
 {

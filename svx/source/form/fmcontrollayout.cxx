@@ -190,9 +190,9 @@ namespace svxform
         }
     }
 
-    //====================================================================
+
     //= ControlLayouter
-    //====================================================================
+
 
     Reference< XPropertySet > ControlLayouter::getDefaultDocumentTextStyle( const Reference< XPropertySet >& _rxModel )
     {

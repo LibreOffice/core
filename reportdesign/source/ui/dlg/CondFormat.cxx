@@ -61,9 +61,9 @@ namespace rptui
 
     using namespace ::com::sun::star::report;
 
-    //========================================================================
+
     // UpdateLocker
-    //========================================================================
+
     class UpdateLocker
     {
         Window& m_rWindow;
@@ -80,9 +80,9 @@ namespace rptui
         }
     };
 
-    //========================================================================
+
     // class ConditionalFormattingDialog
-    //========================================================================
+
     ConditionalFormattingDialog::ConditionalFormattingDialog(
             Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
         :ModalDialog( _pParent, ModuleRes(RID_CONDFORMAT) )

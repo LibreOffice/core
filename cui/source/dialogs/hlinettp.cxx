@@ -66,7 +66,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 
     SetExchangeSupport ();
 
-    ///////////////////////////////////////
+
     // set defaults
     maRbtLinktypInternet.Check ();
     maFtLogin.Show( false );
@@ -76,7 +76,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbAnonymous.Show( false );
     maBtBrowse.Enable( true );
 
-    ///////////////////////////////////////
+
     // overload handlers
     Link aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
     maRbtLinktypInternet.SetClickHdl( aLink );
@@ -402,7 +402,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
 {
-    /////////////////////////////////////////////////
+
     // Open URL if available
 
     SfxStringItem aName( SID_FILE_NAME, OUString("http://") );

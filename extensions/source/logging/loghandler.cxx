@@ -46,9 +46,9 @@ namespace logging
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    //====================================================================
+
     //= LogHandlerHelper
-    //====================================================================
+
 
     LogHandlerHelper::LogHandlerHelper( const Reference< XComponentContext >& _rxContext, ::osl::Mutex& _rMutex, ::cppu::OBroadcastHelper& _rBHelper )
         :m_eEncoding( RTL_TEXTENCODING_UTF8 )

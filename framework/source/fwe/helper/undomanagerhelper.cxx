@@ -65,9 +65,9 @@ namespace framework
     using ::com::sun::star::util::XModifyListener;
     using ::svl::IUndoManager;
 
-    //==================================================================================================================
+
     //= UndoActionWrapper
-    //==================================================================================================================
+
     class UndoActionWrapper : public SfxUndoAction
     {
     public:
@@ -141,9 +141,9 @@ namespace framework
         return false;
     }
 
-    //==================================================================================================================
+
     //= UndoManagerRequest
-    //==================================================================================================================
+
     class UndoManagerRequest : public ::comphelper::AnyEvent
     {
     public:
@@ -197,9 +197,9 @@ namespace framework
 
 
 
-    //==================================================================================================================
+
     //= UndoManagerHelper_Impl
-    //==================================================================================================================
+
     class UndoManagerHelper_Impl : public SfxUndoListener
     {
     private:
@@ -921,9 +921,9 @@ namespace framework
         // TODO: do we need to care? Or is this the responsibility of our owner?
     }
 
-    //==================================================================================================================
+
     //= UndoManagerHelper
-    //==================================================================================================================
+
 
     UndoManagerHelper::UndoManagerHelper( IUndoManagerImplementation& i_undoManagerImpl )
         :m_pImpl( new UndoManagerHelper_Impl( i_undoManagerImpl ) )

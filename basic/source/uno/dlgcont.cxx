@@ -63,7 +63,7 @@ using namespace osl;
 
 using com::sun::star::uno::Reference;
 
-//============================================================================
+
 // Implementation class SfxDialogLibraryContainer
 
 const sal_Char* SAL_CALL SfxDialogLibraryContainer::getInfoFileName() const { return "dialog"; }
@@ -447,7 +447,7 @@ SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ ) thr
 {
     return sal_False; // dialog library has no executable code
 }
-//============================================================================
+
 // Service
 
 void createRegistryInfo_SfxDialogLibraryContainer()
@@ -487,7 +487,7 @@ Reference< XInterface > SAL_CALL SfxDialogLibraryContainer::Create( const Refere
 }
 
 
-//============================================================================
+
 // Implementation class SfxDialogLibrary
 
 // Ctor

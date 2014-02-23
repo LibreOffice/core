@@ -45,7 +45,7 @@ using ::com::sun::star::container::XNameContainer;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 namespace {
 
@@ -335,7 +335,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
 
 } // namespace
 
-// ============================================================================
+
 
 void LineArrowProperties::assignUsed( const LineArrowProperties& rSourceProps )
 {
@@ -344,7 +344,7 @@ void LineArrowProperties::assignUsed( const LineArrowProperties& rSourceProps )
     moArrowLength.assignIfUsed( rSourceProps.moArrowLength );
 }
 
-// ============================================================================
+
 
 void LineProperties::assignUsed( const LineProperties& rSourceProps )
 {
@@ -442,7 +442,7 @@ sal_Int32 LineProperties::getLineWidth() const
     return convertEmuToHmm( moLineWidth.get( 0 ) );
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

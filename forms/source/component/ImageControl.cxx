@@ -81,9 +81,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::frame;
 
-//==============================================================================
+
 //= OImageControlModel
-//==============================================================================
+
 namespace
 {
     enum ImageStoreType
@@ -118,9 +118,9 @@ namespace
     }
 }
 
-//==============================================================================
+
 // OImageControlModel
-//==============================================================================
+
 
 
 InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
@@ -691,9 +691,9 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
     return 1L;
 }
 
-//==================================================================
+
 // OImageControlControl
-//==================================================================
+
 
 
 InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
@@ -947,7 +947,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     }
     else
     {
-        //////////////////////////////////////////////////////////////////////
+
         // Double click
         if (e.ClickCount == 2)
         {

@@ -34,7 +34,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
+
 
 struct LockEntrySequenceParseContext
 {
@@ -56,7 +56,7 @@ struct LockEntrySequenceParseContext
 #define STATE_LOCKTYPE  (STATE_TOP + 4)
 #define STATE_WRITE     (STATE_TOP + 5)
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockEntrySequence_startelement_callback(
     void *,
     int parent,
@@ -121,7 +121,7 @@ extern "C" int LockEntrySequence_startelement_callback(
     return NE_XML_DECLINE;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockEntrySequence_chardata_callback(
     void *,
     int,
@@ -131,7 +131,7 @@ extern "C" int LockEntrySequence_chardata_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockEntrySequence_endelement_callback(
     void *userdata,
     int state,
@@ -181,7 +181,7 @@ extern "C" int LockEntrySequence_endelement_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 // static
 bool LockEntrySequence::createFromXML( const OString & rInData,
                                        uno::Sequence<

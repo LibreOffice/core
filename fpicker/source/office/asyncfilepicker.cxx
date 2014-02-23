@@ -30,9 +30,9 @@ namespace svt
 {
 //........................................................................
 
-    //====================================================================
+
     //= AsyncPickerAction
-    //====================================================================
+
     DBG_NAME( AsyncPickerAction )
 
     AsyncPickerAction::AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction )

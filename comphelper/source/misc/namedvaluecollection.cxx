@@ -46,9 +46,9 @@ namespace comphelper
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 
-    //====================================================================
+
     //= NamedValueCollection_Impl
-    //====================================================================
+
     typedef ::boost::unordered_map< OUString, Any, OUStringHash >    NamedValueRepository;
 
     struct NamedValueCollection_Impl
@@ -56,9 +56,9 @@ namespace comphelper
         NamedValueRepository    aValues;
     };
 
-    //====================================================================
+
     //= NamedValueCollection
-    //====================================================================
+
 
     NamedValueCollection::NamedValueCollection()
         :m_pImpl( new NamedValueCollection_Impl )

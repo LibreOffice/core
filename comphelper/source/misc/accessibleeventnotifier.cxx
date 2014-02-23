@@ -31,9 +31,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-//=====================================================================
+
 //= AccessibleEventNotifier
-//=====================================================================
+
 
 namespace
 {

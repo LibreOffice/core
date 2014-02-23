@@ -32,7 +32,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::drawingml::chart::DataSequenceModel;
 
-// ============================================================================
+
 
 ExcelChartConverter::ExcelChartConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -121,7 +121,7 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
     return xDataSeq;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

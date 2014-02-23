@@ -37,9 +37,9 @@ namespace migration
     static OUString sTargetSubDir( "/user/wordbook" );
 
 
-    // =============================================================================
+
     // component operations
-    // =============================================================================
+
 
     OUString WordbookMigration_getImplementationName()
     {
@@ -74,9 +74,9 @@ namespace migration
         return *pNames;
     }
 
-    // =============================================================================
+
     // WordbookMigration
-    // =============================================================================
+
 
     WordbookMigration::WordbookMigration()
     {
@@ -288,9 +288,9 @@ bool IsUserWordbook( const OUString& rFile )
         return Any();
     }
 
-    // =============================================================================
+
     // component operations
-    // =============================================================================
+
 
     Reference< XInterface > SAL_CALL WordbookMigration_create(
         Reference< XComponentContext > const & )

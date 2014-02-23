@@ -162,7 +162,7 @@ void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-//==================================================================
+
 
 static bool lcl_HasColOutline( const ScViewData& rViewData )
 {

@@ -50,9 +50,9 @@ namespace dbp
     using namespace ::com::sun::star::text;
     using namespace ::com::sun::star::view;
 
-    //=====================================================================
+
     //= OOptionGroupLayouter
-    //=====================================================================
+
 
     OOptionGroupLayouter::OOptionGroupLayouter(const Reference< XComponentContext >& _rxContext)
         :mxContext(_rxContext)

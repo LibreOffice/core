@@ -68,9 +68,9 @@ namespace pcr
 
     using ::com::sun::star::beans::PropertyAttribute::MAYBEVOID;
 
-    //====================================================================
+
     //= XSDValidationPropertyHandler
-    //====================================================================
+
     DBG_NAME( XSDValidationPropertyHandler )
 
     XSDValidationPropertyHandler::XSDValidationPropertyHandler( const Reference< XComponentContext >& _rxContext )

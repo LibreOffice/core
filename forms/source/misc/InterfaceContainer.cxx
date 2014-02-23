@@ -165,9 +165,9 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
     }
 
 }
-//==================================================================
+
 //= ElementDescription
-//==================================================================
+
 
 ElementDescription::ElementDescription( )
 {
@@ -178,9 +178,9 @@ ElementDescription::~ElementDescription()
 {
 }
 
-//==================================================================
+
 //= OInterfaceContainer
-//==================================================================
+
 
 OInterfaceContainer::OInterfaceContainer(
                 const Reference<XComponentContext>& _rxContext,
@@ -1269,9 +1269,9 @@ void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScrip
         m_xEventAttacher->removeScriptListener( xListener );
 }
 
-//==================================================================
+
 //= OFormComponents
-//==================================================================
+
 
 Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType) throw(RuntimeException)
 {

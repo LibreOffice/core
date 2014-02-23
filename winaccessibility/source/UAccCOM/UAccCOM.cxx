@@ -58,7 +58,7 @@ OBJECT_ENTRY(CLSID_AccHyperLink, CAccHyperLink)
 OBJECT_ENTRY(CLSID_AccHypertext, CAccHypertext)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DLL Entry Point
 
 extern "C"
@@ -74,7 +74,7 @@ extern "C"
     return TRUE;    // ok
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Used to determine whether the DLL can be unloaded by OLE
 
 STDAPI DllCanUnloadNow(void)
@@ -82,7 +82,7 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Returns a class factory to create an object of the requested type
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)

@@ -41,9 +41,9 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= OTabOrderDialog
-    //====================================================================
+
 
     OTabOrderDialog::OTabOrderDialog( const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )

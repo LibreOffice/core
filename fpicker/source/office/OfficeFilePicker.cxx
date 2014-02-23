@@ -53,9 +53,9 @@ using namespace     ::com::sun::star::beans;
 using namespace     ::com::sun::star::awt;
 using namespace     ::utl;
 
-//=====================================================================
 
-//=====================================================================
+
+
 
 struct FilterEntry
 {
@@ -91,7 +91,7 @@ public:
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
-//=====================================================================
+
 
 
 FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )

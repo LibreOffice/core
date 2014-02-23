@@ -82,7 +82,7 @@ using namespace ::com::sun::star::uno;
     else \
         *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
-//==================================================================================================
+
 
 namespace {
 
@@ -309,7 +309,7 @@ static void cpp_call(
     }
 }
 
-//==================================================================================================
+
 
 namespace bridges { namespace cpp_uno { namespace shared {
 

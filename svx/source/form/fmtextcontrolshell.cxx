@@ -79,10 +79,10 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     typedef sal_uInt16 WhichId;
 
-    //====================================================================
+
     static SfxSlotId pTextControlSlots[] =
     {
         SID_CLIPBOARD_FORMAT_ITEMS,
@@ -158,9 +158,9 @@ namespace svx
         0
     };
 
-    //====================================================================
+
     //= FmFocusListenerAdapter
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XFocusListener
                                     >   FmFocusListenerAdapter_Base;
     class FmFocusListenerAdapter : public FmFocusListenerAdapter_Base
@@ -250,9 +250,9 @@ namespace svx
         m_xWindow.clear();
     }
 
-    //====================================================================
+
     //= FmMouseListenerAdapter
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XMouseListener
                                     >   FmMouseListenerAdapter_Base;
     class FmMouseListenerAdapter : public FmMouseListenerAdapter_Base
@@ -278,9 +278,9 @@ namespace svx
         virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
     };
 
-    //====================================================================
+
     //= FmMouseListenerAdapter
-    //====================================================================
+
 
     DBG_NAME( FmMouseListenerAdapter )
 
@@ -363,9 +363,9 @@ namespace svx
         m_xWindow.clear();
     }
 
-    //====================================================================
+
     //= FmTextControlShell
-    //====================================================================
+
 
     namespace
     {

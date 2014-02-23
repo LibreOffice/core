@@ -993,7 +993,7 @@ sal_Int16 SlideShowImpl::calcActiveCursor( sal_Int16 nCursorShape ) const
 void SlideShowImpl::stopShow()
 {
     // Force-end running animation
-    // ===========================
+
     if (mpCurrentSlide)
     {
         mpCurrentSlide->hide();
@@ -1383,7 +1383,7 @@ sal_Bool SlideShowImpl::addView(
         return false; // view already added
 
     // initialize view content
-    // =======================
+
 
     if (mpCurrentSlide)
     {
@@ -2195,7 +2195,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
                                     bool&                                     bHasAutomaticNextSlide )
 {
     // retrieve slide change parameters from XDrawPage
-    // ===============================================
+
 
     uno::Reference< beans::XPropertySet > xPropSet( xDrawPage,
                                                     uno::UNO_QUERY );

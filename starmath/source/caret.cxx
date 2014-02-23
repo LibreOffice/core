@@ -8,7 +8,7 @@
  */
 #include "caret.hxx"
 
-/////////////////////////////// SmCaretPosGraph ////////////////////////////////
+/////////////////////////////// SmCaretPosGraph
 
 SmCaretPosGraphEntry* SmCaretPosGraphIterator::Next(){
     if(nOffset >= pGraph->nOffset){

@@ -370,7 +370,7 @@ void SalGtkFilePicker::impl_controlStateChanged( FilePickerEvent aEvent )
     if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );
 }
 
-//=====================================================================
+
 
 struct FilterEntry
 {
@@ -406,7 +406,7 @@ public:
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
-//=====================================================================
+
 
 
 FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )

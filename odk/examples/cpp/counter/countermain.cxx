@@ -67,7 +67,7 @@ using namespace com::sun::star::lang;
 using namespace ::rtl;
 
 
-//=======================================================================
+
 SAL_IMPLEMENT_MAIN()
 {
     try {

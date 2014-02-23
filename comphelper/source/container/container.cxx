@@ -28,7 +28,7 @@ namespace comphelper
 {
 //.........................................................................
 
-//==============================================================================
+
 IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint)
     :m_xStartingPoint(xStartingPoint)
     ,m_xCurrentObject(NULL)

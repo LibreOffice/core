@@ -1294,7 +1294,7 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+
 //
 //  DLL-calls
 

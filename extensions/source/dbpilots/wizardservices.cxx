@@ -53,9 +53,9 @@ namespace dbp
 
     using namespace ::com::sun::star::uno;
 
-    //=====================================================================
+
     //= OGroupBoxSI
-    //=====================================================================
+
 
     OUString OGroupBoxSI::getImplementationName() const
     {
@@ -70,9 +70,9 @@ namespace dbp
         return aReturn;
     }
 
-    //=====================================================================
+
     //= OListComboSI
-    //=====================================================================
+
 
     OUString OListComboSI::getImplementationName() const
     {
@@ -87,9 +87,9 @@ namespace dbp
         return aReturn;
     }
 
-    //=====================================================================
+
     //= OGridSI
-    //=====================================================================
+
 
     OUString OGridSI::getImplementationName() const
     {

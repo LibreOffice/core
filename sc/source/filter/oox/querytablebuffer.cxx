@@ -33,7 +33,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -132,7 +132,7 @@ Reference< XAreaLink > lclFindAreaLink(
 
 } // namespace
 
-// ============================================================================
+
 
 QueryTableModel::QueryTableModel() :
     mnConnId( -1 ),
@@ -268,7 +268,7 @@ void QueryTable::finalizeImport()
     }
 }
 
-// ============================================================================
+
 
 QueryTableBuffer::QueryTableBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -287,7 +287,7 @@ void QueryTableBuffer::finalizeImport()
     maQueryTables.forEachMem( &QueryTable::finalizeImport );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

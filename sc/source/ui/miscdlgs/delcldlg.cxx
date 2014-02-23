@@ -31,7 +31,7 @@
 
 static sal_uInt8 nDelItemChecked=0;
 
-//==================================================================
+
 
 ScDeleteCellDlg::ScDeleteCellDlg(Window* pParent, bool bDisallowCellMove)
     : ModalDialog(pParent, "DeleteCellsDialog", "modules/scalc/ui/deletecells.ui")

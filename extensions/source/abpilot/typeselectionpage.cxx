@@ -33,9 +33,9 @@ namespace abp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
 
-    //=====================================================================
+
     //= TypeSelectionPage
-    //=====================================================================
+
 
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))

@@ -163,7 +163,7 @@ void FuSelection::ActivateNoteHandles(SdrObject* pObject)
     }
 }
 
-//==================================================================
+
 
 
 

@@ -39,9 +39,9 @@ namespace basprov
 {
 //.........................................................................
 
-    // =============================================================================
+
     // BasicModuleNodeImpl
-    // =============================================================================
+
 
     BasicModuleNodeImpl::BasicModuleNodeImpl( const Reference< XComponentContext >& rxContext,
         const OUString& sScriptingContext, SbModule* pModule, bool isAppScript )

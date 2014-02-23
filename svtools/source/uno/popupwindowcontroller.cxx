@@ -129,9 +129,9 @@ IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, Window*, pWin
     return 0;
 }
 
-//========================================================================
+
 // class PopupWindowController
-//========================================================================
+
 
 PopupWindowController::PopupWindowController( const Reference< uno::XComponentContext >& rxContext,
                                               const Reference< frame::XFrame >& xFrame,

@@ -56,7 +56,7 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 
 
-//==================================================================================================
+
 class OInterfaceA : public WeakImplHelper1< XInterfaceA >
 {
 public:
@@ -70,7 +70,7 @@ public:
         { return Sequence< StructB >(); }
 };
 
-//==================================================================================================
+
 static inline bool uik_equals( const Uik & rUik1, const Uik & rUik2 )
 {
     return (rUik1.m_Data1 == rUik2.m_Data1 &&
@@ -79,7 +79,7 @@ static inline bool uik_equals( const Uik & rUik1, const Uik & rUik2 )
             rUik1.m_Data4 == rUik2.m_Data4 &&
             rUik1.m_Data5 == rUik2.m_Data5);
 }
-//==================================================================================================
+
 static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 {
     Reference< XIdlClass > xClass;

@@ -23,10 +23,10 @@
 #include "core_resource.hrc"
 #include <boost/mem_fn.hpp>
 #include <algorithm>
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
 
 OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,const uno::Reference< uno::XComponentContext >& context)
@@ -199,8 +199,8 @@ void OGroups::checkIndex(sal_Int32 _nIndex)
     if ( _nIndex < 0 || static_cast<sal_Int32>(m_aGroups.size()) <= _nIndex )
         throw lang::IndexOutOfBoundsException();
 }
-// =============================================================================
+
 }
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

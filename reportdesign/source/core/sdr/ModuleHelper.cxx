@@ -36,9 +36,9 @@ namespace rptui
 {
 //.........................................................................
     using namespace ::com::sun::star;
-//=========================================================================
+
 //= OModuleImpl
-//=========================================================================
+
 /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
 */
 class OModuleImpl
@@ -80,9 +80,9 @@ ResMgr* OModuleImpl::getResManager()
     return m_pResources;
 }
 
-//=========================================================================
+
 //= OModule
-//=========================================================================
+
 
 namespace
 {

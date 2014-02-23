@@ -37,9 +37,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-//==========================================================================
+
 //= OPropertyContainer
-//==========================================================================
+
 
 OPropertyContainer::OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper)
     :OPropertySetHelper(_rBHelper)

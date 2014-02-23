@@ -34,9 +34,9 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= MasterDetailLinkDialog
-    //====================================================================
+
 
     MasterDetailLinkDialog::MasterDetailLinkDialog(const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )

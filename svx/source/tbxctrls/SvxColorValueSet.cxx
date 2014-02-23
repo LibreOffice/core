@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SvxColorValueSet::SvxColorValueSet(Window* _pParent, WinBits nWinStyle)
 :   ValueSet(_pParent, nWinStyle)

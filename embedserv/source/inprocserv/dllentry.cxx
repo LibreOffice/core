@@ -129,9 +129,9 @@ namespace {
     }
 };
 
-// ===========================
+
 // InprocEmbedProvider_Impl declaration
-// ===========================
+
 
 namespace inprocserv
 {
@@ -160,9 +160,9 @@ protected:
 }; // namespace inprocserv
 
 
-// ===========================
+
 // Entry points
-// ===========================
+
 
 
 extern "C" INPROC_DLLPUBLIC BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/ )
@@ -228,16 +228,16 @@ STDAPI INPROC_DLLPUBLIC DllUnregisterServer( void )
     return WriteLibraryToRegistry( "ole32.dll", 10 );
 }
 
-// ===========================
+
 // End of entry points
-// ===========================
+
 
 namespace inprocserv
 {
 
-// ===========================
+
 // InprocCountedObject_Impl implementation
-// ===========================
+
 
 
 InprocCountedObject_Impl::InprocCountedObject_Impl()
@@ -251,9 +251,9 @@ InprocCountedObject_Impl::~InprocCountedObject_Impl()
     g_nObj--;
 }
 
-// ===========================
+
 // InprocEmbedProvider_Impl implementation
-// ===========================
+
 
 
 InprocEmbedProvider_Impl::InprocEmbedProvider_Impl( const GUID& guid )

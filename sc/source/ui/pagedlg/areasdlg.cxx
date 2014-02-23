@@ -52,7 +52,7 @@ const sal_uInt16 SC_AREASDLG_RR_NONE    = 0;
 const sal_uInt16 SC_AREASDLG_RR_USER    = 1;
 const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
-//============================================================================
+
 
 
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
@@ -91,7 +91,7 @@ static void printAddressFlags(sal_uInt16 nFlag)
 }
 #endif
 
-//============================================================================
+
 //  class ScPrintAreasDlg
 
 
@@ -668,7 +668,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 }
 
 
-//============================================================================
+
 // globale Funktionen:
 
 

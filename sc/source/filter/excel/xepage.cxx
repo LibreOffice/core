@@ -428,6 +428,6 @@ void XclExpChartPageSettings::Save( XclExpStream& rStrm )
     XclExpUInt16Record( EXC_ID_PRINTSIZE, EXC_PRINTSIZE_FULL ).Save( rStrm );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

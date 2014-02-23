@@ -33,13 +33,13 @@
 
 #define SUBDIVIDE_FOR_CUT_TEST_COUNT        (50)
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace
     {
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         class temporaryPoint
         {
@@ -70,11 +70,11 @@ namespace basegfx
             double getCut() const { return mfCut; }
         };
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         typedef ::std::vector< temporaryPoint > temporaryPointVector;
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         class temporaryPolygonData
         {
@@ -89,7 +89,7 @@ namespace basegfx
             temporaryPointVector& getTemporaryPointVector() { return maPoints; }
         };
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolygon mergeTemporaryPointsAndPolygon(const B2DPolygon& rCandidate, temporaryPointVector& rTempPoints)
         {
@@ -180,7 +180,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void adaptAndTransferCutsWithBezierSegment(
             const temporaryPointVector& rPointVector, const B2DPolygon& rPolygon,
@@ -205,25 +205,25 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace
     {
-        ////////////////////////////////////////////////////////////////////////////////
+
         // predefines for calls to this methods before method implementation
 
         void findCuts(const B2DPolygon& rCandidate, temporaryPointVector& rTempPoints);
         void findTouches(const B2DPolygon& rEdgePolygon, const B2DPolygon& rPointPolygon, temporaryPointVector& rTempPoints);
         void findCuts(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, temporaryPointVector& rTempPointsA, temporaryPointVector& rTempPointsB);
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findEdgeCutsTwoEdges(
             const B2DPoint& rCurrA, const B2DPoint& rNextA,
@@ -277,7 +277,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findCutsAndTouchesAndCommonForBezier(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, temporaryPointVector& rTempPointsA, temporaryPointVector& rTempPointsB)
         {
@@ -399,7 +399,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findEdgeCutsBezierAndEdge(
             const B2DCubicBezier& rCubicA,
@@ -440,7 +440,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findEdgeCutsTwoBeziers(
             const B2DCubicBezier& rCubicA,
@@ -481,7 +481,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findEdgeCutsOneBezier(
             const B2DCubicBezier& rCubicA,
@@ -514,7 +514,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findCuts(const B2DPolygon& rCandidate, temporaryPointVector& rTempPoints)
         {
@@ -627,18 +627,18 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace
     {
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findTouchesOnEdge(
             const B2DPoint& rCurr, const B2DPoint& rNext, const B2DPolygon& rPointPolygon,
@@ -685,7 +685,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findTouchesOnCurve(
             const B2DCubicBezier& rCubicA, const B2DPolygon& rPointPolygon,
@@ -711,7 +711,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findTouches(const B2DPolygon& rEdgePolygon, const B2DPolygon& rPointPolygon, temporaryPointVector& rTempPoints)
         {
@@ -760,18 +760,18 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace
     {
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         void findCuts(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, temporaryPointVector& rTempPointsA, temporaryPointVector& rTempPointsB)
         {
@@ -880,18 +880,18 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace tools
     {
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate)
         {
@@ -910,7 +910,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate, bool bSelfIntersections)
         {
@@ -995,7 +995,7 @@ namespace basegfx
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd)
         {
@@ -1044,7 +1044,7 @@ namespace basegfx
             return rCandidate;
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPolyPolygon& rPolyMask)
         {
@@ -1127,7 +1127,7 @@ namespace basegfx
             return rCandidate;
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
     } // end of namespace tools
 } // end of namespace basegfx

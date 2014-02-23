@@ -247,7 +247,7 @@ ScVbaCommandBarControls::getServiceNames()
     return aServiceNames;
 }
 
-// ============================================================================
+
 
 class VbaDummyIndexAccess : public ::cppu::WeakImplHelper1< container::XIndexAccess >
 {

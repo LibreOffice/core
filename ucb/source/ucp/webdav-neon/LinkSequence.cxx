@@ -35,7 +35,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
+
 
 struct LinkSequenceParseContext
 {
@@ -54,7 +54,7 @@ struct LinkSequenceParseContext
 #define STATE_DST  (STATE_TOP + 1)
 #define STATE_SRC  (STATE_TOP + 2)
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LinkSequence_startelement_callback(
     void *,
     int parent,
@@ -82,7 +82,7 @@ extern "C" int LinkSequence_startelement_callback(
     return NE_XML_DECLINE;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LinkSequence_chardata_callback(
     void *userdata,
     int state,
@@ -111,7 +111,7 @@ extern "C" int LinkSequence_chardata_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LinkSequence_endelement_callback(
     void *userdata,
     int state,
@@ -133,7 +133,7 @@ extern "C" int LinkSequence_endelement_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 // static
 bool LinkSequence::createFromXML( const OString & rInData,
                                   uno::Sequence< ucb::Link > & rOutData )
@@ -188,7 +188,7 @@ bool LinkSequence::createFromXML( const OString & rInData,
     return success;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 // static
 bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
                           OUString & rOutData )

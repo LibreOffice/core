@@ -25,10 +25,10 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
 
 
-// ============================================================================
+
+
 
 namespace {
 
@@ -45,7 +45,7 @@ OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
 
 } // namespace
 
-// ============================================================================
+
 
 Relations::Relations( const OUString& rFragmentPath ) :
     maFragmentPath( rFragmentPath )
@@ -132,7 +132,7 @@ OUString Relations::getFragmentPathFromFirstType( const OUString& rType ) const
     return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

@@ -42,9 +42,9 @@ namespace svt { namespace table
 
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 
-    //==================================================================================================================
+
     //= TableControl
-    //==================================================================================================================
+
 
     TableControl::TableControl( Window* _pParent, WinBits _nStyle )
         :Control( _pParent, _nStyle )

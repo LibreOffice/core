@@ -48,9 +48,9 @@ namespace sdr { namespace contact {
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
+
     //= ViewContactOfUnoControl
-    //====================================================================
+
     class ViewContactOfUnoControl_Impl
     {
     public:
@@ -72,9 +72,9 @@ namespace sdr { namespace contact {
     {
     }
 
-    //====================================================================
+
     //= ViewContactOfUnoControl
-    //====================================================================
+
     DBG_NAME( ViewContactOfUnoControl )
 
     ViewContactOfUnoControl::ViewContactOfUnoControl( SdrUnoObj& _rUnoObject )

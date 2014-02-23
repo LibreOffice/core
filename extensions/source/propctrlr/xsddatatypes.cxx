@@ -34,9 +34,9 @@ namespace pcr
     using namespace ::com::sun::star::xsd;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
 
     template< typename INTERFACE, typename ARGUMENT >
     void setSave( INTERFACE* pObject, void ( SAL_CALL INTERFACE::*pSetter )( ARGUMENT ), ARGUMENT _rArg )
@@ -82,9 +82,9 @@ namespace pcr
         return aReturn;
     }
 
-    //====================================================================
+
     //= XSDDataType
-    //====================================================================
+
 
     XSDDataType::XSDDataType( const Reference< XDataType >& _rxDataType )
         :m_xDataType( _rxDataType )

@@ -35,7 +35,7 @@ using namespace com::sun::star::linguistic2;
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
+
 
 Meaning::Meaning(
             const OUString &rTerm, sal_Int16 nLang) :

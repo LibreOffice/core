@@ -41,9 +41,9 @@ namespace abp
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         return pFilter;
     }
-    //=====================================================================
+
     //= FinalPage
-    //=====================================================================
+
 
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_FINAL))

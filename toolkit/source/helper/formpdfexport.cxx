@@ -277,7 +277,7 @@ namespace toolkitform
                 // if we survived classifyFormControl, then it's a real form control, and they all have
                 // service infos
 
-            // ================================
+
             // set the common widget properties
 
 
@@ -414,7 +414,7 @@ namespace toolkitform
                 _rpDescriptor->TabOrder = nIndex;
             }
 
-            // ================================
+
             // special widget properties
 
             // edits
@@ -593,7 +593,7 @@ namespace toolkitform
                 pComboWidget->Sort = false;
             }
 
-            // ================================
+
             // some post-processing
 
             // text line ends

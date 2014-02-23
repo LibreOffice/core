@@ -157,7 +157,7 @@ void Layout::DataChanged (DataChangedEvent const& rDCEvt)
 
 //
 // SplittedSide
-// ============
+
 //
 
 // ctor

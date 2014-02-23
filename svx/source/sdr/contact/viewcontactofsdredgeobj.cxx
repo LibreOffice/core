@@ -24,7 +24,7 @@
 #include <svx/sdr/primitive2d/sdrconnectorprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

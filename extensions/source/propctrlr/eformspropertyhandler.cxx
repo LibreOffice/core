@@ -53,9 +53,9 @@ namespace pcr
     using namespace ::com::sun::star::form::binding;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= EFormsPropertyHandler
-    //====================================================================
+
     DBG_NAME( EFormsPropertyHandler )
 
     EFormsPropertyHandler::EFormsPropertyHandler( const Reference< XComponentContext >& _rxContext )

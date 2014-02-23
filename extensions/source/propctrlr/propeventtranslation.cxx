@@ -36,9 +36,9 @@ namespace pcr
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::NullPointerException;
 
-    //====================================================================
+
     //= PropertyEventTranslation
-    //====================================================================
+
 
     PropertyEventTranslation::PropertyEventTranslation( const Reference< XPropertyChangeListener >& _rxDelegator,
         const Reference< XInterface >& _rxTranslatedEventSource )

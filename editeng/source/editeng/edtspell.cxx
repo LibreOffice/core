@@ -581,7 +581,7 @@ bool WrongList::DbgIsBuggy() const
     return bError;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 EdtAutoCorrDoc::EdtAutoCorrDoc(
     EditEngine* pE, ContentNode* pN, sal_uInt16 nCrsr, sal_Unicode cIns) :

@@ -51,9 +51,9 @@ namespace rptui
     using ::com::sun::star::util::XNumberFormatTypes;
     using ::com::sun::star::uno::makeAny;
 
-    //====================================================================
+
     //= FormatNormalizer
-    //====================================================================
+
 
     FormatNormalizer::FormatNormalizer( const OReportModel& _rModel )
         :m_rModel( _rModel )

@@ -40,9 +40,9 @@ namespace frm
     using ::com::sun::star::form::XResetListener;
     using ::com::sun::star::lang::EventObject;
 
-    //====================================================================
+
     //= ResetHelper
-    //====================================================================
+
 
     void ResetHelper::addResetListener( const Reference< XResetListener >& _listener )
     {

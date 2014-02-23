@@ -42,9 +42,9 @@ namespace frm
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::form::binding;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
 
     Any translateExternalDoubleToControlIntValue(
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
@@ -94,9 +94,9 @@ namespace frm
         return aExternalDoubleValue;
     }
 
-    //====================================================================
+
     //= OScrollBarModel
-    //====================================================================
+
 
 
     OScrollBarModel::OScrollBarModel( const Reference<XComponentContext>& _rxFactory )

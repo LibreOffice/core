@@ -31,7 +31,7 @@
 #include <win/salframe.h>
 #include <win/salobj.h>
 
-// =======================================================================
+
 
 static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 {
@@ -260,7 +260,7 @@ void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
     pSalData->mnSalObjWantKeyEvt = 0;
 }
 
-// =======================================================================
+
 
 LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
@@ -470,7 +470,7 @@ LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LP
     return nRet;
 }
 
-// =======================================================================
+
 
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 {
@@ -567,7 +567,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
     return NULL;
 }
 
-// =======================================================================
+
 
 WinSalObject::WinSalObject()
 {

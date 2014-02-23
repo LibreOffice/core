@@ -28,9 +28,9 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::form;
 
-    //====================================================================
+
     //= ResetListeners
-    //====================================================================
+
 
     bool ResetListeners::implTypedNotify( const Reference< XResetListener >& _rxListener,
         const EventObject& _rEvent )   SAL_THROW( ( Exception ) )

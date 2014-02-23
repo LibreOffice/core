@@ -27,14 +27,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
 
-// ============================================================================
+
 
 BiffDecoderBase::BiffDecoderBase() :
     mbValid( false )
@@ -69,7 +69,7 @@ void BiffDecoderBase::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
     }
 }
 
-// ============================================================================
+
 
 BiffDecoder_XOR::BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
@@ -130,7 +130,7 @@ void BiffDecoder_XOR::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcD
     maCodec.decode( pnDestData, pnSrcData, nBytes );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -244,7 +244,7 @@ void BiffCodecHelper::cloneDecoder( BiffInputStream& rStrm )
         rStrm.setDecoder( BiffDecoderRef( mxDecoder->clone() ) );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -163,9 +163,9 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > xTempOut, ISt
 }
 
 
-//===============================================================================
+
 // EmbedDocument_Impl
-//===============================================================================
+
 
 EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory, const GUID* guid )
 : m_refCount( 0L )
@@ -920,7 +920,7 @@ STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
     return m_aFileName.getLength() ? S_OK : S_FALSE;
 }
 
-// ===============================================
+
 
 LockedEmbedDocument_Impl EmbeddedDocumentInstanceAccess_Impl::GetEmbedDocument()
 {
@@ -934,7 +934,7 @@ void EmbeddedDocumentInstanceAccess_Impl::ClearEmbedDocument()
     m_pEmbedDocument = NULL;
 }
 
-// ===============================================
+
 
 LockedEmbedDocument_Impl::LockedEmbedDocument_Impl()
 : m_pEmbedDocument( NULL )

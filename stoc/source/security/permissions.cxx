@@ -102,7 +102,7 @@ static inline OUString makeStrings(
 
 //##################################################################################################
 
-//==================================================================================================
+
 class SocketPermission : public Permission
 {
     static char const * s_actions [];
@@ -273,7 +273,7 @@ OUString SocketPermission::toString() const SAL_THROW(())
 
 //##################################################################################################
 
-//==================================================================================================
+
 class FilePermission : public Permission
 {
     static char const * s_actions [];
@@ -430,7 +430,7 @@ OUString FilePermission::toString() const SAL_THROW(())
 
 //##################################################################################################
 
-//==================================================================================================
+
 class RuntimePermission : public Permission
 {
     OUString m_name;
@@ -576,7 +576,7 @@ static void throwAccessControlException(
     throw security::AccessControlException(
         buf.makeStringAndClear(), Reference< XInterface >(), demanded_perm );
 }
-//==================================================================================================
+
 void PermissionCollection::checkPermission( Any const & perm ) const
     SAL_THROW( (RuntimeException) )
 {

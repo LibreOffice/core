@@ -55,9 +55,9 @@ namespace connectivity { namespace hsqldb
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdbc::XRow;
 
-    //====================================================================
+
     //= HView
-    //====================================================================
+
 
     HView::HView( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
         const OUString& _rSchemaName, const OUString& _rName )

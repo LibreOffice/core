@@ -31,7 +31,7 @@
 #include "miscdlgs.hrc"
 
 
-//==================================================================
+
 
 ScShowTabDlg::ScShowTabDlg(Window* pParent)
     : ModalDialog(pParent, "ShowSheetDialog", "modules/scalc/ui/showsheetdialog.ui")

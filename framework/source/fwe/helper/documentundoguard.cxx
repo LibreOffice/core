@@ -47,9 +47,9 @@ namespace framework
     using ::com::sun::star::document::UndoManagerEvent;
     using ::com::sun::star::lang::EventObject;
 
-    //==================================================================================================================
+
     //= UndoManagerContextListener
-    //==================================================================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XUndoManagerListener
                                     >   UndoManagerContextListener_Base;
     class UndoManagerContextListener : public UndoManagerContextListener_Base
@@ -194,9 +194,9 @@ namespace framework
         m_documentDisposed = true;
     }
 
-    //==================================================================================================================
+
     //= DocumentUndoGuard_Data
-    //==================================================================================================================
+
     struct DocumentUndoGuard_Data
     {
         Reference< XUndoManager >                       xUndoManager;
@@ -239,9 +239,9 @@ namespace framework
         }
     }
 
-    //==================================================================================================================
+
     //= DocumentUndoGuard
-    //==================================================================================================================
+
 
     DocumentUndoGuard::DocumentUndoGuard( const Reference< XInterface >& i_undoSupplierComponent )
         :m_pData( new DocumentUndoGuard_Data )

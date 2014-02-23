@@ -191,7 +191,7 @@ bool bSourceLinesEnabled = false;
 
 //
 // ModulWindow
-// ===========
+
 //
 
 ModulWindow::ModulWindow (
@@ -1480,7 +1480,7 @@ void ModulWindow::UpdateModule ()
 
 //
 // ModulWindowLayout
-// =================
+
 //
 
 ModulWindowLayout::ModulWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
@@ -1569,7 +1569,7 @@ void ModulWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
 
 //
 // SyntaxColors
-// ============
+
 //
 
 ModulWindowLayout::SyntaxColors::SyntaxColors () :

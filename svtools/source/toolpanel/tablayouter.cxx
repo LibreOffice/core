@@ -34,9 +34,9 @@ namespace svt
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::accessibility::XAccessible;
 
-    //====================================================================
+
     //= TabDeckLayouter_Data
-    //====================================================================
+
     struct TabDeckLayouter_Data
     {
         TabAlignment                    eAlignment;
@@ -54,9 +54,9 @@ namespace svt
         }
     };
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
         static bool lcl_isVerticalTabBar( const TabAlignment i_eAlignment )
@@ -76,9 +76,9 @@ namespace svt
         }
     }
 
-    //====================================================================
+
     //= TabDeckLayouter
-    //====================================================================
+
 
     TabDeckLayouter::TabDeckLayouter( Window& i_rParent, IToolPanelDeck& i_rPanels,
             const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )

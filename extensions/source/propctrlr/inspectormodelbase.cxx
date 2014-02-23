@@ -49,9 +49,9 @@ namespace pcr
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
+
     //= InspectorModelProperties
-    //====================================================================
+
     /** helper class for implementing the property set related functionality
         of an ImplInspectorModel
     */
@@ -87,9 +87,9 @@ namespace pcr
         void    constructWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );
     };
 
-    //====================================================================
+
     //= InspectorModelProperties
-    //====================================================================
+
 
     InspectorModelProperties::InspectorModelProperties( ::osl::Mutex& _rMutex )
         :m_rMutex( _rMutex )
@@ -154,9 +154,9 @@ namespace pcr
         return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
     }
 
-    //====================================================================
+
     //= ImplInspectorModel
-    //====================================================================
+
     ImplInspectorModel::ImplInspectorModel()
         :ImplInspectorModel_PBase( GetBroadcastHelper() )
         ,m_pProperties( new InspectorModelProperties( m_aMutex ) )

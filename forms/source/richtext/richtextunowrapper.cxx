@@ -38,7 +38,7 @@ namespace frm
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     namespace
     {
         const SvxItemPropertySet* getTextEnginePropertySet()
@@ -58,9 +58,9 @@ namespace frm
         }
     }
 
-    //====================================================================
+
     //= ORichTextUnoWrapper
-    //====================================================================
+
 
     ORichTextUnoWrapper::ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :SvxUnoText( getTextEnginePropertySet() )
@@ -73,9 +73,9 @@ namespace frm
     {
     }
 
-    //====================================================================
+
     //= RichTextEditSource
-    //====================================================================
+
 
     RichTextEditSource::RichTextEditSource( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :m_rEngine              ( _rEngine                               )

@@ -23,7 +23,7 @@
 #include <fontsubset.hxx>
 #include <sft.hxx>
 
-// ====================================================================
+
 
 FontSubsetInfo::FontSubsetInfo()
 :   m_nAscent( 0)
@@ -168,6 +168,6 @@ bool FontSubsetInfo::CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths)
     return false;
 }
 
-// ====================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

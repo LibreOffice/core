@@ -34,9 +34,9 @@ namespace svt { namespace table
 
     using ::com::sun::star::uno::Any;
 
-    //==================================================================================================================
+
     //= TableDataWindow
-    //==================================================================================================================
+
 
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )

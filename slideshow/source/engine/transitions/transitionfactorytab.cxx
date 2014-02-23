@@ -2083,12 +2083,12 @@ static const TransitionInfo lcl_transitionInfo[] =
         true // scale isotrophically to target size
     },
 
-    /////////////////////////////////////////////////////////
+
     // NOTE: This entry MUST be the last, to keep
     // createSlideTransition() from infinite recursion. Because
     // getRandomTransitionInfo() below will exclude the last entry of
     // the table from the random number generation.
-    /////////////////////////////////////////////////////////
+
     {
         // specially handled
         animations::TransitionType::RANDOM,
@@ -2101,9 +2101,9 @@ static const TransitionInfo lcl_transitionInfo[] =
         true, // 'out' by parameter sweep inversion
         true // scale isotrophically to target size
     }
-    /////////////////////////////////////////////////////////
+
     // NOTE: DON'T add after this entry! See comment above!
-    /////////////////////////////////////////////////////////
+
 };
 
 } // anon namespace

@@ -132,9 +132,9 @@ namespace pcr
 
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-    //====================================================================
+
     //= FormComponentPropertyHandler
-    //====================================================================
+
     DBG_NAME( FormComponentPropertyHandler )
 #define PROPERTY_ID_ROWSET 1
 
@@ -173,7 +173,7 @@ namespace pcr
         return aSupported;
     }
 
-    //============================================
+
     // TODO: -> export from toolkit
     struct LanguageDependentProp
     {
@@ -647,7 +647,7 @@ namespace pcr
 
         switch ( nPropId )
         {
-        //////////////////////////////////////////////////////////////
+
         case PROPERTY_ID_SHOW_POSITION:
         case PROPERTY_ID_SHOW_NAVIGATION:
         case PROPERTY_ID_SHOW_RECORDACTIONS:
@@ -667,7 +667,7 @@ namespace pcr
         }
         break;
 
-        //////////////////////////////////////////////////////////////
+
         case PROPERTY_ID_DATASOURCE:
         {
             OSL_ENSURE( _rControlValueType.getTypeClass() == TypeClass_STRING,
@@ -684,7 +684,7 @@ namespace pcr
         }
         break;
 
-        //////////////////////////////////////////////////////////////
+
         case PROPERTY_ID_CONTROLLABEL:
         {
             OUString sControlValue;
@@ -709,7 +709,7 @@ namespace pcr
         }
         break;
 
-        //////////////////////////////////////////////////////////////
+
         case PROPERTY_ID_DATEMIN:
         case PROPERTY_ID_DATEMAX:
         case PROPERTY_ID_DEFAULT_DATE:
@@ -973,7 +973,7 @@ namespace pcr
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
         Property aProperty( impl_getPropertyFromId_throw( nPropId ) );
 
-        //////////////////////////////////////////////////////////////////////
+
         // for the MultiLine property, we have different UI translations depending on the control
         // type
         if ( nPropId == PROPERTY_ID_MULTILINE )
@@ -993,7 +993,7 @@ namespace pcr
             throw UnknownPropertyException();
         }
 
-        //////////////////////////////////////////////////////////////////////
+
 
         LineDescriptor aDescriptor;
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
@@ -1004,7 +1004,7 @@ namespace pcr
         sal_Bool bReadOnly = sal_False;
         aDescriptor.Control.clear();
 
-        //////////////////////////////////////////////////////////////////////
+
 
         bool bNeedDefaultStringIfVoidAllowed = false;
 
@@ -1239,11 +1239,11 @@ namespace pcr
             break;
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         if ( eType == TypeClass_SEQUENCE )
             nControlType = PropertyControlType::StringListField;
 
-        //////////////////////////////////////////////////////////////////////
+
         // boolean values
         if ( eType == TypeClass_BOOLEAN )
         {
@@ -1261,7 +1261,7 @@ namespace pcr
             bNeedDefaultStringIfVoidAllowed = true;
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         // enum properties
         sal_uInt32 nPropertyUIFlags = m_pInfoService->getPropertyUIFlags( nPropId );
         bool bIsEnumProperty = ( nPropertyUIFlags & PROP_FLAG_ENUM ) != 0;
@@ -1307,7 +1307,7 @@ namespace pcr
             }
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         switch( nPropId )
         {
             case PROPERTY_ID_REPEAT_DELAY:
@@ -1353,7 +1353,7 @@ namespace pcr
             }
             break;
 
-            //////////////////////////////////////////////////////////////////////
+
             // DataSource
             case PROPERTY_ID_DATASOURCE:
             {
@@ -2029,7 +2029,7 @@ namespace pcr
     {
         try
         {
-            //////////////////////////////////////////////////////////////////
+
             // component class
             m_eComponentClass = eUnknown;
 
@@ -2048,7 +2048,7 @@ namespace pcr
                 m_eComponentClass = eFormControl;
             }
 
-            //////////////////////////////////////////////////////////////////
+
             // (database) sub form?
             Reference< XForm > xAsForm( m_xComponent, UNO_QUERY );
             if ( xAsForm.is() )
@@ -2057,13 +2057,13 @@ namespace pcr
                 m_bComponentIsSubForm = xFormsParent.is();
             }
 
-            //////////////////////////////////////////////////////////////////
+
             // ClassId
             Reference< XChild > xCompAsChild( m_xComponent, UNO_QUERY );
             if ( xCompAsChild.is() )
                 m_xObjectParent = xCompAsChild->getParent();
 
-            //////////////////////////////////////////////////////////////////
+
             // ClassId
             impl_classifyControlModel_throw();
         }
@@ -2448,14 +2448,14 @@ namespace pcr
         {
             WaitCursor aWaitCursor( impl_getDefaultDialogParent_nothrow() );
 
-            ////////////////////////////////////////////////////////////
+
             // Setzen der UI-Daten
             _out_rProperty.DisplayName = m_pInfoService->getPropertyTranslation( PROPERTY_ID_COMMAND );
 
             _out_rProperty.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_COMMAND ) );
             _out_rProperty.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_SQLCOMMAND);
 
-            ////////////////////////////////////////////////////////////
+
             sal_Int32 nCommandType = CommandType::COMMAND;
             impl_getPropertyValue_throw( PROPERTY_COMMANDTYPE ) >>= nCommandType;
 
@@ -2558,7 +2558,7 @@ namespace pcr
     {
         OSL_PRECOND( m_xComponent.is(), "FormComponentPropertyHandler::impl_describeListSourceUI_throw: no component!" );
 
-        ////////////////////////////////////////////////////////////
+
         // Auslesen des ListSourceTypes
         Any aListSourceType( m_xComponent->getPropertyValue( PROPERTY_LISTSOURCETYPE ) );
 
@@ -2568,7 +2568,7 @@ namespace pcr
         _out_rDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( PROPERTY_ID_LISTSOURCE );
         _out_rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_LISTSOURCE ) );
 
-        ////////////////////////////////////////////////////////////
+
         // Enums setzen
         switch( nListSourceType )
         {

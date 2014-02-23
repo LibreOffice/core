@@ -50,9 +50,9 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::form;
 
-    //====================================================================
+
     //= file-local helpers
-    //====================================================================
+
     namespace
     {
 
@@ -67,9 +67,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
+
     //= EFormsHelper
-    //====================================================================
+
 
     EFormsHelper::EFormsHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxControlModel, const Reference< frame::XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )

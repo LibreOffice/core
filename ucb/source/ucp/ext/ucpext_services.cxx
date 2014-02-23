@@ -39,9 +39,9 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::lang::XSingleComponentFactory;
 
-    //==================================================================================================================
+
     //= descriptors for the services implemented in this component
-    //==================================================================================================================
+
     static struct ::cppu::ImplementationEntry s_aServiceEntries[] =
     {
         {

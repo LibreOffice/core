@@ -58,9 +58,9 @@ namespace svt { namespace table
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleTableModelChangeType = ::com::sun::star::accessibility::AccessibleTableModelChangeType;
 
-    //==================================================================================================================
+
     //= SuppressCursor
-    //==================================================================================================================
+
     class SuppressCursor
     {
     private:
@@ -78,9 +78,9 @@ namespace svt { namespace table
         }
     };
 
-    //====================================================================
+
     //= EmptyTableModel
-    //====================================================================
+
     /** default implementation of an ->ITableModel, used as fallback when no
         real model is present
 
@@ -232,15 +232,15 @@ namespace svt { namespace table
     };
 
 
-    //====================================================================
+
     //= TableControl_Impl
-    //====================================================================
+
     DBG_NAME( TableControl_Impl )
 
 #ifdef DBG_UTIL
-    //====================================================================
+
     //= SuspendInvariants
-    //====================================================================
+
     class SuspendInvariants
     {
     private:
@@ -268,7 +268,7 @@ namespace svt { namespace table
 #endif
 
 #ifdef DBG_UTIL
-    //====================================================================
+
     const char* TableControl_Impl_checkInvariants( const void* _pInstance )
     {
         return static_cast< const TableControl_Impl* >( _pInstance )->impl_checkInvariants();
@@ -2750,9 +2750,9 @@ namespace svt { namespace table
              m_pAccessibleTable->commitEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    //==================================================================================================================
+
     //= TableFunctionSet
-    //==================================================================================================================
+
 
     TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl)
         :m_pTableControl( _pTableControl)

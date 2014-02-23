@@ -3545,6 +3545,6 @@ XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, c
     AppendNewRecord( new XclExpChChart( rRoot, xChartDoc, rChartRect ) );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

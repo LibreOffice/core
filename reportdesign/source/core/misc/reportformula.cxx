@@ -49,9 +49,9 @@ namespace rptui
         }
     }
 
-    //====================================================================
+
     //= ReportFormula
-    //====================================================================
+
 
     ReportFormula::ReportFormula( const OUString& _rFormula )
         :m_eType( Invalid )

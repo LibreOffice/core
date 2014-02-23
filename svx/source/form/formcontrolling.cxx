@@ -65,9 +65,9 @@ namespace svx
 
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
-    //====================================================================
+
     //= FeatureSlotTranslation
-    //====================================================================
+
     namespace
     {
         struct FeatureDescription
@@ -192,9 +192,9 @@ namespace svx
         return ( pos != rDescriptions.end() ) ? pos->nSlotId : -1;
     }
 
-    //====================================================================
+
     //= ControllerFeatures
-    //====================================================================
+
 
     ControllerFeatures::ControllerFeatures( IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
@@ -235,9 +235,9 @@ namespace svx
         }
     }
 
-    //====================================================================
+
     //= FormControllerHelper
-    //====================================================================
+
 
     FormControllerHelper::FormControllerHelper( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )

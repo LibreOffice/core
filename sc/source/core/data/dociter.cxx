@@ -314,7 +314,7 @@ bool ScValueIterator::GetNext(double& rValue, sal_uInt16& rErr)
     return GetThis(rValue, rErr);
 }
 
-// ============================================================================
+
 
 ScDBQueryDataIterator::DataAccess::DataAccess(const ScDBQueryDataIterator* pParent) :
     mpParent(pParent)
@@ -2570,7 +2570,7 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
     return NULL;  // Nothing anymore
 }
 
-// ============================================================================
+
 
 ScDocRowHeightUpdater::TabRanges::TabRanges(SCTAB nTab) :
     mnTab(nTab), mpRanges(new ScFlatBoolRowSegments)
@@ -2729,7 +2729,7 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
     return NULL; // Nothing anymore
 }
 
-// ============================================================================
+
 
 SCROW ScRowBreakIterator::NOT_FOUND = -1;
 

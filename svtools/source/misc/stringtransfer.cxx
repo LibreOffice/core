@@ -27,9 +27,9 @@ namespace svt
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::datatransfer;
 
-    //====================================================================
+
     //= OStringTransferable
-    //====================================================================
+
 
     OStringTransferable::OStringTransferable(const OUString& _rContent)
         :TransferableHelper()
@@ -53,9 +53,9 @@ namespace svt
         return sal_False;
     }
 
-    //====================================================================
+
     //= OStringTransfer
-    //====================================================================
+
 
     void OStringTransfer::CopyString( const OUString& _rContent, Window* _pWindow )
     {

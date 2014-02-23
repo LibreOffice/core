@@ -83,7 +83,7 @@ namespace stoc_inspect
 typedef WeakImplHelper3< XIntrospectionAccess, XMaterialHolder, XExactName > IntrospectionAccessHelper;
 
 
-//==================================================================================================
+
 
 // Special value for Method-Concept, to be able to mark "normal" functions
 #define  MethodConcept_NORMAL_IMPL        0x80000000
@@ -109,7 +109,7 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
     return sal_False;
 }
 
-//========================================================================
+
 
 // *** Classification of Properties (no enum, to be able to use Sequence) ***
 // Properties from a PropertySet-Interface

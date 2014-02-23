@@ -76,9 +76,9 @@ namespace pcr
         }
     }
 
-    //========================================================================
+
     //= PushButtonNavigation
-    //========================================================================
+
 
     PushButtonNavigation::PushButtonNavigation( const Reference< XPropertySet >& _rxControlModel )
         :m_xControlModel( _rxControlModel )

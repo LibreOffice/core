@@ -88,7 +88,7 @@ using ::oox::drawingml::ShapeExport;
 using ::oox::vml::VMLExport;
 using namespace oox;
 
-// ============================================================================
+
 
 sal_Int32 XclExpObjList::mnDrawingMLCount;
 sal_Int32 XclExpObjList::mnVmlCount;
@@ -1409,7 +1409,7 @@ sal_Size ExcEScenarioManager::GetLen() const
     return 8;
 }
 
-// ============================================================================
+
 
 struct XclExpTabProtectOption
 {
@@ -1475,7 +1475,7 @@ void XclExpSheetProtectOptions::WriteBody( XclExpStream& rStrm )
     rStrm << nBytes;
 }
 
-// ============================================================================
+
 
 
 
@@ -1580,7 +1580,7 @@ void XclDelta::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
-// ============================================================================
+
 
 XclExpFileEncryption::XclExpFileEncryption( const XclExpRoot& rRoot ) :
     XclExpRecord(0x002F, 54),
@@ -1618,7 +1618,7 @@ void XclExpFileEncryption::WriteBody( XclExpStream& rStrm )
     rStrm.SetEncrypter(xEnc);
 }
 
-// ============================================================================
+
 
 XclExpInterfaceHdr::XclExpInterfaceHdr( sal_uInt16 nCodePage ) :
     XclExpUInt16Record( EXC_ID_INTERFACEHDR, nCodePage )
@@ -1631,7 +1631,7 @@ void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
     rStrm << GetValue();
 }
 
-// ============================================================================
+
 
 XclExpInterfaceEnd::XclExpInterfaceEnd() :
     XclExpRecord(0x00E2, 0) {}
@@ -1644,7 +1644,7 @@ void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
     rStrm.EnableEncryption();
 }
 
-// ============================================================================
+
 
 XclExpWriteAccess::XclExpWriteAccess() :
     XclExpRecord(0x005C, 112)
@@ -1678,7 +1678,7 @@ void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
         rStrm << aData[i];
 }
 
-// ============================================================================
+
 
 XclExpFileSharing::XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash, bool bRecommendReadOnly ) :
     XclExpRecord( EXC_ID_FILESHARING ),
@@ -1702,7 +1702,7 @@ void XclExpFileSharing::WriteBody( XclExpStream& rStrm )
     rStrm << sal_uInt16( mbRecommendReadOnly ? 1 : 0 ) << mnPasswordHash << maUserName;
 }
 
-// ============================================================================
+
 
 XclExpProt4Rev::XclExpProt4Rev() :
     XclExpRecord(0x01AF, 2)
@@ -1718,7 +1718,7 @@ void XclExpProt4Rev::WriteBody( XclExpStream& rStrm )
     rStrm << static_cast<sal_uInt16>(0x0000);
 }
 
-// ============================================================================
+
 
 XclExpProt4RevPass::XclExpProt4RevPass() :
     XclExpRecord(0x01BC, 2)
@@ -1734,7 +1734,7 @@ void XclExpProt4RevPass::WriteBody( XclExpStream& rStrm )
     rStrm << static_cast<sal_uInt16>(0x0000);
 }
 
-// ============================================================================
+
 
 static const sal_uInt8 nDataRecalcId[] = {
     0xC1, 0x01, 0x00, 0x00, 0x54, 0x8D, 0x01, 0x00
@@ -1745,7 +1745,7 @@ XclExpRecalcId::XclExpRecalcId() :
 {
 }
 
-// ============================================================================
+
 
 static const sal_uInt8 nDataBookExt[] = {
     0x63, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1758,7 +1758,7 @@ XclExpBookExt::XclExpBookExt() :
 {
 }
 
-// ============================================================================
+
 
 XclRefmode::XclRefmode( const ScDocument& rDoc ) :
     XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != formula::FormulaGrammar::CONV_XL_R1C1 )

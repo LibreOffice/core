@@ -78,9 +78,9 @@ namespace frm
 
     using ::connectivity::ORowSetValue;
 
-    //==============================================================================
+
     //= helper
-    //==============================================================================
+
     namespace
     {
 
@@ -123,14 +123,14 @@ namespace frm
         }
     }
 
-    //==============================================================================
+
     //= ItemEventDescription
-    //==============================================================================
+
     typedef ::comphelper::EventHolder< ItemEvent >    ItemEventDescription;
 
-    //==============================================================================
+
     //= OListBoxModel
-    //==============================================================================
+
 
     InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
     {
@@ -1722,9 +1722,9 @@ namespace frm
             initFromField( m_xCursor );
     }
 
-    //==================================================================
+
     // OListBoxControl
-    //==================================================================
+
 
 
     InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)

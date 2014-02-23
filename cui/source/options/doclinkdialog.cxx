@@ -39,9 +39,9 @@ namespace svx
     using namespace ::com::sun::star::ucb;
     using namespace ::svt;
 
-    //==================================================================
+
     //= ODocumentLinkDialog
-    //==================================================================
+
 
     ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
         : ModalDialog(_pParent, "DatabaseLinkDialog",

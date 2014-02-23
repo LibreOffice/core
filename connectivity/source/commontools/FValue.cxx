@@ -124,7 +124,7 @@ namespace tracing
         AllocationType( ) : pName( NULL ), nAllocatedUnits( 0 ) { }
     };
 
-    // =============================================================================
+
     class AllocationTracer
     {
     public:
@@ -140,7 +140,7 @@ namespace tracing
         static AllocationState::iterator    getLocation( const sal_Char* _pName );
     };
 
-    // =============================================================================
+
     AllocationTracer::AllocationState::iterator AllocationTracer::getLocation( const sal_Char* _pName )
     {
         AllocationState::iterator aLookFor = s_aAllocated.begin();
@@ -160,11 +160,11 @@ namespace tracing
         return aLookFor;
     }
 
-    // =============================================================================
+
     AllocationTracer::AllocationState           AllocationTracer::s_aAllocated;
     ::osl::Mutex                                AllocationTracer::s_aMutex;
 
-    // =============================================================================
+
     void AllocationTracer::registerUnit( const sal_Char* _pName )
     {
         ::osl::MutexGuard aGuard( s_aMutex );
@@ -173,7 +173,7 @@ namespace tracing
         ++aPos->nAllocatedUnits;
     }
 
-    // =============================================================================
+
     void AllocationTracer::revokeUnit( const sal_Char* _pName )
     {
         ::osl::MutexGuard aGuard( s_aMutex );

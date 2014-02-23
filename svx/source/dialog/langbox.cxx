@@ -66,9 +66,9 @@ OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg
     return aTmp;
 }
 
-//========================================================================
+
 //  misc local helper functions
-//========================================================================
+
 
 static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
 {
@@ -103,9 +103,9 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
     return i >= 0  &&  i < nLen;
 }
 
-//========================================================================
+
 //  class SvxLanguageBox
-//========================================================================
+
 
 sal_uInt16 TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
 {

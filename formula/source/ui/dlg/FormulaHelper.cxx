@@ -26,7 +26,7 @@ namespace formula
 
     namespace
     {
-        //============================================================================
+
         class OEmptyFunctionDescription : public IFunctionDescription
         {
         public:
@@ -48,9 +48,9 @@ namespace formula
             virtual bool isParameterOptional(sal_uInt32 ) const { return false; }
         };
     }
-//===================================================================
+
 //  class FormulaHelper - static Method
-//===================================================================
+
 
 #define FUNC_NOTFOUND 0xffff
 
@@ -392,8 +392,8 @@ sal_Int32 FormulaHelper::GetArgStart( const OUString& rStr, sal_Int32 nStart, sa
 
     return nStart;
 }
-// =============================================================================
+
 } // formula
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

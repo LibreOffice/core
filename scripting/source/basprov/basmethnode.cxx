@@ -54,9 +54,9 @@ namespace basprov
 {
 //.........................................................................
 
-    // =============================================================================
+
     // BasicMethodNodeImpl
-    // =============================================================================
+
 
     BasicMethodNodeImpl::BasicMethodNodeImpl( const Reference< XComponentContext >& rxContext,
         const OUString& sScriptingContext, SbMethod* pMethod, bool isAppScript )

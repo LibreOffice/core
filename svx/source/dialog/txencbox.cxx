@@ -32,9 +32,9 @@
 #include <rtl/strbuf.hxx>
 #include <osl/nlsupport.h>
 
-//========================================================================
+
 //  class SvxTextEncodingBox
-//========================================================================
+
 
 SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, WinBits nBits )
     : ListBox( pParent, nBits )

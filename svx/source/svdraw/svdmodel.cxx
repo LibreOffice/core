@@ -90,7 +90,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 struct SdrModelImpl
 {
@@ -98,7 +98,7 @@ struct SdrModelImpl
     SdrUndoFactory* mpUndoFactory;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 DBG_NAME(SdrModel)
 TYPEINIT1(SdrModel,SfxBroadcaster);
@@ -359,7 +359,7 @@ void SdrModel::SetReadOnly(bool bYes)
     bReadOnly=bYes;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrModel::SetMaxUndoActionCount(sal_uIntPtr nAnz)
 {
@@ -1536,7 +1536,7 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
     Broadcast(aHint);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                          sal_uInt16 nDestPos,
@@ -1828,7 +1828,7 @@ void SdrModel::setLock( bool bLock )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel )
 {
@@ -1888,7 +1888,7 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrModel::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
@@ -2047,7 +2047,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
     return theSdrModelUnoTunnelImplementationId::get().getSeq();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrHint,SfxHint);
 

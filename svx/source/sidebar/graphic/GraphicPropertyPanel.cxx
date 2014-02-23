@@ -31,12 +31,12 @@ using namespace css;
 using namespace cssu;
 using ::sfx2::sidebar::Theme;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // namespace open
 
 namespace svx { namespace sidebar {
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 GraphicPropertyPanel::GraphicPropertyPanel(
     Window* pParent,
@@ -65,13 +65,13 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     Initialize();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 GraphicPropertyPanel::~GraphicPropertyPanel()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GraphicPropertyPanel::Initialize()
 {
@@ -124,7 +124,7 @@ void GraphicPropertyPanel::Initialize()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, ModifyBrightnessHdl, void *, EMPTYARG )
 {
@@ -134,7 +134,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyBrightnessHdl, void *, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, ModifyContrastHdl, void *, EMPTYARG )
 {
@@ -144,7 +144,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyContrastHdl, void *, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, ModifyTransHdl, void *, EMPTYARG )
 {
@@ -154,7 +154,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyTransHdl, void *, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl )
 {
@@ -164,7 +164,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, RedHdl, void*, EMPTYARG )
 {
@@ -174,7 +174,7 @@ IMPL_LINK( GraphicPropertyPanel, RedHdl, void*, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, GreenHdl, void*, EMPTYARG )
 {
@@ -184,7 +184,7 @@ IMPL_LINK( GraphicPropertyPanel, GreenHdl, void*, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(GraphicPropertyPanel, BlueHdl, void *, EMPTYARG)
 {
@@ -194,7 +194,7 @@ IMPL_LINK(GraphicPropertyPanel, BlueHdl, void *, EMPTYARG)
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(GraphicPropertyPanel, GammaHdl, void *, EMPTYARG)
 {
@@ -204,7 +204,7 @@ IMPL_LINK(GraphicPropertyPanel, GammaHdl, void *, EMPTYARG)
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GraphicPropertyPanel::SetupIcons(void)
 {
@@ -218,7 +218,7 @@ void GraphicPropertyPanel::SetupIcons(void)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 GraphicPropertyPanel* GraphicPropertyPanel::Create (
     Window* pParent,
@@ -238,7 +238,7 @@ GraphicPropertyPanel* GraphicPropertyPanel::Create (
         pBindings);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GraphicPropertyPanel::DataChanged(
     const DataChangedEvent& rEvent)
@@ -248,7 +248,7 @@ void GraphicPropertyPanel::DataChanged(
     SetupIcons();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GraphicPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -458,17 +458,17 @@ void GraphicPropertyPanel::NotifyItemUpdate(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SfxBindings* GraphicPropertyPanel::GetBindings()
 {
     return mpBindings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // namespace close
 
 }} // end of namespace ::svx::sidebar
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eof

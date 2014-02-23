@@ -29,7 +29,7 @@
 #include <basegfx/tuple/b3ituple.hxx>
 #include <numeric>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -734,7 +734,7 @@ namespace basegfx
             return false;
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         // comparators with tolerance for 3D Polygons
 
         bool equal(const B3DPolygon& rCandidateA, const B3DPolygon& rCandidateB, const double& rfSmallValue)

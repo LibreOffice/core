@@ -26,7 +26,7 @@
 
 #include <cstdio>
 
-// =======================================================================
+
 
 ImplFontMetric::ImplFontMetric()
 :   mnAscent( 0 ),
@@ -76,7 +76,7 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
     return true;
 }
 
-// =======================================================================
+
 
 FontInfo::FontInfo()
 :   mpImplMetric( new ImplFontMetric )
@@ -195,6 +195,6 @@ bool FontMetric::operator==( const FontMetric& rMetric ) const
     return FontInfo::operator==( rMetric );
 }
 
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

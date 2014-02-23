@@ -47,9 +47,9 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::uno::XComponentContext;
 
-    //==================================================================================================================
+
     //= ContentProvider
-    //==================================================================================================================
+
 
     ContentProvider::ContentProvider( const Reference< XComponentContext >& rxContext )
         :ContentProvider_Base( rxContext )
@@ -144,7 +144,7 @@ namespace ucb { namespace ucp { namespace ext
         // the normalized form requires one additional /, but we also accept identifiers which don't have it
         if ( sRemaining.isEmpty() )
         {
-            // the root content is a special case, it requires ///
+            // the root content is a special case, it requires
             aComposer.appendAscii( "//" );
         }
         else

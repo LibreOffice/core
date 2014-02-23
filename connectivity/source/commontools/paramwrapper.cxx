@@ -62,9 +62,9 @@ namespace param
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace DataType = ::com::sun::star::sdbc::DataType;
 
-    //====================================================================
+
     //= ParameterWrapper
-    //====================================================================
+
 
     ParameterWrapper::ParameterWrapper( const Reference< XPropertySet >& _rxColumn )
         :PropertyBase( m_aBHelper )
@@ -246,9 +246,9 @@ namespace param
         m_aBHelper.bDisposed = sal_True;
     }
 
-    //====================================================================
+
     //= ParameterWrapperContainer
-    //====================================================================
+
 
     ParameterWrapperContainer::ParameterWrapperContainer()
         :ParameterWrapperContainer_Base( m_aMutex )

@@ -52,11 +52,11 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
-// =======================================================================
+
 
 #define IMPL_MIN_NEEDSYSWIN         49
 
-// =======================================================================
+
 
 bool ImplCallPreNotify( NotifyEvent& rEvt )
 {
@@ -1950,7 +1950,7 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
     }
 }
 
-// =======================================================================
+
 
 static sal_uInt16 ImplGetMouseMoveMode( SalMouseEvent* pEvent )
 {

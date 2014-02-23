@@ -51,9 +51,9 @@ namespace xforms
     using ::com::sun::star::xsd::XDataType;
     using namespace frm;
 
-    //====================================================================
+
     //= ODataTypeRepository
-    //====================================================================
+
 
     ODataTypeRepository::ODataTypeRepository( )
     {

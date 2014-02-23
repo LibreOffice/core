@@ -65,9 +65,9 @@
     using namespace ::com::sun::star::container;
     using namespace ::comphelper;
 
-    //====================================================================
+
     //= OGeometryControlModel_Base
-    //====================================================================
+
 
     OGeometryControlModel_Base::OGeometryControlModel_Base(::com::sun::star::uno::XAggregation* _pAggregateInstance)
         :OPropertySetAggregationHelper( m_aBHelper )
@@ -435,9 +435,9 @@
             xComp->dispose();
     }
 
-    //====================================================================
+
     //= OCommonGeometryControlModel
-    //====================================================================
+
 
 
     typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > HashMapString2Int;

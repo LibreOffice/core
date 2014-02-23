@@ -28,9 +28,9 @@ namespace abp
 {
 //.........................................................................
 
-    //=====================================================================
+
     //= TableSelectionPage
-    //=====================================================================
+
 
     TableSelectionPage::TableSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION_AB))

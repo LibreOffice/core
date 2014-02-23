@@ -23,9 +23,9 @@
 //........................................................................
 namespace pcr
 {
-    //====================================================================
+
     //= InspectorHelpWindow
-    //====================================================================
+
 
     InspectorHelpWindow::InspectorHelpWindow( Window* _pParent )
         :Window( _pParent, WB_DIALOGCONTROL )

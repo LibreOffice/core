@@ -52,9 +52,9 @@ namespace pcr
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= SubmissionHelper
-    //====================================================================
+
 
     SubmissionHelper::SubmissionHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
         :EFormsHelper( _rMutex, _rxIntrospectee, _rxContextDocument )
@@ -83,9 +83,9 @@ namespace pcr
         return false;
     }
 
-    //====================================================================
+
     //= SubmissionPropertyHandler
-    //====================================================================
+
     DBG_NAME( SubmissionPropertyHandler )
 
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )

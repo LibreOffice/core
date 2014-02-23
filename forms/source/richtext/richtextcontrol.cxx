@@ -75,9 +75,9 @@ namespace frm
     }   \
     return aReturn;
 
-    //==================================================================
+
     // ORichTextControl
-    //==================================================================
+
 
     ORichTextControl::ORichTextControl()
         :UnoEditControl()
@@ -300,9 +300,9 @@ namespace frm
         return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName.equals( PROPERTY_RICH_TEXT );
     }
 
-    //==================================================================
+
     // ORichTextPeer
-    //==================================================================
+
 
     ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, Window* _pParentWindow, WinBits _nStyle )
     {

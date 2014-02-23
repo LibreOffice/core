@@ -1635,7 +1635,7 @@ const FormulaHelper& FormulaDlg_Impl::GetFormulaHelper()  const
 {
     return m_aFormulaHelper;
 }
-//============================================================================
+
 FormulaModalDialog::FormulaModalDialog( Window* pParent
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult

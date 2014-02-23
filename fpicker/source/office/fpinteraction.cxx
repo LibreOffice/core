@@ -33,9 +33,9 @@ namespace svt
     using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::ucb;
 
-    //====================================================================
+
     //= OFilePickerInteractionHandler
-    //====================================================================
+
     DBG_NAME( OFilePickerInteractionHandler )
 
     OFilePickerInteractionHandler::OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster )

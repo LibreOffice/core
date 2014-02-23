@@ -245,7 +245,7 @@ Reference< XMultiServiceFactory > InitializeFac( void )
 
     printf("set global factory.\n");
 
-    //////////////////////////////////////////////////////////////////////
+
     // set global factory
     setProcessServiceFactory( xSMgr );
 

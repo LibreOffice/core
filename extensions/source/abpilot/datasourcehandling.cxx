@@ -63,10 +63,10 @@ namespace abp
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
 
-    //=====================================================================
+
     struct PackageAccessControl { };
 
-    //=====================================================================
+
 
     static Reference< XDatabaseContext > lcl_getDataSourceContext( const Reference< XComponentContext >& _rxContext ) SAL_THROW (( Exception ))
     {
@@ -157,9 +157,9 @@ namespace abp
         }
     }
 
-    //=====================================================================
+
     //= ODataSourceContextImpl
-    //=====================================================================
+
     struct ODataSourceContextImpl
     {
         Reference< XComponentContext >      xORB;
@@ -174,9 +174,9 @@ namespace abp
         }
     };
 
-    //=====================================================================
+
     //= ODataSourceContext
-    //=====================================================================
+
 
     ODataSourceContext::ODataSourceContext(const Reference< XComponentContext >& _rxORB)
         :m_pImpl( new ODataSourceContextImpl( _rxORB ) )
@@ -298,9 +298,9 @@ namespace abp
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:dbase:" );
     }
 
-    //=====================================================================
+
     //= ODataSourceImpl
-    //=====================================================================
+
     struct ODataSourceImpl
     {
     public:
@@ -332,9 +332,9 @@ namespace abp
     {
     }
 
-    //=====================================================================
+
     //= ODataSource
-    //=====================================================================
+
 
     ODataSource::ODataSource( const ODataSource& _rSource )
         :m_pImpl( NULL )

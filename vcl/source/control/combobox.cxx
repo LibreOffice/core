@@ -33,7 +33,7 @@
 #include <ilstbox.hxx>
 #include <controldata.hxx>
 
-// =======================================================================
+
 
 static void lcl_GetSelectedEntries( ::std::set< sal_uInt16 >& rSelectedPos, const OUString& rText, sal_Unicode cTokenSep, const ImplEntryList* pEntryList )
 {
@@ -47,7 +47,7 @@ static void lcl_GetSelectedEntries( ::std::set< sal_uInt16 >& rSelectedPos, cons
     }
 }
 
-// =======================================================================
+
 
 ComboBox::ComboBox( WindowType nType ) :
     Edit( nType )

@@ -248,7 +248,7 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
     }
 }
 
-//==================================================================
+
 
 void ScTabView::TabChanged( bool bSameTabButMoved )
 {

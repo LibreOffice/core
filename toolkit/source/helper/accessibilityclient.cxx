@@ -58,9 +58,9 @@ namespace toolkit
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
     }
 
-    //====================================================================
+
     //= AccessibleDummyFactory
-    //====================================================================
+
     class AccessibleDummyFactory : public IAccessibleFactory
     {
     public:
@@ -170,9 +170,9 @@ namespace toolkit
         return m_refCount;
     }
 
-    //====================================================================
+
     //= AccessibilityClient
-    //====================================================================
+
 
     AccessibilityClient::AccessibilityClient()
         :m_bInitialized( false )

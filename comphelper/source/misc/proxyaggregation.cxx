@@ -33,9 +33,9 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::reflection;
 
-    //=========================================================================
+
     //= OProxyAggregation
-    //=========================================================================
+
 
     OProxyAggregation::OProxyAggregation( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
@@ -97,9 +97,9 @@ namespace comphelper
             // ourself) to this proxy, and thus delete it
     }
 
-    //=========================================================================
+
     //= OComponentProxyAggregationHelper
-    //=========================================================================
+
 
     OComponentProxyAggregationHelper::OComponentProxyAggregationHelper( const Reference< XComponentContext >& _rxContext,
         ::cppu::OBroadcastHelper& _rBHelper )
@@ -185,9 +185,9 @@ namespace comphelper
         }
     }
 
-    //=========================================================================
+
     //= OComponentProxyAggregation
-    //=========================================================================
+
 
     OComponentProxyAggregation::OComponentProxyAggregation( const Reference< XComponentContext >& _rxContext,
             const Reference< XComponent >& _rxComponent )

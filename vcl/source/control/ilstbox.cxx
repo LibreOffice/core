@@ -45,7 +45,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBackground )
 {
@@ -90,7 +90,7 @@ void ImplInitDropDownButton( PushButton* pButton )
         pButton->SetBackground();
 }
 
-// =======================================================================
+
 
 ImplEntryList::ImplEntryList( Window* pWindow )
 {
@@ -526,7 +526,7 @@ sal_uInt16 ImplEntryList::FindFirstSelectable( sal_uInt16 nPos, bool bForward /*
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-// =======================================================================
+
 
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, 0 ),
@@ -2247,7 +2247,7 @@ sal_uInt16 ImplListBoxWindow::ImplGetTextStyle() const
     return nTextStyle;
 }
 
-// =======================================================================
+
 
 ImplListBox::ImplListBox( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
@@ -2741,7 +2741,7 @@ void ImplListBox::SetEdgeBlending(bool bNew)
     }
 }
 
-// =======================================================================
+
 
 ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
     Control ( pParent, nWinStyle )
@@ -3047,7 +3047,7 @@ void ImplWin::LoseFocus()
     Control::LoseFocus();
 }
 
-// =======================================================================
+
 
 ImplBtn::ImplBtn( Window* pParent, WinBits nWinStyle ) :
     PushButton(  pParent, nWinStyle ),
@@ -3075,7 +3075,7 @@ void ImplBtn::MouseButtonDown( const MouseEvent& )
     }
 }
 
-// =======================================================================
+
 
 ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
     FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )    // no drop shadow for list boxes

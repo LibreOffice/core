@@ -38,9 +38,9 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
 
@@ -72,9 +72,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
+
     //= PropertyComposer
-    //====================================================================
+
 
     // TODO: there are various places where we determine the first handler in our array which
     // supports a given property id. This is, at the moment, done with searching all handlers,

@@ -35,9 +35,9 @@
 namespace reportdesign
 {
     using namespace ::com::sun::star;
-    //==================================================================
+
     //= ResourceManager
-    //==================================================================
+
     SimpleResMgr* ResourceManager::m_pImpl = NULL;
 
 

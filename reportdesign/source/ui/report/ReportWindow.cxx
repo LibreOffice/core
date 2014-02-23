@@ -52,9 +52,9 @@ namespace rptui
 {
 using namespace ::com::sun::star;
 using namespace ::comphelper;
-//==================================================================
+
 // class OReportWindow
-//==================================================================
+
 
 OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 : Window(_pParent,WB_DIALOGCONTROL)
@@ -439,8 +439,8 @@ void OReportWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
     static sal_Int32 nIn = INVALIDATE_TRANSPARENT;
     Invalidate(nIn);
 }
-//==================================================================
+
 }   //rptui
-//==================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -902,9 +902,9 @@ using ::com::sun::star::registry::InvalidRegistryException;
 using ::com::sun::star::registry::InvalidValueException;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-//==========================================================================
+
 //= registration
-//==========================================================================
+
 extern "C"
 {
 

@@ -54,9 +54,9 @@ namespace abp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     //= OAddessBookSourcePilot
-    //=====================================================================
+
 
     OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent, ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ),

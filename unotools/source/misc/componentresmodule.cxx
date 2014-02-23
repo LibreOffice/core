@@ -28,9 +28,9 @@ namespace utl
 {
 //........................................................................
 
-    //====================================================================
+
     //= OComponentResModuleImpl
-    //====================================================================
+
     /** PIMPL-class for OComponentResourceModule
 
         not threadsafe!
@@ -95,9 +95,9 @@ namespace utl
         return m_pResources;
     }
 
-    //====================================================================
+
     //= OComponentResourceModule
-    //====================================================================
+
 
     OComponentResourceModule::OComponentResourceModule( const OString& _rResFilePrefix )
         :BaseClass()

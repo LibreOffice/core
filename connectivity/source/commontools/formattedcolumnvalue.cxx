@@ -66,9 +66,9 @@ namespace dbtools
     namespace DataType = ::com::sun::star::sdbc::DataType;
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 
-    //====================================================================
+
     //= FormattedColumnValue_Data
-    //====================================================================
+
     struct FormattedColumnValue_Data
     {
         Reference< XNumberFormatter >   m_xFormatter;
@@ -211,9 +211,9 @@ namespace dbtools
         }
     }
 
-    //====================================================================
+
     //= FormattedColumnValue
-    //====================================================================
+
 
     FormattedColumnValue::FormattedColumnValue( const Reference< XComponentContext >& _rxContext,
             const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& i_rColumn )

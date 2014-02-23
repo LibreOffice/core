@@ -28,7 +28,7 @@
 using namespace ::oox;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -560,6 +560,6 @@ void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt16 nBytes ) const
     rStrm.SetSliceSize( nBytes + (mbIsUnicode ? 2 : 1) );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

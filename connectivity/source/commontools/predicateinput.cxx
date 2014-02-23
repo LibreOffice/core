@@ -60,7 +60,7 @@ namespace dbtools
 
     using ::connectivity::OSQLParseNode;
 
-    //=====================================================================
+
 
     static sal_Unicode lcl_getSeparatorChar( const OUString& _rSeparator, sal_Unicode _nFallback )
     {
@@ -72,9 +72,9 @@ namespace dbtools
         return nReturn;
     }
 
-    //=====================================================================
+
     //= OPredicateInputController
-    //=====================================================================
+
 
     sal_Bool OPredicateInputController::getSeparatorChars( const Locale& _rLocale, sal_Unicode& _rDecSep, sal_Unicode& _rThdSep ) const
     {

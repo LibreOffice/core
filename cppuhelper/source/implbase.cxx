@@ -41,7 +41,7 @@ namespace
 
 namespace cppu
 {
-//==================================================================================================
+
 Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(())
 {
     return theImplHelperInitMutex::get();

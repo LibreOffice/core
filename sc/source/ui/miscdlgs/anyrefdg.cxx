@@ -763,7 +763,7 @@ static void lcl_HideAllReferences()
     }
 }
 
-//============================================================================
+
 //The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
 //  class ScRefHandler
 

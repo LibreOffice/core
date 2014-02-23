@@ -337,7 +337,7 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >
     m_rEmitContext.rEmitter.endTag( "office:body" );
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 void WriterXmlOptimizer::visit( HyperlinkElement&, const std::list< Element* >::const_iterator& )
 {
@@ -831,7 +831,7 @@ void WriterXmlOptimizer::visit( DocumentElement& elem, const std::list< Element*
     elem.applyToChildren(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
+
 
 
 void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& )

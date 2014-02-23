@@ -690,7 +690,7 @@ void CanvasBitmapTest::runTest()
     static const sal_Int8 lcl_depths[]={1,4,8,16,24};
 
     // Testing VclCanvasBitmap wrapper
-    // ===============================
+
 
     for( unsigned int i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
     {
@@ -764,7 +764,7 @@ void CanvasBitmapTest::runTest()
     }
 
     // Testing XBitmap import
-    // ======================
+
     uno::Reference< rendering::XIntegerReadOnlyBitmap > xTestBmp(
         new TestBitmap( geometry::IntegerSize2D(10,10), true ));
 

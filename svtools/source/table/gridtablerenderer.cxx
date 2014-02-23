@@ -53,9 +53,9 @@ namespace svt { namespace table
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 
-    //==================================================================================================================
+
     //= CachedSortIndicator
-    //==================================================================================================================
+
     class CachedSortIndicator
     {
     public:
@@ -103,9 +103,9 @@ namespace svt { namespace table
         return rBitmap;
     }
 
-    //==================================================================================================================
+
     //= GridTableRenderer_Impl
-    //==================================================================================================================
+
     struct GridTableRenderer_Impl
     {
         ITableModel&        rModel;
@@ -124,9 +124,9 @@ namespace svt { namespace table
         }
     };
 
-    //==================================================================================================================
+
     //= helper
-    //==================================================================================================================
+
     namespace
     {
         static Rectangle lcl_getContentArea( GridTableRenderer_Impl const & i_impl, Rectangle const & i_cellArea )
@@ -176,9 +176,9 @@ namespace svt { namespace table
 
     }
 
-    //==================================================================================================================
+
     //= GridTableRenderer
-    //==================================================================================================================
+
 
     GridTableRenderer::GridTableRenderer( ITableModel& _rModel )
         :m_pImpl( new GridTableRenderer_Impl( _rModel ) )

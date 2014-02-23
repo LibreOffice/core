@@ -134,9 +134,9 @@ BasicManagerImpl::~BasicManagerImpl()
     }
 }
 
-//============================================================================
+
 // BasMgrContainerListenerImpl
-//============================================================================
+
 
 typedef ::cppu::WeakImplHelper1< container::XContainerListener > ContainerListenerHelper;
 
@@ -170,9 +170,9 @@ public:
 };
 
 
-//============================================================================
+
 // BasMgrContainerListenerImpl
-//============================================================================
+
 
 void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont,
     BasicManager* pMgr, uno::Any aLibAny, OUString aLibName )
@@ -373,7 +373,7 @@ BasicError::BasicError( const BasicError& rErr ) :
 }
 
 
-//=====================================================================
+
 
 class BasicLibInfo
 {
@@ -437,7 +437,7 @@ public:
 };
 
 
-//=====================================================================
+
 
 class BasicLibs
 {
@@ -525,7 +525,7 @@ BasicLibInfo* BasicLibs::Remove( BasicLibInfo* LibInfo )
 }
 
 
-//=====================================================================
+
 
 BasicLibInfo::BasicLibInfo()
 {
@@ -1845,7 +1845,7 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUStri
     return SbxBase::GetError();
 }
 
-//=====================================================================
+
 
 class ModuleInfo_Impl : public ModuleInfoHelper
 {
@@ -1867,7 +1867,7 @@ public:
 };
 
 
-//=====================================================================
+
 
 class DialogInfo_Impl : public DialogInfoHelper
 {
@@ -1886,7 +1886,7 @@ public:
 };
 
 
-//=====================================================================
+
 
 class LibraryInfo_Impl : public LibraryInfoHelper
 {
@@ -1930,7 +1930,7 @@ public:
         { return maLinkTargetURL; }
 };
 
-//=====================================================================
+
 
 class ModuleContainer_Impl : public NameContainerHelper
 {
@@ -2056,7 +2056,7 @@ void ModuleContainer_Impl::removeByName( const OUString& Name )
 }
 
 
-//=====================================================================
+
 
 uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
 {
@@ -2239,7 +2239,7 @@ void DialogContainer_Impl::removeByName( const OUString& Name )
 }
 
 
-//=====================================================================
+
 
 
 class LibraryContainer_Impl : public NameContainerHelper
@@ -2385,7 +2385,7 @@ void LibraryContainer_Impl::removeByName( const OUString& Name )
     mpMgr->RemoveLib( nLibId );
 }
 
-//=====================================================================
+
 
 typedef WeakImplHelper1< script::XStarBasicAccess > StarBasicAccessHelper;
 

@@ -46,9 +46,9 @@ namespace pcr
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= EditPropertyHandler
-    //====================================================================
+
     DBG_NAME( EditPropertyHandler )
 
     EditPropertyHandler::EditPropertyHandler( const Reference< XComponentContext >& _rxContext )

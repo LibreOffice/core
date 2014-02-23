@@ -34,9 +34,9 @@ namespace svx
 {
 //........................................................................
 
-    //====================================================================
+
     //= TextControlCharAttribDialog
-    //====================================================================
+
 
     TextControlCharAttribDialog::TextControlCharAttribDialog( Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList )
         : SfxTabDialog( pParent, "TextControlCharacterPropertiesDialog",

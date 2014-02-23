@@ -48,18 +48,18 @@ namespace pcr
 
     namespace KeyFunction = ::com::sun::star::awt::KeyFunction;
 
-    //====================================================================
+
     //= PropertyControlExtender_Data
-    //====================================================================
+
     struct PropertyControlExtender_Data
     {
         Reference< XPropertyControl >   xControl;
         Reference< XWindow >            xControlWindow;
     };
 
-    //====================================================================
+
     //= PropertyControlExtender
-    //====================================================================
+
 
     PropertyControlExtender::PropertyControlExtender( const Reference< XPropertyControl >& _rxObservedControl )
         :m_pData( new PropertyControlExtender_Data )

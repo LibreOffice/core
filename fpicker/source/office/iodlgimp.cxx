@@ -94,9 +94,9 @@ SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 // SvtFileDialogFilterList_Impl
 //*****************************************************************************
 
-//=============================================================================
+
 //= SvtFileDialogURLSelector
-//=============================================================================
+
 
 
 SvtFileDialogURLSelector::SvtFileDialogURLSelector( SvtFileDialog* _pParent, const ResId& _rResId, sal_uInt16 _nButtonId )
@@ -126,9 +126,9 @@ void SvtFileDialogURLSelector::Activate()
     SetPopupMenu( m_pMenu );
 }
 
-//=============================================================================
+
 //= SvtUpButton_Impl
-//=============================================================================
+
 
 
 SvtUpButton_Impl::SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId )

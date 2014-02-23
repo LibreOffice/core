@@ -108,9 +108,9 @@ namespace toolkit
         }
     }
 
-    // ===================================================================
+
     // = UnoControlFormattedFieldModel
-    // ===================================================================
+
 
     UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
@@ -417,9 +417,9 @@ namespace toolkit
         return xInfo;
     }
 
-    // ===================================================================
+
     // = UnoFormattedFieldControl
-    // ===================================================================
+
 
     UnoFormattedFieldControl::UnoFormattedFieldControl()
         :UnoSpinFieldControl()

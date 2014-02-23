@@ -54,9 +54,9 @@ namespace comphelper {
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::frame::XFrame;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
         OUString lcl_getTitle( const Reference< XInterface >& _rxComponent )
@@ -68,9 +68,9 @@ namespace comphelper {
         }
     }
 
-    //====================================================================
+
     //= DocumentInfo
-    //====================================================================
+
 
     OUString DocumentInfo::getDocumentTitle( const Reference< XModel >& _rxDocument )
     {

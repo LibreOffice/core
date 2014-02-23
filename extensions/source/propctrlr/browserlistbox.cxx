@@ -57,9 +57,9 @@ namespace pcr
 
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
 
-    //==================================================================
+
     //= ControlEvent
-    //==================================================================
+
     enum ControlEventType
     {
         FOCUS_GAINED,
@@ -79,9 +79,9 @@ namespace pcr
         }
     };
 
-    //==================================================================
+
     //= SharedNotifier
-    //==================================================================
+
     class SharedNotifier
     {
     private:
@@ -125,9 +125,9 @@ namespace pcr
         return s_pNotifier;
     }
 
-    //==================================================================
+
     //= PropertyControlContext_Impl
-    //==================================================================
+
     /** implementation for of <type scope="com::sun::star::inspection">XPropertyControlContext</type>
         which forwards all events to a non-UNO version of this interface
     */
@@ -343,9 +343,9 @@ namespace pcr
         }
     }
 
-    //==================================================================
+
     //= OBrowserListBox
-    //==================================================================
+
     DBG_NAME(OBrowserListBox)
 
     OBrowserListBox::OBrowserListBox( Window* pParent, WinBits nWinStyle)

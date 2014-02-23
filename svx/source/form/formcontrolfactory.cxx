@@ -94,9 +94,9 @@ namespace svxform
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-    //====================================================================
+
     //= FormControlFactory_Data
-    //====================================================================
+
     struct FormControlFactory_Data
     {
         Reference<XComponentContext>  m_xContext;
@@ -107,9 +107,9 @@ namespace svxform
         }
     };
 
-    //====================================================================
+
     //= FormControlFactory
-    //====================================================================
+
 
     FormControlFactory::FormControlFactory( const Reference<XComponentContext>& _rContext )
         :m_pData( new FormControlFactory_Data( _rContext ) )
@@ -566,7 +566,7 @@ namespace svxform
 
         try
         {
-            ////////////////////////////////////////////////////////////////////////
+
             // if the field has a numeric format, and the model has a "Scale" property, sync it
             Reference< XPropertySetInfo > xFieldPSI( _rxDatabaseField->getPropertySetInfo(), UNO_SET_THROW );
             Reference< XPropertySetInfo > xModelPSI( _rxControlModel->getPropertySetInfo(), UNO_SET_THROW );
@@ -591,7 +591,7 @@ namespace svxform
                 _rxControlModel->setPropertyValue( FM_PROP_DECIMAL_ACCURACY, aScaleVal );
             }
 
-            ////////////////////////////////////////////////////////////////////////
+
             // minimum and maximum of the control according to the type of the database field
             sal_Int32 nDataType = DataType::OTHER;
             OSL_VERIFY( _rxDatabaseField->getPropertyValue( FM_PROP_FIELDTYPE ) >>= nDataType );
@@ -636,7 +636,7 @@ namespace svxform
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMAX, aValue );
             }
 
-            ////////////////////////////////////////////////////////////////////////
+
             // a check box can be tristate if and only if the column it is bound to is nullable
             sal_Int16 nClassId = FormComponentType::CONTROL;
             OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );

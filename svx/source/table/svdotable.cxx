@@ -2262,7 +2262,7 @@ SdrHdl* SdrTableObj::GetHdl(sal_uInt32 nHdlNum) const
     return pRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Draging
 
 bool SdrTableObj::hasSpecialDrag() const
@@ -2389,7 +2389,7 @@ basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag
     return aRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Create
 
 

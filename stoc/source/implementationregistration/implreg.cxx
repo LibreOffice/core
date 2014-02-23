@@ -752,7 +752,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
     }
 }
 
-//==================================================================================================
+
 static void delete_all_singleton_entries(
     Reference < registry::XRegistryKey > const & xSingletons_section,
     ::std::list< OUString > const & impl_names )

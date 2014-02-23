@@ -54,9 +54,9 @@ namespace pcr
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= PropertyHandlerHelper
-    //====================================================================
+
 
     void PropertyHandlerHelper::describePropertyLine( const Property& _rProperty,
         LineDescriptor& /* [out] */ _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )

@@ -51,9 +51,9 @@ namespace connectivity
         typedef SQLError::ParamValue ParamValue;
     }
 
-    //====================================================================
+
     //= SQLError_Impl - declaration
-    //====================================================================
+
     class SQLError_Impl
     {
     public:
@@ -94,9 +94,9 @@ namespace connectivity
         bool                                                    m_bAttemptedInit;
     };
 
-    //====================================================================
+
     //= SQLError_Impl - implementation
-    //====================================================================
+
 
     SQLError_Impl::SQLError_Impl( const Reference<XComponentContext> & _rxContext )
         :m_aContext( _rxContext )
@@ -281,9 +281,9 @@ namespace connectivity
         return m_pResources.get() != NULL;
     }
 
-    //====================================================================
+
     //= SQLError
-    //====================================================================
+
 
     SQLError::SQLError( const Reference<XComponentContext> & _rxContext )
         :m_pImpl( new SQLError_Impl( _rxContext ) )

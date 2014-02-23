@@ -180,7 +180,7 @@ unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned 
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 
 PDFDetector::PDFDetector( const uno::Reference< uno::XComponentContext >& xContext) :

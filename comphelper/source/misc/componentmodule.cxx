@@ -40,9 +40,9 @@ namespace comphelper
 
     typedef ::std::vector< ComponentDescription >   ComponentDescriptions;
 
-    //=========================================================================
+
     //= OModuleImpl
-    //=========================================================================
+
     /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
     */
     class OModuleImpl
@@ -64,9 +64,9 @@ namespace comphelper
     {
     }
 
-    //=========================================================================
+
     //= OModule
-    //=========================================================================
+
 
     OModule::OModule()
         : m_nClients(0)

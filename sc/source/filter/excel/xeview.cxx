@@ -524,6 +524,6 @@ void XclExpTabViewSettings::WriteTabBgColor( XclExpStream& rStrm ) const
     if ( !maData.IsDefaultTabBgColor() )
         XclExpTabBgColor( maData ).Save( rStrm );
 }
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

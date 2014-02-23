@@ -51,9 +51,9 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    //==================================================================
+
     //= OBrowserLine
-    //==================================================================
+
     DBG_NAME(OBrowserLine)
 
 

@@ -50,9 +50,9 @@ namespace svt { namespace uno
 
     using namespace ::com::sun::star;
 
-    //==================================================================================================================
+
     //= WizardPageController
-    //==================================================================================================================
+
 
     WizardPageController::WizardPageController( WizardShell& i_rParent, const Reference< XWizardController >& i_rController,
             const sal_Int16 i_nPageId )

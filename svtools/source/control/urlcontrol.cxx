@@ -27,9 +27,9 @@ namespace svt
 {
 //.........................................................................
 
-    //=====================================================================
+
     //= OFileURLControl
-    //=====================================================================
+
 
     OFileURLControl::OFileURLControl(Window* _pParent, const ResId& _rId)
         : SvtURLBox(_pParent, _rId, INET_PROT_FILE)

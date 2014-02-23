@@ -76,9 +76,9 @@ namespace svt
     using ::ucbhelper::ResultSetInclude;
     using ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
-    //====================================================================
+
     //= FileViewContentEnumerator
-    //====================================================================
+
 
     FileViewContentEnumerator::FileViewContentEnumerator(
             const Reference< XCommandEnvironment >& _rxCommandEnv,

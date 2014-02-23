@@ -56,9 +56,9 @@ namespace toolkit
         }
     }
 
-    //====================================================================
+
     //= VCLXSpinButton
-    //====================================================================
+
     DBG_NAME( VCLXSpinButton )
 
     VCLXSpinButton::VCLXSpinButton()

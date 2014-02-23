@@ -49,9 +49,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XDispatchProviderInterceptor;
 
-//==================================================================
+
 //= OButtonModel
-//==================================================================
+
 
 InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -330,9 +330,9 @@ void OButtonModel::impl_resetNoBroadcast_nothrow()
     }
 }
 
-//==================================================================
+
 // OButtonControl
-//==================================================================
+
 
 InterfaceRef SAL_CALL OButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {

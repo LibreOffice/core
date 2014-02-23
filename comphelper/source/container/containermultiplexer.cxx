@@ -29,9 +29,9 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    //=====================================================================
+
     //= OContainerListener
-    //=====================================================================
+
 
     OContainerListener::OContainerListener(::osl::Mutex& _rMutex)
         :m_pAdapter(NULL)
@@ -87,9 +87,9 @@ namespace comphelper
         }
     }
 
-    //=====================================================================
+
     //= OContainerListenerAdapter
-    //=====================================================================
+
 
     OContainerListenerAdapter::OContainerListenerAdapter(OContainerListener* _pListener,
             const  Reference< XContainer >& _rxContainer)

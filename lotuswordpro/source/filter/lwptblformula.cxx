@@ -76,7 +76,7 @@ LwpFormulaArg::~LwpFormulaArg()
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
  LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpCellList(objHdr, pStrm)
     , m_bSupported(sal_True)
@@ -433,7 +433,7 @@ void LwpFormulaInfo::Convert(XFCell * pCell,LwpTableLayout* pCellsMap)
     LwpCellList::Convert(pCell);
 }
 
-//////////////////////////////////////////////////////////////////
+
 
 /**
 *

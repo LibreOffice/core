@@ -30,9 +30,9 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 
-//========================================================================
+
 // ScDelimiterTable
-//========================================================================
+
 
 class ScDelimiterTable
 {
@@ -105,9 +105,9 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
     return aStrDel;
 }
 
-//========================================================================
+
 // ScImportOptionsDlg
-//========================================================================
+
 
 ScImportOptionsDlg::ScImportOptionsDlg(
         Window*                 pParent,

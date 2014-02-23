@@ -22,7 +22,7 @@
 #include <svtools/svtresid.hxx>
 #include <vcl/print.hxx>
 
-// =======================================================================
+
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,
                             ListBox* pBox, PushButton* pPropBtn )
@@ -214,7 +214,7 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     return aStr;
 }
 
-// =======================================================================
+
 
 PrinterSetupDialog::PrinterSetupDialog(Window* pParent)
     : ModalDialog(pParent, "PrinterSetupDialog",

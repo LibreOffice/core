@@ -75,7 +75,7 @@ using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::script::XEventAttacherManager;
 
-// ============================================================================
+
 
 XclEscherExGlobal::XclEscherExGlobal( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -95,7 +95,7 @@ SvStream* XclEscherExGlobal::ImplQueryPictureStream()
     return mxPicStrm.get();
 }
 
-// ============================================================================
+
 
 XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr, SvStream& rStrm, const XclEscherEx* pParent ) :
     EscherEx( pParent ? pParent->mxGlobal : EscherExGlobalRef( new XclEscherExGlobal( rRoot ) ), &rStrm ),
@@ -527,7 +527,7 @@ void XclEscherEx::DeleteCurrAppData()
     }
 }
 
-// ============================================================================
+
 
 // --- class XclEscherClientData -------------------------------------
 

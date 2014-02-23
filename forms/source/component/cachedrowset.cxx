@@ -54,9 +54,9 @@ namespace frm
 
     namespace ResultSetType = ::com::sun::star::sdbc::ResultSetType;
 
-    //====================================================================
+
     //= CachedRowSet_Data
-    //====================================================================
+
     struct CachedRowSet_Data
     {
         OUString                 sCommand;
@@ -74,9 +74,9 @@ namespace frm
         }
     };
 
-    //====================================================================
+
     //= CachedRowSet
-    //====================================================================
+
 
     CachedRowSet::CachedRowSet()
         :m_pData( new CachedRowSet_Data )

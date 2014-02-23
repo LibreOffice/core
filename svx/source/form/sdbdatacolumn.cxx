@@ -32,9 +32,9 @@ namespace svxform
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::container;
 
-    //==========================================================================
+
     //= DataColumn - a class wrapping an object implementing a sdb::DataColumn service
-    //==========================================================================
+
     DataColumn::DataColumn(const Reference< ::com::sun::star::beans::XPropertySet>& _rxIFace)
     {
         m_xPropertySet = _rxIFace;

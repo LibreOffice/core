@@ -34,9 +34,9 @@ namespace svx
     #define TOOLBAR_RESNAME         "private:resource/toolbar/"
     #define PROPNAME_LAYOUTMANAGER  "LayoutManager"
 
-    //====================================================================
+
     //= ToolboxAccess
-    //====================================================================
+
     ToolboxAccess::ToolboxAccess( const ::rtl::OUString& rToolboxName ) :
 
         m_bDocking          ( false ),

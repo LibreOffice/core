@@ -367,9 +367,9 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
                 && ( *pField == *pOtherFld ) );
 }
 
-// =================================================================
+
 // The following are the derivatives of SvxFieldData ...
-// =================================================================
+
 
 SV_IMPL_PERSIST1( SvxDateField, SvxFieldData );
 
@@ -607,9 +607,9 @@ MetaAction* SvxURLField::createBeginComment() const
                                   2*aURL.getLength() );
 }
 
-// =================================================================
+
 // The fields that were removed from Calc:
-// =================================================================
+
 
 SV_IMPL_PERSIST1( SvxPageField, SvxFieldData );
 
@@ -1165,7 +1165,7 @@ SvClassManager& SvxFieldItem::GetClassManager()
     return *pClassMgr;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SV_IMPL_PERSIST1( SvxHeaderField, SvxFieldData );
 
@@ -1189,7 +1189,7 @@ void SvxHeaderField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SV_IMPL_PERSIST1( SvxFooterField, SvxFieldData );
 SvxFooterField::SvxFooterField() {}
@@ -1212,7 +1212,7 @@ void SvxFooterField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SV_IMPL_PERSIST1( SvxDateTimeField, SvxFieldData );
 

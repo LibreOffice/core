@@ -50,9 +50,9 @@ namespace pcr
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::makeAny;
 
-    //====================================================================
+
     //= ObjectInspectorModel
-    //====================================================================
+
     class ObjectInspectorModel : public ImplInspectorModel
     {
     private:
@@ -90,9 +90,9 @@ namespace pcr
         void    impl_verifyArgument_throw( bool _bCondition, sal_Int16 _nArgumentPosition );
     };
 
-    //====================================================================
+
     //= ObjectInspectorModel
-    //====================================================================
+
     ObjectInspectorModel::ObjectInspectorModel()
         :ImplInspectorModel()
     {

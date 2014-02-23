@@ -53,7 +53,7 @@ CXPathObjectPtr::operator xmlXPathObject*() const
 {
     return _object;
 }
-//===========================================================
+
 CXPathContextPtr::CXPathContextPtr(xmlXPathContextPtr aContext)
     : _object(aContext)
 {
@@ -85,7 +85,7 @@ CXPathContextPtr::operator xmlXPathContext*() const
 {
     return _object;
 }
-//===========================================================
+
 CXmlDocPtr::CXmlDocPtr(xmlDoc* aDoc)
     : _object(aDoc)
 {
@@ -118,7 +118,7 @@ CXmlDocPtr::operator xmlDoc*() const
     return _object;
 }
 
-//===========================================================
+
 CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
     : _object(aChar)
 {

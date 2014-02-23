@@ -124,7 +124,7 @@ typedef ::boost::unordered_map<
     ::std::equal_to< OUString > > OId2ObjectMap;
 
 
-//==============================================================================
+
 struct EnvironmentsData
 {
     ::osl::Mutex mutex;
@@ -148,7 +148,7 @@ namespace
     struct theEnvironmentsData : public rtl::Static< EnvironmentsData, theEnvironmentsData > {};
 }
 
-//==============================================================================
+
 struct uno_DefaultEnvironment : public uno_ExtEnvironment
 {
     sal_Int32 nRef;
@@ -653,7 +653,7 @@ uno_DefaultEnvironment::~uno_DefaultEnvironment()
     ::rtl_uString_release( ((uno_Environment *) this)->pTypeName );
 }
 
-//==============================================================================
+
 static void writeLine(
     void * stream, const sal_Char * pLine, const sal_Char * pFilter )
 {
@@ -697,7 +697,7 @@ static void writeLine(
     }
 }
 
-//==============================================================================
+
 static void writeLine(
     void * stream, const OUString & rLine, const sal_Char * pFilter )
 {
@@ -895,7 +895,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
     }
 }
 
-//==============================================================================
+
 static void SAL_CALL unoenv_acquireInterface(
     SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pUnoI_ )
 {
@@ -903,7 +903,7 @@ static void SAL_CALL unoenv_acquireInterface(
     (*pUnoI->acquire)( pUnoI );
 }
 
-//==============================================================================
+
 static void SAL_CALL unoenv_releaseInterface(
     SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pUnoI_ )
 {

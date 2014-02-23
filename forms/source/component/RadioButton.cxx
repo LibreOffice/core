@@ -45,7 +45,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-//==================================================================
+
 
 InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
@@ -91,7 +91,7 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>
     //   them in the proper order.
 }
 
-//==================================================================
+
 InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new ORadioButtonModel( comphelper::getComponentContext(_rxFactory) ));

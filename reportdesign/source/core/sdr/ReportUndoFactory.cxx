@@ -49,7 +49,7 @@ OReportUndoFactory::OReportUndoFactory() : m_pUndoFactory(new SdrUndoFactory)
 OReportUndoFactory::~OReportUndoFactory()
 {
 }
-///////////////////////////////////////////////////////////////////////
+
 // shapes
 SdrUndoAction* OReportUndoFactory::CreateUndoMoveObject( SdrObject& rObject )
 {
@@ -163,8 +163,8 @@ SdrUndoAction* OReportUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChan
     return m_pUndoFactory->CreateUndoPageChangeMasterPage(rChangedPage);
 }
 
-//==================================================================
+
 }   //rptui
-//==================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,8 +46,8 @@ void OReportRuler::SetGridVisible(sal_Bool _bVisible)
     m_pSection->SetGridVisible( _bVisible );
 }
 
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,9 +48,9 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
+
     //= OCellValueBinding
-    //=====================================================================
+
     DBG_NAME( OCellValueBinding )
 
 #ifdef DBG_UTIL

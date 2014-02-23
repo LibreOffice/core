@@ -46,13 +46,13 @@ X11Transferable::X11Transferable(
 {
 }
 
-//==================================================================================================
+
 
 X11Transferable::~X11Transferable()
 {
 }
 
-//==================================================================================================
+
 
 Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     throw(UnsupportedFlavorException, IOException, RuntimeException)
@@ -85,7 +85,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     return aRet;
 }
 
-//==================================================================================================
+
 
 Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
     throw(RuntimeException)
@@ -98,7 +98,7 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
     return aFlavorList;
 }
 
-//==================================================================================================
+
 
 sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw(RuntimeException)

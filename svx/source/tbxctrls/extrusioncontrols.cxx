@@ -44,7 +44,7 @@
 #include "colorwindow.hxx"
 #include "extrusiondepthdialog.hxx"
 
-////////////
+
 
 //using ::svtools::ToolbarMenu;
 
@@ -232,9 +232,9 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-// =======================================================================
+
 // ExtrusionDirectionControl
-// =======================================================================
+
 
 ExtrusionDirectionControl::ExtrusionDirectionControl(
     const Reference< XComponentContext >& rxContext
@@ -486,9 +486,9 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
     return 0;
 }
 
-// =======================================================================
+
 // ExtrusionDirectionControl
-// =======================================================================
+
 
 ExtrusionDepthController::ExtrusionDepthController(
     const Reference< XComponentContext >& rxContext
@@ -751,7 +751,7 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-// ========================================================================
+
 
 ExtrusionLightingControl::ExtrusionLightingControl(
     const Reference< XComponentContext >& rxContext
@@ -894,7 +894,7 @@ IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl)
     return 0;
 }
 
-// ========================================================================
+
 
 ExtrusionSurfaceControl::ExtrusionSurfaceControl(
     const Reference< XComponentContext >& rxContext
@@ -955,7 +955,7 @@ Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(
     return ExtrusionSurfaceControl_getSupportedServiceNames();
 }
 
-//========================================================================
+
 
 SFX_IMPL_TOOLBOX_CONTROL( ExtrusionColorControl, SvxColorItem );
 

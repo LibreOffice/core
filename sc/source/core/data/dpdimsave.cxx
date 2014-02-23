@@ -36,7 +36,7 @@
 
 using namespace com::sun::star;
 
-// ============================================================================
+
 
 ScDPSaveGroupItem::ScDPSaveGroupItem( const OUString& rName ) :
     aGroupName(rName) {}
@@ -131,7 +131,7 @@ void ScDPSaveGroupItem::AddToData(ScDPGroupDimension& rDataDim) const
     rDataDim.AddItem(aGroup);
 }
 
-// ============================================================================
+
 
 ScDPSaveGroupDimension::ScDPSaveGroupDimension( const OUString& rSource, const OUString& rName ) :
     aSourceDim( rSource ),
@@ -426,7 +426,7 @@ void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
     }
 }
 
-// ============================================================================
+
 
 ScDPSaveNumGroupDimension::ScDPSaveNumGroupDimension( const OUString& rName, const ScDPNumGroupInfo& rInfo ) :
     aDimensionName( rName ),
@@ -576,7 +576,7 @@ void ScDPSaveNumGroupDimension::SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_
     nDatePart = nPart;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -855,6 +855,6 @@ OUString ScDPDimensionSaveData::CreateDateGroupDimName(
     return CreateGroupDimName( aPartName, rObject, bAllowSource, pDeletedNames );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

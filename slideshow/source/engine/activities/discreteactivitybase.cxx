@@ -111,7 +111,7 @@ namespace slideshow
             const ::std::size_t nVectorSize( maDiscreteTimes.size() );
 
             // actually perform something
-            // ==========================
+
 
             // TODO(Q3): Refactor this mess
 

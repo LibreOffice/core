@@ -29,7 +29,7 @@
 #include "controldata.hxx"
 #include "svdata.hxx"
 
-// =======================================================================
+
 
 namespace {
 
@@ -288,7 +288,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
         aDecoView.DrawSymbol( aLowRect, eType2, rStyleSettings.GetButtonTextColor(), nSymStyle );
 }
 
-// =======================================================================
+
 
 void SpinField::ImplInitSpinFieldData()
 {

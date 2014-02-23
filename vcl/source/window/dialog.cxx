@@ -53,7 +53,7 @@
 #include <touch/touch.h>
 #endif
 
-// =======================================================================
+
 
 static OString ImplGetDialogText( Dialog* pDialog )
 {
@@ -72,7 +72,7 @@ static OString ImplGetDialogText( Dialog* pDialog )
     return aErrorStr.makeStringAndClear();
 }
 
-// =======================================================================
+
 
 static bool ImplIsMnemonicCtrl( Window* pWindow )
 {
@@ -261,7 +261,7 @@ static Window* getActionAreaButtonList(Dialog *pDialog)
     return pDialog->GetWindow(WINDOW_FIRSTCHILD);
 }
 
-// =======================================================================
+
 
 static PushButton* ImplGetDefaultButton( Dialog* pDialog )
 {
@@ -338,7 +338,7 @@ static void ImplMouseAutoPos( Dialog* pDialog )
     }
 }
 
-// =======================================================================
+
 
 struct DialogImpl
 {
@@ -349,7 +349,7 @@ struct DialogImpl
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
 };
 
-// =======================================================================
+
 
 void Dialog::ImplInitDialogData()
 {
@@ -1363,7 +1363,7 @@ ModelessDialog::ModelessDialog( Window* pParent, const OString& rID, const OUStr
 {
 }
 
-// =======================================================================
+
 
 ModalDialog::ModalDialog( Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_MODALDIALOG )

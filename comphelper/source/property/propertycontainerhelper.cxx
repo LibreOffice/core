@@ -61,9 +61,9 @@ namespace
     };
 }
 
-//==========================================================================
+
 //= OPropertyContainerHelper
-//==========================================================================
+
 
 OPropertyContainerHelper::OPropertyContainerHelper()
     :m_bUnused(false)

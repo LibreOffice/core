@@ -892,7 +892,7 @@ void ScDPFieldControlBase::Resize()
     CalcSize();
 }
 
-//=============================================================================
+
 
 ScDPHorFieldControl::ScDPHorFieldControl ( Window* pParent )  :
     ScDPFieldControlBase( pParent ),
@@ -1153,7 +1153,7 @@ IMPL_LINK_NOARG(ScDPHorFieldControl, EndScrollHdl)
     return 0;
 }
 
-//=============================================================================
+
 
 ScDPPageFieldControl::ScDPPageFieldControl ( Window* pParent )  :
     ScDPHorFieldControl( pParent )
@@ -1180,7 +1180,7 @@ OUString ScDPPageFieldControl::GetDescription() const
     return ScResId(STR_ACC_DATAPILOT_PAGE_DESCR);
 }
 
-//=============================================================================
+
 
 ScDPColFieldControl::ScDPColFieldControl ( Window* pParent )  :
     ScDPHorFieldControl( pParent )
@@ -1206,7 +1206,7 @@ OUString ScDPColFieldControl::GetDescription() const
     return ScResId(STR_ACC_DATAPILOT_COL_DESCR);
 }
 
-//=============================================================================
+
 
 ScDPRowFieldControl::ScDPRowFieldControl ( Window* pParent )  :
     ScDPFieldControlBase( pParent ),
@@ -1442,7 +1442,7 @@ IMPL_LINK_NOARG(ScDPRowFieldControl, EndScrollHdl)
     return 0;
 }
 
-//=============================================================================
+
 
 ScDPSelectFieldControl::ScDPSelectFieldControl(  Window* pParent ):
     ScDPHorFieldControl( pParent )
@@ -1469,7 +1469,7 @@ OUString ScDPSelectFieldControl::GetDescription() const
     return ScResId(STR_ACC_DATAPILOT_SEL_DESCR);
 }
 
-//=============================================================================
+
 
 ScDPDataFieldControl::ScDPDataFieldControl(  Window* pParent ):
     ScDPHorFieldControl( pParent )

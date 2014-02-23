@@ -108,9 +108,9 @@ static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< conta
             _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
     }
 }
-//==================================================================
+
 // class FmFieldWinListBox
-//==================================================================
+
 DBG_NAME(FmFieldWinListBox)
 
 FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
@@ -177,9 +177,9 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     }
 }
 
-//========================================================================
+
 // class FmFieldWinData
-//========================================================================
+
 DBG_NAME(FmFieldWinData);
 
 FmFieldWinData::FmFieldWinData()
@@ -193,9 +193,9 @@ FmFieldWinData::~FmFieldWinData()
     DBG_DTOR(FmFieldWinData,NULL);
 }
 
-//========================================================================
+
 // class FmFieldWin
-//========================================================================
+
 DBG_NAME(FmFieldWin);
 
 FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent)
@@ -415,7 +415,7 @@ void FmFieldWin::Resize()
 
     Size aOutputSize( GetOutputSizePixel() );
 
-    //////////////////////////////////////////////////////////////////////
+
 
     // Groesse der ::com::sun::star::form::ListBox anpassen
     Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );

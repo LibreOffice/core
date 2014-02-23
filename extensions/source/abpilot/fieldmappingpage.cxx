@@ -28,9 +28,9 @@ namespace abp
 {
 //.........................................................................
 
-    //=====================================================================
+
     //= FieldMappingPage
-    //=====================================================================
+
 
     FieldMappingPage::FieldMappingPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage( _pParent, ModuleRes( RID_PAGE_FIELDMAPPING ) )

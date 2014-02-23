@@ -31,7 +31,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//==================================================================
+
 
 static OUString lcl_MetricString( long nTwips, const OUString& rText )
 {
@@ -53,7 +53,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
     }
 }
 
-//==================================================================
+
 
 ScColBar::ScColBar( Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
                     ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
@@ -222,7 +222,7 @@ bool ScColBar::IsLayoutRTL() const        // overloaded only for columns
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
 
-//==================================================================
+
 
 ScRowBar::ScRowBar( Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
                     ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :

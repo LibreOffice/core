@@ -38,9 +38,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-//==================================================================
+
 // ONumericControl
-//==================================================================
+
 
 
 ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
@@ -72,9 +72,9 @@ Sequence<Type> ONumericControl::_getTypes()
     return OBoundControl::_getTypes();
 }
 
-//==================================================================
+
 // ONumericModel
-//==================================================================
+
 
 InterfaceRef SAL_CALL ONumericModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {

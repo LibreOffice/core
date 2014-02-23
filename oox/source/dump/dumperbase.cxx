@@ -38,7 +38,7 @@
 namespace oox {
 namespace dump {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -64,8 +64,8 @@ const sal_Int64 OOX_DUMP_MAXARRAY       = 16;
 
 } // namespace
 
-// ============================================================================
-// ============================================================================
+
+
 
 // file names -----------------------------------------------------------------
 
@@ -149,8 +149,8 @@ Reference< XTextOutputStream2 > InputOutputHelper::openTextOutputStream(
     return openTextOutputStream( rxContext, openOutputStream( rxContext, rFileName ), eTextEnc );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ItemFormat::ItemFormat() :
     meDataType( DATATYPE_VOID ),
@@ -199,8 +199,8 @@ OUStringVector ItemFormat::parse( const OUString& rFormatStr )
     return OUStringVector( aIt, const_cast< const OUStringVector& >( aFormatVec ).end() );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 // append string to string ----------------------------------------------------
 
@@ -798,15 +798,15 @@ void StringHelper::convertStringToIntList( Int64Vector& orVec, const OUString& r
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 Base::~Base()
 {
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ConfigItemBase::~ConfigItemBase()
 {
@@ -881,7 +881,7 @@ void ConfigItemBase::processConfigItem(
         implProcessConfigItemStr( rStrm, rKey, rData );
 }
 
-// ============================================================================
+
 
 NameListBase::~NameListBase()
 {
@@ -951,7 +951,7 @@ void NameListBase::exclude( const OUString& rKeys )
         maMap.erase( *aIt );
 }
 
-// ============================================================================
+
 
 void ItemFormatMap::insertFormats( const NameListRef& rxNameList )
 {
@@ -960,7 +960,7 @@ void ItemFormatMap::insertFormats( const NameListRef& rxNameList )
             (*this)[ aIt->first ].parse( aIt->second );
 }
 
-// ============================================================================
+
 
 ConstList::ConstList( const SharedConfigData& rCfgData ) :
     NameListBase( rCfgData ),
@@ -1012,7 +1012,7 @@ void ConstList::implIncludeList( const NameListBase& rList )
     }
 }
 
-// ============================================================================
+
 
 MultiList::MultiList( const SharedConfigData& rCfgData ) :
     ConstList( rCfgData ),
@@ -1044,7 +1044,7 @@ void MultiList::implSetName( sal_Int64 nKey, const OUString& rName )
     setNamesFromVec( nKey, aNames );
 }
 
-// ============================================================================
+
 
 FlagsList::FlagsList( const SharedConfigData& rCfgData ) :
     NameListBase( rCfgData ),
@@ -1137,7 +1137,7 @@ void FlagsList::implIncludeList( const NameListBase& rList )
         mnIgnore = pFlagsList->mnIgnore;
 }
 
-// ============================================================================
+
 
 bool CombiList::ExtItemFormatKey::operator<( const ExtItemFormatKey& rRight ) const
 {
@@ -1250,7 +1250,7 @@ void CombiList::implIncludeList( const NameListBase& rList )
     FlagsList::implIncludeList( rList );
 }
 
-// ============================================================================
+
 
 UnitConverter::UnitConverter( const SharedConfigData& rCfgData ) :
     NameListBase( rCfgData ),
@@ -1280,15 +1280,15 @@ void UnitConverter::implIncludeList( const NameListBase& /*rList*/ )
 {
 }
 
-// ============================================================================
+
 
 NameListRef NameListWrapper::getNameList( const Config& rCfg ) const
 {
     return mxList.get() ? mxList : (mxList = rCfg.getNameList( maName ));
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 SharedConfigData::SharedConfigData( const OUString& rFileName,
         const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg,
@@ -1429,7 +1429,7 @@ void SharedConfigData::createUnitConverter( const OUString& rData )
     }
 }
 
-// ============================================================================
+
 
 Config::Config( const Config& rParent ) :
     Base()  // c'tor needs to be called explicitly to avoid compiler warning
@@ -1521,8 +1521,8 @@ NameListRef Config::implGetNameList( const OUString& rListName ) const
     return mxCfgData->getNameList( rListName );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 Output::Output( const Reference< XComponentContext >& rxContext, const OUString& rFileName ) :
     mxStrm( InputOutputHelper::openTextOutputStream( rxContext, rFileName, RTL_TEXTENCODING_UTF8 ) ),
@@ -1759,7 +1759,7 @@ void Output::writeItemName( const String& rItemName )
         writeString( rItemName );
 }
 
-// ============================================================================
+
 
 StorageIterator::StorageIterator( const StorageRef& rxStrg ) :
     mxStrg( rxStrg )
@@ -1806,8 +1806,8 @@ bool StorageIterator::implIsValid() const
     return mxStrg.get() && mxStrg->isStorage() && (maIt != maNames.end());
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ObjectBase::~ObjectBase()
 {
@@ -1838,8 +1838,8 @@ void ObjectBase::implDump()
 {
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 void StorageObjectBase::construct( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath )
 {
@@ -1990,8 +1990,8 @@ void StorageObjectBase::extractItem( const StorageRef& rxStrg, const OUString& r
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 OutputObjectBase::~OutputObjectBase()
 {
@@ -2069,8 +2069,8 @@ void OutputObjectBase::writeGuidItem( const String& rName, const OUString& rGuid
     mxOut->writeString( cfg().getStringOption( rGuid, OUString() ) );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 InputObjectBase::~InputObjectBase()
 {
@@ -2354,8 +2354,8 @@ void InputObjectBase::dumpItem( const ItemFormat& rItemFmt )
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 BinaryStreamObject::BinaryStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
@@ -2374,8 +2374,8 @@ void BinaryStreamObject::implDump()
     dumpBinaryStream();
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 void TextStreamObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc, const OUString& rSysFileName )
@@ -2407,7 +2407,7 @@ void TextStreamObjectBase::constructTextStrmObj( rtl_TextEncoding eTextEnc )
         mxTextStrm.reset( new TextInputStream( getContext(), *mxStrm, eTextEnc ) );
 }
 
-// ============================================================================
+
 
 TextLineStreamObject::TextLineStreamObject( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc, const OUString& rSysFileName )
@@ -2441,7 +2441,7 @@ void TextLineStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 nLine
     mxOut->newLine();
 }
 
-// ============================================================================
+
 
 XmlStreamObject::XmlStreamObject( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
@@ -2529,8 +2529,8 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 void RecordObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxBaseStrm, const OUString& rSysFileName,
@@ -2609,7 +2609,7 @@ void RecordObjectBase::writeHeader()
     addNameToItem( mnRecId, maRecNames );
 }
 
-// ============================================================================
+
 
 void SequenceRecordObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxBaseStrm, const OUString& rSysFileName,
@@ -2644,8 +2644,8 @@ bool SequenceRecordObjectBase::implStartRecord( BinaryInputStream& rBaseStrm, sa
     return bValid;
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 DumperBase::~DumperBase()
 {
@@ -2667,8 +2667,8 @@ void DumperBase::construct( const ConfigRef& rxConfig )
         ObjectBase::construct( rxConfig );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 } // namespace dump
 } // namespace oox

@@ -102,7 +102,7 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW(())
     return *this;
 }
 
-//==================================================================================================
+
 struct MappingEntry
 {
     sal_Int32           nRef;
@@ -141,7 +141,7 @@ typedef boost::unordered_map<
 typedef set< uno_getMappingFunc > t_CallbackSet;
 typedef set< OUString > t_OUStringSet;
 
-//==================================================================================================
+
 struct MappingsData
 {
     Mutex               aMappingsMutex;
@@ -279,7 +279,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
     uno_Mapping::mapInterface   = mediate_mapInterface;
 }
 
-//==================================================================================================
+
 static inline OUString getMappingName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -297,7 +297,7 @@ static inline OUString getMappingName(
     aKey.append( ']' );
     return aKey.makeStringAndClear();
 }
-//==================================================================================================
+
 static inline OUString getBridgeName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -378,7 +378,7 @@ static inline oslModule loadModule( const OUString & rBridgeName )
 
 #endif
 
-//==================================================================================================
+
 static Mapping loadExternalMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -459,7 +459,7 @@ static Mapping loadExternalMapping(
     return Mapping();
 }
 
-//==================================================================================================
+
 static Mapping getDirectMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose = OUString() )
     SAL_THROW(())
@@ -502,7 +502,7 @@ static inline Mapping createMediateMapping(
     (*pRet->release)( pRet );
     return aRet;
 }
-//==================================================================================================
+
 static Mapping getMediateMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())

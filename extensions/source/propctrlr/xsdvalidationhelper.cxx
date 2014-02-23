@@ -45,9 +45,9 @@ namespace pcr
 
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 
-    //====================================================================
+
     //= XSDValidationHelper
-    //====================================================================
+
 
     XSDValidationHelper::XSDValidationHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
         :EFormsHelper( _rMutex, _rxIntrospectee, _rxContextDocument )

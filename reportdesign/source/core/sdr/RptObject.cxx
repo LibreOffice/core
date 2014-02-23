@@ -1261,8 +1261,8 @@ uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XRepor
     return xReturn;
 }
 
-//============================================================================
+
 } // rptui
-//============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

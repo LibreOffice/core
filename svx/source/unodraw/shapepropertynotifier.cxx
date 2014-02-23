@@ -67,16 +67,16 @@ namespace svx
                                                             ,   OUStringHash
                                                             >   PropertyChangeListenerContainer;
 
-    //====================================================================
+
     //= IPropertyValueProvider
-    //====================================================================
+
     IPropertyValueProvider::~IPropertyValueProvider()
     {
     }
 
-    //====================================================================
+
     //= PropertyChangeNotifier_Data
-    //====================================================================
+
     struct PropertyChangeNotifier_Data
     {
         ::cppu::OWeakObject&            m_rContext;
@@ -89,9 +89,9 @@ namespace svx
         {
         }
     };
-    //====================================================================
+
     //= PropertyValueProvider
-    //====================================================================
+
 
     OUString PropertyValueProvider::getPropertyName() const
     {
@@ -105,9 +105,9 @@ namespace svx
         _out_rValue = xContextProps->getPropertyValue( getPropertyName() );
     }
 
-    //====================================================================
+
     //= PropertyChangeNotifier
-    //====================================================================
+
 
     PropertyChangeNotifier::PropertyChangeNotifier( ::cppu::OWeakObject& _rOwner, ::osl::Mutex& _rMutex )
         :m_pData( new PropertyChangeNotifier_Data( _rOwner, _rMutex ) )

@@ -25,12 +25,12 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 void PropertySet::set( const Reference< XPropertySet >& rxPropSet )
 {

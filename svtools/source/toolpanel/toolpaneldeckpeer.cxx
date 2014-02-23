@@ -45,9 +45,9 @@ namespace svt
     using ::com::sun::star::accessibility::XAccessibleContext;
     using ::com::sun::star::lang::DisposedException;
 
-    //==================================================================================================================
+
     //= ToolPanelDeckPeer
-    //==================================================================================================================
+
 
     ToolPanelDeckPeer::ToolPanelDeckPeer( ToolPanelDeck& i_rDeck )
         :VCLXWindow()

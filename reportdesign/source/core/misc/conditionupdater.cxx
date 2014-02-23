@@ -36,9 +36,9 @@ namespace rptui
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
+
     //= ConditionUpdater
-    //====================================================================
+
 
     ConditionUpdater::ConditionUpdater()
     {

@@ -164,7 +164,7 @@ void ensureClassInfos()
         return;
     Sequence< OUString > aServices;
 
-    // ========================================================================
+
     // = ControlModels
 
     // - FixedText
@@ -221,7 +221,7 @@ void ensureClassInfos()
         aServices,
         frm::OFormattedFieldWrapper_CreateInstance_ForceFormatted);
 
-    // ========================================================================
+
     // = Controls
     // - RadioButton
     REGISTER_CLASS2(ORadioButtonControl, STARDIV_ONE_FORM_CONTROL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON);
@@ -255,7 +255,7 @@ void ensureClassInfos()
     REGISTER_CLASS2(OImageControlControl, STARDIV_ONE_FORM_CONTROL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL);
 
 
-    // ========================================================================
+
     // = various
     aServices.realloc(1);
     aServices.getArray()[0] = "com.sun.star.form.Forms";
@@ -263,7 +263,7 @@ void ensureClassInfos()
 
     REGISTER_CLASS1(ImageProducer, SRV_AWT_IMAGEPRODUCER);
 
-    // ========================================================================
+
     // = XForms core
 #define REGISTER_XFORMS_CLASS(name) \
     aServices.realloc(1); \
@@ -275,7 +275,7 @@ void ensureClassInfos()
 
 }
 
-//=======================================================================================
+
 extern "C"
 {
 
@@ -317,7 +317,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pI
     if (!_pServiceManager || !_pImplName)
         return NULL;
 
-    // ========================================================================
+
     // a lot of stuff which is implemented "manually" here in this file
     void* pRet = NULL;
 
@@ -359,7 +359,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pI
         }
     }
 
-    // ========================================================================
+
     // the real way - use the OModule
     if ( !pRet )
     {

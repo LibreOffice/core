@@ -172,7 +172,7 @@ namespace
             tools::initViewState(maViewState);
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+
 
     private:
         // Ifc XServiceName
@@ -362,7 +362,7 @@ namespace
                 return createStrokingRenderState();
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+
 
         typedef o3tl::LazyUpdate<
             rendering::FontRequest,
