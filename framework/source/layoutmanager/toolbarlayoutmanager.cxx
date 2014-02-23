@@ -744,9 +744,9 @@ bool ToolbarLayoutManager::dockToolbar( const OUString& rResourceURL, ui::Dockin
 
                         SolarMutexGuard aGuard;
                         {
-                            if ( pToolBox )
+                            if (pToolBox)
                                 aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
-                            else
+                            else if (pWindow)
                                 aSize = pWindow->GetSizePixel();
                         }
 
