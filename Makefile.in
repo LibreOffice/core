@@ -271,7 +271,9 @@ ifeq ($(DISABLE_LINKOO),TRUE)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 	@macosx-codesign-app-bundle $(DEVINSTALLDIR)/opt/"LibreOffice from Collabora.app"
 endif
+ifeq ($(OS),LINUX)
 	@install-gdb-printers -L
+endif
 else
 	@ooinstall -l $(DEVINSTALLDIR)/opt
 endif
