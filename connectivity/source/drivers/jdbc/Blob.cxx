@@ -25,9 +25,9 @@
 #include <string.h>
 
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.sql.Blob
-//**************************************************************
+
 
 jclass java_sql_Blob::theClass = 0;
 java_sql_Blob::java_sql_Blob( JNIEnv * pEnv, jobject myObj )

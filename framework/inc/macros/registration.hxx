@@ -36,10 +36,10 @@
 
 _________________________________________________________________________________________________________________*/
 
-//*****************************************************************************************************************
+
 //  public
 //  use it as parameter for COMPONENT_GETFACTORY( IFFACTORIES )
-//*****************************************************************************************************************
+
 #define IFFACTORY( CLASS )                                                                                                              \
     /* If searched name found ... */                                                                                                    \
     /* You can't add some statements before follow line ... Here can be an ELSE-statement! */                                           \
@@ -50,10 +50,10 @@ ________________________________________________________________________________
         xFactory = CLASS::impl_createFactory( xServiceManager );                                                                        \
     }
 
-//*****************************************************************************************************************
+
 //  public
 //  define method to instanciate new services
-//*****************************************************************************************************************
+
 #define COMPONENTGETFACTORY( LIB, IFFACTORIES )                                                                                         \
     extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL LIB##_component_getFactory( const sal_Char* pImplementationName,                      \
                                                             void*       pServiceManager     ,                                           \

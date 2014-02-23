@@ -23,14 +23,14 @@
 #include <editeng/unotext.hxx>
 #include <editeng/unoedsrc.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IEngineTextChangeListener
-    //====================================================================
+
     class IEngineTextChangeListener
     {
     public:
@@ -40,9 +40,9 @@ namespace frm
         ~IEngineTextChangeListener() {}
     };
 
-    //====================================================================
+
     //= ORichTextUnoWrapper
-    //====================================================================
+
     class ORichTextUnoWrapper : public SvxUnoText
     {
     public:
@@ -58,9 +58,9 @@ namespace frm
         ORichTextUnoWrapper& operator=( const ORichTextUnoWrapper& );   // never implemented
     };
 
-    //====================================================================
+
     //= RichTextEditSource
-    //====================================================================
+
     class RichTextEditSource : public SvxEditSource
     {
     private:
@@ -85,9 +85,9 @@ namespace frm
         RichTextEditSource& operator=( const RichTextEditSource& ); // never implemented
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTUNOWRAPPER_HXX
 

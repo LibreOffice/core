@@ -53,10 +53,10 @@
 #include <algorithm>
 #include <map>
 
-// .......................................................................
+
 namespace svt
 {
-// .......................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -90,9 +90,9 @@ namespace svt
         }
     }
 
-    // ===================================================================
+
     // = IAssigmentData
-    // ===================================================================
+
     class IAssigmentData
     {
     public:
@@ -129,9 +129,9 @@ namespace svt
     {
     }
 
-    // ===================================================================
+
     // = AssigmentTransientData
-    // ===================================================================
+
     class AssigmentTransientData : public IAssigmentData
     {
     protected:
@@ -267,9 +267,9 @@ public:
         OSL_FAIL( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
 
-    // ===================================================================
+
     // = AssignmentPersistentData
-    // ===================================================================
+
     class AssignmentPersistentData
             :public ::utl::ConfigItem
             ,public IAssigmentData
@@ -483,9 +483,9 @@ void AssignmentPersistentData::Commit()
         return getInt32Property( "CommandType" );
     }
 
-    // ===================================================================
+
     // = AddressBookSourceDialogData
-    // ===================================================================
+
     struct AddressBookSourceDialogData
     {
         FixedText*      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
@@ -512,7 +512,7 @@ void AssignmentPersistentData::Commit()
 
         IAssigmentData* pConfigData;
 
-        // ................................................................
+
         AddressBookSourceDialogData( )
             :nFieldScrollPos(0)
             ,nLastVisibleListIndex(0)
@@ -522,7 +522,7 @@ void AssignmentPersistentData::Commit()
         {
         }
 
-        // ................................................................
+
         AddressBookSourceDialogData( const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
             const OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
             :m_xTransientDataSource( _rxTransientDS )
@@ -541,9 +541,9 @@ void AssignmentPersistentData::Commit()
 
     };
 
-    // ===================================================================
+
     // = AddressBookSourceDialog
-    // ===================================================================
+
 
 
     AddressBookSourceDialog::AddressBookSourceDialog(Window* _pParent,
@@ -1311,8 +1311,8 @@ void AssignmentPersistentData::Commit()
         return ModalDialog::PreNotify(_rNEvt);
     }
 
-// .......................................................................
+
 }   // namespace svt
-// .......................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@ namespace slideshow
         {
         public:
             // Animation methods
-            //------------------------------------------------------------------
+
 
             /** Notify the Shape that it should start with playback
 

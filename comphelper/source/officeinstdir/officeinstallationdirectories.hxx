@@ -29,7 +29,7 @@
 
 namespace comphelper {
 
-//=========================================================================
+
 
 typedef cppu::WeakImplHelper2<
             com::sun::star::util::XOfficeInstallationDirectories,

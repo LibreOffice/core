@@ -29,14 +29,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/cjkoptions.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= TextControlCharAttribDialog
-    //====================================================================
+
 
     TextControlCharAttribDialog::TextControlCharAttribDialog( Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList )
         : SfxTabDialog( pParent, "TextControlCharacterPropertiesDialog",
@@ -90,6 +90,6 @@ namespace svx
     }
 
 }   // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

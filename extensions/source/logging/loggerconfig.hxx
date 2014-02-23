@@ -23,10 +23,10 @@
 #include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     /** initializes the given logger from the configuration
 
@@ -44,9 +44,9 @@ namespace logging
                 const ::com::sun::star::uno::Reference< ::com::sun::star::logging::XLogger >& _rxLogger
             );
 
-//........................................................................
+
 } // namespace logging
-//........................................................................
+
 
 #endif // EXTENSIONS_LOGGERCONFIG_HXX
 

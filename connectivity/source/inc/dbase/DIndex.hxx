@@ -49,9 +49,9 @@ namespace connectivity
             friend class OIndexIterator;
 
         public:
-            //==================================================================
+
             // Header struct - stays in memory
-            //==================================================================
+
             struct NDXHeader
             {
                 sal_uInt32  db_rootpage;                    /* Rootpage position                */

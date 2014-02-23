@@ -25,7 +25,7 @@
 #include <svx/sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/range/b3drange.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

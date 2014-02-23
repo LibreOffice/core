@@ -31,7 +31,7 @@
 //#define   CHECK_DIRTY 1
 //#define   READ_AFTER_WRITE 1
 
-////////////////////////////// class StgPage /////////////////////////////
+////////////////////////////// class StgPage
 // This class implements buffer functionality. The cache will always return
 // a page buffer, even if a read fails. It is up to the caller to determine
 // the correctness of the I/O.
@@ -75,7 +75,7 @@ bool StgPage::IsPageGreater( const StgPage *pA, const StgPage *pB )
     return pA->mnPage < pB->mnPage;
 }
 
-//////////////////////////////// class StgCache ////////////////////////////
+//////////////////////////////// class StgCache
 
 // The disk cache holds the cached sectors. The sector type differ according
 // to their purpose.

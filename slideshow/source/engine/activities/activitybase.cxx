@@ -146,7 +146,7 @@ namespace slideshow
         double ActivityBase::calcAcceleratedTime( double nT ) const
         {
             // Handle acceleration/deceleration
-            // ================================
+
 
             // clamp nT to permissible [0,1] range
             nT = ::basegfx::clamp( nT, 0.0, 1.0 );

@@ -22,7 +22,7 @@
 #include <tools/bigint.hxx>
 #include <basic/sbx.hxx>
 
-///////////////////////////// BigInt/Currency //////////////////////////////
+///////////////////////////// BigInt/Currency
 
 SbxValues::SbxValues( const BigInt &rBig ) : eType(SbxCURRENCY)
 {

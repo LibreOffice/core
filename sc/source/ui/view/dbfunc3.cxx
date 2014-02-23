@@ -88,7 +88,7 @@ using ::std::vector;
 // STATIC DATA -----------------------------------------------------------
 
 
-//==================================================================
+
 
 //
 //          Outliner
@@ -364,7 +364,7 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//  --------------------------------------------------------------------------
+
 
 //
 //          Teilergebnisse

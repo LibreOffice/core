@@ -28,9 +28,9 @@ namespace connectivity
     namespace mork
     {
         class MDatabaseMetaDataHelper;
-        //**************************************************************
+
         //************ Class: ODatabaseMetaData
-        //**************************************************************
+
 
         class ODatabaseMetaData : public ODatabaseMetaDataBase
         {

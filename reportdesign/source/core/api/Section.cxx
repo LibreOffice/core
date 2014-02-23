@@ -37,10 +37,10 @@
 #include "RptObject.hxx"
 #include "ReportDrawPage.hxx"
 #include <comphelper/property.hxx>
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
@@ -709,8 +709,8 @@ void OSection::notifyElementRemoved(const uno::Reference< drawing::XShape >& xSh
         m_aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);
     }
 }
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

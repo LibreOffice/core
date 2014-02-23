@@ -22,26 +22,26 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/diagnose.h>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     static const OUString& getActiveConnectionPropertyName()
     {
         static const OUString s_sActiveConnectionPropertyName( "ActiveConnection" );
         return s_sActiveConnectionPropertyName;
     }
 
-    //=====================================================================
+
     //= OAutoConnectionDisposer
-    //=====================================================================
+
 
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
         :m_xRowSet( _rxRowSet )
@@ -229,8 +229,8 @@ namespace dbtools
     }
 
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,18 +20,18 @@
 #include <comphelper/propmultiplex.hxx>
 #include <osl/diagnose.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-//========================================================================
+
 //= OPropertyChangeListener
-//========================================================================
+
 
 OPropertyChangeListener::~OPropertyChangeListener()
 {
@@ -73,9 +73,9 @@ void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
     }
 }
 
-//========================================================================
+
 //= OPropertyChangeMultiplexer
-//========================================================================
+
 
 OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  Reference< XPropertySet>& _rxSet, bool _bAutoReleaseSet)
             :m_xSet(_rxSet)
@@ -166,8 +166,8 @@ void OPropertyChangeMultiplexer::addProperty(const OUString& _sPropertyName)
     }
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,7 @@
 
 class ScVbaEventListener;
 
-// ============================================================================
+
 
 class ScVbaEventsHelper : public VbaEventsHelperBase
 {
@@ -67,7 +67,7 @@ private:
     bool mbOpened;
 };
 
-// ============================================================================
+
 
 #endif
 

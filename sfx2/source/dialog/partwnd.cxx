@@ -43,9 +43,9 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxuno.hxx>
 
-//****************************************************************************
+
 // SfxPartChildWnd_Impl
-//****************************************************************************
+
 
 SFX_IMPL_DOCKINGWINDOW( SfxPartChildWnd_Impl, SID_BROWSER );
 
@@ -93,9 +93,9 @@ sal_Bool SfxPartChildWnd_Impl::QueryClose()
     return ( (SfxPartDockWnd_Impl*)pWindow )->QueryClose();
 }
 
-//****************************************************************************
+
 // SfxPartDockWnd_Impl
-//****************************************************************************
+
 
 SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 (
@@ -138,13 +138,13 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     }
 }
 
-//****************************************************************************
+
 
 SfxPartDockWnd_Impl::~SfxPartDockWnd_Impl()
 {
 }
 
-//****************************************************************************
+
 
 void SfxPartDockWnd_Impl::Resize()
 
@@ -157,7 +157,7 @@ void SfxPartDockWnd_Impl::Resize()
     SfxDockingWindow::Resize();
 }
 
-//****************************************************************************
+
 
 sal_Bool SfxPartDockWnd_Impl::QueryClose()
 {
@@ -177,7 +177,7 @@ sal_Bool SfxPartDockWnd_Impl::QueryClose()
     return bClose;
 }
 
-//****************************************************************************
+
 
 bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
 {

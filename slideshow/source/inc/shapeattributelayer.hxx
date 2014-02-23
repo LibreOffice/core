@@ -103,7 +103,7 @@ namespace slideshow
             explicit ShapeAttributeLayer( const ShapeAttributeLayerSharedPtr& rChildLayer );
 
             // Children management methods
-            //------------------------------------------------------------------
+
 
             /** Revoke the given layer.
 
@@ -144,7 +144,7 @@ namespace slideshow
             void setAdditiveMode( sal_Int16 nMode );
 
             // Attribute methods
-            //------------------------------------------------------------------
+
 
             /** Query whether the width attribute is valid.
              */
@@ -482,7 +482,7 @@ namespace slideshow
             void setCharScale( const double& rNewScale );
 
             // State change query methods
-            // ==========================
+
 
             State::StateId getTransformationState() const;
             State::StateId getClipState() const;

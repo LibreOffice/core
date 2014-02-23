@@ -46,10 +46,10 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdbc;
@@ -1014,8 +1014,8 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
     return OUString();
 }
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

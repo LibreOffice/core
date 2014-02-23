@@ -26,7 +26,7 @@
 #include <vcl/fixed.hxx>
 
 
-//------------------------------------------------------------------------
+
 
 class ScMetricInputDlg : public ModalDialog
 {

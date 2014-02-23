@@ -22,7 +22,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helper methods
 
 namespace drawinglayer

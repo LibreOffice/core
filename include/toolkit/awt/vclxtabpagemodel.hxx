@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
 #include <cppuhelper/implbase1.hxx>
-//  ----------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper1 <    UnoControlModel,
                                             ::com::sun::star::awt::tab::XTabPageModel
                                              > VCLXTabPageModel_Base;

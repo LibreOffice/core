@@ -26,9 +26,9 @@
 #include <list>
 #include <set>
 
-//  ----------------------------------------------------
+
 //  class UnoPropertyArrayHelper
-//  ----------------------------------------------------
+
 class TOOLKIT_DLLPUBLIC UnoPropertyArrayHelper : public ::cppu::IPropertyArrayHelper
 {
 private:

@@ -27,7 +27,7 @@
 #include "sc.hrc"
 
 
-//==================================================================
+
 
 class ScHFEditDlg : public SfxTabDialog
 {

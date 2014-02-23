@@ -27,10 +27,10 @@ extern "C" void SAL_CALL createRegistryInfo_OSpinButtonModel()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::OSpinButtonModel >   aRegisterModel;
 }
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -41,18 +41,18 @@ namespace frm
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::form::binding;
 
-    //====================================================================
+
     //= OSpinButtonModel
-    //====================================================================
+
     // implemented elsewhere
     Any translateExternalDoubleToControlIntValue(
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
         const OUString& _rMinValueName, const OUString& _rMaxValueName );
     Any translateControlIntToExternalDoubleValue( const Any& _rControlIntValue );
 
-    //====================================================================
+
     //= OSpinButtonModel
-    //====================================================================
+
 
 
     OSpinButtonModel::OSpinButtonModel( const Reference<XComponentContext>& _rxFactory )
@@ -256,8 +256,8 @@ namespace frm
         return Sequence< Type >( &::getCppuType( static_cast< double* >( NULL ) ), 1 );
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

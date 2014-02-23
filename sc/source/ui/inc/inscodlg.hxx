@@ -25,7 +25,7 @@
 #include <vcl/fixed.hxx>
 #include "global.hxx"
 
-//------------------------------------------------------------------------
+
 #include "scui_def.hxx"
 
 class ScInsertContentsDlg : public ModalDialog

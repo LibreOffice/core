@@ -560,7 +560,7 @@ namespace dxcanvas
             {
                 // not a native CanvasBitmap, extract VCL bitmap and
                 // render into GDI+ bitmap of similar size
-                // =================================================
+
 
                 const geometry::IntegerSize2D aBmpSize( xBitmap->getSize() );
                 BitmapSharedPtr               pBitmap;

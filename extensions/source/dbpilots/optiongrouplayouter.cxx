@@ -31,10 +31,10 @@
 #include "groupboxwiz.hxx"
 #include "dbptools.hxx"
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
 #define BUTTON_HEIGHT       300
 #define HEIGHT              450
@@ -50,9 +50,9 @@ namespace dbp
     using namespace ::com::sun::star::text;
     using namespace ::com::sun::star::view;
 
-    //=====================================================================
+
     //= OOptionGroupLayouter
-    //=====================================================================
+
 
     OOptionGroupLayouter::OOptionGroupLayouter(const Reference< XComponentContext >& _rxContext)
         :mxContext(_rxContext)
@@ -196,8 +196,8 @@ namespace dbp
             _rxShapeProps->setPropertyValue(s_sAnchorPropertyName, makeAny(TextContentAnchorType_AT_PAGE));
     }
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

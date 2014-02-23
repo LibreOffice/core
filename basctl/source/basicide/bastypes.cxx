@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 
 //
 // BaseWindow
-// ==========
+
 //
 
 DBG_NAME( BaseWindow )
@@ -272,7 +272,7 @@ bool BaseWindow::HasActiveEditor () const
 
 //
 // DockingWindow
-// =============
+
 //
 
 // style bits for DockingWindow
@@ -429,7 +429,7 @@ void DockingWindow::DockThis ()
 
 //
 // ExtendedEdit
-// ============
+
 //
 
 ExtendedEdit::ExtendedEdit( Window* pParent, IDEResId nRes ) :
@@ -465,7 +465,7 @@ IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 
 //
 //  TabBar
-// ========
+
 //
 
 TabBar::TabBar( Window* pParent ) :
@@ -725,7 +725,7 @@ sal_uLong CalcLineCount( SvStream& rStream )
 
 //
 // LibInfos
-// ========
+
 //
 
 LibInfos::LibInfos ()

@@ -69,7 +69,7 @@ namespace dxcanvas
 
 
         // CanvasHelper functionality is implementation-inherited. yuck.
-        // =============================================================
+
         void clear();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
@@ -80,7 +80,7 @@ namespace dxcanvas
                             const ::com::sun::star::rendering::RenderState& renderState );
 
         // BitmapCanvasHelper functionality
-        // ================================
+
 
         void copyRect( const ::com::sun::star::rendering::XCanvas*          pCanvas,
                        const ::com::sun::star::uno::Reference<

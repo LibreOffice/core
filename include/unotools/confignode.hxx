@@ -33,10 +33,10 @@ namespace comphelper
     class ComponentContext;
 }
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
+
 
     //========================================================================
     //= OConfigurationNode
@@ -178,7 +178,7 @@ namespace utl
         /// invalidate the object
         virtual void clear() throw();
 
-        // -----------------------
+
         // meta information about the node
 
         /// checks whether or not the object represents a set node.
@@ -316,9 +316,9 @@ namespace utl
         virtual void clear() throw();
     };
 
-//........................................................................
+
 }   // namespace utl
-//........................................................................
+
 
 #endif // INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 

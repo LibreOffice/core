@@ -4383,6 +4383,6 @@ void XclImpChart::ReadChChart( XclImpStream& rStrm )
     mxChartData->ReadRecordGroup( rStrm );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,7 +24,7 @@
 class ScInputHandler;
 class ScDocShell;
 
-//============================================================================
+
 
 class ScFormEditData : public formula::FormEditData
 {

@@ -203,7 +203,7 @@ static void initAppMenu()
     }
 }
 
-// =======================================================================
+
 
 SalMenu* AquaSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
@@ -236,7 +236,7 @@ void AquaSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 }
 
 
-// =======================================================================
+
 
 
 /*
@@ -900,7 +900,7 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
             );
 }
 
-// =======================================================================
+
 
 /*
  * SalMenuItem

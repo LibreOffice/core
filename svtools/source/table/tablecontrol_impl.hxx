@@ -34,10 +34,10 @@
 class ScrollBar;
 class ScrollBarBox;
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
+
 
     struct MutableColumnMetrics : protected ColumnMetrics
     {
@@ -76,9 +76,9 @@ namespace svt { namespace table
     class TableDataWindow;
     class TableFunctionSet;
 
-    //====================================================================
+
     //= TableControl_Impl
-    //====================================================================
+
     class TableControl_Impl :public ITableControl
                             ,public ITableModelListener
     {
@@ -503,9 +503,9 @@ namespace svt { namespace table
     };
 
 
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TABLE_TABLECONTROL_IMPL_HXX
 

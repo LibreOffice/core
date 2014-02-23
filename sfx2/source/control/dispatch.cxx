@@ -218,7 +218,7 @@ sal_Bool SfxDispatcher::IsOnTop(const SfxShell& rShell)
     return CheckVirtualStack(rShell, sal_False);
 }
 
-//====================================================================
+
 sal_Bool SfxDispatcher::IsLocked( sal_uInt16 ) const
 
 /*  [Description]
@@ -356,7 +356,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     return sal_False;
 }
 
-//====================================================================
+
 void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
 {
     pImp.reset(new SfxDispatcher_Impl);
@@ -422,7 +422,7 @@ SfxDispatcher::SfxDispatcher( SfxViewFrame *pViewFrame )
     pImp->pFrame = pViewFrame;
 }
 
-//====================================================================
+
 SfxDispatcher::~SfxDispatcher()
 
 /*  [Description]
@@ -465,7 +465,7 @@ SfxDispatcher::~SfxDispatcher()
     }
 }
 
-//====================================================================
+
 void SfxDispatcher::Pop
 (
     SfxShell&   rShell,  /* the stack to take the SfxShell instance. */

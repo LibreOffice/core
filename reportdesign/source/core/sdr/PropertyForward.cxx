@@ -26,10 +26,10 @@
 #include "corestrings.hrc"
 #include <o3tl/compat_functional.hxx>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
@@ -188,8 +188,8 @@ void OPropertyMediator::startListening()
         m_xDest->addPropertyChangeListener(OUString(), this);
 }
 
-//........................................................................
+
 }   // namespace dbaccess
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

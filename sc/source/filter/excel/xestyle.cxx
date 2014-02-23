@@ -1039,7 +1039,7 @@ void XclExpBlindFont::Save( XclExpStream& /*rStrm*/ )
     // do nothing
 }
 
-// ============================================================================
+
 
 XclExpFontBuffer::XclExpFontBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -2998,7 +2998,7 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_dxfs );
 }
 
-// ============================================================================
+
 
 XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
             XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor)
@@ -3036,7 +3036,7 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_dxf );
 }
 
-// ============================================================================
+
 
 XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot )
@@ -3068,6 +3068,6 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     rStrm.PopStream();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

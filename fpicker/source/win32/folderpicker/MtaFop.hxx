@@ -39,10 +39,10 @@
 #endif
 #include "../misc/WinImplHelper.hxx"
 
-//----------------------------------------------------------------
+
 // a simple helper class used to provide a buffer for different
 // Win32 file and directory functions
-//----------------------------------------------------------------
+
 
 class CAutoPathBuff
 {
@@ -80,14 +80,14 @@ private:
     sal_Unicode* pBuff;
 };
 
-//--------------------------------------------------------
+
 // the Mta-Ole clipboard class is for internal use only!
 // only one instance of this class should be created, the
 // user has to ensure this!
 // the class is not thread-safe because it will be used
 // only from within the clipboard service and the methods
 // of the clipboard service are already synchronized
-//--------------------------------------------------------
+
 
 class CMtaFolderPicker
 {
@@ -107,9 +107,9 @@ public:
     virtual void SAL_CALL setTitle( const OUString& aTitle );
     OUString  SAL_CALL getTitle( );
 
-    //-----------------------------------------------------
+
     // XCancellable
-    //-----------------------------------------------------
+
 
     virtual void SAL_CALL cancel( );
 
@@ -135,10 +135,10 @@ private:
     // target; so we guarantee synchronization
     sal_Bool SAL_CALL createStaRequestWindow( );
 
-    //---------------------------------------------------------------
+
     // message handler functions; remember these functions are called
     // from a different thread context!
-    //---------------------------------------------------------------
+
 
     sal_Bool SAL_CALL onBrowseForFolder( );
 

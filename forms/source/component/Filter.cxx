@@ -70,10 +70,10 @@ extern "C" void SAL_CALL createRegistryInfo_OFilterControl()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::OFilterControl > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -89,9 +89,9 @@ namespace frm
 
     using namespace ::connectivity;
 
-    //=====================================================================
+
     // OFilterControl
-    //=====================================================================
+
 
     OFilterControl::OFilterControl( const Reference< XComponentContext >& _rxORB )
         :UnoControl()
@@ -825,13 +825,13 @@ namespace frm
             return;
         }
         // some properties which are "derived" from the control model we're working for
-        // ...................................................
+
         // the field
         m_xField.clear();
         OSL_ENSURE( ::comphelper::hasProperty( PROPERTY_BOUNDFIELD, xControlModel ), "OFilterControl::initialize: control model needs a bound field property!" );
         xControlModel->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= m_xField;
 
-        // ...................................................
+
         // filter list and control class
         m_bFilterList = ::comphelper::hasProperty( PROPERTY_FILTERPROPOSAL, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_FILTERPROPOSAL ) );
         if ( m_bFilterList )
@@ -864,7 +864,7 @@ namespace frm
             }
         }
 
-        // ...................................................
+
         // the connection meta data for the form which we're working for
         Reference< XChild > xModel( xControlModel, UNO_QUERY );
         Reference< XRowSet > xForm;
@@ -908,8 +908,8 @@ namespace frm
         return static_cast< XServiceInfo* >( new OFilterControl( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

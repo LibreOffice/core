@@ -99,11 +99,11 @@ using namespace ::com::sun::star::animations::AnimationNodeType;
 namespace animcore
 {
 
-// ====================================================================
+
 
 typedef ::std::list< Reference< XAnimationNode > > ChildList_t;
 
-// ====================================================================
+
 
 class AnimationNodeBase :   public XAnimateMotion,
                             public XAnimateColor,
@@ -350,7 +350,7 @@ private:
     ChildList_t             maChildren;
 };
 
-// ====================================================================
+
 
 class TimeContainerEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
@@ -402,7 +402,7 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
     return makeAny( (*maIter++) );
 }
 
-// ====================================================================
+
 
 Sequence< Type >* AnimationNode::mpTypes[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 Sequence< sal_Int8 >* AnimationNode::mpId[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };

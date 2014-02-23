@@ -27,7 +27,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 struct CommentModel
 {
@@ -51,7 +51,7 @@ struct CommentModel
     explicit            CommentModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class Comment : public WorksheetHelper
 {
@@ -77,7 +77,7 @@ private:
 
 typedef ::boost::shared_ptr< Comment > CommentRef;
 
-// ============================================================================
+
 
 class CommentsBuffer : public WorksheetHelper
 {
@@ -100,7 +100,7 @@ private:
     CommentVector       maComments;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
-//////////////////////////////////////////////////////////////////////
+
 //     Description: Turn off frame/object shell if applicable
 
 static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
@@ -64,7 +64,7 @@ static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
         rWrtSh.EnterStdMode();
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 class SwKeepConversionDirectionStateContext
 {
@@ -83,7 +83,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 SwHHCWrapper::SwHHCWrapper(
         SwView* pSwView,
@@ -738,6 +738,6 @@ bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
     return !pConversionArgs->aConvText.isEmpty();
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

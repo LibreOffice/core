@@ -26,15 +26,15 @@
 
 #include <map>
 
-//........................................................................
+
 namespace xforms
 {
-//........................................................................
+
 
     class OXSDDataType;
-    //====================================================================
+
     //= ODataTypeRepository
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::xforms::XDataTypeRepository
                                     >   ODataTypeRepository_Base;
     class ODataTypeRepository : public ODataTypeRepository_Base
@@ -80,9 +80,9 @@ namespace xforms
         Repository::iterator    implLocate( const OUString& _rName, bool _bAllowMiss = false ) SAL_THROW( ( ::com::sun::star::container::NoSuchElementException ) );
     };
 
-//........................................................................
+
 } // namespace xforms
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_XFORMS_DATATYPEREPOSITORY_HXX
 

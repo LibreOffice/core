@@ -24,14 +24,14 @@
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OTabOrderDialog
-    //====================================================================
+
     class OTabOrderDialog;
     typedef ::svt::OGenericUnoDialog                                    OTabOrderDialog_DBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OTabOrderDialog >  OTabOrderDialog_PBase;
@@ -81,9 +81,9 @@ namespace pcr
         virtual Dialog* createDialog(Window* _pParent);
     };
 
-//........................................................................
+
 } // namespacepcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_PCRUNODIALOGS_HXX
 

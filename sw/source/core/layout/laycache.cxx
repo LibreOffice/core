@@ -1069,7 +1069,7 @@ bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
     pStream( &rStrm ),

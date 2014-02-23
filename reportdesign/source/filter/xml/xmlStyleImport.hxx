@@ -148,9 +148,9 @@ namespace rptxml
 
         sal_Int32 GetIndex(const sal_Int16 nContextID);
     };
-// -----------------------------------------------------------------------------
+
 } // rptxml
-// -----------------------------------------------------------------------------
+
 #endif // RPT_XMLSTYLEIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

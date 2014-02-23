@@ -24,7 +24,7 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

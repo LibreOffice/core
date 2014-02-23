@@ -42,7 +42,7 @@ inline long SmFromTo(long nFrom, long nTo, double fRelDist)
 }
 
 
-////////////////////////////////////////
+
 // SmRect
 // ... (to be done)
 // This Implementation assumes that the x-axis points to the right and the

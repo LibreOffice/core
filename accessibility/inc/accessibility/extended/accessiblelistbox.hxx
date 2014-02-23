@@ -32,11 +32,11 @@
 
 class SvTreeListBox;
 class SvTreeListEntry;
-//........................................................................
+
 namespace accessibility
 {
     class AccessibleListBoxEntry;
-//........................................................................
+
 
     typedef ::cppu::ImplHelper2<  ::com::sun::star::accessibility::XAccessible
                                 , ::com::sun::star::accessibility::XAccessibleSelection> AccessibleListBox_BASE;
@@ -125,9 +125,9 @@ private:
 
     };
 
-//........................................................................
+
 }// namespace accessibility
-//........................................................................
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBLELISTBOX_HXX_
 

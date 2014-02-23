@@ -42,13 +42,13 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -109,7 +109,7 @@ sal_Int32 lclGetTickMark( sal_Int32 nToken )
 
 } // namespace
 
-// ============================================================================
+
 
 AxisConverter::AxisConverter( const ConverterRoot& rParent, AxisModel& rModel ) :
     ConverterBase< AxisModel >( rParent, rModel )
@@ -362,7 +362,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
     }
 }
 
-// ============================================================================
+
 
 AxisDispUnitsConverter::AxisDispUnitsConverter( const ConverterRoot& rParent, AxisDispUnitsModel& rModel ) :
     ConverterBase< AxisDispUnitsModel >( rParent, rModel )
@@ -382,7 +382,7 @@ void AxisDispUnitsConverter::convertFromModel( const Reference< XAxis >& rxAxis 
         aPropSet.setProperty( PROP_BuiltInUnit, mrModel.mnBuiltInUnit );
     }
 }
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

@@ -29,10 +29,10 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -43,28 +43,28 @@ namespace toolkit
 
     namespace
     {
-        // ...............................................................
+
         ::osl::Mutex& getDefaultFormatsMutex()
         {
             static ::osl::Mutex s_aDefaultFormatsMutex;
             return s_aDefaultFormatsMutex;
         }
 
-        // ...............................................................
+
         Reference< XNumberFormatsSupplier >& lcl_getDefaultFormatsAccess_nothrow()
         {
             static Reference< XNumberFormatsSupplier > s_xDefaultFormats;
             return s_xDefaultFormats;
         }
 
-        // ...............................................................
+
         bool& lcl_getTriedCreation()
         {
             static bool s_bTriedCreation = false;
             return s_bTriedCreation;
         }
 
-        // ...............................................................
+
         const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
         {
             ::osl::MutexGuard aGuard( getDefaultFormatsMutex() );
@@ -82,16 +82,16 @@ namespace toolkit
             return rDefaultFormats;
         }
 
-        // ...............................................................
+
         static oslInterlockedCount  s_refCount(0);
 
-        // ...............................................................
+
         void    lcl_registerDefaultFormatsClient()
         {
             osl_atomic_increment( &s_refCount );
         }
 
-        // ...............................................................
+
         void    lcl_revokeDefaultFormatsClient()
         {
             ::osl::ClearableMutexGuard aGuard( getDefaultFormatsMutex() );
@@ -108,9 +108,9 @@ namespace toolkit
         }
     }
 
-    // ===================================================================
+
     // = UnoControlFormattedFieldModel
-    // ===================================================================
+
 
     UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
@@ -417,9 +417,9 @@ namespace toolkit
         return xInfo;
     }
 
-    // ===================================================================
+
     // = UnoFormattedFieldControl
-    // ===================================================================
+
 
     UnoFormattedFieldControl::UnoFormattedFieldControl()
         :UnoSpinFieldControl()
@@ -452,9 +452,9 @@ namespace toolkit
             GetTextListeners().textChanged( e );
     }
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(

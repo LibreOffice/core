@@ -1891,9 +1891,9 @@ sal_Bool SVGReader::parseAndConvert()
     // the root state for svg document
     State aInitialState;
 
-    /////////////////////////////////////////////////////////////////
+
     // doc boilerplate
-    /////////////////////////////////////////////////////////////////
+
 
     m_xDocumentHandler->startDocument();
 
@@ -2036,7 +2036,7 @@ sal_Bool SVGReader::parseAndConvert()
 
     m_xDocumentHandler->endElement( "office:automatic-styles" );
 
-    ////////////////////////////////////////////////////////////////////
+
 
     xAttrs->Clear();
     m_xDocumentHandler->startElement( "office:styles", xUnoAttrs);
@@ -2045,7 +2045,7 @@ sal_Bool SVGReader::parseAndConvert()
                        m_xDocumentHandler);
     m_xDocumentHandler->endElement( "office:styles" );
 
-    ////////////////////////////////////////////////////////////////////
+
 
     m_xDocumentHandler->startElement( "office:master-styles", xUnoAttrs );
     xAttrs->Clear();
@@ -2057,7 +2057,7 @@ sal_Bool SVGReader::parseAndConvert()
 
     m_xDocumentHandler->endElement( "office:master-styles" );
 
-    ////////////////////////////////////////////////////////////////////
+
 
     xAttrs->Clear();
     m_xDocumentHandler->startElement( "office:body", xUnoAttrs );

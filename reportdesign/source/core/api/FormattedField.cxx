@@ -31,10 +31,10 @@
 #include "FormatCondition.hxx"
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include "ReportHelperImpl.hxx"
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
@@ -366,8 +366,8 @@ OUString SAL_CALL OFormattedField::getShapeType(  ) throw (uno::RuntimeException
    return OUString("com.sun.star.drawing.ControlShape");
 }
 
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

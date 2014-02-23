@@ -33,7 +33,7 @@ namespace ooo { namespace vba { DECLARE_FUNCTIONS( VBAMacroResolver ); } }
 
 #undef DECLARE_FUNCTIONS
 
-// ============================================================================
+
 
 namespace {
 

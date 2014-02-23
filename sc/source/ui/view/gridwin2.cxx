@@ -278,7 +278,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
         bTimer = sal_True;
     }
 
-    //  ---
+
 
     SCsCOL  nPosX;
     SCsROW  nPosY;

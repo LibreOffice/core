@@ -212,7 +212,7 @@ namespace dxcanvas
             mpRedrawManager->forEachSpriteArea( *this );
 
             // flip primary surface to screen
-            // ==============================
+
 
             // perform buffer flipping
             mpRenderModule->flip( maUpdateRect,
@@ -238,7 +238,7 @@ namespace dxcanvas
             mpRedrawManager->forEachSprite(::std::ptr_fun( &spriteRedraw ) );
 
             // flip primary surface to screen
-            // ==============================
+
 
             // perform buffer flipping
             mpRenderModule->flip( aUpdateArea,
@@ -348,7 +348,7 @@ namespace dxcanvas
                           "SpriteCanvasHelper::genericUpdate(): NULL device pointer " );
 
         // paint background
-        // ================
+
 
         // TODO(E1): Use numeric_cast to catch overflow here
         ::basegfx::B2IRange aActualArea( 0, 0,
@@ -360,7 +360,7 @@ namespace dxcanvas
         mpBackBuffer->draw(aActualArea);
 
         // paint sprite
-        // ============
+
 
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),

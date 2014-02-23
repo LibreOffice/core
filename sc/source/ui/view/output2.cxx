@@ -183,7 +183,7 @@ private:
     void        TextChanged();
 };
 
-//==================================================================
+
 
 ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     pOutput     ( pData ),
@@ -806,7 +806,7 @@ sal_uLong ScDrawStringsVars::GetResultValueFormat() const
     return nValueFormat;
 }
 
-//==================================================================
+
 
 double ScOutputData::GetStretch()
 {
@@ -834,7 +834,7 @@ double ScOutputData::GetStretch()
     }
 }
 
-//==================================================================
+
 
 //
 //  output strings
@@ -2075,7 +2075,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     mpDoc->EnableIdle(bWasIdleEnabled);
 }
 
-//  -------------------------------------------------------------------------------
+
 
 ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
 {
@@ -4710,7 +4710,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
         DrawRotated(bPixelToLogic);     //! von aussen rufen ?
 }
 
-//  -------------------------------------------------------------------------------
+
 
 void ScOutputData::DrawRotated(bool bPixelToLogic)
 {

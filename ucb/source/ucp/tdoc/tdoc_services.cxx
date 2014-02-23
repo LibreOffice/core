@@ -28,7 +28,7 @@
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucptdoc1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -39,9 +39,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucptdoc1_component_getFactory(
                 pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Transient Documents Content Provider.
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( ContentProvider::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -49,9 +49,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucptdoc1_component_getFactory(
         xFactory = ContentProvider::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // Transient Documents Document Content Factory.
-    //////////////////////////////////////////////////////////////////////
+
 
     else if ( DocumentContentFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -59,7 +59,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucptdoc1_component_getFactory(
         xFactory = DocumentContentFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( xFactory.is() )
     {

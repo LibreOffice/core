@@ -30,7 +30,7 @@
 namespace pseudo_uno
 {
 
-//==================================================================================================
+
 struct pseudo_Mapping : public uno_Mapping
 {
     oslInterlockedCount     nRef;
@@ -229,12 +229,12 @@ pseudo_Mapping::~pseudo_Mapping()
 
 }
 
-//##################################################################################################
+
 extern "C" void SAL_CALL uno_initEnvironment( uno_Environment * pUnoEnv )
 {
     OSL_FAIL( "### no impl: unexpected call!" );
 }
-//##################################################################################################
+
 extern "C" void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
 {

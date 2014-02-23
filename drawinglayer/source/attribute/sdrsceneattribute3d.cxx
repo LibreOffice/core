@@ -20,7 +20,7 @@
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

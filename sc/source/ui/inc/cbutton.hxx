@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------
+
 
 #ifndef SC_CBUTTON_HXX
 #define SC_CBUTTON_HXX
@@ -28,7 +28,7 @@
 class OutputDevice;
 
 
-//==================================================================
+
 
 class ScDDComboBoxButton
 {

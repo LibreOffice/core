@@ -34,9 +34,9 @@
 
 using namespace com::sun::star;
 
-//  ----------------------------------------------------
+
 //  class VCLXGraphics
-//  ----------------------------------------------------
+
 
 // uno::XInterface
 uno::Any VCLXGraphics::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)

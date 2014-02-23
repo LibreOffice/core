@@ -39,7 +39,7 @@ namespace
 {
 
 
-//==================================================================================================
+
 static void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
@@ -302,7 +302,7 @@ static void callVirtualMethod(
 }
 
 
-//==================================================================================================
+
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot  aVtableSlot,

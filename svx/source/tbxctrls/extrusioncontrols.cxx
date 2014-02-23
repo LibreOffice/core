@@ -44,7 +44,7 @@
 #include "colorwindow.hxx"
 #include "extrusiondepthdialog.hxx"
 
-////////////
+
 
 //using ::svtools::ToolbarMenu;
 
@@ -232,9 +232,9 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-// =======================================================================
+
 // ExtrusionDirectionControl
-// =======================================================================
+
 
 ExtrusionDirectionControl::ExtrusionDirectionControl(
     const Reference< XComponentContext >& rxContext
@@ -294,7 +294,7 @@ Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceName
     return ExtrusionDirectionControl_getSupportedServiceNames();
 }
 
-// ####################################################################
+
 
 ExtrusionDepthDialog::ExtrusionDepthDialog( Window* pParent, double fDepth, FieldUnit eDefaultUnit )
     : ModalDialog( pParent, "ExtrustionDepthDialog", "svx/ui/extrustiondepthdialog.ui" )
@@ -309,7 +309,7 @@ double ExtrusionDepthDialog::getDepth() const
     return (double)( m_pMtrDepth->GetValue( FUNIT_100TH_MM ) ) / 100.0;
 }
 
-// ####################################################################
+
 
 double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
 double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
@@ -486,9 +486,9 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
     return 0;
 }
 
-// =======================================================================
+
 // ExtrusionDirectionControl
-// =======================================================================
+
 
 ExtrusionDepthController::ExtrusionDepthController(
     const Reference< XComponentContext >& rxContext
@@ -548,7 +548,7 @@ Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames
 }
 
 
-// ####################################################################
+
 
 
 
@@ -751,7 +751,7 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-// ========================================================================
+
 
 ExtrusionLightingControl::ExtrusionLightingControl(
     const Reference< XComponentContext >& rxContext
@@ -810,7 +810,7 @@ Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames
     return ExtrusionLightingControl_getSupportedServiceNames();
 }
 
-// ####################################################################
+
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     svt::ToolboxController& rController,
@@ -894,7 +894,7 @@ IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl)
     return 0;
 }
 
-// ========================================================================
+
 
 ExtrusionSurfaceControl::ExtrusionSurfaceControl(
     const Reference< XComponentContext >& rxContext
@@ -955,7 +955,7 @@ Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(
     return ExtrusionSurfaceControl_getSupportedServiceNames();
 }
 
-//========================================================================
+
 
 SFX_IMPL_TOOLBOX_CONTROL( ExtrusionColorControl, SvxColorItem );
 

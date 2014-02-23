@@ -64,7 +64,7 @@ namespace salhelper{
 template< class SingletonClass >
 class SingletonRef
 {
-    //-------------------------------------------
+
     // member
 
     private :
@@ -75,12 +75,12 @@ class SingletonRef
         /** @short  ref count, which regulate creation and removing of m_pInstance. */
         static sal_Int32 m_nRef;
 
-    //-------------------------------------------
+
     // interface
 
     public :
 
-        //---------------------------------------
+
 
         /** @short  standard ctor.
 
@@ -104,7 +104,7 @@ class SingletonRef
             // <- GLOBAL SAFE
         }
 
-        //---------------------------------------
+
 
         /** @short  standard dtor.
 
@@ -129,7 +129,7 @@ class SingletonRef
             // <- GLOBAL SAFE
         }
 
-        //---------------------------------------
+
 
         /** @short  Allows rSingle->someBodyOp().
          */
@@ -141,7 +141,7 @@ class SingletonRef
             // <- GLOBAL SAFE
         }
 
-        //---------------------------------------
+
 
         /** @short  Allows (*rSingle).someBodyOp().
          */
@@ -153,12 +153,12 @@ class SingletonRef
             // <- GLOBAL SAFE
         }
 
-    //-------------------------------------------
+
     // helper
 
     private :
 
-        //---------------------------------------
+
 
         /** @short  creates an own mutex for guarding static contents.
 

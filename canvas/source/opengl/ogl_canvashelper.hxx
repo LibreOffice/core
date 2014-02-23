@@ -53,7 +53,7 @@ namespace oglcanvas
                    SpriteDeviceHelper& rDeviceHelper );
 
         // CanvasHelper functionality
-        // ==========================
+
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)

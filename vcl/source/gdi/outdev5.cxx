@@ -31,10 +31,10 @@
 #include <outdata.hxx>
 #include <outdev.h>
 
-// =======================================================================
 
 
-// =======================================================================
+
+
 
 void OutputDevice::DrawRect( const Rectangle& rRect,
                              sal_uLong nHorzRound, sal_uLong nVertRound )

@@ -37,9 +37,9 @@ public:
     CInfoTip(long RefCnt = 1);
     virtual ~CInfoTip();
 
-    //-----------------------------
+
     // IUnknown methods
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
@@ -49,23 +49,23 @@ public:
 
     virtual ULONG STDMETHODCALLTYPE Release( void);
 
-    //----------------------------
+
     // IQueryInfo methods
-    //----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE GetInfoTip(DWORD dwFlags, wchar_t** ppwszTip);
 
     virtual HRESULT STDMETHODCALLTYPE GetInfoFlags(DWORD *pdwFlags);
 
-    //----------------------------
+
     // IPersist methods
-    //----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID* pClassID);
 
-    //----------------------------
+
     // IPersistFile methods
-    //----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE IsDirty(void);
 

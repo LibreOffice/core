@@ -34,14 +34,14 @@
 
 #include <boost/unordered_map.hpp>
 
-//.........................................................................
+
 namespace dlgprov
 {
-//.........................................................................
 
-    // =============================================================================
+
+
     // class DialogEventsAttacherImpl
-    // =============================================================================
+
     typedef boost::unordered_map< OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >,
         OUStringHash,
@@ -85,9 +85,9 @@ namespace dlgprov
     };
 
 
-    // =============================================================================
+
     // class DialogAllListenerImpl
-    // =============================================================================
+
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::XAllListener > DialogAllListenerImpl_BASE;
@@ -119,9 +119,9 @@ namespace dlgprov
     };
 
 
-    // =============================================================================
+
     // class DialogScriptListenerImpl
-    // =============================================================================
+
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::XScriptListener > DialogScriptListenerImpl_BASE;
@@ -148,9 +148,9 @@ namespace dlgprov
     };
 
 
-//.........................................................................
+
 }   // namespace dlgprov
-//.........................................................................
+
 
 #endif // SCRIPTING_DLGEVT_HXX
 

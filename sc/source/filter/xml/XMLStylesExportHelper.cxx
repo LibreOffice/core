@@ -450,7 +450,7 @@ const OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nInd
     return aValidationVec[nIndex].sName;
 }
 
-//==============================================================================
+
 
 sal_Int32 ScMyDefaultStyles::GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
     const sal_Int32 nTable, const sal_Int32 nPos,
@@ -686,7 +686,7 @@ void ScRowFormatRanges::Sort()
     aRowFormatRanges.sort();
 }
 
-// ============================================================================
+
 ScMyFormatRange::ScMyFormatRange()
     : nStyleNameIndex(-1),
     nValidationIndex(-1),
@@ -990,7 +990,7 @@ void ScFormatRangeStyles::Sort()
             aTables[i]->sort();
 }
 
-//===========================================================================
+
 
 ScColumnRowStylesBase::ScColumnRowStylesBase()
     : aStyleNames()
@@ -1051,7 +1051,7 @@ OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
     return aStyleNames[nIndex];
 }
 
-//===========================================================================
+
 
 ScColumnStyles::ScColumnStyles()
     : ScColumnRowStylesBase(),
@@ -1109,7 +1109,7 @@ OUString* ScColumnStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 n
     return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField, bTemp));
 }
 
-//===========================================================================
+
 
 ScRowStyles::Cache::Cache() :
     mnTable(-1), mnStart(-1), mnEnd(-1), mnStyle(-1) {}

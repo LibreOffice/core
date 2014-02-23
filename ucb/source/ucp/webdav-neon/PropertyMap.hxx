@@ -35,7 +35,7 @@
 
 namespace webdav_ucp {
 
-//=========================================================================
+
 
 struct equalPropertyName
 {

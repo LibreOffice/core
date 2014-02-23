@@ -30,9 +30,9 @@
 #pragma warning(pop)
 #endif
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 class CDummyCustomControl : public CCustomControl
 {
@@ -43,9 +43,9 @@ public:
     virtual void SAL_CALL SetFont(HFONT hFont);
 };
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 class CDialogCustomControlBase : public CCustomControl
 {
@@ -64,9 +64,9 @@ protected:
     HWND m_ParentHandle;
 };
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 class CStaticCustomControl : public CDialogCustomControlBase
 {
@@ -76,9 +76,9 @@ public:
     virtual void SAL_CALL Align();
 };
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 class CPushButtonCustomControl : public CDialogCustomControlBase
 {
@@ -88,9 +88,9 @@ public:
     virtual void SAL_CALL Align();
 };
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 class CComboboxCustomControl : public CDialogCustomControlBase
 {
@@ -100,9 +100,9 @@ public:
     virtual void SAL_CALL Align();
 };
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 class CCheckboxCustomControl : public CDialogCustomControlBase
 {

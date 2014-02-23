@@ -24,14 +24,14 @@
 #include <rtl/ref.hxx>
 
 class FmFormModel;
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IFormScriptingEnvironment
-    //====================================================================
+
     /** describes the interface implemented by a component which handles scripting requirements
         in a form/control environment.
     */
@@ -76,14 +76,14 @@ namespace svxform
     };
     typedef ::rtl::Reference< IFormScriptingEnvironment >   PFormScriptingEnvironment;
 
-    //====================================================================
+
     /** creates a default component implementing the IFormScriptingEnvironment interface
     */
     PFormScriptingEnvironment   createDefaultFormScriptingEnvironment( FmFormModel& _rFormModel );
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSCRIPTINGENV_HXX
 

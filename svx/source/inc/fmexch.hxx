@@ -33,21 +33,21 @@
 
 class SvTreeListEntry;
 
-//========================================================================
+
 class SvTreeListBox;
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
+
+
 
     typedef ::std::set< SvTreeListEntry* >  ListBoxEntrySet;
 
-    //====================================================================
+
     //= OLocalExchange
-    //====================================================================
+
     class SVX_DLLPUBLIC OLocalExchange : public TransferableHelper
     {
     private:
@@ -91,9 +91,9 @@ namespace svxform
         }
     };
 
-    //====================================================================
+
     //= OLocalExchangeHelper
-    //====================================================================
+
     /// a helper for navigator windows (SvTreeListBox'es) which allow DnD within themself
     class SVX_DLLPUBLIC OLocalExchangeHelper
     {
@@ -124,9 +124,9 @@ namespace svxform
         SVX_DLLPRIVATE void implReset();
     };
 
-    //====================================================================
+
     //= OControlTransferData
-    //====================================================================
+
     class OControlTransferData
     {
     private:
@@ -200,16 +200,16 @@ namespace svxform
                                 getFormsRoot() const { return m_xFormsRoot; }
     };
 
-    //====================================================================
+
     inline const DataFlavorExVector& OControlTransferData::GetDataFlavorExVector() const
     {
         const_cast< OControlTransferData* >( this )->updateFormats( );
         return m_aCurrentFormats;
     }
 
-    //====================================================================
+
     //= OControlExchange
-    //====================================================================
+
     class OControlExchange : public OLocalExchange, public OControlTransferData
     {
     public:
@@ -229,9 +229,9 @@ namespace svxform
         virtual void        AddSupportedFormats();
     };
 
-    //====================================================================
+
     //= OControlExchangeHelper
-    //====================================================================
+
     class OControlExchangeHelper : public OLocalExchangeHelper
     {
     public:
@@ -244,8 +244,8 @@ namespace svxform
         virtual OLocalExchange* createExchange() const;
     };
 
-    //====================================================================
-    //====================================================================
+
+
     inline sal_Bool OControlExchange::hasFieldExchangeFormat( const DataFlavorExVector& _rFormats )
     {
         return hasFormat( _rFormats, getFieldExchangeFormatId() );
@@ -261,9 +261,9 @@ namespace svxform
         return hasFormat( _rFormats, getHiddenControlModelsFormatId() );
     }
 
-//........................................................................
+
 }   // namespace svxform
-//........................................................................
+
 
 #endif
 

@@ -24,9 +24,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class IndexEntrySupplier_ja_phonetic
-//  ----------------------------------------------------
+
 
 class IndexEntrySupplier_ja_phonetic : public IndexEntrySupplier_Common {
 public:

@@ -239,7 +239,7 @@ void SvxConfigGroupListBox::ClearAll()
 
 namespace
 {
-    //...........................................
+
     /** examines a component whether it supports XEmbeddedScripts, or provides access to such a
         component by implementing XScriptInvocationContext.
         @return
@@ -259,7 +259,7 @@ namespace
         return Reference< XModel >( xScripts, UNO_QUERY );
     }
 
-    //...........................................
+
     static Reference< XModel > lcl_getScriptableDocument_nothrow( const Reference< XFrame >& _rxFrame )
     {
         Reference< XModel > xDocument;

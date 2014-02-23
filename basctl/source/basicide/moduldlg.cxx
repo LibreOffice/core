@@ -49,7 +49,7 @@ using namespace ::com::sun::star::resource;
 
 //
 // ExtTreeListBox
-// ==============
+
 //
 
 ExtTreeListBox::ExtTreeListBox(Window* pParent, WinBits nStyle)
@@ -465,7 +465,7 @@ sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
 
 //
 // OrganizeDialog
-// ==============
+
 //
 
 OrganizeDialog::OrganizeDialog(Window* pParent, sal_Int16 tabId,
@@ -553,7 +553,7 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 //
 // ObjectPage
-// ==========
+
 //
 
 ObjectPage::ObjectPage(Window *pParent, const OString &rName, sal_uInt16 nMode)

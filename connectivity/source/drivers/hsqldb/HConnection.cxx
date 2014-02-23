@@ -83,9 +83,9 @@ namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
 namespace connectivity { namespace hsqldb
 {
-    // =============================================================================
+
     // = FlushListeners
-    // =============================================================================
+
     typedef ::comphelper::OListenerContainerBase< XFlushListener, EventObject > FlushListeners_Base;
     class FlushListeners : public FlushListeners_Base
     {
@@ -106,9 +106,9 @@ namespace connectivity { namespace hsqldb
         return true;    // continue notifying the other listeners, if any
     }
 
-    // =============================================================================
+
     // = OHsqlConnection
-    // =============================================================================
+
 
     void SAL_CALL OHsqlConnection::disposing(void)
     {

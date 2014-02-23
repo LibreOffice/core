@@ -28,9 +28,9 @@ class Point;
 class Rectangle;
 class Window;
 
-// --------------
+
 // - Help-Types -
-// --------------
+
 
 #define QUICKHELP_LEFT              ((sal_uInt16)0x0001)
 #define QUICKHELP_CENTER            ((sal_uInt16)0x0002)
@@ -52,9 +52,9 @@ class Window;
 #define OOO_HELP_INDEX          ".help:index"
 #define OOO_HELP_HELPONHELP     ".help:helponhelp"
 
-// --------
+
 // - Help -
-// --------
+
 
 class VCL_DLLPUBLIC Help
 {

@@ -85,12 +85,12 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-//===================================================================
+
 
 #define SfxApplication
 #include "sfxslots.hxx"
 
-//====================================================================
+
 
 #define SFX_ITEMTYPE_STATBAR             4
 

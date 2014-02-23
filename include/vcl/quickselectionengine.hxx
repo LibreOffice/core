@@ -26,10 +26,10 @@
 
 class KeyEvent;
 
-//........................................................................
+
 namespace vcl
 {
-//........................................................................
+
 
     typedef const void* StringEntryIdentifier;
 
@@ -85,9 +85,9 @@ namespace vcl
         QuickSelectionEngine& operator=( const QuickSelectionEngine& ); // never implemented
     };
 
-//........................................................................
+
 } // namespace vcl
-//........................................................................
+
 
 #endif // INCLUDED_VCL_QUICKSELECTIONENGINE_HXX
 

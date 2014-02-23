@@ -366,7 +366,7 @@ namespace
     }
 
 
-    //=====================================================================
+
     static typelib_TypeClass cpp_mediate(
         sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
         void ** gpreg, double* fpreg,
@@ -531,7 +531,7 @@ namespace
     }
 }
 
-//=======================================================================
+
 /**
  * is called on incoming vtable calls
  * (called by asm snippets)

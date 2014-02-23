@@ -28,10 +28,10 @@
 
 class ScDocument;
 
-//----------------------------------------------------------------------------
+
 
 #include "scui_def.hxx"
-//============================================================================
+
 
 class ScFillSeriesDlg : public ModalDialog
 {
@@ -88,7 +88,7 @@ private:
 
     const OUString aErrMsgInvalidVal;
 
-    //----------------------------------------------------------
+
 
     ScDocument& rDoc;
     FillDir     theFillDir;

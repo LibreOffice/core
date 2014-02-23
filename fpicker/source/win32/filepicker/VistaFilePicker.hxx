@@ -40,9 +40,9 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-//-----------------------------------------------------------------------------
+
 // types
-//-----------------------------------------------------------------------------
+
 
 typedef ::cppu::WeakComponentImplHelper6<
                 css::ui::dialogs::XFilePicker2,
@@ -52,7 +52,7 @@ typedef ::cppu::WeakComponentImplHelper6<
                 css::lang::XInitialization,
                 css::lang::XServiceInfo >   TVistaFilePickerBase;
 
-//-----------------------------------------------------------------------------
+
 /** Implements the XFilePicker & friends interface(s)
     for Windos Vista and upcoming versions.
 
@@ -65,16 +65,16 @@ class VistaFilePicker : public ::cppu::BaseMutex
 {
 public:
 
-    //------------------------------------------------------------------------------------
+
     // ctor/dtor
-    //------------------------------------------------------------------------------------
+
 
              VistaFilePicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
     virtual ~VistaFilePicker();
 
-    //------------------------------------------------------------------------------------
+
     // XFilePickerNotifier
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
         throw( css::uno::RuntimeException );
@@ -82,9 +82,9 @@ public:
     virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
         throw( css::uno::RuntimeException );
 
-    //------------------------------------------------------------------------------------
+
     // XExecutableDialog functions
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL setTitle( const OUString& sTitle )
         throw( css::uno::RuntimeException );
@@ -92,9 +92,9 @@ public:
     virtual sal_Int16 SAL_CALL execute(  )
         throw( css::uno::RuntimeException );
 
-    //------------------------------------------------------------------------------------
+
     // XFilePicker functions
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode )
         throw( css::uno::RuntimeException );
@@ -112,16 +112,16 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  )
         throw( css::uno::RuntimeException );
 
-    //------------------------------------------------------------------------------------
+
     // XFilePicker2 functions
-    //------------------------------------------------------------------------------------
+
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  )
         throw( css::uno::RuntimeException );
 
-    //------------------------------------------------------------------------------------
+
     // XFilterManager functions
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL appendFilter( const OUString& sTitle  ,
                                         const OUString& sFilter )
@@ -135,18 +135,18 @@ public:
     virtual OUString SAL_CALL getCurrentFilter(  )
         throw( css::uno::RuntimeException );
 
-    //------------------------------------------------------------------------------------
+
     // XFilterGroupManager functions
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL appendFilterGroup( const OUString&                              sGroupTitle,
                                              const css::uno::Sequence< css::beans::StringPair >& lFilters   )
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException         );
 
-    //------------------------------------------------------------------------------------
+
     // XFilePickerControlAccess functions
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL setValue(       sal_Int16      nControlId    ,
                                           sal_Int16      nControlAction,
@@ -168,9 +168,9 @@ public:
     virtual OUString SAL_CALL getLabel( sal_Int16 nControlId )
         throw (css::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XFilePreview
-    //------------------------------------------------
+
 
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  )
         throw (css::uno::RuntimeException);
@@ -194,31 +194,31 @@ public:
     virtual sal_Bool SAL_CALL getShowState(  )
         throw (css::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XInitialization
-    //------------------------------------------------
+
 
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArguments )
         throw(css::uno::Exception       ,
               css::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XCancellable
-    //------------------------------------------------
+
 
     virtual void SAL_CALL cancel( )
         throw(css::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XEventListener
-    //------------------------------------------------
+
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent )
         throw(css::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XServiceInfo
-    //------------------------------------------------
+
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(css::uno::RuntimeException);
@@ -230,9 +230,9 @@ public:
         throw(css::uno::RuntimeException);
 
     /*
-    //------------------------------------------------------------------------------------
+
     // FilePicker Event functions
-    //------------------------------------------------------------------------------------
+
 
     void SAL_CALL fileSelectionChanged(const css::ui::dialogs::FilePickerEvent& aEvent );
     void SAL_CALL directoryChanged(const css::ui::dialogs::FilePickerEvent& aEvent );
@@ -256,21 +256,21 @@ public:
 
     private:
 
-        //---------------------------------------------------------------------
+
         /// service manager to create own used uno services
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
-        //---------------------------------------------------------------------
+
         css::uno::Sequence< OUString > m_lLastFiles;
 
-        //---------------------------------------------------------------------
+
         /** execute the COM dialog within a STA thread
          *  Must be used on the heap ... because it's implemented as OSL thread .-)
          */
         RequestHandlerRef m_rDialog;
         AsyncRequests m_aAsyncExecute;
 
-        //---------------------------------------------------------------------
+
         oslThreadIdentifier m_nFilePickerThreadId;
 
         bool m_bInitialized;

@@ -65,9 +65,9 @@ ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
 }
 
 
-//==================================================================
+
 // index page
-//==================================================================
+
 ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
            :nPagePos(nPos)
            ,bModified(sal_False)
@@ -647,9 +647,9 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
         }
     }
 }
-//==================================================================
+
 // ONDXNode
-//==================================================================
+
 
 
 void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
@@ -727,9 +727,9 @@ ONDXPagePtr& ONDXNode::GetChild(ODbaseIndex* pIndex, ONDXPage* pParent)
     return aChild;
 }
 
-//==================================================================
+
 // ONDXKey
-//==================================================================
+
 
 sal_Bool ONDXKey::IsText(sal_Int32 eType)
 {
@@ -797,9 +797,9 @@ SvStream& connectivity::dbase::WriteONDXPagePtr(SvStream &rStream, const ONDXPag
     return rStream;
 }
 
-//==================================================================
+
 // ONDXPagePtr
-//==================================================================
+
 
 ONDXPagePtr::ONDXPagePtr(const ONDXPagePtr& rRef)
               :ONDXPageRef(rRef)

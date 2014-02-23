@@ -108,7 +108,7 @@ using namespace com::sun;
 
 using ::com::sun::star::awt::XTopWindow;
 
-// =======================================================================
+
 
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
@@ -352,7 +352,7 @@ const char* ImplDbgCheckWindow( const void* pObj )
 }
 #endif
 
-// =======================================================================
+
 
 bool Window::HasMirroredGraphics() const
 {
@@ -720,7 +720,7 @@ CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, Window* pSour
     return CommandEvent( aPos, rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetData() );
 }
 
-// =======================================================================
+
 
 void Window::ImplInitWindowData( WindowType nType )
 {
@@ -9419,7 +9419,7 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
     Sequence< Any > aArg(6);
 
     // Feed any with operating system's window handle
-    // ==============================================
+
 
     // common: first any is VCL pointer to window (for VCL canvas)
     aArg[ 0 ] = makeAny( reinterpret_cast<sal_Int64>(this) );
@@ -9456,7 +9456,7 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
     uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
     // Create canvas instance with window handle
-    // =========================================
+
     static ::vcl::DeleteUnoReferenceOnDeinit<lang::XMultiComponentFactory> xStaticCanvasFactory(
         rendering::CanvasFactory::create( xContext ) );
     uno::Reference<lang::XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());

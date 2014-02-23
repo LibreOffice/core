@@ -21,18 +21,18 @@
 #include "ZConnectionPool.hxx"
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= ODriverWrapper
-    //====================================================================
+
 
     ODriverWrapper::ODriverWrapper( Reference< XAggregation >& _rxAggregateDriver, OConnectionPool* _pPool )
         :m_pConnectionPool(_pPool)
@@ -118,9 +118,9 @@ namespace connectivity
         return m_xDriver.is() ? m_xDriver->getMinorVersion() : 0;
     }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

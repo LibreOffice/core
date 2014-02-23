@@ -1124,7 +1124,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
                     {
                         // if the bullet is still visible just do not paint it from
                         // now on and that will be all. Otherwise continue as usual.
-                        // ...
+
 
                         sal_Int32 nPara = pImpEditEngine->GetEditDoc().GetPos( pNode );
                         SfxBoolItem aBulletState( (const SfxBoolItem&) pImpEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) );
@@ -2421,9 +2421,9 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
     return pImpEditEngine->CreateTransferable( aSel );
 }
 
-// =====================================================================
+
 // ======================    Virtual Methods    ========================
-// =====================================================================
+
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
     const sal_Int32*, const SvxFont&, sal_Int32, sal_Int32, sal_uInt8,
     const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
@@ -2568,9 +2568,9 @@ void EditEngine::FieldSelected( const SvxFieldItem&, sal_Int32, sal_Int32 )
 {
 }
 
-// =====================================================================
+
 // ======================     Static Methods     =======================
-// =====================================================================
+
 SfxItemPool* EditEngine::CreatePool( bool bPersistentRefCounts )
 {
     SfxItemPool* pPool = new EditEngineItemPool( bPersistentRefCounts );

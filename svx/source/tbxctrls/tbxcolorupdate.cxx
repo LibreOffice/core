@@ -26,14 +26,14 @@
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ToolboxButtonColorUpdater
-    //====================================================================
+
     /* Note:
        The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
        (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
@@ -173,8 +173,8 @@ namespace svx
         }
     }
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,9 +62,9 @@ struct UnoControlComponentInfos
 };
 
 struct UnoControl_Data;
-//  ----------------------------------------------------
+
 //  class UnoControl
-//  ----------------------------------------------------
+
 typedef ::cppu::WeakAggImplHelper9  <   ::com::sun::star::awt::XControl
                                     ,   ::com::sun::star::awt::XWindow2
                                     ,   ::com::sun::star::awt::XView

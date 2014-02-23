@@ -57,9 +57,9 @@ namespace toolkit
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXWINDOW
-//  ----------------------------------------------------
+
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;

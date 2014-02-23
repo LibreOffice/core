@@ -182,9 +182,9 @@ public:
     virtual ImageList getImageList(vcl::ImageListType) SAL_THROW ((com::sun::star::lang::IllegalArgumentException ));
 
 };
-// =============================================================================
+
 } // namespace rptui
-// =============================================================================
+
 #endif // RPTUI_GROUPS_SORTING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

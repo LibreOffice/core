@@ -39,10 +39,10 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svl/filenotation.hxx>
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -54,9 +54,9 @@ namespace dbp
     using namespace ::com::sun::star::task;
     using namespace ::comphelper;
 
-    //=====================================================================
+
     //= OTableSelectionPage
-    //=====================================================================
+
 
     OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
         :OControlWizardPage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION))
@@ -384,9 +384,9 @@ namespace dbp
         }
     }
 
-    //=====================================================================
+
     //= OMaybeListSelectionPage
-    //=====================================================================
+
 
     OMaybeListSelectionPage::OMaybeListSelectionPage( OControlWizard* _pParent, const ResId& _rId )
         :OControlWizardPage(_pParent, _rId)
@@ -451,9 +451,9 @@ namespace dbp
             m_pNo->GrabFocus();
     }
 
-    //=====================================================================
+
     //= ODBFieldPage
-    //=====================================================================
+
 
     ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_OPTION_DBFIELD))
@@ -491,8 +491,8 @@ namespace dbp
         return sal_True;
     }
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

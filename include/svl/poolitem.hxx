@@ -53,7 +53,7 @@ static const sal_uInt32 SFX_ITEMS_DEFAULT=  0xfffffffe;
 
 #define CONVERT_TWIPS                       0x80    //Uno-Konvertierung fuer Massangaben (fuer MemberId)
 
-// -----------------------------------------------------------------------
+
 
 // UNO3 shortcuts
 
@@ -83,7 +83,7 @@ inline ::com::sun::star::uno::Any Bool2Any( bool bValue )
     return ::com::sun::star::uno::Any( &bValue, ::getCppuBooleanType() );
 }
 
-// -----------------------------------------------------------------------
+
 
 //! Notloesung!!!
 enum SfxFieldUnit
@@ -112,7 +112,7 @@ enum SfxMapUnit
     SFX_MAPUNIT_ABSOLUTE
 };
 
-// -----------------------------------------------------------------------
+
 
 enum SfxItemPresentation
 
@@ -130,7 +130,7 @@ enum SfxItemPresentation
     SFX_ITEM_PRESENTATION_COMPLETE
 };
 
-// -----------------------------------------------------------------------
+
 
 typedef sal_uInt16 SfxItemState;
 
@@ -157,7 +157,7 @@ class SfxItemPool;
 class SfxItemSet;
 
 
-// -----------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxPoolItem
 {
@@ -266,7 +266,7 @@ private:
     SfxPoolItem&             operator=( const SfxPoolItem& );    // n.i.!!
 };
 
-// -----------------------------------------------------------------------
+
 
 inline void SfxPoolItem::SetRefCount( sal_uLong n )
 {
@@ -299,7 +299,7 @@ inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
     return m_nRefCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool IsPoolDefaultItem(const SfxPoolItem *pItem )
 {
@@ -326,7 +326,7 @@ inline bool IsInvalidItem(const SfxPoolItem *pItem)
     return pItem == (SfxPoolItem *)-1;
 }
 
-// -----------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
 {
@@ -351,7 +351,7 @@ public:
             void            SetWhich(sal_uInt16 nWh) { m_nWhich = nWh; }
 };
 
-// -----------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
 {
@@ -385,7 +385,7 @@ public:
                             { return *pSet; }
 };
 
-// -----------------------------------------------------------------------
+
 // Handle Klasse fuer PoolItems
 
 class SVL_DLLPUBLIC SfxItemHandle
@@ -401,11 +401,11 @@ public:
     const SfxPoolItem &GetItem() const { return *pItem; }
 };
 
-// -----------------------------------------------------------------------
+
 
 DECL_PTRHINT(SVL_DLLPUBLIC, SfxPoolItemHint, SfxPoolItem);
 
-// -----------------------------------------------------------------------
+
 
 #endif // INCLUDED_SVL_POOLITEM_HXX
 

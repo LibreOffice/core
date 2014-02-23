@@ -33,14 +33,14 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OControlWizardContext
-    //=====================================================================
+
     struct OControlWizardContext
     {
         // the global data source context
@@ -80,9 +80,9 @@ namespace dbp
         sal_Bool bEmbedded;
     };
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 #endif // _EXTENSIONS_DBP_WIZARDCONTEXT_HXX_
 

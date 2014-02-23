@@ -25,7 +25,7 @@
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DiscreteBitmapPrimitive2D class
 
 namespace drawinglayer
@@ -71,7 +71,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DISCRETEBITMAPPRIMITIVE2D_HXX
 

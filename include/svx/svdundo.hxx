@@ -394,7 +394,7 @@ public:
     virtual OUString GetComment() const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #i11702#
 
 class SVX_DLLPUBLIC SdrUndoObjectLayerChange : public SdrUndoObj
@@ -725,7 +725,7 @@ public:
     virtual OUString GetComment() const;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 /**
  * The SdrUndoFactory can be set and retrieved from the SdrModel.

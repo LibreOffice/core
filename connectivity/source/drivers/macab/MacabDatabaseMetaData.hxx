@@ -28,9 +28,9 @@ namespace connectivity
 {
     namespace macab
     {
-        //**************************************************************
+
         //************ Class: MacabDatabaseMetaData
-        //**************************************************************
+
 
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> MacabDatabaseMetaData_BASE;
 

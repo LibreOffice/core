@@ -34,7 +34,7 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 
 
 class DockingAreaDefaultAcceptor    :   private ThreadHelpBase                                      ,
@@ -42,9 +42,9 @@ class DockingAreaDefaultAcceptor    :   private ThreadHelpBase                  
 {
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      constructor to initialize this instance
@@ -64,19 +64,19 @@ class DockingAreaDefaultAcceptor    :   private ThreadHelpBase                  
          DockingAreaDefaultAcceptor(    const css::uno::Reference< css::frame::XFrame >& xOwner );
         virtual ~DockingAreaDefaultAcceptor();
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XDockingAreaAcceptor
-        //---------------------------------------------------------------------------------------------------------
+
 
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getContainerWindow() throw (css::uno::RuntimeException);
         virtual sal_Bool SAL_CALL requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) throw (css::uno::RuntimeException);
         virtual void SAL_CALL setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) throw (css::uno::RuntimeException);
 
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

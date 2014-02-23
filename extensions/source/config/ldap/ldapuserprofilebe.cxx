@@ -33,7 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/security.hxx>
 
-//==============================================================================
+
 namespace extensions { namespace config { namespace ldap {
 
 LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContext>& xContext)

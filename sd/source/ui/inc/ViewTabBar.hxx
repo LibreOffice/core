@@ -132,7 +132,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
         throw (com::sun::star::uno::RuntimeException);
 
-    // ------------------------------------------------------------------------
+
 
     /** The returned value is calculated as the difference between the
         total height of the control and the heigh of its first tab page.

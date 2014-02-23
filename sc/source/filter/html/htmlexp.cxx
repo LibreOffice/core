@@ -86,7 +86,7 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-//========================================================================
+
 
 const static sal_Char sMyBegComment[]   = "<!-- ";
 const static sal_Char sMyEndComment[]   = " -->";
@@ -110,9 +110,9 @@ const sal_uInt16 ScHTMLExport::nCellSpacing = 0;
 const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-//========================================================================
+
 // Macros for HTML export
-//========================================================================
+
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( rStrm, tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( rStrm, tag, false )
 #define OUT_STR( str )      HTMLOutFuncs::Out_String( rStrm, str, eDestEnc, &aNonConvertibleChars )
@@ -130,7 +130,7 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 
 
-//========================================================================
+
 
 FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/, bool bAll,
@@ -206,7 +206,7 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
     return aStr.makeStringAndClear();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
                             const ScRange& rRangeP,

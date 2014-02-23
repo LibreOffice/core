@@ -31,7 +31,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr { namespace contact {
 

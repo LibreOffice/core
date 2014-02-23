@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star {
 
 namespace oox {
 
-// ============================================================================
+
 
 /** Provides helper functions for colors, device measurement conversion,
     graphics, and graphic objects handling.
@@ -140,7 +140,7 @@ public:
         @return The original Graphic size in 100thmm */
     ::com::sun::star::awt::Size getOriginalSize( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic ) const;
 
-    // ------------------------------------------------------------------------
+
 private:
     typedef ::std::map< sal_Int32, sal_Int32 > SystemPalette;
     typedef ::std::deque< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > > GraphicObjectDeque;
@@ -159,7 +159,7 @@ private:
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

@@ -141,7 +141,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     rObj.SetRect( aRect );
 }
 
-//  -----------------------------------------------------------------------
+
 
 #define ADD_SHAPE( nType, nFlags )                              \
 {                                                               \

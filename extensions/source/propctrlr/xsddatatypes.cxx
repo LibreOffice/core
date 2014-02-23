@@ -25,18 +25,18 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xsd;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
 
     template< typename INTERFACE, typename ARGUMENT >
     void setSave( INTERFACE* pObject, void ( SAL_CALL INTERFACE::*pSetter )( ARGUMENT ), ARGUMENT _rArg )
@@ -82,9 +82,9 @@ namespace pcr
         return aReturn;
     }
 
-    //====================================================================
+
     //= XSDDataType
-    //====================================================================
+
 
     XSDDataType::XSDDataType( const Reference< XDataType >& _rxDataType )
         :m_xDataType( _rxDataType )
@@ -232,8 +232,8 @@ namespace pcr
         }
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

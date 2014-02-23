@@ -23,16 +23,16 @@
 #include <rtl/ustring.hxx>
 
 class SimpleResMgr;
-//.........................................................................
+
 namespace frm
 {
 
 #define FRM_RES_STRING(id) ResourceManager::loadString(id)
 
-    //==================================================================
+
     //= ResourceManager
     //= handling resources within the FormLayer library
-    //==================================================================
+
     class ResourceManager
     {
         static SimpleResMgr*    m_pImpl;
@@ -61,9 +61,9 @@ namespace frm
         static OUString loadString(sal_uInt16 _nResId);
     };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_FRM_RESOURCE_HXX
 

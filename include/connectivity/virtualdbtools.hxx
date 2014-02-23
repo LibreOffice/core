@@ -31,9 +31,9 @@
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//========================================================================
+
 //= forward declarations
-//========================================================================
+
 namespace com {
     namespace sun {
         namespace star {
@@ -76,9 +76,9 @@ namespace dbtools {
     class FormattedColumnValue;
 }
 
-//========================================================================
+
 //= entry into this library
-//========================================================================
+
 /** this is the entry point for the load-on-call usage of the DBTOOLS
     library.
     <p>When you need one of the simple objects in this library, load the lib
@@ -90,25 +90,25 @@ namespace dbtools {
 */
 extern "C" OOO_DLLPUBLIC_DBTOOLS void* SAL_CALL createDataAccessToolsFactory();
 
-//========================================================================
+
 //=
-//========================================================================
-//........................................................................
+
+
 namespace connectivity
 {
-//........................................................................
+
 
     class IParseContext;
-    //....................................................................
+
     namespace simple
     {
-    //....................................................................
+
 
         typedef void* (SAL_CALL * createDataAccessToolsFactoryFunction)( );
 
-        //================================================================
+
         //= IDataAccessTools
-        //================================================================
+
         class OOO_DLLPUBLIC_DBTOOLS IDataAccessTools : public ::rtl::IReference
         {
         public:
@@ -221,9 +221,9 @@ namespace connectivity
             ~IDataAccessTools() {}
         };
 
-        //================================================================
+
         //= IDataAccessCharSet
-        //================================================================
+
         /** simple wrapper for the OCharsetMap
         */
         class OOO_DLLPUBLIC_DBTOOLS IDataAccessCharSet :
@@ -242,9 +242,9 @@ namespace connectivity
             ~IDataAccessCharSet() {}
         };
 
-        //================================================================
+
         //= IDataAccessTypeConversion
-        //================================================================
+
         class OOO_DLLPUBLIC_DBTOOLS IDataAccessTypeConversion :
             public ::rtl::IReference
         {
@@ -273,9 +273,9 @@ namespace connectivity
             ~IDataAccessTypeConversion() {}
         };
 
-        //================================================================
+
         //= ISQLParseNode
-        //================================================================
+
         /** a simple version of the OSQLParseNode, with all methods beeing virtual
         */
         class OOO_DLLPUBLIC_DBTOOLS ISQLParseNode : public ::rtl::IReference
@@ -300,9 +300,9 @@ namespace connectivity
             ~ISQLParseNode() {}
         };
 
-        //================================================================
+
         //= ISQLParser
-        //================================================================
+
         /** a simple version of the OSQLParser, with all methods beeing virtual
         */
         class OOO_DLLPUBLIC_DBTOOLS ISQLParser : public ::rtl::IReference
@@ -321,9 +321,9 @@ namespace connectivity
             ~ISQLParser() {}
         };
 
-        //================================================================
+
         //= IDataAccessToolsFactory
-        //================================================================
+
         /** the main factory for runtime-loadable tools in the DBTOOLS library
         */
         class OOO_DLLPUBLIC_DBTOOLS IDataAccessToolsFactory :
@@ -355,13 +355,13 @@ namespace connectivity
             ~IDataAccessToolsFactory() {}
         };
 
-    //....................................................................
-    }   //  namespace simple
-    //....................................................................
 
-//........................................................................
+    }   //  namespace simple
+
+
+
 }   // namespace connectivity
-//........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_VIRTUALDBTOOLS_HXX
 

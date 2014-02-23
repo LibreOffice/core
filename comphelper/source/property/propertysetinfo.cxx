@@ -143,7 +143,7 @@ bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) throw()
     return maPropertyMap.find( aName ) != maPropertyMap.end();
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 PropertySetInfo::PropertySetInfo() throw()
 {

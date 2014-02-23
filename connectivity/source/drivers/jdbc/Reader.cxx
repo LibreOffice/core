@@ -21,9 +21,9 @@
 #include <string.h>
 using namespace connectivity;
 
-//**************************************************************
+
 //************ Class: java.io.Reader
-//**************************************************************
+
 
 jclass java_io_Reader::theClass = 0;
 java_io_Reader::java_io_Reader( JNIEnv * pEnv, jobject myObj )

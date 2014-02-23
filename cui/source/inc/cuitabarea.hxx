@@ -698,7 +698,7 @@ private:
 
     void ImpColorCountChanged();
 
-    //-----------------------------------------------------------------------------------------------------
+
     DECL_LINK( ClickAddHdl_Impl, void * );
     DECL_LINK( ClickModifyHdl_Impl, void * );
     DECL_LINK( ClickDeleteHdl_Impl, void * );

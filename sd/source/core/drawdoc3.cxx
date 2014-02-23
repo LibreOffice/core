@@ -80,7 +80,7 @@ private:
 void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc )
 {
     // now check for duplicate masterpage and layout names
-    // ===================================================
+
 
     OUString aFullNameLayout( pBMMPage->GetLayoutName() );
     sal_Int32 nIndex = aFullNameLayout.indexOf( SD_LT_SEPARATOR );

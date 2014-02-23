@@ -32,7 +32,7 @@ namespace rptui
 {
     class OXUndoEnvironmentImpl;
 
-    //========================================================================
+
     class REPORTDESIGN_DLLPUBLIC OXUndoEnvironment
         : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener

@@ -31,14 +31,14 @@ namespace comphelper
     class OPropertyChangeMultiplexer;
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= SubmissionHelper
-    //====================================================================
+
     class SubmissionHelper : public EFormsHelper
     {
     public:
@@ -59,9 +59,9 @@ namespace pcr
                 ) SAL_THROW(());
     };
 
-    //====================================================================
+
     //= SubmissionPropertyHandler
-    //====================================================================
+
     class SubmissionPropertyHandler;
     typedef HandlerComponentBase< SubmissionPropertyHandler > EditPropertyHandler_Base;
     /** a property handler for any virtual string properties
@@ -107,9 +107,9 @@ namespace pcr
         virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_SUBMISSIONHANDLER_HXX
 

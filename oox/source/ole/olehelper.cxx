@@ -44,7 +44,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::form::XForm;
@@ -70,7 +70,7 @@ using ::com::sun::star::lang::XServiceInfo;
 
 using namespace ::com::sun::star::form;
 
-// ============================================================================
+
 
 namespace {
 
@@ -211,7 +211,7 @@ void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )
 
 } // namespace
 
-// ============================================================================
+
 
 StdFontInfo::StdFontInfo() :
     mnHeight( 0 ),
@@ -231,7 +231,7 @@ StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
 {
 }
 
-// ============================================================================
+
 
 sal_Int32 OleHelper::decodeOleColor(
         const GraphicHelper& rGraphicHelper, sal_uInt32 nOleColor, bool bDefaultColorBgr )
@@ -717,7 +717,7 @@ const Reference< XShapes >& MSConvertOCXControls::GetShapes()
     return mxShapes;
 }
 #endif
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

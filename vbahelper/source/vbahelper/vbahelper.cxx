@@ -969,7 +969,7 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
     mxModelProps->setPropertyValue( bHeight ? OUString(saHeightName) : OUString(saWidthName), uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
 }
 
-// ============================================================================
+
 
 double ConcreteXShapeGeometryAttributes::getLeft() const
 {

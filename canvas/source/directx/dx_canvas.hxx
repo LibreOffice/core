@@ -102,7 +102,7 @@ namespace dxcanvas
 
     typedef ::rtl::Reference< Canvas > CanvasRef;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     typedef ::cppu::WeakComponentImplHelper7< ::com::sun::star::rendering::XBitmapCanvas,
                                                ::com::sun::star::rendering::XIntegerBitmap,

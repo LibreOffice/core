@@ -29,7 +29,7 @@
 
 namespace msfilter {
 
-// ============================================================================
+
 
 /** Encodes and decodes data from protected MSO 95- documents.
  */
@@ -173,7 +173,7 @@ public:
 };
 
 
-// ============================================================================
+
 
 /** Encodes and decodes data from protected MSO 97+ documents.
 
@@ -361,7 +361,7 @@ private:
     sal_uInt8           m_pDocId[16];
 };
 
-// ============================================================================
+
 
 } // namespace msfilter
 

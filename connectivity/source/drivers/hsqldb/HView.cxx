@@ -34,10 +34,10 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 
-//........................................................................
+
 namespace connectivity { namespace hsqldb
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -55,9 +55,9 @@ namespace connectivity { namespace hsqldb
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdbc::XRow;
 
-    //====================================================================
+
     //= HView
-    //====================================================================
+
 
     HView::HView( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
         const OUString& _rSchemaName, const OUString& _rName )
@@ -194,8 +194,8 @@ namespace connectivity { namespace hsqldb
         return sCommand;
     }
 
-//........................................................................
+
 } } // namespace connectivity::hsqldb
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

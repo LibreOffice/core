@@ -90,7 +90,7 @@ namespace slideshow
             ViewLayerSharedPtr getViewLayer() const;
 
             // animation methods
-            //------------------------------------------------------------------
+
 
             /** Notify the ViewShape that an animation starts now
 
@@ -113,7 +113,7 @@ namespace slideshow
             void endApplet();
 
             // render methods
-            //------------------------------------------------------------------
+
 
             /** Render the ViewShape
 

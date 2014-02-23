@@ -21,7 +21,7 @@
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

@@ -34,7 +34,7 @@
 #define PAIRED_VAR_ARGS (VAR_ARGS + VAR_ARGS)
 namespace formula
 {
-//============================================================================
+
 
 ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     TabPage         (pParent,ModuleRes(RID_FORMULATAB_PARAMETER)),

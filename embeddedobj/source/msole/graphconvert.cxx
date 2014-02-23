@@ -79,9 +79,9 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
     return sal_False;
 }
 
-// =====================================================================
+
 // MainThreadNotificationRequest
-// =====================================================================
+
 MainThreadNotificationRequest::MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect )
 : m_pObject( xObj.get() )
 , m_xObject( static_cast< embed::XEmbeddedObject* >( xObj.get() ) )

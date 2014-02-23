@@ -57,7 +57,7 @@ private:
     OUString        aStrDelMsg;
     OUString        aStrRename;
 
-    //------------------------
+
     ScAutoFormat*           pFormat;
     const ScAutoFormatData* pSelFmtData;
     sal_uInt16                  nIndex;
@@ -66,7 +66,7 @@ private:
 
     void Init           ();
     void UpdateChecks   ();
-    //------------------------
+
     DECL_LINK( CheckHdl, Button * );
     DECL_LINK( AddHdl, void * );
     DECL_LINK( RemoveHdl, void * );

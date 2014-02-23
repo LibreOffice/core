@@ -1475,7 +1475,7 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
 
 } // namespace
 
-// ============================================================================
+
 
 XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
     meSysLang( rRoot.GetSysLanguage() ),
@@ -1771,6 +1771,6 @@ bool XclXFBase::Equals( const XclXFBase& rCmp ) const
         (mbBorderUsed == rCmp.mbBorderUsed) && (mbAreaUsed  == rCmp.mbAreaUsed);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

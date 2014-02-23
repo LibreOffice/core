@@ -1672,9 +1672,9 @@ STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid,
 }
 
 
-// ====
+
 // InternalCacheWrapper
-// ====
+
 
 // IUnknown
 

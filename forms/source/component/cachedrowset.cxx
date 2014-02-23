@@ -29,10 +29,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -54,9 +54,9 @@ namespace frm
 
     namespace ResultSetType = ::com::sun::star::sdbc::ResultSetType;
 
-    //====================================================================
+
     //= CachedRowSet_Data
-    //====================================================================
+
     struct CachedRowSet_Data
     {
         OUString                 sCommand;
@@ -74,9 +74,9 @@ namespace frm
         }
     };
 
-    //====================================================================
+
     //= CachedRowSet
-    //====================================================================
+
 
     CachedRowSet::CachedRowSet()
         :m_pData( new CachedRowSet_Data )
@@ -183,8 +183,8 @@ namespace frm
         }
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,9 +29,9 @@ namespace connectivity
 {
     namespace evoab
     {
-        //**************************************************************
+
         //************ Class: ResultSetMetaData
-        //**************************************************************
+
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OEvoabResultSetMetaData : public  OResultSetMetaData_BASE

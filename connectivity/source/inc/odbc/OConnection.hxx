@@ -51,9 +51,9 @@ namespace connectivity
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             ::std::map< SQLHANDLE,OConnection*> m_aConnections; // holds all connectionas which are need for serveral statements
             TTypeInfoVector                     m_aTypeInfo;    //  vector containing an entry
                                                         //  for each row returned by

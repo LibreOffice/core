@@ -98,9 +98,9 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindowListBox::getSelectedFieldDe
     }
     return aArgs;
 }
-//==================================================================
+
 // class OAddFieldWindowListBox
-//==================================================================
+
 
 OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
     :SvTreeListBox( _pParent, WB_TABSTOP|WB_BORDER|WB_SORT )
@@ -142,9 +142,9 @@ void OAddFieldWindowListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_r
     EndSelection();
     pDataContainer->StartDrag( this, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
-//========================================================================
+
 // class OAddFieldWindow
-//========================================================================
+
 
 OAddFieldWindow::OAddFieldWindow(Window* pParent
                                  ,const uno::Reference< beans::XPropertySet >& _xRowSet
@@ -545,8 +545,8 @@ IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
     return 0L;
 }
 
-// =============================================================================
+
 } // namespace rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

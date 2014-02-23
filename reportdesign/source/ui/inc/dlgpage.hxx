@@ -39,9 +39,9 @@ public:
 
     ORptPageDialog(Window* pParent, const SfxItemSet* pAttr, const OString &rDialog);
 };
-// =============================================================================
+
 } // namespace rptui
-// =============================================================================
+
 #endif // RPTUI_DLGPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

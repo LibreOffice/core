@@ -55,7 +55,7 @@ SmResId::SmResId( sal_uInt16 nId )
 {
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SmLocalizedSymbolData::SmLocalizedSymbolData() :
     Resource( SmResId(RID_LOCALIZED_NAMES) ),
@@ -156,7 +156,7 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
     return aRes;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 {

@@ -157,7 +157,7 @@ ExtraData* Dll::GetExtraData ()
 
 //
 // basctl::ExtraData
-// ===================
+
 //
 
 ExtraData::ExtraData () :

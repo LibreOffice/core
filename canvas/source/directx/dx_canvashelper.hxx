@@ -84,7 +84,7 @@ namespace dxcanvas
 
 
         // CanvasHelper functionality
-        // ==========================
+
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)

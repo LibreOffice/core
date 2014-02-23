@@ -207,9 +207,9 @@ static const OUString& getStepPropertyName( )
     return s_sStepProperty;
 }
 
-//  ----------------------------------------------------
+
 //  class ControlModelContainerBase
-//  ----------------------------------------------------
+
 ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponentContext >& rxContext )
     :ControlModelContainer_IBase( rxContext )
     ,maContainerListeners( *this )
@@ -265,7 +265,7 @@ Any ControlModelContainerBase::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 void SAL_CALL ControlModelContainerBase::dispose(  ) throw(RuntimeException)
 {
-    // ====================================================================
+
     // tell our listeners
     {
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -277,11 +277,11 @@ void SAL_CALL ControlModelContainerBase::dispose(  ) throw(RuntimeException)
         maChangeListeners.disposeAndClear( aDisposeEvent );
     }
 
-    // ====================================================================
+
     // call the base class
     UnoControlModel::dispose();
 
-    // ====================================================================
+
     // dispose our child models
     // for this, collect the models (we collect them from maModels, and this is modified when disposing children)
     ::std::vector< Reference< XControlModel > > aChildModels( maModels.size() );
@@ -838,7 +838,7 @@ namespace
         eExpandingGroup
     };
 
-    // ........................................................................
+
     static sal_Int32 lcl_getDialogStep( const Reference< XControlModel >& _rxModel )
     {
         sal_Int32 nStep = 0;
@@ -1128,9 +1128,9 @@ void ControlModelContainerBase::stopControlListening( const Reference< XControlM
         xModelProps->removePropertyChangeListener( getTabIndexPropertyName(), this );
 }
 
-// ============================================================================
+
 // = class ResourceListener
-// ============================================================================
+
 
 ResourceListener::ResourceListener(
     const Reference< util::XModifyListener >& rListener ) :
@@ -1351,10 +1351,10 @@ throw ( RuntimeException )
     }
 }
 
-//===============================================================
-//  ----------------------------------------------------
+
+
 //  class DialogContainerControl
-//  ----------------------------------------------------
+
 ControlContainerBase::ControlContainerBase( const Reference< XComponentContext >& rxContext )
     :ContainerControl_IBase()
     ,m_xContext(rxContext)

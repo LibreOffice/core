@@ -32,7 +32,7 @@
 #include <svx/sdr/properties/pageproperties.hxx>
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrPageObj::CreateObjectSpecificProperties()
@@ -40,7 +40,7 @@ sdr::properties::BaseProperties* SdrPageObj::CreateObjectSpecificProperties()
     return new sdr::properties::PageProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrPageObj::CreateObjectSpecificViewContact()
@@ -48,7 +48,7 @@ sdr::contact::ViewContact* SdrPageObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfPageObj(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // this method is called form the destructor of the referenced page.
 // do all necessary action to forget the page. It is not necessary to call
 // RemovePageUser(), that is done form the destructor.
@@ -64,7 +64,7 @@ void SdrPageObj::PageInDestruction(const SdrPage& rPage)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrPageObj,SdrObject);
 

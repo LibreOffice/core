@@ -44,7 +44,7 @@ typedef boost::shared_ptr<TestView> TestViewSharedPtr;
 TestViewSharedPtr createTestView();
 
 
-///////////////////////////////////////////////////////////////////////////////////////
+
 
 
 class TestShape : public slideshow::internal::AnimatableShape

@@ -28,9 +28,9 @@
 
 #include <vcl/outdev.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXFont
-//  ----------------------------------------------------
+
 VCLXFont::VCLXFont()
 {
     mpFontMetric = NULL;

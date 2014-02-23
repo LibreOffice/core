@@ -78,7 +78,7 @@ namespace slideshow
             void reset( const ::boost::shared_ptr< GDIMetaFile >&   rMtf );
 
             // Shape subsetting methods
-            // ========================================================
+
 
             /// Return subset node for this shape
             DocTreeNode                 getSubsetNode       () const;
@@ -109,7 +109,7 @@ namespace slideshow
 
 
             // Doc tree methods
-            // ========================================================
+
 
             /// Return overall number of nodes for given type
             sal_Int32   getNumberOfTreeNodes        ( DocTreeNode::NodeType eNodeType ) const;
@@ -128,7 +128,7 @@ namespace slideshow
                                                       DocTreeNode::NodeType eNodeType ) const;
 
             // Helper
-            // ========================================================
+
 
             /** Return a vector of currently active subsets.
 

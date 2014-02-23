@@ -94,7 +94,7 @@ public:
     void                    AddEvent( const OUString&, const OUString&, sal_uInt16 );
 };
 
-// -----------------------------------------------------------------------
+
 
 #define PROP_EVENT_TYPE     "EventType"
 #define PROP_LIBRARY        "Library"

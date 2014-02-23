@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
+
 void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
@@ -131,7 +131,7 @@ void callVirtualMethod(
     }
 }
 
-//==================================================================================================
+
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,

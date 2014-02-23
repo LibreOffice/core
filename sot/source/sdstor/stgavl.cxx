@@ -380,7 +380,7 @@ bool StgAvlNode::Move( StgAvlNode** pRoot1, StgAvlNode** pRoot2, StgAvlNode* pMo
         return false;
 }
 
-////////////////////////// class AvlIterator /////////////////////////
+////////////////////////// class AvlIterator
 
 // The iterator walks through a tree one entry by one.
 

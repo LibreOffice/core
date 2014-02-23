@@ -36,16 +36,16 @@
 #define LID_RECORD_LABEL    1000
 #define LID_RECORD_FILLER   1001
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using ::com::sun::star::uno::makeAny;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
-    //=====================================================================
-    //.....................................................................
+
+
     namespace
     {
         static bool isArtificialItem( sal_Int16 _nFeatureId )
@@ -95,9 +95,9 @@ namespace frm
         }
     }
 
-    //=====================================================================
+
     //= ImplNavToolBar
-    //=====================================================================
+
     class ImplNavToolBar : public ToolBox
     {
     protected:
@@ -135,9 +135,9 @@ namespace frm
         }
     }
 
-    //=====================================================================
+
     //= NavigationToolBar
-    //=====================================================================
+
 
     NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
             const PCommandDescriptionProvider& _pDescriptionProvider )
@@ -651,9 +651,9 @@ namespace frm
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
     }
 
-    //=====================================================================
+
     //= RecordPositionInput
-    //=====================================================================
+
 
     RecordPositionInput::RecordPositionInput( Window* _pParent )
         :NumericField( _pParent, WB_BORDER | WB_VCENTER )
@@ -710,8 +710,8 @@ namespace frm
     }
 
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,7 @@
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <cppuhelper/compbase2.hxx>
 
-// ------------------------------------------------------------------------
+
 
 #define X11_CLIPBOARD_IMPLEMENTATION_NAME "com.sun.star.datatransfer.X11ClipboardSupport"
 
@@ -118,13 +118,13 @@ namespace x11 {
         virtual com::sun::star::uno::Reference< XInterface > getReference() throw();
     };
 
-// ------------------------------------------------------------------------
+
 
     Sequence< OUString > SAL_CALL X11Clipboard_getSupportedServiceNames();
     com::sun::star::uno::Reference< XInterface > SAL_CALL X11Clipboard_createInstance(
         const com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
-// ------------------------------------------------------------------------
+
 
 } // namepspace
 

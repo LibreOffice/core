@@ -295,9 +295,9 @@ void SAL_CALL CWinFileOpenImpl::appendFilterGroup(const OUString& sGroupTitle, c
     }
 }
 
-//=================================================================================================================
+
 // XExtendedFilePicker
-//=================================================================================================================
+
 
 // #i90917: Due to a different feature set for the system-dependent file pickers
 // it's possible that generic code (e.g. sfx2) provides control ids

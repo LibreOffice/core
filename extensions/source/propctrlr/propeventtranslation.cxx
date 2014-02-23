@@ -22,10 +22,10 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::uno::RuntimeException;
@@ -36,9 +36,9 @@ namespace pcr
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::NullPointerException;
 
-    //====================================================================
+
     //= PropertyEventTranslation
-    //====================================================================
+
 
     PropertyEventTranslation::PropertyEventTranslation( const Reference< XPropertyChangeListener >& _rxDelegator,
         const Reference< XInterface >& _rxTranslatedEventSource )
@@ -84,8 +84,8 @@ namespace pcr
         m_xTranslatedEventSource.clear();
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,7 @@ using namespace ::rtl;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-//==================================================================================================
+
 static inline OUString toUNOname( OUString const & rRTTIname ) throw ()
 {
     OUStringBuffer aRet( 64 );
@@ -62,7 +62,7 @@ static inline OUString toUNOname( OUString const & rRTTIname ) throw ()
     }
     return aRet.makeStringAndClear();
 }
-//==================================================================================================
+
 static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
 {
     OUStringBuffer aRet( 64 );
@@ -80,14 +80,14 @@ static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
 }
 
 
-//##################################################################################################
+
 //#### RTTI simulation #############################################################################
-//##################################################################################################
+
 
 
 typedef boost::unordered_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
 
-//==================================================================================================
+
 class RTTInfos
 {
     Mutex               _aMutex;
@@ -101,7 +101,7 @@ public:
     ~RTTInfos();
 };
 
-//==================================================================================================
+
 class __type_info
 {
     friend type_info * RTTInfos::getRTTI( OUString const & ) throw ();
@@ -174,12 +174,12 @@ RTTInfos::~RTTInfos() throw ()
 }
 
 
-//##################################################################################################
+
 //#### Exception raising ###########################################################################
-//##################################################################################################
 
 
-//==================================================================================================
+
+
 struct ObjectFunction
 {
     char somecode[12];
@@ -236,14 +236,14 @@ ObjectFunction::~ObjectFunction() throw ()
     ::typelib_typedescription_release( _pTypeDescr );
 }
 
-//==================================================================================================
+
 static void * __cdecl __copyConstruct( void * pExcThis, void * pSource, ObjectFunction * pThis )
     throw ()
 {
     ::uno_copyData( pExcThis, pSource, pThis->_pTypeDescr, cpp_acquire );
     return pExcThis;
 }
-//==================================================================================================
+
 static void * __cdecl __destruct( void * pExcThis, ObjectFunction * pThis )
     throw ()
 {
@@ -253,7 +253,7 @@ static void * __cdecl __destruct( void * pExcThis, ObjectFunction * pThis )
 
 // these are non virtual object methods; there is no this ptr on stack => ecx supplies _this_ ptr
 
-//==================================================================================================
+
 static __declspec(naked) void copyConstruct() throw ()
 {
     __asm
@@ -266,7 +266,7 @@ static __declspec(naked) void copyConstruct() throw ()
         ret  4
     }
 }
-//==================================================================================================
+
 static __declspec(naked) void destruct() throw ()
 {
     __asm
@@ -279,7 +279,7 @@ static __declspec(naked) void destruct() throw ()
     }
 }
 
-//==================================================================================================
+
 struct ExceptionType
 {
     sal_Int32           _n0;
@@ -300,7 +300,7 @@ struct ExceptionType
     inline ~ExceptionType() throw ()
         { delete _pCopyCtor; }
 };
-//==================================================================================================
+
 struct RaiseInfo
 {
     sal_Int32           _n0;
@@ -359,7 +359,7 @@ RaiseInfo::~RaiseInfo() throw ()
     delete _pDtor;
 }
 
-//==================================================================================================
+
 class ExceptionInfos
 {
     Mutex           _aMutex;
@@ -435,12 +435,12 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
 }
 
 
-//##################################################################################################
+
 //#### exported ####################################################################################
-//##################################################################################################
 
 
-//##################################################################################################
+
+
 type_info * msci_getRTTI( OUString const & rUNOname )
 {
     static RTTInfos * s_pRTTIs = 0;
@@ -460,7 +460,7 @@ type_info * msci_getRTTI( OUString const & rUNOname )
     return s_pRTTIs->getRTTI( rUNOname );
 }
 
-//##################################################################################################
+
 void msci_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
     // no ctor/dtor in here: this leads to dtors called twice upon RaiseException()!
@@ -491,7 +491,7 @@ void msci_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 3, arFilterArgs );
 }
 
-//##############################################################################
+
 int msci_filterCppException(
     EXCEPTION_POINTERS * pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {

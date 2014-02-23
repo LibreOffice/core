@@ -24,9 +24,9 @@
 #include <comphelper/accessibletexthelper.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleTextComponent
-//  ----------------------------------------------------
+
 
 typedef ::cppu::ImplHelper1 <
     ::com::sun::star::accessibility::XAccessibleText >  VCLXAccessibleTextComponent_BASE;

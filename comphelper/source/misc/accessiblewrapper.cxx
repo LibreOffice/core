@@ -29,14 +29,14 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-//.............................................................................
+
 namespace comphelper
 {
-//.............................................................................
 
-    //=========================================================================
+
+
     //= OWrappedAccessibleChildrenManager
-    //=========================================================================
+
 
     struct RemoveEventListener
             : public ::std::unary_function< AccessibleMap::value_type, void >
@@ -295,9 +295,9 @@ namespace comphelper
         }
     }
 
-    //=========================================================================
+
     //= OAccessibleWrapper (implementation)
-    //=========================================================================
+
 
     OAccessibleWrapper::OAccessibleWrapper( const Reference< XComponentContext >& _rxContext,
             const Reference< XAccessible >& _rxInnerAccessible, const Reference< XAccessible >& _rxParentAccessible )
@@ -365,9 +365,9 @@ namespace comphelper
         return xContext;
     }
 
-    //=========================================================================
+
     //= OAccessibleWrapper (implementation)
-    //=========================================================================
+
 
     OAccessibleContextWrapperHelper::OAccessibleContextWrapperHelper(
                 const Reference< XComponentContext >& _rxContext,
@@ -517,9 +517,9 @@ namespace comphelper
         OComponentProxyAggregationHelper::disposing( _rEvent );
     }
 
-    //====================================================================
+
     //= OAccessibleContextWrapper
-    //====================================================================
+
 
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleContextWrapper, OAccessibleContextWrapper_CBase, OAccessibleContextWrapperHelper )
 
@@ -666,8 +666,8 @@ namespace comphelper
         WeakComponentImplHelperBase::dispose();
     }
 
-//.............................................................................
+
 }   // namespace accessibility
-//.............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

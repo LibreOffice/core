@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_SVXENUM_HXX
 #define INCLUDED_EDITENG_SVXENUM_HXX
 
-// -----------------------------------------------------------------------
+
 
 enum SvxCaseMap
 {

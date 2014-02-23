@@ -70,7 +70,7 @@ FILE * mslLog()
 #endif
 }
 #endif
-// =======================================================================
+
 
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
 {
@@ -185,7 +185,7 @@ bool IsDiacritic( sal_UCS4 nChar )
     return false;
 }
 
-// =======================================================================
+
 
 int GetVerticalFlags( sal_UCS4 nChar )
 {
@@ -347,7 +347,7 @@ inline bool IsControlChar( sal_UCS4 cChar )
     return false;
 }
 
-// =======================================================================
+
 
 bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
 {
@@ -510,7 +510,7 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
     return true;
 }
 
-// =======================================================================
+
 
 ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
     int nMinCharPos, int nEndCharPos, int nFlags, const LanguageTag& rLanguageTag )
@@ -674,7 +674,7 @@ bool ImplLayoutArgs::GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL )
     return bValid;
 }
 
-// =======================================================================
+
 
 SalLayout::SalLayout()
 :   mnMinCharPos( -1 ),
@@ -872,7 +872,7 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
     return bRet;
 }
 
-// =======================================================================
+
 
 GenericSalLayout::GenericSalLayout()
 {}
@@ -1557,7 +1557,7 @@ void GenericSalLayout::SortGlyphItems()
     }
 }
 
-// =======================================================================
+
 
 MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout, const PhysicalFontFace* pBaseFont )
 :   SalLayout()

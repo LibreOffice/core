@@ -35,9 +35,9 @@ class ListBox;
 namespace avmedia
 {
 
-// ---------------------
+
 // - MediaControlStyle -
-// ---------------------
+
 
 enum MediaControlStyle
 {
@@ -45,9 +45,9 @@ enum MediaControlStyle
     MEDIACONTROLSTYLE_MULTILINE = 1
 };
 
-// ----------------
+
 // - MediaControl -
-// ---------------
+
 
 class MediaItem;
 

@@ -33,7 +33,7 @@
 
 namespace svtools { class AsynchronLink; }
 
-//====================================================================
+
 
 DBG_NAMEEX(SfxObjectShell)
 

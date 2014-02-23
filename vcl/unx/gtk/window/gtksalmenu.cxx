@@ -780,7 +780,7 @@ void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
 {
 }
 
-// =======================================================================
+
 
 /*
  * GtkSalMenuItem

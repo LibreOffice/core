@@ -22,18 +22,18 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
 
-    //====================================================================
+
     //= UnoURL
-    //====================================================================
+
     UnoURL::UnoURL( const OUString& _rCompleteURL, const Reference< XMultiServiceFactory >& _rxORB )
     {
         m_aURL.Complete = _rCompleteURL;
@@ -56,8 +56,8 @@ namespace pcr
         }
     }
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

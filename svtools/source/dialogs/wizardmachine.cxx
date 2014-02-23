@@ -25,14 +25,14 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= WizardPageImplData
-    //=====================================================================
+
     struct WizardPageImplData
     {
         WizardPageImplData()
@@ -40,9 +40,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= OWizardPage
-    //=====================================================================
+
     OWizardPage::OWizardPage( Window* _pParent, const ResId& _rResId )
         :TabPage( _pParent, _rResId )
         ,m_pImpl( new WizardPageImplData )
@@ -94,9 +94,9 @@ namespace svt
         return sal_True;
     }
 
-    //=====================================================================
+
     //= WizardMachineImplData
-    //=====================================================================
+
     struct WizardMachineImplData : public WizardTypes
     {
         OUString                        sTitleBase;         // the base for the title
@@ -118,9 +118,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= OWizardMachine
-    //=====================================================================
+
 
     OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags )
         :WizardDialog( _pParent, _rRes )
@@ -707,8 +707,8 @@ namespace svt
        m_pImpl->m_bTravelingSuspended = false;
     }
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

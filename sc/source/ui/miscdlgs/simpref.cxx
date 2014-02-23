@@ -28,7 +28,7 @@
 #include "simpref.hxx"
 #include "scmod.hxx"
 
-//============================================================================
+
 
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
@@ -195,7 +195,7 @@ void ScSimpleRefDlg::RefInputDone( bool bForced)
 }
 
 // Handler:
-// ========
+
 IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
 {
     bAutoReOpen=false;

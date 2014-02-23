@@ -25,10 +25,10 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::util;
@@ -40,9 +40,9 @@ namespace frm
     ::osl::Mutex                            OLimitedFormats::s_aMutex;
     Reference< XNumberFormatsSupplier >     OLimitedFormats::s_xStandardFormats;
 
-    //=====================================================================
+
     //=
-    //=====================================================================
+
 
     enum LocaleType
     {
@@ -127,9 +127,9 @@ namespace frm
         return NULL;
     }
 
-    //=====================================================================
+
     //= OLimitedFormats
-    //=====================================================================
+
 
     OLimitedFormats::OLimitedFormats(const Reference< XComponentContext >& _rxContext, const sal_Int16 _nClassId)
         :m_nFormatEnumPropertyHandle(-1)
@@ -377,8 +377,8 @@ namespace frm
         }
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

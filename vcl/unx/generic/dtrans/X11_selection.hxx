@@ -49,7 +49,7 @@ namespace x11 {
 
     class PixmapHolder; // in bmp.hxx
 
-// ------------------------------------------------------------------------
+
     rtl_TextEncoding getTextPlainEncoding( const OUString& rMimeType );
 
     class SelectionAdaptor
@@ -507,7 +507,7 @@ namespace x11 {
                 throw( ::com::sun::star::uno::RuntimeException );
     };
 
-// ------------------------------------------------------------------------
+
 
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_createInstance(
@@ -517,7 +517,7 @@ namespace x11 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
-// ------------------------------------------------------------------------
+
 
 }
 

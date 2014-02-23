@@ -24,14 +24,14 @@
 #include "addresssettings.hxx"
 #include <vcl/edit.hxx>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= TypeSelectionPage
-    //=====================================================================
+
     class TypeSelectionPage : public AddressBookSourcePage
     {
     protected:
@@ -90,9 +90,9 @@ namespace abp
         void                selectType( AddressSourceType _eType );
     };
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 #endif // EXTENSIONS_ABP_TYPESELECTIONPAGE_HXX
 

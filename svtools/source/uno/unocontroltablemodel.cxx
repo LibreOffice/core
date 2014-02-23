@@ -35,10 +35,10 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-// .....................................................................................................................
+
 namespace svt { namespace table
 {
-// .....................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
@@ -63,9 +63,9 @@ namespace svt { namespace table
     using ::com::sun::star::awt::grid::XSortableGridData;
     using ::com::sun::star::beans::Pair;
 
-    //==================================================================================================================
+
     //= UnoControlTableModel_Impl
-    //==================================================================================================================
+
     typedef ::std::vector< PTableModelListener >    ModellListeners;
     typedef ::std::vector< PColumnModel >           ColumnModels;
     struct UnoControlTableModel_Impl
@@ -123,9 +123,9 @@ namespace svt { namespace table
         }
     };
 
-    //==================================================================================================================
+
     //= UnoControlTableModel
-    //==================================================================================================================
+
 #ifdef DBG_UTIL
     const char* UnoControlTableModel_checkInvariants( const void* _pInstance )
     {
@@ -959,7 +959,7 @@ namespace svt { namespace table
         }
     }
 
-// .....................................................................................................................
+
 } } // svt::table
-// .....................................................................................................................
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

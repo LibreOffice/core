@@ -23,10 +23,10 @@
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::uno;
@@ -36,9 +36,9 @@ namespace connectivity
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //================================================================
+
     //= ODataAccessStaticTools
-    //================================================================
+
 
     ODataAccessStaticTools::ODataAccessStaticTools()
     {
@@ -196,8 +196,8 @@ namespace connectivity
         return ::dbtools::isEmbeddedInDatabase( _rxComponent, _rxActualConnection );
     }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

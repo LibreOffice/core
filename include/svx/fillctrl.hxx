@@ -68,7 +68,7 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
-//========================================================================
+
 
 class FillControl : public Window
 {

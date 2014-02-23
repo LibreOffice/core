@@ -62,9 +62,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::report;
 using namespace ::com::sun::star::xml::sax;
 
-// -------------
+
 // - ORptFilter -
-// -------------
+
 class ORptFilter : public SvXMLImport
 {
 public:
@@ -231,9 +231,9 @@ public:
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
 
-// -----------------------------------------------------------------------------
+
 } // rptxml
-// -----------------------------------------------------------------------------
+
 #endif // RPT_XMLFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

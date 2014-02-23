@@ -303,7 +303,7 @@ public:
     void SetDblClickHdl(const Link& rLink) { aSymbolWindow.SetDblClickHdl(rLink); }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 class SmShowSymbol : public Control
 {
@@ -325,7 +325,7 @@ public:
     void    SetDblClickHdl(const Link &rLink) { aDblClickHdlLink = rLink; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 class SmSymDefineDialog;
 
@@ -368,7 +368,7 @@ public:
     sal_uInt16  GetSelectedSymbol() const   { return m_pSymbolSetDisplay->GetSelectSymbol(); }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 class SmShowChar : public Control
 {
@@ -384,7 +384,7 @@ public:
     void    SetSymbol( sal_UCS4 cChar, const Font &rFont );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 class SmSymDefineDialog : public ModalDialog
 {

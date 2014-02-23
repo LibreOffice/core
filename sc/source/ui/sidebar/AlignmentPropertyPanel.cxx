@@ -44,12 +44,12 @@ const char UNO_ALIGNRIGHT[]            = ".uno:AlignRight";
 const char UNO_ALIGNTOP[]              = ".uno:AlignTop";
 const char UNO_ALIGNVCENTER[]          = ".uno:AlignVCenter";
 
-//////////////////////////////////////////////////////////////////////////////
+
 // namespace open
 
 namespace sc { namespace sidebar {
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 AlignmentPropertyPanel::AlignmentPropertyPanel(
     Window* pParent,
@@ -87,13 +87,13 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     mpFtRotate->SetBackground(Wallpaper());
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 AlignmentPropertyPanel::~AlignmentPropertyPanel()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::Initialize()
 {
@@ -146,7 +146,7 @@ void AlignmentPropertyPanel::Initialize()
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 {
@@ -168,7 +168,7 @@ IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
 {
@@ -181,7 +181,7 @@ IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
 {
@@ -192,7 +192,7 @@ IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
 {
@@ -232,7 +232,7 @@ IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, TbxVerAlignSelectHdl, ToolBox*, pToolBox)
 {
@@ -265,7 +265,7 @@ IMPL_LINK(AlignmentPropertyPanel, TbxVerAlignSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
 {
@@ -277,7 +277,7 @@ IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
     return( 0L );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)
 {
@@ -296,7 +296,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
 {
@@ -306,7 +306,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
     Window* pParent,
@@ -326,7 +326,7 @@ AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
         pBindings);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::DataChanged(
     const DataChangedEvent& rEvent)
@@ -334,7 +334,7 @@ void AlignmentPropertyPanel::DataChanged(
     (void)rEvent;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::HandleContextChange(
     const ::sfx2::sidebar::EnumContext aContext)
@@ -352,7 +352,7 @@ void AlignmentPropertyPanel::HandleContextChange(
     // todo
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -520,14 +520,14 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SfxBindings* AlignmentPropertyPanel::GetBindings()
 {
     return mpBindings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
 {
@@ -537,7 +537,7 @@ void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
         dTmp = 359;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::UpdateHorAlign()
 {
@@ -589,7 +589,7 @@ void AlignmentPropertyPanel::UpdateHorAlign()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::UpdateVerAlign()
 {
@@ -610,12 +610,12 @@ void AlignmentPropertyPanel::UpdateVerAlign()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // namespace close
 
 }} // end of namespace ::sc::sidebar
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -40,7 +40,7 @@ const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
 
 } // namespace
 
-// ============================================================================
+
 
 OUString BinaryInputStream::readNulUnicodeArray()
 {
@@ -121,7 +121,7 @@ void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nB
     }
 }
 
-// ============================================================================
+
 
 BinaryXInputStream::BinaryXInputStream( const Reference< XInputStream >& rxInStrm, bool bAutoClose ) :
     BinaryStreamBase( Reference< XSeekable >( rxInStrm, UNO_QUERY ).is() ),
@@ -202,7 +202,7 @@ void BinaryXInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
     }
 }
 
-// ============================================================================
+
 
 SequenceInputStream::SequenceInputStream( const StreamDataSequence& rData ) :
     BinaryStreamBase( true ),
@@ -249,7 +249,7 @@ void SequenceInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
     }
 }
 
-// ============================================================================
+
 
 RelativeInputStream::RelativeInputStream( BinaryInputStream& rInStrm, sal_Int64 nSize ) :
     BinaryStreamBase( rInStrm.isSeekable() ),
@@ -325,7 +325,7 @@ void RelativeInputStream::skip( sal_Int32 nBytes, size_t nAtomSize )
     }
 }
 
-// ============================================================================
+
 
 } // namespace oox
 

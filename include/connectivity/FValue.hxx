@@ -465,7 +465,7 @@ namespace connectivity
     };
     typedef ::rtl::Reference<ORowSetValueDecorator> ORowSetValueDecoratorRef;
 
-    // -------------------------------------------------------------------------
+
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
     struct OOO_DLLPUBLIC_DBTOOLS TSetBound : ::std::unary_function<ORowSetValue,void>
     {
@@ -475,7 +475,7 @@ namespace connectivity
 
     };
 
-    // -------------------------------------------------------------------------
+
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
     struct OOO_DLLPUBLIC_DBTOOLS TSetRefBound : ::std::unary_function<ORowSetValueDecoratorRef,void>
     {
@@ -485,9 +485,9 @@ namespace connectivity
 
     };
 
-    // ----------------------------------------------------------------------------
+
     // Vector for file based rows
-    // ----------------------------------------------------------------------------
+
     template< class VectorVal > class  ODeleteVector : public connectivity::ORowVector< VectorVal >
     {
         bool    m_bDeleted;

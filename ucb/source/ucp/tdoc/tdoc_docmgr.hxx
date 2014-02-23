@@ -45,7 +45,7 @@ namespace tdoc_ucp {
         ~OfficeDocumentsEventListener() {}
     };
 
-    //=======================================================================
+
 
     struct StorageInfo
     {
@@ -66,7 +66,7 @@ namespace tdoc_ucp {
         : aTitle( rTitle ), xStorage( rxStorage ), xModel( rxModel ) {}
     };
 
-    //=======================================================================
+
 
     struct ltref
     {
@@ -79,7 +79,7 @@ namespace tdoc_ucp {
 
     typedef std::map< OUString, StorageInfo, ltref > DocumentList;
 
-    //=======================================================================
+
 
     class OfficeDocumentsManager :
         public cppu::WeakImplHelper1< com::sun::star::document::XEventListener >

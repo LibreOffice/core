@@ -3891,7 +3891,7 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 }
 
 
-//========================================================================
+
 
 // Implementation of an EventAttacher-drawn AllListener, which
 // solely transmits several events to an general AllListener
@@ -3915,18 +3915,18 @@ public:
 };
 
 
-//========================================================================
+
 BasicAllListener_Impl::BasicAllListener_Impl(const OUString& aPrefixName_)
     : aPrefixName( aPrefixName_ )
 {
 }
 
-//========================================================================
+
 BasicAllListener_Impl::~BasicAllListener_Impl()
 {
 }
 
-//========================================================================
+
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
 {
@@ -3991,7 +3991,7 @@ Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( 
     return aRetAny;
 }
 
-//========================================================================
+
 // Methods of XEventListener
 void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeException )
 {
@@ -4002,10 +4002,10 @@ void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeExcep
 
 
 
-//*************************************************************************
+
 //  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener (also in project eventattacher!)
-//*************************************************************************
+
 class InvocationToAllListenerMapper : public WeakImplHelper1< XInvocation >
 {
 public:
@@ -4063,14 +4063,14 @@ InvocationToAllListenerMapper::InvocationToAllListenerMapper
 {
 }
 
-//*************************************************************************
+
 Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection(void)
     throw( RuntimeException )
 {
     return Reference< XIntrospectionAccess >();
 }
 
-//*************************************************************************
+
 Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
     Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
         throw( IllegalArgumentException, CannotConvertException,
@@ -4124,7 +4124,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
     return aRet;
 }
 
-//*************************************************************************
+
 void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& PropertyName, const Any& Value)
     throw( UnknownPropertyException, CannotConvertException,
            InvocationTargetException, RuntimeException )
@@ -4133,7 +4133,7 @@ void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& PropertyNa
     (void)Value;
 }
 
-//*************************************************************************
+
 Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& PropertyName)
     throw( UnknownPropertyException, RuntimeException )
 {
@@ -4142,7 +4142,7 @@ Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& PropertyNam
     return Any();
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
     throw( RuntimeException )
 {
@@ -4150,7 +4150,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
     return xMethod.is();
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
     throw( RuntimeException )
 {
@@ -4158,7 +4158,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
     return xField.is();
 }
 
-//========================================================================
+
 // create Uno-Service
 // 1. Parameter == Prefix-Name of the macro
 // 2. Parameter == fully qualified name of the listener
@@ -4221,7 +4221,7 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     refVar->PutObject( p->xSbxObj );
 }
 
-//========================================================================
+
 // Represents the DefaultContext property of the ProcessServiceManager
 // in the Basic runtime system.
 void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -4237,7 +4237,7 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
     refVar->PutObject( (SbUnoObject*)xUnoObj );
 }
 
-//========================================================================
+
 // Creates a Basic wrapper object for a strongly typed Uno value
 // 1. parameter: Uno type as full qualified type name, e.g. "byte[]"
 void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -4324,7 +4324,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     refVar->PutObject( xUnoAnyObject );
 }
 
-//==========================================================================
+
 
 namespace {
 class OMutexBasis

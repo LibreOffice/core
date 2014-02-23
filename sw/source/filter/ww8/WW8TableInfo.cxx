@@ -203,19 +203,19 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
         // The difference is that this kind of draws vertical lines,
         // so that if the rows look like this:
         //
-        //  ------------------------
+
         //  |                   |  |
-        //  ------------------------
+
         //  |   |                  |
-        //  ------------------------
+
         //  |       |              |
-        //  ------------------------
+
         //
         // then the actual column widths will be broken down like this:
         //
-        //  ------------------------
+
         //  |   |   |           |  |
-        //  ------------------------
+
         //
         // See the example at
         // http://officeopenxml.com/WPtableGrid.php

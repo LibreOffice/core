@@ -77,7 +77,7 @@ namespace slideshow
             ViewLayerSharedPtr getViewLayer() const;
 
             // animation methods
-            //------------------------------------------------------------------
+
 
             /** Notify the ViewShape that an animation starts now
 
@@ -111,7 +111,7 @@ namespace slideshow
             void setMediaTime(double fTime);
 
             // render methods
-            //------------------------------------------------------------------
+
 
             /** Render the ViewShape
 

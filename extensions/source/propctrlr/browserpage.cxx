@@ -19,19 +19,19 @@
 
 #include "browserpage.hxx"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     #define LAYOUT_BORDER_LEFT      3
     #define LAYOUT_BORDER_TOP       3
     #define LAYOUT_BORDER_RIGHT     3
     #define LAYOUT_BORDER_BOTTOM    3
 
-    //==================================================================
+
     // class OBrowserPage
-    //==================================================================
+
 
     OBrowserPage::OBrowserPage(Window* pParent,WinBits nWinStyle)
             :TabPage(pParent,nWinStyle)
@@ -88,9 +88,9 @@ namespace pcr
         return m_aListBox.GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

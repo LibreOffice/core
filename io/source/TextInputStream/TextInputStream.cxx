@@ -48,7 +48,7 @@ using namespace ::com::sun::star::registry;
 
 namespace io_TextInputStream
 {
-//===========================================================================
+
 // Implementation XTextInputStream
 
 typedef WeakImplHelper2< XTextInputStream2, XServiceInfo > TextInputStreamHelper;
@@ -145,7 +145,7 @@ void OTextInputStream::implResizeBuffer( void )
 }
 
 
-//===========================================================================
+
 // XTextInputStream
 
 OUString OTextInputStream::readLine(  )
@@ -379,7 +379,7 @@ void OTextInputStream::setEncoding( const OUString& Encoding )
     mEncoding = Encoding;
 }
 
-//===========================================================================
+
 // XInputStream
 
 sal_Int32 OTextInputStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -413,7 +413,7 @@ void OTextInputStream::closeInput(  )
 }
 
 
-//===========================================================================
+
 // XActiveDataSink
 
 void OTextInputStream::setInputStream( const Reference< XInputStream >& aStream )

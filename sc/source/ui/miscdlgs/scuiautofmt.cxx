@@ -53,7 +53,7 @@
 #include "scresid.hxx"
 #include "document.hxx"
 
-//========================================================================
+
 // AutoFormat-Dialog:
 
 ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,

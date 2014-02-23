@@ -21,7 +21,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/msg.hxx>
 
-//====================================================================
+
 
 SfxSlotKind SfxSlot::GetKind() const
 {

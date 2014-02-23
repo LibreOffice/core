@@ -29,10 +29,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     namespace
     {
@@ -43,7 +43,7 @@ namespace svxform
         using ::com::sun::star::uno::UNO_QUERY;
         using ::com::sun::star::frame::XModule;
 
-        //....................................................................
+
         template< class TYPE >
         Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
         {
@@ -60,7 +60,7 @@ namespace svxform
             }
         }
 
-        //....................................................................
+
         Reference< XModel > getDocument( const Reference< XInterface >& _rxModelNode )
         {
             return getTypedModelNode< XModel >( _rxModelNode );
@@ -74,8 +74,8 @@ namespace svxform
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
 
-    //====================================================================
-    //====================================================================
+
+
     namespace
     {
 
@@ -105,9 +105,9 @@ namespace svxform
         }
     }
 
-    //====================================================================
+
     //= DocumentClassification
-    //====================================================================
+
 
     DocumentType DocumentClassification::classifyDocument( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
     {
@@ -193,8 +193,8 @@ namespace svxform
         return OUString();
     }
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

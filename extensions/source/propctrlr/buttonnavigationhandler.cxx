@@ -31,10 +31,10 @@ extern "C" void SAL_CALL createRegistryInfo_ButtonNavigationHandler()
     ::pcr::ButtonNavigationHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -43,9 +43,9 @@ namespace pcr
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= ButtonNavigationHandler
-    //====================================================================
+
     DBG_NAME( ButtonNavigationHandler )
 
     ButtonNavigationHandler::ButtonNavigationHandler( const Reference< XComponentContext >& _rxContext )
@@ -274,8 +274,8 @@ namespace pcr
         return aReturn;
     }
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

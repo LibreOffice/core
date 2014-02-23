@@ -25,9 +25,9 @@
 #include <impedit.hxx>
 #include <editeng/editview.hxx>
 
-//  ----------------------------------------------------------------------
+
 //  class EditSelFunctionSet
-//  ----------------------------------------------------------------------
+
 EditSelFunctionSet::EditSelFunctionSet()
 {
     pCurView = NULL;
@@ -79,9 +79,9 @@ void EditSelFunctionSet::DeselectAll()
         pCurView->pImpEditView->DeselectAll();
 }
 
-//  ----------------------------------------------------------------------
+
 //  class EditSelectionEngine
-//  ----------------------------------------------------------------------
+
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
 {
     SetSelectionMode( RANGE_SELECTION );

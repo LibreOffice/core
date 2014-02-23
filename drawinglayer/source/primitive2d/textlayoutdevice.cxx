@@ -28,7 +28,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <vcl/svapp.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // VDev RevDevice provider
 
 namespace
@@ -119,7 +119,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // access to one global ImpTimedRefDev incarnation in namespace drawinglayer::primitive
 
 namespace drawinglayer
@@ -358,7 +358,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helper methods for vcl font handling
 
 namespace drawinglayer

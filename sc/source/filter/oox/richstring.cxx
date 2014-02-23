@@ -30,13 +30,13 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -50,7 +50,7 @@ inline bool lclNeedsRichTextFormat( const Font* pFont )
 
 } // namespace
 
-// ============================================================================
+
 
 RichStringPortion::RichStringPortion( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -195,7 +195,7 @@ void FontPortionModelList::importPortions( SequenceInputStream& rStrm )
     }
 }
 
-// ============================================================================
+
 
 PhoneticDataModel::PhoneticDataModel() :
     mnFontId( -1 ),
@@ -244,7 +244,7 @@ void PhoneticSettings::importStringData( SequenceInputStream& rStrm )
     maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }
 
-// ============================================================================
+
 
 RichStringPhonetic::RichStringPhonetic( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -314,7 +314,7 @@ void PhoneticPortionModelList::importPortions( SequenceInputStream& rStrm )
     }
 }
 
-// ============================================================================
+
 
 RichString::RichString( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -500,7 +500,7 @@ void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionM
     }
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

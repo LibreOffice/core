@@ -83,9 +83,9 @@ Window* LibBoxControl::CreateItemWindow( Window *pParent )
     return new LibBox( pParent, m_xFrame );
 }
 
-//=============================================================================
+
 //= DocListenerBox
-//=============================================================================
+
 
 DocListenerBox::DocListenerBox( Window* pParent )
     :ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) )
@@ -143,9 +143,9 @@ void DocListenerBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/
     // not interested in
 }
 
-//=============================================================================
+
 //= basctl::LibBox
-//=============================================================================
+
 LibBox::LibBox( Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
     DocListenerBox( pParent ),
     m_xFrame( rFrame )

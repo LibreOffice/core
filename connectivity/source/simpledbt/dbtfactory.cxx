@@ -28,7 +28,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-//================================================================
+
 // the entry point for load-on-call usage of the DBTOOLS lib
 extern "C" void* SAL_CALL createDataAccessToolsFactory()
 {
@@ -37,14 +37,14 @@ extern "C" void* SAL_CALL createDataAccessToolsFactory()
     return pFactory;
 }
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //================================================================
+
+
     //= ODataAccessToolsFactory
-    //================================================================
+
 
     ODataAccessToolsFactory::ODataAccessToolsFactory()
     {
@@ -100,9 +100,9 @@ namespace connectivity
         return new OSimpleSQLParser(rxContext, _pContext);
     }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

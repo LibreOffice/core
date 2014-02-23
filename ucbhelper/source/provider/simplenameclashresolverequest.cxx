@@ -23,7 +23,7 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-//=========================================================================
+
 SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
                                     const OUString & rTargetFolderURL,
                                     const OUString & rClashingName,

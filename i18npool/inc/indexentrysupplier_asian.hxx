@@ -25,9 +25,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class IndexEntrySupplier_asian
-//  ----------------------------------------------------
+
 
 class IndexEntrySupplier_asian : public IndexEntrySupplier_Common {
 public:

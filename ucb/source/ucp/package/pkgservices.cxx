@@ -24,7 +24,7 @@
 
 using namespace com::sun::star;
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucppkg1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -34,9 +34,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucppkg1_component_getFactory(
         reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Create factory, if implementation name matches.
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( ::package_ucp::ContentProvider::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -44,7 +44,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucppkg1_component_getFactory(
         xFactory = ::package_ucp::ContentProvider::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( xFactory.is() )
     {

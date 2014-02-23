@@ -15,7 +15,7 @@
 
 namespace oox { namespace drawingml {
 
-// ---------------------------------------------------------------------
+
 
 struct EffectProperties;
 

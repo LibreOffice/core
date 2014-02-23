@@ -23,14 +23,14 @@
 #include "svtools/toolpanel/toolpanel.hxx"
 #include "svtools/toolpanel/refbase.hxx"
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DummyPanel
-    //====================================================================
+
     /// is a dummy implementation of the IToolPanel interface
     class DummyPanel    :public RefBase
                         ,public IToolPanel
@@ -56,9 +56,9 @@ namespace svt
         DECLARE_IREFERENCE()
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_DUMMYPANEL_HXX
 

@@ -284,9 +284,9 @@ private:
         bool        m_bAllowAAChecked : 1;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     ConfigItem( ROOTNODE_START  ),
     m_bOverlayBuffer( DEFAULT_OVERLAYBUFFER ),
@@ -547,18 +547,18 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtOptionsDrawinglayer_Impl::~SvtOptionsDrawinglayer_Impl()
 {
     if( IsModified() )
         Commit();
 }
 
-//*****************************************************************************************************************
+
 //  Commit
-//*****************************************************************************************************************
+
 void SvtOptionsDrawinglayer_Impl::Commit()
 {
     Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
@@ -690,41 +690,41 @@ void SvtOptionsDrawinglayer_Impl::Notify( const com::sun::star::uno::Sequence<OU
 {
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer() const
 {
     return m_bOverlayBuffer;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer() const
 {
     return m_bPaintBuffer;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Color SvtOptionsDrawinglayer_Impl::GetStripeColorA() const
 {
     return m_bStripeColorA;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Color SvtOptionsDrawinglayer_Impl::GetStripeColorB() const
 {
     return m_bStripeColorB;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_uInt16 SvtOptionsDrawinglayer_Impl::GetStripeLength() const
 {
     return m_nStripeLength;
@@ -897,9 +897,9 @@ sal_uInt16 SvtOptionsDrawinglayer_Impl::GetSelectionMaximumLuminancePercent() co
     return m_nSelectionMaximumLuminancePercent;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
 {
     // Build list of configuration key names.
@@ -950,17 +950,17 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtOptionsDrawinglayer_Impl* SvtOptionsDrawinglayer::m_pDataContainer = NULL;
 sal_Int32 SvtOptionsDrawinglayer::m_nRefCount = 0;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtOptionsDrawinglayer::SvtOptionsDrawinglayer()
 {
     // Global access, must be guarded (multithreading!).
@@ -974,9 +974,9 @@ SvtOptionsDrawinglayer::SvtOptionsDrawinglayer()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
 {
     // Global access, must be guarded (multithreading!)
@@ -992,45 +992,45 @@ SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsOverlayBuffer();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaintBuffer();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Color SvtOptionsDrawinglayer::GetStripeColorA() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetStripeColorA();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Color SvtOptionsDrawinglayer::GetStripeColorB() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetStripeColorB();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_uInt16 SvtOptionsDrawinglayer::GetStripeLength() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -1257,9 +1257,9 @@ namespace
     class theOptionsDrawinglayerMutex : public rtl::Static<osl::Mutex, theOptionsDrawinglayerMutex>{};
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Mutex& SvtOptionsDrawinglayer::GetOwnStaticMutex()
 {
     return theOptionsDrawinglayerMutex::get();

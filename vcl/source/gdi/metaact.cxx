@@ -30,7 +30,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <unotools/fontdefs.hxx>
 
-// ========================================================================
+
 
 inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
 {
@@ -75,14 +75,14 @@ inline void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScal
     }
 }
 
-// ========================================================================
+
 
 #define COMPAT( _def_rIStm ) VersionCompat aCompat( ( _def_rIStm ), STREAM_READ );
 #define WRITE_BASE_COMPAT( _def_rOStm, _def_nVer, _pWriteData )         \
     MetaAction::Write( ( _def_rOStm ), _pWriteData );                   \
     VersionCompat aCompat( ( _def_rOStm ), STREAM_WRITE, ( _def_nVer ) );
 
-// ========================================================================
+
 
 MetaAction::MetaAction() :
     mnRefCount( 1 ),
@@ -233,7 +233,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
     return pAction;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Pixel, META_PIXEL_ACTION )
 
@@ -302,7 +302,7 @@ void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
     maColor.Read( rIStm, true );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Point, META_POINT_ACTION )
 
@@ -367,7 +367,7 @@ void MetaPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Line, META_LINE_ACTION )
 
@@ -464,7 +464,7 @@ void MetaLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Rect, META_RECT_ACTION )
 
@@ -529,7 +529,7 @@ void MetaRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( RoundRect, META_ROUNDRECT_ACTION )
 
@@ -602,7 +602,7 @@ void MetaRoundRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect ).ReadUInt32( mnHorzRound ).ReadUInt32( mnVertRound );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Ellipse, META_ELLIPSE_ACTION )
 
@@ -667,7 +667,7 @@ void MetaEllipseAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Arc, META_ARC_ACTION )
 
@@ -745,7 +745,7 @@ void MetaArcAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maEndPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Pie, META_PIE_ACTION )
 
@@ -823,7 +823,7 @@ void MetaPieAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maEndPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Chord, META_CHORD_ACTION )
 
@@ -901,7 +901,7 @@ void MetaChordAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maEndPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( PolyLine, META_POLYLINE_ACTION )
 
@@ -1008,7 +1008,7 @@ void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Polygon, META_POLYGON_ACTION )
 
@@ -1090,7 +1090,7 @@ void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( PolyPolygon, META_POLYPOLYGON_ACTION )
 
@@ -1195,7 +1195,7 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Text, META_TEXT_ACTION )
 
@@ -1278,7 +1278,7 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
-// ========================================================================
+
 
 MetaTextArrayAction::MetaTextArrayAction() :
     MetaAction  ( META_TEXTARRAY_ACTION ),
@@ -1465,7 +1465,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
 
@@ -1554,7 +1554,7 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
 
@@ -1633,7 +1633,7 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextLine, META_TEXTLINE_ACTION )
 
@@ -1731,7 +1731,7 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Bmp, META_BMP_ACTION )
 
@@ -1803,7 +1803,7 @@ void MetaBmpAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpScale, META_BMPSCALE_ACTION )
 
@@ -1883,7 +1883,7 @@ void MetaBmpScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpScalePart, META_BMPSCALEPART_ACTION )
 
@@ -1972,7 +1972,7 @@ void MetaBmpScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpEx, META_BMPEX_ACTION )
 
@@ -2044,7 +2044,7 @@ void MetaBmpExAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpExScale, META_BMPEXSCALE_ACTION )
 
@@ -2124,7 +2124,7 @@ void MetaBmpExScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpExScalePart, META_BMPEXSCALEPART_ACTION )
 
@@ -2213,7 +2213,7 @@ void MetaBmpExScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Mask, META_MASK_ACTION )
 
@@ -2289,7 +2289,7 @@ void MetaMaskAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( MaskScale, META_MASKSCALE_ACTION )
 
@@ -2372,7 +2372,7 @@ void MetaMaskScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( MaskScalePart, META_MASKSCALEPART_ACTION )
 
@@ -2466,7 +2466,7 @@ void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Gradient, META_GRADIENT_ACTION )
 
@@ -2535,7 +2535,7 @@ void MetaGradientAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGradient( rIStm, maGradient );
 }
 
-// ========================================================================
+
 
 MetaGradientExAction::MetaGradientExAction() :
     MetaAction  ( META_GRADIENTEX_ACTION )
@@ -2623,7 +2623,7 @@ void MetaGradientExAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGradient( rIStm, maGradient );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Hatch, META_HATCH_ACTION )
 
@@ -2698,7 +2698,7 @@ void MetaHatchAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadHatch( rIStm, maHatch );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Wallpaper, META_WALLPAPER_ACTION )
 
@@ -2766,7 +2766,7 @@ void MetaWallpaperAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadWallpaper( rIStm, maWallpaper );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( ClipRegion, META_CLIPREGION_ACTION )
 
@@ -2838,7 +2838,7 @@ void MetaClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbClip );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( ISectRectClipRegion, META_ISECTRECTCLIPREGION_ACTION )
 
@@ -2903,7 +2903,7 @@ void MetaISectRectClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( ISectRegionClipRegion, META_ISECTREGIONCLIPREGION_ACTION )
 
@@ -2968,7 +2968,7 @@ void MetaISectRegionClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRegion( rIStm, maRegion );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( MoveClipRegion, META_MOVECLIPREGION_ACTION )
 
@@ -3034,7 +3034,7 @@ void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     mnVertMove = nTmpVM;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( LineColor, META_LINECOLOR_ACTION )
 
@@ -3092,7 +3092,7 @@ void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( FillColor, META_FILLCOLOR_ACTION )
 
@@ -3150,7 +3150,7 @@ void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextColor, META_TEXTCOLOR_ACTION )
 
@@ -3201,7 +3201,7 @@ void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     maColor.Read( rIStm, true );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextFillColor, META_TEXTFILLCOLOR_ACTION )
 
@@ -3259,7 +3259,7 @@ void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextLineColor, META_TEXTLINECOLOR_ACTION )
 
@@ -3317,7 +3317,7 @@ void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
 
@@ -3375,7 +3375,7 @@ void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextAlign, META_TEXTALIGN_ACTION )
 
@@ -3428,7 +3428,7 @@ void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( nTmp16 ); maAlign = (TextAlign) nTmp16;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( MapMode, META_MAPMODE_ACTION )
 
@@ -3489,7 +3489,7 @@ void MetaMapModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadMapMode( rIStm, maMapMode );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Font, META_FONT_ACTION )
 
@@ -3565,7 +3565,7 @@ void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         pData->meActualCharSet = osl_getThreadTextEncoding();
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Push, META_PUSH_ACTION )
 
@@ -3616,7 +3616,7 @@ void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( mnFlags );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Pop, META_POP_ACTION )
 
@@ -3650,7 +3650,7 @@ void MetaPopAction::Read( SvStream& rIStm, ImplMetaReadData* )
     COMPAT( rIStm );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( RasterOp, META_RASTEROP_ACTION )
 
@@ -3703,7 +3703,7 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( nTmp16 ); meRasterOp = (RasterOp) nTmp16;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Transparent, META_TRANSPARENT_ACTION )
 
@@ -3786,7 +3786,7 @@ void MetaTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( mnTransPercent );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( FloatTransparent, META_FLOATTRANSPARENT_ACTION )
 
@@ -3868,7 +3868,7 @@ void MetaFloatTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGradient( rIStm, maGradient );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( EPS, META_EPS_ACTION )
 
@@ -3949,7 +3949,7 @@ void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGDIMetaFile( rIStm, maSubst );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( RefPoint, META_REFPOINT_ACTION )
 
@@ -4006,7 +4006,7 @@ void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maRefPoint ).ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 MetaCommentAction::MetaCommentAction( sal_Int32 nValue ) :
     MetaAction  ( META_COMMENT_ACTION ),
@@ -4240,7 +4240,7 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
         mpData = NULL;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( LayoutMode, META_LAYOUTMODE_ACTION )
 
@@ -4291,7 +4291,7 @@ void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt32( mnLayoutMode );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextLanguage, META_TEXTLANGUAGE_ACTION )
 

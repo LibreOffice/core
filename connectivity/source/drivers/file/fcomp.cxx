@@ -546,7 +546,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     return pOperand;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+
 sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 {
     static sal_Bool bResult;

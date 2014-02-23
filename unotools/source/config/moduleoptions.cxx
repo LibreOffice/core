@@ -587,7 +587,7 @@ bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eModule
     return aRet;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sName;
@@ -600,7 +600,7 @@ OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFact
     return sName;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFactory)
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
@@ -639,7 +639,7 @@ OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFacto
     return sShortName;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sFile;
@@ -652,7 +652,7 @@ OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EF
     return sFile;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory ) const
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
@@ -690,7 +690,7 @@ OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EF
     return sURL;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sDefaultFilter;
@@ -701,7 +701,7 @@ OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFact
     }
     return sDefaultFilter;
 }
-//*****************************************************************************************************************
+
 bool SvtModuleOptions_Impl::IsDefaultFilterReadonly( SvtModuleOptions::EFactory eFactory   ) const
 {
     bool bRet = false;
@@ -712,7 +712,7 @@ bool SvtModuleOptions_Impl::IsDefaultFilterReadonly( SvtModuleOptions::EFactory 
     return bRet;
 }
 
-//*****************************************************************************************************************
+
 sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFactory ) const
 {
     sal_Int32 nIcon = 0;
@@ -725,7 +725,7 @@ sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFac
     return nIcon;
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::EFactory eFactory   ,
                                                         const OUString&           sTemplate  )
 {
@@ -736,7 +736,7 @@ void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::
     }
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFactory eFactory,
                                                      const OUString&           sFilter )
 {
@@ -939,7 +939,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
     }
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 {
     if (m_bReadOnlyStatesWellKnown)
@@ -974,11 +974,11 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     m_bReadOnlyStatesWellKnown = true;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL  ;
 sal_Int32               SvtModuleOptions::m_nRefCount       = 0     ;
 
@@ -1007,7 +1007,7 @@ SvtModuleOptions::SvtModuleOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 SvtModuleOptions::~SvtModuleOptions()
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
@@ -1038,48 +1038,48 @@ bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
     return m_pDataContainer->IsModuleInstalled( eModule );
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryName( eFactory );
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryStandardTemplate( eFactory );
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryEmptyDocumentURL( eFactory );
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryDefaultFilter( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryDefaultFilter( eFactory );
 }
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsDefaultFilterReadonly( EFactory eFactory   ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     m_pDataContainer->MakeReadonlyStatesAvailable();
     return m_pDataContainer->IsDefaultFilterReadonly( eFactory );
 }
-//*****************************************************************************************************************
+
 sal_Int32 SvtModuleOptions::GetFactoryIcon( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryIcon( eFactory );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::ClassifyFactoryByName( const OUString& sName    ,
                                                         EFactory&        eFactory )
 {
@@ -1087,7 +1087,7 @@ bool SvtModuleOptions::ClassifyFactoryByName( const OUString& sName    ,
     return SvtModuleOptions_Impl::ClassifyFactoryByName( sName, eFactory );
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFactory   ,
                                                    const OUString& sTemplate  )
 {
@@ -1095,7 +1095,7 @@ void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFacto
     m_pDataContainer->SetFactoryStandardTemplate( eFactory, sTemplate );
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
                                                 const OUString& sFilter )
 {
@@ -1103,54 +1103,54 @@ void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
     m_pDataContainer->SetFactoryDefaultFilter( eFactory, sFilter );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsMath() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SMATH );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsChart() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SCHART );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsCalc() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SCALC );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsDraw() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SDRAW );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsWriter() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SWRITER );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsImpress() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SIMPRESS );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsBasicIDE() const
 {
     return true;
 }
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsDataBase() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );

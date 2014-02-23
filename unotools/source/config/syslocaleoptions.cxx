@@ -520,7 +520,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
         NotifyListeners( nHint );
 }
 
-// ====================================================================
+
 
 SvtSysLocaleOptions::SvtSysLocaleOptions()
 {

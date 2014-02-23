@@ -29,9 +29,9 @@
 #include "tpstat.hxx"
 
 
-//========================================================================
+
 // Dokumentinfo-Tabpage:
-//========================================================================
+
 
 SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
 {

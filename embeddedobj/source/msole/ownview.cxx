@@ -53,9 +53,9 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
 sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw ( uno::Exception );
 
-//========================================================
+
 // Dummy interaction handler
-//========================================================
+
 
 class DummyHandler_Impl : public ::cppu::WeakImplHelper1< task::XInteractionHandler >
 {
@@ -79,9 +79,9 @@ void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractio
     return;
 }
 
-//========================================================
+
 // Object viewer
-//========================================================
+
 
 OwnView_Impl::OwnView_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                             const uno::Reference< io::XInputStream >& xInputStream )

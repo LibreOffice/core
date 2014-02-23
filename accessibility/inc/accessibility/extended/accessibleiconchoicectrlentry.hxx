@@ -41,10 +41,10 @@
 class SvxIconChoiceCtrlEntry;
 class SvtIconChoiceCtrl;
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
+
 
 // class AccessibleIconChoiceCtrlEntry ------------------------------------------
 
@@ -183,9 +183,9 @@ namespace accessibility
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     };
 
-//........................................................................
+
 }// namespace accessibility
-//........................................................................
+
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEICONCHOICECTRLENTRY_HXX
 

@@ -30,9 +30,9 @@
 
 using namespace ::com::sun::star;
 
-// ============================================================================
+
 // Decryption
-// ============================================================================
+
 
 XclImpDecrypter::XclImpDecrypter() :
     mnError( EXC_ENCR_ERROR_UNSUPP_CRYPT ),
@@ -321,9 +321,9 @@ sal_uInt16 XclImpBiff8Decrypter::GetOffset( sal_Size nStrmPos ) const
     return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
 }
 
-// ============================================================================
+
 // Stream
-// ============================================================================
+
 
 XclImpStreamPos::XclImpStreamPos() :
     mnPos( STREAM_SEEK_TO_BEGIN ),
@@ -364,7 +364,7 @@ void XclImpStreamPos::Get(
     rbValid = mbValid;
 }
 
-// ============================================================================
+
 
 XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
 {
@@ -1147,6 +1147,6 @@ sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
     return nRet;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,9 +26,9 @@
 namespace basctl
 {
 
-//============================================================================
+
 // DlgEdTransferableImpl
-//============================================================================
+
 
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::datatransfer::XTransferable, ::com::sun::star::datatransfer::clipboard::XClipboardOwner > DlgEdTransferableHelper;
 

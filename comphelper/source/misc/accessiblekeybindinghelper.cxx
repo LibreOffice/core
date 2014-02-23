@@ -20,19 +20,19 @@
 #include <comphelper/accessiblekeybindinghelper.hxx>
 
 
-//..............................................................................
+
 namespace comphelper
 {
-//..............................................................................
+
 
     using namespace ::com::sun::star; // MT 04/2003: was ::drafts::com::sun::star - otherwise to many changes
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    //==============================================================================
+
     // OAccessibleKeyBindingHelper
-    //==============================================================================
+
 
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper()
     {
@@ -97,8 +97,8 @@ namespace comphelper
 
 
 
-//..............................................................................
+
 }   // namespace comphelper
-//..............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

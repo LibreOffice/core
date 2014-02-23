@@ -24,9 +24,9 @@
 
 #include <unicode/calendar.h>
 
-//  ----------------------------------------------------
+
 //  class Calendar_gregorian
-//  ----------------------------------------------------
+
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -128,9 +128,9 @@ private:
     bool getCombinedOffset( sal_Int32 & o_nOffset, sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const;
 };
 
-//  ----------------------------------------------------
+
 //  class Calendar_hanja
-//  ----------------------------------------------------
+
 class Calendar_hanja : public Calendar_gregorian
 {
 public:
@@ -140,9 +140,9 @@ public:
     virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) throw(com::sun::star::uno::RuntimeException);
 };
 
-//  ----------------------------------------------------
+
 //  class Calendar_gengou
-//  ----------------------------------------------------
+
 class Calendar_gengou : public Calendar_gregorian
 {
 public:
@@ -150,9 +150,9 @@ public:
     Calendar_gengou();
 };
 
-//  ----------------------------------------------------
+
 //  class Calendar_ROC
-//  ----------------------------------------------------
+
 class Calendar_ROC : public Calendar_gregorian
 {
 public:
@@ -160,9 +160,9 @@ public:
     Calendar_ROC();
 };
 
-//  ----------------------------------------------------
+
 //  class Calendar_buddhist
-//  ----------------------------------------------------
+
 class Calendar_buddhist : public Calendar_gregorian
 {
 public:

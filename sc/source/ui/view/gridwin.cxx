@@ -173,7 +173,7 @@ struct ScGridWindow::MouseEventState
 
 #define SC_FILTERLISTBOX_LINES  12
 
-// ============================================================================
+
 
 ScGridWindow::VisibleRange::VisibleRange() :
     mnCol1(0), mnCol2(MAXCOL), mnRow1(0), mnRow2(MAXROW)
@@ -197,7 +197,7 @@ bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     return bChanged;
 }
 
-// ============================================================================
+
 
 class ScFilterListBox : public ListBox
 {
@@ -333,7 +333,7 @@ void ScFilterListBox::SelectHdl()
     }
 }
 
-// ============================================================================
+
 
 // use a System floating window for the above filter listbox
 class ScFilterFloatingWindow : public FloatingWindow
@@ -360,7 +360,7 @@ Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
     return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD)->GetPreferredKeyInputWindow() : NULL;    // will be the FilterBox
 }
 
-// ============================================================================
+
 
 static sal_Bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 {

@@ -34,7 +34,7 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 
-//==================================================================
+
 
 ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
 

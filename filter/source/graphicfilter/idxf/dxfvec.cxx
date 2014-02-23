@@ -227,7 +227,7 @@ sal_uLong DXFTransform::TransLineWidth(double fW) const
 
     fex=sqrt(aMX.fx*aMX.fx + aMX.fy*aMX.fy);
     fey=sqrt(aMY.fx*aMY.fx + aMY.fy*aMY.fy);
-    // ###
+
     // printf("fex=%f fey=%f\n", fex, fey);
     return (sal_uLong)(fabs(fW)*(fex+fey)/2.0+0.5);
 }

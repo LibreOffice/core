@@ -29,9 +29,9 @@
 #include "excelvbahelper.hxx"
 
 #include <vbahelper/vbaglobalbase.hxx>
-    // =============================================================================
+
     // class ScVbaGlobals
-    // =============================================================================
+
 
 typedef ::cppu::ImplInheritanceHelper1< VbaGlobalsBase, ov::excel::XGlobals > ScVbaGlobals_BASE;
 

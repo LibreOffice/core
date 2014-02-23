@@ -300,9 +300,9 @@ void FontWorkShapeTypeControl::Select( sal_Bool )
 
 }
 
-// ========================================================================
+
 // FontworkAlignmentWindow
-// ========================================================================
+
 
 class FontworkAlignmentWindow : public ToolbarMenu
 {
@@ -423,9 +423,9 @@ IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl)
     return 0;
 }
 
-// ========================================================================
+
 // FontworkAlignmentControl
-// ========================================================================
+
 
 class FontworkAlignmentControl : public svt::PopupWindowController
 {
@@ -496,7 +496,7 @@ Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames
 }
 
 
-// ####################################################################
+
 
 class FontworkCharacterSpacingWindow : public ToolbarMenu
 {
@@ -661,9 +661,9 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl)
     return 0;
 }
 
-// ========================================================================
+
 // FontworkCharacterSpacingControl
-// ========================================================================
+
 
 class FontworkCharacterSpacingControl : public svt::PopupWindowController
 {

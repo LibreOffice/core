@@ -26,10 +26,10 @@
 #include <vector>
 #include "connectivity/dbtoolsdllapi.hxx"
 
-// -------------------------------------------------------------------------
+
 namespace connectivity
 {
-// -------------------------------------------------------------------------
+
 struct OOO_DLLPUBLIC_DBTOOLS RowEquation
 {
     sal_Int32   nOperation;
@@ -136,9 +136,9 @@ private:
     FunctionParser& operator=( const FunctionParser& );
 };
 
-// -------------------------------------------------------------------------
+
 } // namespace connectivity
-// -------------------------------------------------------------------------
+
 #endif /* CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

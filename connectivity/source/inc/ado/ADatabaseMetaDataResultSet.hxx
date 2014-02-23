@@ -195,7 +195,7 @@ namespace connectivity
             void setCrossReferenceMap();
             void setTypeInfoMap(sal_Bool _bJetEngine);
         };
-        // -------------------------------------------------------------------------
+
         inline sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32   column)
         {
             sal_Int32   map = column;

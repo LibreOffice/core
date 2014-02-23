@@ -52,13 +52,13 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 using namespace comphelper;
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
 
-//==================================================================
+
+
     struct ElementDescription
     {
     public:
@@ -79,10 +79,10 @@ namespace frm
 typedef ::std::vector<InterfaceRef> OInterfaceArray;
 typedef ::boost::unordered_multimap< OUString, InterfaceRef, OUStringHash > OInterfaceMap;
 
-//==================================================================
+
 // OInterfaceContainer
 // implements a container for form components
-//==================================================================
+
 typedef ::cppu::ImplHelper8 <   ::com::sun::star::container::XNameContainer
                             ,   ::com::sun::star::container::XIndexContainer
                             ,   ::com::sun::star::container::XContainer
@@ -280,9 +280,9 @@ private:
     void    impl_createEventAttacher_nothrow();
 };
 
-//==================================================================
+
 //= OFormComponents
-//==================================================================
+
 typedef ::cppu::ImplHelper1< ::com::sun::star::form::XFormComponent> OFormComponents_BASE;
 typedef ::cppu::OComponentHelper FormComponentsBase;
     // else MSVC kills itself on some statements
@@ -314,9 +314,9 @@ public:
     // XEventListener
     using OInterfaceContainer::disposing;
 };
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 

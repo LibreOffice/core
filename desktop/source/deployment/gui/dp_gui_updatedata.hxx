@@ -54,7 +54,7 @@ struct UpdateData
     OUString updateVersion;
 
     //For online update
-    // ======================
+
     // The content of the update information.
     //Only if aUpdateInfo is set then there is an online update available with a better version
     //than any of the currently installed extensions with the same identifier.
@@ -66,7 +66,7 @@ struct UpdateData
     OUString sWebsiteURL;
 
     //For local update
-    //=====================
+
     //The locale extension which is used as update for the user or shared repository.
     //If set then the data for the online update (aUpdateInfo, sLocalURL, sWebsiteURL)
     //are to be ignored.

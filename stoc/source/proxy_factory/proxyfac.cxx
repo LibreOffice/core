@@ -61,7 +61,7 @@ static Sequence< OUString > proxyfac_getSupportedServiceNames()
     return Sequence< OUString >( &str_name, 1 );
 }
 
-//==============================================================================
+
 struct FactoryImpl : public ::cppu::WeakImplHelper2< lang::XServiceInfo,
                                                      reflection::XProxyFactory >
 {
@@ -165,7 +165,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     }
 }
 
-//==============================================================================
+
 struct ProxyRoot : public ::cppu::OWeakAggObject
 {
     // XAggregation
@@ -182,7 +182,7 @@ private:
     UnoInterfaceReference m_target;
 };
 
-//==============================================================================
+
 struct binuno_Proxy : public uno_Interface
 {
     oslInterlockedCount m_nRefCount;
@@ -395,7 +395,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
     return ret;
 }
 
-//##############################################################################
+
 
 
 FactoryImpl::FactoryImpl()
@@ -454,7 +454,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     return proxyfac_getSupportedServiceNames();
 }
 
-//==============================================================================
+
 static Reference< XInterface > SAL_CALL proxyfac_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     throw (Exception)

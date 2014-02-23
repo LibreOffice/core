@@ -23,10 +23,10 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/transfer.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     //====================================================================
     //= OStringTransferable
@@ -67,9 +67,9 @@ namespace svt
         SVT_DLLPUBLIC static void           StartStringDrag( const OUString& _rContent, Window* _pWindow, sal_Int8 _nDragSourceActions );
     };
 
-//........................................................................
+
 }   // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_STRINGTRANSFER_HXX
 

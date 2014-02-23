@@ -44,10 +44,10 @@
 #include <svtools/imageresourceaccess.hxx>
 #define LOCAL_URL_PREFIX    '#'
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
@@ -65,9 +65,9 @@ namespace frm
     using ::com::sun::star::awt::MouseEvent;
     using ::com::sun::star::task::XInteractionHandler;
 
-    //==================================================================
+
     // OClickableImageBaseControl
-    //==================================================================
+
 
     Sequence<Type> OClickableImageBaseControl::_getTypes()
     {
@@ -257,7 +257,7 @@ namespace frm
                 if (!xModel.is())
                     return;
 
-                ///////////////////////////////////////////////////////////////////////
+
                 // Jetzt URL ausfuehren
                 Reference< XController >  xController = xModel->getCurrentController();
                 if (!xController.is())
@@ -434,9 +434,9 @@ namespace frm
         }
     }
 
-    //==================================================================
+
     // OClickableImageBaseModel
-    //==================================================================
+
 
     Sequence<Type> OClickableImageBaseModel::_getTypes()
     {
@@ -857,9 +857,9 @@ namespace frm
         }
     }
 
-    //==================================================================
+
     // OImageProducerThread_Impl
-    //==================================================================
+
 
     EventObject* OImageProducerThread_Impl::cloneEvent( const EventObject* _pEvt ) const
     {
@@ -875,8 +875,8 @@ namespace frm
         ((OClickableImageBaseControl *)pCompImpl)->actionPerformed_Impl( sal_True, *(MouseEvent *)pEvt );
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

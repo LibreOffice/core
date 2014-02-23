@@ -42,7 +42,7 @@ public:
     OUString            maHelpText;
 };
 
-// =======================================================================
+
 
 #define HEAD_ARROWSIZE1             4
 #define HEAD_ARROWSIZE2             7
@@ -56,7 +56,7 @@ public:
 #define HEAD_HITTEST_ITEM           ((sal_uInt16)0x0001)
 #define HEAD_HITTEST_DIVIDER        ((sal_uInt16)0x0002)
 
-// =======================================================================
+
 
 void HeaderBar::ImplInit( WinBits nWinStyle )
 {

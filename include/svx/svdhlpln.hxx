@@ -28,7 +28,7 @@
 #include <svx/svxdllapi.h>
 
 class OutputDevice;
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 enum SdrHelpLineKind {SDRHELPLINE_POINT,SDRHELPLINE_VERTICAL,SDRHELPLINE_HORIZONTAL};
 
@@ -100,7 +100,7 @@ public:
     sal_uInt16             HitTest(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDHLPLN_HXX
 

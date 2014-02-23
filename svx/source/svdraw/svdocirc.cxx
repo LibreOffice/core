@@ -50,7 +50,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpool.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 Point GetWinkPnt(const Rectangle& rR, long nWink)
 {
@@ -88,7 +88,7 @@ Point GetWinkPnt(const Rectangle& rR, long nWink)
     return aRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrCircObj::CreateObjectSpecificProperties()
@@ -96,7 +96,7 @@ sdr::properties::BaseProperties* SdrCircObj::CreateObjectSpecificProperties()
     return new sdr::properties::CircleProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrCircObj::CreateObjectSpecificViewContact()
@@ -104,7 +104,7 @@ sdr::contact::ViewContact* SdrCircObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrCircObj(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrCircObj,SdrRectObj);
 
@@ -469,7 +469,7 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
     return pH;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrCircObj::hasSpecialDrag() const
 {
@@ -615,7 +615,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
 {
@@ -1067,7 +1067,7 @@ void SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     ImpSetAttrToCircInfo();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrCircObj::ImpSetAttrToCircInfo()
 {

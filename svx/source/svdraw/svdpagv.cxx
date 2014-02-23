@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 DBG_NAME(SdrPageView);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // interface to SdrPageWindow
 
 SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
@@ -137,7 +137,7 @@ SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 :   mrView(rNewView),
@@ -269,7 +269,7 @@ void SdrPageView::InvalidateAllWin()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPageView::PrePaint()
 {
@@ -313,7 +313,7 @@ void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rRe
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i74769# use SdrPaintWindow directly
 
 void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
@@ -419,7 +419,7 @@ void SdrPageView::SetDesignMode( bool _bDesignMode ) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor)
 {

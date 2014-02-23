@@ -67,7 +67,7 @@ typedef ::cppu::WeakImplHelper3<
     ::com::sun::star::container::XContainer,
     ::com::sun::star::util::XChangesNotifier > NameContainer_BASE;
 
-//============================================================================
+
 
 class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
@@ -147,7 +147,7 @@ public:
             throw (::com::sun::star::uno::RuntimeException);
 };
 
-//============================================================================
+
 
 class ModifiableHelper
 {
@@ -178,7 +178,7 @@ public:
     }
 };
 
-//============================================================================
+
 
 typedef ::comphelper::OListenerContainerBase<
     ::com::sun::star::script::vba::XVBAScriptListener,
@@ -196,7 +196,7 @@ private:
         throw (::com::sun::star::uno::Exception);
 };
 
-//============================================================================
+
 
 class SfxLibrary;
 
@@ -527,7 +527,7 @@ public:
             throw (::com::sun::star::uno::RuntimeException);
 };
 
-//============================================================================
+
 
 class LibraryContainerMethodGuard
 {
@@ -546,7 +546,7 @@ public:
     }
 };
 
-//============================================================================
+
 
 class SfxLibrary
     : public ::com::sun::star::container::XNameContainer
@@ -705,7 +705,7 @@ protected:
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
 };
 
-//============================================================================
+
 
 class ScriptSubPackageIterator
 {
@@ -729,7 +729,7 @@ public:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > getNextScriptSubPackage( bool& rbPureDialogLib );
 };
 
-//============================================================================
+
 
 class ScriptExtensionIterator
 {
@@ -775,7 +775,7 @@ protected:
 
 }; // end class ScriptExtensionIterator
 
-//============================================================================
+
 
 }   // namespace basic
 

@@ -37,10 +37,10 @@ extern "C" void SAL_CALL createRegistryInfo_FormController()
     ::pcr::OAutoRegistration< ::pcr::DialogController > aDialogControllerRegistration;
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::TypeClass_INTERFACE;
@@ -69,9 +69,9 @@ namespace pcr
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
+
     //= FormController
-    //====================================================================
+
 
     FormController::FormController( const Reference< XComponentContext >& _rxContext, ServiceDescriptor _aServiceDescriptor,
             bool _bUseFormFormComponentHandlers )
@@ -252,9 +252,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
+
     //= DialogController
-    //====================================================================
+
 
     OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
     {
@@ -278,8 +278,8 @@ namespace pcr
         return *(new FormController( _rxContext, aService, false ) );
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

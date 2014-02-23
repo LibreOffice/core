@@ -21,10 +21,10 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/awt/ImageAlign.hpp>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::awt::ImagePosition;
     using namespace ::com::sun::star::awt::ImageAlign;
@@ -120,8 +120,8 @@ namespace toolkit
         return nReturn;
     }
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

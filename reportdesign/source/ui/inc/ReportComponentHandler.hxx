@@ -29,10 +29,10 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 
     class OPropertyInfoService;
 
@@ -102,9 +102,9 @@ namespace rptui
         ::std::auto_ptr< OPropertyInfoService >                                             m_pInfoService;
         SAL_WNODEPRECATED_DECLARATIONS_POP
     };
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 #endif // RPT_REPORTCOMPONENTHANDLER_HXX
 

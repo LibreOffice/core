@@ -32,15 +32,15 @@
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     struct FormattedColumnValue_Data;
-    //====================================================================
+
     //= FormattedColumnValue
-    //====================================================================
+
     /** a class which helps retrieving and setting the value of a database column
         as formatted string.
     */
@@ -100,9 +100,9 @@ namespace dbtools
         ::std::auto_ptr< FormattedColumnValue_Data >    m_pData;
     };
 
-//........................................................................
+
 } // namespace dbtools
-//........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 

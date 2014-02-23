@@ -24,7 +24,7 @@
 #include <svx/sdr/primitive2d/sdrcaptionprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // includes for special text box shadow (SC)
 
 #include <svl/itemset.hxx>
@@ -36,7 +36,7 @@
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

@@ -48,9 +48,9 @@ namespace accessibility
     using namespace ::svt::table;
 
 
-    // =============================================================================
+
     // = AccessibleGridControlCell
-    // =============================================================================
+
 
     AccessibleGridControlCell::AccessibleGridControlCell(
             const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable,

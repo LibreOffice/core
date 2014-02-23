@@ -65,7 +65,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i15222#
 // Due to the resource problems in Win95/98 with bitmap resources I
 // will change this handle bitmap providing class. Old version was splitting
@@ -92,7 +92,7 @@ public:
     const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd=0);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #define KIND_COUNT          (14)
 #define INDEX_COUNT         (6)
 #define INDIVIDUAL_COUNT    (5)
@@ -265,7 +265,7 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrHdl::SdrHdl():
     pObj(NULL),
@@ -915,7 +915,7 @@ void SdrHdl::onMouseLeave()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // class SdrHdlColor
 
 SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, sal_Bool bLum)
@@ -1074,7 +1074,7 @@ void SdrHdlColor::SetSize(const Size& rNew)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // class SdrHdlGradient
 
 SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, sal_Bool bGrad)
@@ -1258,7 +1258,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, sal_Bool bSetItemOnObject, 
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrHdlLine::~SdrHdlLine() {}
 
@@ -1318,7 +1318,7 @@ Pointer SdrHdlLine::GetPointer() const
     return Pointer(POINTER_REFHAND);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrHdlBezWgt::~SdrHdlBezWgt() {}
 
@@ -1380,7 +1380,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 E3dVolumeMarker::E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly)
 {
@@ -1430,7 +1430,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ImpEdgeHdl::~ImpEdgeHdl()
 {
@@ -1554,7 +1554,7 @@ sal_Bool ImpEdgeHdl::IsHorzDrag() const
     return sal_False;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ImpMeasureHdl::~ImpMeasureHdl()
 {
@@ -1629,7 +1629,7 @@ Pointer ImpMeasureHdl::GetPointer() const
     return Pointer(POINTER_NOTALLOWED);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ImpTextframeHdl::ImpTextframeHdl(const Rectangle& rRect) :
     SdrHdl(rRect.TopLeft(),HDL_MOVE),
@@ -1693,7 +1693,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
 {
@@ -1842,7 +1842,7 @@ extern "C" int SAL_CALL ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
 {
@@ -2023,7 +2023,7 @@ void SdrHdlList::ResetFocusHdl()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrHdlList::SdrHdlList(SdrMarkView* pV)
 :   mnFocusIndex(CONTAINER_ENTRY_NOTFOUND),
@@ -2208,9 +2208,9 @@ SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
    return pRet;
 }
 
-// --------------------------------------------------------------------
+
 // SdrCropHdl
-// --------------------------------------------------------------------
+
 
 SdrCropHdl::SdrCropHdl(
     const Point& rPnt,
@@ -2223,7 +2223,7 @@ SdrCropHdl::SdrCropHdl(
 {
 }
 
-// --------------------------------------------------------------------
+
 
 BitmapEx SdrCropHdl::GetHandlesBitmap()
 {
@@ -2233,7 +2233,7 @@ BitmapEx SdrCropHdl::GetHandlesBitmap()
     return *pModernBitmap;
 }
 
-// --------------------------------------------------------------------
+
 
 BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
 {
@@ -2275,7 +2275,7 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
     return aRetval;
 }
 
-// --------------------------------------------------------------------
+
 
 void SdrCropHdl::CreateB2dIAObject()
 {
@@ -2353,7 +2353,7 @@ void SdrCropHdl::CreateB2dIAObject()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // with the correction of crop handling I could get rid of the extra mirroring flag, adapted stuff
 // accordingly
 

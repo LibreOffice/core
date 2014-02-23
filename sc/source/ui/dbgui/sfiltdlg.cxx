@@ -42,7 +42,7 @@
                                     ScGlobal::GetRscString(rid) ).Execute()
 
 
-//============================================================================
+
 //  class ScSpecialFilterDialog
 
 
@@ -287,7 +287,7 @@ bool ScSpecialFilterDlg::IsRefInputMode() const
 
 
 // Handler:
-// ========
+
 
 IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 {

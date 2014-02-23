@@ -25,9 +25,9 @@
 
 #include <vector>
 
-//------------------------------------------------------
+
 // helper class, only useable by OFilterContainer
-//------------------------------------------------------
+
 
 class CFilterContainer
 {
@@ -97,10 +97,10 @@ private:
     OUString                 m_sCurrentFilter;
 };
 
-//----------------------------------------------------------------
+
 // a helper function to create a filter buffer in the format
 // the Win32 API requires, e.g. "Text\0*.txt\0Doc\0*.doc;*xls\0\0"
-//----------------------------------------------------------------
+
 
 OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer );
 

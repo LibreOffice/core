@@ -30,7 +30,7 @@ class ScDocument;
 class ScViewData;
 
 
-//============================================================================
+
 
 class ScPrintAreasDlg : public ScAnyRefDlg
 {

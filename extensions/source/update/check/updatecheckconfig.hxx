@@ -198,7 +198,7 @@ private:
     const ::rtl::Reference< UpdateCheckConfigListener > m_rListener;
 };
 
-//------------------------------------------------------------------------------
+
 
 
 template <typename T>

@@ -30,9 +30,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class TextConversion
-//  ----------------------------------------------------
+
 class TextConversion: public cppu::WeakImplHelper2
 <
     com::sun::star::i18n::XExtendedTextConversion,
@@ -97,9 +97,9 @@ typedef struct {
     sal_Int16 count;
 } Hangul_Index;
 
-//  ----------------------------------------------------
+
 //  class TextConversion_ko
-//  ----------------------------------------------------
+
 class TextConversion_ko : public TextConversion
 {
 public:
@@ -146,9 +146,9 @@ private :
             getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toHanja);
 };
 
-//  ----------------------------------------------------
+
 //  class TextConversion_zh
-//  ----------------------------------------------------
+
 
 // for SChines/TChinese word conversion
 typedef struct {

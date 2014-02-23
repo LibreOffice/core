@@ -45,9 +45,9 @@ class AccessibleStateSetHelper;
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleComponent
-//  ----------------------------------------------------
+
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 

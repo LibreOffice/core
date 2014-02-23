@@ -22,14 +22,14 @@
 #include "rtattributes.hxx"
 
 struct ESelection;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ITextAttributeListener
-    //====================================================================
+
     class ITextAttributeListener
     {
     public:
@@ -39,9 +39,9 @@ namespace frm
         ~ITextAttributeListener() {}
     };
 
-    //====================================================================
+
     //= ITextAttributeListener
-    //====================================================================
+
     class ITextSelectionListener
     {
     public:
@@ -51,9 +51,9 @@ namespace frm
         ~ITextSelectionListener() {}
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_TEXTATTRIBUTELISTENER_HXX
 

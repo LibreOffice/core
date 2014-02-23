@@ -30,7 +30,7 @@
 using namespace ::com::sun::star;
 
 
-// =======================================================================
+
 
 MnemonicGenerator::MnemonicGenerator()
 {

@@ -19,9 +19,9 @@
 
 #include "jscriptclasses.hxx"
 
-//========================================================================
+
 // JScriptValue
-//========================================================================
+
 JScriptValue::JScriptValue(): m_bOutParam(0), m_bInOutParam(0)
 {
 }
@@ -207,9 +207,9 @@ STDMETHODIMP JScriptValue::GetValue( BSTR* type, VARIANT *value)
     return hr;
 }
 
-//##########################################################################################
+
 // JScriptOutValue
-//##########################################################################################
+
 
 JScriptOutParam::JScriptOutParam()
 {

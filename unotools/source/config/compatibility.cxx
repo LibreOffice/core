@@ -31,9 +31,9 @@
 
 #include <algorithm>
 
-//_________________________________________________________________________________________________________________
+
 //  namespaces
-//_________________________________________________________________________________________________________________
+
 
 using namespace ::std;
 using namespace ::utl;
@@ -76,9 +76,9 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_CONSIDERWRAPPINGSTYLE    11
 #define OFFSET_EXPANDWORDSPACE          12
 
-//_________________________________________________________________________________________________________________
+
 //  private declarations!
-//_________________________________________________________________________________________________________________
+
 
 /*-****************************************************************************************************************
     @descr  struct to hold information about one compatibility entry
@@ -357,9 +357,9 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         SvtCompatibilityEntry   m_aDefOptions;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
     // Init baseclasses first
     :   ConfigItem( ROOTNODE_OPTIONS )
@@ -414,9 +414,9 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
 {
     // We must save our current values .. if user forget it!
@@ -452,17 +452,17 @@ void SvtCompatibilityOptions_Impl::SetDefault( OUString sName, bool bValue )
         m_aDefOptions.SetExpandWordSpace( bValue );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 {
     DBG_ASSERT( false, "SvtCompatibilityOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCompatibilityOptions_Impl::Commit()
 {
     // Write all properties!
@@ -509,18 +509,18 @@ void SvtCompatibilityOptions_Impl::Commit()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCompatibilityOptions_Impl::Clear()
 {
     m_aOptions.Clear();
     SetModified();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() const
 {
     Sequence< Sequence< PropertyValue > > lReturn;
@@ -528,9 +528,9 @@ Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() co
     return lReturn;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 
 void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
                                                 const OUString& _sModule,
@@ -567,9 +567,9 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
     SetModified();
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequence< OUString >& rItems )
 {
     // First get ALL names of current existing list items in configuration!
@@ -581,9 +581,9 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
     return lProperties;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
     const Sequence< OUString >& lSource, Sequence< OUString >& lDestination )
 {
@@ -637,17 +637,17 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
     }
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtCompatibilityOptions_Impl*   SvtCompatibilityOptions::m_pDataContainer = NULL;
 sal_Int32                       SvtCompatibilityOptions::m_nRefCount = 0;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtCompatibilityOptions::SvtCompatibilityOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -662,9 +662,9 @@ SvtCompatibilityOptions::SvtCompatibilityOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtCompatibilityOptions::~SvtCompatibilityOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -680,9 +680,9 @@ SvtCompatibilityOptions::~SvtCompatibilityOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCompatibilityOptions::Clear()
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -694,9 +694,9 @@ void SvtCompatibilityOptions::SetDefault( OUString sName, bool bValue )
     m_pDataContainer->SetDefault( sName, bValue );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCompatibilityOptions::AppendItem( const OUString& sName,
                                           const OUString& sModule,
                                           bool bUsePrtMetrics,
@@ -796,9 +796,9 @@ namespace
     class theCompatibilityOptionsMutex : public rtl::Static<osl::Mutex, theCompatibilityOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Mutex& SvtCompatibilityOptions::GetOwnStaticMutex()
 {
     return theCompatibilityOptionsMutex::get();

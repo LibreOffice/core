@@ -50,7 +50,7 @@ void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrPreRenderDevice::SdrPreRenderDevice(OutputDevice& rOriginal)
 :   mrOutputDevice(rOriginal)
@@ -152,7 +152,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
     maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPaintWindow::impCreateOverlayManager()
 {

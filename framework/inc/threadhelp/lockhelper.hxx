@@ -60,45 +60,45 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
                  , public  IRWLock
                  , private INonCopyable
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        //-------------------------------------------------------------------------------------------------------------
+
         //  ctor/dtor
-        //-------------------------------------------------------------------------------------------------------------
+
                  LockHelper( comphelper::SolarMutex* pSolarMutex = NULL );
         virtual ~LockHelper(                                   );
 
-        //-------------------------------------------------------------------------------------------------------------
+
         //  interface ::framework::IMutex
-        //-------------------------------------------------------------------------------------------------------------
+
         virtual void acquire();
         virtual void release();
 
-        //-------------------------------------------------------------------------------------------------------------
+
         //  interface ::framework::IRWLock
-        //-------------------------------------------------------------------------------------------------------------
+
         virtual void acquireReadAccess   ();
         virtual void releaseReadAccess   ();
         virtual void acquireWriteAccess  ();
         virtual void releaseWriteAccess  ();
         virtual void downgradeWriteAccess();
 
-        //-------------------------------------------------------------------------------------------------------------
+
         //  something else
-        //-------------------------------------------------------------------------------------------------------------
+
         static LockHelper&  getGlobalLock();
             //TODO: this presumable should return the SolarMutex, though it
             // actually returns some independent mutex
 
         ::osl::Mutex&       getShareableOslMutex(                                   );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
     //  Make some member mutable for using in const functions!
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         mutable comphelper::SolarMutex* m_pSolarMutex   ;

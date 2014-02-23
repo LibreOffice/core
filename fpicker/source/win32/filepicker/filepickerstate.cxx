@@ -353,7 +353,7 @@ void SAL_CALL CNonExecuteFilePickerState::addControlCommand( CControlCommand* aC
     }
 }
 
-//#######################################################################
+
 
 
 //

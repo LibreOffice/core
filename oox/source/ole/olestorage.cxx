@@ -38,7 +38,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -169,7 +169,7 @@ void OleOutputStream::ensureConnected() const throw( NotConnectedException )
 
 } // namespace
 
-// ============================================================================
+
 
 OleStorage::OleStorage( const Reference< XComponentContext >& rxContext,
         const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
@@ -390,7 +390,7 @@ void OleStorage::implCommit() const
     }
 }
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

@@ -20,16 +20,16 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_TOGGLESTATE_HXX
 #define INCLUDED_FORMS_SOURCE_INC_TOGGLESTATE_HXX
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     enum ToggleState { STATE_NOCHECK = 0, STATE_CHECK = 1, STATE_DONTKNOW = 2 };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_TOGGLESTATE_HXX
 

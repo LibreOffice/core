@@ -31,13 +31,13 @@
 #include <vector>
 #include <algorithm>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace
     {
-        //////////////////////////////////////////////////////////////////////////////
+
 
         struct StripHelper
         {
@@ -46,7 +46,7 @@ namespace basegfx
             B2VectorOrientation                     meOrinetation;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         struct PN
         {
@@ -57,7 +57,7 @@ namespace basegfx
             sal_uInt32              mnIN;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         struct VN
         {
@@ -72,7 +72,7 @@ namespace basegfx
             B2DVector               maOriginalNext;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         struct SN
         {
@@ -99,7 +99,7 @@ namespace basegfx
             }
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         typedef ::std::vector< PN > PNV;
         typedef ::std::vector< VN > VNV;
@@ -107,7 +107,7 @@ namespace basegfx
         typedef ::std::pair< basegfx::B2DPoint /*orig*/, basegfx::B2DPoint /*repl*/ > CorrectionPair;
         typedef ::std::vector< CorrectionPair > CorrectionTable;
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         class solver
         {
@@ -691,18 +691,18 @@ namespace basegfx
             }
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace tools
     {
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate)
         {
@@ -717,7 +717,7 @@ namespace basegfx
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate)
         {
@@ -725,7 +725,7 @@ namespace basegfx
             return aSolver.getB2DPolyPolygon();
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate)
         {
@@ -744,7 +744,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
         {
@@ -832,7 +832,7 @@ namespace basegfx
             return aCandidate;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero)
         {
@@ -936,7 +936,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate)
         {
@@ -1134,7 +1134,7 @@ namespace basegfx
             return B2DPolyPolygon();
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
     } // end of namespace tools
 } // end of namespace basegfx

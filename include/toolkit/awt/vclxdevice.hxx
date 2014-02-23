@@ -32,9 +32,9 @@
 class OutputDevice;
 class VirtualDevice;
 
-//  ----------------------------------------------------
+
 //  class VCLXDevice
-//  ----------------------------------------------------
+
 
 // For using nDummy, no incompatible update, add a sal_Bool bCreatedWithToolkitMember later...
 #define FLAGS_CREATEDWITHTOOLKIT    0x00000001
@@ -98,9 +98,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXVirtualDevice
-//  ----------------------------------------------------
+
 
 class VCLXVirtualDevice : public VCLXDevice
 {

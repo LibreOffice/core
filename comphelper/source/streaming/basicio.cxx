@@ -19,10 +19,10 @@
 
 #include <comphelper/basicio.hxx>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 
 const staruno::Reference<stario::XObjectOutputStream>& operator << (
@@ -158,8 +158,8 @@ const staruno::Reference<stario::XObjectOutputStream>& operator << (const starun
     return _rxOutStream;
 }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

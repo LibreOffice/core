@@ -29,7 +29,7 @@
 #include "miscdlgs.hrc"
 
 
-//==================================================================
+
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
                                     OString         sDialogName,

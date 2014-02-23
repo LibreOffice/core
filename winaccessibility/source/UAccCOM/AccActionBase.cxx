@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//////////////////////////////////////////////////////////////////////
+
 // AccActionBase.cpp: implementation of the CAccActionBase class.
-//////////////////////////////////////////////////////////////////////
+
 #include "stdafx.h"
 
 #include "AccActionBase.h"
@@ -41,9 +41,9 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 
-//////////////////////////////////////////////////////////////////////
+
 // Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+
 
 CAccActionBase::CAccActionBase()
 {}

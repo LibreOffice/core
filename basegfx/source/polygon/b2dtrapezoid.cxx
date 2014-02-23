@@ -22,13 +22,13 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <list>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace trapezoidhelper
     {
-        //////////////////////////////////////////////////////////////////////////////
+
         // helper class to hold a simple ege. This is only used for horizontal edges
         // currently, thus the YPositions will be equal. I did not create a special
         // class for this since holdingthe pointers is more effective and also can be
@@ -56,12 +56,12 @@ namespace basegfx
             const B2DPoint& getEnd() const { return *mpEnd; }
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // define vector of simple edges
 
         typedef ::std::vector< TrDeSimpleEdge > TrDeSimpleEdges;
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // helper class for holding a traversing edge. It will always have some
         // distance in YPos. The slope (in a numerically useful form, see comments) is
         // hold and used in SortValue to allow sorting traversing edges by Y, X and slope
@@ -179,7 +179,7 @@ namespace basegfx
             }
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // define double linked list of edges (for fast random insert)
 
         typedef ::std::list< TrDeEdgeEntry > TrDeEdgeEntries;
@@ -187,7 +187,7 @@ namespace basegfx
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -898,7 +898,7 @@ namespace basegfx
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -951,7 +951,7 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {

@@ -179,9 +179,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                             break;
                     }
 
-                    //=====
+
                     return;
-                    //=====
+
                 }
 
                 if( pView->AreObjectsMarked() )

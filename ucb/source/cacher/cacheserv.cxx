@@ -30,7 +30,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
@@ -40,9 +40,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
+
     // CachedContentResultSetFactory.
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( CachedContentResultSetFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -50,9 +50,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
         xFactory = CachedContentResultSetFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // CachedContentResultSetStubFactory.
-    //////////////////////////////////////////////////////////////////////
+
 
     else if ( CachedContentResultSetStubFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -60,9 +60,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
         xFactory = CachedContentResultSetStubFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // CachedDynamicResultSetFactory.
-    //////////////////////////////////////////////////////////////////////
+
 
     else if ( CachedDynamicResultSetFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -70,9 +70,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
         xFactory = CachedDynamicResultSetFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // CachedDynamicResultSetStubFactory.
-    //////////////////////////////////////////////////////////////////////
+
 
     else if ( CachedDynamicResultSetStubFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -80,7 +80,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
         xFactory = CachedDynamicResultSetStubFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( xFactory.is() )
     {

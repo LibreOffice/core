@@ -906,8 +906,8 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
     return bIsValid;
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
 {

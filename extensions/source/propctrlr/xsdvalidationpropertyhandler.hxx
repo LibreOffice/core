@@ -24,15 +24,15 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     class XSDValidationHelper;
-    //====================================================================
+
     //= XSDValidationPropertyHandler
-    //====================================================================
+
     class XSDValidationPropertyHandler;
     typedef HandlerComponentBase< XSDValidationPropertyHandler > XSDValidationPropertyHandler_Base;
     class XSDValidationPropertyHandler : public XSDValidationPropertyHandler_Base
@@ -84,9 +84,9 @@ namespace pcr
         void    implGetAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const SAL_THROW(());
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_XSDVALIDATIONPROPERTYHANDLER_HXX
 

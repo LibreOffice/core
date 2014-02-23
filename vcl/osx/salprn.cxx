@@ -45,7 +45,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 
 
-// =======================================================================
+
 
 AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpGraphics( 0 ),
@@ -608,7 +608,7 @@ sal_uLong AquaSalInfoPrinter::GetErrorCode() const
     return 0;
 }
 
-// =======================================================================
+
 
 AquaSalPrinter::AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter ) :
     mpInfoPrinter( i_pInfoPrinter )

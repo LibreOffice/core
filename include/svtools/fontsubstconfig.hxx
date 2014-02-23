@@ -24,7 +24,7 @@
 
 struct SvtFontSubstConfig_Impl;
 
-//-----------------------------------------------------------------------------
+
 struct SubstitutionStruct
 {
     OUString   sFont;
@@ -32,7 +32,7 @@ struct SubstitutionStruct
     sal_Bool        bReplaceAlways;
     sal_Bool        bReplaceOnScreenOnly;
 };
-//-----------------------------------------------------------------------------
+
 class SVT_DLLPUBLIC SvtFontSubstConfig : public utl::ConfigItem
 {
     sal_Bool                    bIsEnabled;

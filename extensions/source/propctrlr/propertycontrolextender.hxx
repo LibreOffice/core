@@ -27,14 +27,14 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= PropertyControlExtender
-    //====================================================================
+
     struct PropertyControlExtender_Data;
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XKeyListener
                                     >   PropertyControlExtender_Base;
@@ -58,9 +58,9 @@ namespace pcr
         ::std::auto_ptr< PropertyControlExtender_Data > m_pData;
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_PROPERTYCONTROLEXTENDER_HXX
 

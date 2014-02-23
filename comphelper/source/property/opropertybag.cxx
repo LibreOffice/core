@@ -44,10 +44,10 @@ void createRegistryInfo_OPropertyBag()
     static ::comphelper::module::OAutoRegistration< ::comphelper::OPropertyBag > aAutoRegistration;
 }
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -55,9 +55,9 @@ namespace comphelper
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     //= OPropertyBag
-    //====================================================================
+
 
     OPropertyBag::OPropertyBag()
         :OPropertyBag_PBase( GetBroadcastHelper(), this )
@@ -578,8 +578,8 @@ namespace comphelper
         return aDefault;
     }
 
-//........................................................................
+
 }   // namespace comphelper
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

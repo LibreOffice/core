@@ -28,14 +28,14 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -65,7 +65,7 @@ ShapePropertyInfo::ShapePropertyInfo( const sal_Int32* pnPropertyIds,
     OSL_ENSURE( mpnPropertyIds != 0, "ShapePropertyInfo::ShapePropertyInfo - missing property identifiers" );
 }
 
-// ============================================================================
+
 
 ShapePropertyMap::ShapePropertyMap( ModelObjectHelper& rModelObjHelper, const ShapePropertyInfo& rShapePropInfo ) :
     mrModelObjHelper( rModelObjHelper ),
@@ -195,7 +195,7 @@ bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
     return false;
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

@@ -85,9 +85,9 @@ class PopupMenuDispatcher :     // baseclasses
                                            css::frame::XFrameActionListener,
                                            css::lang::XInitialization >
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
         //  constructor / destructor

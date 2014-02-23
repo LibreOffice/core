@@ -41,9 +41,9 @@ namespace connectivity
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             ::com::sun::star::sdbc::SQLWarning      m_aLastWarning;
             MorkDriver*                             m_pDriver;      //  Pointer to the owning
                                                                     //  driver object

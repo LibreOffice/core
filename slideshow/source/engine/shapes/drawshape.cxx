@@ -75,11 +75,11 @@ namespace slideshow
 {
     namespace internal
     {
-        //////////////////////////////////////////////////////////////////////
+
         //
         // Private methods
         //
-        //////////////////////////////////////////////////////////////////////
+
 
         GDIMetaFileSharedPtr DrawShape::forceScrollTextMetaFile()
         {
@@ -284,7 +284,7 @@ namespace slideshow
                 if( !maCurrentShapeUnitBounds )
                 {
                     // no, (re)generate them
-                    // =====================
+
 
                     // setup cached values to defaults (might fail to
                     // retrieve true bounds below)
@@ -523,11 +523,11 @@ namespace slideshow
             //           issue for this #i72828#
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         //
         // Public methods
         //
-        //////////////////////////////////////////////////////////////////////
+
 
         DrawShapeSharedPtr DrawShape::create(
             const uno::Reference< drawing::XShape >&    xShape,
@@ -1053,7 +1053,7 @@ namespace slideshow
 
 
         // AnimatableShape methods
-        // ======================================================
+
 
         void DrawShape::enterAnimationMode()
         {
@@ -1091,7 +1091,7 @@ namespace slideshow
 
 
         // AttributableShape methods
-        // ======================================================
+
 
         ShapeAttributeLayerSharedPtr DrawShape::createAttributeLayer()
         {

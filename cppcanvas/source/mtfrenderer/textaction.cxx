@@ -1426,7 +1426,7 @@ namespace cppcanvas
 
 
                 // create and setup local line polygon
-                // ===================================
+
 
                 uno::Reference< rendering::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
                 const rendering::ViewState&          rViewState( mpCanvas->getViewState() );
@@ -1440,7 +1440,7 @@ namespace cppcanvas
 
 
                 // render everything
-                // =================
+
 
                 return renderEffectText(
                     EffectTextArrayRenderHelper( xCanvas,
@@ -1497,7 +1497,7 @@ namespace cppcanvas
 
 
                 // create and setup local line polygon
-                // ===================================
+
 
                 const ::basegfx::B2DPolyPolygon aPoly(
                     tools::createTextLinesPolyPolygon(
@@ -1860,7 +1860,7 @@ namespace cppcanvas
 
 
                 // create and setup local Text polygon
-                // ===================================
+
 
                 uno::Reference< rendering::XPolyPolygon2D > xTextPolygon();
 
@@ -1870,7 +1870,7 @@ namespace cppcanvas
                     return false;
 
                 // render everything
-                // =================
+
 
                 return renderEffectText(
                     OutlineTextArrayRenderHelper(
@@ -1919,11 +1919,11 @@ namespace cppcanvas
             }
 
 
-            // ======================================================================
+
             //
             // Action factory methods
             //
-            // ======================================================================
+
 
             /** Create an outline action
 
@@ -2140,7 +2140,7 @@ namespace cppcanvas
                               rState ));
 
             // determine type of text action to create
-            // =======================================
+
 
             const ::Color aEmptyColor( COL_AUTO );
 

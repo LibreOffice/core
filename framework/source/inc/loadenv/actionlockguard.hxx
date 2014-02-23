@@ -37,7 +37,7 @@ namespace framework{
 */
 class ActionLockGuard : private ThreadHelpBase
 {
-    //-------------------------------------------
+
     // member
 
     private:
@@ -49,12 +49,12 @@ class ActionLockGuard : private ThreadHelpBase
                     forced by this guard instance. */
         sal_Bool m_bActionLocked;
 
-    //-------------------------------------------
+
     // interface
 
     public:
 
-        //---------------------------------------
+
         /** @short  default ctor to initialize a "non working guard".
 
             @descr  That can be useful in cases, where no resource still exists,
@@ -67,7 +67,7 @@ class ActionLockGuard : private ThreadHelpBase
         {
         }
 
-        //---------------------------------------
+
         /** @short  initialize new guard instance and lock the given resource immediately.
 
             @param  xLock
@@ -80,7 +80,7 @@ class ActionLockGuard : private ThreadHelpBase
             setResource(xLock);
         }
 
-        //---------------------------------------
+
         /** @short  release this guard instance and make shure, that no lock
                     will exist afterwards on the internal wrapped resource.
          */
@@ -89,7 +89,7 @@ class ActionLockGuard : private ThreadHelpBase
             unlock();
         }
 
-        //---------------------------------------
+
         /** @short  set a new resource for locking at this guard.
 
             @descr  This call will fail, if an internal resource already exists
@@ -117,7 +117,7 @@ class ActionLockGuard : private ThreadHelpBase
             return sal_True;
         }
 
-        //---------------------------------------
+
         /** @short  set a new resource for locking at this guard.
 
             @descr  This call will fail, if an internal resource already exists
@@ -147,7 +147,7 @@ class ActionLockGuard : private ThreadHelpBase
                 xLock->removeActionLock();
         }
 
-        //---------------------------------------
+
         /** @short  lock the internal wrapped resource, if its not already done. */
         virtual void lock()
         {
@@ -162,7 +162,7 @@ class ActionLockGuard : private ThreadHelpBase
             // <- SAFE ..........................
         }
 
-        //---------------------------------------
+
         /** @short  unlock the internal wrapped resource, if its not already done. */
         virtual void unlock()
         {

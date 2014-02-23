@@ -161,7 +161,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     }
 }
 
-// ============================================================================
+
 
 } // namespace docprop
 } // namespace oox

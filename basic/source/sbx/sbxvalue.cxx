@@ -27,7 +27,7 @@
 
 TYPEINIT1(SbxValue,SbxBase)
 
-///////////////////////////// constructors //////////////////////////////
+///////////////////////////// constructors
 
 SbxValue::SbxValue() : SbxBase()
 {
@@ -220,7 +220,7 @@ void SbxValue::Clear()
 void SbxValue::Broadcast( sal_uIntPtr )
 {}
 
-//////////////////////////// Readout data //////////////////////////////
+//////////////////////////// Readout data
 
 // Detect the "right" variables. If it is an object, will be addressed either
 // the object itself or its default property.
@@ -460,7 +460,7 @@ GET( GetUInt64,   SbxSALUINT64,  sal_uInt64,    uInt64 )
 GET( GetDecimal,  SbxDECIMAL,    SbxDecimal*,   pDecimal )
 
 
-//////////////////////////// Write data /////////////////////////////
+//////////////////////////// Write data
 
 sal_Bool SbxValue::Put( const SbxValues& rVal )
 {
@@ -703,7 +703,7 @@ PUT( PutInt64,    SbxSALINT64,   sal_Int64,        nInt64 )
 PUT( PutUInt64,   SbxSALUINT64,  sal_uInt64,       uInt64 )
 PUT( PutDecimal,  SbxDECIMAL,    SbxDecimal*,      pDecimal )
 
-////////////////////////// Setting of the data type ///////////////////////////
+////////////////////////// Setting of the data type
 
 sal_Bool SbxValue::IsFixed() const
 {
@@ -867,7 +867,7 @@ sal_Bool SbxValue::Convert( SbxDataType eTo )
     else
         return sal_False;
 }
-////////////////////////////////// Calculating /////////////////////////////////
+////////////////////////////////// Calculating
 
 sal_Bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 {
@@ -1400,7 +1400,7 @@ sal_Bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
     return bRes;
 }
 
-///////////////////////////// Reading/Writing ////////////////////////////
+///////////////////////////// Reading/Writing
 
 sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
 {

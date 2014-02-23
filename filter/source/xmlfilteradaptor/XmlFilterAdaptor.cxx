@@ -119,9 +119,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         xStatusIndicator->setValue(nSteps++);
     }
 
-    //*********************
+
     // Creating a ConverterBridge instance
-    //*********************
+
     Reference< XInterface > xConvBridge(mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext), UNO_QUERY);
     if(! xConvBridge.is()){
         OSL_FAIL( "XMLReader::Read: %s service missing\n" );
@@ -132,9 +132,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
 
     Reference< XImportFilter > xConverter( xConvBridge, UNO_QUERY );
 
-     //********************
+
     //Template Loading if Required
-    //********************
+
     if (!msTemplateName.isEmpty()){
         Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
         Reference< XStyleLoader > xstyleLoader (xstylefamiliessupplier->getStyleFamilies(), UNO_QUERY);
@@ -159,9 +159,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     if (xStatusIndicator.is()){
         xStatusIndicator->setValue(nSteps++);
     }
-    //*********************
+
     // Calling Filtering Component
-    //*********************
+
     try {
         if (!xConverter->importer(aDescriptor,xHandler,msUserData)) {
             if (xStatusIndicator.is())

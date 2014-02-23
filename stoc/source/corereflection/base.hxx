@@ -62,17 +62,17 @@ typedef list< OUString > ClassNameList;
 extern ClassNameList g_aClassNames;
 #endif
 
-//--------------------------------------------------------------------------------------------------
+
 Mutex & getMutexAccess();
 
-//--------------------------------------------------------------------------------------------------
+
 inline bool td_equals( typelib_TypeDescription * pTD, typelib_TypeDescriptionReference * pType )
 {
     return (pTD->pWeakRef == pType ||
             (pTD->pTypeName->length == pType->pTypeName->length &&
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
-//--------------------------------------------------------------------------------------------------
+
 inline typelib_TypeDescription * getTypeByName( const OUString & rName )
 {
     typelib_TypeDescription * pTypeDescr = 0;
@@ -87,7 +87,7 @@ typedef boost::unordered_map< OUString, WeakReference< XIdlField >,
 typedef boost::unordered_map< OUString, WeakReference< XIdlMethod >,
     FctHashOUString, equal_to< OUString > > OUString2Method;
 
-//==================================================================================================
+
 class IdlReflectionServiceImpl
     : public OComponentHelper
     , public XIdlReflection
@@ -148,7 +148,7 @@ public:
     Reference< XIdlClass > forType( typelib_TypeDescriptionReference * pRef ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================================================
+
 class IdlClassImpl
     : public WeakImplHelper1< XIdlClass >
 {
@@ -202,7 +202,7 @@ public:
     virtual Reference< XIdlArray > SAL_CALL getArray() throw(::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================================================
+
 class InterfaceIdlClassImpl
     : public IdlClassImpl
 {
@@ -244,7 +244,7 @@ public:
     virtual void SAL_CALL createObject( Any & rObj ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================================================
+
 class CompoundIdlClassImpl
     : public IdlClassImpl
 {
@@ -273,7 +273,7 @@ public:
     virtual Sequence< Reference< XIdlField > > SAL_CALL getFields() throw(::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================================================
+
 class ArrayIdlClassImpl
     : public IdlClassImpl
     , public XIdlArray
@@ -309,7 +309,7 @@ public:
     virtual void SAL_CALL set( Any & rArray, sal_Int32 nIndex, const Any & rNewValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================================================
+
 class EnumIdlClassImpl
     : public IdlClassImpl
 {
@@ -335,7 +335,7 @@ public:
     virtual void SAL_CALL createObject( Any & rObj ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-//==================================================================================================
+
 class IdlMemberImpl
     : public WeakImplHelper1< XIdlMember >
 {
@@ -368,7 +368,7 @@ public:
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 };
 
-//--------------------------------------------------------------------------------------------------
+
 // coerces to type descr pTo else queries for it: the interface pointer is returned via rDest
 // ## type to XidlClass coercion possible
 inline sal_Bool extract(
@@ -398,7 +398,7 @@ inline sal_Bool extract(
     }
     return sal_False;
 }
-//--------------------------------------------------------------------------------------------------
+
 inline sal_Bool coerce_assign(
     void * pDest, typelib_TypeDescription * pTD, const Any & rSource,
     IdlReflectionServiceImpl * pRefl )

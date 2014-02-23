@@ -18,9 +18,9 @@
  */
 #ifndef _CONNECTIVITY_JAVA_LANG_CLASS_HXX_
 #define _CONNECTIVITY_JAVA_LANG_CLASS_HXX_
-//**************************************************************
+
 //************ Class: java.lang.Class
-//**************************************************************
+
 #include "java/lang/Object.hxx"
 
 namespace connectivity

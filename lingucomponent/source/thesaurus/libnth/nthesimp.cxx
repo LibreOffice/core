@@ -56,7 +56,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
@@ -700,6 +700,6 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

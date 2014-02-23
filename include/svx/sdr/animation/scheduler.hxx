@@ -24,7 +24,7 @@
 #include <vcl/timer.hxx>
 #include <svx/svxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // event class
 
 namespace sdr
@@ -58,7 +58,7 @@ namespace sdr
     } // end of namespace animation
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eventlist class
 
 namespace sdr
@@ -88,7 +88,7 @@ namespace sdr
     } // end of namespace animation
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 // scheduler class
 
 namespace sdr
@@ -141,7 +141,7 @@ namespace sdr
     } // end of namespace animation
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_ANIMATION_SCHEDULER_HXX
 

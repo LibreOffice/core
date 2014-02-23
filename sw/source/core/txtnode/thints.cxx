@@ -2517,7 +2517,7 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
         // pNd (pNd is the 'main' node):
         //
         //  case    pNd     this     action
-        //  ----------------------------------------------------
+
         //     1     -       -      do nothing
         //     2     -       a      convert item to attr of this
         //     3     a       -      convert item to attr of pNd

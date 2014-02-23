@@ -26,9 +26,9 @@ namespace sun {
 namespace star {
 namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class InputSequenceChecker_hi
-//  ----------------------------------------------------
+
 class InputSequenceChecker_hi : public InputSequenceCheckerImpl
 {
 public:

@@ -36,14 +36,14 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 
-//.........................................................................
+
 namespace calc
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OCellValueBinding
-    //=====================================================================
+
     class OCellValueBinding;
     // the base for our interfaces
     typedef ::cppu::WeakAggComponentImplHelper5 <   ::com::sun::star::form::binding::XValueBinding
@@ -156,9 +156,9 @@ namespace calc
 #endif
     };
 
-//.........................................................................
+
 }   // namespace calc
-//.........................................................................
+
 
 #endif // SC_CELLVALUEBINDING_HXX
 

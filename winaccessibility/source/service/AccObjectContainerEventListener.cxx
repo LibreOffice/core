@@ -19,7 +19,7 @@
 
 // AccObjectContainerEventListener.cpp: implementation of the AccContainerEventListener class.
 //
-//////////////////////////////////////////////////////////////////////
+
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

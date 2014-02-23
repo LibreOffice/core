@@ -28,7 +28,7 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 /** Expands to an OUString containing an 'officeDocument' relation type created
     from the passed literal(!) ASCII(!) character array. */
@@ -45,7 +45,7 @@ namespace core {
 #define CREATE_MSOFFICE_RELATION_TYPE( ascii ) \
     ( "http://schemas.microsoft.com/office/2006/relationships/" ascii )
 
-// ============================================================================
+
 
 struct Relation
 {
@@ -57,7 +57,7 @@ struct Relation
     Relation() : mbExternal( false ) {}
 };
 
-// ============================================================================
+
 
 class Relations;
 typedef ::boost::shared_ptr< Relations > RelationsRef;
@@ -93,7 +93,7 @@ private:
     OUString     maFragmentPath;
 };
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

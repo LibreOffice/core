@@ -438,7 +438,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     return aFilterName;
 }
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

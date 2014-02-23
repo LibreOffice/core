@@ -60,11 +60,11 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "svdconv.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
@@ -72,7 +72,7 @@ sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
     return new sdr::properties::TextProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
@@ -80,7 +80,7 @@ sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfTextObj(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrTextObj,SdrAttrObj);
 
@@ -1349,7 +1349,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXKorreg );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
 {
@@ -1568,14 +1568,14 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //
 // transformation interface for StarOfficeAPI. This implements support for
 // homogeneous 3x3 matrices containing the transformation of the SdrObject. At the
 // moment it contains a shearX, rotation and translation, but for setting all linear
 // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
 sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
@@ -1736,7 +1736,7 @@ bool SdrTextObj::IsRealyEdited() const
     return pEdtOutl && pEdtOutl->IsModified();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 // moved inlines here form hxx
 
 long SdrTextObj::GetEckenradius() const
@@ -1960,7 +1960,7 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
     static_cast< sdr::properties::TextProperties& >(GetProperties()).SetObjectItemNoBroadcast(rItem);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 //
 // The concept of the text object:
 // ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2024,6 +2024,6 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // - FillColorChanged while editin
 // - and many more...
 //
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

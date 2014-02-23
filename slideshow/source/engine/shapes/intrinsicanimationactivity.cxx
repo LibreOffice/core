@@ -96,7 +96,7 @@ namespace slideshow
             bool                                    mbIsActive;
         };
 
-        //////////////////////////////////////////////////////////////////////
+
 
         class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler,
                                            private boost::noncopyable
@@ -114,7 +114,7 @@ namespace slideshow
             IntrinsicAnimationActivity& mrActivity;
         };
 
-        //////////////////////////////////////////////////////////////////////
+
 
         IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext&         rContext,
                                                                 const DrawShapeSharedPtr&       rDrawShape,
@@ -258,7 +258,7 @@ namespace slideshow
                 shared_from_this() );
         }
 
-        //////////////////////////////////////////////////////////////////////
+
 
         ActivitySharedPtr createIntrinsicAnimationActivity(
             const SlideShowContext&         rContext,

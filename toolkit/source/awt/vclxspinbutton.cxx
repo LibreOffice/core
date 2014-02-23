@@ -32,10 +32,10 @@ namespace toolkit
     ::com::sun::star::uno::Any  getButtonLikeFaceColor( const Window* _pWindow );
 }
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -56,9 +56,9 @@ namespace toolkit
         }
     }
 
-    //====================================================================
+
     //= VCLXSpinButton
-    //====================================================================
+
     DBG_NAME( VCLXSpinButton )
 
     VCLXSpinButton::VCLXSpinButton()
@@ -112,7 +112,7 @@ namespace toolkit
         typedef void (SpinButton::*SetSpinButtonValue) (long);
         typedef long (SpinButton::*GetSpinButtonValue) (void) const;
 
-        //................................................................
+
         void lcl_setSpinButtonValue(Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )
         {
             SolarMutexGuard aGuard;
@@ -121,7 +121,7 @@ namespace toolkit
                 (pSpinButton->*_pSetter)( _nValue );
         }
 
-        //................................................................
+
         sal_Int32 lcl_getSpinButtonValue(const Window* _pWindow, GetSpinButtonValue _pGetter )
         {
             SolarMutexGuard aGuard;
@@ -340,8 +340,8 @@ namespace toolkit
         return aReturn;
     }
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

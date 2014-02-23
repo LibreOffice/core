@@ -195,7 +195,7 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
     return aRet;
 }
 
-//===============================================
+
 void SAL_CALL RecoveryUI::dispatch(const css::util::URL&                                  aURL      ,
                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
     throw(css::uno::RuntimeException)
@@ -204,14 +204,14 @@ void SAL_CALL RecoveryUI::dispatch(const css::util::URL&                        
     dispatchWithReturnValue(aURL, lArguments);
 }
 
-//===============================================
+
 void SAL_CALL RecoveryUI::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL& ) throw(css::uno::RuntimeException)
 {
     // TODO
     OSL_FAIL("RecoveryUI::addStatusListener()\nNot implemented yet!");
 }
 
-//===============================================
+
 void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL& )
     throw(css::uno::RuntimeException)
 {
@@ -237,7 +237,7 @@ static OUString GetCrashConfigDir()
     return ustrValue;
 }
 
-//===============================================
+
 
 #if defined(WNT)
 #define LCKFILE "crashdat.lck"
@@ -252,7 +252,7 @@ static OUString GetUnsentURL()
     return aURL;
 }
 
-//===============================================
+
 
 static bool delete_pending_crash()
 {
@@ -274,7 +274,7 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
     return m_eJob;
 }
 
-//===============================================
+
 sal_Bool RecoveryUI::impl_doEmergencySave()
 {
     // create core service, which implements the real "emergency save" algorithm.
@@ -296,7 +296,7 @@ sal_Bool RecoveryUI::impl_doEmergencySave()
     return (nRet==DLG_RET_OK_AUTOLUNCH);
 }
 
-//===============================================
+
 void RecoveryUI::impl_doRecovery()
 {
     // create core service, which implements the real "emergency save" algorithm.
@@ -324,7 +324,7 @@ void RecoveryUI::impl_doRecovery()
     delete_pending_crash();
 }
 
-//===============================================
+
 
 void RecoveryUI::impl_showAllRecoveredDocs()
 {

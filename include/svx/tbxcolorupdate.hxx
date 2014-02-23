@@ -28,14 +28,14 @@
 class ToolBox;
 class VirtualDevice;
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ToolboxButtonColorUpdater
-    //====================================================================
+
     /** helper class to update a color in a toolbox button image
 
         formerly known as SvxTbxButtonColorUpdater_Impl, residing in svx/source/tbxctrls/colorwindow.hxx.
@@ -60,9 +60,9 @@ namespace svx
         bool        mbWasHiContrastMode;
     };
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_TBXCOLORUPDATE_HXX
 

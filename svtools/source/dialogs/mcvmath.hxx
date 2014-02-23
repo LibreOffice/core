@@ -55,9 +55,9 @@ class FixCpx;
 #define FIX_A3 0
 #endif
 
-// -------
+
 // - Fix -
-// -------
+
 
 class Fix
 {
@@ -103,9 +103,9 @@ public:
     friend FixCpx   operator-( const FixCpx& a );
 };
 
-// ----------
+
 // - FixCpx -
-// ----------
+
 
 class FixCpx
 {
@@ -199,7 +199,7 @@ inline FixCpx operator/ ( const FixCpx& a, const FixCpx& b )
                    (b.r*a.r-a.r*b.i)/(b.r*b.r+b.i*b.i) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Fix ImpMultBig2( const Fix& a, const Fix& b );
 

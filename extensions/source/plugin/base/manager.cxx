@@ -97,7 +97,7 @@ const Sequence< OUString >& PluginManager::getAdditionalSearchPaths()
     return aPaths;
 }
 
-//==================================================================================================
+
 Reference< XInterface > SAL_CALL PluginManager_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr ) throw( Exception )
 {
     Reference< XInterface >  xService = *new XPluginManager_Impl( comphelper::getComponentContext(rSMgr) );

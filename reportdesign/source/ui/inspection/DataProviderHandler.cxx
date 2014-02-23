@@ -51,10 +51,10 @@
 #include "helpids.hrc"
 #include "RptResId.hrc"
 #include "PropertyForward.hxx"
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 using namespace ::com::sun::star;
 
 DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext > const & context)
@@ -536,8 +536,8 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
     _rClearBeforeDialog.clear();
     return ( xDialog->execute() != 0 );
 }
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,13 +43,13 @@ namespace framework{
 *//*-*************************************************************************************************************/
 class TaskCreator : private ThreadHelpBase
 {
-    //_______________________
+
     // member
     private:
 
         css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
-    //_______________________
+
     // interface
     public:
 
@@ -59,7 +59,7 @@ class TaskCreator : private ThreadHelpBase
         css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName    ,
                                                                     sal_Bool         bVisible );
 
-    //_______________________
+
     // helper
     private:
 

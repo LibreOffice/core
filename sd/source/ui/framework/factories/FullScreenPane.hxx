@@ -72,7 +72,7 @@ public:
         throw (cssu::RuntimeException);
 
 
-    //-------------------------------------------------------------------------
+
 
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 

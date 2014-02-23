@@ -38,7 +38,7 @@
 #define SYMBOL_NONE     0xFFFF
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 inline const OUString GetExportSymbolName( const OUString &rUiSymbolName )
 {
@@ -62,7 +62,7 @@ inline const OUString GetUiSymbolSetName( const OUString &rExportSymbolSetName )
     return SM_MOD()->GetLocSymbolData().GetUiSymbolSetName( rExportSymbolSetName );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 class SmSym
 {

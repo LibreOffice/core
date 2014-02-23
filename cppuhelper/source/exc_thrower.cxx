@@ -40,7 +40,7 @@ namespace
 
 using cppuhelper::detail::XExceptionThrower;
 
-//==============================================================================
+
 struct ExceptionThrower : public uno_Interface, XExceptionThrower
 {
     inline ExceptionThrower();
@@ -183,7 +183,7 @@ class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThr
 namespace cppu
 {
 
-//==============================================================================
+
 void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
 {
     if (exc.getValueTypeClass() != TypeClass_EXCEPTION)
@@ -211,7 +211,7 @@ void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
     xThrower->throwException( exc );
 }
 
-//==============================================================================
+
 Any SAL_CALL getCaughtException()
 {
     Mapping cpp2uno(Environment::getCurrent(), Environment(UNO_LB_UNO));

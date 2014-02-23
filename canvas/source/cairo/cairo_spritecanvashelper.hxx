@@ -88,7 +88,7 @@ namespace cairocanvas
 
 
         // SpriteRedrawManager functor calls
-        // -------------------------------------------------
+
 
         /** Gets called for simple background repaints
          */

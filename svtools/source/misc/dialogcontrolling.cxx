@@ -23,30 +23,30 @@
 #include <algorithm>
 #include <functional>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //=====================================================================
+
+
     //= IWindowOperator
-    //=====================================================================
+
 
     IWindowOperator::~IWindowOperator()
     {
     }
 
-    //=====================================================================
+
     //= IWindowEventFilter
-    //=====================================================================
+
 
     IWindowEventFilter::~IWindowEventFilter()
     {
     }
 
-    //=====================================================================
+
     //= DialogController_Data
-    //=====================================================================
+
     struct DialogController_Data
     {
         Window&                     rInstigator;
@@ -62,9 +62,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= DialogController
-    //=====================================================================
+
 
     DialogController::DialogController( Window& _rInstigator, const PWindowEventFilter& _pEventFilter,
             const PWindowOperator& _pOperator )
@@ -124,17 +124,17 @@ namespace svt
         m_pImpl->pOperator->operateOn( _rTriggerEvent, _rWindow );
     }
 
-    //=====================================================================
+
     //= ControlDependencyManager_Data
-    //=====================================================================
+
     struct ControlDependencyManager_Data
     {
         ::std::vector< PDialogController >  aControllers;
     };
 
-    //=====================================================================
+
     //= ControlDependencyManager
-    //=====================================================================
+
 
     ControlDependencyManager::ControlDependencyManager()
         :m_pImpl( new ControlDependencyManager_Data )
@@ -239,8 +239,8 @@ namespace svt
         m_pImpl->aControllers.push_back( pController );
     }
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

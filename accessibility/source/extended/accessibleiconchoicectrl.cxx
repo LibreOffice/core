@@ -28,10 +28,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
+
 
     // class AccessibleIconChoiceCtrl ----------------------------------------------
 
@@ -372,8 +372,8 @@ namespace accessibility
         return static_cast<SvtIconChoiceCtrl*>(GetWindow());
     }
 
-//........................................................................
+
 }// namespace accessibility
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

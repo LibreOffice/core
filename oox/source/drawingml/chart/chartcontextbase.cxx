@@ -26,12 +26,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 ShapePrWrapperContext::ShapePrWrapperContext( ContextHandler2Helper& rParent, Shape& rModel ) :
     ContextBase< Shape >( rParent, rModel )
@@ -47,7 +47,7 @@ ContextHandlerRef ShapePrWrapperContext::onCreateContext( sal_Int32 nElement, co
     return (isRootElement() && (nElement == C_TOKEN( spPr ))) ? new ShapePropertiesContext( *this, mrModel ) : 0;
 }
 
-// ============================================================================
+
 
 LayoutContext::LayoutContext( ContextHandler2Helper& rParent, LayoutModel& rModel ) :
     ContextBase< LayoutModel >( rParent, rModel )
@@ -107,7 +107,7 @@ ContextHandlerRef LayoutContext::onCreateContext( sal_Int32 nElement, const Attr
     return 0;
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

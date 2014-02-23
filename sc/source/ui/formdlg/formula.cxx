@@ -55,7 +55,7 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 
-//============================================================================
+
 using namespace formula;
 using namespace com::sun::star;
 
@@ -64,9 +64,9 @@ ScAddress ScFormulaDlg::aCursorPos;
 
 
 
-//  --------------------------------------------------------------------------
+
 //      Initialisierung / gemeinsame Funktionen  fuer Dialog
-//  --------------------------------------------------------------------------
+
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                     Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
@@ -305,9 +305,9 @@ bool ScFormulaDlg::Close()
     return true;
 }
 
-//  --------------------------------------------------------------------------
+
 //                          Funktionen fuer rechte Seite
-//  --------------------------------------------------------------------------
+
 bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
     boost::scoped_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator( pDoc, aCursorPos, rStrExp ) );

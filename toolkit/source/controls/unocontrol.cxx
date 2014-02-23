@@ -130,9 +130,9 @@ struct UnoControl_Data
     }
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControl
-//  ----------------------------------------------------
+
 DBG_NAME( UnoControl )
 UnoControl::UnoControl() :
       maDisposeListeners( *this )

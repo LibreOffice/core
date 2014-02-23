@@ -45,9 +45,9 @@ using namespace com::sun::star;
 namespace framework
 {
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
 DEFINE_XINTERFACE_11                    (   TabWindow                                                                          ,
                                             ::cppu::OWeakObject                                                                ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                        ),

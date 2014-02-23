@@ -209,7 +209,7 @@ static inline void * __queryDeepNoXInterface(
 }
 
 // ImplHelper
-//==================================================================================================
+
 Any SAL_CALL ImplHelper_query(
     Type const & rType, class_data * cd, void * that )
     SAL_THROW( (RuntimeException) )
@@ -234,7 +234,7 @@ Any SAL_CALL ImplHelper_query(
     }
     return Any( &p, pTDR );
 }
-//==================================================================================================
+
 Any SAL_CALL ImplHelper_queryNoXInterface(
     Type const & rType, class_data * cd, void * that )
     SAL_THROW( (RuntimeException) )
@@ -252,7 +252,7 @@ Any SAL_CALL ImplHelper_queryNoXInterface(
         return Any();
     }
 }
-//==================================================================================================
+
 Sequence< sal_Int8 > SAL_CALL ImplHelper_getImplementationId( class_data * cd )
     SAL_THROW( (RuntimeException) )
 {
@@ -273,7 +273,7 @@ Sequence< sal_Int8 > SAL_CALL ImplHelper_getImplementationId( class_data * cd )
     ::rtl_byte_sequence_constructFromArray( &seq, cd->m_id, 16 );
     return Sequence< sal_Int8 >( seq, SAL_NO_ACQUIRE );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL ImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )
@@ -283,7 +283,7 @@ Sequence< Type > SAL_CALL ImplHelper_getTypes(
     __fillTypes( pTypes, cd );
     return types;
 }
-//==================================================================================================
+
 Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
     class_data * cd, Sequence< Type > const & rAddTypes )
     SAL_THROW( (RuntimeException) )
@@ -303,7 +303,7 @@ Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
 }
 
 // WeakImplHelper
-//==================================================================================================
+
 Any SAL_CALL WeakImplHelper_query(
     Type const & rType, class_data * cd, void * that, OWeakObject * pBase )
     SAL_THROW( (RuntimeException) )
@@ -322,7 +322,7 @@ Any SAL_CALL WeakImplHelper_query(
     }
     return pBase->OWeakObject::queryInterface( rType );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL WeakImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )
@@ -336,7 +336,7 @@ Sequence< Type > SAL_CALL WeakImplHelper_getTypes(
 }
 
 // WeakAggImplHelper
-//==================================================================================================
+
 Any SAL_CALL WeakAggImplHelper_queryAgg(
     Type const & rType, class_data * cd, void * that, OWeakAggObject * pBase )
     SAL_THROW( (RuntimeException) )
@@ -355,7 +355,7 @@ Any SAL_CALL WeakAggImplHelper_queryAgg(
     }
     return pBase->OWeakAggObject::queryAggregation( rType );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL WeakAggImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )
@@ -370,7 +370,7 @@ Sequence< Type > SAL_CALL WeakAggImplHelper_getTypes(
 }
 
 // WeakComponentImplHelper
-//==================================================================================================
+
 Any SAL_CALL WeakComponentImplHelper_query(
     Type const & rType, class_data * cd, void * that, WeakComponentImplHelperBase * pBase )
     SAL_THROW( (RuntimeException) )
@@ -389,7 +389,7 @@ Any SAL_CALL WeakComponentImplHelper_query(
     }
     return pBase->WeakComponentImplHelperBase::queryInterface( rType );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL WeakComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )
@@ -404,7 +404,7 @@ Sequence< Type > SAL_CALL WeakComponentImplHelper_getTypes(
 }
 
 // WeakAggComponentImplHelper
-//==================================================================================================
+
 Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     Type const & rType, class_data * cd, void * that, WeakAggComponentImplHelperBase * pBase )
     SAL_THROW( (RuntimeException) )
@@ -423,7 +423,7 @@ Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     }
     return pBase->WeakAggComponentImplHelperBase::queryAggregation( rType );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )

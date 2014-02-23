@@ -27,10 +27,10 @@
 
 #include <map>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Type;
@@ -44,9 +44,9 @@ namespace comphelper
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
+
     //= PropertyBag_Impl
-    //====================================================================
+
     typedef ::std::map< sal_Int32, Any >    MapInt2Any;
     struct PropertyBag_Impl
     {
@@ -55,9 +55,9 @@ namespace comphelper
         bool m_bAllowEmptyPropertyName;
     };
 
-    //====================================================================
+
     //= PropertyBag
-    //====================================================================
+
 
     PropertyBag::PropertyBag()
         :m_pImpl( new PropertyBag_Impl )
@@ -202,8 +202,8 @@ namespace comphelper
     }
 
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

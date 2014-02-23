@@ -31,9 +31,9 @@
 #include "svtools/treelistentry.hxx"
 
 
-/////////////////////
+
 // SdCustomShowDlg //
-/////////////////////
+
 
 
 SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
@@ -272,9 +272,9 @@ sal_Bool SdCustomShowDlg::IsCustomShow() const
 
 
 
-///////////////////////////
+
 // SdDefineCustomShowDlg //
-///////////////////////////
+
 
 
 SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,

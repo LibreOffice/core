@@ -24,14 +24,14 @@
 #include <sfx2/tabdlg.hxx>
 #include <editeng/flstitem.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= TextControlCharAttribDialog
-    //====================================================================
+
     class TextControlCharAttribDialog : public SfxTabDialog
     {
     private:
@@ -52,9 +52,9 @@ namespace svx
     public:
         TextControlParaAttribDialog(Window* _pParent, const SfxItemSet& _rCoreSet);
     };
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX
 

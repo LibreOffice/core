@@ -43,10 +43,10 @@ namespace connectivity
             ~IMethodGuardAccess() {}
         };
 
-        //==========================================================================
+
         //= OHsqlConnection - wraps all methods to the real connection from the driver
         //= but when disposed it doesn't dispose the real connection
-        //==========================================================================
+
         typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::util::XFlushable
                                                 ,   ::com::sun::star::sdb::application::XTableUIProvider
                                                 >   OHsqlConnection_BASE;
@@ -127,9 +127,9 @@ namespace connectivity
                 impl_getTextTableIcon_nothrow();
         };
 
-        //==========================================================================
+
         //= OHsqlConnection
-        //==========================================================================
+
         class MethodGuard : public ::osl::MutexGuard
         {
         private:

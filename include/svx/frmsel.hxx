@@ -68,7 +68,7 @@ const FrameSelFlags FRAMESEL_DIAGONAL   = FRAMESEL_DIAG_TLBR|FRAMESEL_DIAG_BLTR;
 /** If set, all frame borders will support the don't care state. */
 const FrameSelFlags FRAMESEL_DONTCARE   = 0x0100;
 
-// ----------------------------------------------------------------------------
+
 
 /** All possible states of a frame border. */
 enum FrameBorderState
@@ -178,7 +178,7 @@ public:
     /** Returns the bounding rectangle of the specified frame border (if enabled). */
     Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
 
-    // ------------------------------------------------------------------------
+
 protected:
     virtual void        Paint( const Rectangle& rRect );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );

@@ -33,10 +33,10 @@ extern "C" void SAL_CALL createRegistryInfo_CellBindingPropertyHandler()
     ::pcr::CellBindingPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::table;
@@ -48,9 +48,9 @@ namespace pcr
     using namespace ::com::sun::star::form::binding;
     using namespace ::comphelper;
 
-    //====================================================================
+
     //= CellBindingPropertyHandler
-    //====================================================================
+
     DBG_NAME( CellBindingPropertyHandler )
 
     CellBindingPropertyHandler::CellBindingPropertyHandler( const Reference< XComponentContext >& _rxContext )
@@ -487,8 +487,8 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

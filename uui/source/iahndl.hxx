@@ -65,7 +65,7 @@ namespace com { namespace sun { namespace star {
 
 class Window;
 
-//============================================================================
+
 struct InteractionHandlerData
 {
     /** The UNO service name to use to instanciate the content provider.
@@ -83,7 +83,7 @@ typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com
 
 typedef ::boost::unordered_map< OUString, OUString, OUStringHash >    StringHashMap;
 
-//============================================================================
+
 class UUIInteractionHelper
 {
 private:
@@ -190,7 +190,7 @@ private:
                 com::sun::star::task::XInteractionContinuation > > const &
             rContinuations);
 
-    //=====================================================================
+
 
     bool
     handleInteractiveIOException(

@@ -27,9 +27,9 @@
 #include "excimp8.hxx"
 #include "scextopt.hxx"
 #include "document.hxx"
-// ============================================================================
+
 // *** Implementation ***
-// ============================================================================
+
 
 XclImpName::TokenStrmData::TokenStrmData( XclImpStream& rStrm ) :
     mrStrm(rStrm), mnStrmPos(0), mnStrmSize(0) {}
@@ -311,6 +311,6 @@ void XclImpNameManager::ConvertAllTokens()
         it->ConvertTokens();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

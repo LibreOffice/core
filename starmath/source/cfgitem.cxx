@@ -38,7 +38,7 @@ static const char aRootName[] = "Office.Math";
 #define SYMBOL_LIST         "SymbolList"
 #define FONT_FORMAT_LIST    "FontFormatList"
 
-/////////////////////////////////////////////////////////////////
+
 
 
 static Sequence< OUString > lcl_GetFontPropertyNames()
@@ -65,7 +65,7 @@ static Sequence< OUString > lcl_GetFontPropertyNames()
     return aNames;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 
 static Sequence< OUString > lcl_GetSymbolPropertyNames()
@@ -90,7 +90,7 @@ static Sequence< OUString > lcl_GetSymbolPropertyNames()
     return aNames;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 static const char * aMathPropNames[] =
 {
@@ -180,7 +180,7 @@ static Sequence< OUString > GetOtherPropertyNames()
     return lcl_GetPropertyNames( aMathPropNames, SAL_N_ELEMENTS( aMathPropNames ) );
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 struct SmCfgOther
 {
@@ -209,7 +209,7 @@ SmCfgOther::SmCfgOther()
     bFormulaCursor      = bIsSaveOnlyUsedSymbols = true;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 
 SmFontFormat::SmFontFormat()
@@ -258,7 +258,7 @@ bool SmFontFormat::operator == ( const SmFontFormat &rFntFmt ) const
 }
 
 
-/////////////////////////////////////////////////////////////////
+
 
 SmFntFmtListEntry::SmFntFmtListEntry( const OUString &rId, const SmFontFormat &rFntFmt ) :
     aId     (rId),
@@ -396,7 +396,7 @@ const OUString SmFontFormatList::GetNewFontFormatId() const
     return OUString();
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SmMathConfig::SmMathConfig() :
     ConfigItem(OUString(aRootName))
@@ -1273,6 +1273,6 @@ void SmMathConfig::SetShowFormulaCursor( bool bVal )
 void SmMathConfig::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {}
 
-/////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

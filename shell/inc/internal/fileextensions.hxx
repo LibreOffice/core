@@ -43,13 +43,13 @@ extern FileExtensionEntry OOFileExtensionTable[];
 
 extern size_t OOFileExtensionTableSize;
 
-//---------------------------------
+
 /** Return the extension of a file
     name without the '.'
 */
 std::string get_file_name_extension(const std::string& file_name);
 
-//---------------------------------
+
 /** Return the type of a file
 */
 

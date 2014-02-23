@@ -26,9 +26,9 @@
 namespace connectivity
 {
 
-    //**************************************************************
+
     //************ Class: java.util.Date
-    //**************************************************************
+
 
     class java_util_Date : public java_lang_Object
     {

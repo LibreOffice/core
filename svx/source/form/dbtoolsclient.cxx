@@ -26,10 +26,10 @@
 #include <rtl/instance.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::connectivity::simple;
     using namespace ::com::sun::star::sdbc;
@@ -40,9 +40,9 @@ namespace svxform
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     //= ODbtoolsClient
-    //====================================================================
+
 
     namespace
     {
@@ -161,9 +161,9 @@ namespace svxform
         OSL_ENSURE(s_nClients >= 0,"Illegall call of revokeClient()");
     }
 
-    //====================================================================
+
     //= OStaticDataAccessTools
-    //====================================================================
+
 
     OStaticDataAccessTools::OStaticDataAccessTools()
     {
@@ -315,9 +315,9 @@ namespace svxform
         return bReturn;
     }
 
-    //====================================================================
+
     //= DBToolsObjectFactory
-    //====================================================================
+
 
     DBToolsObjectFactory::DBToolsObjectFactory()
     {
@@ -340,9 +340,9 @@ namespace svxform
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-//........................................................................
+
 }   // namespace svxform
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

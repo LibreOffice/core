@@ -150,7 +150,7 @@ class heap_ptr_test : public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE_END();
 }; // class heap_ptr_test
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(heap_ptr_test);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,7 +51,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 struct AccessibleEventObject;
 }}}}
 
-//////////////////////////////////////////////////////////////////////
+
 //
 // classes and helper-classes used for accessibility in the graphic-window
 //
@@ -152,7 +152,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-//////////////////////////////////////////////////////////////////////
+
 //
 // classes and helper-classes used for accessibility in the command-window
 //
@@ -385,7 +385,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 #endif
 

@@ -49,7 +49,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 class MacSpellChecker :
@@ -133,7 +133,7 @@ inline OUString MacSpellChecker::getImplementationName_Static() throw()
 
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 #endif
 

@@ -31,7 +31,7 @@ class Size;
 class Point;
 
 
-//_____________________________________________________________________________
+
 
 /**
 This class provides drawing text with different script types on any output devices.
@@ -88,7 +88,7 @@ public:
     void                        DrawText( const Point& _rPos );
 };
 
-//_____________________________________________________________________________
+
 
 #endif
 

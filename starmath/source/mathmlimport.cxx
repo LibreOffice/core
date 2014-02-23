@@ -79,7 +79,7 @@ using namespace ::xmloff::token;
 
 #define IMPORT_SVC_NAME "com.sun.star.xml.XMLImportFilter"
 
-////////////////////////////////////////////////////////////
+
 
 namespace {
 template < typename T >
@@ -405,7 +405,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     return ERRCODE_SFX_DOLOADFAILED;
 }
 
-////////////////////////////////////////////////////////////
+
 
 SmXMLImport::SmXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
@@ -454,7 +454,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     return (cppu::OWeakObject*)new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), IMPORT_ALL);
 }
 
-////////////////////////////////////////////////////////////
+
 
 OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
 {
@@ -476,7 +476,7 @@ throw( uno::Exception )
     return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportMeta_getImplementationName(), IMPORT_META );
 }
 
-////////////////////////////////////////////////////////////
+
 
 OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw()
 {
@@ -554,7 +554,7 @@ void SmXMLImport::endDocument(void)
     SvXMLImport::endDocument();
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLImportContext: public SvXMLImportContext
 {
@@ -603,7 +603,7 @@ SvXMLImportContext * SmXMLImportContext::CreateChildContext(sal_uInt16 /*nPrefix
     return 0;
 }
 
-////////////////////////////////////////////////////////////
+
 
 struct SmXMLContext_Helper
 {
@@ -771,7 +771,7 @@ void SmXMLContext_Helper::ApplyAttrs()
     }
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLDocContext_Impl : public SmXMLImportContext
 {
@@ -785,7 +785,7 @@ public:
     void EndElement();
 };
 
-////////////////////////////////////////////////////////////
+
 
 /*avert thy gaze from the proginator*/
 class SmXMLRowContext_Impl : public SmXMLDocContext_Impl
@@ -808,7 +808,7 @@ public:
     void EndElement();
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLEncloseContext_Impl : public SmXMLRowContext_Impl
 {
@@ -833,7 +833,7 @@ void SmXMLEncloseContext_Impl::EndElement()
         SmXMLRowContext_Impl::EndElement();
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLFracContext_Impl : public SmXMLRowContext_Impl
 {
@@ -846,7 +846,7 @@ public:
     void EndElement();
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLSqrtContext_Impl : public SmXMLRowContext_Impl
 {
@@ -858,7 +858,7 @@ public:
     void EndElement();
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLRootContext_Impl : public SmXMLRowContext_Impl
 {
@@ -870,7 +870,7 @@ public:
     void EndElement();
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLStyleContext_Impl : public SmXMLRowContext_Impl
 {
@@ -907,7 +907,7 @@ void SmXMLStyleContext_Impl::EndElement()
     aStyleHelper.ApplyAttrs();
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLPaddedContext_Impl : public SmXMLRowContext_Impl
 {
@@ -931,7 +931,7 @@ void SmXMLPaddedContext_Impl::EndElement()
         SmXMLRowContext_Impl::EndElement();
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLPhantomContext_Impl : public SmXMLRowContext_Impl
 {
@@ -966,7 +966,7 @@ void SmXMLPhantomContext_Impl::EndElement()
     rNodeStack.push(pPhantom);
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLFencedContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1062,7 +1062,7 @@ void SmXMLFencedContext_Impl::EndElement()
 }
 
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLErrorContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1091,7 +1091,7 @@ void SmXMLErrorContext_Impl::EndElement()
     }
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLNumberContext_Impl : public SmXMLImportContext
 {
@@ -1123,7 +1123,7 @@ void SmXMLNumberContext_Impl::EndElement()
     GetSmImport().GetNodeStack().push(new SmTextNode(aToken,FNT_NUMBER));
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLAnnotationContext_Impl : public SmXMLImportContext
 {
@@ -1170,7 +1170,7 @@ void SmXMLAnnotationContext_Impl::Characters(const OUString &rChars)
         GetSmImport().SetText( GetSmImport().GetText() + rChars );
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLTextContext_Impl : public SmXMLImportContext
 {
@@ -1202,7 +1202,7 @@ void SmXMLTextContext_Impl::EndElement()
     GetSmImport().GetNodeStack().push(new SmTextNode(aToken,FNT_TEXT));
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLStringContext_Impl : public SmXMLImportContext
 {
@@ -1244,7 +1244,7 @@ void SmXMLStringContext_Impl::EndElement()
     GetSmImport().GetNodeStack().push(new SmTextNode(aToken,FNT_FIXED));
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLIdentifierContext_Impl : public SmXMLImportContext
 {
@@ -1308,7 +1308,7 @@ void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
     aToken.aText = rChars;
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLOperatorContext_Impl : public SmXMLImportContext
 {
@@ -1376,7 +1376,7 @@ void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
 }
 
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLSpaceContext_Impl : public SmXMLImportContext
 {
@@ -1402,7 +1402,7 @@ void SmXMLSpaceContext_Impl::StartElement(
     GetSmImport().GetNodeStack().push(pBlank);
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLSubContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1447,7 +1447,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
     rNodeStack.push(pNode);
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLSupContext_Impl : public SmXMLSubContext_Impl
 {
@@ -1462,7 +1462,7 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLSubSupContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1508,7 +1508,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     rNodeStack.push(pNode);
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLUnderContext_Impl : public SmXMLSubContext_Impl
 {
@@ -1573,7 +1573,7 @@ void SmXMLUnderContext_Impl::EndElement()
         HandleAccent();
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLOverContext_Impl : public SmXMLSubContext_Impl
 {
@@ -1631,7 +1631,7 @@ void SmXMLOverContext_Impl::HandleAccent()
 
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLUnderOverContext_Impl : public SmXMLSubSupContext_Impl
 {
@@ -1646,7 +1646,7 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLMultiScriptsContext_Impl : public SmXMLSubSupContext_Impl
 {
@@ -1666,7 +1666,7 @@ public:
         const uno::Reference< xml::sax::XAttributeList > &xAttrList);
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLNoneContext_Impl : public SmXMLImportContext
 {
@@ -1690,7 +1690,7 @@ void SmXMLNoneContext_Impl::EndElement(void)
         new SmTextNode(aToken,FNT_VARIABLE));
 }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLPrescriptsContext_Impl : public SmXMLImportContext
 {
@@ -1700,7 +1700,7 @@ public:
         : SmXMLImportContext(rImport,nPrefix,rLName) {}
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLTableRowContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1716,7 +1716,7 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLTableContext_Impl : public SmXMLTableRowContext_Impl
 {
@@ -1733,7 +1733,7 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLTableCellContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1744,7 +1744,7 @@ public:
         {}
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLAlignGroupContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1760,7 +1760,7 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLActionContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1773,7 +1773,7 @@ public:
     void EndElement();
 };
 
-////////////////////////////////////////////////////////////
+
 
 // NB: virtually inherit so we can multiply inherit properly
 //     in SmXMLFlatDocContext_Impl
@@ -1810,7 +1810,7 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
     return pContext;
 }
 
-////////////////////////////////////////////////////////////
+
 
 // context for flat file xml format
 class SmXMLFlatDocContext_Impl
@@ -1858,7 +1858,7 @@ SvXMLImportContext *SmXMLFlatDocContext_Impl::CreateChildContext(
     }
 }
 
-////////////////////////////////////////////////////////////
+
 
 static const SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
 {
@@ -1957,7 +1957,7 @@ static const SvXMLTokenMapEntry aColorTokenMap[] =
 };
 
 
-////////////////////////////////////////////////////////////
+
 
 const SvXMLTokenMap& SmXMLImport::GetPresLayoutElemTokenMap()
 {
@@ -2024,7 +2024,7 @@ const SvXMLTokenMap& SmXMLImport::GetColorTokenMap()
     return *pColorTokenMap;
 }
 
-////////////////////////////////////////////////////////////
+
 
 SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -2962,7 +2962,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
 }
 
 
-////////////////////////////////////////////////////////////
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

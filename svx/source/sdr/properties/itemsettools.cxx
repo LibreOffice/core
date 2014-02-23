@@ -25,7 +25,7 @@
 #include <svx/svditer.hxx>
 #include <vcl/region.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // class to remember broadcast start positions
 
 namespace sdr
@@ -91,7 +91,7 @@ namespace sdr
     } // end of namespace properties
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

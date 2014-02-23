@@ -27,9 +27,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class IndexEntrySupplier_Common
-//  ----------------------------------------------------
+
 
 class IndexEntrySupplier_Common : public cppu::WeakImplHelper2
 <

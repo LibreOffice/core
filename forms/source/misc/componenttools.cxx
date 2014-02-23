@@ -24,10 +24,10 @@
 #include <algorithm>
 #include <iterator>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::uno::XInterface;
@@ -35,9 +35,9 @@ namespace frm
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::container::XChild;
 
-    //====================================================================
+
     //= TypeBag
-    //====================================================================
+
 
     TypeBag::TypeBag( const TypeSequence& _rTypes1 )
     {
@@ -89,7 +89,7 @@ namespace frm
         return aTypes;
     }
 
-    //====================================================================
+
     Reference< XModel >  getXModel( const Reference< XInterface >& _rxComponent )
     {
         Reference< XInterface > xParent = _rxComponent;
@@ -103,8 +103,8 @@ namespace frm
         return xModel;
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

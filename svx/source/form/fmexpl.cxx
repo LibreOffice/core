@@ -71,9 +71,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-//========================================================================
+
 // class FmNavInsertedHint
-//========================================================================
+
 TYPEINIT1( FmNavInsertedHint, SfxHint );
 DBG_NAME(FmNavInsertedHint);
 
@@ -92,9 +92,9 @@ FmNavInsertedHint::~FmNavInsertedHint()
 }
 
 
-//========================================================================
+
 // class FmNavInsertedHint
-//========================================================================
+
 TYPEINIT1( FmNavModelReplacedHint, SfxHint );
 DBG_NAME(FmNavModelReplacedHint);
 
@@ -110,9 +110,9 @@ FmNavModelReplacedHint::~FmNavModelReplacedHint()
     DBG_DTOR(FmNavModelReplacedHint,NULL);
 }
 
-//========================================================================
+
 // class FmNavRemovedHint
-//========================================================================
+
 TYPEINIT1( FmNavRemovedHint, SfxHint );
 DBG_NAME(FmNavRemovedHint);
 
@@ -129,9 +129,9 @@ FmNavRemovedHint::~FmNavRemovedHint()
 }
 
 
-//========================================================================
+
 // class FmNavNameChangedHint
-//========================================================================
+
 TYPEINIT1( FmNavNameChangedHint, SfxHint );
 DBG_NAME(FmNavNameChangedHint);
 
@@ -148,9 +148,9 @@ FmNavNameChangedHint::~FmNavNameChangedHint()
     DBG_DTOR(FmNavNameChangedHint,NULL);
 }
 
-//========================================================================
+
 // class FmNavClearedHint
-//========================================================================
+
 TYPEINIT1( FmNavClearedHint, SfxHint );
 DBG_NAME(FmNavClearedHint);
 
@@ -165,19 +165,19 @@ FmNavClearedHint::~FmNavClearedHint()
     DBG_DTOR(FmNavClearedHint,NULL);
 }
 
-//========================================================================
+
 // class FmNavRequestSelectHint
-//========================================================================
+
 TYPEINIT1(FmNavRequestSelectHint, SfxHint);
 
-//========================================================================
+
 // class FmNavViewMarksChanged
-//========================================================================
+
 TYPEINIT1(FmNavViewMarksChanged, SfxHint);
 
-//========================================================================
+
 // class FmEntryDataList
-//========================================================================
+
 DBG_NAME(FmEntryDataList);
 
 FmEntryDataList::FmEntryDataList()
@@ -229,9 +229,9 @@ void FmEntryDataList::clear()
     maEntryDataList.clear();
 }
 
-//========================================================================
+
 // class FmEntryData
-//========================================================================
+
 TYPEINIT0( FmEntryData );
 DBG_NAME(FmEntryData);
 
@@ -317,9 +317,9 @@ sal_Bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 }
 
 
-//========================================================================
+
 // class FmFormData
-//========================================================================
+
 TYPEINIT1( FmFormData, FmEntryData );
 DBG_NAME(FmFormData);
 
@@ -332,12 +332,12 @@ FmFormData::FmFormData(
     m_xForm( _rxForm )
 {
     DBG_CTOR(FmEntryData,NULL);
-    //////////////////////////////////////////////////////////////////////
+
     // Images setzen
 
     m_aNormalImage = _rNormalImages.GetImage( RID_SVXIMG_FORM );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Titel setzen
     if (m_xForm.is())
     {
@@ -387,9 +387,9 @@ sal_Bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 }
 
 
-//========================================================================
+
 // class FmControlData
-//========================================================================
+
 TYPEINIT1( FmControlData, FmEntryData );
 DBG_NAME(FmControlData);
 
@@ -402,11 +402,11 @@ FmControlData::FmControlData(
     m_xFormComponent( _rxComponent )
 {
     DBG_CTOR(FmControlData,NULL);
-    //////////////////////////////////////////////////////////////////////
+
     // Images setzen
     m_aNormalImage = GetImage( _rNormalImages );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Titel setzen
     Reference< XPropertySet >  xSet(m_xFormComponent, UNO_QUERY);
     if( xSet.is() )
@@ -438,7 +438,7 @@ FmEntryData* FmControlData::Clone()
 
 Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
 {
-    //////////////////////////////////////////////////////////////////////
+
     // Default-Image
     Image aImage = ilNavigatorImages.GetImage( RID_SVXIMG_CONTROL );
 
@@ -446,7 +446,7 @@ Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
     if (!m_xFormComponent.is())
         return aImage;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Spezielle Control-Images
     sal_Int16 nObjectType = getControlTypeByObject(xInfo);
     switch (nObjectType)
@@ -572,14 +572,14 @@ void FmControlData::ModelReplaced(
     m_aNormalImage = GetImage( _rNormalImages );
 }
 
-//............................................................................
+
 namespace svxform
 {
-//............................................................................
 
-    //========================================================================
+
+
     // class NavigatorFrame
-    //========================================================================
+
     DBG_NAME(NavigatorFrame)
 
     NavigatorFrame::NavigatorFrame( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
@@ -681,9 +681,9 @@ namespace svxform
     }
 
 
-    //========================================================================
+
     // class NavigatorFrameManager
-    //========================================================================
+
 
 
     SFX_IMPL_DOCKINGWINDOW( NavigatorFrameManager, SID_FM_SHOW_FMEXPLORER )
@@ -698,8 +698,8 @@ namespace svxform
         ((SfxDockingWindow*)pWindow)->Initialize( _pInfo );
     }
 
-//............................................................................
+
 }   // namespace svxform
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

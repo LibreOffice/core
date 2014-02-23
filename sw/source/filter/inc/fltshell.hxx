@@ -303,7 +303,7 @@ class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
     SwTOXBase* pTOXBase;
     sal_uInt16 nCols;
     sal_Bool bHadBreakItem; // there was a break item BEFORE insertion of the TOX
-    sal_Bool bHadPageDescItem; // ...
+    sal_Bool bHadPageDescItem;
 public:
     SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols = 0);
     SwFltTOX(const SwFltTOX&);
@@ -343,7 +343,7 @@ public:
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////
+
 //
 // hier beginnen die fuer ww1-filter neu erstellten klassen. diese
 // sollen eine simple oberflaeche fuer die komplexen strukturen des

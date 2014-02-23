@@ -1366,7 +1366,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////
+
     // Menuoption: Change->Convert->To Bitmap, Change->Convert->To Metafile
     //             disable, if there only Bitmap or Metafiles marked
     // Menuoption: Format->Area, Format->Line
@@ -1487,7 +1487,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem (SID_ATTR_GRAF_CROP);
     }
 
-    ///////////////////////////////////////////////////////////////////////
+
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
     //

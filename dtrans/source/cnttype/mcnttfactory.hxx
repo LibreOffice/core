@@ -35,16 +35,16 @@ class CMimeContentTypeFactory : public
 public:
     CMimeContentTypeFactory();
 
-    //------------------------------------------------
+
     // XMimeContentTypeFactory
-    //------------------------------------------------
+
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentType > SAL_CALL createMimeContentType( const OUString& aContentType )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XServiceInfo
-    //------------------------------------------------
+
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);

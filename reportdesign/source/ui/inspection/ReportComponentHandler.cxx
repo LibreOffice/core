@@ -33,10 +33,10 @@
 #include <tools/fldunit.hxx>
 #include "metadata.hxx"
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 using namespace ::com::sun::star;
 
 ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentContext > const & context)
@@ -209,8 +209,8 @@ void SAL_CALL ReportComponentHandler::actuatingPropertyChanged(const OUString & 
     return m_xFormComponentHandler->suspend(Suspend);
 }
 
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -126,7 +126,7 @@ static bool isStylesFile (OUString const & i_rPath)
 }
 
 
-//=============================================================================
+
 // XML ID handling ---------------------------------------------------
 
 /** handles registration of XMetadatable.
@@ -346,7 +346,7 @@ private:
 };
 
 
-//=============================================================================
+
 // XmlIdRegistry
 
 ::sfx2::IXmlIdRegistry * createXmlIdRegistry(const bool i_DocIsClipboard)
@@ -425,7 +425,7 @@ template< typename T >
     return id;
 }
 
-//=============================================================================
+
 // Document XML ID Registry (_Impl)
 
 /// element list
@@ -623,7 +623,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
     }
 }
 
-//=============================================================================
+
 // Document XML ID Registry
 
 
@@ -906,7 +906,7 @@ XmlIdRegistryDocument::JoinMetadatables(
 }
 
 
-//=============================================================================
+
 // Clipboard XML ID Registry (_Impl)
 
 struct RMapEntry
@@ -1080,7 +1080,7 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::TryInsertMetadatable(
     }
 }
 
-//=============================================================================
+
 // Clipboard XML ID Registry
 
 
@@ -1292,7 +1292,7 @@ XmlIdRegistryClipboard::SourceLink(Metadatable const& i_rObject)
 }
 
 
-//=============================================================================
+
 // Metadatable mixin
 
 
@@ -1574,7 +1574,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 }
 
 
-//=============================================================================
+
 // XMetadatable mixin
 
 // ::com::sun::star::rdf::XNode:
@@ -1666,7 +1666,7 @@ throw (uno::RuntimeException)
 } // namespace sfx2
 
 
-//=============================================================================
+
 
 #if OSL_DEBUG_LEVEL > 1
 

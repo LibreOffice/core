@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// ============================================================================
+
 
 #ifndef _SC_CSVRULER_HXX
 #define _SC_CSVRULER_HXX
@@ -30,7 +30,7 @@
 class ScAccessibleCsvControl;
 
 
-// ============================================================================
+
 
 /** A ruler control for the CSV import dialog. Supports setting and moving
     splits (which divide lines of data into several columns). */
@@ -57,7 +57,7 @@ private:
     Rectangle                   maActiveRect;       /// The active area of the ruler.
     sal_Int32                   mnSplitSize;        /// Size of a split circle.
 
-    // ------------------------------------------------------------------------
+
 public:
     explicit                    ScCsvRuler( ScCsvControl& rParent );
                                 ~ScCsvRuler();
@@ -185,7 +185,7 @@ protected:
 };
 
 
-// ============================================================================
+
 
 #endif
 

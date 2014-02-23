@@ -28,10 +28,10 @@
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
@@ -39,9 +39,9 @@ namespace dbtools
     using namespace ::comphelper;
     using namespace ::connectivity;
 
-//==============================================================================
+
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
-//==============================================================================
+
 
 SQLExceptionInfo::SQLExceptionInfo()
     :m_eType(UNDEFINED)
@@ -262,9 +262,9 @@ void SQLExceptionInfo::doThrow()
     throw RuntimeException();
 }
 
-//==============================================================================
+
 //= SQLExceptionIteratorHelper
-//==============================================================================
+
 
 
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& _rChainStart )
@@ -496,9 +496,9 @@ OUString getStandardSQLState( StandardSQLState _eState )
 }
 
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

@@ -29,7 +29,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-//.........................................................................
+
 namespace connectivity
 {
     namespace mozab
@@ -40,7 +40,7 @@ namespace connectivity
             Reference< XPropertySet > xNode;
             try
             {
-                //=============================================================
+
                 // create the config provider
                 Reference< XMultiServiceFactory > xConfigProvider(
                     com::sun::star::configuration::theDefaultProvider::get(
@@ -49,7 +49,7 @@ namespace connectivity
                 OUString sCompleteNodePath( "/org.openoffice.Office.DataAccess/DriverSettings/" );
                 sCompleteNodePath += OConnection::getDriverImplementationName();
 
-                //=========================================================
+
                 // arguments for creating the config access
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
@@ -67,7 +67,7 @@ namespace connectivity
                     PropertyState_DIRECT_VALUE
                 );
 
-                //=========================================================
+
                 // create the access
                 Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
                     OUString("com.sun.star.configuration.ConfigurationAccess" ),
@@ -172,7 +172,7 @@ namespace connectivity
     }
 }
 
-//.........................................................................
+
 
 
 extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )

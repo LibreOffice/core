@@ -22,9 +22,9 @@
 #include <toolkit/helper/property.hxx>
 #include <map>
 
-//  ----------------------------------------------------
+
 //  class UnoPropertyArrayHelper
-//  ----------------------------------------------------
+
 
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Sequence<sal_Int32>& rIDs )
 {

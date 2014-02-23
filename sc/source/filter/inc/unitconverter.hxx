@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Units supported by the UnitConverter class. */
 enum Unit
@@ -104,7 +104,7 @@ private:
     sal_Int32           mnNullDate;         /// Nulldate of this workbook (number of days since 0000-01-01).
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

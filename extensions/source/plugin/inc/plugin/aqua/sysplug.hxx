@@ -69,7 +69,7 @@ CFURLRef                createURLFromPath( const OUString& i_rPath );
 OUString           CFURLtoOSLURL( CFURLRef i_xURL );
 }
 
-//==================================================================================================
+
 class MacPluginComm :
     public PluginComm,
     public ::vcl::SolarThreadExecutor

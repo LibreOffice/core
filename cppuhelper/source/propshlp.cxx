@@ -130,9 +130,9 @@ sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & Proper
     return pR != NULL;
 }
 
-//  ----------------------------------------------------
+
 //  class PropertySetHelper_Impl
-//  ----------------------------------------------------
+
 class OPropertySetHelper::Impl {
 
 public:
@@ -155,9 +155,9 @@ public:
 };
 
 
-//  ----------------------------------------------------
+
 //  class PropertySetHelper
-//  ----------------------------------------------------
+
 OPropertySetHelper::OPropertySetHelper(
     OBroadcastHelper  & rBHelper_ ) SAL_THROW(())
     : rBHelper( rBHelper_ ),
@@ -1032,9 +1032,9 @@ void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )
     m_pReserved->m_bFireEvents = bEnable;
 }
 
-//========================================================================
+
 //== OPropertyArrayHelper ================================================
-//========================================================================
+
 
 extern "C" {
 
@@ -1096,13 +1096,13 @@ OPropertyArrayHelper::OPropertyArrayHelper(
     init( bSorted );
 }
 
-//========================================================================
+
 sal_Int32 OPropertyArrayHelper::getCount() const
 {
     return aInfos.getLength();
 }
 
-//========================================================================
+
 sal_Bool OPropertyArrayHelper::fillPropertyMembersByHandle
 (
     OUString * pPropName,
@@ -1141,13 +1141,13 @@ sal_Bool OPropertyArrayHelper::fillPropertyMembersByHandle
     return sal_False;
 }
 
-//========================================================================
+
 Sequence< Property > OPropertyArrayHelper::getProperties(void)
 {
     return aInfos;
 }
 
-//========================================================================
+
 Property OPropertyArrayHelper::getPropertyByName(const OUString& aPropertyName)
         throw (UnknownPropertyException)
 {
@@ -1161,7 +1161,7 @@ Property OPropertyArrayHelper::getPropertyByName(const OUString& aPropertyName)
     return *pR;
 }
 
-//========================================================================
+
 sal_Bool OPropertyArrayHelper::hasPropertyByName(const OUString& aPropertyName)
 {
     Property * pR;
@@ -1171,7 +1171,7 @@ sal_Bool OPropertyArrayHelper::hasPropertyByName(const OUString& aPropertyName)
     return pR != NULL;
 }
 
-//========================================================================
+
 sal_Int32 OPropertyArrayHelper::getHandleByName( const OUString & rPropName )
 {
     Property * pR;
@@ -1181,7 +1181,7 @@ sal_Int32 OPropertyArrayHelper::getHandleByName( const OUString & rPropName )
     return pR ? pR->Handle : -1;
 }
 
-//========================================================================
+
 sal_Int32 OPropertyArrayHelper::fillHandles( sal_Int32 * pHandles, const Sequence< OUString > & rPropNames )
 {
     sal_Int32 nHitCount = 0;

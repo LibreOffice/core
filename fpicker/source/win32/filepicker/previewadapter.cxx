@@ -389,7 +389,7 @@ HWND SAL_CALL CPreviewAdapterImpl::findFileListbox() const
 }
 
 
-//##############################################################
+
 
 
 
@@ -435,7 +435,7 @@ void SAL_CALL CWin95NTPreviewAdapterImpl::notifyParentShow(sal_Bool bShow)
 }
 
 
-//##############################################################
+
 
 
 

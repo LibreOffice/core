@@ -32,9 +32,9 @@ class NameOrIndex;
 
 typedef sal_Bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p2 );
 
-//-------------------
+
 // class NameOrIndex
-//-------------------
+
 class SVX_DLLPUBLIC NameOrIndex : public SfxStringItem
 {
     sal_Int32    nPalIndex;

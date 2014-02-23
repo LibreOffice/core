@@ -30,10 +30,10 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
-//.............................................................................
+
 namespace svx
 {
-//.............................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -106,8 +106,8 @@ void FormatPaintBrushToolBoxControl::StateChanged( sal_uInt16 nSID, SfxItemState
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
 
-//.............................................................................
+
 } //namespace svx
-//.............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,9 +30,9 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svx/svxdllapi.h>
 
-// -----------------------------
+
 // - SvXMLEmbeddedObjectHelper -
-// -----------------------------
+
 
 enum SvXMLEmbeddedObjectHelperMode
 {
@@ -40,9 +40,9 @@ enum SvXMLEmbeddedObjectHelperMode
     EMBEDDEDOBJECTHELPER_MODE_WRITE = 1
 };
 
-// -----------------------------
+
 // - SvXMLEmbeddedObjectHelper -
-// -----------------------------
+
 
 namespace comphelper {
 class IEmbeddedHelper;

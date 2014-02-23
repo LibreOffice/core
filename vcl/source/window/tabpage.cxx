@@ -32,7 +32,7 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-// =======================================================================
+
 
 void TabPage::ImplInit( Window* pParent, WinBits nStyle )
 {

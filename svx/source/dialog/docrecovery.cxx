@@ -65,27 +65,27 @@ namespace svx{
 using namespace ::rtl;
 using namespace ::osl;
 
-//===============================================
+
 TabDialog4Recovery::TabDialog4Recovery(Window* pParent)
     : TabDialog    (pParent, SVX_RES( RID_SVX_TABDLG_DOCRECOVERY ))
     , m_pActualPage(m_lTabPages.begin()                           )
 {
 }
 
-//===============================================
+
 TabDialog4Recovery::~TabDialog4Recovery()
 {
     m_lTabPages.clear();
 }
 
-//===============================================
+
 void TabDialog4Recovery::addTabPage(IExtendedTabPage* pPage)
 {
     if (pPage)
         m_lTabPages.push_back(pPage);
 }
 
-//===============================================
+
 short TabDialog4Recovery::Execute()
 {
     ::SolarMutexGuard aLock;
@@ -126,7 +126,7 @@ short TabDialog4Recovery::Execute()
     }
 }
 
-//===============================================
+
 RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                  bool                                            bUsedForSaving)
     : m_xContext        ( rxContext    )
@@ -136,25 +136,25 @@ RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContex
     impl_startListening();
 }
 
-//===============================================
+
 RecoveryCore::~RecoveryCore()
 {
     impl_stopListening();
 }
 
-//===============================================
+
 css::uno::Reference< css::uno::XComponentContext > RecoveryCore::getComponentContext()
 {
     return m_xContext;
 }
 
-//===============================================
+
 TURLList* RecoveryCore::getURLListAccess()
 {
     return &m_lURLs;
 }
 
-//===============================================
+
 bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
 {
     if (rInfo.TempURL.isEmpty())
@@ -171,7 +171,7 @@ bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
     return true;
 }
 
-//===============================================
+
 void RecoveryCore::saveBrokenTempEntries(const OUString& rPath)
 {
     if (rPath.isEmpty())
@@ -209,7 +209,7 @@ void RecoveryCore::saveBrokenTempEntries(const OUString& rPath)
     }
 }
 
-//===============================================
+
 void RecoveryCore::saveAllTempEntries(const OUString& rPath)
 {
     if (rPath.isEmpty())
@@ -247,7 +247,7 @@ void RecoveryCore::saveAllTempEntries(const OUString& rPath)
     }
 }
 
-//===============================================
+
 void RecoveryCore::forgetBrokenTempEntries()
 {
     if (!m_xRealCore.is())
@@ -279,7 +279,7 @@ void RecoveryCore::forgetBrokenTempEntries()
     }
 }
 
-//===============================================
+
 void RecoveryCore::forgetAllRecoveryEntries()
 {
     if (!m_xRealCore.is())
@@ -308,7 +308,7 @@ void RecoveryCore::forgetAllRecoveryEntries()
     }
 }
 
-//===============================================
+
 void RecoveryCore::forgetBrokenRecoveryEntries()
 {
     if (!m_xRealCore.is())
@@ -340,19 +340,19 @@ void RecoveryCore::forgetBrokenRecoveryEntries()
     }
 }
 
-//===============================================
+
 void RecoveryCore::setProgressHandler(const css::uno::Reference< css::task::XStatusIndicator >& xProgress)
 {
     m_xProgress = xProgress;
 }
 
-//===============================================
+
 void RecoveryCore::setUpdateListener(IRecoveryUpdateListener* pListener)
 {
     m_pListener = pListener;
 }
 
-//===============================================
+
 void RecoveryCore::doEmergencySavePrepare()
 {
     if (!m_xRealCore.is())
@@ -367,7 +367,7 @@ void RecoveryCore::doEmergencySavePrepare()
     m_xRealCore->dispatch(aURL, lArgs);
 }
 
-//===============================================
+
 void RecoveryCore::doEmergencySave()
 {
     if (!m_xRealCore.is())
@@ -384,7 +384,7 @@ void RecoveryCore::doEmergencySave()
     m_xRealCore->dispatch(aURL, lArgs);
 }
 
-//===============================================
+
 void RecoveryCore::doRecovery()
 {
     if (!m_xRealCore.is())
@@ -401,7 +401,7 @@ void RecoveryCore::doRecovery()
     m_xRealCore->dispatch(aURL, lArgs);
 }
 
-//===============================================
+
 ERecoveryState RecoveryCore::mapDocState2RecoverState(sal_Int32 eDocState)
 {
     // ???
@@ -433,7 +433,7 @@ ERecoveryState RecoveryCore::mapDocState2RecoverState(sal_Int32 eDocState)
     return eRecState;
 }
 
-//===============================================
+
 void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -521,14 +521,14 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
         m_pListener->updateItems();
 }
 
-//===============================================
+
 void SAL_CALL RecoveryCore::disposing(const css::lang::EventObject& /*aEvent*/)
     throw(css::uno::RuntimeException)
 {
     m_xRealCore.clear();
 }
 
-//===============================================
+
 void RecoveryCore::impl_startListening()
 {
     // listening already initialized ?
@@ -549,7 +549,7 @@ void RecoveryCore::impl_startListening()
     m_xRealCore->addStatusListener(static_cast< css::frame::XStatusListener* >(this), aURL);
 }
 
-//===============================================
+
 void RecoveryCore::impl_stopListening()
 {
     // Ignore it, if this instance doesn't listen currently
@@ -568,7 +568,7 @@ void RecoveryCore::impl_stopListening()
     m_xRealCore.clear();
 }
 
-//===============================================
+
 css::util::URL RecoveryCore::impl_getParsedURL(const OUString& sURL)
 {
     css::util::URL aURL;
@@ -580,7 +580,7 @@ css::util::URL RecoveryCore::impl_getParsedURL(const OUString& sURL)
     return aURL;
 }
 
-//===============================================
+
 PluginProgressWindow::PluginProgressWindow(      Window*                                       pParent  ,
                                            const css::uno::Reference< css::lang::XComponent >& xProgress)
     : Window     (pParent  )
@@ -592,14 +592,14 @@ PluginProgressWindow::PluginProgressWindow(      Window*                        
     setPosSizePixel( -9, 0, aParentSize.Width() + 15, aParentSize.Height() - 4 );
 }
 
-//===============================================
+
 PluginProgressWindow::~PluginProgressWindow()
 {
     if (m_xProgress.is())
         m_xProgress->dispose();
 }
 
-//===============================================
+
 PluginProgress::PluginProgress(      Window*                                             pParent,
                                const css::uno::Reference< css::uno::XComponentContext >& xContext  )
 {
@@ -609,12 +609,12 @@ PluginProgress::PluginProgress(      Window*                                    
     m_xProgress = m_xProgressFactory->createStatusIndicator();
 }
 
-//===============================================
+
 PluginProgress::~PluginProgress()
 {
 }
 
-//===============================================
+
 void SAL_CALL PluginProgress::dispose()
     throw(css::uno::RuntimeException)
 {
@@ -624,19 +624,19 @@ void SAL_CALL PluginProgress::dispose()
     m_xProgress.clear();
 }
 
-//===============================================
+
 void SAL_CALL PluginProgress::addEventListener(const css::uno::Reference< css::lang::XEventListener >& )
     throw(css::uno::RuntimeException)
 {
 }
 
-//===============================================
+
 void SAL_CALL PluginProgress::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
     throw(css::uno::RuntimeException)
 {
 }
 
-//===============================================
+
 void SAL_CALL PluginProgress::start(const OUString&,
                                           sal_Int32        nRange)
     throw(css::uno::RuntimeException)
@@ -645,7 +645,7 @@ void SAL_CALL PluginProgress::start(const OUString&,
         m_xProgress->start(OUString(), nRange);
 }
 
-//===============================================
+
 void SAL_CALL PluginProgress::end()
     throw(css::uno::RuntimeException)
 {
@@ -653,7 +653,7 @@ void SAL_CALL PluginProgress::end()
         m_xProgress->end();
 }
 
-//===============================================
+
 void SAL_CALL PluginProgress::setText(const OUString& sText)
     throw(css::uno::RuntimeException)
 {
@@ -661,7 +661,7 @@ void SAL_CALL PluginProgress::setText(const OUString& sText)
         m_xProgress->setText(sText);
 }
 
-//===============================================
+
 void SAL_CALL PluginProgress::setValue(sal_Int32 nValue)
     throw(css::uno::RuntimeException)
 {
@@ -669,7 +669,7 @@ void SAL_CALL PluginProgress::setValue(sal_Int32 nValue)
         m_xProgress->setValue(nValue);
 }
 
-//===============================================
+
 void SAL_CALL PluginProgress::reset()
     throw(css::uno::RuntimeException)
 {
@@ -677,7 +677,7 @@ void SAL_CALL PluginProgress::reset()
         m_xProgress->reset();
 }
 
-//===============================================
+
 SaveDialog::SaveDialog(Window*       pParent,
                        RecoveryCore* pCore  )
     : IExtendedTabPage( pParent, SVX_RES( RID_SVXPAGE_DOCRECOVERY_SAVE ) )
@@ -725,19 +725,19 @@ SaveDialog::SaveDialog(Window*       pParent,
     }
 }
 
-//===============================================
+
 SaveDialog::~SaveDialog()
 {
 }
 
-//===============================================
+
 IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
 {
     m_nResult = DLG_RET_OK;
     return 0;
 }
 
-//===============================================
+
 short SaveDialog::execute()
 {
     ::SolarMutexGuard aLock;
@@ -762,13 +762,13 @@ short SaveDialog::execute()
     return m_nResult;
 }
 
-//===============================================
+
 void SaveDialog::setDefButton()
 {
     m_aOkBtn.GrabFocus();
 }
 
-//===============================================
+
 SaveProgressDialog::SaveProgressDialog(Window*       pParent,
                                        RecoveryCore* pCore  )
     : ModalDialog   ( pParent        , SVX_RES( RID_SVX_MDLG_DOCRECOVERY_PROGR ) )
@@ -782,12 +782,12 @@ SaveProgressDialog::SaveProgressDialog(Window*       pParent,
     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 }
 
-//===============================================
+
 SaveProgressDialog::~SaveProgressDialog()
 {
 }
 
-//===============================================
+
 short SaveProgressDialog::Execute()
 {
     ::SolarMutexGuard aLock;
@@ -800,12 +800,12 @@ short SaveProgressDialog::Execute()
     return nRet;
 }
 
-//===============================================
+
 void SaveProgressDialog::updateItems()
 {
 }
 
-//===============================================
+
 void SaveProgressDialog::stepNext(TURLInfo* )
 {
     /* TODO
@@ -816,18 +816,18 @@ void SaveProgressDialog::stepNext(TURLInfo* )
     */
 }
 
-//===============================================
+
 void SaveProgressDialog::start()
 {
 }
 
-//===============================================
+
 void SaveProgressDialog::end()
 {
     EndDialog(DLG_RET_OK);
 }
 
-//===============================================
+
 RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
                                            sal_uInt16       nFlags,
                                      const OUString&        sText )
@@ -835,7 +835,7 @@ RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
 {
 }
 
-//===============================================
+
 void RecovDocListEntry::Paint(
     const Point& aPos, SvTreeListBox& aDevice, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
@@ -893,7 +893,7 @@ void RecovDocListEntry::Paint(
         aDevice.DrawText(aPnt, *pTxt);
     }
 }
-//===============================================
+
 RecovDocList::RecovDocList(SvSimpleTableContainer& rParent, ResMgr &rResMgr)
     : SvSimpleTable      ( rParent )
     , m_aGreenCheckImg    ( ResId(IMG_GREENCHECK, rResMgr ) )
@@ -907,12 +907,12 @@ RecovDocList::RecovDocList(SvSimpleTableContainer& rParent, ResMgr &rResMgr)
 {
 }
 
-//===============================================
+
 RecovDocList::~RecovDocList()
 {
 }
 
-//===============================================
+
 void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
                              const OUString& rText,
                              const Image& rImage1,
@@ -927,7 +927,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
     pEntry->ReplaceItem(p, 2);
 }
 
-//===============================================
+
 short impl_askUserForWizardCancel(Window* pParent, sal_Int16 nRes)
 {
     QueryBox aQuery(pParent, SVX_RES(nRes));
@@ -937,7 +937,7 @@ short impl_askUserForWizardCancel(Window* pParent, sal_Int16 nRes)
         return DLG_RET_CANCEL;
 }
 
-//===============================================
+
 RecoveryDialog::RecoveryDialog(Window*       pParent,
                                RecoveryCore* pCore  )
     : IExtendedTabPage( pParent      , SVX_RES( RID_SVXPAGE_DOCRECOVERY_RECOVER ) )
@@ -1010,12 +1010,12 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
         m_aFileListLB.SetCursor(pFirst, sal_True);
 }
 
-//===============================================
+
 RecoveryDialog::~RecoveryDialog()
 {
 }
 
-//===============================================
+
 short RecoveryDialog::execute()
 {
     ::SolarMutexGuard aSolarLock;
@@ -1227,7 +1227,7 @@ short RecoveryDialog::execute()
     return DLG_RET_OK;
 }
 
-//===============================================
+
 void RecoveryDialog::setDefButton()
 {
     if ( m_aNextBtn.IsEnabled() )
@@ -1236,12 +1236,12 @@ void RecoveryDialog::setDefButton()
         m_pDefButton = &m_aNextBtn;
 }
 
-//===============================================
+
 void RecoveryDialog::start()
 {
 }
 
-//===============================================
+
 void RecoveryDialog::updateItems()
 {
     sal_uIntPtr c = m_aFileListLB.GetEntryCount();
@@ -1265,7 +1265,7 @@ void RecoveryDialog::updateItems()
     m_aFileListLB.Update();
 }
 
-//===============================================
+
 void RecoveryDialog::stepNext(TURLInfo* pItem)
 {
     sal_uIntPtr c = m_aFileListLB.GetEntryCount();
@@ -1288,7 +1288,7 @@ void RecoveryDialog::stepNext(TURLInfo* pItem)
     }
 }
 
-//===============================================
+
 void RecoveryDialog::end()
 {
     if ( m_pDefButton )
@@ -1299,7 +1299,7 @@ void RecoveryDialog::end()
     m_bWaitForCore = false;
 }
 
-//===============================================
+
 IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl)
 {
     m_bUserDecideNext = true;
@@ -1307,7 +1307,7 @@ IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl)
     return 0;
 }
 
-//===============================================
+
 IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
 {
     if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_PREPARED)
@@ -1320,7 +1320,7 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
     return 0;
 }
 
-//===============================================
+
 OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
 {
     OUString sStatus;
@@ -1347,7 +1347,7 @@ OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
     return sStatus;
 }
 
-//===============================================
+
 BrokenRecoveryDialog::BrokenRecoveryDialog(Window*       pParent        ,
                                            RecoveryCore* pCore          ,
                                            bool      bBeforeRecovery)
@@ -1380,12 +1380,12 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(Window*       pParent        ,
     impl_refresh();
 }
 
-//===============================================
+
 BrokenRecoveryDialog::~BrokenRecoveryDialog()
 {
 }
 
-//===============================================
+
 void BrokenRecoveryDialog::impl_refresh()
 {
                              m_bExecutionNeeded = sal_False;
@@ -1421,19 +1421,19 @@ void BrokenRecoveryDialog::impl_refresh()
     m_aOkBtn.GrabFocus();
 }
 
-//===============================================
+
 sal_Bool BrokenRecoveryDialog::isExecutionNeeded()
 {
     return m_bExecutionNeeded;
 }
 
-//===============================================
+
 OUString BrokenRecoveryDialog::getSaveDirURL()
 {
     return m_sSavePath;
 }
 
-//===============================================
+
 IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
 {
     OUString sPhysicalPath = comphelper::string::strip(m_aSaveDirED.GetText(), ' ');
@@ -1447,21 +1447,21 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
     return 0;
 }
 
-//===============================================
+
 IMPL_LINK_NOARG(BrokenRecoveryDialog, CancelButtonHdl)
 {
     EndDialog(DLG_RET_CANCEL);
     return 0;
 }
 
-//===============================================
+
 IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl)
 {
     impl_askForSavePath();
     return 0;
 }
 
-//===============================================
+
 void BrokenRecoveryDialog::impl_askForSavePath()
 {
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker =

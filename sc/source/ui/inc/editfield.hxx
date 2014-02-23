@@ -22,7 +22,7 @@
 
 #include <vcl/field.hxx>
 
-// ============================================================================
+
 
 /** An edit control that contains a double precision floating-point value. */
 class ScDoubleField : public Edit
@@ -37,7 +37,7 @@ public:
                             bool bEraseTrailingDecZeros = true );
 };
 
-// ============================================================================
+
 
 #endif
 

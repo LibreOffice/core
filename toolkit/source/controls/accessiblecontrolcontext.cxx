@@ -28,10 +28,10 @@
 #include <toolkit/helper/externallock.hxx>
 #include <vcl/window.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using ::comphelper::OContextEntryGuard;
     using namespace ::com::sun::star;
@@ -40,9 +40,9 @@ namespace toolkit
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::accessibility;
 
-    //====================================================================
+
     //= OAccessibleControlContext
-    //====================================================================
+
 
     OAccessibleControlContext::OAccessibleControlContext()
         : OAccessibleControlContext_Base(new VCLExternalSolarLock)
@@ -365,8 +365,8 @@ namespace toolkit
         return nColor;
     }
 
-//........................................................................
+
 }   //namespace toolkit
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

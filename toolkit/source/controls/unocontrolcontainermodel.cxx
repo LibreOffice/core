@@ -23,9 +23,9 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 
-//  ----------------------------------------------------
+
 //  class UnoControlContainerModel
-//  ----------------------------------------------------
+
 UnoControlContainerModel::UnoControlContainerModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {

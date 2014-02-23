@@ -126,9 +126,9 @@ class SvtFontOptions_Impl : public ConfigItem
         bool        m_bFontWYSIWYG          ;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtFontOptions_Impl::SvtFontOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_FONT )
@@ -178,9 +178,9 @@ SvtFontOptions_Impl::SvtFontOptions_Impl()
     EnableNotification( seqNames );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtFontOptions_Impl::~SvtFontOptions_Impl()
 {
     // We must save our current values .. if user forget it!
@@ -190,9 +190,9 @@ SvtFontOptions_Impl::~SvtFontOptions_Impl()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtFontOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
     // Use given list of updated properties to get his values from configuration directly!
@@ -227,9 +227,9 @@ void SvtFontOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtFontOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
@@ -258,43 +258,43 @@ void SvtFontOptions_Impl::Commit()
     PutProperties( seqNames, seqValues );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtFontOptions_Impl::IsFontHistoryEnabled() const
 {
     return m_bFontHistory;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtFontOptions_Impl::EnableFontHistory( bool bState )
 {
     m_bFontHistory = bState;
     SetModified();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtFontOptions_Impl::IsFontWYSIWYGEnabled() const
 {
     return m_bFontWYSIWYG;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtFontOptions_Impl::EnableFontWYSIWYG( bool bState )
 {
     m_bFontWYSIWYG = bState;
     SetModified();
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
 {
     // Build list of configuration key names.
@@ -310,17 +310,17 @@ Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = NULL  ;
 sal_Int32               SvtFontOptions::m_nRefCount         = 0     ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtFontOptions::SvtFontOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -336,9 +336,9 @@ SvtFontOptions::SvtFontOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtFontOptions::~SvtFontOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -354,36 +354,36 @@ SvtFontOptions::~SvtFontOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtFontOptions::IsFontHistoryEnabled() const
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsFontHistoryEnabled();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtFontOptions::EnableFontHistory( bool bState )
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     m_pDataContainer->EnableFontHistory( bState );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtFontOptions::IsFontWYSIWYGEnabled() const
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsFontWYSIWYGEnabled();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtFontOptions::EnableFontWYSIWYG( bool bState )
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
@@ -395,9 +395,9 @@ namespace
     class theFontOptionsMutex : public rtl::Static<osl::Mutex, theFontOptionsMutex> {};
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Mutex& SvtFontOptions::impl_GetOwnStaticMutex()
 {
     return theFontOptionsMutex::get();

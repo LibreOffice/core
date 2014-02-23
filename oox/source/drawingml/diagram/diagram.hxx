@@ -154,11 +154,11 @@ typedef std::vector< Point >        Points;
 class LayoutNode;
 typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
 
-////////////////////
+
 
 typedef std::map< OUString, uno::Reference<xml::dom::XDocument> > DiagramDomMap;
 
-////////////////////
+
 
 class DiagramData
 {
@@ -203,7 +203,7 @@ typedef boost::shared_ptr< DiagramData > DiagramDataPtr;
 
 
 
-////////////////////
+
 
 class DiagramLayout
 {
@@ -251,7 +251,7 @@ private:
 
 typedef boost::shared_ptr< DiagramLayout > DiagramLayoutPtr;
 
-///////////////////////
+
 
 struct DiagramStyle
 {
@@ -275,7 +275,7 @@ struct DiagramColor
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
 
-///////////////////////
+
 
 class Diagram
 {

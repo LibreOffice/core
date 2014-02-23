@@ -22,12 +22,12 @@
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-//====================================================================
+
 
 TYPEINIT1_AUTOFACTORY(SfxObjectShellItem,SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SfxObjectItem,SfxPoolItem)
 
-//=========================================================================
+
 
 bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 {
@@ -98,7 +98,7 @@ bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
     return true;
 }
 
-//=========================================================================
+
 
 SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 :   SfxPoolItem( nWhichId ),

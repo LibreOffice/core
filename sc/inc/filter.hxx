@@ -40,7 +40,7 @@ class ScOrcusFilters;
 typedef sal_uLong FltError;
 
 #define eERR_OK         ERRCODE_NONE                // no error
-#define eERR_OPEN       SCERR_IMPORT_OPEN           // ...
+#define eERR_OPEN       SCERR_IMPORT_OPEN
 #define eERR_UNBEK      SCERR_IMPORT_UNKNOWN        // unknown error, historical meaning
 #define eERR_NOMEM      SCERR_IMPORT_OUTOFMEM       // out of memory
 #define eERR_UNKN_WK    SCERR_IMPORT_UNKNOWN_WK     // unknown WK? format (Lotus 1-2-3)

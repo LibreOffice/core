@@ -26,10 +26,10 @@
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 // infos about one single property
 struct COMPHELPER_DLLPUBLIC PropertyDescription
@@ -61,9 +61,9 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
     }
 };
 
-//==========================================================================
+
 //= OPropertyContainerHelper
-//==========================================================================
+
 /** helper class for managing property values, and implementing most of the X*Property* interfaces
 
     The property values are usually held in derived classes, but can also be given to the
@@ -194,9 +194,9 @@ private:
     COMPHELPER_DLLPRIVATE OPropertyContainerHelper& operator=( const OPropertyContainerHelper& ); // never implemented
 };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_PROPERTYCONTAINERHELPER_HXX
 

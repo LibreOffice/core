@@ -29,10 +29,10 @@
 #include <vcl/msgbox.hxx>
 #include "iodlg.hxx"
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
 #define PROPERTY_ID_HELPURL     1
 #define PROPERTY_ID_WINDOW      2
@@ -490,8 +490,8 @@ namespace svt
         return bKnown;
     }
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

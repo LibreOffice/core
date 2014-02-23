@@ -32,14 +32,14 @@ namespace utl {
 class AccessibleStateSetHelper;
 }
 
-//.........................................................................
+
 namespace accessibility
 {
-//.........................................................................
 
-    //  ----------------------------------------------------
+
+
     //  class AccessibleTabBarPageList
-    //  ----------------------------------------------------
+
 
     typedef ::cppu::ImplHelper3<
         ::com::sun::star::accessibility::XAccessible,
@@ -125,9 +125,9 @@ namespace accessibility
         virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     };
 
-//.........................................................................
+
 }   // namespace accessibility
-//.........................................................................
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBLETABBARPAGELIST_HXX_
 

@@ -38,7 +38,7 @@ namespace vclcanvas
                                 const OutDevProviderSharedPtr& rOutDevProvider )
     {
         // create bitmap for given reference device
-        // ========================================
+
         const sal_uInt16 nBitCount( (sal_uInt16)24U );
         const BitmapPalette*    pPalette = NULL;
 

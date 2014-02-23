@@ -76,7 +76,7 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
@@ -164,14 +164,14 @@ SdrObject* E3dObjList::RemoveObject(sal_uIntPtr nObjNum)
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(E3dObject, SdrAttrObj);
 
@@ -764,14 +764,14 @@ void E3dObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 
 /*************************************************************************/
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dCompoundProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(E3dCompoundObject, E3dObject);
 

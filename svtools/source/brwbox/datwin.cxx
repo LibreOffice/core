@@ -28,7 +28,7 @@
 #include <rtl/string.hxx>
 #include <tools/debug.hxx>
 
-//===================================================================
+
 void ButtonFrame::Draw( OutputDevice& rDev )
 {
     Color aOldFillColor = rDev.GetFillColor();
@@ -624,7 +624,7 @@ void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
     pEventWin = GetParent();
 }
 
-//===================================================================
+
 
 BrowseEvent::BrowseEvent( Window* pWindow,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
@@ -637,7 +637,7 @@ BrowseEvent::BrowseEvent( Window* pWindow,
 {
 }
 
-//===================================================================
+
 BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
                           const MouseEvent& rEvt ):
     MouseEvent(rEvt),
@@ -655,7 +655,7 @@ BrowserMouseEvent::BrowserMouseEvent( Window *pWindow, const MouseEvent& rEvt,
 {
 }
 
-//===================================================================
+
 
 BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWindow, const AcceptDropEvent& rEvt )
     :AcceptDropEvent(rEvt)
@@ -663,7 +663,7 @@ BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWindow, const A
 {
 }
 
-//===================================================================
+
 
 BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const ExecuteDropEvent& rEvt )
     :ExecuteDropEvent(rEvt)
@@ -671,7 +671,7 @@ BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const
 {
 }
 
-//===================================================================
+
 
 
 
@@ -721,7 +721,7 @@ void BrowserDataWin::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
         Window::Invalidate( rRect, nFlags );
 }
 
-//===================================================================
+
 
 void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
 {

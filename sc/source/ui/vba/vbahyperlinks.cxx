@@ -28,7 +28,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// ============================================================================
+
 
 namespace {
 
@@ -102,7 +102,7 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
 
 } // namespace
 
-// ============================================================================
+
 
 namespace detail {
 
@@ -185,7 +185,7 @@ sal_Bool SAL_CALL ScVbaHlinkContainer::hasElements() throw (uno::RuntimeExceptio
     return !maHlinks.empty();
 }
 
-// ============================================================================
+
 
 ScVbaHlinkContainerMember::ScVbaHlinkContainerMember( ScVbaHlinkContainer* pContainer ) :
     mxContainer( pContainer )
@@ -198,7 +198,7 @@ ScVbaHlinkContainerMember::~ScVbaHlinkContainerMember()
 
 } // namespace detail
 
-// ============================================================================
+
 
 ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext ) throw (uno::RuntimeException) :
@@ -281,6 +281,6 @@ uno::Any ScVbaHyperlinks::createCollectionObject( const uno::Any& rSource )
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlinks, "ooo.vba.excel.Hyperlinks" )
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -521,7 +521,7 @@ void ScXMLSetItemContext::EndElement()
 {
 }
 
-//==========================================================================
+
 
 ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,

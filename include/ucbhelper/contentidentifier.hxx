@@ -31,7 +31,7 @@ namespace ucbhelper
 
 struct ContentIdentifier_Impl;
 
-//=========================================================================
+
 
 /**
   * This class implements a simple identifier object for UCB contents.

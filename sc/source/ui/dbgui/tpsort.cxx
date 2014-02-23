@@ -68,8 +68,8 @@ using namespace com::sun::star;
  * This still needs to be changed!
  */
 
-//========================================================================
-//========================================================================
+
+
 // Sort Criteria Tab page
 
 ScTabPageSortFields::ScTabPageSortFields(Window* pParent,
@@ -501,9 +501,9 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
     return 0;
 }
 
-//========================================================================
+
 // Sort option Tab Page:
-//========================================================================
+
 
 ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                                             const SfxItemSet&   rArgSet )

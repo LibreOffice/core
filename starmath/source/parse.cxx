@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 
-///////////////////////////////////////////////////////////////////////////
+
 
 namespace {
 template < typename T >
@@ -71,7 +71,7 @@ SmToken::SmToken(SmTokenType eTokenType,
     nCol = nRow = 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 static const SmTokenTableEntry aTokenTable[] =
@@ -314,7 +314,7 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 #if OSL_DEBUG_LEVEL > 1
 
@@ -942,7 +942,7 @@ void SmParser::NextToken()
 }
 
 
-////////////////////////////////////////
+
 // grammar
 //
 

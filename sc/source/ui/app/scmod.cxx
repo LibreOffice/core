@@ -1052,9 +1052,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-    //============================================
+
     // DefaultsOptions
-    //============================================
+
 
     if (rOptSet.HasItem(SID_SCDEFAULTSOPTIONS, &pItem))
     {
@@ -1062,9 +1062,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SetDefaultsOptions( rOpt );
     }
 
-    //============================================
+
     // FormulaOptions
-    //============================================
+
 
     if (rOptSet.HasItem(SID_SCFORMULAOPTIONS, &pItem))
     {
@@ -1090,9 +1090,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-    //============================================
+
     // ViewOptions
-    //============================================
+
 
     if (rOptSet.HasItem(SID_SCVIEWOPTIONS, &pItem))
     {
@@ -1124,10 +1124,10 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-    //============================================
+
     // GridOptions, Auswertung nach ViewOptions,
     // da GridOptions Member der ViewOptions ist!
-    //============================================
+
 
     if ( rOptSet.HasItem(SID_ATTR_GRID_OPTIONS,&pItem) )
     {
@@ -1159,9 +1159,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
 
-    //============================================
+
     // DocOptions
-    //============================================
+
 
     if ( rOptSet.HasItem(SID_SCDOCOPTIONS,&pItem) )
     {
@@ -1245,9 +1245,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             pBindings->Invalidate( SID_AUTOSPELL_CHECK );
     }
 
-    //============================================
+
     // InputOptions
-    //============================================
+
 
     if ( rOptSet.HasItem(SID_SC_INPUT_SELECTIONPOS,&pItem) )
     {
@@ -1307,9 +1307,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         bSaveInputOptions = true;
     }
 
-    //============================================
+
     // PrintOptions
-    //============================================
+
 
     if ( rOptSet.HasItem(SID_SCPRINTOPTIONS,&pItem) )
     {

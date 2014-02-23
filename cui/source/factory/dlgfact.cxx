@@ -148,9 +148,9 @@ IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractPasswordToOpenModifyDialog_Impl);
 
-//////////////////////////////////////////////////////////////////////////
+
 // VclAbstractDialog2_Impl
-//////////////////////////////////////////////////////////////////////////
+
 
 // virtual
 VclAbstractDialog2_Impl::~VclAbstractDialog2_Impl()
@@ -185,7 +185,7 @@ IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog*, pDlg )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 
 void CuiAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {

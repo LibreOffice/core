@@ -1010,16 +1010,16 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
         aMEFormula.Invalidate();
         aMEFormula.Update();
     }
-    //...
+
 
     return 0;
 }
 
 
 
-//  --------------------------------------------------------------------------
+
 //                          Functions for 1. Page
-//  --------------------------------------------------------------------------
+
 
 
 
@@ -1058,9 +1058,9 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
 }
 
 
-//  --------------------------------------------------------------------------
+
 //                          Functions for right Page
-//  --------------------------------------------------------------------------
+
 void FormulaDlg_Impl::SetData(sal_Int32 nFStart, sal_Int32 nNextFStart, sal_Int32 nNextFEnd, sal_Int32& PrivStart, sal_Int32& PrivEnd)
 {
     sal_Int32 nFEnd;
@@ -1635,7 +1635,7 @@ const FormulaHelper& FormulaDlg_Impl::GetFormulaHelper()  const
 {
     return m_aFormulaHelper;
 }
-//============================================================================
+
 FormulaModalDialog::FormulaModalDialog( Window* pParent
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult
@@ -1719,9 +1719,9 @@ void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
     m_pImpl->StoreFormEditData(pData);
 }
 
-//  --------------------------------------------------------------------------
+
 //      Initialisation / General functions  for Dialog
-//  --------------------------------------------------------------------------
+
 FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                              Window* pParent
                             , bool _bSupportFunctionResult

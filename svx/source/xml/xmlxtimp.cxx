@@ -74,11 +74,11 @@ sal_Char const sXML_np__draw_ooo[] = "___draw";
 sal_Char const sXML_np__ooo[] = "__ooo";
 sal_Char const sXML_np__xlink[] = "__xlink";
 
-///////////////////////////////////////////////////////////////////////
+
 
 enum SvxXMLTableImportContextEnum { stice_unknown, stice_color, stice_marker, stice_dash, stice_hatch, stice_gradient, stice_bitmap };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
@@ -105,7 +105,7 @@ private:
     bool mbOOoFormat;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, bool bOOoFormat )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxTable( xTable ), meContext( eContext ),
@@ -324,7 +324,7 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 // #110680#
 SvxXMLXTableImport::SvxXMLXTableImport(

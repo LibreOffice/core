@@ -25,16 +25,16 @@
 // for introspection
 #include <toolkit/awt/vclxwindows.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
 
-    //====================================================================
+
     //= UnoControlScrollBarModel
-    //====================================================================
+
 
     UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
@@ -83,9 +83,9 @@ namespace toolkit
     }
 
 
-    //====================================================================
+
     //= UnoControlScrollBarModel
-    //====================================================================
+
     UnoScrollBarControl::UnoScrollBarControl()
         :UnoControlBase()
         ,maAdjustmentListeners( *this )
@@ -279,9 +279,9 @@ namespace toolkit
 
 
 
-//........................................................................
+
 }  // namespace toolkit
-//........................................................................
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(

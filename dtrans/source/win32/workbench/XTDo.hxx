@@ -61,9 +61,9 @@ class CXTDataObject : public IDataObject
 public:
     CXTDataObject( );
 
-    //-----------------------------------------------------------------
+
     // ole interface implementation
-    //-----------------------------------------------------------------
+
 
     //IUnknown interface methods
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);
@@ -89,9 +89,9 @@ private:
     LONG m_nRefCnt;
 };
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 class CEnumFormatEtc : public IEnumFORMATETC
 {

@@ -22,7 +22,7 @@
 #include "xltracer.hxx"
 #include "xistream.hxx"
 
-// ============================================================================
+
 
 void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
@@ -119,7 +119,7 @@ void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCou
         aIt->Write( rStrm, bCol16Bit );
 }
 
-// ============================================================================
+
 
 XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAddress& rMaxPos ) :
     mrTracer( rTracer ),
@@ -149,6 +149,6 @@ bool XclAddressConverterBase::CheckScTab( SCTAB nScTab, bool bWarn )
     return bValid;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

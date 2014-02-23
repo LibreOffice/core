@@ -30,9 +30,9 @@
 // whereas NULL chooses the default dialog parent
 #define DIALOG_NO_PARENT ((Window*)0xffffffff)
 
-// ----------
+
 // - Dialog -
-// ----------
+
 struct DialogImpl;
 class VclBox;
 class VclButtonBox;
@@ -117,7 +117,7 @@ public:
     virtual void      SetText( const OUString& rStr );
     virtual OUString  GetText() const;
 
-    ////////////////////////////////////////
+
     // Dialog::Execute replacement API
 public:
     // Link impl: DECL_LINK( MyEndDialogHdl, Dialog* ); <= param is dialog just ended
@@ -129,7 +129,7 @@ private:
 public:
 
     // Dialog::Execute replacement API
-    ////////////////////////////////////////
+
 
     void            EndDialog( long nResult = 0 );
     static void     EndAllDialogs( Window* pParent=NULL );
@@ -144,9 +144,9 @@ public:
     void            GrabFocusToFirstControl();
 };
 
-// ------------------
+
 // - ModelessDialog -
-// ------------------
+
 
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
 {
@@ -159,9 +159,9 @@ public:
     explicit        ModelessDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
 };
 
-// ---------------
+
 // - ModalDialog -
-// ---------------
+
 
 class VCL_DLLPUBLIC ModalDialog : public Dialog
 {

@@ -43,7 +43,7 @@ SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindin
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState)

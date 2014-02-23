@@ -41,7 +41,7 @@
 #include <svx/srchdlg.hxx>
 #include "document.hxx"
 
-//==================================================================
+
 
 OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 {

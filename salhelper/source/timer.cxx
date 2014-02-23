@@ -32,10 +32,10 @@ class salhelper::TimerManager : public osl::Thread
 
 public:
 
-    ///
+
     TimerManager();
 
-    ///
+
     ~TimerManager();
 
     /// register timer
@@ -74,7 +74,7 @@ protected:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+
 //
 // Timer class
 //
@@ -232,7 +232,7 @@ TTimeValue Timer::getRemainingTime() const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 //
 // Timer manager
 //
@@ -461,7 +461,7 @@ void TimerManager::run()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 //
 // Timer manager cleanup
 //

@@ -243,7 +243,7 @@ vector<ScTokenRef>* TokenTable::getAllRanges() const
     return pTokens.release();
 }
 
-// ============================================================================
+
 
 typedef std::map<sal_uInt32, FormulaToken*> FormulaTokenMap;
 typedef std::map<sal_uInt32, FormulaTokenMap*> FormulaTokenMapMap;
@@ -830,7 +830,7 @@ void Chart2Positioner::createPositionMap()
     }
 }
 
-// ============================================================================
+
 
 /**
  * Function object to create a range string from a token list.

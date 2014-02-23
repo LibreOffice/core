@@ -27,10 +27,10 @@
 
 #include <algorithm>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::DisposedException;
@@ -45,9 +45,9 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
         struct HandlerLess : public ::std::binary_function  <   Reference< XPropertyHandler >
@@ -61,19 +61,19 @@ namespace pcr
             }
         };
 
-        //================================================================
+
         typedef ::std::set< OUString >       StringBag;
         typedef ::std::map< sal_Int16, StringBag >  MapIntToStringBag;
     }
 
-    //====================================================================
+
     //= callbacks for CachedInspectorUI
-    //====================================================================
+
     typedef void (ComposedPropertyUIUpdate::*FNotifySingleUIChange)();
 
-    //====================================================================
+
     //= CachedInspectorUI
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::inspection::XObjectInspectorUI
                                     >   CachedInspectorUI_Base;
     struct CachedInspectorUI : public CachedInspectorUI_Base
@@ -380,9 +380,9 @@ namespace pcr
         m_rMaster.getDelegatorUI()->setHelpSectionText( _HelpText );
     }
 
-    //====================================================================
+
     //= HandlerMap
-    //====================================================================
+
     typedef ::std::map  <   Reference< XPropertyHandler >
                         ,   ::rtl::Reference< CachedInspectorUI >
                         ,   HandlerLess
@@ -392,9 +392,9 @@ namespace pcr
         ImplMapHandlerToUI aHandlers;
     };
 
-    //====================================================================
+
     //= ComposedPropertyUIUpdate
-    //====================================================================
+
 
     ComposedPropertyUIUpdate::ComposedPropertyUIUpdate( const Reference< XObjectInspectorUI >& _rxDelegatorUI,
         IPropertyExistenceCheck* _pPropertyCheck )
@@ -426,9 +426,9 @@ namespace pcr
 
     namespace
     {
-        //============================================================
+
         //= StringBagCollector
-        //============================================================
+
         /** an STL-compatible structure which collects strings from a CachedInspectorUI instances
         */
         struct StringBagCollector : public ::std::unary_function< ImplMapHandlerToUI::value_type, void >
@@ -452,9 +452,9 @@ namespace pcr
             }
         };
 
-        //============================================================
+
         //= StringBagClearer
-        //============================================================
+
         /** an STL-compatible structure which cleans a certain string bag in a CachedInspectorUI instances
         */
         struct StringBagClearer : public ::std::unary_function< ImplMapHandlerToUI::value_type, void >
@@ -476,16 +476,16 @@ namespace pcr
             }
         };
 
-        //============================================================
+
         //= FPropertyUISetter
-        //============================================================
+
         /** a typedef for a ->XObjectInspectorUI member function taking a string
         */
         typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUISetter )( const OUString& );
 
-        //============================================================
+
         //= PropertyUIOperator
-        //============================================================
+
         /** an STL-compatible struct which calls a certain member method (taking a string) at a
             given ->XObjectInspectorUI instance
         */
@@ -513,9 +513,9 @@ namespace pcr
             }
         };
 
-        //============================================================
+
         //= IStringKeyBooleanUIUpdate
-        //============================================================
+
         /** an interface which encapsulates access to a single aspect of the ->XObjectInspectorUI,
             where this aspect is given by a string key, and has a boolean value.
         */
@@ -527,9 +527,9 @@ namespace pcr
             virtual ~IStringKeyBooleanUIUpdate() { }
         };
 
-        //============================================================
+
         //= FPropertyUIFlagSetter
-        //============================================================
+
         /** an implementation of the ->IStringKeyBooleanUIUpdate interface which,
             for a fixed ->XObjectInspectorUI instance and a fixed UI element (->PropertyLineElement),
             updates this element for a given property with a given boolean flag
@@ -551,22 +551,22 @@ namespace pcr
             virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const;
         };
 
-        //............................................................
+
         void EnablePropertyUIElement::updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const
         {
             m_xUIUpdate->enablePropertyUIElements( _rKey, m_nElement, _bFlag );
         }
 
-        //============================================================
+
         //= FPropertyUIFlagSetter
-        //============================================================
+
         /** a ->XObjectInspectorUI method taking a string and a boolean
         */
         typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, sal_Bool );
 
-        //============================================================
+
         //= DefaultStringKeyBooleanUIUpdate
-        //============================================================
+
         /** an implementaiton of the ->IStringKeyBooleanUIUpdate interface which calls
             am arbitrary ->XObjectInspectorUI method taking a string and a boolean flag
         */
@@ -582,22 +582,22 @@ namespace pcr
             virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const;
         };
 
-        //............................................................
+
         DefaultStringKeyBooleanUIUpdate::DefaultStringKeyBooleanUIUpdate( const Reference< XObjectInspectorUI >& _rxUIUpdate, FPropertyUIFlagSetter _pSetter )
             :m_xUIUpdate( _rxUIUpdate )
             ,m_pSetter( _pSetter )
         {
         }
 
-        //............................................................
+
         void DefaultStringKeyBooleanUIUpdate::updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const
         {
             ((m_xUIUpdate.get())->*m_pSetter)( _rKey, _bFlag );
         }
 
-        //============================================================
+
         //= BooleanUIAspectUpdate
-        //============================================================
+
         /** an STL-compatible structure which applies a ->IStringKeyBooleanUIUpdate::updateUIForKey
             operation with a fixed boolean value, for a given string value
         */
@@ -625,9 +625,9 @@ namespace pcr
             }
         };
 
-        //============================================================
+
         //= BooleanUIAspectUpdate
-        //============================================================
+
         /** an STL-compatible structure subtracting a given string from a fixed ->StringBag
         */
         struct StringBagComplement : public ::std::unary_function< OUString, void >
@@ -649,9 +649,9 @@ namespace pcr
             }
         };
 
-        //============================================================
+
         //= BooleanUIAspectUpdate
-        //============================================================
+
         void lcl_fireUIStateFlag(
                 const IStringKeyBooleanUIUpdate& _rUIUpdate,
                 const ImplMapHandlerToUI& _rHandlerUIs,
@@ -839,8 +839,8 @@ namespace pcr
         return false;
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,15 +25,15 @@
 #include <vcl/combobox.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
-// -----------------------------------------------------------------------------
+
 // globals
-// -----------------------------------------------------------------------------
+
 
 const sal_Int32 DEFAULT_INDEX_IN_PARENT = -1;
 
-// -----------------------------------------------------------------------------
+
 // class VCLListBoxHelper
-// -----------------------------------------------------------------------------
+
 
 template< class T > class VCLListBoxHelper : public ::accessibility::IComboListBoxHelper
 {
@@ -45,12 +45,12 @@ public:
     VCLListBoxHelper( T& _pListBox ) :
         m_aComboListBox( _pListBox ){}
 
-    // -----------------------------------------------------------------------------
+
     virtual OUString        GetEntry( sal_uInt16 nPos ) const
     {
         return m_aComboListBox.GetEntry( nPos );
     }
-    // -----------------------------------------------------------------------------
+
     virtual Rectangle       GetDropDownPosSizePixel() const
     {
         Rectangle aTemp = m_aComboListBox.GetWindowExtentsRelative(NULL);
@@ -58,7 +58,7 @@ public:
         aRet.Move(aTemp.TopLeft().X(),aTemp.TopLeft().Y());
         return aRet;
     }
-    // -----------------------------------------------------------------------------
+
     virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const
     {
         Rectangle aRect;
@@ -75,94 +75,94 @@ public:
             aRect = m_aComboListBox.GetBoundingRectangle( nItem );
         return aRect;
     }
-    // -----------------------------------------------------------------------------
+
     virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow )
     {
         return m_aComboListBox.GetWindowExtentsRelative( pRelativeWindow );
     }
-    // -----------------------------------------------------------------------------
+
     virtual bool            IsActive() const
     {
         return m_aComboListBox.IsActive();
     }
-    // -----------------------------------------------------------------------------
+
     virtual bool            IsEnabled() const
     {
         return m_aComboListBox.IsEnabled();
     }
-    // -----------------------------------------------------------------------------
+
     virtual bool            IsEntryVisible( sal_uInt16 nPos ) const
     {
         sal_uInt16 nTopEntry = m_aComboListBox.GetTopEntry();
         sal_uInt16 nLines = m_aComboListBox.GetDisplayLineCount();
         return ( nPos >= nTopEntry && nPos < ( nTopEntry + nLines ) );
     }
-    // -----------------------------------------------------------------------------
+
     virtual sal_uInt16      GetDisplayLineCount() const
     {
         return m_aComboListBox.GetDisplayLineCount();
     }
-    // -----------------------------------------------------------------------------
+
     virtual void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
     {
         m_aComboListBox.GetMaxVisColumnsAndLines(rnCols,rnLines);
     }
-    // -----------------------------------------------------------------------------
+
     virtual WinBits         GetStyle() const
     {
         return m_aComboListBox.GetStyle();
     }
-    // -----------------------------------------------------------------------------
+
     virtual bool            IsMultiSelectionEnabled() const
     {
         return m_aComboListBox.IsMultiSelectionEnabled();
     }
-    // -----------------------------------------------------------------------------
+
     virtual sal_uInt16      GetTopEntry() const
     {
         return m_aComboListBox.GetTopEntry();
     }
-    // -----------------------------------------------------------------------------
+
     virtual bool            IsEntryPosSelected( sal_uInt16 nPos ) const
     {
         return m_aComboListBox.IsEntryPosSelected(nPos);
     }
-    // -----------------------------------------------------------------------------
+
     virtual sal_uInt16      GetEntryCount() const
     {
         return m_aComboListBox.GetEntryCount();
     }
-    // -----------------------------------------------------------------------------
+
     virtual void            Select()
     {
         m_aComboListBox.Select();
     }
-    // -----------------------------------------------------------------------------
+
     virtual void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = true )
     {
         m_aComboListBox.SelectEntryPos(nPos,bSelect);
     }
-    // -----------------------------------------------------------------------------
+
     virtual sal_uInt16      GetSelectEntryCount() const
     {
         return m_aComboListBox.GetSelectEntryCount();
     }
-    // -----------------------------------------------------------------------------
+
     virtual void    SetNoSelection()
     {
         m_aComboListBox.SetNoSelection();
     }
-    // -----------------------------------------------------------------------------
+
     virtual sal_uInt16      GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const
     {
         return m_aComboListBox.GetSelectEntryPos(nSelIndex);
     }
-    // -----------------------------------------------------------------------------
+
     virtual bool            IsInDropDown() const
     {
         return m_aComboListBox.IsInDropDown();
     }
-    // -----------------------------------------------------------------------------
+
     virtual Rectangle GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const
     {
         Rectangle aRect;
@@ -175,18 +175,18 @@ public:
         }
         return aRect;
     }
-    // -----------------------------------------------------------------------------
+
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& nPos ) const
     {
         return m_aComboListBox.GetIndexForPoint( rPoint, nPos );
     }
-    // -----------------------------------------------------------------------------
+
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >
         GetClipboard()
     {
         return m_aComboListBox.GetClipboard();
     }
-    // -----------------------------------------------------------------------------
+
 };
 
 #endif  // ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX

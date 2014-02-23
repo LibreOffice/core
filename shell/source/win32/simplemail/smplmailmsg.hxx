@@ -25,9 +25,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/system/XSimpleMailMessage2.hpp>
 
-//----------------------------------------------------------
+
 // class declaration
-//----------------------------------------------------------
+
 
 class CSmplMailMsg :
     public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailMessage2 >
@@ -41,7 +41,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getBody(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
 
     virtual void SAL_CALL setRecipient( const OUString& aRecipient )
         throw (::com::sun::star::uno::RuntimeException);
@@ -49,7 +49,7 @@ public:
     virtual OUString SAL_CALL getRecipient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
 
     virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< OUString >& aCcRecipient )
         throw (::com::sun::star::uno::RuntimeException);
@@ -57,7 +57,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCcRecipient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
 
     virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< OUString >& aBccRecipient )
         throw (::com::sun::star::uno::RuntimeException);
@@ -65,7 +65,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getBccRecipient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
 
     virtual void SAL_CALL setOriginator( const OUString& aOriginator )
         throw (::com::sun::star::uno::RuntimeException);
@@ -73,7 +73,7 @@ public:
     virtual OUString SAL_CALL getOriginator(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
 
     virtual void SAL_CALL setSubject( const OUString& aSubject )
         throw (::com::sun::star::uno::RuntimeException);
@@ -81,7 +81,7 @@ public:
     virtual OUString SAL_CALL getSubject(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
 
     virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< OUString >& aAttachement )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);

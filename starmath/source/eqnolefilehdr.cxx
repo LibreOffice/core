@@ -20,7 +20,7 @@
 #include "eqnolefilehdr.hxx"
 #include <sot/storage.hxx>
 
-//////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -52,6 +52,6 @@ sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
     return bSuccess;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 const sal_Int32 BIFF12_CONNECTION_UNKNOWN               = 0;
 const sal_Int32 BIFF12_CONNECTION_ODBC                  = 1;
@@ -38,7 +38,7 @@ const sal_Int32 BIFF12_CONNECTION_TEXT                  = 6;
 const sal_Int32 BIFF12_CONNECTION_ADO                   = 7;
 const sal_Int32 BIFF12_CONNECTION_DSP                   = 8;
 
-// ============================================================================
+
 
 /** Special properties for data connections representing web queries. */
 struct WebPrModel
@@ -63,7 +63,7 @@ struct WebPrModel
     explicit            WebPrModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Common properties of an external data connection. */
 struct ConnectionModel
@@ -95,7 +95,7 @@ struct ConnectionModel
     WebPrModel&         createWebPr();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** An external data connection (database, web query, etc.). */
 class Connection : public WorkbookHelper
@@ -134,7 +134,7 @@ private:
 
 typedef ::boost::shared_ptr< Connection > ConnectionRef;
 
-// ============================================================================
+
 
 class ConnectionsBuffer : public WorkbookHelper
 {
@@ -163,7 +163,7 @@ private:
     sal_Int32           mnUnusedId;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

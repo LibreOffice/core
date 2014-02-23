@@ -116,7 +116,7 @@ namespace slideshow
 
 
         // Value extraction from Any
-        // =========================
+
 
         /// extract unary double value from Any
         bool extractValue( double&                              o_rValue,

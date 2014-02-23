@@ -50,7 +50,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrViewEvent::SdrViewEvent()
 :     pHdl(NULL),
@@ -88,7 +88,7 @@ SdrViewEvent::~SdrViewEvent()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // helper class for all D&D overlays
 
 void SdrDropMarkerOverlay::ImplCreateOverlays(

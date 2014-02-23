@@ -26,7 +26,7 @@
 
 using namespace com::sun::star::i18n;
 
-//////////////////////////////////////////////////////////////////////
+
 
 SvxJSearchOptionsPage::SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptJSearchPage", "cui/ui/optjsearchpage.ui", rSet )
@@ -362,6 +362,6 @@ sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
 }
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

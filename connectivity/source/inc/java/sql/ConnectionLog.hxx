@@ -34,19 +34,19 @@ namespace com { namespace sun { namespace star { namespace util
     struct DateTime;
 } } } }
 
-//........................................................................
+
 namespace comphelper { namespace log { namespace convert
 {
-//........................................................................
+
 
     // helpers for logging more data types than are defined in comphelper/logging.hxx
     OUString convertLogArgToString( const ::com::sun::star::util::Date& _rDate );
     OUString convertLogArgToString( const ::com::sun::star::util::Time& _rTime );
     OUString convertLogArgToString( const ::com::sun::star::util::DateTime& _rDateTime );
 
-//........................................................................
+
 } } }
-//........................................................................
+
 
 #include <comphelper/logging.hxx>
 
@@ -55,13 +55,13 @@ namespace connectivity
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 }
 
-//........................................................................
-namespace connectivity { namespace java { namespace sql {
-//........................................................................
 
-    //====================================================================
+namespace connectivity { namespace java { namespace sql {
+
+
+
     //= ConnectionLog
-    //====================================================================
+
     typedef ::comphelper::ResourceBasedEventLogger  ConnectionLog_Base;
     class ConnectionLog : public ConnectionLog_Base
     {
@@ -125,9 +125,9 @@ namespace connectivity { namespace java { namespace sql {
         }
     };
 
-//........................................................................
+
 } } } // namespace connectivity::java::sql
-//........................................................................
+
 
 #endif // CONNECTIVITY_CONNECTIONLOG_HXX
 

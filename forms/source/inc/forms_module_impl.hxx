@@ -27,10 +27,10 @@
 
 #include <comphelper/sequence.hxx>
 
-//.........................................................................
+
 namespace FORMS_MODULE_NAMESPACE
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -38,20 +38,20 @@ namespace FORMS_MODULE_NAMESPACE
     using namespace ::comphelper;
     using namespace ::cppu;
 
-    //=========================================================================
-    //= OFormsModule
-    //=========================================================================
 
-    //--------------------------------------------------------------------------
+    //= OFormsModule
+
+
+
     //- registration helper
-    //--------------------------------------------------------------------------
+
 
     Sequence< OUString >*                OFormsModule::s_pImplementationNames = NULL;
     Sequence< Sequence< OUString > >*    OFormsModule::s_pSupportedServices = NULL;
     Sequence< sal_Int64 >*                      OFormsModule::s_pCreationFunctionPointers = NULL;
     Sequence< sal_Int64 >*                      OFormsModule::s_pFactoryFunctionPointers = NULL;
 
-    //--------------------------------------------------------------------------
+
     void OFormsModule::registerComponent(
         const OUString& _rImplementationName,
         const Sequence< OUString >& _rServiceNames,
@@ -87,7 +87,7 @@ namespace FORMS_MODULE_NAMESPACE
         s_pFactoryFunctionPointers->getArray()[nOldLen] = reinterpret_cast<sal_Int64>(_pFactoryFunction);
     }
 
-    //--------------------------------------------------------------------------
+
     void OFormsModule::revokeComponent(const OUString& _rImplementationName)
     {
         if (!s_pImplementationNames)
@@ -125,7 +125,7 @@ namespace FORMS_MODULE_NAMESPACE
         }
     }
 
-    //--------------------------------------------------------------------------
+
     Reference< XInterface > OFormsModule::getComponentFactory(
         const OUString& _rImplementationName,
         const Reference< XMultiServiceFactory >& _rxServiceManager)
@@ -174,8 +174,8 @@ namespace FORMS_MODULE_NAMESPACE
         return NULL;
     }
 
-//.........................................................................
+
 }   // namespace FORMS_MODULE_NAMESPACE
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

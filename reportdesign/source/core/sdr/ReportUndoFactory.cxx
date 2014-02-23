@@ -24,7 +24,7 @@
 namespace rptui
 {
     using namespace ::com::sun::star;
-// -----------------------------------------------------------------------------
+
 SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCommentId)
 {
     OObjectBase* pObj = dynamic_cast<OObjectBase*>(&rObject);
@@ -40,16 +40,16 @@ SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCo
         pUndo = new OUndoReportSectionAction(*rObject.GetModel(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,_nCommentId);
     return pUndo;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 OReportUndoFactory::OReportUndoFactory() : m_pUndoFactory(new SdrUndoFactory)
 {
 }
-// -----------------------------------------------------------------------------
+
 OReportUndoFactory::~OReportUndoFactory()
 {
 }
-///////////////////////////////////////////////////////////////////////
+
 // shapes
 SdrUndoAction* OReportUndoFactory::CreateUndoMoveObject( SdrObject& rObject )
 {
@@ -163,8 +163,8 @@ SdrUndoAction* OReportUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChan
     return m_pUndoFactory->CreateUndoPageChangeMasterPage(rChangedPage);
 }
 
-//==================================================================
+
 }   //rptui
-//==================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -83,10 +83,10 @@ namespace comp_DialogModelProvider
         return static_cast< ::cppu::OWeakObject * >(new dlgprov::DialogModelProvider(context));
     }
 } // closing component helper namespace
-//.........................................................................
+
 namespace dlgprov
 {
-//.........................................................................
+
 
 static OUString aResourceResolverPropName("ResourceResolver");
 
@@ -160,9 +160,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
         return xDialogModel;
     }
-    // =============================================================================
+
     // component operations
-    // =============================================================================
+
 
     static OUString getImplementationName_DialogProviderImpl()
     {
@@ -200,9 +200,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
 
-    // =============================================================================
+
     // mutex
-    // =============================================================================
+
 
     ::osl::Mutex& getMutex()
     {
@@ -220,9 +220,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
 
-    // =============================================================================
+
     // DialogProviderImpl
-    // =============================================================================
+
 
     DialogProviderImpl::DialogProviderImpl( const Reference< XComponentContext >& rxContext )
         :m_xContext( rxContext )
@@ -789,9 +789,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
 
-    // =============================================================================
+
     // component operations
-    // =============================================================================
+
 
     static Reference< XInterface > SAL_CALL create_DialogProviderImpl(
         Reference< XComponentContext > const & xContext )
@@ -811,14 +811,14 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
 
 
-//.........................................................................
+
 }   // namespace dlgprov
-//.........................................................................
 
 
-// =============================================================================
+
+
 // component exports
-// =============================================================================
+
 
 extern "C"
 {

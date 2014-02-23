@@ -162,7 +162,7 @@ static void callVirtualMethod(
     INSERT_INT32(pSV, pDS) \
     INSERT_INT32(((sal_uInt32*)pSV)+1, pDS) \
 }
-//==================================================================================================
+
 static void cpp_call(
         bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
         bridges::cpp_uno::shared::VtableSlot aVtableSlot,

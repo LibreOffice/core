@@ -30,7 +30,7 @@ using namespace ::com::sun::star::script::framework;
 namespace func_provider
 {
 
-//*************************************************************************
+
 ScriptImpl::ScriptImpl(
     const Reference< beans::XPropertySet > & scriptingContext,
     const Reference< runtime::XScriptInvocation > & runtimeMgr,
@@ -43,13 +43,13 @@ throw ( RuntimeException ) :
     SAL_INFO("scripting.provider", "<!constucting a ScriptImpl>" );
 }
 
-//*************************************************************************
+
 ScriptImpl::~ScriptImpl()
 {
     SAL_INFO("scripting.provider", "<Destructing a ScriptImpl>" );
 }
 
-//*************************************************************************
+
 Any SAL_CALL
 ScriptImpl::invoke( const Sequence< Any >& aParams,
                       Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )

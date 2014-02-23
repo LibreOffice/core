@@ -70,7 +70,7 @@ class SmViewShell;
 SmViewShell * SmGetActiveView();
 
 
-////////////////////////////////////////////////////////////
+
 //
 // SmFace
 //
@@ -112,7 +112,7 @@ public:
 SmFace & operator *= (SmFace &rFace, const Fraction &rFrac);
 
 
-////////////////////////////////////////////////////////////
+
 //
 // SmFontPickList
 //
@@ -147,7 +147,7 @@ public:
     void            WriteTo(SmFontDialog& rDialog) const;
 };
 
-////////////////////////////////////////////////////////////
+
 //
 //  SmFontPickListBox
 //

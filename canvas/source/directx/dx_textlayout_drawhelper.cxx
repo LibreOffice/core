@@ -49,7 +49,7 @@ class ::com::sun::star::rendering::XCanvasFont;
 using namespace ::com::sun::star;
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace dxcanvas
 {

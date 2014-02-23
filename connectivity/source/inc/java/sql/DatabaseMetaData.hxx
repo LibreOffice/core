@@ -27,9 +27,9 @@
 namespace connectivity
 {
     class java_sql_Connection;
-    //**************************************************************
+
     //************ Class: java.sql.DatabaseMetaDataDate
-    //**************************************************************
+
 
     class java_sql_DatabaseMetaData :   public ODatabaseMetaDataBase,
                                         public java_lang_Object

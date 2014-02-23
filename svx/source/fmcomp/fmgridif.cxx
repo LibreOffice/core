@@ -122,9 +122,9 @@ Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
     return aFont;
 }
 
-//==================================================================
+
 //= FmXModifyMultiplexer
-//==================================================================
+
 
 FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
@@ -160,9 +160,9 @@ void FmXModifyMultiplexer::modified(const EventObject& e) throw( RuntimeExceptio
     notifyEach( &XModifyListener::modified, aMulti );
 }
 
-//==================================================================
+
 //= FmXUpdateMultiplexer
-//==================================================================
+
 
 FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
@@ -216,9 +216,9 @@ void FmXUpdateMultiplexer::updated(const EventObject &e) throw( RuntimeException
 }
 
 
-//==================================================================
+
 //= FmXSelectionMultiplexer
-//==================================================================
+
 
 FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
@@ -254,9 +254,9 @@ void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEv
     notifyEach( &XSelectionChangeListener::selectionChanged, aMulti );
 }
 
-//==================================================================
+
 //= FmXContainerMultiplexer
-//==================================================================
+
 
 FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                         :OWeakSubObject( rSource )
@@ -308,9 +308,9 @@ void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e) throw( Ru
     notifyEach( &XContainerListener::elementReplaced, aMulti );
 }
 
-//==================================================================
+
 //= FmXGridControlMultiplexer
-//==================================================================
+
 
 FmXGridControlMultiplexer::FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
@@ -345,9 +345,9 @@ void SAL_CALL FmXGridControlMultiplexer::columnChanged( const EventObject& _even
     notifyEach( &XGridControlListener::columnChanged, aForwardedEvent );
 }
 
-//==================================================================
+
 //= FmXGridControl
-//==================================================================
+
 
 
 Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference< XMultiServiceFactory>& _rxFactory)
@@ -1007,9 +1007,9 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode) throw( Runt
     return xPeer.is() ? xPeer->supportsMode(Mode) : sal_False;
 }
 
-//==============================================================================
+
 //= FmXGridPeer
-//==============================================================================
+
 // helper class which prevents that in the peer's header the FmGridListener must be known
 class FmXGridPeer::GridListenerDelegator : public FmGridListener
 {
@@ -1048,7 +1048,7 @@ void FmXGridPeer::GridListenerDelegator::columnChanged()
     m_pPeer->columnChanged();
 }
 
-//==============================================================================
+
 
 Reference< XInterface >  FmXGridPeer_CreateInstance(const Reference< XMultiServiceFactory>& _rxFactory)
 {

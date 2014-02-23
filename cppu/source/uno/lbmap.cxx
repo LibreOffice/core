@@ -102,7 +102,7 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW(())
     return *this;
 }
 
-//==================================================================================================
+
 struct MappingEntry
 {
     sal_Int32           nRef;
@@ -141,7 +141,7 @@ typedef boost::unordered_map<
 typedef set< uno_getMappingFunc > t_CallbackSet;
 typedef set< OUString > t_OUStringSet;
 
-//==================================================================================================
+
 struct MappingsData
 {
     Mutex               aMappingsMutex;
@@ -279,7 +279,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
     uno_Mapping::mapInterface   = mediate_mapInterface;
 }
 
-//==================================================================================================
+
 static inline OUString getMappingName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -297,7 +297,7 @@ static inline OUString getMappingName(
     aKey.append( ']' );
     return aKey.makeStringAndClear();
 }
-//==================================================================================================
+
 static inline OUString getBridgeName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -378,7 +378,7 @@ static inline oslModule loadModule( const OUString & rBridgeName )
 
 #endif
 
-//==================================================================================================
+
 static Mapping loadExternalMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -459,7 +459,7 @@ static Mapping loadExternalMapping(
     return Mapping();
 }
 
-//==================================================================================================
+
 static Mapping getDirectMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose = OUString() )
     SAL_THROW(())
@@ -502,7 +502,7 @@ static inline Mapping createMediateMapping(
     (*pRet->release)( pRet );
     return aRet;
 }
-//==================================================================================================
+
 static Mapping getMediateMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -570,7 +570,7 @@ using namespace ::cppu;
 
 extern "C"
 {
-//##################################################################################################
+
 void SAL_CALL uno_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
     rtl_uString * pAddPurpose )
@@ -640,7 +640,7 @@ void SAL_CALL uno_getMapping(
         *ppMapping = aRet.get();
     }
 }
-//##################################################################################################
+
 void SAL_CALL uno_getMappingByName(
     uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
     rtl_uString * pAddPurpose )
@@ -670,7 +670,7 @@ void SAL_CALL uno_getMappingByName(
     }
 }
 
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
@@ -708,7 +708,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
         }
     }
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
     uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C()
@@ -733,7 +733,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
     }
 }
 
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
@@ -743,7 +743,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
     MutexGuard aGuard( rData.aCallbacksMutex );
     rData.aCallbacks.insert( pCallback );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()

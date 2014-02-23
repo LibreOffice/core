@@ -30,10 +30,10 @@
 
 namespace rptui
 {
-//============================================================================
+
 class FunctionCategory;
 class FunctionDescription;
-//============================================================================
+
 class FunctionManager : public formula::IFunctionManager
 {
     typedef std::map< OUString, ::boost::shared_ptr< FunctionDescription > > TFunctionsMap;
@@ -53,7 +53,7 @@ public:
 
     ::boost::shared_ptr< FunctionDescription >      get(const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription) const;
 };
-//============================================================================
+
 class FunctionDescription : public formula::IFunctionDescription
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FunctionArgument > m_aParameter;
@@ -77,7 +77,7 @@ public:
     virtual OUString getParameterDescription(sal_uInt32 _nPos) const ;
     virtual bool isParameterOptional(sal_uInt32 _nPos) const ;
 };
-//============================================================================
+
 class FunctionCategory : public formula::IFunctionCategory
 {
     mutable ::std::vector< ::boost::shared_ptr< FunctionDescription > > m_aFunctions;
@@ -95,9 +95,9 @@ public:
     virtual const formula::IFunctionManager*        getFunctionManager() const;
     virtual OUString                         getName() const;
 };
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 #endif //RPTUI_FUNCTIONHELPER_HXX
 

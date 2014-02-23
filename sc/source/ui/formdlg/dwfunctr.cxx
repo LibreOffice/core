@@ -991,7 +991,7 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
     {
         DoEnter();          // Uebernimmt die Eingabe
     }
-    //...
+
 
     return 0;
 }
@@ -1027,7 +1027,7 @@ IMPL_LINK( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit*, pCtrl )
         aFiFuncDesc.SetPosPixel(aFDTopLeft);
         aFiFuncDesc.SetSizePixel(aFDSize);
     }
-    //...
+
 
     return 0;
 }

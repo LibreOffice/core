@@ -420,7 +420,7 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
 
 }
 
-//*********************************************************************
+
 //  ORegistry()
 //
 ORegistry::ORegistry()
@@ -431,7 +431,7 @@ ORegistry::ORegistry()
 {
 }
 
-//*********************************************************************
+
 //  ~ORegistry()
 //
 ORegistry::~ORegistry()
@@ -445,7 +445,7 @@ ORegistry::~ORegistry()
 }
 
 
-//*********************************************************************
+
 //  initRegistry
 //
 RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMode)
@@ -512,7 +512,7 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
 }
 
 
-//*********************************************************************
+
 //  closeRegistry
 //
 RegError ORegistry::closeRegistry()
@@ -532,7 +532,7 @@ RegError ORegistry::closeRegistry()
 }
 
 
-//*********************************************************************
+
 //  destroyRegistry
 //
 RegError ORegistry::destroyRegistry(const OUString& regName)
@@ -594,7 +594,7 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  acquireKey
 //
 RegError ORegistry::acquireKey (RegKeyHandle hKey)
@@ -609,7 +609,7 @@ RegError ORegistry::acquireKey (RegKeyHandle hKey)
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  releaseKey
 //
 RegError ORegistry::releaseKey (RegKeyHandle hKey)
@@ -627,7 +627,7 @@ RegError ORegistry::releaseKey (RegKeyHandle hKey)
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  createKey
 //
 RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
@@ -688,7 +688,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
 }
 
 
-//*********************************************************************
+
 //  openKey
 //
 RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
@@ -739,7 +739,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
 }
 
 
-//*********************************************************************
+
 //  closeKey
 //
 RegError ORegistry::closeKey(RegKeyHandle hKey)
@@ -773,7 +773,7 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
     return releaseKey(pKey);
 }
 
-//*********************************************************************
+
 //  deleteKey
 //
 RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
@@ -855,7 +855,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     return pKey->closeKey(pOldKey);
 }
 
-//*********************************************************************
+
 //  deleteSubKeysAndValues
 //
 RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
@@ -896,7 +896,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 }
 
 
-//*********************************************************************
+
 //  loadKey
 //
 RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
@@ -944,7 +944,7 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 }
 
 
-//*********************************************************************
+
 //  saveKey
 //
 RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
@@ -995,7 +995,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 
-//*********************************************************************
+
 //  loadAndSaveValue()
 //
 RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
@@ -1123,7 +1123,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 }
 
 
-//*********************************************************************
+
 //  checkblop()
 //
 RegError ORegistry::checkBlop(OStoreStream& rValue,
@@ -1253,7 +1253,7 @@ static sal_uInt32 checkTypeReaders(RegistryTypeReader& reader1,
     return count;
 }
 
-//*********************************************************************
+
 //  mergeModuleValue()
 //
 RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
@@ -1328,7 +1328,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  loadAndSaveKeys()
 //
 RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
@@ -1398,7 +1398,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
 }
 
 
-//*********************************************************************
+
 //  getRootKey()
 //
 ORegKey* ORegistry::getRootKey()
@@ -1408,7 +1408,7 @@ ORegKey* ORegistry::getRootKey()
 }
 
 
-//*********************************************************************
+
 //  dumpRegistry()
 //
 RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
@@ -1447,7 +1447,7 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  dumpValue()
 //
 RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_Int16 nSpc) const
@@ -1688,7 +1688,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  dumpKey()
 //
 RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_Int16 nSpace) const

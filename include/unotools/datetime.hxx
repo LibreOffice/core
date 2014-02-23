@@ -31,10 +31,10 @@ class Date;
 class Time;
 class DateTime;
 
-//.........................................................................
+
 namespace utl
 {
-//.........................................................................
+
 
     namespace starutil = ::com::sun::star::util;
 
@@ -50,9 +50,9 @@ namespace utl
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseDate(const ::rtl::OUString &i_rIn, starutil::Date& o_rDate);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseTime(const ::rtl::OUString &i_rIn, starutil::Time& o_Time);
 
-//.........................................................................
+
 }   // namespace utl
-//.........................................................................
+
 
 #endif // INCLUDED_UNOTOOLS_DATETIME_HXX
 

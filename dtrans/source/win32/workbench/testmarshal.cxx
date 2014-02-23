@@ -66,7 +66,7 @@ HANDLE  g_hEvtThreadWakeup;
     IStream* g_pStm;
 #endif
 
-//################################################################
+
 // a thread in another apartment to test apartment transparency
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
@@ -114,7 +114,7 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     return 0;
 }
 
-//################################################################
+
 
 
 //  main

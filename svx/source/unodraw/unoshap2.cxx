@@ -1726,7 +1726,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     return true;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxShapeCaption::SvxShapeCaption( SdrObject* pObj ) throw()
 : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CAPTION), getSvxMapProvider().GetPropertySet(SVXMAP_CAPTION, SdrObject::GetGlobalDrawObjectItemPool()) )

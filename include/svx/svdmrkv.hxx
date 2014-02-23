@@ -230,7 +230,7 @@ public:
 
     sal_Bool HasMarkableObj() const;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // migrate selections
 
 protected:
@@ -260,7 +260,7 @@ public:
     const SdrMarkList& GetMarkedEdgesOfMarkedNodes() const { return mpSdrViewSelection->GetMarkedEdgesOfMarkedNodes(); }
     const std::vector<SdrObject*>& GetTransitiveHullOfMarkedObjects() const { return mpSdrViewSelection->GetAllMarkedObjects(); }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     // mechanism to complete disable handles at the view. Handles will be hidden and deleted
     // when set, no new ones created, no interaction allowed. Handles will be recreated and shown
@@ -463,7 +463,7 @@ public:
     void UnmarkObj(SdrObject* pObj);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //
 // - Hit tolarances:
 //   It have to be declared in logical coordinates. So please translate the
@@ -479,7 +479,7 @@ public:
 //     When an object is directly hit, the Edit method is called.
 //     In opposite, a hit in the surrounding sensitive area enables Dragging.
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDMRKV_HXX
 

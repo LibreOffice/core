@@ -35,9 +35,9 @@ namespace foo
     namespace stario    = ::com::sun::star::io;
     namespace staruno   = ::com::sun::star::uno;
 
-//==================================================================
+
 //= OOutputStreamWrapper
-//==================================================================
+
 typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
     // needed for some compilers
 class OOutputStreamWrapper : public OutputStreamWrapper_Base

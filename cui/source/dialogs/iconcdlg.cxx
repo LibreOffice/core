@@ -444,7 +444,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     const Point aCtrlOffset ( LogicToPixel( Point( CTRLS_OFFSET, CTRLS_OFFSET ), MAP_APPFONT ) );
     Size aOutSize ( GetOutputSizePixel() );
 
-    ////////////////////////////////////////
+
     // Button-Defaults
     //
     Size aDefaultButtonSize = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
@@ -453,7 +453,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     Size aResetButtonSize ( bInit ? aDefaultButtonSize :
                                     aResetBtn.GetSizePixel () );
 
-    ////////////////////////////////////////
+
     // IconChoiceCtrl resizen & positionieren
     //
     SvtTabAppearanceCfg aCfg;
@@ -492,7 +492,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     maIconCtrl.SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
     maIconCtrl.ArrangeIcons();
 
-    ////////////////////////////////////////
+
     // resize & position the pages
     //
     for ( size_t i = 0; i < maPageList.size(); i++ )
@@ -537,7 +537,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
             pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
     }
 
-    ////////////////////////////////////////
+
     // position the buttons
     //
     sal_uLong nXOffset=0;

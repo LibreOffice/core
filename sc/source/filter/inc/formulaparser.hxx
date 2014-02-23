@@ -89,7 +89,7 @@ private:
     ApiTokenVector      maTokens;
 };
 
-// ============================================================================
+
 
 class FormulaParserImpl;
 
@@ -147,7 +147,7 @@ private:
     ::std::auto_ptr< FormulaParserImpl > mxImpl;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

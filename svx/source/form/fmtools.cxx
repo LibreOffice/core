@@ -98,7 +98,7 @@ using namespace ::com::sun::star::form;
 using namespace ::svxform;
 using namespace ::connectivity::simple;
 
-//  ------------------------------------------------------------------------------
+
 namespace
 {
     static bool lcl_shouldDisplayError( const Any& _rError )
@@ -121,7 +121,7 @@ namespace
     }
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const Any& _rExcept, Window* _pParent)
 {
     // check whether we need to display it
@@ -143,25 +143,25 @@ void displayException(const Any& _rExcept, Window* _pParent)
     }
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const ::com::sun::star::sdbc::SQLWarning& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const ::com::sun::star::sdb::SQLContext& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, Window* _pParent)
 {
     displayException(_rEvent.Reason, _pParent);
@@ -222,7 +222,7 @@ OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& x
     return ::comphelper::getString(xControlModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
 }
 
-//========================================================================
+
 // = CursorWrapper
 
 CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned)
@@ -306,7 +306,7 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
     }
 }
 
-//==============================================================================
+
 DBG_NAME(FmXDisposeMultiplexer);
 
 FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
@@ -357,7 +357,7 @@ void FmXDisposeMultiplexer::dispose()
     }
 }
 
-//==============================================================================
+
 
 sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
 {

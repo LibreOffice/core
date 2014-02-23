@@ -217,22 +217,22 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 //
 // Dtor
 //
-//////////////////////////////////////////////////////////////////////////
+
 
 ImplSdPPTImport::~ImplSdPPTImport()
 {
     delete pStData;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 //
 // Import
 //
-//////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool ImplSdPPTImport::Import()
 {
@@ -543,9 +543,9 @@ sal_Bool ImplSdPPTImport::Import()
     Scale( aVisAreaSize );
     pDocShell->SetVisArea( Rectangle( Point(), aVisAreaSize ) );
 
-    ///////////////////////////////////////////////////////////
+
     // create master pages:
-    ///////////////////////////////////////////////////////////
+
     SfxProgress* pStbMgr = new SfxProgress( pDocShell, SD_RESSTR( STR_POWERPOINT_IMPORT ),
             pMasterPages->size() + pSlidePages->size() + pNotePages->size() );
 
@@ -577,9 +577,9 @@ sal_Bool ImplSdPPTImport::Import()
                     SfxStyleSheet* pSheet;
                     if ( nMasterNum == 1 )
                     {
-                        ///////////////////
+
                         // standardsheet //
-                        ///////////////////
+
                         pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS );
                         if ( pSheet )
                         {
@@ -604,10 +604,10 @@ sal_Bool ImplSdPPTImport::Import()
                         aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                     }
 
-                    ///////////////////////////////////////////////////////////
+
                     // create layoutstylesheets, set layoutname and stylesheet
                     // (only on standard and not pages)
-                    ///////////////////////////////////////////////////////////
+
                     OUString aLayoutName( SD_RESSTR( STR_LAYOUT_DEFAULT_NAME ) );
                     if ( nMasterNum > 2 )
                     {
@@ -625,9 +625,9 @@ sal_Bool ImplSdPPTImport::Import()
                     aLayoutName += SD_RESSTR( STR_LAYOUT_OUTLINE );
                     pPage->SetLayoutName( aLayoutName );
 
-                    /////////////////////
+
                     // set stylesheets //
-                    /////////////////////
+
                     if ( pPage->GetPageKind() == PK_STANDARD )
                     {
                         sal_uInt32 nTitleInstance = TSS_TYPE_PAGETITLE;
@@ -639,9 +639,9 @@ sal_Bool ImplSdPPTImport::Import()
                             nTitleInstance = TSS_TYPE_TITLE;
                             nOutlinerInstance = TSS_TYPE_SUBTITLE;
                         }
-                        /////////////////////
+
                         // titelstylesheet //
-                        /////////////////////
+
                         pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
                         if ( pSheet )
                         {
@@ -652,9 +652,9 @@ sal_Bool ImplSdPPTImport::Import()
                             aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                         }
-                        ////////////////////////
+
                         // outlinerstylesheet //
-                        ////////////////////////
+
                         sal_uInt16 nLevel;
                         PPTParagraphObj* pParagraphs[ 9 ];
                         PPTParagraphObj* pPreviousPara = NULL;
@@ -680,9 +680,9 @@ sal_Bool ImplSdPPTImport::Import()
                                 pParagraphs[ nLevel ] = NULL;
                         }
                         for ( nLevel = 0; nLevel < 9; delete pParagraphs[ nLevel++ ] ) ;
-                        /////////////////////////
+
                         // subtitle stylesheet //
-                        /////////////////////////
+
                         pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
                         if ( pSheet )
                         {
@@ -716,9 +716,9 @@ sal_Bool ImplSdPPTImport::Import()
     for ( i = 0; i < mpDoc->GetMasterPageCount() && ( (pMPage = (SdPage*)mpDoc->GetMasterPage( i )) != 0 ); i++ )
     {
         SetPageNum( i, PPT_MASTERPAGE );
-        /////////////////////////////////////////////
+
         // importing master page objects           //
-        /////////////////////////////////////////////
+
         PptSlidePersistList* pList = GetPageList( eAktPageKind );
         PptSlidePersistEntry* pPersist = ( pList && ( nAktPageNum < pList->size() ) )
                                                     ? (*pList)[ nAktPageNum ] : NULL;
@@ -835,9 +835,9 @@ sal_Bool ImplSdPPTImport::Import()
                 rStCtrl.Seek( nFPosMerk );
                 ImportPageEffect( (SdPage*)pMPage, bNewAnimationsUsed );
 
-                ///////////////////////
+
                 // background object //
-                ///////////////////////
+
                 pObj = pMPage->GetObj( 0 );
                 if ( pObj && pObj->GetObjIdentifier() == OBJ_RECT )
                 {
@@ -873,9 +873,9 @@ sal_Bool ImplSdPPTImport::Import()
         if( pStbMgr )
             pStbMgr->SetState( nImportedPages++ );
     }
-    ////////////////////////////////////
+
     // importing slide pages          //
-    ////////////////////////////////////
+
     {
         sal_uInt32          nFPosMerk = rStCtrl.Tell();
         PptPageKind     ePageKind = eAktPageKind;
@@ -1044,17 +1044,17 @@ sal_Bool ImplSdPPTImport::Import()
         SetPageNum( nPageNum, ePageKind );
         rStCtrl.Seek( nFPosMerk );
     }
-    ///////////////////////////////////////////////////////////////////
+
     // create handout and note pages                                 //
-    ///////////////////////////////////////////////////////////////////
+
     bOk = mpDoc->CreateMissingNotesAndHandoutPages();
     if ( bOk )
     {
         for ( i = 0; i < mpDoc->GetSdPageCount( PK_STANDARD ); i++ )
         {
-            ////////////////////
+
             // set AutoLayout //
-            ////////////////////
+
             SetPageNum( i, PPT_SLIDEPAGE );
             SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
             AutoLayout eAutoLayout = AUTOLAYOUT_NONE;
@@ -1171,9 +1171,9 @@ sal_Bool ImplSdPPTImport::Import()
                     pPage->SetAutoLayout( eAutoLayout, sal_False );
             }
         }
-        //////////////////////////////////////////////////////////////
+
         // handout master page: auto layout                         //
-        //////////////////////////////////////////////////////////////
+
         SdPage* pHandoutMPage = mpDoc->GetMasterSdPage( 0, PK_HANDOUT );
         pHandoutMPage->SetAutoLayout( AUTOLAYOUT_HANDOUT6, sal_True, sal_True );
     }
@@ -1458,11 +1458,11 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 //
 // Import of pages
 //
-//////////////////////////////////////////////////////////////////////////
+
 
 struct Ppt97AnimationStlSortHelper
 {
@@ -1851,14 +1851,14 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
     rStCtrl.Seek( nFilePosMerk );
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 //
 // import of sounds
 //
 // Not only the sounds are imported as string, they are also inserted to
 // the gallery if they are not already there.
 //
-///////////////////////////////////////////////////////////////////////////
+
 
 OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 {
@@ -1964,11 +1964,11 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
     return aRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 //
 // media object import, the return value is the url to the media object
 //
-//////////////////////////////////////////////////////////////////////////
+
 
 OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 {
@@ -2034,11 +2034,11 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
     return aRetVal;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 //
 // import of objects
 //
-//////////////////////////////////////////////////////////////////////////
+
 
 void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName )
 {

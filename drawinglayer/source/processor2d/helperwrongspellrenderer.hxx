@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class OutputDevice;
@@ -36,7 +36,7 @@ namespace basegfx {
     class BColorModifierStack;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // support WrongSpell rendreing using VCL from primitives due to VCLs nice
 // and fast solution with wavelines
 
@@ -50,7 +50,7 @@ namespace drawinglayer
 
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_HELPERWRONGSPELLRENDER_HXX
 

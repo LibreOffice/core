@@ -45,9 +45,9 @@
 
 #include "basegfx/polygon/b2dpolygon.hxx"
 
-// ----------------------------------------------------------------------------
+
 // The only common SalFrame method
-// ----------------------------------------------------------------------------
+
 
 SalFrameGeometry SalFrame::GetGeometry()
 {
@@ -64,7 +64,7 @@ SalFrameGeometry SalFrame::GetGeometry()
         return maGeometry;
 }
 
-// ----------------------------------------------------------------------------
+
 
 SalGraphics::SalGraphics()
 :   m_nLayout( 0 ),
@@ -79,7 +79,7 @@ SalGraphics::~SalGraphics()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool SalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& /* rNull */,
@@ -92,7 +92,7 @@ bool SalGraphics::drawTransformedBitmap(
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) const
 {
@@ -376,7 +376,7 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
     return aRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool SalGraphics::SetClipRegion( const Region& i_rClip, const OutputDevice *pOutDev )
 {

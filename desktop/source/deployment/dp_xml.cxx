@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 namespace dp_misc
 {
 
-//==============================================================================
+
 void xml_parse(
     Reference<xml::sax::XDocumentHandler> const & xDocHandler,
     ::ucbhelper::Content & ucb_content,

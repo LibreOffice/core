@@ -659,9 +659,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             pScene->NbcSetTransform( aNewTransform );
 
-            ///////////
+
             // light //
-            ///////////
+
 
             const OUString sBrightness( "Brightness" );
             double fAmbientIntensity = GetDouble( rGeometryItem, sBrightness, 22178.0 / 655.36, NULL ) / 100.0;

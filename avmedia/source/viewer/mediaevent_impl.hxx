@@ -31,9 +31,9 @@ namespace avmedia
 {
     namespace priv
     {
-        // ---------------------------
+
         // - MediaEventListenersImpl -
-        // ---------------------------
+
         class MediaEventListenersImpl : public ::cppu::WeakImplHelper4< ::com::sun::star::awt::XKeyListener,
                                                                         ::com::sun::star::awt::XMouseListener,
                                                                         ::com::sun::star::awt::XMouseMotionListener,

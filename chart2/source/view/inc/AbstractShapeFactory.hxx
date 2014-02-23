@@ -84,7 +84,7 @@ public:
                 ::com::sun::star::drawing::XShapes >& xTarget
                 , OUString aName = OUString() ) = 0;
 
-    //------
+
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
             createCube(   const ::com::sun::star::uno::Reference<
@@ -249,7 +249,7 @@ public:
          getChartRootShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& xPage );
 
-    //------
+
     static void makeShapeInvisible( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape >& xShape );
 

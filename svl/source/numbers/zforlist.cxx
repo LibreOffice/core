@@ -82,7 +82,7 @@ struct IndexTable
 
 static IndexTable theIndexTable;
 
-// ====================================================================
+
 
 /**
     instead of every number formatter being a listener we have a registry which
@@ -163,7 +163,7 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
 }
 
 
-// ====================================================================
+
 
 SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = NULL;
 bool SvNumberFormatter::bCurrencyTableInitialized = false;

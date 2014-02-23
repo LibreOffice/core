@@ -103,7 +103,7 @@ public:
     bool                CanInputDone( bool bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
 };
 
-//============================================================================
+
 
 class SC_DLLPUBLIC ScRefHandler :
                     public IAnyRefDialog
@@ -173,7 +173,7 @@ public:
     inline  bool        CanInputDone( bool bForced );
 };
 
-//============================================================================
+
 
 
 class ScRefHdlModalImpl : public ModalDialog, public ScRefHandler
@@ -275,7 +275,7 @@ public:
         const OUString& rUIXMLDescription);
 };
 
-//============================================================================
+
 template<class TDerived, class TBase, bool bBindRef = true>
 struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
 {
@@ -300,7 +300,7 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
         SC_MOD()->UnregisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
     }
 };
-//============================================================================
+
 struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
 {
     template<class T1, class T2, class T3, class T4>
@@ -315,7 +315,7 @@ struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
     {
     }
 };
-//============================================================================
+
 
 inline bool ScRefHandler::CanInputStart( const formula::RefEdit *pEdit )
 {

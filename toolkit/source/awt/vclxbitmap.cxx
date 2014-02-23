@@ -24,9 +24,9 @@
 #include <rtl/uuid.h>
 #include <vcl/dibtools.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXBitmap
-//  ----------------------------------------------------
+
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXBitmap::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)

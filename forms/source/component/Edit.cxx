@@ -45,7 +45,7 @@
 
 using namespace dbtools;
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -738,8 +738,8 @@ Any OEditModel::getDefaultForReset() const
     return makeAny( m_aDefaultText );
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

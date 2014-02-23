@@ -28,10 +28,10 @@
 
 class StyleSettings;
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
+
 
     //====================================================================
     //= ITableRenderer
@@ -278,9 +278,9 @@ namespace svt { namespace table
     };
     typedef ::boost::shared_ptr< ITableRenderer > PTableRenderer;
 
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLERENDERER_HXX
 

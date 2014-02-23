@@ -29,10 +29,10 @@
 #include <boost/optional.hpp>
 #include <memory>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     class ToolPanelCollection;
     class ToolPanelDeck_Impl;
@@ -175,9 +175,9 @@ namespace svt
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANELDECK_HXX
 

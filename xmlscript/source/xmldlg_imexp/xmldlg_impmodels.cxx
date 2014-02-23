@@ -105,7 +105,7 @@ void Frame::endElement()
     _events.clear();
 }
 
-//===
+
 Reference< xml::input::XElement > MultiPage::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )

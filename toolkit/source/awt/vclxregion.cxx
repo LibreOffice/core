@@ -25,9 +25,9 @@
 #include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXRegion
-//  ----------------------------------------------------
+
 VCLXRegion::VCLXRegion()
 {
 }

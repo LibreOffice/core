@@ -29,7 +29,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
@@ -37,8 +37,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
 
-// ============================================================================
-// ============================================================================
+
+
 
 ExternalSheetDataContext::ExternalSheetDataContext(
         WorkbookFragmentBase& rFragment, const Reference< XExternalSheetCache >& rxSheetCache ) :
@@ -159,7 +159,7 @@ void ExternalSheetDataContext::setCellValue( const Any& rValue )
     }
 }
 
-// ============================================================================
+
 
 ExternalLinkFragment::ExternalLinkFragment( const WorkbookHelper& rHelper,
         const OUString& rFragmentPath, ExternalLink& rExtLink ) :
@@ -336,7 +336,7 @@ const RecordInfo* ExternalLinkFragment::getRecordInfos() const
     return spRecInfos;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

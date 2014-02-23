@@ -158,7 +158,7 @@ sal_Bool SAL_CALL CFormatEtcContainer::skipFormatEtc( sal_uInt32 aNum )
 }
 
 
-//#########################################################################
+
 
 
 

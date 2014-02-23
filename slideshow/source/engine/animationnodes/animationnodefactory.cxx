@@ -185,7 +185,7 @@ bool implCreateIteratedNodes(
                    "(visually equivalent to whole-shape effect)" );
 
     // Determine target shape (or subset)
-    // ==================================
+
 
     // TODO(E1): I'm not too sure what to expect here...
     ENSURE_OR_RETURN_FALSE(
@@ -223,7 +223,7 @@ bool implCreateIteratedNodes(
     }
 
     // Lookup shape, and fill NodeContext
-    // ==================================
+
 
     AttributableShapeSharedPtr  pTargetShape(
         lookupAttributableShape( rContext.maContext.mpSubsettableShapeManager,
@@ -287,7 +287,7 @@ bool implCreateIteratedNodes(
                                                         uno::UNO_QUERY_THROW );
 
     // Generate subsets
-    // ================
+
 
     if( bParagraphTarget ||
         nSubItem != presentation::ShapeAnimationSubType::ONLY_TEXT )

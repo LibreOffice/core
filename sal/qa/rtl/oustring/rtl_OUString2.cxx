@@ -252,7 +252,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
     // 1.1
     // 10.1
     // 100.1
-    // ...
+
     // 1000...0.1
 
     sal_Int16 i = 0;
@@ -277,7 +277,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
     // 1.1
     // 1.01
     // 1.001
-    // ...
+
     // 1.000...001
 
     for (j=0;j<50;j++)

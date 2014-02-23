@@ -70,7 +70,7 @@ namespace slideshow
 
 
             // View layer methods
-            //------------------------------------------------------------------
+
 
             /** Add a new view layer.
 
@@ -103,7 +103,7 @@ namespace slideshow
             virtual bool clearAllViewLayers() = 0;
 
             // render methods
-            //------------------------------------------------------------------
+
 
             /** Update the shape
 
@@ -135,7 +135,7 @@ namespace slideshow
 
 
             // Shape attributes
-            //------------------------------------------------------------------
+
 
             /** Get the current shape position and size.
 
@@ -206,7 +206,7 @@ namespace slideshow
             virtual bool isBackgroundDetached() const = 0;
 
             // Misc
-            //------------------------------------------------------------------
+
 
             /** Functor struct, for shape ordering
 

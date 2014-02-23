@@ -23,14 +23,14 @@
 #include <connectivity/virtualdbtools.hxx>
 #include "refbase.hxx"
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //================================================================
+
+
     //= ODataAccessToolsFactory
-    //================================================================
+
     class ODataAccessToolsFactory
             :public simple::IDataAccessToolsFactory
             ,public ORefBase
@@ -65,9 +65,9 @@ namespace connectivity
         virtual oslInterlockedCount SAL_CALL release();
     };
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 #endif // CONNECTIVITY_DBTOOLS_DBTFACTORY_HXX
 

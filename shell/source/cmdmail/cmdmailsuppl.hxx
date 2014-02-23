@@ -29,9 +29,9 @@
 
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
 
-//----------------------------------------------------------
+
 // class declaration
-//----------------------------------------------------------
+
 
 class CmdMailSuppl :
     public  cppu::WeakImplHelper3<
@@ -45,16 +45,16 @@ class CmdMailSuppl :
 public:
     CmdMailSuppl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
-    //------------------------------------------------
+
     // XSimpleMailClientSupplier
-    //------------------------------------------------
+
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XSimpleMailClient
-    //------------------------------------------------
+
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  )
         throw (::com::sun::star::uno::RuntimeException);
@@ -62,9 +62,9 @@ public:
     virtual void SAL_CALL sendSimpleMailMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
+
     // XServiceInfo
-    //------------------------------------------------
+
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);

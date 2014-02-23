@@ -118,7 +118,7 @@ private:
     BackgroundPreviewImpl*  m_pPreviewWin2;
 
     // DDListBox for Writer -------------------------------
-    //------------------------------------------------------
+
     Color       aBgdColor;
     sal_uInt16      nHtmlMode;
     sal_Bool        bAllowShowSelector  : 1;

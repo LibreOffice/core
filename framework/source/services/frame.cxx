@@ -414,10 +414,10 @@ private:
     static sal_Bool implcp_windowDeactivated                   (   const   css::lang::EventObject&                                             aEvent              );
     static sal_Bool implcp_disposing                           (   const   css::lang::EventObject&                                             aEvent              );
 
-//*************************************************************************************************************
+
 //  variables
 //  -threadsafe by own read/write lock "m_aLock"
-//*************************************************************************************************************
+
 private:
 
     css::uno::Reference< css::uno::XComponentContext >                      m_xContext                          ;   /// reference to factory, which has create this instance
@@ -484,9 +484,9 @@ protected:
 
 css::uno::WeakReference< css::frame::XFrame2 > Frame::m_xCloserFrame = css::uno::WeakReference< css::frame::XFrame2 >();
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
 DEFINE_XINTERFACE_22                (   Frame                                                                   ,
                                         OWeakObject                                                             ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
@@ -1886,7 +1886,7 @@ void SAL_CALL Frame::addFrameActionListener( const css::uno::Reference< css::fra
     m_aListenerContainer.addInterface( ::getCppuType( (const css::uno::Reference< css::frame::XFrameActionListener >*)NULL ), xListener );
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -2025,7 +2025,7 @@ void SAL_CALL Frame::addCloseListener( const css::uno::Reference< css::util::XCl
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >* ) NULL ), xListener );
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException)
 {
     // Use soft exception mode - moslty this method is called during disposing of this frame ...
@@ -2035,7 +2035,7 @@ void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >* ) NULL ), xListener );
 }
 
-//*****************************************************************************************************************
+
 OUString SAL_CALL Frame::getTitle()
     throw (css::uno::RuntimeException)
 {
@@ -2050,7 +2050,7 @@ OUString SAL_CALL Frame::getTitle()
     return xTitle->getTitle();
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::setTitle( const OUString& sTitle )
     throw (css::uno::RuntimeException)
 {
@@ -2065,7 +2065,7 @@ void SAL_CALL Frame::setTitle( const OUString& sTitle )
     xTitle->setTitle(sTitle);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
     throw (css::uno::RuntimeException)
 {
@@ -2080,7 +2080,7 @@ void SAL_CALL Frame::addTitleChangeListener( const css::uno::Reference< css::fra
     xTitle->addTitleChangeListener(xListener);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )
     throw (css::uno::RuntimeException)
 {
@@ -2344,7 +2344,7 @@ void SAL_CALL Frame::addEventListener( const css::uno::Reference< css::lang::XEv
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -2491,7 +2491,7 @@ void SAL_CALL Frame::registerDispatchProviderInterceptor( const css::uno::Refere
     xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException )
 {
     // We use a helper to support these interface and an interceptor mechanism.
@@ -2515,7 +2515,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL Frame::getSupportedCommandGroups()
     return m_xDispatchInfoHelper->getSupportedCommandGroups();
 }
 
-//*****************************************************************************************************************
+
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
     throw(css::uno::RuntimeException)
 {
@@ -2551,7 +2551,7 @@ void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw(
     implts_resizeComponentWindow();
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -2612,7 +2612,7 @@ void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) thr
     }
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -2663,7 +2663,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
     }
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
     /* #i62088#
@@ -2837,7 +2837,7 @@ sal_Bool SAL_CALL Frame::isActionLocked() throw( css::uno::RuntimeException )
     return( m_nExternalLockCount!=0);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::addActionLock() throw( css::uno::RuntimeException )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -2845,7 +2845,7 @@ void SAL_CALL Frame::addActionLock() throw( css::uno::RuntimeException )
     ++m_nExternalLockCount;
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::removeActionLock() throw( css::uno::RuntimeException )
 {
     // Register no transaction here! Otherwhise we wait for ever inside possible
@@ -2860,7 +2860,7 @@ void SAL_CALL Frame::removeActionLock() throw( css::uno::RuntimeException )
     implts_checkSuicide();
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::setActionLocks( sal_Int16 nLock ) throw( css::uno::RuntimeException )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -2872,7 +2872,7 @@ void SAL_CALL Frame::setActionLocks( sal_Int16 nLock ) throw( css::uno::RuntimeE
     m_nExternalLockCount = m_nExternalLockCount + nLock;
 }
 
-//*****************************************************************************************************************
+
 sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException )
 {
     // Register no transaction here! Otherwhise we wait for ever inside possible
@@ -2894,7 +2894,7 @@ sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException )
     return nCurrentLocks;
 }
 
-//*****************************************************************************************************************
+
 void Frame::impl_initializePropInfo()
 {
     impl_setPropertyChangeBroadcaster(static_cast< css::frame::XFrame* >(this));
@@ -2935,7 +2935,7 @@ void Frame::impl_initializePropInfo()
             css::beans::PropertyAttribute::TRANSIENT));
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
                                                  sal_Int32        nHandle  ,
                                            const css::uno::Any&   aValue   )
@@ -2995,7 +2995,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
     }
 }
 
-//*****************************************************************************************************************
+
 css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*/,
                                                           sal_Int32        nHandle  )
 {
@@ -3312,7 +3312,7 @@ void Frame::implts_startWindowListening()
     }
 }
 
-//*****************************************************************************************************************
+
 void Frame::implts_stopWindowListening()
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -3517,7 +3517,7 @@ void Frame::impl_checkMenuCloser()
 //  debug methods
 
 
-//*****************************************************************************************************************
+
 // Its allowed to reset the active frame membervariable with a NULL-css::uno::Reference but not with a NULL-pointer!
 // And we accept frames only! No tasks and desktops!
 sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
@@ -3525,49 +3525,49 @@ sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XF
     return css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is();
 }
 
-//*****************************************************************************************************************
+
 sal_Bool Frame::implcp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
     return !xListener.is();
 }
 
-//*****************************************************************************************************************
+
 sal_Bool Frame::implcp_removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
     return !xListener.is();
 }
 
-//*****************************************************************************************************************
+
 sal_Bool Frame::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return !xListener.is();
 }
 
-//*****************************************************************************************************************
+
 sal_Bool Frame::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return !xListener.is();
 }
 
-//*****************************************************************************************************************
+
 sal_Bool Frame::implcp_windowResized( const css::awt::WindowEvent& aEvent )
 {
     return !aEvent.Source.is();
 }
 
-//*****************************************************************************************************************
+
 sal_Bool Frame::implcp_focusGained( const css::awt::FocusEvent& aEvent )
 {
     return !aEvent.Source.is();
 }
 
-//*****************************************************************************************************************
+
 sal_Bool Frame::implcp_windowActivated( const css::lang::EventObject& aEvent )
 {
     return !aEvent.Source.is();
 }
 
-//*****************************************************************************************************************
+
 sal_Bool Frame::implcp_windowDeactivated( const css::lang::EventObject& aEvent )
 {
     return !aEvent.Source.is();

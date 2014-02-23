@@ -71,7 +71,7 @@ using namespace com::sun::star;
 // STATIC DATA ---------------------------------------------------------------
 
 
-//============================================================================
+
 
 //  GlobalName der Writer-DocShell kommt jetzt aus comphelper/classids.hxx
 

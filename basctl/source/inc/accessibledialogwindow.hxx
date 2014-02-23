@@ -43,9 +43,9 @@ class DlgEditor;
 class DlgEdModel;
 class DlgEdObj;
 
-//  ----------------------------------------------------
+
 //  class AccessibleDialogWindow
-//  ----------------------------------------------------
+
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 

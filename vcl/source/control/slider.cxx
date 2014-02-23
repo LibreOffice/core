@@ -26,7 +26,7 @@
 
 #include "thumbpos.hxx"
 
-// =======================================================================
+
 
 #define SLIDER_DRAW_THUMB           ((sal_uInt16)0x0001)
 #define SLIDER_DRAW_CHANNEL1        ((sal_uInt16)0x0002)
@@ -48,7 +48,7 @@
 
 #define SLIDER_VIEW_STYLE           (WB_3DLOOK | WB_HORZ | WB_VERT)
 
-// =======================================================================
+
 
 void Slider::ImplInit( Window* pParent, WinBits nStyle )
 {

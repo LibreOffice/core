@@ -151,7 +151,7 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
 {
 }
 
-//============================================================================
+
 //  class ScOptSolverDlg
 
 

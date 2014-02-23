@@ -154,9 +154,9 @@ LanguageType EditView::CheckLanguage(
 }
 
 
-// ----------------------------------------------------------------------
+
 // class EditView
-// ----------------------------------------------------------------------
+
 EditView::EditView( EditEngine* pEng, Window* pWindow )
 {
     pImpEditView = new ImpEditView( this, pEng, pWindow );

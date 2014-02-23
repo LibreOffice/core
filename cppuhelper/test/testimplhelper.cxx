@@ -77,7 +77,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-//==================================================================================================
+
 struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
 {
     sal_Int32 nRef;
@@ -115,7 +115,7 @@ struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
         { return OUString("g"); }
 };
 
-//==================================================================================================
+
 struct TestWeakAggImpl : public WeakAggImplHelper4< CA, DBA, FE, G >
 {
     virtual ~TestWeakAggImpl()
@@ -144,7 +144,7 @@ struct TestWeakAggImpl : public WeakAggImplHelper4< CA, DBA, FE, G >
         { return OUString("g"); }
 };
 
-//==================================================================================================
+
 struct TestWeakImpl : public WeakImplHelper4< CA, DBA, FE, G >
 {
     TestWeakImpl() {}
@@ -188,7 +188,7 @@ protected:
     TestWeakImpl(int, int, int, int, int, int, int = 0) {}
 };
 
-//==================================================================================================
+
 struct TestWeakComponentImpl : public WeakComponentImplHelper4< CA, DBA, FE, G >
 {
     Mutex m;
@@ -224,7 +224,7 @@ struct TestWeakComponentImpl : public WeakComponentImplHelper4< CA, DBA, FE, G >
         { return OUString("g"); }
 };
 
-//==================================================================================================
+
 struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, FE, G >
 {
     Mutex m;
@@ -260,7 +260,7 @@ struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, F
         { return OUString("g"); }
 };
 
-//==================================================================================================
+
 struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
 {
     TestImplInh() {}
@@ -294,7 +294,7 @@ struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
         { return OUString("i"); }
 };
 
-//==================================================================================================
+
 struct TestAggImplInh : public AggImplInheritanceHelper2< TestWeakAggImpl, H, I >
 {
     virtual ~TestAggImplInh()
@@ -321,7 +321,7 @@ static bool isIn( Sequence< Type > const & rTypes, char const * name )
     return false;
 }
 
-//==================================================================================================
+
 static void dotest( const Reference< XInterface > & xOriginal )
 {
     Reference< lang::XTypeProvider > xTP( xOriginal, UNO_QUERY );
@@ -419,7 +419,7 @@ void throw_one(
 }
 
 
-//==================================================================================================
+
 void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
 {
     Reference< XInterface > xImpl( (lang::XTypeProvider *)new TestImpl() );

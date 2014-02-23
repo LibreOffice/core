@@ -36,9 +36,9 @@ using ::rtl::OUStringToOString;
 namespace cppu
 {
 
-//  ----------------------------------------------------
+
 //  class OComponentHelper
-//  ----------------------------------------------------
+
 
 OComponentHelper::OComponentHelper( Mutex & rMutex ) SAL_THROW(())
     : rBHelper( rMutex )

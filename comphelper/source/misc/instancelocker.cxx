@@ -34,9 +34,9 @@
 using namespace ::com::sun::star;
 
 
-// ====================================================================
+
 // OInstanceLocker
-// ====================================================================
+
 
 
 OInstanceLocker::OInstanceLocker( const uno::Reference< uno::XComponentContext >& xContext )
@@ -230,9 +230,9 @@ uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::Create(
 
 
 
-// ====================================================================
+
 // OLockListener
-// ====================================================================
+
 
 
 OLockListener::OLockListener( const uno::WeakReference< lang::XComponent >& xWrapper,

@@ -93,7 +93,7 @@ using ::rtl::Uri;
 // #i34411: Flag for error handling during migration
 static bool GbMigrationSuppressErrors = false;
 
-//============================================================================
+
 // Implementation class NameContainer
 
 // Methods XElementAccess
@@ -331,7 +331,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
     maChangesListeners.removeInterface( xListener );
 }
 
-//============================================================================
+
 // ModifiableHelper
 
 void ModifiableHelper::setModified( sal_Bool _bModified )
@@ -350,7 +350,7 @@ void ModifiableHelper::setModified( sal_Bool _bModified )
     m_aModifyListeners.notifyEach( &XModifyListener::modified, aModifyEvent );
 }
 
-//============================================================================
+
 
 VBAScriptListenerContainer::VBAScriptListenerContainer( ::osl::Mutex& rMutex ) :
     VBAScriptListenerContainer_BASE( rMutex )
@@ -364,7 +364,7 @@ bool VBAScriptListenerContainer::implTypedNotify( const Reference< vba::XVBAScri
     return true;    // notify all other listeners too
 }
 
-//============================================================================
+
 
 // Implementation class SfxLibraryContainer
 DBG_NAME( SfxLibraryContainer )
@@ -3260,7 +3260,7 @@ void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListen
     maNameContainer.removeChangesListener( xListener );
 }
 
-//============================================================================
+
 // Implementation class ScriptExtensionIterator
 
 #define sBasicLibMediaType "application/vnd.sun.star.basic-library"

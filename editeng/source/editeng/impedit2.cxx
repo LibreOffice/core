@@ -688,9 +688,9 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet()
     return *pEmptyItemSet;
 }
 
-//  ----------------------------------------------------------------------
+
 //  MISC
-//  ----------------------------------------------------------------------
+
 void ImpEditEngine::CursorMoved( ContentNode* pPrevNode )
 {
     // Delete empty attributes, but only if paragraph is not empty!
@@ -731,9 +731,9 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
         CalcHeight( pNextPortion );
 }
 
-//  ----------------------------------------------------------------------
+
 //  Cursor movements
-//  ----------------------------------------------------------------------
+
 
 EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView )
 {
@@ -2030,9 +2030,9 @@ SvxCellVerJustify ImpEditEngine::GetVerJustification( sal_Int32 nPara ) const
     return static_cast<SvxCellVerJustify>(rItem.GetEnumValue());
 }
 
-//  ----------------------------------------------------------------------
+
 //  Text changes
-//  ----------------------------------------------------------------------
+
 
 void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars, EditUndoRemoveChars* pCurUndo )
 {
@@ -2968,9 +2968,9 @@ EditPaM ImpEditEngine::InsertLineBreak(const EditSelection& aCurSel)
     return aPaM;
 }
 
-//  ----------------------------------------------------------------------
+
 //  Helper functions
-//  ----------------------------------------------------------------------
+
 Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags )
 {
     OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: PaMtoEditCursor" );

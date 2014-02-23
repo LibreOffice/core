@@ -46,7 +46,7 @@ namespace connectivity
         typedef WpOLEAppendCollection<  ADOFields,      ADOField,       WpADOField>         WpADOFields;
         typedef WpOLECollection<        ADOProperties,  ADOProperty,    WpADOProperty>      WpADOProperties;
 
-        //------------------------------------------------------------------------
+
         class WpADOConnection : public WpOLEBase<ADOConnection>
         {
             friend class WpADOCommand;
@@ -59,7 +59,7 @@ namespace connectivity
              WpADOConnection& operator=(const WpADOConnection& rhs)
                 {WpOLEBase<ADOConnection>::operator=(rhs); return *this;}
 
-            //////////////////////////////////////////////////////////////////////
+
 
             WpADOProperties get_Properties() const;
 
@@ -138,7 +138,7 @@ namespace connectivity
              ADORecordset* getTypeInfo(DataTypeEnum _eType = adEmpty );
         };
 
-        //------------------------------------------------------------------------
+
         class WpADOCommand : public WpOLEBase<ADOCommand>
         {
         public:
@@ -153,7 +153,7 @@ namespace connectivity
             {
                 WpOLEBase<ADOCommand>::operator=(rhs); return *this;}
 
-            //////////////////////////////////////////////////////////////////////
+
 
             sal_Bool putref_ActiveConnection( WpADOConnection *pCon);
 
@@ -177,7 +177,7 @@ namespace connectivity
              sal_Bool put_Name(const OUString& _Name);
              sal_Bool Cancel();
         };
-        //------------------------------------------------------------------------
+
         class WpADOError : public WpOLEBase<ADOError>
         {
         public:
@@ -191,7 +191,7 @@ namespace connectivity
              WpADOError& operator=(const WpADOError& rhs)
                 {WpOLEBase<ADOError>::operator=(rhs); return *this;}
 
-            //////////////////////////////////////////////////////////////////////
+
 
              OUString GetDescription() const;
              OUString GetSource() const ;
@@ -202,7 +202,7 @@ namespace connectivity
 
 
 
-        //------------------------------------------------------------------------
+
         class WpADOField : public WpOLEBase<ADOField>
         {
             //  friend class WpADOFields;
@@ -215,7 +215,7 @@ namespace connectivity
 
              WpADOField& operator=(const WpADOField& rhs)
                 {WpOLEBase<ADOField>::operator=(rhs); return *this;}
-            //////////////////////////////////////////////////////////////////////
+
 
              WpADOProperties get_Properties();
              sal_Int32 GetActualSize() const ;
@@ -252,7 +252,7 @@ namespace connectivity
 
 
 
-        //------------------------------------------------------------------------
+
         class WpADOProperty: public WpOLEBase<ADOProperty>
         {
         public:
@@ -262,7 +262,7 @@ namespace connectivity
             WpADOProperty(const WpADOProperty& rhs) : WpOLEBase<ADOProperty>(rhs) {}
              WpADOProperty& operator=(const WpADOProperty& rhs)
                 {WpOLEBase<ADOProperty>::operator=(rhs); return *this;}
-            //////////////////////////////////////////////////////////////////////
+
 
              OLEVariant GetValue() const;
              void GetValue(OLEVariant &aValVar) const;
@@ -292,7 +292,7 @@ namespace connectivity
                 //  if(pInterface && get_State() == adStateOpen)
                     //  Close();
             }
-            //////////////////////////////////////////////////////////////////////
+
              void Create();
              sal_Bool Open(
                     /* [optional][in] */ VARIANT Source,
@@ -339,7 +339,7 @@ namespace connectivity
              sal_Bool UpdateBatch(AffectEnum AffectRecords);
         };
 
-        //------------------------------------------------------------------------
+
         class WpADOParameter:public WpOLEBase<ADOParameter>
         {
         public:
@@ -349,7 +349,7 @@ namespace connectivity
             WpADOParameter(const WpADOParameter& rhs):WpOLEBase<ADOParameter>(rhs){}
              WpADOParameter& operator=(const WpADOParameter& rhs)
                 {WpOLEBase<ADOParameter>::operator=(rhs); return *this;}
-            //////////////////////////////////////////////////////////////////////
+
 
              OUString GetName() const ;
              DataTypeEnum GetADOType() const ;

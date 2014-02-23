@@ -50,7 +50,7 @@ class QueryTokenizer : public ::boost::unordered_map< OUString                  
                                                OUStringHash                ,
                                                ::std::equal_to< OUString > >
 {
-    //-------------------------------------------
+
     // member
 
     private:
@@ -63,7 +63,7 @@ class QueryTokenizer : public ::boost::unordered_map< OUString                  
          */
         sal_Bool m_bValid;
 
-    //-------------------------------------------
+
     // interface
 
     public:
@@ -80,13 +80,13 @@ class QueryTokenizer : public ::boost::unordered_map< OUString                  
          */
         QueryTokenizer(const OUString& sQuery);
 
-        //---------------------------------------
+
 
         /** @short  destruct an instance of this class.
          */
         virtual ~QueryTokenizer();
 
-        //---------------------------------------
+
 
         /** @short  can be used to check if analyzing of given query
                     was successfully or not.

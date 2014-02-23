@@ -29,7 +29,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Absolute position in a spreadsheet (in EMUs) independent from cells. */
 struct AnchorPointModel : public ::oox::drawingml::EmuPoint
@@ -38,7 +38,7 @@ struct AnchorPointModel : public ::oox::drawingml::EmuPoint
     inline bool         isValid() const { return (X >= 0) && (Y >= 0); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Absolute size in a spreadsheet (in EMUs). */
 struct AnchorSizeModel : public ::oox::drawingml::EmuSize
@@ -47,7 +47,7 @@ struct AnchorSizeModel : public ::oox::drawingml::EmuSize
     inline bool         isValid() const { return (Width >= 0) && (Height >= 0); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Position in spreadsheet (cell position and offset inside cell). */
 struct CellAnchorModel
@@ -61,7 +61,7 @@ struct CellAnchorModel
     inline bool         isValid() const { return (mnCol >= 0) && (mnRow >= 0); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Application-specific client data of a shape. */
 struct AnchorClientDataModel
@@ -72,7 +72,7 @@ struct AnchorClientDataModel
     explicit            AnchorClientDataModel();
 };
 
-// ============================================================================
+
 
 /** Contains the position of a shape in the spreadsheet. Supports different
     shape anchor modes (absolute, one-cell, two-cell). */
@@ -134,7 +134,7 @@ private:
     AnchorType          meEditAs;           /// Anchor mode as shown in the UI.
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

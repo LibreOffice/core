@@ -80,8 +80,8 @@ void OReportVisitor::start(const uno::Reference< report::XGroup>& _xGroup)
     if ( _xGroup->getFooterOn() )
         m_pTraverseReport->traverseGroupFooter(_xGroup->getFooter());
 }
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

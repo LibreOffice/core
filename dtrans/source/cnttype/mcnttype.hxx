@@ -35,9 +35,9 @@ class CMimeContentType : public
 public:
     CMimeContentType( const OUString& aCntType );
 
-    //-------------------------------------------
+
     // XMimeContentType
-    //-------------------------------------------
+
 
     virtual OUString SAL_CALL getMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException);

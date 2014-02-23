@@ -35,7 +35,7 @@ static sal_Sequence aEmpty_rtl_ByteSeq =
     { 0 }   /* sal_Unicode  buffer[1];  */
 };
 
-//==================================================================================================
+
 void SAL_CALL rtl_byte_sequence_reference2One(
     sal_Sequence ** ppSequence ) SAL_THROW_EXTERN_C()
 {
@@ -73,7 +73,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
     }
 }
 
-//==================================================================================================
+
 void SAL_CALL rtl_byte_sequence_realloc(
     sal_Sequence ** ppSequence, sal_Int32 nSize ) SAL_THROW_EXTERN_C()
 {
@@ -123,7 +123,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
     *ppSequence = pSequence;
 }
 
-//==================================================================================================
+
 void SAL_CALL rtl_byte_sequence_acquire( sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {
@@ -131,7 +131,7 @@ void SAL_CALL rtl_byte_sequence_acquire( sal_Sequence *pSequence )
     osl_atomic_increment( &(pSequence->nRefCount) );
 }
 
-//==================================================================================================
+
 void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {
@@ -144,7 +144,7 @@ void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence )
     }
 }
 
-//==================================================================================================
+
 void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32 nLength )
     SAL_THROW_EXTERN_C()
 {
@@ -172,7 +172,7 @@ void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32
     }
 }
 
-//==================================================================================================
+
 void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , sal_Int32 nLength )
     SAL_THROW_EXTERN_C()
 {
@@ -192,7 +192,7 @@ void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , 
     }
 }
 
-//==================================================================================================
+
 void SAL_CALL rtl_byte_sequence_constructFromArray(
     sal_Sequence **ppSequence, const sal_Int8 *pData , sal_Int32 nLength )
     SAL_THROW_EXTERN_C()
@@ -202,7 +202,7 @@ void SAL_CALL rtl_byte_sequence_constructFromArray(
         memcpy( (*ppSequence)->elements, pData, nLength );
 }
 
-//==================================================================================================
+
 void SAL_CALL rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {
@@ -220,7 +220,7 @@ void SAL_CALL rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence
 
 }
 
-//==================================================================================================
+
 sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Sequence *pSequence2 )
     SAL_THROW_EXTERN_C()
 {
@@ -241,14 +241,14 @@ sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Seque
 }
 
 
-//==================================================================================================
+
 const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray( sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {
     return ((const sal_Int8*)(pSequence->elements));
 }
 
-//==================================================================================================
+
 sal_Int32 SAL_CALL rtl_byte_sequence_getLength( sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {

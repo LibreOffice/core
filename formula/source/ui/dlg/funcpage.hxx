@@ -33,7 +33,7 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include "formula/omoduleclient.hxx"
-//============================================================================
+
 namespace formula
 {
 
@@ -41,7 +41,7 @@ class IFunctionDescription;
 class IFunctionManager;
 class IFunctionCategory;
 
-//============================================================================
+
 class FormulaListBox : public ListBox
 {
 protected:
@@ -57,7 +57,7 @@ public:
 
 
 typedef const IFunctionDescription* TFunctionDesc;
-//============================================================================
+
 class FuncPage : public TabPage
 {
 private:

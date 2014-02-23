@@ -27,18 +27,18 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-//.........................................................................
+
 namespace migration
 {
-//.........................................................................
+
 
 
     #define sSourceUserBasic OUString( "/user/basic" )
     #define sTargetUserBasic OUString( "/user/__basic_80" )
 
-    // =============================================================================
+
     // component operations
-    // =============================================================================
+
 
     OUString BasicMigration_getImplementationName()
     {
@@ -54,9 +54,9 @@ namespace migration
         return aNames;
     }
 
-    // =============================================================================
+
     // BasicMigration
-    // =============================================================================
+
 
     BasicMigration::BasicMigration()
     {
@@ -222,9 +222,9 @@ namespace migration
         return Any();
     }
 
-    // =============================================================================
+
     // component operations
-    // =============================================================================
+
 
     Reference< XInterface > SAL_CALL BasicMigration_create(
         Reference< XComponentContext > const & )
@@ -235,8 +235,8 @@ namespace migration
 
 
 
-//.........................................................................
+
 }   // namespace migration
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

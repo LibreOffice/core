@@ -28,7 +28,7 @@ namespace xls {
 class Scenario;
 class SheetScenarios;
 
-// ============================================================================
+
 
 class ScenarioContext : public WorksheetContextBase
 {
@@ -46,7 +46,7 @@ private:
     Scenario&           mrScenario;
 };
 
-// ============================================================================
+
 
 class ScenariosContext : public WorksheetContextBase
 {
@@ -64,7 +64,7 @@ private:
     SheetScenarios&     mrSheetScenarios;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

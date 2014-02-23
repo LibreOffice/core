@@ -53,7 +53,7 @@
 
 using namespace dbtools;
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -69,9 +69,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-//========================================================================
+
 // class OComboBoxModel
-//========================================================================
+
 
 InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
@@ -864,9 +864,9 @@ void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( R
         OBoundControlModel::disposing( _rSource );
 }
 
-//========================================================================
+
 //= OComboBoxControl
-//========================================================================
+
 
 
 InterfaceRef SAL_CALL OComboBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
@@ -891,8 +891,8 @@ StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(Runti
     return aSupported;
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

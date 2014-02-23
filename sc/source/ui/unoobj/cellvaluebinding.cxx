@@ -31,10 +31,10 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-//.........................................................................
+
 namespace calc
 {
-//.........................................................................
+
 
 #define PROP_HANDLE_BOUND_CELL  1
 
@@ -48,9 +48,9 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
+
     //= OCellValueBinding
-    //=====================================================================
+
     DBG_NAME( OCellValueBinding )
 
 #ifdef DBG_UTIL
@@ -635,8 +635,8 @@ namespace calc
     }
 
 
-//.........................................................................
+
 }   // namespace calc
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

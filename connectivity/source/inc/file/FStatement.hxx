@@ -51,9 +51,9 @@ namespace connectivity
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable> OStatement_BASE;
 
-        //**************************************************************
+
         //************ Class: java.sql.Statement
-        //**************************************************************
+
         class OOO_DLLPUBLIC_FILE OStatement_Base :
                                         public  comphelper::OBaseMutex,
                                         public  OStatement_BASE,

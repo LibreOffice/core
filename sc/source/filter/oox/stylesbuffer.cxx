@@ -82,7 +82,7 @@ using ::com::sun::star::table::BorderLine2;
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -94,7 +94,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
 
-// ============================================================================
+
 
 namespace {
 
@@ -224,7 +224,7 @@ sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 
 } // namespace
 
-// ============================================================================
+
 
 ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
     GraphicHelper( rHelper.getBaseFilter().getComponentContext(), rHelper.getBaseFilter().getTargetFrame(), rHelper.getBaseFilter().getStorage() ),
@@ -244,7 +244,7 @@ sal_Int32 ExcelGraphicHelper::getPaletteColor( sal_Int32 nPaletteIdx ) const
     return getStyles().getPaletteColor( nPaletteIdx );
 }
 
-// ============================================================================
+
 
 void Color::setAuto()
 {
@@ -341,7 +341,7 @@ SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor )
     return rStrm;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -470,7 +470,7 @@ void ColorPalette::appendColor( sal_Int32 nRGBValue )
     ++mnAppendIndex;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -597,7 +597,7 @@ ApiFontData::ApiFontData() :
     maLatinFont.maName = maDesc.Name;
 }
 
-// ============================================================================
+
 
 Font::Font( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -1117,7 +1117,7 @@ void Font::writeToPropertySet( PropertySet& rPropSet, FontPropertyType ePropType
     rPropSet.setProperties( aPropMap );
 }
 
-// ============================================================================
+
 
 AlignmentModel::AlignmentModel() :
     mnHorAlign( XML_general ),
@@ -1177,7 +1177,7 @@ bool operator==( const ApiAlignmentData& rLeft, const ApiAlignmentData& rRight )
         (rLeft.mbShrink      == rRight.mbShrink);
 }
 
-// ============================================================================
+
 
 Alignment::Alignment( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1391,7 +1391,7 @@ void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
     rPropMap[ PROP_ShrinkToFit ]     <<= maApiData.mbShrink;
 }
 
-// ============================================================================
+
 
 ProtectionModel::ProtectionModel() :
     mbLocked( true ),   // default in Excel and Calc
@@ -1415,7 +1415,7 @@ bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight
         (rLeft.maCellProt.IsPrintHidden   == rRight.maCellProt.IsPrintHidden);
 }
 
-// ============================================================================
+
 
 Protection::Protection( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1450,7 +1450,7 @@ void Protection::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     ScfTools::PutItem( rItemSet, ScProtectionAttr( maApiData.maCellProt.IsLocked, maApiData.maCellProt.IsFormulaHidden ), bSkipPoolDefs );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1534,7 +1534,7 @@ bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
         (rLeft.mbDiagUsed   == rRight.mbDiagUsed);
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1757,7 +1757,7 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
 }
 
 
-// ============================================================================
+
 
 PatternFillModel::PatternFillModel( bool bDxf ) :
     mnPattern( XML_none ),
@@ -1834,7 +1834,7 @@ bool operator==( const ApiSolidFillData& rLeft, const ApiSolidFillData& rRight )
         (rLeft.mbUsed        == rRight.mbUsed);
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -2084,7 +2084,7 @@ void Fill::writeToPropertyMap( PropertyMap& rPropMap ) const
     }
 }
 
-// ============================================================================
+
 
 XfModel::XfModel() :
     mnStyleXfId( -1 ),
@@ -2102,7 +2102,7 @@ XfModel::XfModel() :
 {
 }
 
-// ============================================================================
+
 
 Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2367,7 +2367,7 @@ Xf::createPattern( bool bSkipPoolDefs )
     return *mpPattern;
 }
 
-// ============================================================================
+
 
 Dxf::Dxf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -2491,7 +2491,7 @@ void Dxf::fillToItemSet( SfxItemSet& rSet ) const
         mxFill->fillToItemSet(rSet);
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -2600,7 +2600,7 @@ bool CellStyleModel::isDefaultStyle() const
     return mbBuiltin && (mnBuiltinId == OOX_STYLE_NORMAL);
 }
 
-// ============================================================================
+
 
 CellStyle::CellStyle( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2681,7 +2681,7 @@ void CellStyle::finalizeImport( const OUString& rFinalName )
         createCellStyle();
 }
 
-// ============================================================================
+
 
 CellStyleBuffer::CellStyleBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -2852,7 +2852,7 @@ OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle ) con
     return lclGetBuiltinStyleName( OOX_STYLE_NORMAL, OUString() );
 }
 
-// ============================================================================
+
 
 AutoFormatModel::AutoFormatModel() :
     mnAutoFormatId( 0 ),
@@ -2865,7 +2865,7 @@ AutoFormatModel::AutoFormatModel() :
 {
 }
 
-// ============================================================================
+
 
 StylesBuffer::StylesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

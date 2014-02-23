@@ -93,9 +93,9 @@ private:
     ::std::auto_ptr<SvXMLTokenMap>                                                      m_pReportElemTokenMap;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 };
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 #endif // RPT_IMPORTDOCUMENTHANDLER_HXX_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

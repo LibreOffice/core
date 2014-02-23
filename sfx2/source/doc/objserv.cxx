@@ -110,7 +110,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::task;
 
-//====================================================================
+
 
 class SfxSaveAsContext_Impl
 {
@@ -127,12 +127,12 @@ public:
                 { _rNewNameVar = ""; }
 };
 
-//====================================================================
+
 
 #define SfxObjectShell
 #include "sfxslots.hxx"
 
-//=========================================================================
+
 
 
 
@@ -140,7 +140,7 @@ SFX_IMPL_INTERFACE(SfxObjectShell,SfxShell,SfxResId(0))
 {
 }
 
-//=========================================================================
+
 
 class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {
@@ -187,7 +187,7 @@ void SAL_CALL SfxClosePreventer_Impl::notifyClosing( const lang::EventObject& ) 
 void SAL_CALL SfxClosePreventer_Impl::disposing( const lang::EventObject& ) throw ( uno::RuntimeException )
 {}
 
-//=========================================================================
+
 class SfxInstanceCloseGuard_Impl
 {
     SfxClosePreventer_Impl* m_pPreventer;
@@ -256,7 +256,7 @@ SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
     }
 }
 
-//=========================================================================
+
 
 void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
 {
@@ -598,7 +598,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
 
                 // TODO/LATER: do the following GUI related actions in standalown method
-                // ========================================================================================================
+
                 // Introduce a status indicator for GUI operation
                 SFX_REQUEST_ARG( rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, false );
                 if ( !pStatusIndicatorItem )
@@ -660,7 +660,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // but it is not clear here whether the saving will be done or saveAs operation
                     GetMedium()->GetItemSet()->Put( *pInteractionHandlerItem );
                 }
-                // ========================================================================================================
+
 
                 sal_Bool bPreselectPassword = sal_False;
                 SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );

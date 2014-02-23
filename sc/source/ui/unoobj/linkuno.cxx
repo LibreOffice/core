@@ -1468,7 +1468,7 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     return xLink;
 }
 
-// ============================================================================
+
 
 ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScExternalRefCache::TableTypeRef pTable, size_t nIndex) :
     mpTable(pTable),
@@ -1570,7 +1570,7 @@ sal_Int32 SAL_CALL ScExternalSheetCacheObj::getTokenIndex()
     return static_cast< sal_Int32 >( mnIndex );
 }
 
-// ============================================================================
+
 
 ScExternalDocLinkObj::ScExternalDocLinkObj(ScExternalRefManager* pRefMgr, sal_uInt16 nFileId) :
     mpRefMgr(pRefMgr), mnFileId(nFileId)
@@ -1706,7 +1706,7 @@ sal_Int32 SAL_CALL ScExternalDocLinkObj::getTokenIndex()
     return static_cast<sal_Int32>(mnFileId);
 }
 
-// ============================================================================
+
 
 ScExternalDocLinksObj::ScExternalDocLinksObj(ScDocShell* pDocShell) :
     mpDocShell(pDocShell),

@@ -399,9 +399,9 @@ namespace reportdesign
 
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2 > getUIConfigurationManager2(  ) throw (::com::sun::star::uno::RuntimeException);
       };
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 #endif // REPORTDESIGN_API_REPORTDEFINITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

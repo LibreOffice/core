@@ -131,7 +131,7 @@ private:
     double              mfOldHeight;
     RECT_POINT          meRP;
 
-    //------------------------------------
+
     DECL_LINK( ChangePosProtectHdl, void * );
     DECL_LINK( ChangeSizeProtectHdl, void * );
 
@@ -243,7 +243,7 @@ private:
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eDlgUnit;
-    //------------------------------------
+
 public:
          SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 

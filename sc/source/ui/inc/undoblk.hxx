@@ -41,7 +41,7 @@ class SvxSearchItem;
 class SdrUndoAction;
 class ScEditDataArray;
 
-//----------------------------------------------------------------------------
+
 
 class ScUndoInsertCells: public ScMoveUndo
 {

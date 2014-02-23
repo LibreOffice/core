@@ -1398,7 +1398,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                             // the getXXX methods are 1-based ...
                         sal_Int32 nTableColumnPos = i + 1;
                             // get first table column is the bookmark column
-                            // ...
+
 #if OSL_DEBUG_LEVEL > 0
                         OSL_TRACE("Set Col Mapping: %d -> %d", nSelectColumnPos, nTableColumnPos );
 #endif

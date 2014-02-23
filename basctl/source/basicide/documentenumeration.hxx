@@ -31,9 +31,9 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-//........................................................................
+
 namespace basctl { namespace docs {
-//........................................................................
+
 
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                         Model;
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >   Controllers;
@@ -46,9 +46,9 @@ namespace basctl { namespace docs {
 
     typedef ::std::vector< DocumentDescriptor > Documents;
 
-    //====================================================================
+
     //= IDocumentDescriptorFilter
-    //====================================================================
+
     /// allows pre-filtering when enumerating document descriptors
     class SAL_NO_VTABLE IDocumentDescriptorFilter
     {
@@ -59,9 +59,9 @@ namespace basctl { namespace docs {
         ~IDocumentDescriptorFilter() {}
     };
 
-    //====================================================================
+
     //= DocumentEnumeration
-    //====================================================================
+
     struct DocumentEnumeration_Data;
     /** is a helper class for enumerating documents in OOo
 
@@ -95,9 +95,9 @@ namespace basctl { namespace docs {
         boost::scoped_ptr< DocumentEnumeration_Data > m_pData;
     };
 
-//........................................................................
+
 } } // namespace basctl::docs
-//........................................................................
+
 
 #endif // BASCTL_DOCUMENTENUMERATION_HXX
 

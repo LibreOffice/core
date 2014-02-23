@@ -60,9 +60,9 @@ public:
     bool operator==( const SvxChartColorTable & _rOther ) const;
 };
 
-// ====================
+
 // all options
-// ====================
+
 class SvxChartOptions : public ::utl::ConfigItem
 {
 private:
@@ -87,9 +87,9 @@ public:
     virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
 };
 
-// ====================
+
 // items
-// ====================
+
 class SvxChartColorTableItem : public SfxPoolItem
 {
 public:

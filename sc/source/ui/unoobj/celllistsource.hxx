@@ -35,14 +35,14 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 
 
-//.........................................................................
+
 namespace calc
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OCellListSource
-    //=====================================================================
+
     class OCellListSource;
     // the base for our interfaces
     typedef ::cppu::WeakAggComponentImplHelper4 <   ::com::sun::star::form::binding::XListEntrySource
@@ -160,9 +160,9 @@ namespace calc
 #endif
     };
 
-//.........................................................................
+
 }   // namespace calc
-//.........................................................................
+
 
 #endif // SC_CELLLISTSOURCE_HXX
 

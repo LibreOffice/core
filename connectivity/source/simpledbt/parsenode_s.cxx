@@ -27,14 +27,14 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //================================================================
+
+
     //= OSimpleParseNode
-    //================================================================
+
 
     OSimpleParseNode::OSimpleParseNode(const OSQLParseNode* _pNode, sal_Bool _bTakeOwnership)
         :m_pFullNode(_pNode)
@@ -78,9 +78,9 @@ namespace connectivity
                                               _rIntl, _cDecSeparator, _pContext );
     }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

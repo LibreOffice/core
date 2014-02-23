@@ -39,21 +39,21 @@
 #include <osl/mutex.hxx>
 #include <memory>
 
-//.........................................................................
+
 namespace dlgprov
 {
-//.........................................................................
 
-    // =============================================================================
+
+
     // mutex
-    // =============================================================================
+
 
     ::osl::Mutex& getMutex();
 
 
-    // =============================================================================
+
     // class DialogProviderImpl
-    // =============================================================================
+
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > lcl_createControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext);
     ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > lcl_getStringResourceManager(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext,const OUString& i_sURL);
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > lcl_createDialogModel(
@@ -150,9 +150,9 @@ namespace dlgprov
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
      };
 
-//.........................................................................
+
 }   // namespace dlgprov
-//.........................................................................
+
 
 #endif // SCRIPTING_DLGPROV_HXX
 

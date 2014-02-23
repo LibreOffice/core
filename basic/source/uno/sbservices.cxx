@@ -19,10 +19,10 @@
 
 #include "sbmodule.hxx"
 
-//........................................................................
+
 namespace basic
 {
-//........................................................................
+
 
 
     extern void createRegistryInfo_SfxDialogLibraryContainer();
@@ -42,9 +42,9 @@ namespace basic
         }
     }
 
-//........................................................................
+
 } // namespace basic
-//........................................................................
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL sb_component_getFactory(
     const sal_Char* pImplementationName, void*, void* )

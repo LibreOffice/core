@@ -25,9 +25,9 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//=====================================================================
+
 //= Https_UADialog
-//=====================================================================
+
 class UnknownAuthDialog : public MessageDialog
 {
 private:

@@ -3099,7 +3099,7 @@ void Svx3DWin::UpdatePreview()
     aCtlLightPreview.GetSvx3DLightControl().Set3DAttributes( aSet );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // document is to be reloaded, destroy remembered ItemSet
 void Svx3DWin::DocumentReload()
 {

@@ -58,7 +58,7 @@ using namespace com::sun::star::uno;
 #define SEP_PATH_CLPBRD     "Office.Calc/Dialogs/ClipboardTextImport"
 #define SEP_PATH_TEXT2COL   "Office.Calc/Dialogs/TextToColumnsImport"
 
-// ============================================================================
+
 
 static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect )
 {

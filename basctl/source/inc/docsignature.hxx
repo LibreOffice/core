@@ -23,15 +23,15 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//........................................................................
+
 namespace basctl
 {
-//........................................................................
+
 
     class ScriptDocument;
-    //====================================================================
+
     //= DocumentSignature
-    //====================================================================
+
     /// encapsulates (actions on) the signature/state of a document
     class DocumentSignature
     {
@@ -72,9 +72,9 @@ namespace basctl
         boost::scoped_ptr<Impl> m_pImpl;
     };
 
-//........................................................................
+
 } // namespace basctl
-//........................................................................
+
 
 #endif // BASCTL_DOCSIGNATURE_HXX
 

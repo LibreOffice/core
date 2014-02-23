@@ -886,7 +886,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        //  ----------------------------------------------------------------
+
 
         case FID_INPUTLINE_STATUS:
             OSL_FAIL("Execute von InputLine-Status");

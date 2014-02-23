@@ -48,7 +48,7 @@ using namespace ::com::sun::star::uno;
 
 namespace dp_gui {
 
-//==============================================================================
+
 class MyApp : public Application, private boost::noncopyable
 {
 public:
@@ -136,7 +136,7 @@ OUString ReplaceProductNameHookProc( const OUString& rStr )
     return sRet;
 }
 
-//==============================================================================
+
 class ServiceImpl
     : public ::cppu::WeakImplHelper2<ui::dialogs::XAsynchronousExecutableDialog,
                                      task::XJobExecutor>

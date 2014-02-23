@@ -27,7 +27,7 @@
 class Window;
 class SfxItemSet;
 
-//////////////////////////////////////////////////////////////////////
+
 
 class SvxJSearchOptionsPage : public SfxTabPage
 {
@@ -76,7 +76,7 @@ public:
     void                SetTransliterationFlags( sal_Int32 nSettings );
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 #endif
 

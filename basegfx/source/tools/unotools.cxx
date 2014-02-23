@@ -153,7 +153,7 @@ namespace unotools
         return aNewPolyPolygon;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////
+
 
     void b2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly,
                                             drawing::PolyPolygonBezierCoords& rRetval )

@@ -38,9 +38,9 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXDevice
-//  ----------------------------------------------------
+
 VCLXDevice::VCLXDevice()
 {
     mpOutputDevice = NULL;

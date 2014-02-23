@@ -29,9 +29,9 @@
 #include <vcl/bitmapex.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class VCLXBitmap
-//  ----------------------------------------------------
+
 
 class VCLXBitmap :  public ::com::sun::star::awt::XBitmap,
                     public ::com::sun::star::awt::XDisplayBitmap,

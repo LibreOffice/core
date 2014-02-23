@@ -77,9 +77,9 @@ namespace connectivity
         protected:
 
             rtl_TextEncoding                        m_nTextEncoding; // the encoding which is used for all text conversions
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             TTypeInfoVector                         m_aTypeInfo;    //  vector containing an entry
                                                                     //  for each row returned by
                                                                     //  DatabaseMetaData.getTypeInfo.

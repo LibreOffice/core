@@ -30,12 +30,12 @@
 #include <rtl/math.hxx>
 #include <sfx2/objsh.hxx>
 
-//==================================================================
+
 // ugly dependencies for the OColorControl
 #include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
-//==================================================================
+
 #include <vcl/floatwin.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/colorcfg.hxx>
@@ -45,16 +45,16 @@
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-//==================================================================
+
 
 #include <limits>
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -64,9 +64,9 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::inspection;
 
-    //==================================================================
+
     //= OTimeControl
-    //==================================================================
+
 
     OTimeControl::OTimeControl( Window* pParent, WinBits nWinStyle )
         :OTimeControl_Base( PropertyControlType::TimeField, pParent, nWinStyle )
@@ -109,9 +109,9 @@ namespace pcr
         return ::getCppuType( static_cast< util::Time* >( NULL ) );
     }
 
-    //==================================================================
+
     //= ODateControl
-    //==================================================================
+
 
     ODateControl::ODateControl( Window* pParent, WinBits nWinStyle )
         :ODateControl_Base( PropertyControlType::DateField, pParent, nWinStyle | WB_DROPDOWN )
@@ -163,9 +163,9 @@ namespace pcr
         return ::getCppuType( static_cast< util::Date* >( NULL ) );
     }
 
-    //==================================================================
+
     //= OEditControl
-    //==================================================================
+
 
     OEditControl::OEditControl(Window* _pParent, sal_Bool _bPW, WinBits _nWinStyle)
         :OEditControl_Base( _bPW ? PropertyControlType::CharacterField : PropertyControlType::TextField, _pParent, _nWinStyle )
@@ -249,9 +249,9 @@ namespace pcr
         return n;
     }
 
-    //==================================================================
+
     // class ODateTimeControl
-    //==================================================================
+
 
     ODateTimeControl::ODateTimeControl( Window* _pParent, WinBits _nWinStyle)
         :ODateTimeControl_Base( PropertyControlType::DateTimeField, _pParent, _nWinStyle )
@@ -322,9 +322,9 @@ namespace pcr
         return ::getCppuType( static_cast< util::DateTime* >( NULL ) );
     }
 
-    //========================================================================
+
     //= HyperlinkInput
-    //========================================================================
+
 
     HyperlinkInput::HyperlinkInput( Window* _pParent, WinBits _nWinStyle )
         :Edit( _pParent, _nWinStyle )
@@ -407,9 +407,9 @@ namespace pcr
             impl_checkEndClick( rTEvt.GetMouseEvent() );
     }
 
-    //========================================================================
+
     //= OHyperlinkControl
-    //========================================================================
+
 
     OHyperlinkControl::OHyperlinkControl( Window* _pParent, WinBits _nWinStyle )
         :OHyperlinkControl_Base( PropertyControlType::HyperlinkField, _pParent, _nWinStyle )
@@ -473,9 +473,9 @@ namespace pcr
         return 0;
     }
 
-    //==================================================================
+
     //= ONumericControl
-    //==================================================================
+
 
     ONumericControl::ONumericControl( Window* _pParent, WinBits _nWinStyle )
         :ONumericControl_Base( PropertyControlType::NumericField, _pParent, _nWinStyle )
@@ -643,9 +643,9 @@ namespace pcr
         return ::getCppuType( static_cast< double* >( NULL ) );
     }
 
-    //==================================================================
+
     //= OColorControl
-    //==================================================================
+
     #define LB_DEFAULT_COUNT 20
 
     OUString MakeHexStr(sal_uInt32 nVal, sal_Int32 nLength)
@@ -794,9 +794,9 @@ namespace pcr
             m_aImplControl.notifyModifiedValue();
     }
 
-    //==================================================================
+
     //= OListboxControl
-    //==================================================================
+
 
     OListboxControl::OListboxControl( Window* pParent, WinBits nWinStyle)
         :OListboxControl_Base( PropertyControlType::ListBox, pParent, nWinStyle )
@@ -886,9 +886,9 @@ namespace pcr
             m_aImplControl.notifyModifiedValue();
     }
 
-    //==================================================================
+
     //= OComboboxControl
-    //==================================================================
+
 
     OComboboxControl::OComboboxControl( Window* pParent, WinBits nWinStyle)
         :OComboboxControl_Base( PropertyControlType::ComboBox, pParent, nWinStyle )
@@ -955,9 +955,9 @@ namespace pcr
         return 0L;
     }
 
-    //==================================================================
+
     //= OMultilineFloatingEdit
-    //==================================================================
+
     class OMultilineFloatingEdit : public FloatingWindow
     {
     private:
@@ -1018,9 +1018,9 @@ namespace pcr
         return nResult;
     }
 
-    //==================================================================
+
     //= DropDownEditControl_Base
-    //==================================================================
+
 
     DropDownEditControl::DropDownEditControl( Window* _pParent, WinBits _nStyle )
         :DropDownEditControl_Base( _pParent, _nStyle )
@@ -1155,7 +1155,7 @@ namespace pcr
 
     namespace
     {
-        //..............................................................
+
         StlSyntaxSequence< OUString > lcl_convertMultiLineToList( const OUString& _rCompsedTextWithLineBreaks )
         {
             sal_Int32 nLines = comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n');
@@ -1180,7 +1180,7 @@ namespace pcr
             return sMultiLineText;
         }
 
-        //..............................................................
+
         OUString lcl_convertListToDisplayText( const StlSyntaxSequence< OUString >& _rStrings )
         {
             OUStringBuffer aComposed;
@@ -1351,9 +1351,9 @@ namespace pcr
         return GetText();
     }
 
-    //==================================================================
+
     //= OMultilineEditControl
-    //==================================================================
+
 
     OMultilineEditControl::OMultilineEditControl( Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle )
         :OMultilineEditControl_Base( _eMode == eMultiLineText ? PropertyControlType::MultiLineTextField : PropertyControlType::StringListField
@@ -1416,8 +1416,8 @@ namespace pcr
         return ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

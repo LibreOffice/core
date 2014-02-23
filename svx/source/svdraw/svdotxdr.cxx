@@ -62,7 +62,7 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
     return pH;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrTextObj::hasSpecialDrag() const
 {
@@ -143,7 +143,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     return aTmpRect;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // drag
 
 bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
@@ -178,7 +178,7 @@ OUString SdrTextObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Create
 
 bool SdrTextObj::BegCreate(SdrDragStat& rStat)

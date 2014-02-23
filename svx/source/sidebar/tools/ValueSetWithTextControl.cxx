@@ -422,7 +422,7 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
     //End
 }
 
-//===============================================================================================
+
 
 SvxNumValueSet3::SvxNumValueSet3( Window* pParent, const ResId& rResId) :
     ValueSet( pParent, rResId )

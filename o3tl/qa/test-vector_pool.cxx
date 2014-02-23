@@ -83,7 +83,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(vector_pool_test);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

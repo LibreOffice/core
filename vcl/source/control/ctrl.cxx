@@ -35,7 +35,7 @@
 
 using namespace vcl;
 
-// =======================================================================
+
 
 void Control::ImplInitControlData()
 {

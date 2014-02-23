@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-// ============================================================================
+
 
 static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
 {
@@ -63,13 +63,13 @@ static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, 
     return aResult;
 }
 
-// ============================================================================
+
 
 IDocPasswordVerifier::~IDocPasswordVerifier()
 {
 }
 
-// ============================================================================
+
 uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswordInfo( const OUString& aPassword )
 {
     uno::Sequence< beans::PropertyValue > aResult;
@@ -94,7 +94,7 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
     return aResult;
 }
 
-// ============================================================================
+
 bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     bool bResult = false;
@@ -131,7 +131,7 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, cons
     return bResult;
 }
 
-// ============================================================================
+
 sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
                 const OUString& aUString )
 {
@@ -208,7 +208,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
     return nResult;
 }
 
-// ============================================================================
+
 sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
                 const OUString& aUString,
                 rtl_TextEncoding nEnc )
@@ -233,7 +233,7 @@ sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
     return nResult;
 }
 
-// ============================================================================
+
 Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
                 const OUString& aUString,
                 rtl_TextEncoding nEnc )
@@ -246,7 +246,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     return aResult;
 }
 
-// ============================================================================
+
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateRandomByteSequence( sal_Int32 nLength )
 {
     uno::Sequence< sal_Int8 > aResult( nLength );
@@ -262,7 +262,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 }
 
 
-// ============================================================================
+
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
@@ -280,7 +280,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     return aResultKey;
 }
 
-// ============================================================================
+
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const sal_uInt16 pPassData[16], const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
@@ -291,7 +291,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     return aResultKey;
 }
 
-// ============================================================================
+
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const sal_uInt16 pPassData[16], const sal_uInt8 pDocId[16] )
 {
     uno::Sequence< sal_Int8 > aResultKey;
@@ -346,7 +346,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 }
 
 
-// ============================================================================
+
 
 /*static*/ ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > DocPasswordHelper::requestAndVerifyDocPassword(
         IDocPasswordVerifier& rVerifier,

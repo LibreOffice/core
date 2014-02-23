@@ -24,9 +24,9 @@
 #include <com/sun/star/form/XForms.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
-//==================================================================
+
 // FmFormObj
-//==================================================================
+
 class FmFormObj: public SdrUnoObj
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >  aEvts;  // events des Objects

@@ -48,7 +48,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 struct HDInfo {
@@ -142,7 +142,7 @@ inline OUString Hyphenator::getImplementationName_Static() throw()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 #endif
 

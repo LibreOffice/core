@@ -28,17 +28,17 @@
 #include <svx/svdobj.hxx>
 #include <editeng/unoprnms.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     namespace
     {
         const SvxItemPropertySet* getTextEnginePropertySet()
@@ -58,9 +58,9 @@ namespace frm
         }
     }
 
-    //====================================================================
+
     //= ORichTextUnoWrapper
-    //====================================================================
+
 
     ORichTextUnoWrapper::ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :SvxUnoText( getTextEnginePropertySet() )
@@ -73,9 +73,9 @@ namespace frm
     {
     }
 
-    //====================================================================
+
     //= RichTextEditSource
-    //====================================================================
+
 
     RichTextEditSource::RichTextEditSource( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :m_rEngine              ( _rEngine                               )
@@ -119,8 +119,8 @@ namespace frm
             m_pTextChangeListener->potentialTextChange();
     }
 
-//........................................................................
+
 }  // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

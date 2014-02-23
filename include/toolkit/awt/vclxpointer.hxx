@@ -29,9 +29,9 @@
 
 #include <vcl/pointr.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXPointer
-//  ----------------------------------------------------
+
 
 class VCLXPointer : public ::com::sun::star::awt::XPointer,
                     public ::com::sun::star::lang::XTypeProvider,

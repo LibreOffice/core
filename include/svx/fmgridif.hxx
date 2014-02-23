@@ -69,9 +69,9 @@ public:
     virtual void SAL_CALL release() throw() { m_rParent.release(); }
 };
 
-//==================================================================
+
 // FmXModifyMultiplexer
-//==================================================================
+
 class FmXModifyMultiplexer  :public OWeakSubObject
                             ,public ::cppu::OInterfaceContainerHelper
                             ,public ::com::sun::star::util::XModifyListener
@@ -92,9 +92,9 @@ public:
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
 
-//==================================================================
+
 // FmXUpdateMultiplexer
-//==================================================================
+
 class FmXUpdateMultiplexer : public OWeakSubObject,
                              public ::cppu::OInterfaceContainerHelper,
                              public ::com::sun::star::form::XUpdateListener
@@ -117,9 +117,9 @@ public:
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
 
-//==================================================================
+
 // FmXSelectionMultiplexer
-//==================================================================
+
 class FmXSelectionMultiplexer   :public OWeakSubObject
                                 ,public ::cppu::OInterfaceContainerHelper
                                 ,public ::com::sun::star::view::XSelectionChangeListener
@@ -141,9 +141,9 @@ public:
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
 
-//==================================================================
+
 // FmXGridControlMultiplexer
-//==================================================================
+
 class FmXGridControlMultiplexer :public OWeakSubObject
                                 ,public ::cppu::OInterfaceContainerHelper
                                 ,public ::com::sun::star::form::XGridControlListener
@@ -165,9 +165,9 @@ public:
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
 
-//==================================================================
+
 // FmXContainerMultiplexer
-//==================================================================
+
 class FmXContainerMultiplexer : public OWeakSubObject,
                                 public ::cppu::OInterfaceContainerHelper,
                                 public ::com::sun::star::container::XContainerListener
@@ -190,9 +190,9 @@ public:
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
 
-//==================================================================
+
 // FmXGridControl
-//==================================================================
+
 typedef ::cppu::ImplHelper10<   ::com::sun::star::form::XBoundComponent,
                                 ::com::sun::star::form::XGridControl,
                                 ::com::sun::star::util::XModifyBroadcaster,
@@ -314,9 +314,9 @@ protected:
 
 };
 
-//==================================================================
+
 // FmXGridPeer -> Peer for the Gridcontrol
-//==================================================================
+
 typedef ::comphelper::ImplHelper19  <   ::com::sun::star::form::XGridPeer,
                                         ::com::sun::star::form::XBoundComponent,
                                         ::com::sun::star::form::XGridControl,
