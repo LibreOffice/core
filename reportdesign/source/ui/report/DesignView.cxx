@@ -251,7 +251,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
             // normalize the split pos
             const long nSplitterWidth = GetSettings().GetStyleSettings().GetSplitSize();
             Point aTaskPanePos(nSplitPos + nSplitterWidth, _rPlayground.Top());
-            if ( m_pTaskPane && m_pTaskPane->IsVisible() )
+            if (m_pTaskPane && m_pTaskPane->IsVisible() && m_pPropWin)
             {
                 aTaskPanePos.X() = aPlaygroundSize.Width() - m_pTaskPane->GetSizePixel().Width();
                 sal_Int32 nMinWidth = m_pPropWin->getMinimumSize().Width();
