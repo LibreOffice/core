@@ -375,8 +375,18 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_TOC_NEW_LINE: sName = "TOCNewLine"; break;
             case PROP_TOC_PARAGRAPH_OUTLINE_LEVEL   :   sName = "TOCParagraphOutlineLevel"; break;
             case PROP_CHAR_THEME_COLOR_TINT         :   sName = "CharThemeColorTint"; break;
-            case PROP_CHAR_GLOW_TEXT_EFFECT         :   sName = "CharGlowTextEffect"; break;
-            case PROP_CHAR_SHADOW_TEXT_EFFECT       :   sName = "CharShadowTextEffect"; break;
+            case PROP_CHAR_GLOW_TEXT_EFFECT          :   sName = "CharGlowTextEffect"; break;
+            case PROP_CHAR_SHADOW_TEXT_EFFECT        :   sName = "CharShadowTextEffect"; break;
+            case PROP_CHAR_REFLECTION_TEXT_EFFECT    :   sName = "CharReflectionTextEffect"; break;
+            case PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT   :   sName = "CharTextOutlineTextEffect"; break;
+            case PROP_CHAR_TEXTFILL_TEXT_EFFECT      :   sName = "CharTextFillTextEffect"; break;
+            case PROP_CHAR_SCENE3D_TEXT_EFFECT       :   sName = "CharScene3DTextEffect"; break;
+            case PROP_CHAR_PROPS3D_TEXT_EFFECT       :   sName = "CharProps3DTextEffect"; break;
+            case PROP_CHAR_LIGATURES_TEXT_EFFECT     :   sName = "CharLigaturesTextEffect"; break;
+            case PROP_CHAR_NUMFORM_TEXT_EFFECT       :   sName = "CharNumFormTextEffect"; break;
+            case PROP_CHAR_NUMSPACING_TEXT_EFFECT    :   sName = "CharNumSpacingTextEffect"; break;
+            case PROP_CHAR_STYLISTICSETS_TEXT_EFFECT :   sName = "CharStylisticSetsTextEffect"; break;
+            case PROP_CHAR_CNTXTALTS_TEXT_EFFECT     :   sName = "CharCntxtAltsTextEffect"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
