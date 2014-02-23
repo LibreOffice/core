@@ -897,8 +897,6 @@ DummyFormattedText::DummyFormattedText(uno::Sequence< uno::Reference<
 {
 }
 
-
-
 DummyGroup3D::DummyGroup3D(const OUString& rName)
 {
     setName(rName);
@@ -1252,6 +1250,73 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 
 namespace {
 
+const char* getSeverityString(GLenum severity)
+{
+    switch(severity)
+    {
+        case GL_DEBUG_SEVERITY_LOW:
+            return "low";
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            return "medium";
+        case GL_DEBUG_SEVERITY_HIGH:
+            return "high";
+        default:
+            ;
+    }
+
+    return "unknown";
+}
+
+const char* getSourceString(GLenum source)
+{
+    switch(source)
+    {
+        case GL_DEBUG_SOURCE_API:
+            return "API";
+        case GL_DEBUG_SOURCE_SHADER_COMPILER:
+            return "shader compiler";
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+            return "window system";
+        case GL_DEBUG_SOURCE_THIRD_PARTY:
+            return "third party";
+        case GL_DEBUG_SOURCE_APPLICATION:
+            return "Libreoffice";
+        case GL_DEBUG_SOURCE_OTHER:
+            return "unknown";
+        default:
+            ;
+    }
+
+    return "unknown";
+}
+
+const char* getTypeString(GLenum type)
+{
+    switch(type)
+    {
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+            return "deprecated behavior";
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+            return "undefined behavior";
+        case GL_DEBUG_TYPE_PERFORMANCE:
+            return "performance";
+        case GL_DEBUG_TYPE_PORTABILITY:
+            return "portability";
+        case GL_DEBUG_TYPE_MARKER:
+            return "marker";
+        case GL_DEBUG_TYPE_PUSH_GROUP:
+            return "push group";
+        case GL_DEBUG_TYPE_POP_GROUP:
+            return "pop group";
+        case GL_DEBUG_TYPE_OTHER:
+            return "other";
+        default:
+            ;
+    }
+
+    return "unkown";
+}
+
 extern "C" void
 #if defined _WIN32
 APIENTRY
@@ -1259,8 +1324,8 @@ APIENTRY
 debug_callback(GLenum source, GLenum type, GLuint id,
         GLenum severity, GLsizei , const GLchar* message, GLvoid* )
 {
-    SAL_WARN("chart2.opengl", "OpenGL debug message: source: " << source << ", type: "
-            << type << ", id: " << id << ", severity: " << severity << " with message: " << message);
+    SAL_WARN("chart2.opengl", "OpenGL debug message: source: " << getSourceString(source) << ", type: "
+            << type << ", id: " << id << ", severity: " << getSeverityString(severity) << " with message: " << message);
 }
 
 }
