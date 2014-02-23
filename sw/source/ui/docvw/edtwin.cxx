@@ -1811,7 +1811,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_DELETE:
                     if ( !rSh.HasReadonlySel() )
                     {
-                        if (rSh.IsInFrontOfLabel() && rSh.NumOrNoNum(sal_False))
+                        if (rSh.IsInFrontOfLabel() && rSh.NumOrNoNum(false))
                             eKeyState = KS_NumOrNoNum;
                     }
                     else
@@ -1972,7 +1972,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                     }
                                 }
                                 if ( bCallNumOrNoNum
-                                     && rSh.NumOrNoNum( !bOnlyBackspaceKey, sal_True ) )
+                                     && rSh.NumOrNoNum( !bOnlyBackspaceKey, true ) )
                                 {
                                     eKeyState = KS_NumOrNoNum;
                                 }
@@ -2237,7 +2237,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                 if( bNormalChar && rSh.IsInFrontOfLabel() )
                 {
-                    rSh.NumOrNoNum(sal_False);
+                    rSh.NumOrNoNum(false);
                 }
 
                 if( !m_aInBuffer.isEmpty() && ( !bNormalChar || bIsDocReadOnly ))
