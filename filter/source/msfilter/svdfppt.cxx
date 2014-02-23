@@ -3402,7 +3402,7 @@ sal_Bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rM
     if ( nBuBlip != 0xffff )        // set graphical bullet
     {
         Graphic aGraphic;
-        if ( pParaProv->GetGraphic( nBuBlip, aGraphic ) )
+        if ( pParaProv && pParaProv->GetGraphic( nBuBlip, aGraphic ) )
         {
             SvxBrushItem aBrush( aGraphic, GPOS_MM, SID_ATTR_BRUSH );
             rNumberFormat.SetGraphicBrush( &aBrush );
