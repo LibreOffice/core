@@ -1332,7 +1332,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     }
 
     // TODO/LATER: error handling
-    if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
+    if( rMedium.GetErrorCode() || !pMedium || pMedium->GetErrorCode() || GetErrorCode() )
         return sal_False;
 
     AddLog( OUString( OSL_LOG_PREFIX "Locking"  ) );
