@@ -209,7 +209,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   [(id <MouseEventListener>)mView registerMouseEventListener: mDragSourceHelper];
 }
 
-sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
+bool SAL_CALL DragSource::isDragImageSupported(  )
   throw(RuntimeException)
 {
   return true;
@@ -332,7 +332,7 @@ OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException)
   return dragSource_getImplementationName();
 }
 
-sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
   return cppu::supportsService(this, ServiceName);
 }

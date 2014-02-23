@@ -44,7 +44,7 @@ void EditSelFunctionSet::DestroyAnchor()
     // Only with multiple selection
 }
 
-bool EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
+bool EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool )
 {
     if ( pCurView )
         return pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );

@@ -91,7 +91,7 @@ public:
 
 protected:
     virtual bool Docking( const Point& rPos, Rectangle& rRect );
-    virtual void     EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
+    virtual void     EndDocking( const Rectangle& rRect, bool bFloatMode );
     virtual void     ToggleFloatingMode();
     virtual bool PrepareToggleFloatingMode();
     virtual void     StartDocking();

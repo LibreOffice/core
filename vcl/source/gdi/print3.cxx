@@ -148,10 +148,10 @@ public:
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
     ChoiceDisableMap                                            maChoiceDisableMap;
-    sal_Bool                                                    mbFirstPage;
-    sal_Bool                                                    mbLastPage;
-    sal_Bool                                                    mbReversePageOrder;
-    sal_Bool                                                    mbPapersizeFromSetup;
+    bool                                                    mbFirstPage;
+    bool                                                    mbLastPage;
+    bool                                                    mbReversePageOrder;
+    bool                                                    mbPapersizeFromSetup;
     view::PrintableState                                        meJobState;
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
@@ -182,10 +182,10 @@ public:
     // history suggests this is intentional...
 
     ImplPrinterControllerData() :
-        mbFirstPage( sal_True ),
-        mbLastPage( sal_False ),
-        mbReversePageOrder( sal_False ),
-        mbPapersizeFromSetup( sal_False ),
+        mbFirstPage( true ),
+        mbLastPage( false ),
+        mbReversePageOrder( false ),
+        mbPapersizeFromSetup( false ),
         meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL ),
         mnDefaultPaperBin( -1 ),
@@ -285,7 +285,7 @@ void Printer::PrintJob( const boost::shared_ptr<PrinterController>& i_pControlle
                         const JobSetup& i_rInitSetup
                         )
 {
-    sal_Bool bSynchronous = sal_False;
+    bool bSynchronous = false;
     PropertyValue* pVal = i_pController->getValue( OUString( "Wait" ) );
     if( pVal )
         pVal->Value >>= bSynchronous;
@@ -317,7 +317,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             aBox.Execute();
         }
         pController->setValue( OUString( "IsDirect" ),
-                               makeAny( sal_False ) );
+                               makeAny( false ) );
     }
 
     // setup printer
@@ -333,7 +333,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     }
 
     // reset last page property
-    i_pController->setLastPage( sal_False );
+    i_pController->setLastPage( false );
 
     // update "PageRange" property inferring from other properties:
     // case 1: "Pages" set from UNO API ->
@@ -402,7 +402,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     PropertyValue* pReverseVal = i_pController->getValue( OUString( "PrintReverse" ) );
     if( pReverseVal )
     {
-        sal_Bool bReverse = sal_False;
+        bool bReverse = false;
         pReverseVal->Value >>= bReverse;
         pController->setReversePrint( bReverse );
     }
@@ -410,7 +410,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     PropertyValue* pPapersizeFromSetupVal = i_pController->getValue( OUString( "PapersizeFromSetup" ) );
     if( pPapersizeFromSetupVal )
     {
-        sal_Bool bPapersizeFromSetup = sal_False;
+        bool bPapersizeFromSetup = false;
         pPapersizeFromSetupVal->Value >>= bPapersizeFromSetup;
         pController->setPapersizeFromSetup( bPapersizeFromSetup );
     }
@@ -497,7 +497,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             else if( aDlg.isSingleJobs() )
             {
                 pController->setValue( OUString( "PrintCollateAsSingleJobs" ),
-                                       makeAny( sal_True ) );
+                                       makeAny( true ) );
             }
         }
         catch (const std::bad_alloc&)
@@ -1395,7 +1395,7 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
     {
         PropertyValue aVal;
         aVal.Name = "IsPrinter";
-        aVal.Value <<= sal_True;
+        aVal.Value <<= true;
         aResult[nCur++] = aVal;
     }
     aResult.realloc( nCur );
@@ -1893,12 +1893,12 @@ Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OUString >& 
     if( i_rControlOptions.mbInternalOnly )
     {
         aCtrl[nUsed  ].Name    = "InternalUIOnly";
-        aCtrl[nUsed++].Value <<= sal_True;
+        aCtrl[nUsed++].Value <<= true;
     }
     if( ! i_rControlOptions.mbEnabled )
     {
         aCtrl[nUsed  ].Name    = "Enabled";
-        aCtrl[nUsed++].Value <<= sal_False;
+        aCtrl[nUsed++].Value <<= false;
     }
 
     sal_Int32 nAddProps = i_rControlOptions.maAddProps.getLength();
@@ -1968,7 +1968,7 @@ Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Sequence< OU
                                               const OUString& i_rProperty,
                                               const Sequence< OUString >& i_rChoices,
                                               sal_Int32 i_nValue,
-                                              const Sequence< sal_Bool >& i_rDisabledChoices,
+                                              const Sequence< bool >& i_rDisabledChoices,
                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );
@@ -1994,7 +1994,7 @@ Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rID,
                                               const OUString& i_rProperty,
                                               const Sequence< OUString >& i_rChoices,
                                               sal_Int32 i_nValue,
-                                              const Sequence< sal_Bool >& i_rDisabledChoices,
+                                              const Sequence< bool >& i_rDisabledChoices,
                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );

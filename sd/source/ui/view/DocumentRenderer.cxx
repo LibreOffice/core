@@ -419,7 +419,7 @@ namespace {
                                     "SlidesPerPage" ,
                                     GetSlidesPerPageSequence(),
                                     0,
-                                    Sequence< sal_Bool >(),
+                                    Sequence< bool >(),
                                     aContentOpt
                                     )
                                 );
@@ -433,7 +433,7 @@ namespace {
                                     "SlidesPerPageOrder" ,
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
                                     0,
-                                    Sequence< sal_Bool >(),
+                                    Sequence< bool >(),
                                     aSlidesPerPageOpt )
                                 );
             }
@@ -526,7 +526,7 @@ namespace {
                                     "PageOptions" ,
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
                                     0,
-                                    Sequence< sal_Bool >(),
+                                    Sequence< bool >(),
                                     aPageOptionsOpt
                                     )
                                 );
@@ -541,7 +541,7 @@ namespace {
                                     "PageOptions" ,
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
                                     0,
-                                    Sequence< sal_Bool >(),
+                                    Sequence< bool >(),
                                     aPageOptionsOpt
                                     )
                                 );
@@ -575,7 +575,7 @@ namespace {
                                 "PrintProspectInclude" ,
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
                                 0,
-                                Sequence< sal_Bool >(),
+                                Sequence< bool >(),
                                 aIncludeOpt
                                 )
                             );

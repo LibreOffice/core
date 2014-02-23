@@ -369,7 +369,7 @@ bool DockingManager::IsDockable( const Window *pWindow )
 
     /*
     if( pWindow->HasDockingHandler() )
-        return sal_True;
+        return true;
     */
     return (pWrapper != NULL);
 }
@@ -931,7 +931,7 @@ void ImplDockingWindowWrapper::ImplInitData()
 {
     mpDockingWindow     = NULL;
 
-    //GetWindow()->mpWindowImpl->mbDockWin  = sal_True;     // TODO: must be eliminated
+    //GetWindow()->mpWindowImpl->mbDockWin  = true;     // TODO: must be eliminated
     mpFloatWin          = NULL;
     mbDockCanceled      = false;
     mbFloatPrevented    = false;
@@ -1101,7 +1101,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
 
 bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
 {
-    sal_Bool bFloating = sal_True;
+    bool bFloating = true;
     GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_PREPARETOGGLEFLOATING, &bFloating );
     return bFloating;
 }

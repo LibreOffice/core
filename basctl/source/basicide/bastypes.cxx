@@ -359,7 +359,7 @@ bool DockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     }
 }
 
-void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
+void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
     if ( bFloatMode )
         ::DockingWindow::EndDocking( rRect, bFloatMode );

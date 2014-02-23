@@ -50,7 +50,7 @@ public:
     virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle );
     virtual void                DestroyFrame( SalFrame* pFrame );
 
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
     virtual void                DestroyObject( SalObject* pObject );
 
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,

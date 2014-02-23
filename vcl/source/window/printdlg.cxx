@@ -788,7 +788,7 @@ bool PrintDialog::isPrintToFile()
 
 bool PrintDialog::isCollate()
 {
-    return maJobPage.mpCopyCountField->GetValue() > 1 ? maJobPage.mpCollateBox->IsChecked() : sal_False;
+    return maJobPage.mpCopyCountField->GetValue() > 1 ? maJobPage.mpCollateBox->IsChecked() : false;
 }
 
 bool PrintDialog::isSingleJobs()
@@ -838,7 +838,7 @@ void PrintDialog::setupOptionalUI()
         OUString aText;
         OUString aPropertyName;
         Sequence< OUString > aChoices;
-        Sequence< sal_Bool > aChoicesDisabled;
+        Sequence< bool > aChoicesDisabled;
         Sequence< OUString > aHelpTexts;
         Sequence< OUString > aIDs;
         Sequence< OUString > aHelpIds;
@@ -1039,7 +1039,7 @@ void PrintDialog::setupOptionalUI()
                 pBtn->SetText( aChoices[m] );
                 pBtn->Check( m == nSelectVal );
                 pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
-                if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] == sal_True )
+                if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] == true )
                     pBtn->Enable( false );
                 pBtn->Show();
                 maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );

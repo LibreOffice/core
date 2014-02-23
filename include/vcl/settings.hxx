@@ -830,7 +830,7 @@ public:
     void                            SetAutoMnemonic( bool bAutoMnemonic )
                                         { CopyData(); mpData->mnAutoMnemonic = (sal_uInt16)bAutoMnemonic; }
     bool                            GetAutoMnemonic() const
-                                        { return mpData->mnAutoMnemonic ? sal_True : sal_False; }
+                                        { return mpData->mnAutoMnemonic ? true : false; }
 
     void                            SetFontColor( const Color& rColor )
                                         { CopyData(); mpData->maFontColor = rColor; }
@@ -978,7 +978,7 @@ public:
                                     ~MiscSettings();
 
 #ifdef WNT
-    void                            SetEnableATToolSupport( sal_Bool bEnable );
+    void                            SetEnableATToolSupport( bool bEnable );
 #endif
     bool                        GetEnableATToolSupport() const;
     bool                        GetDisablePrinting() const;

@@ -362,7 +362,7 @@ static int DisplayYield( int fd, SalX11Display *pDisplay )
   GetSalData()->m_pInstance->GetYieldMutex()->acquire();
   pDisplay->Yield();
   GetSalData()->m_pInstance->GetYieldMutex()->release();
-  return sal_True;
+  return true;
 }
 
 SalX11Display::SalX11Display( Display *display )

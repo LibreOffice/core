@@ -36,7 +36,7 @@ public:
     RGNDATA*                mpClipRgnData;          // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
     RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
-    sal_Bool                mbFirstClipRect;        // Flag for first cliprect to insert
+    bool                mbFirstClipRect;        // Flag for first cliprect to insert
     WinSalObject*               mpNextObject;           // pointer to next object
 
 
@@ -49,8 +49,8 @@ public:
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                    EndSetClipRegion();
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( sal_Bool bVisible );
-    virtual void                    Enable( sal_Bool nEnable );
+    virtual void                    Show( bool bVisible );
+    virtual void                    Enable( bool nEnable );
     virtual void                    GrabFocus();
     virtual const SystemEnvData*    GetSystemData() const;
 };

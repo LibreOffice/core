@@ -114,7 +114,7 @@ public:
     virtual void            DestroyFrame( SalFrame* pFrame );
 
     // Object (System Child Window)
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
     virtual void            DestroyObject( SalObject* pObject );
 
     // VirtualDevice

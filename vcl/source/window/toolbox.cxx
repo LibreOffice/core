@@ -932,7 +932,7 @@ void ToolBox::ImplSetMinMaxFloatSize( ToolBox *pThis )
     {
         pWrapper->SetMinOutputSizePixel( aMinSize );
         pWrapper->SetMaxOutputSizePixel( aMaxSize );
-        pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) ? sal_True : sal_False );
+        pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) ? true : false );
     }
     else
     {
@@ -1319,10 +1319,10 @@ void ImplTBDragMgr::EndDragging( bool bOK )
         if ( !bOK )
         {
             mpDragBox->mnDockLines = mnStartLines;
-            mpDragBox->EndDocking( maStartRect, sal_False );
+            mpDragBox->EndDocking( maStartRect, false );
         }
         else
-            mpDragBox->EndDocking( maRect, sal_False );
+            mpDragBox->EndDocking( maRect, false );
         mnLineMode = 0;
         mnStartLines = 0;
     }
@@ -1412,7 +1412,7 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
     else
         EndDragging( true );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -3005,7 +3005,7 @@ void ToolBox::ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect )
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow )
 {
     // draws toolbar button background either native or using a coloured selection
-    // if bIsWindow is sal_True, the corresponding item is a control and only a selection border will be drawn
+    // if bIsWindow is true, the corresponding item is a control and only a selection border will be drawn
 
     bool bNativeOk = false;
     if( !bIsWindow && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
@@ -3249,7 +3249,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder( pItem );
             else
-                ImplDrawButton( this, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
+                ImplDrawButton( this, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? true : false );
 
             if( nHighlight != 0 )
             {
@@ -3303,7 +3303,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder( pItem );
             else
-                ImplDrawButton( this, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
+                ImplDrawButton( this, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? true : false );
         }
 
         sal_uInt16 nTextStyle = 0;
@@ -4424,7 +4424,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
 
                 if( bNoTabCycling &&  ! (GetStyle() & WB_FORCETABCYCLE) )
                     return DockingWindow::Notify( rNEvt );
-                else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() ? sal_True : sal_False , bNoTabCycling ) )
+                else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() ? true : false , bNoTabCycling ) )
                     return false;
                 else
                     return DockingWindow::Notify( rNEvt );
@@ -4641,7 +4641,7 @@ void ToolBox::ToggleFloatingMode()
     }
     else
     {
-        mbScroll = (mnWinStyle & WB_SCROLL) ? sal_True : sal_False;
+        mbScroll = (mnWinStyle & WB_SCROLL) ? true : false;
         if ( (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM) )
             mbHorz = true;
         else
@@ -4801,7 +4801,7 @@ bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
 
 
 
-void ToolBox::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
+void ToolBox::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
     if ( !IsDockingCanceled() )
     {
@@ -5053,7 +5053,7 @@ void ToolBox::TriggerItem( sal_uInt16 nItemId, bool bShift, bool bCtrl )
 
 
 // calls the button's action handler
-// returns sal_True if action was called
+// returns true if action was called
 bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
 {
     bool bRet = true;
@@ -5135,7 +5135,7 @@ bool ImplCloseLastPopup( Window *pParent )
 }
 
 // opens a drop down toolbox item
-// returns sal_True if item was opened
+// returns true if item was opened
 bool ToolBox::ImplOpenItem( KeyCode aKeyCode )
 {
     sal_uInt16 nCode = aKeyCode.GetCode();

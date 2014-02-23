@@ -162,7 +162,7 @@ bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
 
     pGraphics_->Init( this, pColormap, bDeleteColormap );
 
-    return hDrawable_ != None ? sal_True : sal_False;
+    return hDrawable_ != None ? true : false;
 }
 
 X11SalVirtualDevice::X11SalVirtualDevice() :

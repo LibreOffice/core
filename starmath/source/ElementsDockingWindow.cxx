@@ -572,7 +572,7 @@ void SmElementsDockingWindow::ToggleFloatingMode()
         GetFloatingWindow()->SetMinOutputSizePixel( Size(100, 100) );
 }
 
-void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, sal_Bool bFloatMode)
+void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, bool bFloatMode)
 {
     SfxDockingWindow::EndDocking(rReactangle, bFloatMode);
     bool bVertical = ( GetAlignment() == SFX_ALIGN_TOP || GetAlignment() == SFX_ALIGN_BOTTOM );

@@ -59,7 +59,7 @@ public:
   virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
     throw( ::com::sun::star::uno::RuntimeException );
 
-  virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+  virtual bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
     throw( ::com::sun::star::uno::RuntimeException );
 
   //------------------------------------------------------------------------

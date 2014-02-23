@@ -102,7 +102,7 @@ void ImplAccelManager::EndSequence( bool bCancel )
     for ( size_t i = 0, n = mpSequenceList->size(); i < n; ++i )
     {
         Accelerator* pTempAccel = (*mpSequenceList)[ i ];
-        sal_Bool bDel = sal_False;
+        bool bDel = false;
         pTempAccel->mbIsCancel = bCancel;
         pTempAccel->mpDel = &bDel;
         pTempAccel->Deactivate();
@@ -169,7 +169,7 @@ bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
 
                     // set accelerator of the actuel item
                     // and call the handler
-                    sal_Bool bDel = sal_False;
+                    bool bDel = false;
                     pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
                     pAccel->mnCurRepeat     = nRepeat;
@@ -240,7 +240,7 @@ bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
 
                     // define accelerator of the actual item
                     // and call the handler
-                    sal_Bool bDel = sal_False;
+                    bool bDel = false;
                     pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
                     pAccel->mnCurRepeat     = nRepeat;

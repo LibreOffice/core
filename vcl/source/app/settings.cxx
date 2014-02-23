@@ -803,7 +803,7 @@ ImplMiscData::ImplMiscData()
     mnEnableATT                 = TRISTATE_INDET;
     mnDisablePrinting           = TRISTATE_INDET;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
-    mbEnableLocalizedDecimalSep = (pEnv != NULL) ? sal_True : sal_False;
+    mbEnableLocalizedDecimalSep = (pEnv != NULL) ? true : false;
 }
 
 // -----------------------------------------------------------------------
@@ -957,7 +957,7 @@ bool MiscSettings::GetEnableATToolSupport() const
 }
 
 #ifdef WNT
-void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
+void MiscSettings::SetEnableATToolSupport( bool bEnable )
 {
     if ( (bEnable ? TRISTATE_TRUE : TRISTATE_FALSE) != mpData->mnEnableATT )
     {

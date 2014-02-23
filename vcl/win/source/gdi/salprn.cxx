@@ -273,8 +273,8 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
                                 nCaps, (LPWSTR)pOutput, pDevMode );
 }
 
-static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
-                                 ImplJobSetup* pSetupData, sal_Bool bDelete )
+static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
+                                 ImplJobSetup* pSetupData, bool bDelete )
 {
     if ( pSetupData && pSetupData->mpDriverData )
     {
@@ -356,8 +356,8 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
     return FALSE;
 }
 
-static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData,
-                                   sal_Bool bIn, WinSalFrame* pVisibleDlgParent )
+static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData,
+                                   bool bIn, WinSalFrame* pVisibleDlgParent )
 {
     HANDLE hPrn;
     LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
@@ -1057,7 +1057,7 @@ static WinSalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
     return pGraphics;
 }
 
-static sal_Bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
+static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
 {
     HDC hNewDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
     if ( !hNewDC )
@@ -1328,7 +1328,7 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
 {
     SalData*    pSalData = GetSalData();
     WinSalPrinter* pPrinter;
-    sal_Bool        bWhile = TRUE;
+    bool        bWhile = TRUE;
     int         i = 0;
 
     do
@@ -1364,7 +1364,7 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
     return TRUE;
 }
 
-static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, sal_Bool bCollate )
+static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, bool bCollate )
 {
     LPDEVMODEW pNewDevMode = pDevMode;
     if ( pDevMode && (nCopies > 1) )
@@ -1509,7 +1509,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
 
     // As the Telocom Balloon Fax driver tends to send messages repeatedly
     // we try to process first all, and then insert a dummy message
-    sal_Bool bWhile = TRUE;
+    bool bWhile = TRUE;
     int  i = 0;
     do
     {
@@ -1669,7 +1669,7 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
     }
 }
 
-SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData )
+SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobData )
 {
     if( ! isValid() || mhDC == 0 )
         return NULL;

@@ -790,7 +790,7 @@ bool Dialog::Close()
 
     if ( IsInExecute() )
     {
-        EndDialog( sal_False );
+        EndDialog( false );
         mbInClose = false;
         return true;
     }
@@ -1078,7 +1078,7 @@ void Dialog::EndAllDialogs( Window* pParent )
      pTempModDialog = pModDialog->mpPrevExecuteDlg;
      if( !pParent || ( pParent && pParent->IsWindowOrChild( pModDialog, true ) ) )
      {
-        pModDialog->EndDialog( sal_False );
+        pModDialog->EndDialog( false );
         pModDialog->PostUserEvent( Link() );
      }
      pModDialog = pTempModDialog;

@@ -291,7 +291,7 @@ void ScViewFunctionSet::SetAnchorFlag( bool bSet )
     bAnchor = bSet;
 }
 
-bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* bDontSelectAtCursor */ )
+bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
@@ -791,7 +791,7 @@ void ScHeaderFunctionSet::DestroyAnchor()
     bAnchor = false;
 }
 
-bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* bDontSelectAtCursor */ )
+bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {

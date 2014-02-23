@@ -2504,7 +2504,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             Rectangle   aPaintRect = aPaintRegion.GetBoundRect();
 
             // - RTL - re-mirror paint rect and region at this window
-            if( ImplIsAntiparallel() )
+            if( IsAntiparallel() )
             {
                 ReMirror( aPaintRect );
                 ReMirror( aPaintRegion );
@@ -3023,7 +3023,7 @@ void Window::ImplScroll( const Rectangle& rRect,
     OutputDevice *pOutDev = GetOutDev();
 
     // --- RTL --- check if this window requires special action
-    bool bReMirror = ( ImplIsAntiparallel() );
+    bool bReMirror = ( IsAntiparallel() );
 
     Rectangle aRectMirror( rRect );
     if( bReMirror )
@@ -3376,7 +3376,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             // #106948# always mirror our pos if our parent is not mirroring, even
             // if we are also not mirroring
             // --- RTL --- check if parent is in different coordinates
-            if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+            if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->IsAntiparallel() )
             {
                 // --- RTL --- (re-mirror at parent window)
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
@@ -3386,7 +3386,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             */
             if( bnXRecycled )
             {
-                if( ImplIsAntiparallel() )
+                if( IsAntiparallel() )
                 {
                     aPtDev.X() = mpWindowImpl->mnAbsScreenX;
                     nOrgX = mpWindowImpl->maPos.X();
@@ -8153,7 +8153,7 @@ void Window::SetWindowPeer( ::com::sun::star::uno::Reference< ::com::sun::star::
     {
         UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
         if ( pWrapper )
-            mpWindowImpl->mxWindowPeer = pWrapper->GetWindowInterface( this, sal_True );
+            mpWindowImpl->mxWindowPeer = pWrapper->GetWindowInterface( this, true );
     }
     return mpWindowImpl->mxWindowPeer;
 }

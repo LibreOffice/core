@@ -97,7 +97,7 @@ private:
     FontAttrMap     aFontAttributes;
     OUString        aCacheFileName;
     OUString        aBaseURL;
-    sal_Bool        bModified;
+    bool        bModified;
 
 protected:
     OUString OptimizeURL( const OUString& rURL ) const;

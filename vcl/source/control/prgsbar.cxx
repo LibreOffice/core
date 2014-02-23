@@ -196,7 +196,7 @@ void ProgressBar::StateChanged( StateChangedType nType )
     if ( (nType == STATE_CHANGE_ZOOM) ||
          (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else

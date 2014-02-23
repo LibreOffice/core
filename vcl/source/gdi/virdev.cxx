@@ -409,7 +409,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mnDPIScaleFactor = 1;
 
     DisableOutput();  // prevent output on reference device
-    mbScreenComp = sal_False;
+    mbScreenComp = false;
 
     // invalidate currently selected fonts
     mbInitFont = true;

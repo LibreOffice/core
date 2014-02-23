@@ -356,7 +356,7 @@ public:
 
     // --------------------------------------------------------------
     // MT: Remove these methods too, ExtDateFormat should be enough!
-    //     What should happen if using DDMMYYYY, but ShowCentury=sal_False?
+    //     What should happen if using DDMMYYYY, but ShowCentury=false?
     // --------------------------------------------------------------
     void                    SetLongFormat( bool bLong );
     bool                    IsLongFormat() const { return mbLongFormat; }

@@ -179,7 +179,7 @@ void ImplInitSalGDI()
         HBITMAP     hBmpOld = (HBITMAP) ::SelectObject( hMemDC, hMemBmp );
         HBRUSH      hMemBrush = ::CreateSolidBrush( PALETTERGB( 175, 171, 169 ) );
         HBRUSH      hBrushOld = (HBRUSH) ::SelectObject( hMemDC, hMemBrush );
-        sal_Bool        bDither16 = TRUE;
+        bool        bDither16 = TRUE;
 
         ::PatBlt( hMemDC, 0, 0, 8, 8, PATCOPY );
         const COLORREF aCol( ::GetPixel( hMemDC, 0, 0 ) );
@@ -1097,7 +1097,7 @@ void WinSalGraphics::SetLineColor( SalColor nSalColor )
                                         SALCOLOR_GREEN( nSalColor ),
                                         SALCOLOR_BLUE( nSalColor ) );
     HPEN        hNewPen = 0;
-    sal_Bool        bStockPen = FALSE;
+    bool        bStockPen = FALSE;
 
     // search for stock pen (only screen, because printer have problems,
     // when we use stock objects)
@@ -1181,7 +1181,7 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
     BYTE        nBlue       = SALCOLOR_BLUE( nSalColor );
     COLORREF    nBrushColor = PALETTERGB( nRed, nGreen, nBlue );
     HBRUSH      hNewBrush   = 0;
-    sal_Bool        bStockBrush = FALSE;
+    bool        bStockBrush = FALSE;
 
     // search for stock brush (only screen, because printer have problems,
     // when we use stock objects)
@@ -1552,9 +1552,9 @@ bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPt
 
     ImplRenderPath( getHDC(), nPoints, pPtAry, pFlgAry );
 
-    return sal_True;
+    return true;
 #else
-    return sal_False;
+    return false;
 #endif
 }
 
@@ -1585,7 +1585,7 @@ bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtA
     sal_uInt32 nPoints_i32(nPoints);
     ImplPreparePolyDraw(true, 1, &nPoints_i32, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
 
-    sal_Bool bRet( sal_False );
+    bool bRet( false );
 
     if( BeginPath( getHDC() ) )
     {
@@ -1594,7 +1594,7 @@ bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtA
         if( EndPath( getHDC() ) )
         {
             if( StrokeAndFillPath( getHDC() ) )
-                bRet = sal_True;
+                bRet = true;
         }
     }
 
@@ -1606,7 +1606,7 @@ bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtA
 
     return bRet;
 #else
-    return sal_False;
+    return false;
 #endif
 }
 
@@ -1642,7 +1642,7 @@ bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* 
 
     ImplPreparePolyDraw(true, nPoly, pPoints, pPtAry, pFlgAry, pWinPointAry, pWinFlagAry);
 
-    sal_Bool bRet( sal_False );
+    bool bRet( false );
 
     if( BeginPath( getHDC() ) )
     {
@@ -1651,7 +1651,7 @@ bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* 
         if( EndPath( getHDC() ) )
         {
             if( StrokeAndFillPath( getHDC() ) )
-                bRet = sal_True;
+                bRet = true;
         }
     }
 
@@ -1663,7 +1663,7 @@ bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* 
 
     return bRet;
 #else
-    return sal_False;
+    return false;
 #endif
 }
 
@@ -1688,9 +1688,9 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uLong nComp, sal_u
     return NULL;
 }
 
-static sal_Bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
+static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 {
-    sal_Bool    bRetValue = FALSE;
+    bool    bRetValue = FALSE;
     BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nSize, 14 );
     if ( pDest )
     {
@@ -1705,9 +1705,9 @@ static sal_Bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSiz
         for ( i = 0; ( i < 4 ) && nSizeLeft; i++ )
         {
             int     nDivision = 1;
-            sal_Bool    bDivision = FALSE;
-            sal_Bool    bNegative = FALSE;
-            sal_Bool    bValid = TRUE;
+            bool    bDivision = FALSE;
+            bool    bNegative = FALSE;
+            bool    bValid = TRUE;
 
             while ( ( --nSizeLeft ) && ( ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) ) pDest++;
             BYTE nByte = *pDest;
@@ -1752,7 +1752,7 @@ static sal_Bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSiz
 
 bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
-    sal_Bool bRetValue = FALSE;
+    bool bRetValue = FALSE;
 
     if ( mbPrinter )
     {

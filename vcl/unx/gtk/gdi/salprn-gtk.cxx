@@ -949,7 +949,7 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
         aFilterData[0].Name = "PageLayout";
         aFilterData[0].Value <<= sal_Int32(0);
         aFilterData[1].Name = "FirstPageOnLeft";
-        aFilterData[1].Value <<= sal_False;
+        aFilterData[1].Value <<= false;
 
 
         const gchar *pStr = gtk_print_settings_get(pSettings, GTK_PRINT_SETTINGS_PRINT_PAGES);

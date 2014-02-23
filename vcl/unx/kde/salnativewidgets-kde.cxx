@@ -1232,7 +1232,7 @@ class KDESalGraphics : public X11SalGraphics
     @param nPart
     Specification of the widget's part if it consists of more than one.
 
-    @return sal_True if the platform supports native drawing of the widget nType
+    @return true if the platform supports native drawing of the widget nType
     defined by nPart.
 */
 bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
@@ -1266,7 +1266,7 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 
 /** Test whether the position is in the native widget.
 
-    If the return value is sal_True, bIsInside contains information whether
+    If the return value is true, bIsInside contains information whether
     aPos was or was not inside the native widget specified by the
     nType/nPart combination.
 */
@@ -1506,7 +1506,7 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
 
 /** Check if the bounding regions match.
 
-    If the return value is sal_True, rNativeBoundingRegion
+    If the return value is true, rNativeBoundingRegion
     contains the true bounding region covered by the control
     including any adornment, while rNativeContentRegion contains the area
     within the control that can be safely drawn into without drawing over
@@ -1724,7 +1724,7 @@ KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nStyle ) :
 {
 }
 
-void KDESalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
+void KDESalFrame::Show( bool bVisible, bool bNoActivate )
 {
     if ( !GetParent() && ! (GetStyle() & SAL_FRAME_STYLE_INTRO) )
     {

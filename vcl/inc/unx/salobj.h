@@ -67,7 +67,7 @@ public:
     bool            mbVisible;
 
     static VCL_DLLPUBLIC bool Dispatch( XEvent* pEvent );
-    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = sal_True );
+    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
 
     X11SalObject();
     virtual ~X11SalObject();
@@ -80,7 +80,7 @@ public:
     virtual void                    EndSetClipRegion();
 
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( sal_Bool bVisible );
+    virtual void                    Show( bool bVisible );
     virtual void                    GrabFocus();
 
     virtual const SystemEnvData*    GetSystemData() const;

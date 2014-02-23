@@ -126,7 +126,7 @@ public:
         @param eConversion
         The format this bitmap should be converted to.
 
-        @return sal_True, if the conversion was completed successfully.
+        @return true, if the conversion was completed successfully.
      */
     bool                Convert( BmpConversion eConversion );
 
@@ -138,7 +138,7 @@ public:
         @param eReduce
         Algorithm to use for color reduction
 
-        @return sal_True, if the color reduction operation was completed successfully.
+        @return true, if the color reduction operation was completed successfully.
      */
     bool                ReduceColors( sal_uInt16 nNewColorCount,
                                       BmpReduce eReduce = BMP_REDUCE_SIMPLE );
@@ -164,9 +164,9 @@ public:
         dimension, i.e. negative left,top rectangle coordinates or
         exceeding width or height is ignored.
 
-        @return sal_True, if cropping was performed successfully. If
+        @return true, if cropping was performed successfully. If
         nothing had to be cropped, because e.g. the crop rectangle
-        included the bitmap, sal_False is returned, too!
+        included the bitmap, false is returned, too!
      */
     bool                Crop( const Rectangle& rRectPixel );
 
@@ -184,7 +184,7 @@ public:
         @param bExpandTransparent
         Whether to expand the transparency color or not.
 
-        @return sal_True, if padding was performed successfully. sal_False is
+        @return true, if padding was performed successfully. false is
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
@@ -209,7 +209,7 @@ public:
         equal to the object this method is called on, copying takes
         place within the same bitmap.
 
-        @return sal_True, if the operation completed successfully. sal_False
+        @return true, if the operation completed successfully. false
         is not only returned when the operation failed, but also if
         nothing had to be done, e.g. because one of the rectangles are
         empty.
@@ -224,13 +224,13 @@ public:
         Color value to use for filling. Set the transparency part of
         the color to fill the mask.
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Erase( const Color& rFillColor );
 
     /** Perform the Invert operation on every pixel
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Invert();
 
@@ -239,7 +239,7 @@ public:
         @param nMirrorFlags
         About which axis (horizontal, vertical, or both) to mirror
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Mirror( sal_uLong nMirrorFlags );
 
@@ -251,7 +251,7 @@ public:
         @param nScaleFlag
         The algorithm to be used for scaling
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
 
@@ -266,7 +266,7 @@ public:
         @param nScaleFlag
         The algorithm to be used for scaling
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
 
@@ -281,7 +281,7 @@ public:
         in. The empty spaces around that rotated original bitmap are
         then filled with this color.
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Rotate( long nAngle10, const Color& rFillColor );
 
@@ -298,7 +298,7 @@ public:
         rSearchColor and the individual pixel values, such that the
         corresponding pixel is still regarded a match.
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
 
@@ -318,7 +318,7 @@ public:
         pSearchColor colors and the individual pixel values, such that
         the corresponding pixel is still regarded a match.
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Replace( const Color* pSearchColors, const Color* pReplaceColors,
                                  sal_uLong nColorCount, const sal_uLong* pTols = NULL );
@@ -346,9 +346,9 @@ public:
         (0.0,10.0]. Values outside this range are regarded as 1.0.
 
         @param bInvert
-        If sal_True, invert the channel values with the logical 'not' operator
+        If true, invert the channel values with the logical 'not' operator
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Adjust( short nLuminancePercent = 0,
                                 short nContrastPercent = 0,
@@ -369,7 +369,7 @@ public:
         @param pProgress
         A callback for showing the progress of the vectorization
 
-        @return sal_True, if the operation was completed successfully.
+        @return true, if the operation was completed successfully.
      */
     bool                Filter( BmpFilter eFilter,
                                 const BmpFilterParam* pFilterParam = NULL,

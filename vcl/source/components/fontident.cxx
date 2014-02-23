@@ -56,7 +56,7 @@ FontIdentificator() {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
     // XInitialization
@@ -106,8 +106,8 @@ Any SAL_CALL FontIdentificator::getMaterial() throw(RuntimeException)
     aFD.Underline           = 0;
     aFD.Strikeout           = 0;
     aFD.Orientation         = 0;
-    aFD.Kerning             = sal_False;
-    aFD.WordLineMode        = sal_False;
+    aFD.Kerning             = false;
+    aFD.WordLineMode        = false;
     aFD.Type                = 0;
     switch( m_aFont.GetFamily() )
     {

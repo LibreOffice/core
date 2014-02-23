@@ -115,9 +115,9 @@ GDIMetaFile::GDIMetaFile() :
     pPrev       ( NULL ),
     pNext       ( NULL ),
     pOutDev     ( NULL ),
-    bPause      ( sal_False ),
-    bRecord     ( sal_False ),
-    bUseCanvas  ( sal_False )
+    bPause      ( false ),
+    bRecord     ( false ),
+    bUseCanvas  ( false )
 {
 }
 
@@ -128,8 +128,8 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     pPrev           ( rMtf.pPrev ),
     pNext           ( rMtf.pNext ),
     pOutDev         ( NULL ),
-    bPause          ( sal_False ),
-    bRecord         ( sal_False ),
+    bPause          ( false ),
+    bRecord         ( false ),
     bUseCanvas      ( rMtf.bUseCanvas )
 {
     // Increment RefCount of MetaActions
@@ -144,7 +144,7 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
         Record( rMtf.pOutDev );
 
         if ( rMtf.bPause )
-            Pause( sal_True );
+            Pause( true );
     }
 }
 
@@ -208,8 +208,8 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
         pPrev = rMtf.pPrev;
         pNext = rMtf.pNext;
         pOutDev = NULL;
-        bPause = sal_False;
-        bRecord = sal_False;
+        bPause = false;
+        bRecord = false;
         bUseCanvas = rMtf.bUseCanvas;
 
         if( rMtf.bRecord )
@@ -217,7 +217,7 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
             Record( rMtf.pOutDev );
 
             if( rMtf.bPause )
-                Pause( sal_True );
+                Pause( true );
         }
     }
 
@@ -227,21 +227,21 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
 bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 {
     const size_t    nObjCount = aList.size();
-    bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( this == &rMtf )
-        bRet = sal_True;
+        bRet = true;
     else if( rMtf.GetActionSize()  == nObjCount &&
              rMtf.GetPrefSize()    == aPrefSize &&
              rMtf.GetPrefMapMode() == aPrefMapMode )
     {
-        bRet = sal_True;
+        bRet = true;
 
         for( size_t n = 0; n < nObjCount; n++ )
         {
             if( aList[ n ] != rMtf.GetAction( n ) )
             {
-                bRet = sal_False;
+                bRet = false;
                 break;
             }
         }
@@ -305,8 +305,8 @@ void GDIMetaFile::Record( OutputDevice* pOut )
 
     nCurrentActionElement = aList.empty() ? 0 : (aList.size() - 1);
     pOutDev = pOut;
-    bRecord = sal_True;
-    Linker( pOut, sal_True );
+    bRecord = true;
+    Linker( pOut, true );
 }
 
 void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
@@ -596,12 +596,12 @@ void GDIMetaFile::Pause( bool _bPause )
         if( _bPause )
         {
             if( !bPause )
-                Linker( pOutDev, sal_False );
+                Linker( pOutDev, false );
         }
         else
         {
             if( bPause )
-                Linker( pOutDev, sal_True );
+                Linker( pOutDev, true );
         }
 
         bPause = _bPause;
@@ -612,12 +612,12 @@ void GDIMetaFile::Stop()
 {
     if( bRecord )
     {
-        bRecord = sal_False;
+        bRecord = false;
 
         if( !bPause )
-            Linker( pOutDev, sal_False );
+            Linker( pOutDev, false );
         else
-            bPause = sal_False;
+            bPause = false;
     }
 }
 
@@ -707,10 +707,10 @@ bool GDIMetaFile::Mirror( sal_uLong nMirrorFlags )
         Scale( fScaleX, fScaleY );
         Move( nMoveX, nMoveY );
         SetPrefSize( aOldPrefSize );
-        bRet = sal_True;
+        bRet = true;
     }
     else
-        bRet = sal_False;
+        bRet = false;
 
     return bRet;
 }
@@ -843,7 +843,7 @@ void GDIMetaFile::Clip( const Rectangle& i_rClipRect )
             Region aNewReg( aCurRect );
             if( pOldAct->IsClipping() )
                 aNewReg.Intersect( pOldAct->GetRegion() );
-            MetaClipRegionAction* pNewAct = new MetaClipRegionAction( aNewReg, sal_True );
+            MetaClipRegionAction* pNewAct = new MetaClipRegionAction( aNewReg, true );
             aList[ nCurrentActionElement ] = pNewAct;
             pOldAct->Delete();
         }
@@ -1279,7 +1279,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     MetaClipRegionAction* pAct = (MetaClipRegionAction*) pAction;
 
                     if( pAct->IsClipping() && pAct->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
-                        aMtf.AddAction( new MetaClipRegionAction( Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), sal_True ) );
+                        aMtf.AddAction( new MetaClipRegionAction( Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), true ) );
                     else
                     {
                         pAction->Duplicate();
@@ -1938,7 +1938,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                 if( !pAct->IsSetting() )
                     pAct->Duplicate();
                 else
-                    pAct = new MetaLineColorAction( pFncCol( pAct->GetColor(), pColParam ), sal_True );
+                    pAct = new MetaLineColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
             }
@@ -1951,7 +1951,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                 if( !pAct->IsSetting() )
                     pAct->Duplicate();
                 else
-                    pAct = new MetaFillColorAction( pFncCol( pAct->GetColor(), pColParam ), sal_True );
+                    pAct = new MetaFillColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
             }
@@ -1971,7 +1971,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                 if( !pAct->IsSetting() )
                     pAct->Duplicate();
                 else
-                    pAct = new MetaTextFillColorAction( pFncCol( pAct->GetColor(), pColParam ), sal_True );
+                    pAct = new MetaTextFillColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
             }
@@ -1984,7 +1984,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                 if( !pAct->IsSetting() )
                     pAct->Duplicate();
                 else
-                    pAct = new MetaTextLineColorAction( pFncCol( pAct->GetColor(), pColParam ), sal_True );
+                    pAct = new MetaTextLineColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
             }
@@ -1997,7 +1997,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                 if( !pAct->IsSetting() )
                     pAct->Duplicate();
                 else
-                    pAct = new MetaOverlineColorAction( pFncCol( pAct->GetColor(), pColParam ), sal_True );
+                    pAct = new MetaOverlineColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
             }
@@ -2771,7 +2771,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
                     {
                         MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
                         if ( pCommentAct->GetComment() == "EMF_PLUS" )
-                            rGDIMetaFile.UseCanvas( sal_True );
+                            rGDIMetaFile.UseCanvas( true );
                     }
                     rGDIMetaFile.AddAction( pAction );
                 }

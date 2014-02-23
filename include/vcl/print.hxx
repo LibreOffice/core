@@ -648,7 +648,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                             const OUString& i_rProperty,
                                                             const css::uno::Sequence< OUString >& i_rChoices,
                                                             sal_Int32 i_nValue,
-                                                            const css::uno::Sequence< sal_Bool >& i_rDisabledChoices = css::uno::Sequence< sal_Bool >(),
+                                                            const css::uno::Sequence< bool >& i_rDisabledChoices = css::uno::Sequence< bool >(),
                                                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // show a set of choices as radio buttons
@@ -658,7 +658,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                             const OUString& i_rProperty,
                                                             const css::uno::Sequence< OUString >& i_rChoices,
                                                             sal_Int32 i_nValue,
-                                                            const css::uno::Sequence< sal_Bool >& i_rDisabledChoices = css::uno::Sequence< sal_Bool >(),
+                                                            const css::uno::Sequence< bool >& i_rDisabledChoices = css::uno::Sequence< bool >(),
                                                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
 

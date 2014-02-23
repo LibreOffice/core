@@ -136,6 +136,7 @@ namespace x11 {
 
         // XDragSource
         virtual sal_Bool    SAL_CALL isDragImageSupported() throw();
+
         virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw();
         virtual void        SAL_CALL startDrag(
             const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,

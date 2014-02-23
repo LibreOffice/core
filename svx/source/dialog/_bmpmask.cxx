@@ -566,7 +566,7 @@ void SvxBmpMask::onSelect( MaskSet* pSet )
 
 
 
-sal_Bool SvxBmpMask::Close()
+bool SvxBmpMask::Close()
 {
     SfxBoolItem aItem2( SID_BMPMASK_PIPETTE, false );
     GetBindings().GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aItem2, 0L );

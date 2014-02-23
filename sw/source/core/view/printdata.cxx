@@ -289,19 +289,19 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create a choice for the content to create
     OUString aPrintRangeName( "PrintContent" );
     uno::Sequence< OUString > aChoices( 3 );
-    uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
+    uno::Sequence< bool > aChoicesDisabled( 3 );
     uno::Sequence< OUString > aHelpIds( 3 );
     uno::Sequence< OUString > aWidgetIds( 3 );
     aChoices[0] = aLocalizedStrings.GetString( 27 );
-    aChoicesDisabled[0] = sal_False;
+    aChoicesDisabled[0] = false;
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
     aWidgetIds[0] = "printallpages";
     aChoices[1] = aLocalizedStrings.GetString( 28 );
-    aChoicesDisabled[1] = sal_False;
+    aChoicesDisabled[1] = false;
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
     aWidgetIds[1] = "printpages";
     aChoices[2] = aLocalizedStrings.GetString( 29 );
-    aChoicesDisabled[2] = sal_Bool(! bHasSelection);
+    aChoicesDisabled[2] = !bHasSelection;
     aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
     aWidgetIds[2] = "printselection";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
@@ -338,7 +338,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            OUString( "PrintAnnotationMode" ),
                                                            aChoices,
                                                            nPrintPostIts,
-                                                           uno::Sequence< sal_Bool >(),
+                                                           uno::Sequence< bool >(),
                                                            aAnnotOpt);
 
     // create subsection for Page settings
@@ -403,7 +403,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                                OUString( "PrintProspectRTL" ),
                                                                aBRTLChoices,
                                                                nBRTLChoice,
-                                                               uno::Sequence< sal_Bool >(),
+                                                               uno::Sequence< bool >(),
                                                                aBrochureRTLOpt);
     }
 

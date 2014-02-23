@@ -290,8 +290,8 @@ namespace sfx2
         SfxDockingWindow::StateChanged( i_nType );
     }
 
-
-    void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, sal_Bool i_bFloatMode )
+    //------------------------------------------------------------------------------------------------------------------
+    void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, bool i_bFloatMode )
     {
         SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
 

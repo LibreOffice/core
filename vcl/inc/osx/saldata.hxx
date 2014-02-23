@@ -111,7 +111,7 @@ public:
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
 inline SalData *GetSalData() { return ImplGetSVData()->mpSalData; }
 
-sal_Bool ImplSalYieldMutexTryToAcquire();
+bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 

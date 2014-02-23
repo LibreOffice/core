@@ -1785,7 +1785,7 @@ void OKButton::Click()
             if ( pParent->IsDialog() )
             {
                 if ( ((Dialog*)pParent)->IsInExecute() )
-                    ((Dialog*)pParent)->EndDialog( sal_True );
+                    ((Dialog*)pParent)->EndDialog( true );
                 // prevent recursive calls
                 else if ( !((Dialog*)pParent)->IsInClose() )
                 {
@@ -1850,7 +1850,7 @@ void CancelButton::Click()
             if ( pParent->IsDialog() )
             {
                 if ( ((Dialog*)pParent)->IsInExecute() )
-                    ((Dialog*)pParent)->EndDialog( sal_False );
+                    ((Dialog*)pParent)->EndDialog( false );
                 // prevent recursive calls
                 else if ( !((Dialog*)pParent)->IsInClose() )
                 {

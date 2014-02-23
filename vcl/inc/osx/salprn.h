@@ -91,15 +91,15 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // so let's make AquaSalPrinter just a forwarder to AquaSalInfoPrinter
     // and concentrate the real work in one class
     // implement pull model print system
-    sal_Bool                        StartJob( const OUString* i_pFileName,
+    bool                        StartJob( const OUString* i_pFileName,
                                           const OUString& rJobName,
                                           const OUString& i_rAppName,
                                           ImplJobSetup* i_pSetupData,
                                           vcl::PrinterController& i_rController );
-    sal_Bool                        EndJob();
-    sal_Bool                        AbortJob();
-    SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData );
-    sal_Bool                        EndPage();
+    bool                        EndJob();
+    bool                        AbortJob();
+    SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData );
+    bool                        EndPage();
     sal_uLong                       GetErrorCode() const;
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
@@ -143,7 +143,7 @@ class AquaSalPrinter : public SalPrinter
 
     virtual bool                    EndJob();
     virtual bool                    AbortJob();
-    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData );
+    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData );
     virtual bool                    EndPage();
     virtual sal_uLong                   GetErrorCode();
 

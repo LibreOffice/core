@@ -549,7 +549,7 @@ void GtkSalGraphics::copyBits( const SalTwoRect& rPosAry,
 /*
  * IsNativeControlSupported()
  *
- *  Returns sal_True if the platform supports native
+ *  Returns true if the platform supports native
  *  drawing of the control defined by nPart
  */
 bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
@@ -658,7 +658,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 /*
  * HitTestNativeControl()
  *
- *  bIsInside is set to sal_True if aPos is contained within the
+ *  bIsInside is set to true if aPos is contained within the
  *  given part of the control, whose bounding region is
  *  given by rControlRegion (in VCL frame coordinates).
  *
@@ -967,7 +967,7 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
 /*
  * GetNativeControlRegion()
  *
- *  If the return value is sal_True, rNativeBoundingRegion
+ *  If the return value is true, rNativeBoundingRegion
  *  contains the true bounding region covered by the control
  *  including any adornment, while rNativeContentRegion contains the area
  *  within the control that can be safely drawn into without drawing over
@@ -1662,7 +1662,7 @@ bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
     // intermediate states between active/inactive. Let's hope that
     // GtkToggleButtone stays binary compatible.
     if (!isChecked)
-        GTK_TOGGLE_BUTTON(gWidgetData[m_nXScreen].gRadioWidgetSibling)->active = sal_True;
+        GTK_TOGGLE_BUTTON(gWidgetData[m_nXScreen].gRadioWidgetSibling)->active = true;
     GTK_TOGGLE_BUTTON(gWidgetData[m_nXScreen].gRadioWidget)->active = isChecked;
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
@@ -2004,7 +2004,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         // ----------------- ARROW 1
         NWCalcArrowRect( button11BoundRect, arrowRect );
         gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
-                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button1Type, sal_True,
+                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button1Type, true,
                          x+hShim+arrowRect.Left(), y+vShim+arrowRect.Top(),
                          arrowRect.GetWidth(), arrowRect.GetHeight() );
     }
@@ -2020,7 +2020,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         // ----------------- ARROW 1
         NWCalcArrowRect( button12BoundRect, arrowRect );
         gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
-                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button2Type, sal_True,
+                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button2Type, true,
                          x+hShim+arrowRect.Left(), y+vShim+arrowRect.Top(),
                          arrowRect.GetWidth(), arrowRect.GetHeight() );
     }
@@ -2037,7 +2037,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         // ----------------- ARROW 2
         NWCalcArrowRect( button21BoundRect, arrowRect );
         gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
-                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button1Type, sal_True,
+                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button1Type, true,
                          x+hShim+arrowRect.Left(), y+vShim+arrowRect.Top(),
                          arrowRect.GetWidth(), arrowRect.GetHeight() );
     }
@@ -2053,7 +2053,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         // ----------------- ARROW 2
         NWCalcArrowRect( button22BoundRect, arrowRect );
         gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
-                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button2Type, sal_True,
+                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button2Type, true,
                          x+hShim+arrowRect.Left(), y+vShim+arrowRect.Top(),
                          arrowRect.GetWidth(), arrowRect.GetHeight() );
     }
@@ -2482,7 +2482,7 @@ static void NWPaintOneSpinButton( SalX11Screen nScreen,
         arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 - 1);
 
     gtk_paint_arrow( gWidgetData[nScreen].gSpinButtonWidget->style, pixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[nScreen].gSpinButtonWidget,
-            "spinbutton", (nPart == PART_BUTTON_UP) ? GTK_ARROW_UP : GTK_ARROW_DOWN, sal_True,
+            "spinbutton", (nPart == PART_BUTTON_UP) ? GTK_ARROW_UP : GTK_ARROW_DOWN, true,
             (arrowRect.Left() - aAreaRect.Left()), (arrowRect.Top() - aAreaRect.Top()),
             arrowRect.GetWidth(), arrowRect.GetHeight() );
 }
@@ -2560,7 +2560,7 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
                        buttonRect.GetWidth(), buttonRect.GetHeight() );
 
         gtk_paint_arrow( gWidgetData[m_nXScreen].gArrowWidget->style, gdkDrawable, stateType, shadowType,
-                         &clipRect, gWidgetData[m_nXScreen].gArrowWidget, "arrow", GTK_ARROW_DOWN, sal_True,
+                         &clipRect, gWidgetData[m_nXScreen].gArrowWidget, "arrow", GTK_ARROW_DOWN, true,
                          x+(arrowRect.Left() - pixmapRect.Left()), y+(arrowRect.Top() - pixmapRect.Top()),
                          arrowRect.GetWidth(), arrowRect.GetHeight() );
     }

@@ -431,7 +431,7 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
         else if ( maDropDownRect.IsInside( rMEvt.GetPosPixel() ) )
         {
             // put DropDownButton to the right
-            mbInDropDown = ShowDropDown( mbInDropDown ? sal_False : sal_True );
+            mbInDropDown = ShowDropDown( mbInDropDown ? false : true );
             Paint( Rectangle( Point(), GetOutputSizePixel() ) );
         }
 
@@ -553,7 +553,7 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
                     }
                     else if ( ( nMod == KEY_MOD2 ) && !mbInDropDown && ( GetStyle() & WB_DROPDOWN ) )
                     {
-                        mbInDropDown = ShowDropDown( sal_True );
+                        mbInDropDown = ShowDropDown( true );
                         Paint( Rectangle( Point(), GetOutputSizePixel() ) );
                         nDone = true;
                     }
@@ -957,7 +957,7 @@ void SpinField::EndDropDown()
 
 
 
-bool SpinField::ShowDropDown( sal_Bool )
+bool SpinField::ShowDropDown( bool )
 {
     return false;
 }

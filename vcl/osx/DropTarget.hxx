@@ -103,8 +103,8 @@ public:
     throw(com::sun::star::uno::RuntimeException);
 
   // Default is not active
-  virtual sal_Bool SAL_CALL isActive() throw(com::sun::star::uno::RuntimeException);
-  virtual void SAL_CALL setActive(sal_Bool isActive) throw(com::sun::star::uno::RuntimeException);
+  virtual bool SAL_CALL isActive() throw(com::sun::star::uno::RuntimeException);
+  virtual void SAL_CALL setActive(bool isActive) throw(com::sun::star::uno::RuntimeException);
   virtual sal_Int8 SAL_CALL getDefaultActions() throw(com::sun::star::uno::RuntimeException);
   virtual void SAL_CALL setDefaultActions(sal_Int8 actions) throw(com::sun::star::uno::RuntimeException);
 
@@ -115,11 +115,11 @@ public:
   // XDropTargetDragContext
   virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) throw (com::sun::star::uno::RuntimeException);
   virtual void SAL_CALL rejectDrop() throw (com::sun::star::uno::RuntimeException);
-  virtual void SAL_CALL dropComplete(sal_Bool success) throw (com::sun::star::uno::RuntimeException);
+  virtual void SAL_CALL dropComplete(bool success) throw (com::sun::star::uno::RuntimeException);
 
   // XServiceInfo
   virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException);
-  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (com::sun::star::uno::RuntimeException);
+  virtual bool SAL_CALL supportsService(const OUString& ServiceName) throw (com::sun::star::uno::RuntimeException);
   virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
 
   // NSDraggingDestination protocol functions

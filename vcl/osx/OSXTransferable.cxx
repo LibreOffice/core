@@ -114,14 +114,14 @@ Sequence< DataFlavor > SAL_CALL OSXTransferable::getTransferDataFlavors(  )
 }
 
 
-sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
+bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
     throw( RuntimeException )
 {
     for (sal_Int32 i = 0; i < mFlavorList.getLength(); i++)
       if (compareDataFlavors(aFlavor, mFlavorList[i]))
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 

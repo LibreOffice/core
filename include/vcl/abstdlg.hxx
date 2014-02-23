@@ -30,7 +30,6 @@ class VCL_DLLPUBLIC VclAbstractDialog
 {
 public:
     virtual short           Execute() = 0;
-    //virtual void          Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 ) = 0;
     virtual                 ~VclAbstractDialog();
 };
 

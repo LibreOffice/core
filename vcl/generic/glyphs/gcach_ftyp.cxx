@@ -1138,7 +1138,7 @@ bool ServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
             ((FT_OutlineGlyphRec*)pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
         FT_Render_Mode nRenderMode = FT_RENDER_MODE_MONO;
 
-        rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, sal_True );
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, true );
         if( rc != FT_Err_Ok )
         {
             FT_Done_Glyph( pGlyphFT );
@@ -1261,7 +1261,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     bool bEmbedded = (pGlyphFT->format == FT_GLYPH_FORMAT_BITMAP);
     if( !bEmbedded )
     {
-        rc = FT_Glyph_To_Bitmap( &pGlyphFT, FT_RENDER_MODE_NORMAL, NULL, sal_True );
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, FT_RENDER_MODE_NORMAL, NULL, true );
         if( rc != FT_Err_Ok )
         {
             FT_Done_Glyph( pGlyphFT );

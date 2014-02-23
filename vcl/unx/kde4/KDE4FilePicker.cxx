@@ -144,8 +144,8 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
              this, SLOT( executeSlot() ), Qt::BlockingQueuedConnection );
 
     // XFilePicker functions
-    connect( this, SIGNAL( setMultiSelectionModeSignal( sal_Bool ) ),
-             this, SLOT( setMultiSelectionModeSlot( sal_Bool ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( setMultiSelectionModeSignal( bool ) ),
+             this, SLOT( setMultiSelectionModeSlot( bool ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( setDefaultNameSignal( const OUString & ) ),
              this, SLOT( setDefaultNameSlot( const OUString & ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( setDisplayDirectorySignal( const OUString & ) ),
@@ -172,8 +172,8 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
              this, SLOT( setValueSlot( sal_Int16, sal_Int16, const ::com::sun::star::uno::Any & ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( getValueSignal( sal_Int16, sal_Int16 ) ),
              this, SLOT( getValueSlot( sal_Int16, sal_Int16 ) ), Qt::BlockingQueuedConnection );
-    connect( this, SIGNAL( enableControlSignal( sal_Int16, sal_Bool ) ),
-             this, SLOT( enableControlSlot( sal_Int16, sal_Bool ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( enableControlSignal( sal_Int16, bool ) ),
+             this, SLOT( enableControlSlot( sal_Int16, bool ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( setLabelSignal( sal_Int16, const OUString & ) ),
              this, SLOT( setLabelSlot( sal_Int16, const OUString & ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( getLabelSignal( sal_Int16 ) ),
@@ -276,7 +276,7 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     return ExecutableDialogResults::CANCEL;
 }
 
-void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
+void SAL_CALL KDE4FilePicker::setMultiSelectionMode( bool multiSelect )
     throw( uno::RuntimeException )
 {
     if( qApp->thread() != QThread::currentThread() ) {
@@ -485,7 +485,7 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nCont
     return res;
 }
 
-void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enable )
+void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, bool enable )
     throw( uno::RuntimeException )
 {
     if( qApp->thread() != QThread::currentThread() ) {
@@ -758,7 +758,7 @@ OUString SAL_CALL KDE4FilePicker::getImplementationName()
     return OUString( FILE_PICKER_IMPL_NAME );
 }
 
-sal_Bool SAL_CALL KDE4FilePicker::supportsService( const OUString& ServiceName )
+bool SAL_CALL KDE4FilePicker::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

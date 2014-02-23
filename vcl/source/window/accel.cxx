@@ -325,7 +325,7 @@ Accelerator::~Accelerator()
 
     // inform AccelManager about deleting the Accelerator
     if ( mpDel )
-        *mpDel = sal_True;
+        *mpDel = true;
 
     ImplDeleteData();
     delete mpData;

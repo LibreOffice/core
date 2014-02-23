@@ -177,7 +177,7 @@ sal_Int16 SAL_CALL UnxFilePicker::execute()
         : css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-void SAL_CALL UnxFilePicker::setMultiSelectionMode( sal_Bool bMode )
+void SAL_CALL UnxFilePicker::setMultiSelectionMode( bool bMode )
     throw( uno::RuntimeException )
 {
     checkFilePicker();
@@ -415,7 +415,7 @@ uno::Any SAL_CALL UnxFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nCont
     return uno::Any();
 }
 
-void SAL_CALL UnxFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bEnable )
+void SAL_CALL UnxFilePicker::enableControl( sal_Int16 nControlId, bool bEnable )
     throw( uno::RuntimeException )
 {
     checkFilePicker();
@@ -503,7 +503,7 @@ void SAL_CALL UnxFilePicker::setImage( sal_Int16 aImageFormat, const uno::Any &r
     m_pImpl->setImage( aImageFormat, aImage );
 }
 
-sal_Bool SAL_CALL UnxFilePicker::setShowState( sal_Bool bShowState )
+bool SAL_CALL UnxFilePicker::setShowState( bool bShowState )
     throw( uno::RuntimeException )
 {
     checkFilePicker();
@@ -512,7 +512,7 @@ sal_Bool SAL_CALL UnxFilePicker::setShowState( sal_Bool bShowState )
     return m_pImpl->setShowState( bShowState );
 }
 
-sal_Bool SAL_CALL UnxFilePicker::getShowState()
+bool SAL_CALL UnxFilePicker::getShowState()
     throw( uno::RuntimeException )
 {
     checkFilePicker();
@@ -653,7 +653,7 @@ OUString SAL_CALL UnxFilePicker::getImplementationName()
     return OUString( FILE_PICKER_IMPL_NAME );
 }
 
-sal_Bool SAL_CALL UnxFilePicker::supportsService( const OUString& ServiceName )
+bool SAL_CALL UnxFilePicker::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

@@ -32,7 +32,7 @@ extern "C"
 {
 
 #ifdef __MINGW32__
-sal_Bool WINAPI DllMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
+bool WINAPI DllMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 #else
 BOOL WINAPI _CRT_INIT( HINSTANCE hInst, DWORD nReason, LPVOID pReserved );
 
@@ -82,7 +82,7 @@ HBITMAP ImplLoadSalBitmap( int nId )
 
 
 
-sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
+bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 {
     DBG_ASSERT( aSalShlData.mhInst, "no DLL instance handle" );
 

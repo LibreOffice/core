@@ -88,8 +88,8 @@ public:
     virtual void                        DrawMenuBar();
 
     virtual void                        SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                        Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
-    virtual void                        Enable( sal_Bool bEnable );
+    virtual void                        Show( bool bVisible, bool bNoActivate = false );
+    virtual void                        Enable( bool bEnable );
     virtual void                        SetMinClientSize( long nWidth, long nHeight );
     virtual void                        SetMaxClientSize( long nWidth, long nHeight );
     virtual void                        SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
@@ -99,11 +99,11 @@ public:
     virtual void                        SetWindowState( const SalFrameState* pState );
     virtual bool                        GetWindowState( SalFrameState* pState );
     virtual void                        ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
-    virtual void                        StartPresentation( sal_Bool bStart );
-    virtual void                        SetAlwaysOnTop( sal_Bool bOnTop );
+    virtual void                        StartPresentation( bool bStart );
+    virtual void                        SetAlwaysOnTop( bool bOnTop );
     virtual void                        ToTop( sal_uInt16 nFlags );
     virtual void                        SetPointer( PointerStyle ePointerStyle );
-    virtual void                        CaptureMouse( sal_Bool bMouse );
+    virtual void                        CaptureMouse( bool bMouse );
     virtual void                        SetPointerPos( long nX, long nY );
     using SalFrame::Flush;
     virtual void                        Flush();

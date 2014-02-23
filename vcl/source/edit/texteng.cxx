@@ -751,7 +751,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, OUString(c) );
-        bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? sal_True : sal_False;
+        bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? true : false;
         InsertUndo( pNewUndo, bTryMerge );
     }
 
@@ -1694,9 +1694,9 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
     i18n::LineBreakUserOptions aUserOptions;
     aUserOptions.forbiddenBeginCharacters = ImpGetLocaleDataWrapper()->getForbiddenCharacters().beginLine;
     aUserOptions.forbiddenEndCharacters = ImpGetLocaleDataWrapper()->getForbiddenCharacters().endLine;
-    aUserOptions.applyForbiddenRules = sal_True;
-    aUserOptions.allowPunctuationOutsideMargin = sal_False;
-    aUserOptions.allowHyphenateEnglish = sal_False;
+    aUserOptions.applyForbiddenRules = true;
+    aUserOptions.allowPunctuationOutsideMargin = false;
+    aUserOptions.allowHyphenateEnglish = false;
 
     static const com::sun::star::lang::Locale aDefLocale;
     i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, aDefLocale, pLine->GetStart(), aHyphOptions, aUserOptions );
@@ -2152,7 +2152,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
 
 bool TextEngine::CreateLines( sal_uLong nPara )
 {
-    // sal_Bool: changing Height of Paragraph Yes/No - sal_True/sal_False
+    // bool: changing Height of Paragraph Yes/No - true/false
 
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
@@ -2491,7 +2491,7 @@ OUString TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )
         TextSelection aSel( rCursorPos );
         TextNode* pNode = mpDoc->GetNodes().GetObject(  rCursorPos.GetPara() );
         uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
-        i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rCursorPos.GetIndex(), GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+        i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rCursorPos.GetIndex(), GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
         aSel.GetStart().GetIndex() = (sal_uInt16)aBoundary.startPos;
         aSel.GetEnd().GetIndex() = (sal_uInt16)aBoundary.endPos;
         aWord = pNode->GetText().copy( aSel.GetStart().GetIndex(), aSel.GetEnd().GetIndex() - aSel.GetStart().GetIndex() );
@@ -2543,7 +2543,7 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
     SetUpdateMode( bUpdate );
     FormatAndUpdate( GetActiveView() );
 
-    return rInput.GetError() ? sal_False : sal_True;
+    return rInput.GetError() ? false : true;
 }
 
 bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML )
@@ -2631,7 +2631,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
         rOutput.WriteLine( "</HTML>" );
     }
 
-    return rOutput.GetError() ? sal_False : sal_True;
+    return rOutput.GetError() ? false : true;
 }
 
 void TextEngine::RemoveAttribs( sal_uLong nPara, bool bIdleFormatAndUpdate )

@@ -942,8 +942,8 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aData.aInclFilter[sizeof( aData.aInclFilter )-1] = '\0';
         aData.aExclFilter[sizeof( aData.aExclFilter )-1] = '\0';
 
-        aData.bOverwrite = maOverwrite.IsChecked() ? sal_True : sal_False;
-        aData.bHookOSLAssert = maHookOSLBox.IsChecked() ? sal_True : sal_False;
+        aData.bOverwrite = maOverwrite.IsChecked() ? true : false;
+        aData.bHookOSLAssert = maHookOSLBox.IsChecked() ? true : false;
 
         if ( maXtorThis.IsChecked() )
             aData.nTestFlags |= DBG_TEST_XTOR_THIS;
@@ -1010,7 +1010,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
                 ) );
             aBox.Execute();
         }
-        EndDialog( sal_True );
+        EndDialog( true );
     }
     else if ( pButton == &maInfoButton )
     {
@@ -1537,8 +1537,8 @@ long SolarMessageBoxExecutor::doIt()
 
 #if ! defined USE_VCL_MSGBOX
 #ifdef WNT
-    sal_Bool bOldCallTimer = pSVData->mbNoCallTimer;
-    pSVData->mbNoCallTimer = sal_True;
+    bool bOldCallTimer = pSVData->mbNoCallTimer;
+    pSVData->mbNoCallTimer = true;
     nResult = MessageBoxW( 0, (LPWSTR)m_sDebugMessage.getStr(), L"Debug Output",
                                      MB_TASKMODAL | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP );
     pSVData->mbNoCallTimer = bOldCallTimer;

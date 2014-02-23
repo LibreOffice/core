@@ -56,7 +56,7 @@ GraphicDescriptor::~GraphicDescriptor()
         delete pFileStm;
 }
 
-bool GraphicDescriptor::Detect( sal_Bool bExtendedInfo )
+bool GraphicDescriptor::Detect( bool bExtendedInfo )
 {
     bool bRet = false;
     if ( pFileStm && !pFileStm->GetError() )

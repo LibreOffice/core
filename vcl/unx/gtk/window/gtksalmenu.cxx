@@ -731,7 +731,7 @@ void GtkSalMenu::Display( bool bVisible )
 
     bMenuVisibility = bVisible;
 
-    bool bVCLMenuVisible = ( bVisible ) ? sal_False : sal_True;
+    bool bVCLMenuVisible = ( bVisible ) ? false : true;
 
     MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
     pMenuBar->SetDisplayable( bVCLMenuVisible );
@@ -748,15 +748,15 @@ bool GtkSalMenu::IsItemVisible( unsigned nPos )
     return bVisible;
 }
 
-void GtkSalMenu::CheckItem( unsigned, sal_Bool )
+void GtkSalMenu::CheckItem( unsigned, bool )
 {
 }
 
-void GtkSalMenu::EnableItem( unsigned, sal_Bool )
+void GtkSalMenu::EnableItem( unsigned, bool )
 {
 }
 
-void GtkSalMenu::ShowItem( unsigned nPos, sal_Bool bShow )
+void GtkSalMenu::ShowItem( unsigned nPos, bool bShow )
 {
     SolarMutexGuard aGuard;
     if ( nPos < maItems.size() )

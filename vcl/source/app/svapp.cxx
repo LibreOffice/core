@@ -1640,7 +1640,7 @@ bool InitAccessBridge()
         // disable accessibility if the user chooses to continue
         AllSettings aSettings = Application::GetSettings();
         MiscSettings aMisc = aSettings.GetMiscSettings();
-        aMisc.SetEnableATToolSupport( sal_False );
+        aMisc.SetEnableATToolSupport( false );
         aSettings.SetMiscSettings( aMisc );
         Application::SetSettings( aSettings );
     }

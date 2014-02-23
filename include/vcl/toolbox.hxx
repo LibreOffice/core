@@ -319,7 +319,7 @@ public:
     virtual void        ToggleFloatingMode();
     virtual void        StartDocking();
     virtual bool        Docking( const Point& rPos, Rectangle& rRect );
-    virtual void        EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
+    virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode );
     virtual void        Resizing( Size& rSize );
     virtual Size        GetOptimalSize() const;
 

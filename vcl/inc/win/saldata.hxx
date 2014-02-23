@@ -68,7 +68,7 @@ public:
     void initKeyCodeMap();
 
     // checks if the menuhandle was created by VCL
-    sal_Bool    IsKnownMenuHandle( HMENU hMenu );
+    bool    IsKnownMenuHandle( HMENU hMenu );
 
 public:
     HINSTANCE               mhInst;                 // default instance handle
@@ -86,7 +86,7 @@ public:
     DWORD                   mnNextTimerTime;
     DWORD                   mnLastEventTime;
     UINT                    mnTimerId;              // windows timer id
-    sal_Bool                    mbInTimerProc;          // timer event is currently being dispatched
+    bool                    mbInTimerProc;          // timer event is currently being dispatched
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
@@ -106,16 +106,16 @@ public:
     sal_uInt16              mnStockBrushCount;      // count of static brushes
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent that should be processed by SalObj-Hook
     BYTE                    mnCacheDCInUse;         // count of CacheDC in use
-    sal_Bool                mbObjClassInit;         // is SALOBJECTCLASS initialised
-    sal_Bool                mbInPalChange;          // is in WM_QUERYNEWPALETTE
+    bool                mbObjClassInit;         // is SALOBJECTCLASS initialised
+    bool                mbInPalChange;          // is in WM_QUERYNEWPALETTE
     DWORD                   mnAppThreadId;          // Id from Applikation-Thread
     BOOL                    mbScrSvrEnabled;        // ScreenSaver enabled
     int                     mnSageStatus;           // status of Sage-DLL (DISABLE_AGENT == does not exist)
     SysAgt_Enable_PROC      mpSageEnableProc;       // funktion to deactivate the system agent
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
-    sal_Bool                mbThemeChanged;         // true if visual theme was changed: throw away theme handles
-    sal_Bool                mbThemeMenuSupport;
+    bool                mbThemeChanged;         // true if visual theme was changed: throw away theme handles
+    bool                mbThemeMenuSupport;
 
     // for GdiPlus GdiplusStartup/GdiplusShutdown
     ULONG_PTR               gdiplusToken;
@@ -166,13 +166,13 @@ void ImplReleaseTempFonts( SalData& );
 
 HCURSOR ImplLoadSalCursor( int nId );
 HBITMAP ImplLoadSalBitmap( int nId );
-sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon );
+bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon );
 
 void ImplInitSalGDI();
 void ImplFreeSalGDI();
 
 void ImplSalYieldMutexAcquireWithWait();
-sal_Bool ImplSalYieldMutexTryToAcquire();
+bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 sal_uLong ImplSalReleaseYieldMutex();
@@ -184,14 +184,14 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 void    CALLBACK SalTimerProc( HWND hWnd, UINT nMsg, UINT_PTR nId, DWORD nTime );
 
 void SalTestMouseLeave();
-sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall );
+bool ImplWriteLastError( DWORD lastError, const char *szApiCall );
 
 long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
-sal_Bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
+bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
 
 WinSalObject* ImplFindSalObject( HWND hWndChild );
-sal_Bool ImplSalPreDispatchMsg( MSG* pMsg );
+bool ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont );
