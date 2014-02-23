@@ -333,7 +333,9 @@ public:
     virtual OUString SAL_CALL getSelectedText(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getSelectionStart(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getSelectionEnd(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSelectionEnd()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);

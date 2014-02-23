@@ -2660,7 +2660,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionStart()
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectionEnd()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
