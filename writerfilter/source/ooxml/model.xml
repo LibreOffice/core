@@ -23395,10 +23395,10 @@
       <element name="smallCaps" tokenid="ooxml:EG_RPrBase_smallCaps"/>
       <element name="strike" tokenid="ooxml:EG_RPrBase_strike"/>
       <element name="dstrike" tokenid="ooxml:EG_RPrBase_dstrike"/>
-      <element name="outline" tokenid="sprm:CFOutline"/>
-      <element name="shadow" tokenid="sprm:CFShadow"/>
-      <element name="emboss" tokenid="sprm:CFEmboss"/>
-      <element name="imprint" tokenid="sprm:CFImprint"/>
+      <element name="outline" tokenid="ooxml:EG_RPrBase_outline"/>
+      <element name="shadow" tokenid="ooxml:EG_RPrBase_shadow"/>
+      <element name="emboss" tokenid="ooxml:EG_RPrBase_emboss"/>
+      <element name="imprint" tokenid="ooxml:EG_RPrBase_imprint"/>
       <element name="noProof" tokenid="sprm:CFNoProof"/>
       <element name="snapToGrid" tokenid="ooxml:EG_RPrBase_snapToGrid"/>
       <element name="vanish" tokenid="sprm:CFVanish"/>

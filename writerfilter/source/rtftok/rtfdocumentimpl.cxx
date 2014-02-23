@@ -3846,13 +3846,13 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_I: nSprm = NS_ooxml::LN_EG_RPrBase_i; break;
         case RTF_AI: nSprm = NS_ooxml::LN_EG_RPrBase_iCs; break;
         case RTF_UL: nSprm = NS_sprm::LN_CKul; break;
-        case RTF_OUTL: nSprm = NS_sprm::LN_CFOutline; break;
-        case RTF_SHAD: nSprm = NS_sprm::LN_CFShadow; break;
+        case RTF_OUTL: nSprm = NS_ooxml::LN_EG_RPrBase_outline; break;
+        case RTF_SHAD: nSprm = NS_ooxml::LN_EG_RPrBase_shadow; break;
         case RTF_V: nSprm = NS_sprm::LN_CFVanish; break;
         case RTF_STRIKE: nSprm = NS_ooxml::LN_EG_RPrBase_strike; break;
         case RTF_STRIKED: nSprm = NS_ooxml::LN_EG_RPrBase_dstrike; break;
         case RTF_SCAPS: nSprm = NS_ooxml::LN_EG_RPrBase_smallCaps; break;
-        case RTF_IMPR: nSprm = NS_sprm::LN_CFImprint; break;
+        case RTF_IMPR: nSprm = NS_ooxml::LN_EG_RPrBase_imprint; break;
         case RTF_CAPS: nSprm = NS_ooxml::LN_EG_RPrBase_caps; break;
         default: break;
     }

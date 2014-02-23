@@ -1307,15 +1307,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_CKcd:
         rContext->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
         break;  // sprmCKcd
-    case NS_sprm::LN_CFEmboss:// sprmCFEmboss
+    case NS_ooxml::LN_EG_RPrBase_emboss:
     case NS_ooxml::LN_EG_RPrBase_b:
     case NS_ooxml::LN_EG_RPrBase_bCs:
     case NS_ooxml::LN_EG_RPrBase_i:
     case NS_ooxml::LN_EG_RPrBase_iCs:
     case NS_ooxml::LN_EG_RPrBase_strike:
     case NS_ooxml::LN_EG_RPrBase_dstrike:
-    case NS_sprm::LN_CFOutline: //sprmCFOutline
-    case NS_sprm::LN_CFShadow: //sprmCFShadow
+    case NS_ooxml::LN_EG_RPrBase_outline:
+    case NS_ooxml::LN_EG_RPrBase_shadow:
     case NS_ooxml::LN_EG_RPrBase_caps:
     case NS_ooxml::LN_EG_RPrBase_smallCaps:
     case NS_sprm::LN_CFVanish: //sprmCFVanish
@@ -1335,10 +1335,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             case NS_ooxml::LN_EG_RPrBase_dstrike:
                 ePropertyId = PROP_CHAR_STRIKEOUT;
                 break;
-            case NS_sprm::LN_CFOutline: /*sprmCFOutline*/
+            case NS_ooxml::LN_EG_RPrBase_outline:
                 ePropertyId = PROP_CHAR_CONTOURED;
                 break;
-            case NS_sprm::LN_CFShadow: /*sprmCFShadow*/
+            case NS_ooxml::LN_EG_RPrBase_shadow:
                 ePropertyId = PROP_CHAR_SHADOWED;
                 break;
             case NS_ooxml::LN_EG_RPrBase_caps:
@@ -1348,7 +1348,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             case NS_sprm::LN_CFVanish: /*sprmCFVanish*/
                 ePropertyId = PROP_CHAR_HIDDEN;
                 break;
-            case NS_sprm::LN_CFEmboss: /*sprmCFEmboss*/
+            case NS_ooxml::LN_EG_RPrBase_emboss:
                 ePropertyId = PROP_CHAR_RELIEF;
                 break;
             }
@@ -1424,8 +1424,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? awt::FontStrikeout::DOUBLE : awt::FontStrikeout::NONE ) );
                     break;
-                    case NS_sprm::LN_CFOutline: /*sprmCFOutline*/
-                    case NS_sprm::LN_CFShadow: /*sprmCFShadow*/
+                    case NS_ooxml::LN_EG_RPrBase_outline:
+                    case NS_ooxml::LN_EG_RPrBase_shadow:
                     case NS_sprm::LN_CFVanish: /*sprmCFVanish*/
                         rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? true : false ));
                     break;
@@ -1440,7 +1440,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                                          uno::makeAny( nIntValue ? style::CaseMap::UPPERCASE : style::CaseMap::NONE));
                         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "caps", OUString::number(nIntValue));
                     break;
-                    case NS_sprm::LN_CFEmboss: /*sprmCFEmboss*/
+                    case NS_ooxml::LN_EG_RPrBase_emboss:
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? awt::FontRelief::EMBOSSED : awt::FontRelief::NONE ));
                     break;
@@ -1573,7 +1573,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert(PROP_CHAR_SCALE_WIDTH,
                          uno::makeAny( sal_Int16(nIntValue) ));
         break;
-    case NS_sprm::LN_CFImprint: // sprmCFImprint   1 or 0
+    case NS_ooxml::LN_EG_RPrBase_imprint:
         // FontRelief: NONE, EMBOSSED, ENGRAVED
         rContext->Insert(PROP_CHAR_RELIEF,
                          uno::makeAny( nIntValue ? awt::FontRelief::ENGRAVED : awt::FontRelief::NONE ));
