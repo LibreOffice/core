@@ -765,44 +765,37 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             {
                 while (nTextRotationAngle > 360000)
                     nTextRotationAngle-=9000;
-                switch (nTextRotationAngle)
+                if (nTextRotationAngle == 9000)
                 {
-                    case 9000:
-                        {
-                            long nWidth = rTextRect.GetWidth();
-                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
-                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                    long nWidth = rTextRect.GetWidth();
+                    rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
+                    rTextRect.Bottom() = rTextRect.Top() + nWidth;
 
-                            sal_Int32 nOldTextLeft = nTextLeft;
-                            sal_Int32 nOldTextRight = nTextRight;
-                            sal_Int32 nOldTextTop = nTextTop;
-                            sal_Int32 nOldTextBottom = nTextBottom;
+                    sal_Int32 nOldTextLeft = nTextLeft;
+                    sal_Int32 nOldTextRight = nTextRight;
+                    sal_Int32 nOldTextTop = nTextTop;
+                    sal_Int32 nOldTextBottom = nTextBottom;
 
-                            nTextLeft = nOldTextBottom;
-                            nTextRight = nOldTextTop;
-                            nTextTop = nOldTextLeft;
-                            nTextBottom = nOldTextRight;
-                        }
-                        break;
-                    case 27000:
-                        {
-                            long nWidth = rTextRect.GetWidth();
-                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
-                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                    nTextLeft = nOldTextBottom;
+                    nTextRight = nOldTextTop;
+                    nTextTop = nOldTextLeft;
+                    nTextBottom = nOldTextRight;
+                }
+                else if (nTextRotationAngle == 27000)
+                {
+                    long nWidth = rTextRect.GetWidth();
+                    rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
+                    rTextRect.Bottom() = rTextRect.Top() + nWidth;
 
-                            sal_Int32 nOldTextLeft = nTextLeft;
-                            sal_Int32 nOldTextRight = nTextRight;
-                            sal_Int32 nOldTextTop = nTextTop;
-                            sal_Int32 nOldTextBottom = nTextBottom;
+                    sal_Int32 nOldTextLeft = nTextLeft;
+                    sal_Int32 nOldTextRight = nTextRight;
+                    sal_Int32 nOldTextTop = nTextTop;
+                    sal_Int32 nOldTextBottom = nTextBottom;
 
-                            nTextLeft = nOldTextTop;
-                            nTextRight = nOldTextBottom;
-                            nTextTop = nOldTextRight;
-                            nTextBottom = nOldTextLeft;
-                        }
-                        break;
-                    default:
-                        break;
+                    nTextLeft = nOldTextTop;
+                    nTextRight = nOldTextBottom;
+                    nTextTop = nOldTextRight;
+                    nTextBottom = nOldTextLeft;
                 }
             }
 
