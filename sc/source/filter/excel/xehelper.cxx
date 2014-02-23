@@ -1064,6 +1064,6 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
     }
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

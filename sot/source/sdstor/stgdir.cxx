@@ -28,7 +28,7 @@
 #include "stgio.hxx"
 
 
-//////////////////////////// class StgDirEntry /////////////////////////////
+//////////////////////////// class StgDirEntry
 
 // This class holds the dir entry data and maintains dirty flags for both
 // the entry and the data.
@@ -770,7 +770,7 @@ void StgDirEntry::Invalidate( bool bDel )
     }
 }
 
-///////////////////////////// class StgDirStrm ////////////////////////////
+///////////////////////////// class StgDirStrm
 
 // This specialized stream is the maintenance stream for the directory tree.
 

@@ -24,7 +24,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 namespace {
 
@@ -33,7 +33,7 @@ const sal_uInt32 AX_STRING_COMPRESSED       = 0x80000000;
 
 } // namespace
 
-// ============================================================================
+
 
 AxAlignedInputStream::AxAlignedInputStream( BinaryInputStream& rInStrm ) :
     BinaryStreamBase( false ),
@@ -106,7 +106,7 @@ void AxAlignedInputStream::align( size_t nSize )
     skip( static_cast< sal_Int32 >( (nSize - (mnStrmPos % nSize)) % nSize ) );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -285,7 +285,7 @@ bool AxBinaryPropertyReader::startNextProperty()
     return ensureValid() && bHasProp;
 }
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

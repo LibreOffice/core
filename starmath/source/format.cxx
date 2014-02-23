@@ -22,7 +22,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include "format.hxx"
 
-/////////////////////////////////////////////////////////////////
+
 
 // Latin default-fonts
 static const sal_uInt16 aLatinDefFnts[FNT_END] =
@@ -93,7 +93,7 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
     }
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SmFormat::SmFormat()
 :   aBaseSize(0, SmPtsTo100th_mm(12))

@@ -29,7 +29,7 @@
 namespace stoc_corefl
 {
 
-//==================================================================================================
+
 class IdlCompFieldImpl
     : public IdlMemberImpl
     , public XIdlField

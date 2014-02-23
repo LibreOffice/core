@@ -64,7 +64,7 @@ static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
@@ -271,7 +271,7 @@ SwUndoInsSection::SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 class SwUndoDelSection
     : public SwUndo
@@ -386,7 +386,7 @@ void SwUndoDelSection::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 class SwUndoUpdateSection
     : public SwUndo

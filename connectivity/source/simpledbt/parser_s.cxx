@@ -26,14 +26,14 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //================================================================
+
+
     //= OSimpleSQLParser
-    //================================================================
+
 
     OSimpleSQLParser::OSimpleSQLParser(const Reference< XComponentContext >& rxContext, const IParseContext* _pContext)
         :m_aFullParser(rxContext, _pContext)
@@ -69,9 +69,9 @@ namespace connectivity
         return pReturn;
     }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

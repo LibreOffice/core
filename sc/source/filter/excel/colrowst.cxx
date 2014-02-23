@@ -32,14 +32,14 @@
 // for filter manager
 #include "excimp8.hxx"
 
-// ============================================================================
+
 
 const sal_uInt8 EXC_COLROW_USED         = 0x01;
 const sal_uInt8 EXC_COLROW_DEFAULT      = 0x02;
 const sal_uInt8 EXC_COLROW_HIDDEN       = 0x04;
 const sal_uInt8 EXC_COLROW_MAN          = 0x08;
 
-// ============================================================================
+
 
 XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),

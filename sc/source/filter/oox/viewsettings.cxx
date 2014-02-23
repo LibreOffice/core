@@ -42,7 +42,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
 
-// ============================================================================
+
 
 namespace {
 
@@ -109,7 +109,7 @@ sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
 
 } // namespace
 
-// ============================================================================
+
 
 PaneSelectionModel::PaneSelectionModel() :
     mnActiveCellId( 0 )
@@ -460,7 +460,7 @@ SheetViewModelRef SheetViewSettings::createSheetView()
     return xModel;
 }
 
-// ============================================================================
+
 
 WorkbookViewModel::WorkbookViewModel() :
     mnWinX( 0 ),
@@ -633,7 +633,7 @@ WorkbookViewModel& ViewSettings::createWorkbookView()
     return *xModel;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

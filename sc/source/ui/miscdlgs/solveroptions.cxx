@@ -39,7 +39,7 @@
 
 using namespace com::sun::star;
 
-//==================================================================
+
 
 /// Helper for sorting properties
 struct ScSolverOptionsEntry

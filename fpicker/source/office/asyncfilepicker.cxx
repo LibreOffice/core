@@ -25,14 +25,14 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= AsyncPickerAction
-    //====================================================================
+
     DBG_NAME( AsyncPickerAction )
 
     AsyncPickerAction::AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction )
@@ -204,8 +204,8 @@ namespace svt
         return 1L;
     }
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

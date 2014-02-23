@@ -29,7 +29,7 @@
 #include <svtools/svtools.hrc>
 #include <svtools/sfxecode.hxx>
 
-//=========================================================================
+
 
 static sal_uInt16 aWndFunc(
     Window *pWin,            // Parent of the dialog

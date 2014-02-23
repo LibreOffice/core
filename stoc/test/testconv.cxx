@@ -47,7 +47,7 @@ const double MAX_DOUBLE     = DBL_MAX;
 const double MIN_FLOAT      = -FLT_MAX;
 const double MAX_FLOAT      = FLT_MAX;
 
-//==================================================================================================
+
 static void printValue( const Any & rVal )
 {
     // print value
@@ -159,7 +159,7 @@ static void printValue( const Any & rVal )
 
 static Reference< XTypeConverter > s_xConverter;
 
-//==================================================================================================
+
 static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bExpectSuccess )
 {
     sal_Bool bCanConvert = sal_False;
@@ -261,7 +261,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
 }
 
 
-//==================================================================================================
+
 typedef struct _ConvBlock
 {
     Any         _value;
@@ -287,7 +287,7 @@ typedef struct _ConvBlock
 } ConvBlock;
 
 
-//==================================================================================================
+
 static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
 {
     Any aVal;
@@ -601,7 +601,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     return nElems;
 }
 
-//==================================================================================================
+
 static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
 {
     printf( "test_Conversion(): start...\n" );

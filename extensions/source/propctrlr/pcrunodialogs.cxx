@@ -32,18 +32,18 @@ extern "C" void SAL_CALL createRegistryInfo_OTabOrderDialog()
     ::pcr::OAutoRegistration< ::pcr::OTabOrderDialog > aAutoRegistration;
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= OTabOrderDialog
-    //====================================================================
+
 
     OTabOrderDialog::OTabOrderDialog( const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
@@ -163,8 +163,8 @@ namespace pcr
 
 
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,7 +49,7 @@
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
 
-// ============================================================================
+
 
 static sal_uInt16 pValueRanges[] =
 {
@@ -59,7 +59,7 @@ static sal_uInt16 pValueRanges[] =
 };
 
 
-// ============================================================================
+
 
 ScValidationDlg::ScValidationDlg(Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh, SfxBindings *pB /*= NULL*/)
@@ -166,7 +166,7 @@ ScValidationDlg::~ScValidationDlg()
         RemoveRefDlg( false );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -674,8 +674,8 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl)
 }
 
 
-//========================================================================
-//========================================================================
+
+
 // Input Help Page
 
 ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
@@ -754,8 +754,8 @@ sal_Bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-//========================================================================
-//========================================================================
+
+
 // Error Alert Page
 
 ScTPValidationError::ScTPValidationError( Window*           pParent,

@@ -25,10 +25,10 @@
 #include "modulepcr.hxx"
 #include "formstrings.hxx"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::form;
@@ -127,8 +127,8 @@ namespace pcr
         return nControlType;
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

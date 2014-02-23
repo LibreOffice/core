@@ -33,12 +33,12 @@ using namespace com::sun::star::uno;
 
 
 
-// ============================================================================
+
 #define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
 #define FIXED_WIDTH_LIST    "FixedWidthList"
 
 
-// ============================================================================
+
 
 static void load_FixedWidthList(ScCsvSplits &aSplits)
 {
@@ -667,6 +667,6 @@ ScAccessibleCsvControl* ScCsvRuler::ImplCreateAccessible()
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

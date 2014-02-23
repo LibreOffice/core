@@ -47,7 +47,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
@@ -61,7 +61,7 @@ using namespace ::com::sun::star::uno;
 
 using ::comphelper::ConfigurationHelper;
 
-// ============================================================================
+
 
 namespace {
 
@@ -117,7 +117,7 @@ bool VbaFilterConfig::isExportVba() const
     return lclReadConfigItem( mxConfigAccess, "Save" );
 }
 
-// ============================================================================
+
 
 VbaMacroAttacherBase::VbaMacroAttacherBase( const OUString& rMacroName ) :
     maMacroName( rMacroName )
@@ -140,7 +140,7 @@ void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroReso
     }
 }
 
-// ============================================================================
+
 
 VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
         const Reference< XModel >& rxDocModel, const OUString& rConfigCompName ) :
@@ -562,7 +562,7 @@ void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
     }
 }
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

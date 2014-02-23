@@ -71,7 +71,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     SdrModel& rModel,
@@ -1128,7 +1128,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScaleAction& rAct)
     InsertObj(pGraf);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 {
@@ -1178,7 +1178,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaLineColorAction& rAct)
 {
@@ -1213,7 +1213,7 @@ void ImpSdrGDIMetaFileImport::MapScaling()
     mnMapScalingOfs = nAnz;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pMtf )
 {

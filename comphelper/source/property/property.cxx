@@ -36,7 +36,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 
-//.........................................................................
+
 namespace comphelper
 {
 
@@ -209,8 +209,8 @@ bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValue
     return bModified;
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

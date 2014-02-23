@@ -27,10 +27,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::dom::events;
 
-//............................................................................
+
 namespace svxform
 {
-//............................................................................
+
 
     DataListener::DataListener( DataNavigatorWindow* pNaviWin ) :
 
@@ -82,8 +82,8 @@ namespace svxform
         SAL_WARN( "svx.form", "disposing" );
     }
 
-//............................................................................
+
 }   // namespace svxform
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

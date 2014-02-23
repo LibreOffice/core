@@ -71,7 +71,7 @@ extern "C" {
 WINADVAPI LONG WINAPI RegDeleteKeyExA(HKEY,LPCSTR,REGSAM,DWORD);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DLL Entry Point
 
 extern "C"
@@ -87,7 +87,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     return TRUE;    // ok
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Used to determine whether the DLL can be unloaded by OLE
 
 STDAPI DllCanUnloadNow(void)
@@ -95,7 +95,7 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Returns a class factory to create an object of the requested type
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
@@ -103,7 +103,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DllRegisterServer - Adds entries to the system registry
 
 // for now database component and chart are always installed
@@ -349,7 +349,7 @@ STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, co
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DllUnregisterServer - Removes entries from the system registry
 HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
 {
@@ -469,7 +469,7 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DllRegisterServerDoc - Adds entries to the system registry
 
 #define SUPPORTED_MSEXT_NUM 7
@@ -572,7 +572,7 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DllUnregisterServerDoc - Removes entries from the system registry
 
 STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
@@ -654,7 +654,7 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DllRegisterServer - regsvr32 entry point
 
 STDAPI DllRegisterServer( void )
@@ -687,7 +687,7 @@ STDAPI DllRegisterServer( void )
     return aResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DllUnregisterServer - regsvr32 entry point
 
 STDAPI DllUnregisterServer( void )

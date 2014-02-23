@@ -22,10 +22,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
@@ -34,9 +34,9 @@ namespace svx
     #define TOOLBAR_RESNAME         "private:resource/toolbar/"
     #define PROPNAME_LAYOUTMANAGER  "LayoutManager"
 
-    //====================================================================
+
     //= ToolboxAccess
-    //====================================================================
+
     ToolboxAccess::ToolboxAccess( const ::rtl::OUString& rToolboxName ) :
 
         m_bDocking          ( false ),
@@ -100,8 +100,8 @@ namespace svx
         return ( m_xLayouter.is() && m_xLayouter->isElementVisible( m_sToolboxResName ) );
     }
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

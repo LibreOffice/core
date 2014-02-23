@@ -37,10 +37,10 @@ namespace
     }
 }
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
 SecurityOptionsDialog::SecurityOptionsDialog(Window* pParent, SvtSecurityOptions* pOptions)
     : ModalDialog(pParent, "SecurityOptionsDialog", "cui/ui/securityoptionsdialog.ui")
@@ -76,8 +76,8 @@ SecurityOptionsDialog::~SecurityOptionsDialog()
 {
 }
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

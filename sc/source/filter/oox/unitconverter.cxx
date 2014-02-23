@@ -34,14 +34,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -237,7 +237,7 @@ double UnitConverter::getCoefficient( Unit eUnit ) const
     return maCoeffs[ static_cast< size_t >( eUnit ) ];
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

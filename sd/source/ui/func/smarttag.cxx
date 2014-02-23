@@ -26,7 +26,7 @@
 namespace sd
 {
 
-// ====================================================================
+
 
 SmartTag::SmartTag( ::sd::View& rView )
 : mrView( rView )
@@ -143,7 +143,7 @@ void SmartTag::CheckPossibilities()
 {
 }
 
-// ====================================================================
+
 
 SmartTagSet::SmartTagSet( View& rView )
 : mrView( rView )
@@ -425,7 +425,7 @@ void SmartTagSet::CheckPossibilities()
         mxSelectedTag->CheckPossibilities();
 }
 
-// ====================================================================
+
 
 SmartHdl::SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind /*=HDL_MOVE*/ )
 : SdrHdl( rPnt, eNewKind )

@@ -27,13 +27,13 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
-// ============================================================================
+
 
 DrawingFragment::DrawingFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, Drawing& rDrawing ) :
     FragmentHandler2( rFilter, rFragmentPath, false ),  // do not trim whitespace, has been preprocessed by the input stream
@@ -79,7 +79,7 @@ void DrawingFragment::finalizeImport()
     mrDrawing.finalizeFragmentImport();
 }
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

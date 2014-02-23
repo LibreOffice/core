@@ -25,19 +25,19 @@
 #include <comphelper/property.hxx>
 #include <algorithm>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
+
     //= OEntryListHelper
-    //=====================================================================
+
 
     OEntryListHelper::OEntryListHelper( OControlModel& _rControlModel )
         :m_rControlModel( _rControlModel )
@@ -306,8 +306,8 @@ namespace frm
         stringItemListChanged( _rInstanceLock );
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

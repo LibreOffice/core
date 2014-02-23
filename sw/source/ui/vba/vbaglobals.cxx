@@ -31,9 +31,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 
-// =============================================================================
+
 // SwVbaGlobals
-// =============================================================================
+
 
 SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
@@ -52,9 +52,9 @@ SwVbaGlobals::~SwVbaGlobals()
     OSL_TRACE("SwVbaGlobals::~SwVbaGlobals");
 }
 
-// =============================================================================
+
 // XGlobals
-// =============================================================================
+
 uno::Reference<word::XApplication >
 SwVbaGlobals::getApplication() throw (uno::RuntimeException)
 {

@@ -61,7 +61,7 @@ using namespace linguistic;
 // min, max
 #define Max(a,b) (a > b ? a : b)
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 Hyphenator::Hyphenator() :
@@ -905,6 +905,6 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

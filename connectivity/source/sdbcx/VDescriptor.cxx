@@ -32,9 +32,9 @@ namespace connectivity
         using namespace ::com::sun::star::lang;
         using namespace ::com::sun::star::beans;
 
-        // =========================================================================
+
         // = ODescriptor
-        // =========================================================================
+
 
         ODescriptor::ODescriptor(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bCase, sal_Bool _bNew)
             :ODescriptor_PBASE(_rBHelper)

@@ -26,7 +26,7 @@
 
 using namespace sd;
 
-///////////////////////////////////////////////////////////////////////
+
 
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
 : mpUndoUsercall(0)
@@ -85,7 +85,7 @@ void UndoRemovePresObjectImpl::Redo()
         mpUndoUsercall->Redo();
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 
 UndoRemoveObject::UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
@@ -118,7 +118,7 @@ void UndoRemoveObject::Redo()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 UndoDeleteObject::UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 : SdrUndoDelObj( rObject, bOrdNumDirect )
@@ -151,7 +151,7 @@ void UndoDeleteObject::Redo()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 : SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect )
@@ -184,7 +184,7 @@ void UndoReplaceObject::Redo()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
 : SdrUndoObjSetText( rObject, nText )
@@ -238,7 +238,7 @@ void UndoObjectSetText::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Undo for SdrObject::SetUserCall()
 
 UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
@@ -272,7 +272,7 @@ void UndoObjectUserCall::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
 UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
@@ -317,7 +317,7 @@ void UndoObjectPresentationKind::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 UndoAutoLayoutPosAndSize::UndoAutoLayoutPosAndSize( SdPage& rPage )
 : mxPage( &rPage )
@@ -340,7 +340,7 @@ void UndoAutoLayoutPosAndSize::Redo()
         pPage->SetAutoLayout( pPage->GetAutoLayout(), sal_False, sal_False );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 : SdrUndoGeoObj( rNewObj )
@@ -389,7 +389,7 @@ void UndoGeoObject::Redo()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 : SdrUndoAttrObj( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False )

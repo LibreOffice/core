@@ -40,7 +40,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::linguistic2;
 
-//////////////////////////////////////////////////////////////////////
+
 
 TextConvWrapper::TextConvWrapper( Window* pWindow,
         const Reference< XComponentContext >& rxContext,
@@ -583,6 +583,6 @@ bool TextConvWrapper::HasRubySupport() const
     return false;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

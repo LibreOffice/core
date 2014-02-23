@@ -3294,7 +3294,7 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
 void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 {
     getDesignView()->unmarkAllObjects(NULL);
-    //////////////////////////////////////////////////////////////////////
+
     // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
     ::boost::shared_ptr<OSectionWindow> pSectionWindow[2];
     pSectionWindow[0] = getDesignView()->getMarkedSection();

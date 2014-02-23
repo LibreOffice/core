@@ -26,10 +26,10 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using com::sun::star::resource::XResourceBundle;
@@ -41,9 +41,9 @@ namespace comphelper
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
 
-    //====================================================================
+
     //= ResourceBundle_Impl
-    //====================================================================
+
     class ResourceBundle_Impl
     {
     private:
@@ -184,9 +184,9 @@ namespace comphelper
         return m_xBundle.is();
     }
 
-    //====================================================================
+
     //= OfficeResourceBundle
-    //====================================================================
+
 
     OfficeResourceBundle::OfficeResourceBundle( const Reference< XComponentContext >& _context, const sal_Char* _bundleBaseAsciiName )
         :m_pImpl( new ResourceBundle_Impl( _context, OUString::createFromAscii( _bundleBaseAsciiName ) ) )
@@ -212,8 +212,8 @@ namespace comphelper
         return m_pImpl->hasString( _resourceId );
     }
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

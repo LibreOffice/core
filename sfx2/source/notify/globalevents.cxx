@@ -78,7 +78,7 @@ public:
               css::uno::RuntimeException            );
 };
 
-//=============================================================================
+
 //TODO: remove support of obsolete document::XEventBroadcaster/Listener
 class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
                            , public ::cppu::WeakImplHelper3< css::lang::XServiceInfo

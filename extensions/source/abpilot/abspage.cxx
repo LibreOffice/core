@@ -20,17 +20,17 @@
 #include "abspage.hxx"
 #include "abspilot.hxx"
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
     using namespace ::svt;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-    //=====================================================================
+
     //= AddressBookSourcePage
-    //=====================================================================
+
     AddressBookSourcePage::AddressBookSourcePage( OAddessBookSourcePilot* _pParent, const ResId& _rId )
         :AddressBookSourcePage_Base(_pParent, _rId)
     {
@@ -73,8 +73,8 @@ namespace abp
         return getDialog()->getORB();
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

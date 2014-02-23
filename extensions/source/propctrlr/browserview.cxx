@@ -23,18 +23,18 @@
 #include <tools/debug.hxx>
 #include <boost/scoped_ptr.hpp>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
 
-    //========================================================================
+
     //= class OPropertyBrowserView
-    //========================================================================
+
     DBG_NAME(OPropertyBrowserView)
 
     OPropertyBrowserView::OPropertyBrowserView(Window* _pParent, WinBits nBits)
@@ -125,8 +125,8 @@ namespace pcr
         return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -284,7 +284,7 @@ static inline void try_dispose( Reference< lang::XComponent > const & xComp )
     }
 }
 
-//==================================================================================================
+
 
 class DisposingForwarder
     : public WeakImplHelper1< lang::XEventListener >
@@ -324,13 +324,13 @@ void DisposingForwarder::disposing( lang::EventObject const & )
     m_xTarget.clear();
 }
 
-//==================================================================================================
+
 struct MutexHolder
 {
 protected:
     Mutex m_mutex;
 };
-//==================================================================================================
+
 
 class ComponentContext
     : private MutexHolder

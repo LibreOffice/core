@@ -27,10 +27,10 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-//.........................................................................
+
 namespace calc
 {
-//.........................................................................
+
 
 #define PROP_HANDLE_RANGE_ADDRESS  1
 
@@ -44,9 +44,9 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
+
     //= OCellListSource
-    //=====================================================================
+
     DBG_NAME( OCellListSource )
 
 #ifdef DBG_UTIL
@@ -422,8 +422,8 @@ namespace calc
         m_bInitialized = true;
     }
 
-//.........................................................................
+
 }   // namespace calc
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

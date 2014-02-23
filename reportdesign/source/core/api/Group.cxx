@@ -30,10 +30,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "Functions.hxx"
 
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
@@ -330,8 +330,8 @@ uno::Reference< report::XFunctions > SAL_CALL OGroup::getFunctions() throw (uno:
 {
     return m_xFunctions;
 }
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

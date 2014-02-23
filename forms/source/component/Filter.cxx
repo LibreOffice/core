@@ -70,10 +70,10 @@ extern "C" void SAL_CALL createRegistryInfo_OFilterControl()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::OFilterControl > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -89,9 +89,9 @@ namespace frm
 
     using namespace ::connectivity;
 
-    //=====================================================================
+
     // OFilterControl
-    //=====================================================================
+
 
     OFilterControl::OFilterControl( const Reference< XComponentContext >& _rxORB )
         :UnoControl()
@@ -908,8 +908,8 @@ namespace frm
         return static_cast< XServiceInfo* >( new OFilterControl( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

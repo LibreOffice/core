@@ -40,10 +40,10 @@
 #include <functional>
 #include <algorithm>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -59,7 +59,7 @@ namespace pcr
 
     namespace
     {
-        //....................................................................
+
         struct StringCompare : public ::std::unary_function< OUString, bool >
         {
         private:
@@ -75,9 +75,9 @@ namespace pcr
         };
     }
 
-    //========================================================================
+
     //= CellBindingHelper
-    //========================================================================
+
 
     CellBindingHelper::CellBindingHelper( const Reference< XPropertySet >& _rxControlModel, const Reference< XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )
@@ -549,8 +549,8 @@ namespace pcr
             xSink->setListEntrySource( _rxSource );
     }
 
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

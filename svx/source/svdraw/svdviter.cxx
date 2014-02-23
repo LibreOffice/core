@@ -28,7 +28,7 @@
 #include <svl/brdcst.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrViewIter::ImpInitVars()
 {
@@ -38,7 +38,7 @@ void SdrViewIter::ImpInitVars()
     mpAktView = 0L;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrViewIter::SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage)
 {
@@ -49,7 +49,7 @@ SdrViewIter::SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage)
     ImpInitVars();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrViewIter::SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage)
 {
@@ -67,7 +67,7 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage)
     ImpInitVars();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 {
@@ -135,7 +135,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrView* SdrViewIter::ImpFindView()
 {
@@ -176,7 +176,7 @@ SdrView* SdrViewIter::ImpFindView()
     return mpAktView;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrView* SdrViewIter::FirstView()
 {
@@ -184,7 +184,7 @@ SdrView* SdrViewIter::FirstView()
     return ImpFindView();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrView* SdrViewIter::NextView()
 {

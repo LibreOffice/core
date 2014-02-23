@@ -2421,9 +2421,9 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
     return pImpEditEngine->CreateTransferable( aSel );
 }
 
-// =====================================================================
+
 // ======================    Virtual Methods    ========================
-// =====================================================================
+
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
     const sal_Int32*, const SvxFont&, sal_Int32, sal_Int32, sal_uInt8,
     const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
@@ -2568,9 +2568,9 @@ void EditEngine::FieldSelected( const SvxFieldItem&, sal_Int32, sal_Int32 )
 {
 }
 
-// =====================================================================
+
 // ======================     Static Methods     =======================
-// =====================================================================
+
 SfxItemPool* EditEngine::CreatePool( bool bPersistentRefCounts )
 {
     SfxItemPool* pPool = new EditEngineItemPool( bPersistentRefCounts );

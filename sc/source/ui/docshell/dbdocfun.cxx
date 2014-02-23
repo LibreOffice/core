@@ -1667,7 +1667,7 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
     }
 }
 
-//==================================================================
+
 //
 //      database import
 

@@ -84,7 +84,7 @@ using namespace ::com::sun::star;
 
 
 // free support functions
-// ======================
+
 namespace
 {
     template < class MetaActionType > void setStateColor( MetaActionType*                   pAct,
@@ -186,7 +186,7 @@ namespace
 
             // iteratively fill dash array, first with dashs, then
             // with dots.
-            // ===================================================
+
 
             sal_Int32 nCurrEntry=0;
 
@@ -1220,7 +1220,7 @@ namespace cppcanvas
 
 
             // Loop over every metaaction
-            // ==========================
+
             MetaAction* pCurrAct;
 
             // TODO(P1): think about caching
@@ -2849,7 +2849,7 @@ namespace cppcanvas
 
 
             // find start and end action
-            // =========================
+
             o_rRangeBegin = ::std::lower_bound( aBegin, aEnd,
                                                 MtfAction( ActionSharedPtr(), io_rStartIndex ),
                                                 UpperBoundActionIndexComparator() );
@@ -2861,7 +2861,7 @@ namespace cppcanvas
 
 
         // Public methods
-        // ====================================================================
+
 
         ImplRenderer::ImplRenderer( const CanvasSharedPtr&  rCanvas,
                                     const GDIMetaFile&      rMtf,
@@ -2892,7 +2892,7 @@ namespace cppcanvas
             aVDev.EnableOutput( false );
 
             // Setup VDev for state tracking and mapping
-            // =========================================
+
 
             aVDev.SetMapMode( rMtf.GetPrefMapMode() );
 
@@ -3016,7 +3016,7 @@ namespace cppcanvas
 
 
                 // render subset of actions
-                // ========================
+
 
                 ::basegfx::B2DHomMatrix aMatrix;
                 ::canvas::tools::getRenderStateTransform( aMatrix,
@@ -3063,7 +3063,7 @@ namespace cppcanvas
 
 
             // query bounds for subset of actions
-            // ==================================
+
 
             ::basegfx::B2DHomMatrix aMatrix;
             ::canvas::tools::getRenderStateTransform( aMatrix,

@@ -24,7 +24,7 @@
 #include "SOComWindowPeer.h"
 #include <sal/macros.h>
 
-/////////////////////////////////////////////////////////////////////////////
+
 //
 
 STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)

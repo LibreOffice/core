@@ -54,7 +54,7 @@ struct MutexHolder
 };
 typedef WeakComponentImplHelper2< security::XPolicy, lang::XServiceInfo > t_helper;
 
-//==================================================================================================
+
 class FilePolicy
     : public MutexHolder
     , public t_helper
@@ -149,7 +149,7 @@ Sequence< Any > FilePolicy::getDefaultPermissions()
     return m_defaultPermissions;
 }
 
-//==================================================================================================
+
 class PolicyReader
 {
     OUString m_fileName;

@@ -46,16 +46,16 @@ extern "C" void SAL_CALL createRegistryInfo_OGridWizard()
     > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
 
-    //=====================================================================
+
     //= OGroupBoxSI
-    //=====================================================================
+
 
     OUString OGroupBoxSI::getImplementationName() const
     {
@@ -70,9 +70,9 @@ namespace dbp
         return aReturn;
     }
 
-    //=====================================================================
+
     //= OListComboSI
-    //=====================================================================
+
 
     OUString OListComboSI::getImplementationName() const
     {
@@ -87,9 +87,9 @@ namespace dbp
         return aReturn;
     }
 
-    //=====================================================================
+
     //= OGridSI
-    //=====================================================================
+
 
     OUString OGridSI::getImplementationName() const
     {
@@ -104,8 +104,8 @@ namespace dbp
         return aReturn;
     }
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

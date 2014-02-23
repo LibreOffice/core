@@ -123,9 +123,9 @@ namespace basctl
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
         static bool StringCompareLessThan( const OUString& lhs, const OUString& rhs )
@@ -293,9 +293,9 @@ namespace basctl
         bool        impl_initDocument_nothrow( const Reference< XModel >& _rxModel );
     };
 
-    //====================================================================
+
     //= ScriptDocument::Impl - implementation
-    //====================================================================
+
     ScriptDocument::Impl::Impl()
         :m_bIsApplication( true )
         ,m_bValid( true )
@@ -1039,9 +1039,9 @@ namespace basctl
         // not interested in
     }
 
-    //====================================================================
+
     //= ScriptDocument
-    //====================================================================
+
     ScriptDocument::ScriptDocument()
         :m_pImpl(new Impl)
     { }

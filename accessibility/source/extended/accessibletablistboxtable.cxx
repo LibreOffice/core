@@ -24,10 +24,10 @@
 #include <svtools/svtabbx.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
+
 
     // class AccessibleTabListBoxTable ---------------------------------------------
 
@@ -407,8 +407,8 @@ namespace accessibility
         implSelectRow( implGetRow( nSelectedChildIndex ), sal_False );
     }
 
-//........................................................................
+
 }// namespace accessibility
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

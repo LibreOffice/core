@@ -39,7 +39,7 @@
 #include <svx/dialmgr.hxx>
 #include <vcl/settings.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, const ResId& rResId)
 :   Control(pParent, rResId),
@@ -242,7 +242,7 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
     Resize();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #define RADIUS_LAMP_PREVIEW_SIZE    (4500.0)
 #define RADIUS_LAMP_SMALL           (600.0)
@@ -949,7 +949,7 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
     return basegfx::B3DVector();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SvxLightCtl3D::SvxLightCtl3D( Window* pParent, const ResId& rResId)
 :   Control(pParent, rResId),

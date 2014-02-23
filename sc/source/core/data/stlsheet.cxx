@@ -48,7 +48,7 @@ TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 #define TWO_CM      1134
 #define HFDIST_CM   142
 
-//========================================================================
+
 
 ScStyleSheet::ScStyleSheet( const OUString&     rName,
                             ScStyleSheetPool&   rPoolP,

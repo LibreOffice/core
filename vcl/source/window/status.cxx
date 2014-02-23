@@ -32,7 +32,7 @@
 #include <svdata.hxx>
 #include <window.h>
 
-// =======================================================================
+
 
 #define STATUSBAR_OFFSET_X      STATUSBAR_OFFSET
 #define STATUSBAR_OFFSET_Y      2
@@ -84,7 +84,7 @@ struct ImplStatusItem
     OUString            maCommand;
 };
 
-// =======================================================================
+
 
 inline long ImplCalcProgessWidth( sal_uInt16 nMax, long nSize )
 {

@@ -255,7 +255,7 @@ ExtensionDescription::~ExtensionDescription()
 {
 }
 
-//======================================================================
+
 FileDoesNotExistFilter::FileDoesNotExistFilter(
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv):
     m_bExist(true), m_xCommandEnv(xCmdEnv)

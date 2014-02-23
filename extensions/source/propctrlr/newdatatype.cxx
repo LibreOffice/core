@@ -23,14 +23,14 @@
 #include "modulepcr.hxx"
 #include "formresid.hrc"
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= NewDataTypeDialog
-    //====================================================================
+
 
     NewDataTypeDialog::NewDataTypeDialog( Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames )
         :ModalDialog( _pParent, PcrRes( RID_DLG_NEW_DATA_TYPE ) )
@@ -84,8 +84,8 @@ namespace pcr
         return 0L;
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

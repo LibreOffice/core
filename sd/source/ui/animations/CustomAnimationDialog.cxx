@@ -99,7 +99,7 @@ extern void fillDurationComboBox( ListBox* pBox );
 extern OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText = true );
 extern OUString getPropertyName( sal_Int32 nPropertyType );
 
-// ====================================================================
+
 
 class PresetPropertyBox  : public PropertySubControl
 {
@@ -186,7 +186,7 @@ Control* PresetPropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class ColorPropertyBox  : public PropertySubControl
 {
@@ -270,7 +270,7 @@ Control* ColorPropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class FontPropertyBox : public PropertySubControl
 {
@@ -355,7 +355,7 @@ Control* FontPropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class DropdownMenuBox : public Edit
 {
@@ -530,7 +530,7 @@ Control* CharHeightPropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class TransparencyPropertyBox : public PropertySubControl
 {
@@ -972,7 +972,7 @@ Control* ScalePropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class FontStylePropertyBox : public PropertySubControl
 {
@@ -1109,7 +1109,7 @@ Control* FontStylePropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class CustomAnimationEffectTabPage : public TabPage
 {
@@ -2405,7 +2405,7 @@ void PropertyControl::Resize()
     ListBox::Resize();
 }
 
-// ====================================================================
+
 
 PropertySubControl::~PropertySubControl()
 {

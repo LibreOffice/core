@@ -23,10 +23,10 @@
 #include <svtools/svtabbx.hxx>
 #include <comphelper/sequence.hxx>
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
+
 
     // class AccessibleTabListBox -----------------------------------------------------
 
@@ -113,8 +113,8 @@ namespace accessibility
         return xRet;
     }
 
-//........................................................................
+
 }// namespace accessibility
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

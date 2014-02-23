@@ -81,7 +81,7 @@ typedef boost::unordered_map
     equalOWString_Impl
 > HashMap_OWString_Interface;
 
-//==================================================================================================
+
 class NamingService_Impl
     : public WeakImplHelper2 < XServiceInfo, XNamingService >
 {
@@ -109,17 +109,17 @@ public:
     virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException);
 };
 
-//==================================================================================================
+
 static Reference<XInterface> SAL_CALL NamingService_Impl_create(
     SAL_UNUSED_PARAMETER const Reference<XComponentContext> & )
 {
     return *new NamingService_Impl();
 }
 
-//==================================================================================================
+
 NamingService_Impl::NamingService_Impl() {}
 
-//==================================================================================================
+
 NamingService_Impl::~NamingService_Impl() {}
 
 // XServiceInfo

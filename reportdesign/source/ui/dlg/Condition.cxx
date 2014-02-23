@@ -106,9 +106,9 @@ IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
     }
     return 0L;
 }
-//========================================================================
+
 // class SvxColorWindow_Impl --------------------------------------------------
-//========================================================================
+
 #ifndef WB_NO_DIRECTSELECT
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #endif
@@ -222,9 +222,9 @@ IMPL_LINK_NOARG(OColorPopup, SelectHdl)
     return 0;
 }
 
-// =============================================================================
+
 // = Condition
-// =============================================================================
+
 
 Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController )
     :Control(_pParent, ModuleRes(WIN_CONDITION))
@@ -716,8 +716,8 @@ bool Condition::isEmpty() const
     return m_aCondLHS.GetText().isEmpty();
 }
 
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

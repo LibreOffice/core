@@ -28,17 +28,17 @@
 #include <tools/diagnose_ex.h>
 
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::datatransfer;
 
-    //====================================================================
+
     //= OLocalExchange
-    //====================================================================
+
 
     OLocalExchange::OLocalExchange( )
         :m_bDragging( sal_False )
@@ -120,9 +120,9 @@ namespace svxform
         return sal_False;   // do not have any formats by default
     }
 
-    //====================================================================
+
     //= OControlTransferData
-    //====================================================================
+
 
     OControlTransferData::OControlTransferData( )
         :m_pFocusEntry( NULL )
@@ -281,9 +281,9 @@ namespace svxform
         }
     }
 
-    //====================================================================
+
     //= OControlExchange
-    //====================================================================
+
 
     OControlExchange::OControlExchange( )
     {
@@ -364,17 +364,17 @@ namespace svxform
         return s_nFormat;
     }
 
-    //====================================================================
+
     //= OControlExchangeHelper
-    //====================================================================
+
     OLocalExchange* OControlExchangeHelper::createExchange() const
     {
         return new OControlExchange;
     }
 
-    //====================================================================
+
     //= OLocalExchangeHelper
-    //====================================================================
+
 
     OLocalExchangeHelper::OLocalExchangeHelper(Window* _pDragSource)
         :m_pDragSource(_pDragSource)
@@ -423,8 +423,8 @@ namespace svxform
         m_pTransferable->acquire();
     }
 
-//........................................................................
+
 }
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 using namespace com::sun::star::uno;
 
-///////////////////////////// SbxVariable //////////////////////////////
+///////////////////////////// SbxVariable
 
 TYPEINIT1(SbxVariable,SbxValue)
 TYPEINIT1(SbxHint,SfxSimpleHint)
@@ -38,7 +38,7 @@ TYPEINIT1(SbxHint,SfxSimpleHint)
 static sal_uIntPtr nVar = 0;
 #endif
 
-///////////////////////////// SbxVariableImpl ////////////////////////////
+///////////////////////////// SbxVariableImpl
 
 class SbxVariableImpl
 {
@@ -59,7 +59,7 @@ class SbxVariableImpl
 };
 
 
-///////////////////////////// Constructors //////////////////////////////
+///////////////////////////// Constructors
 
 SbxVariable::SbxVariable() : SbxValue()
 {
@@ -149,7 +149,7 @@ SbxVariable::~SbxVariable()
     delete pCst;
 }
 
-////////////////////////////// Broadcasting //////////////////////////////
+////////////////////////////// Broadcasting
 
 SfxBroadcaster& SbxVariable::GetBroadcaster()
 {
@@ -234,7 +234,7 @@ void SbxVariable::SetParameters( SbxArray* p )
 }
 
 
-/////////////////////////// Name of the variables ///////////////////////////
+/////////////////////////// Name of the variables
 
 void SbxVariable::SetName( const OUString& rName )
 {
@@ -369,7 +369,7 @@ sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
     return n;
 }
 
-////////////////////////////// Operators ////////////////////////////////
+////////////////////////////// Operators
 
 SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 {
@@ -392,7 +392,7 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     return *this;
 }
 
-//////////////////////////////// Conversion ////////////////////////////////
+//////////////////////////////// Conversion
 
 SbxDataType SbxVariable::GetType() const
 {
@@ -499,7 +499,7 @@ void SbxVariable::ClearComListener( void )
 }
 
 
-////////////////////////////// Loading/Saving /////////////////////////////
+////////////////////////////// Loading/Saving
 
 sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
@@ -667,7 +667,7 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
     }
 }
 
-////////////////////////////// SbxInfo ///////////////////////////////////
+////////////////////////////// SbxInfo
 
 SbxInfo::SbxInfo() : aHelpFile(), nHelpId( 0 ), aParams()
 {}
@@ -676,7 +676,7 @@ SbxInfo::SbxInfo( const OUString& r, sal_uInt32 n )
        : aHelpFile( r ), nHelpId( n ), aParams()
 {}
 
-////////////////////////////// SbxAlias //////////////////////////////////
+////////////////////////////// SbxAlias
 
 SbxAlias::SbxAlias( const SbxAlias& r )
         : SvRefBase( r ), SbxVariable( r ),

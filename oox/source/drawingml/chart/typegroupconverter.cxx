@@ -42,14 +42,14 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -100,7 +100,7 @@ const TypeGroupInfo& lclGetTypeInfoFromTypeId( TypeId eTypeId )
 
 } // namespace
 
-// ============================================================================
+
 
 UpDownBarsConverter::UpDownBarsConverter( const ConverterRoot& rParent, UpDownBarsModel& rModel ) :
     ConverterBase< UpDownBarsModel >( rParent, rModel )
@@ -132,7 +132,7 @@ void UpDownBarsConverter::convertFromModel( const Reference< XChartType >& rxCha
     }
 }
 
-// ============================================================================
+
 
 TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupModel& rModel ) :
     ConverterBase< TypeGroupModel >( rParent, rModel ),
@@ -570,7 +570,7 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
     }
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

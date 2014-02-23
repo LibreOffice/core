@@ -40,7 +40,7 @@
 #include "docsh.hxx"
 #include "tablink.hxx"
 
-//==================================================================
+
 
 ScLinkedAreaDlg::ScLinkedAreaDlg(Window* pParent)
     : ModalDialog(pParent, "ExternalDataDialog", "modules/scalc/ui/externaldata.ui")

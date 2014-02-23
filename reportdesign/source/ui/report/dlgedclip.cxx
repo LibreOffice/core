@@ -27,9 +27,9 @@ namespace rptui
 using namespace comphelper;
 using namespace ::com::sun::star;
 
-//============================================================================
+
 // OReportExchange
-//============================================================================
+
 
 OReportExchange::OReportExchange(const TSectionElements& _rCopyElements )
 : m_aCopyElements(_rCopyElements)
@@ -93,8 +93,8 @@ OReportExchange::TSectionElements OReportExchange::extractCopies(const Transfera
 
     return TSectionElements();
 }
-//============================================================================
+
 } // rptui
-//============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

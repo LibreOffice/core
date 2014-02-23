@@ -60,9 +60,9 @@ public:
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
 };
 
-//====================================================================
+
 //= UnoSpinButtonControl
-//====================================================================
+
 
 typedef ::cppu::ImplHelper2 <   css::awt::XAdjustmentListener
                             ,   css::awt::XSpinValue
@@ -111,9 +111,9 @@ public:
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
 };
 
-    //====================================================================
+
     //= UnoSpinButtonModel
-    //====================================================================
+
 
     UnoSpinButtonModel::UnoSpinButtonModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
@@ -199,9 +199,9 @@ public:
         return aServices;
     }
 
-    //====================================================================
+
     //= UnoSpinButtonControl
-    //====================================================================
+
 
     UnoSpinButtonControl::UnoSpinButtonControl()
         :UnoControlBase()

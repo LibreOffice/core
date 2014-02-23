@@ -55,7 +55,7 @@ ScEditWindow* GetScEditWindow ()
     return pActiveEdWnd;
 }
 
-//========================================================================
+
 
 static void lcl_GetFieldData( ScHeaderFieldData& rData )
 {
@@ -69,9 +69,9 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
     }
 }
 
-//========================================================================
+
 // class ScEditWindow
-//========================================================================
+
 
 ScEditWindow::ScEditWindow( Window* pParent, WinBits nBits, ScEditWindowLocation eLoc )
     :   Control( pParent, nBits ),

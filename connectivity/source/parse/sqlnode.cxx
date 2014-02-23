@@ -192,9 +192,9 @@ namespace
 namespace connectivity
 {
 
-//=============================================================================
+
 //= SQLParseNodeParameter
-//=============================================================================
+
 
 SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _xFormatter, const Reference< XPropertySet >& _xField,
@@ -222,9 +222,9 @@ SQLParseNodeParameter::~SQLParseNodeParameter()
 {
 }
 
-//=============================================================================
+
 //= OSQLParseNode
-//=============================================================================
+
 
 OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString) const
 {
@@ -1325,7 +1325,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
     }
 }
 
-//=============================================================================
+
 
 OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
     :m_pContext(_pContext)

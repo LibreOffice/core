@@ -34,9 +34,9 @@
 #include <unotools/fontdefs.hxx>
 #include <list>
 
-// ===========================================================================
+
 // platform specific font substitution hooks
-// ===========================================================================
+
 
 struct FontSelectPatternAttributesHash
 {
@@ -262,7 +262,7 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     return bHaveSubstitute;
 }
 
-// ===========================================================================
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

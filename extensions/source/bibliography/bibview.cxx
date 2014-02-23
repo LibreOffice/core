@@ -42,10 +42,10 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-//.........................................................................
+
 namespace bib
 {
-//.........................................................................
+
 
 
     BibView::BibView( Window* _pParent, BibDataManager* _pManager, WinBits _nStyle )
@@ -199,8 +199,8 @@ namespace bib
         return m_pGeneralPage? m_pGeneralPage->HandleShortCutKey( rKeyEvent ) : sal_False;
     }
 
-//.........................................................................
+
 }   // namespace bib
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

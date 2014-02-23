@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(ScRetypePassDlg, ScrollHdl)
     return 0;
 }
 
-// ============================================================================
+
 
 ScRetypePassInputDlg::ScRetypePassInputDlg(Window* pParent, ScPassHashProtectable* pProtected)
     : ModalDialog(pParent, "RetypePasswordDialog",

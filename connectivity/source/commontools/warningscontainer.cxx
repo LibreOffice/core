@@ -23,18 +23,18 @@
 
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
 
-    //====================================================================
+
     //= WarningsContainer
-    //====================================================================
+
 
     static void lcl_concatWarnings( Any& _rChainLeft, const Any& _rChainRight )
     {
@@ -108,8 +108,8 @@ namespace dbtools
         appendWarning( SQLWarning( _rWarning, _rxContext, OUString::createFromAscii( _pAsciiSQLState ), 0, Any() ) );
     }
 
-//........................................................................
+
 }   // namespace dbtools
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

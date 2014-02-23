@@ -45,11 +45,11 @@ using ::com::sun::star::io::IOException;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-///////////////////////////////////////////////////////////////////////
+
 
 AtomConfigMap gAtomConfigMap;
 
-///////////////////////////////////////////////////////////////////////
+
 
 class ConfigHandler : public ::cppu::WeakAggImplHelper1<XDocumentHandler>
 {
@@ -336,7 +336,7 @@ void load_config( const OUString& rPath )
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 OUString ElementConfig::format( SvStream& rStream, sal_Size& nLength ) const
 {
@@ -459,7 +459,7 @@ OUString ElementConfig::dump_float( SvStream& rStream, sal_Size& nLength )
     return aRet;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLength ) const
 {
@@ -525,7 +525,7 @@ OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLength ) 
     return aRet;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 OUString SwitchElementConfig::format( SvStream& rStream, sal_Size& nLength ) const
 {

@@ -87,7 +87,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
     xWriterHandler->endDocument();
 }
 
-// ==================================================================================
+
 
 
 uno::Sequence< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext > xContext )

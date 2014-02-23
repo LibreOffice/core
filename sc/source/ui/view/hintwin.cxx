@@ -24,7 +24,7 @@
 #define HINT_INDENT     3
 #define HINT_MARGIN     4
 
-//==================================================================
+
 
 ScHintWindow::ScHintWindow( Window* pParent, const OUString& rTit, const OUString& rMsg ) :
     Window( pParent, WinBits( WB_BORDER ) ),

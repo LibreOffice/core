@@ -45,10 +45,10 @@
 #include <vcl/svapp.hxx>
 #include "helpid.hrc"
 
-//.............................................................................
+
 namespace textconversiondlgs
 {
-//.............................................................................
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -825,8 +825,8 @@ IMPL_LINK(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar)
     return 0;
 }
 
-//.............................................................................
+
 } //end namespace
-//.............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

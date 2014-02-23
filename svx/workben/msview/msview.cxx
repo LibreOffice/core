@@ -66,7 +66,7 @@
 
 using namespace ::com::sun::star;
 
-///////////////////////////////////////////////////////////////////////
+
 
 enum CompareStatus           { CMP_NOTYET = 0, CMP_EQUAL = 1, CMP_NOTEQUAL = 2, CMP_NOTAVAILABLE = 3 };
 static ColorData gColors[] = { COL_BLACK,      COL_GREEN,     COL_RED,          COL_CYAN };
@@ -473,9 +473,9 @@ void Atom::compare( Atom* pAtom )
     }
 }
 
-//////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////
+
+
 
 class AtomBoxString : public SvLBoxString
 {
@@ -504,7 +504,7 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 class AtomContainerTreeListBox : public SvTreeListBox
 {
@@ -705,7 +705,7 @@ void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvTreeListEntry* p
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 extern void load_config( const OUString& rPath );
 
@@ -760,7 +760,7 @@ Atom* PPTDocument::getRootAtom() const
     return mpAtom;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 class MSViewerWorkWindow : public WorkWindow
 {

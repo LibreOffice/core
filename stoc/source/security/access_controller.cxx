@@ -336,7 +336,7 @@ static inline Reference< security::XAccessControlContext > getDynamicRestriction
     }
     return Reference< security::XAccessControlContext >();
 }
-//==================================================================================================
+
 class cc_reset
 {
     void * m_cc;
@@ -356,7 +356,7 @@ struct MutexHolder
 typedef WeakComponentImplHelper3<
     security::XAccessController, lang::XServiceInfo, lang::XInitialization > t_helper;
 
-//==================================================================================================
+
 class AccessController
     : public MutexHolder
     , public t_helper

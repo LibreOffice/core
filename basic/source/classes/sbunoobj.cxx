@@ -3891,7 +3891,7 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 }
 
 
-//========================================================================
+
 
 // Implementation of an EventAttacher-drawn AllListener, which
 // solely transmits several events to an general AllListener
@@ -3915,18 +3915,18 @@ public:
 };
 
 
-//========================================================================
+
 BasicAllListener_Impl::BasicAllListener_Impl(const OUString& aPrefixName_)
     : aPrefixName( aPrefixName_ )
 {
 }
 
-//========================================================================
+
 BasicAllListener_Impl::~BasicAllListener_Impl()
 {
 }
 
-//========================================================================
+
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
 {
@@ -3991,7 +3991,7 @@ Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( 
     return aRetAny;
 }
 
-//========================================================================
+
 // Methods of XEventListener
 void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeException )
 {
@@ -4158,7 +4158,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
     return xField.is();
 }
 
-//========================================================================
+
 // create Uno-Service
 // 1. Parameter == Prefix-Name of the macro
 // 2. Parameter == fully qualified name of the listener
@@ -4221,7 +4221,7 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     refVar->PutObject( p->xSbxObj );
 }
 
-//========================================================================
+
 // Represents the DefaultContext property of the ProcessServiceManager
 // in the Basic runtime system.
 void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -4237,7 +4237,7 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
     refVar->PutObject( (SbUnoObject*)xUnoObj );
 }
 
-//========================================================================
+
 // Creates a Basic wrapper object for a strongly typed Uno value
 // 1. parameter: Uno type as full qualified type name, e.g. "byte[]"
 void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -4324,7 +4324,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     refVar->PutObject( xUnoAnyObject );
 }
 
-//==========================================================================
+
 
 namespace {
 class OMutexBasis

@@ -23,7 +23,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 namespace {
 
@@ -36,7 +36,7 @@ const sal_uInt16 VBACHUNK_LENMASK           = 0x0FFF;
 
 } // namespace
 
-// ============================================================================
+
 
 VbaInputStream::VbaInputStream( BinaryInputStream& rInStrm ) :
     BinaryStreamBase( false ),
@@ -208,7 +208,7 @@ bool VbaInputStream::updateChunk()
     return !mbEof;
 }
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

@@ -53,7 +53,7 @@ namespace backend {
 namespace help {
 namespace {
 
-//==============================================================================
+
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class PackageImpl : public ::dp_registry::backend::Package

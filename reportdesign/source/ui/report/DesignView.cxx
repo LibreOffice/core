@@ -83,9 +83,9 @@ public:
     }
 };
 
-//==================================================================
+
 // class ODesignView
-//==================================================================
+
 
 ODesignView::ODesignView(   Window* pParent,
                             const Reference< XComponentContext >& _rxOrb,
@@ -712,8 +712,8 @@ sal_uInt16 ODesignView::getZoomFactor(SvxZoomType _eType) const
 {
     return m_aScrollWindow.getZoomFactor(_eType);
 }
-//============================================================================
+
 } // rptui
-//============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

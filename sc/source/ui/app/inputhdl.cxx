@@ -382,7 +382,7 @@ void ScInputHandler::DeleteRangeFinder()
     }
 }
 
-//==================================================================
+
 
 inline OUString GetEditText(EditEngine* pEng)
 {
@@ -492,7 +492,7 @@ static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
     return (sal_Int32) (p - p0);
 }
 
-//==================================================================
+
 
 ScInputHandler::ScInputHandler()
     :   pInputWin( NULL ),
@@ -3919,9 +3919,9 @@ void ScInputHandler::InputTurnOffWinEngine()
     bInOwnChange = false;
 }
 
-//========================================================================
+
 //  ScInputHdlState
-//========================================================================
+
 
 ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
                                   const ScAddress& rStartPos,

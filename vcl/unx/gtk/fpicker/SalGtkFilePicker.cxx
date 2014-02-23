@@ -370,7 +370,7 @@ void SalGtkFilePicker::impl_controlStateChanged( FilePickerEvent aEvent )
     if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );
 }
 
-//=====================================================================
+
 
 struct FilterEntry
 {
@@ -406,7 +406,7 @@ public:
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
-//=====================================================================
+
 
 
 FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
@@ -506,7 +506,7 @@ dialog_remove_buttons( GtkDialog *pDialog )
 
 
 namespace {
-    //................................................................................
+
     struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
     {
     protected:
@@ -515,7 +515,7 @@ namespace {
     public:
         FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
-        //............................................................................
+
         bool operator () ( const FilterEntry& _rEntry )
         {
             bool bMatch;

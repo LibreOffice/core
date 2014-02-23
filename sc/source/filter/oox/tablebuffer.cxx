@@ -30,14 +30,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 TableModel::TableModel() :
     mnId( -1 ),
@@ -47,7 +47,7 @@ TableModel::TableModel() :
 {
 }
 
-// ============================================================================
+
 
 Table::Table( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -123,7 +123,7 @@ void Table::applyAutoFilters()
     }
 }
 
-// ============================================================================
+
 
 TableBuffer::TableBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -176,7 +176,7 @@ void TableBuffer::insertTableToMaps( const TableRef& rxTable )
     }
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

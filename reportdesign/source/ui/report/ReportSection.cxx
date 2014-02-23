@@ -61,10 +61,10 @@
 #include <unotools/confignode.hxx>
 #include <framework/imageproducer.hxx>
 
-// =============================================================================
+
 namespace rptui
 {
-// =============================================================================
+
 using namespace ::com::sun::star;
 
 
@@ -858,8 +858,8 @@ bool OReportSection::isUiActive() const
     return m_pFunc->isUiActive();
 }
 
-// =============================================================================
+
 }
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

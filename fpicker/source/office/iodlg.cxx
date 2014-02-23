@@ -270,7 +270,7 @@ namespace
         _rHomeDir = "";
 
         // now ask the content broker for a provider for this scheme
-        //=================================================================
+
         try
         {
             // get the provider for the current scheme
@@ -1513,7 +1513,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
 
     INetURLObject aObj( rURL );
 
-    //=========================================================================
+
     {
         OUString sText;
         DBG_ASSERT( INET_PROT_NOT_VALID != aObj.GetProtocol(), "SvtFileDialog::UpdateControls: Invalid URL!" );
@@ -1552,7 +1552,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
         _pImp->_pEdCurrentPath->SetText( sText );
     }
 
-    //=========================================================================
+
     _aPath = rURL;
     if ( _pFileNotifier )
         _pFileNotifier->notify( DIRECTORY_CHANGED, 0 );
@@ -2091,7 +2091,7 @@ short SvtFileDialog::PrepareExecute()
             _aPath += aFileNameOnly;
     }
 
-    //.....................................................................
+
     _aPath = implGetInitialURL( _aPath, GetStandardDir() );
 
     if ( _pImp->_nStyle & WB_SAVEAS && !m_bHasFilename )

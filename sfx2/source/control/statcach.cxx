@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-//====================================================================
+
 
 DBG_NAME(SfxStateCache)
 DBG_NAME(SfxStateCacheSetState)

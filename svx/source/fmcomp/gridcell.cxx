@@ -88,9 +88,9 @@ namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 const char INVALIDTEXT[] = "###";
 const char OBJECTTEXT[] = "<OBJECT>";
 
-//==================================================================
+
 //= helper
-//==================================================================
+
 namespace
 {
     static LineEnd getModelLineEndSetting( const Reference< XPropertySet >& _rxModel )
@@ -129,9 +129,9 @@ namespace
     }
 }
 
-//==================================================================
+
 //= DbGridColumn
-//==================================================================
+
 
 CellControllerRef DbGridColumn::s_xEmptyController;
 
@@ -525,9 +525,9 @@ void DbGridColumn::ImplInitWindow( Window& rParent, const InitWindowFacet _eInit
         m_pCell->ImplInitWindow( rParent, _eInitWhat );
 }
 
-//==============================================================================
+
 //= cell controls
-//==============================================================================
+
 TYPEINIT0( DbCellControl )
 TYPEINIT1( DbLimitedLengthField, DbCellControl )
 TYPEINIT1( DbTextField, DbLimitedLengthField )
@@ -1045,9 +1045,9 @@ void DbCellControl::invalidatedController()
 // CellModels
 /*************************************************************************/
 
-//==============================================================================
+
 //= DbLimitedLengthField
-//==============================================================================
+
 
 DbLimitedLengthField::DbLimitedLengthField( DbGridColumn& _rColumn )
     :DbCellControl( _rColumn )
@@ -1076,9 +1076,9 @@ void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
         dynamic_cast< Edit* >( m_pPainter )->SetMaxTextLen( _nMaxLen );
 }
 
-//==============================================================================
+
 //= DbTextField
-//==============================================================================
+
 
 DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
@@ -1253,9 +1253,9 @@ void DbTextField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
         m_pPainterImplementation->SetMaxTextLen( _nMaxLen );
 }
 
-//==============================================================================
+
 //= DbFormattedField
-//==============================================================================
+
 DBG_NAME(DbFormattedField);
 
 DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
@@ -1638,9 +1638,9 @@ sal_Bool DbFormattedField::commitControl()
     return sal_True;
 }
 
-//==============================================================================
+
 //= DbCheckBox
-//==============================================================================
+
 
 DbCheckBox::DbCheckBox( DbGridColumn& _rColumn )
     :DbCellControl( _rColumn, sal_True )
@@ -1764,7 +1764,7 @@ OUString DbCheckBox::GetFormatText(const Reference< XColumn >& /*_rxField*/, con
     return OUString();
 }
 
-//==============================================================================
+
 //= DbPatternField
 
 DbPatternField::DbPatternField( DbGridColumn& _rColumn, const Reference<XComponentContext>& _rContext )
@@ -1881,9 +1881,9 @@ sal_Bool DbPatternField::commitControl()
     return sal_True;
 }
 
-//==============================================================================
+
 //= DbSpinField
-//==============================================================================
+
 
 DbSpinField::DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign )
     :DbCellControl( _rColumn )
@@ -1919,9 +1919,9 @@ CellControllerRef DbSpinField::CreateController() const
     return new SpinCellController( static_cast< SpinField* >( m_pWindow ) );
 }
 
-//==============================================================================
+
 //= DbNumericField
-//==============================================================================
+
 
 DbNumericField::DbNumericField( DbGridColumn& _rColumn )
     :DbSpinField( _rColumn )
@@ -2061,9 +2061,9 @@ sal_Bool DbNumericField::commitControl()
     return sal_True;
 }
 
-//==============================================================================
+
 //= DbCurrencyField
-//==============================================================================
+
 
 DbCurrencyField::DbCurrencyField(DbGridColumn& _rColumn)
     :DbSpinField( _rColumn )
@@ -2210,9 +2210,9 @@ sal_Bool DbCurrencyField::commitControl()
     return sal_True;
 }
 
-//==============================================================================
+
 //= DbDateField
-//==============================================================================
+
 
 DbDateField::DbDateField( DbGridColumn& _rColumn )
     :DbSpinField( _rColumn )
@@ -2343,9 +2343,9 @@ sal_Bool DbDateField::commitControl()
     return sal_True;
 }
 
-//==============================================================================
+
 //= DbTimeField
-//==============================================================================
+
 
 DbTimeField::DbTimeField( DbGridColumn& _rColumn )
     :DbSpinField( _rColumn, ::com::sun::star::awt::TextAlign::LEFT )
@@ -2455,9 +2455,9 @@ sal_Bool DbTimeField::commitControl()
     return sal_True;
 }
 
-//==============================================================================
+
 //= DbComboBox
-//==============================================================================
+
 
 DbComboBox::DbComboBox(DbGridColumn& _rColumn)
            :DbCellControl(_rColumn)

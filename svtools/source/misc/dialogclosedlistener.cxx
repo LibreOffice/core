@@ -19,18 +19,18 @@
 
 #include <svtools/dialogclosedlistener.hxx>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ui::dialogs;
 
-    //=====================================================================
+
     //= DialogClosedListener
-    //=====================================================================
+
 
     DialogClosedListener::DialogClosedListener()
     {
@@ -52,9 +52,9 @@ namespace svt
         m_aDialogClosedLink = Link();
     }
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

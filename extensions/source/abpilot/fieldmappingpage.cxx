@@ -23,14 +23,14 @@
 #include "abspilot.hxx"
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= FieldMappingPage
-    //=====================================================================
+
 
     FieldMappingPage::FieldMappingPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage( _pParent, ModuleRes( RID_PAGE_FIELDMAPPING ) )
@@ -103,8 +103,8 @@ namespace abp
         return 0L;
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

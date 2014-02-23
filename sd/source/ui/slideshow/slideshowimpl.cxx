@@ -3629,7 +3629,7 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
     throw IllegalArgumentException();
 }
 
-////////////////////////////////
+
 
 
 // XAnimationListener

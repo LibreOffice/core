@@ -75,9 +75,9 @@ using namespace ::com::sun::star::form::inspection;
 using ::com::sun::star::awt::XWindow;
 
 /*************************************************************************/
-//========================================================================
+
 //= FmPropBrwMgr
-//========================================================================
+
 
 SFX_IMPL_FLOATINGWINDOW(FmPropBrwMgr, SID_FM_SHOW_PROPERTIES)
 
@@ -91,8 +91,8 @@ FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
     ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
 }
 
-//========================================================================
-//========================================================================
+
+
 const long STD_WIN_SIZE_X = 300;
 const long STD_WIN_SIZE_Y = 350;
 
@@ -186,9 +186,9 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     return SVX_RESSTR(nClassNameResourceId);
 }
 
-//========================================================================
+
 // class FmPropBrw
-//========================================================================
+
 DBG_NAME(FmPropBrw);
 
 FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,

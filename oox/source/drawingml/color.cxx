@@ -29,7 +29,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 namespace {
 
@@ -202,7 +202,7 @@ void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERC
 
 } // namespace
 
-// ============================================================================
+
 
 Color::Color() :
     meMode( COLOR_UNUSED ),
@@ -766,7 +766,7 @@ void Color::toHsl() const
     }
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

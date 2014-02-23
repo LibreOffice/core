@@ -25,7 +25,7 @@
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucphier1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -36,9 +36,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucphier1_component_getFactory(
                 pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Hierarchy Content Provider.
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( HierarchyContentProvider::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -46,9 +46,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucphier1_component_getFactory(
         xFactory = HierarchyContentProvider::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // Hierarchy Data Source.
-    //////////////////////////////////////////////////////////////////////
+
 
     else if ( HierarchyDataSource::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -56,7 +56,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucphier1_component_getFactory(
         xFactory = HierarchyDataSource::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( xFactory.is() )
     {

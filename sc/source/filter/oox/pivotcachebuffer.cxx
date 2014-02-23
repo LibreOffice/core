@@ -44,7 +44,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -54,7 +54,7 @@ using namespace ::com::sun::star::util;
 
 using ::oox::core::Relations;
 
-// ============================================================================
+
 
 namespace {
 
@@ -151,7 +151,7 @@ void lclAdjustBinDateTime( css::util::DateTime& orDateTime )
 
 } // namespace
 
-// ============================================================================
+
 
 PivotCacheItem::PivotCacheItem() :
     mnType( XML_m ), mbUnused( false )
@@ -424,7 +424,7 @@ void PivotCacheItemList::importArray( SequenceInputStream& rStrm )
     }
 }
 
-// ============================================================================
+
 
 PCFieldModel::PCFieldModel() :
     mnNumFmtId( 0 ),
@@ -1033,7 +1033,7 @@ void PivotCacheField::writeSharedItemToSourceDataCell(
         writeItemToSourceDataCell( rSheetHelper, nCol, nRow, *pCacheItem );
 }
 
-// ============================================================================
+
 
 PCDefinitionModel::PCDefinitionModel() :
     mfRefreshedDate( 0.0 ),
@@ -1396,7 +1396,7 @@ void PivotCache::updateSourceDataRow( WorksheetHelper& rSheetHelper, sal_Int32 n
     }
 }
 
-// ============================================================================
+
 
 PivotCacheBuffer::PivotCacheBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1484,7 +1484,7 @@ PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )
     return *rxCache;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

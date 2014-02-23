@@ -29,7 +29,7 @@ using namespace ::com::sun::star::text;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 TextBodyProperties::TextBodyProperties():
     meVA( TextVerticalAdjust_TOP )
@@ -93,7 +93,7 @@ void TextBodyProperties::pushRotationAdjustments( sal_Int32 nRotation )
     }
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

@@ -661,7 +661,7 @@ XResultSet_impl::getStaticResultSet()
     return uno::Reference< sdbc::XResultSet >( this );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 XResultSet_impl::setListener(
@@ -676,9 +676,9 @@ XResultSet_impl::setListener(
 
     m_xListener = Listener;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Create "welcome event" and send it to listener.
-    //////////////////////////////////////////////////////////////////////
+
 
     // Note: We only have the implementation for a static result set at the
     //       moment (src590). The dynamic result sets passed to the listener
@@ -701,7 +701,7 @@ XResultSet_impl::setListener(
             static_cast< cppu::OWeakObject * >( this ), aActions ) );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 XResultSet_impl::connectToCache(
@@ -741,7 +741,7 @@ XResultSet_impl::connectToCache(
     throw ucb::ServiceNotFoundException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
-//=========================================================================
+
 // virtual
 sal_Int16 SAL_CALL
 XResultSet_impl::getCapabilities()

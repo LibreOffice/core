@@ -996,7 +996,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
     return Impl_createDataSource( rArguments );
 }
 
-////////////////////////////////////////////////////////////
+
 // SwChartDataProvider::GetBrokenCellRangeForExport
 //
 // fix for #i79009
@@ -1641,7 +1641,7 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
     }
 }
 
-////////////////////////////////////////
+
 // SwChartDataProvider::AddRowCols tries to notify charts of added columns
 // or rows and extends the value sequence respectively (if possible).
 // If those can be added to the end of existing value data-sequences those

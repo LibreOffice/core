@@ -21,10 +21,10 @@
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -32,9 +32,9 @@ namespace frm
     using namespace ::com::sun::star::sdb;
     using namespace ::dbtools;
 
-    //=====================================================================
+
     //= OErrorBroadcaster
-    //=====================================================================
+
 
     OErrorBroadcaster::OErrorBroadcaster( ::cppu::OBroadcastHelper& _rBHelper )
         :m_rBHelper( _rBHelper )
@@ -97,8 +97,8 @@ namespace frm
         m_aErrorListeners.removeInterface( _rxListener );
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

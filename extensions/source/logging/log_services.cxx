@@ -19,10 +19,10 @@
 
 #include "log_module.hxx"
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
 
     extern void createRegistryInfo_LoggerPool();
@@ -41,9 +41,9 @@ namespace logging
         createRegistryInfo_CsvFormatter();
     }
 
-//........................................................................
+
 } // namespace logging
-//........................................................................
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL log_component_getFactory(
     const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,

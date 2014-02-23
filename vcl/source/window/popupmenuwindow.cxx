@@ -39,7 +39,7 @@ PopupMenuFloatingWindow::ImplData::~ImplData()
 {
 }
 
-// ============================================================================
+
 
 PopupMenuFloatingWindow::PopupMenuFloatingWindow( Window* pParent, WinBits nStyle ) :
     FloatingWindow(pParent, nStyle),

@@ -179,7 +179,7 @@ OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
     return cppuhelper::detail::expandMacros( exp );
 }
 
-//==================================================================================================
+
 Reference< XInterface > SAL_CALL service_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     SAL_THROW( (RuntimeException) )

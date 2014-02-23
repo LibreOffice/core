@@ -31,19 +31,19 @@
 #include <unotools/confignode.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     //= DbRegisteredNamesConfig
-    //====================================================================
+
 
     void DbRegisteredNamesConfig::GetOptions( SfxItemSet& _rFillItems )
     {
@@ -126,8 +126,8 @@ namespace svx
         }
     }
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

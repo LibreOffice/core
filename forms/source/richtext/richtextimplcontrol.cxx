@@ -37,13 +37,13 @@
 
 #define EMPTY_PAPER_SIZE    0x7FFFFFFF
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
-    //====================================================================
+
+
     //= RichTextControlImpl
-    //====================================================================
+
 
     RichTextControlImpl::RichTextControlImpl( Control* _pAntiImpl, RichTextEngine* _pEngine, ITextAttributeListener* _pTextAttrListener, ITextSelectionListener* _pSelectionListener )
         :m_pAntiImpl            ( _pAntiImpl          )
@@ -661,8 +661,8 @@ namespace frm
         return m_pViewport->GetHideInactiveSelection( );
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

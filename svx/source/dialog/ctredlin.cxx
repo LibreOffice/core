@@ -35,7 +35,7 @@
 #include <svx/ctredlin.hxx>
 #include "helpid.hrc"
 
-//============================================================================
+
 //  Local Defines and Function
 
 
@@ -58,7 +58,7 @@ RedlinData::~RedlinData()
 {
 }
 
-//============================================================================
+
 //  class SvxRedlinEntry (Entries for list)
 
 
@@ -123,7 +123,7 @@ void SvLBoxColorString::Paint(
     rDev.SetTextColor(a2Color);
 }
 
-//============================================================================
+
 //  class SvxRedlinTable
 
 
@@ -388,7 +388,7 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 
 
 
-//============================================================================
+
 //  class SvxTPView
 
 
@@ -549,7 +549,7 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 
 
 
-//============================================================================
+
 //  class SvxTPFilter
 
 
@@ -1089,7 +1089,7 @@ IMPL_LINK( SvxTPFilter, RefHandle, PushButton*, pRef )
     return 0;
 }
 
-//============================================================================
+
 //  class SvxAcceptChgCtr
 
 

@@ -28,10 +28,10 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -52,9 +52,9 @@ namespace frm
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::frame::theUICommandDescription;
 
-    //====================================================================
+
     //= DefaultCommandDescriptionProvider
-    //====================================================================
+
     class DefaultCommandDescriptionProvider : public ICommandDescriptionProvider
     {
     public:
@@ -126,8 +126,8 @@ namespace frm
         return pDescriptionProvider;
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

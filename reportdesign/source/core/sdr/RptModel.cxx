@@ -195,8 +195,8 @@ uno::Reference< uno::XInterface > OReportModel::createShape(const OUString& aSer
     }
     return xRet;
 }
-//==================================================================
+
 }   //rptui
-//==================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

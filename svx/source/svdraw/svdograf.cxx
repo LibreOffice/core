@@ -271,7 +271,7 @@ sdr::properties::BaseProperties* SdrGrafObj::CreateObjectSpecificProperties()
     return new sdr::properties::GraphicProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
@@ -279,7 +279,7 @@ sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfGraphic(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // check if SVG and if try to get ObjectInfoPrimitive2D and extract info
 
 void SdrGrafObj::onGraphicChanged()

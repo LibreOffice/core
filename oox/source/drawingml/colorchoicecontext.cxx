@@ -32,7 +32,7 @@ using ::oox::core::ContextHandler;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 ColorValueContext::ColorValueContext( ContextHandler2Helper& rParent, Color& rColor ) :
     ContextHandler2( rParent ),
@@ -124,7 +124,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
     return 0;
 }
 
-// ============================================================================
+
 
 ColorContext::ColorContext( ContextHandler2Helper& rParent, Color& rColor ) :
     ContextHandler2( rParent ),
@@ -148,7 +148,7 @@ ColorContext::ColorContext( ContextHandler2Helper& rParent, Color& rColor ) :
     return 0;
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

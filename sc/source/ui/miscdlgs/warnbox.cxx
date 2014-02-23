@@ -25,7 +25,7 @@
 #include "sc.hrc"
 
 
-// ============================================================================
+
 
 ScCbWarningBox::ScCbWarningBox( Window* pParent, const OUString& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
@@ -80,6 +80,6 @@ void ScReplaceWarnBox::DisableDialog()
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

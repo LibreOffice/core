@@ -31,10 +31,10 @@
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include "ReportHelperImpl.hxx"
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 uno::Sequence< OUString > lcl_getImageOptionals()
@@ -483,8 +483,8 @@ void SAL_CALL OImageControl::setPreserveIRI( ::sal_Bool _preserveiri ) throw (un
 {
     set(PROPERTY_PRESERVEIRI,_preserveiri,m_bPreserveIRI);
 }
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

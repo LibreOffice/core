@@ -31,10 +31,10 @@
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
     using namespace mysql;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -60,9 +60,9 @@ namespace connectivity
         }
     }
 
-    //====================================================================
+
     //= ODriverDelegator
-    //====================================================================
+
 
     ODriverDelegator::ODriverDelegator(const Reference< XComponentContext >& _rxContext)
         : ODriverDelegator_BASE(m_aMutex)
@@ -491,8 +491,8 @@ namespace connectivity
         return getSupportedServiceNames_Static();
     }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

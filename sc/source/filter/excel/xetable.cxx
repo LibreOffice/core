@@ -40,9 +40,9 @@ using namespace ::oox;
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
-// ============================================================================
+
 // Helper records for cell records
-// ============================================================================
+
 
 XclExpStringRec::XclExpStringRec( const XclExpRoot& rRoot, const OUString& rResult ) :
     XclExpRecord( EXC_ID3_STRING ),
@@ -528,9 +528,9 @@ XclExpTableopRef XclExpTableopBuffer::TryCreate( const ScAddress& rScPos, const 
     return xRec;
 }
 
-// ============================================================================
+
 // Cell records
-// ============================================================================
+
 
 XclExpCellBase::XclExpCellBase(
         sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos ) :
@@ -1345,9 +1345,9 @@ void XclExpRkCell::WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol )
     rStrm << maRkValues[ nRelCol ];
 }
 
-// ============================================================================
+
 // Rows and Columns
-// ============================================================================
+
 
 XclExpOutlineBuffer::XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows ) :
         mpScOLArray( 0 ),
@@ -1502,7 +1502,7 @@ void XclExpDimensions::WriteBody( XclExpStream& rStrm )
         rStrm << sal_uInt16( 0 );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1723,7 +1723,7 @@ void XclExpColinfoBuffer::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cols );
 }
 
-// ============================================================================
+
 
 XclExpDefaultRowData::XclExpDefaultRowData() :
     mnFlags( EXC_DEFROW_DEFAULTFLAGS ),
@@ -2270,9 +2270,9 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
 
 }
 
-// ============================================================================
+
 // Cell Table
-// ============================================================================
+
 
 XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -2557,6 +2557,6 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
     mxExtLst->SaveXml( rStrm );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

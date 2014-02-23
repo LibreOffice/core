@@ -21,7 +21,7 @@
 
 #include <idlemgr.hxx>
 
-// =======================================================================
+
 
 struct ImplIdleData
 {
@@ -32,7 +32,7 @@ struct ImplIdleData
 
 #define IMPL_IDLETIMEOUT         350
 
-// =======================================================================
+
 
 ImplIdleMgr::ImplIdleMgr()
 {

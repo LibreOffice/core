@@ -37,7 +37,7 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -49,7 +49,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 namespace {
 
@@ -70,7 +70,7 @@ sal_Int32 lclGetShapeId( const OUString& rShapeId )
 
 } // namespace
 
-// ============================================================================
+
 
 OleObjectInfo::OleObjectInfo( bool bDmlShape ) :
     mbAutoLoad( false ),
@@ -83,7 +83,7 @@ void OleObjectInfo::setShapeId( sal_Int32 nShapeId )
     maShapeId = lclGetShapeId( nShapeId );
 }
 
-// ============================================================================
+
 
 ControlInfo::ControlInfo()
 {
@@ -94,7 +94,7 @@ void ControlInfo::setShapeId( sal_Int32 nShapeId )
     maShapeId = lclGetShapeId( nShapeId );
 }
 
-// ============================================================================
+
 
 Drawing::Drawing( XmlFilterBase& rFilter, const Reference< XDrawPage >& rxDrawPage, DrawingType eType ) :
     mrFilter( rFilter ),
@@ -290,7 +290,7 @@ void Drawing::notifyXShapeInserted( const Reference< XShape >& /*rxShape*/,
 {
 }
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespave oox

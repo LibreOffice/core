@@ -22,7 +22,7 @@
 
 namespace { // anonymous namespace
 
-// ====================================================================
+
 
 #define MAX_CVT_SELECT 6
 
@@ -40,7 +40,7 @@ private:
     rtl_UnicodeToTextContext maContexts[ MAX_CVT_SELECT+1 ];
 };
 
-// ====================================================================
+
 
 ConverterCache::ConverterCache( void)
 {
@@ -150,7 +150,7 @@ void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt1
 
 } // anonymous namespace
 
-// ====================================================================
+
 
 #include "xlat.hxx"
 

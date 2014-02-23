@@ -59,10 +59,10 @@ extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController()
     ::pcr::OAutoRegistration< ::pcr::OPropertyBrowserController > aAutoRegistration;
 }
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -78,9 +78,9 @@ namespace pcr
     using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
 
-    //========================================================================
+
     //= OPropertyBrowserController
-    //========================================================================
+
     DBG_NAME(OPropertyBrowserController)
 
     OPropertyBrowserController::OPropertyBrowserController( const Reference< XComponentContext >& _rxContext )
@@ -979,7 +979,7 @@ namespace pcr
     {
         try
         {
-            //////////////////////////////////////////////////////////////////////
+
             // obtain the properties of the object
             ::std::vector< Property > aProperties;
 
@@ -1142,7 +1142,7 @@ namespace pcr
 
             _rDescriptor.assignFrom( handler->second->describePropertyLine( _rProperty.Name, this ) );
 
-            //////////////////////////////////////////////////////////////////////
+
 
             _rDescriptor.xPropertyHandler = handler->second;
             _rDescriptor.sName = _rProperty.Name;
@@ -1394,12 +1394,12 @@ namespace pcr
             // do we have a dedicated handler for this property, which we can delegate some tasks to?
             PropertyHandlerRef handler = impl_getHandlerForProperty_throw( rName );
 
-            //////////////////////////////////////////////////////////////////////
+
             // set the value ( only if it's not a placeholder )
             if ( !bIsPlaceHolderValue )
                 handler->setPropertyValue( rName, _rValue );
 
-            //////////////////////////////////////////////////////////////////////
+
             // re-retrieve the value
             Any aNormalizedValue = handler->getPropertyValue( rName );
 
@@ -1745,9 +1745,9 @@ namespace pcr
         }
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

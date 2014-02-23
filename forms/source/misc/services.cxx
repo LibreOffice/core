@@ -28,7 +28,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
 
-//.......................................................................................
+
 #define DECLARE_SERVICE_INFO(classImplName) \
     namespace frm { \
         extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL classImplName##_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) throw (::com::sun::star::uno::RuntimeException); \
@@ -119,27 +119,27 @@ void registerClassInfo(
 }
 
 
-//.......................................................................................
+
 #define REGISTER_CLASS_CORE(classImplName) \
     registerClassInfo( \
         OUString("com.sun.star.form.") + OUString(#classImplName), \
         aServices, \
         frm::classImplName##_CreateInstance)
 
-//.......................................................................................
+
 #define REGISTER_CLASS1(classImplName, service1) \
     aServices.realloc(1); \
     aServices.getArray()[0] = service1; \
     REGISTER_CLASS_CORE(classImplName)
 
-//.......................................................................................
+
 #define REGISTER_CLASS2(classImplName, service1, service2) \
     aServices.realloc(2); \
     aServices.getArray()[0] = service1; \
     aServices.getArray()[1] = service2; \
     REGISTER_CLASS_CORE(classImplName)
 
-//.......................................................................................
+
 #define REGISTER_CLASS3(classImplName, service1, service2, service3) \
     aServices.realloc(3); \
     aServices.getArray()[0] = service1; \
@@ -147,7 +147,7 @@ void registerClassInfo(
     aServices.getArray()[2] = service3; \
     REGISTER_CLASS_CORE(classImplName)
 
-//.......................................................................................
+
 #define REGISTER_CLASS4(classImplName, service1, service2, service3, service4) \
     aServices.realloc(4); \
     aServices.getArray()[0] = service1; \
@@ -164,7 +164,7 @@ void ensureClassInfos()
         return;
     Sequence< OUString > aServices;
 
-    // ========================================================================
+
     // = ControlModels
 
     // - FixedText
@@ -221,7 +221,7 @@ void ensureClassInfos()
         aServices,
         frm::OFormattedFieldWrapper_CreateInstance_ForceFormatted);
 
-    // ========================================================================
+
     // = Controls
     // - RadioButton
     REGISTER_CLASS2(ORadioButtonControl, STARDIV_ONE_FORM_CONTROL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON);
@@ -255,7 +255,7 @@ void ensureClassInfos()
     REGISTER_CLASS2(OImageControlControl, STARDIV_ONE_FORM_CONTROL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL);
 
 
-    // ========================================================================
+
     // = various
     aServices.realloc(1);
     aServices.getArray()[0] = "com.sun.star.form.Forms";
@@ -263,7 +263,7 @@ void ensureClassInfos()
 
     REGISTER_CLASS1(ImageProducer, SRV_AWT_IMAGEPRODUCER);
 
-    // ========================================================================
+
     // = XForms core
 #define REGISTER_XFORMS_CLASS(name) \
     aServices.realloc(1); \
@@ -275,7 +275,7 @@ void ensureClassInfos()
 
 }
 
-//=======================================================================================
+
 extern "C"
 {
 
@@ -317,7 +317,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pI
     if (!_pServiceManager || !_pImplName)
         return NULL;
 
-    // ========================================================================
+
     // a lot of stuff which is implemented "manually" here in this file
     void* pRet = NULL;
 
@@ -359,7 +359,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pI
         }
     }
 
-    // ========================================================================
+
     // the real way - use the OModule
     if ( !pRet )
     {

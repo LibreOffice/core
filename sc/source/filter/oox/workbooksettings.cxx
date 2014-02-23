@@ -34,7 +34,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sheet;
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::util;
 
 using ::oox::core::CodecHelper;
 
-// ============================================================================
+
 
 namespace {
 
@@ -65,7 +65,7 @@ const sal_Int16 API_SHOWMODE_PLACEHOLDER        = 2;        /// Show placeholder
 
 } // namespace
 
-// ============================================================================
+
 
 FileSharingModel::FileSharingModel() :
     mnPasswordHash( 0 ),
@@ -73,7 +73,7 @@ FileSharingModel::FileSharingModel() :
 {
 }
 
-// ============================================================================
+
 
 WorkbookSettingsModel::WorkbookSettingsModel() :
     mnShowObjectMode( XML_all ),
@@ -91,7 +91,7 @@ void WorkbookSettingsModel::setBiffObjectMode( sal_uInt16 nObjMode )
     mnShowObjectMode = STATIC_ARRAY_SELECT( spnObjModes, nObjMode, XML_all );
 }
 
-// ============================================================================
+
 
 CalcSettingsModel::CalcSettingsModel() :
     mfIterateDelta( 0.001 ),
@@ -109,7 +109,7 @@ CalcSettingsModel::CalcSettingsModel() :
 {
 }
 
-// ============================================================================
+
 
 WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -276,7 +276,7 @@ void WorkbookSettings::setDateMode( bool bDateMode1904, bool bDateCompatibility 
     getUnitConverter().finalizeNullDate( getNullDate() );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

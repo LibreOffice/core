@@ -32,7 +32,7 @@
 #include "view.hxx"
 
 
-////////////////////////////////////////////////////////////
+
 
 static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID )
 {
@@ -102,7 +102,7 @@ static sal_uInt16  GetCategoryRID( sal_uInt16 nResId )
 }
 
 
-////////////////////////////////////////////////////////////
+
 
 
 SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,

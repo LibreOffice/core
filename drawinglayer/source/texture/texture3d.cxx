@@ -21,7 +21,7 @@
 #include <vcl/bmpacc.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -56,7 +56,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -238,7 +238,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -315,7 +315,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

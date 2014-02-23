@@ -20,19 +20,19 @@
 #include "java/ContextClassLoader.hxx"
 #include "java/lang/Object.hxx"
 
-//........................................................................
+
 namespace connectivity { namespace jdbc
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
 
     using ::connectivity::java_lang_Object;
 
-    //====================================================================
+
     //= ContextClassLoaderScope
-    //====================================================================
+
 
     ContextClassLoaderScope::ContextClassLoaderScope( JNIEnv& environment, const GlobalRef< jobject >& newClassLoader,
         const ::comphelper::ResourceBasedEventLogger& _rLoggerForErrors, const Reference< XInterface >& _rxErrorContext )
@@ -111,8 +111,8 @@ namespace connectivity { namespace jdbc
             }
         }
     }
-//........................................................................
+
 } } // namespace connectivity::jdbc
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

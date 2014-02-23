@@ -24,7 +24,7 @@
 #include "osx/salobj.h"
 #include "osx/salframe.h"
 
-// =======================================================================
+
 
 AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
     mpFrame( pFrame ),

@@ -29,10 +29,10 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -108,9 +108,9 @@ namespace toolkit
         }
     }
 
-    // ===================================================================
+
     // = UnoControlFormattedFieldModel
-    // ===================================================================
+
 
     UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
@@ -417,9 +417,9 @@ namespace toolkit
         return xInfo;
     }
 
-    // ===================================================================
+
     // = UnoFormattedFieldControl
-    // ===================================================================
+
 
     UnoFormattedFieldControl::UnoFormattedFieldControl()
         :UnoSpinFieldControl()
@@ -452,9 +452,9 @@ namespace toolkit
             GetTextListeners().textChanged( e );
     }
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(

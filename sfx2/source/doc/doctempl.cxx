@@ -97,14 +97,14 @@ using namespace ::ucbhelper;
 using ::std::vector;
 using ::std::advance;
 
-//========================================================================
+
 
 #define TITLE                   "Title"
 #define TARGET_URL              "TargetURL"
 
 #define COMMAND_TRANSFER        "transfer"
 
-//========================================================================
+
 
 class RegionData_Impl;
 
@@ -279,7 +279,7 @@ static sal_Bool getTextProperty_Impl( Content& rContent,
                                       const OUString& rPropName,
                                       OUString& rPropValue );
 
-//========================================================================
+
 
 OUString SfxDocumentTemplates::GetFullRegionName
 (

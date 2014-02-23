@@ -38,7 +38,7 @@ using namespace ::com::sun::star::ucb;
 namespace dp_misc
 {
 
-//==============================================================================
+
 bool create_ucb_content(
     ::ucbhelper::Content * ret_ucbContent, OUString const & url,
     Reference<XCommandEnvironment> const & xCmdEnv,
@@ -75,7 +75,7 @@ bool create_ucb_content(
     return false;
 }
 
-//==============================================================================
+
 bool create_folder(
     ::ucbhelper::Content * ret_ucb_content, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv, bool throw_exc )
@@ -159,7 +159,7 @@ bool create_folder(
     return false;
 }
 
-//==============================================================================
+
 bool erase_path( OUString const & url,
                  Reference<XCommandEnvironment> const & xCmdEnv,
                  bool throw_exc )
@@ -183,7 +183,7 @@ bool erase_path( OUString const & url,
     return true;
 }
 
-//==============================================================================
+
 ::rtl::ByteSequence readFile( ::ucbhelper::Content & ucb_content )
 {
     ::rtl::ByteSequence bytes;
@@ -196,7 +196,7 @@ bool erase_path( OUString const & url,
     return bytes;
 }
 
-//==============================================================================
+
 bool readLine( OUString * res, OUString const & startingWith,
                ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc )
 {

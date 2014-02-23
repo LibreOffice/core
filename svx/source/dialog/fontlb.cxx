@@ -24,7 +24,7 @@
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 
-// ============================================================================
+
 
 DBG_NAME( SvLBoxFontString );
 
@@ -87,7 +87,7 @@ void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEnt
 }
 
 
-// ============================================================================
+
 
 SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
@@ -160,6 +160,6 @@ void SvxFontListBox::InitEntry(
                                   eButtonKind );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

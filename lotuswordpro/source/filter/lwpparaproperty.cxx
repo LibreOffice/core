@@ -195,7 +195,7 @@ sal_uInt32 LwpParaSpacingProperty::GetType(void)
     return PP_LOCAL_SPACING;
 }
 
-// 01/25/2004////////////////////////////////////////////////////////
+// 01/25/2004
 LwpParaBorderProperty::LwpParaBorderProperty(LwpObjectStream* pStrm) :
 m_pParaBorderOverride(NULL)
 {
@@ -248,7 +248,7 @@ LwpParaNumberingProperty::LwpParaNumberingProperty(LwpObjectStream * pStrm)
     LwpNumberingPiece *pNumberingPiece = dynamic_cast<LwpNumberingPiece*>(aNumberingPiece.obj(VO_NUMBERINGPIECE));
     m_pNumberingOverride = pNumberingPiece ? dynamic_cast<LwpNumberingOverride*>(pNumberingPiece->GetOverride()) : NULL;
 }
-//end//////////////////////////////////////////////////////////////////////
+//end
 
 LwpParaTabRackProperty::LwpParaTabRackProperty(LwpObjectStream* pFile)
 {

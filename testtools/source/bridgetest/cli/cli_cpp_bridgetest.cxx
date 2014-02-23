@@ -356,7 +356,7 @@ static bool performQueryForUnknownType(XBridgeTest* xLBT)
     return bRet;
 }
 
-// //==================================================================================================
+//
 static bool performTest(XBridgeTest* xLBT)
 {
     check( xLBT != 0, "### no test interface!" );
@@ -728,7 +728,7 @@ static bool raiseOnewayException(XBridgeTest* xLBT)
     return bReturn;
 }
 
-// //==================================================================================================
+//
 static bool raiseException(XBridgeTest* xLBT )
 {
     int nCount = 0;

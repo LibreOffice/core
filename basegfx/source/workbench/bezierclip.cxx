@@ -92,7 +92,7 @@ int fac( int n )
 void Impl_calcFatLine( FatLine& line, const Bezier& c )
 {
     // Prepare normalized implicit line
-    // ================================
+
 
     // calculate vector orthogonal to p1-p4:
     line.a = -(c.p0.y - c.p3.y);
@@ -110,7 +110,7 @@ void Impl_calcFatLine( FatLine& line, const Bezier& c )
 
 
     // Determine bounding fat line from it
-    // ===================================
+
 
     // calc control point distances
     const double dP2( calcLineDistance(line.a, line.b, line.c, c.p1.x, c.p1.y ) );
@@ -242,7 +242,7 @@ bool Impl_calcSafeParams( double&           t1,
             else
             {
                 // check against lower and higher bounds
-                // =====================================
+
                 const double r_x( p1.x - p0.x );
 
                 // calc intersection with horizontal dMin line
@@ -945,7 +945,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
                                                         double                                                                          last_t2_c2  )
 {
     // check end condition
-    // ===================
+
 
     // TODO: tidy up recursion handling. maybe put everything in a
     // struct and swap that here at method entry
@@ -979,7 +979,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
     }
 
     // refine solution
-    // ===============
+
 
     double t1_c1, t2_c1;
 
@@ -1013,7 +1013,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
             // for now, end condition is just a fixed threshold on the t's
 
             // check end condition
-            // ===================
+
 
 #if 1
             if( fabs(last_t2_c1 - last_t1_c1) < 0.0001 &&
@@ -1059,7 +1059,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
                 if( false )
                 {
                     // subdivide and descend
-                    // =====================
+
 
                     Bezier part1;
                     Bezier part2;
@@ -1069,7 +1069,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
                     if( last_t2_c1 - last_t1_c1 > last_t2_c2 - last_t1_c2 )
                     {
                         // subdivide c1
-                        // ============
+
 
                         intervalMiddle = last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0;
 
@@ -1091,7 +1091,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
                     else
                     {
                         // subdivide c2
-                        // ============
+
 
                         intervalMiddle = last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0;
 
@@ -1114,7 +1114,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
                 else
                 {
                     // apply calculated clip
-                    // =====================
+
 
                     // clip safe ranges off c1_orig
                     Bezier c1_part1;

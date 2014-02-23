@@ -49,10 +49,10 @@
 
 #include <algorithm>
 
-//......................................................................................................................
+
 namespace ucb { namespace ucp { namespace ext
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -95,9 +95,9 @@ namespace ucb { namespace ucp { namespace ext
     namespace OpenMode = ::com::sun::star::ucb::OpenMode;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //==================================================================================================================
+
     //= helper
-    //==================================================================================================================
+
     namespace
     {
 
@@ -122,9 +122,9 @@ namespace ucb { namespace ucp { namespace ext
         };
     }
 
-    //==================================================================================================================
+
     //= Content
-    //==================================================================================================================
+
 
     Content::Content( const Reference< XComponentContext >& rxContext, ::ucbhelper::ContentProviderImplHelper* i_pProvider,
                       const Reference< XContentIdentifier >& i_rIdentifier )
@@ -548,9 +548,9 @@ namespace ucb { namespace ucp { namespace ext
         sal_uInt32 nCommandCount = 5;
         static const CommandInfo aCommandInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////////
+
             // Mandatory commands
-            ///////////////////////////////////////////////////////////////
+
             CommandInfo(
                 OUString(  "getCommandInfo"  ),
                 -1,
@@ -573,9 +573,9 @@ namespace ucb { namespace ucp { namespace ext
                 getCppuType(
                     static_cast< Sequence< PropertyValue > * >( 0 ) )
             )
-            ///////////////////////////////////////////////////////////////
+
             // Optional standard commands
-            ///////////////////////////////////////////////////////////////
+
             , CommandInfo(
                 OUString(  "open"  ),
                 -1,
@@ -664,8 +664,8 @@ namespace ucb { namespace ucp { namespace ext
         }
     }
 
-//......................................................................................................................
+
 } } }   // namespace ucp::ext
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

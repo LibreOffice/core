@@ -1010,7 +1010,7 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
         aMEFormula.Invalidate();
         aMEFormula.Update();
     }
-    //...
+
 
     return 0;
 }
@@ -1635,7 +1635,7 @@ const FormulaHelper& FormulaDlg_Impl::GetFormulaHelper()  const
 {
     return m_aFormulaHelper;
 }
-//============================================================================
+
 FormulaModalDialog::FormulaModalDialog( Window* pParent
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult

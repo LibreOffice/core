@@ -23,10 +23,10 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/debug.hxx>
 
-//............................................................................
+
 namespace utl
 {
-//............................................................................
+
 
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::Reference;
@@ -39,9 +39,9 @@ namespace utl
     using ::com::sun::star::util::XCloseListener;
     using ::com::sun::star::util::CloseVetoException;
 
-    //========================================================================
+
     //= DisposableComponent
-    //========================================================================
+
 
     DisposableComponent::DisposableComponent( const Reference< XInterface >& _rxComponent )
         :m_xComponent( _rxComponent, UNO_QUERY )
@@ -66,9 +66,9 @@ namespace utl
         }
     }
 
-    //========================================================================
+
     //= CloseableComponentImpl
-    //========================================================================
+
     DBG_NAME( CloseableComponentImpl )
     typedef ::cppu::WeakImplHelper1 <   XCloseListener
                                     >   CloseableComponentImpl_Base;
@@ -212,9 +212,9 @@ namespace utl
             // same reasoning for this assertion as in ->notifyClosing
     }
 
-    //========================================================================
+
     //= CloseableComponentImpl
-    //========================================================================
+
     DBG_NAME( CloseableComponent )
 
     CloseableComponent::CloseableComponent( const Reference< XInterface >& _rxComponent )
@@ -231,8 +231,8 @@ namespace utl
         DBG_DTOR( CloseableComponent, NULL );
     }
 
-//............................................................................
+
 }   // namespace utl
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

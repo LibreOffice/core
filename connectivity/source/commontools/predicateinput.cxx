@@ -34,10 +34,10 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
 
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::util::XNumberFormatsSupplier;
@@ -60,7 +60,7 @@ namespace dbtools
 
     using ::connectivity::OSQLParseNode;
 
-    //=====================================================================
+
 
     static sal_Unicode lcl_getSeparatorChar( const OUString& _rSeparator, sal_Unicode _nFallback )
     {
@@ -72,9 +72,9 @@ namespace dbtools
         return nReturn;
     }
 
-    //=====================================================================
+
     //= OPredicateInputController
-    //=====================================================================
+
 
     sal_Bool OPredicateInputController::getSeparatorChars( const Locale& _rLocale, sal_Unicode& _rDecSep, sal_Unicode& _rThdSep ) const
     {
@@ -432,9 +432,9 @@ namespace dbtools
         }
         return sReturn;
     }
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,7 @@
 namespace pseudo_uno
 {
 
-//==================================================================================================
+
 struct pseudo_Mapping : public uno_Mapping
 {
     oslInterlockedCount     nRef;

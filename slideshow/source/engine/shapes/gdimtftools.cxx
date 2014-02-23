@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 
 
 // free support functions
-// ======================
+
 
 namespace slideshow
 {
@@ -235,7 +235,7 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
 {
     // Special handling for actions that represent
     // more than one indexable action
-    // ===========================================
+
 
     switch (pCurrAct->GetType()) {
     case META_TEXT_ACTION: {

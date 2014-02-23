@@ -36,10 +36,10 @@
 
 #include <stdio.h>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     using ::com::sun::star::logging::XConsoleHandler;
     using ::com::sun::star::lang::XServiceInfo;
@@ -60,9 +60,9 @@ namespace logging
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    //====================================================================
+
     //= ConsoleHandler - declaration
-    //====================================================================
+
 
     typedef ::cppu::WeakComponentImplHelper3    <   XConsoleHandler
                                                 ,   XServiceInfo
@@ -116,9 +116,9 @@ namespace logging
         void    leaveMethod( MethodGuard::Access );
     };
 
-    //====================================================================
+
     //= ConsoleHandler - implementation
-    //====================================================================
+
 
     ConsoleHandler::ConsoleHandler( const Reference< XComponentContext >& _rxContext )
         :ConsoleHandler_Base( m_aMutex )
@@ -312,8 +312,8 @@ namespace logging
         static OAutoRegistration< ConsoleHandler > aAutoRegistration;
     }
 
-//........................................................................
+
 } // namespace logging
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

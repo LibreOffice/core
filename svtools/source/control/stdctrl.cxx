@@ -20,7 +20,7 @@
 
 #include <svtools/stdctrl.hxx>
 
-// =======================================================================
+
 
 FixedInfo::FixedInfo( Window* pParent, WinBits nWinStyle ) :
     FixedText( pParent, nWinStyle | WB_INFO )

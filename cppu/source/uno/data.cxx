@@ -113,7 +113,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
     return ret;
 }
 
-//==================================================================================================
+
 void defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pCompType )
@@ -121,7 +121,7 @@ void defaultConstructStruct(
 {
     _defaultConstructStruct( pMem, pCompType );
 }
-//==================================================================================================
+
 void copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -130,7 +130,7 @@ void copyConstructStruct(
 {
     _copyConstructStruct( pDest, pSource, pTypeDescr, acquire, mapping );
 }
-//==================================================================================================
+
 void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -139,7 +139,7 @@ void destructStruct(
 {
     _destructStruct( pValue, pTypeDescr, release );
 }
-//==================================================================================================
+
 bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -148,7 +148,7 @@ bool equalStruct(
 {
     return _equalStruct( pDest, pSource, pTypeDescr, queryInterface, release );
 }
-//==================================================================================================
+
 bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -158,7 +158,7 @@ bool assignStruct(
     return _assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
 }
 
-//==============================================================================
+
 uno_Sequence * copyConstructSequence(
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
@@ -167,7 +167,7 @@ uno_Sequence * copyConstructSequence(
     return icopyConstructSequence( pSource, pElementType, acquire, mapping );
 }
 
-//==============================================================================
+
 void destructSequence(
     uno_Sequence * pSequence,
     typelib_TypeDescriptionReference * pType,
@@ -177,7 +177,7 @@ void destructSequence(
     idestructSequence( pSequence, pType, pTypeDescr, release );
 }
 
-//==================================================================================================
+
 bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,

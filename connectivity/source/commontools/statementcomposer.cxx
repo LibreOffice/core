@@ -31,10 +31,10 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
@@ -52,9 +52,9 @@ namespace dbtools
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    //====================================================================
+
     //= StatementComposer_Data
-    //====================================================================
+
     struct StatementComposer_Data
     {
         const Reference< XConnection >          xConnection;
@@ -233,9 +233,9 @@ namespace dbtools
         }
     }
 
-    //====================================================================
+
     //= StatementComposer
-    //====================================================================
+
 
     StatementComposer::StatementComposer( const Reference< XConnection >& _rxConnection,
         const OUString&  _rCommand, const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing )
@@ -291,8 +291,8 @@ namespace dbtools
         return OUString();
     }
 
-//........................................................................
+
 } // namespace dbtools
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

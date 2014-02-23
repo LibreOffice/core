@@ -49,14 +49,14 @@ using namespace ::sf_misc;
 #define BASPROV_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY
 
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
 
-    // =============================================================================
+
+
     // BasicMethodNodeImpl
-    // =============================================================================
+
 
     BasicMethodNodeImpl::BasicMethodNodeImpl( const Reference< XComponentContext >& rxContext,
         const OUString& sScriptingContext, SbMethod* pMethod, bool isAppScript )
@@ -330,8 +330,8 @@ namespace basprov
 
 
 
-//.........................................................................
+
 }   // namespace basprov
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,10 @@
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -76,9 +76,9 @@ namespace pcr
         }
     }
 
-    //========================================================================
+
     //= PushButtonNavigation
-    //========================================================================
+
 
     PushButtonNavigation::PushButtonNavigation( const Reference< XPropertySet >& _rxControlModel )
         :m_xControlModel( _rxControlModel )
@@ -291,8 +291,8 @@ namespace pcr
         return !sTargetURL.isEmpty();
     }
 
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

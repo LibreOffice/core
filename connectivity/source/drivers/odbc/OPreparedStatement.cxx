@@ -678,9 +678,9 @@ Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLExc
 }
 
 
-//====================================================================
+
 // methods
-//====================================================================
+
 
 
 // initBoundParam

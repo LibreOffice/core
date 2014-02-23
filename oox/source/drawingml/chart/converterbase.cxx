@@ -40,7 +40,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 namespace cssc = ::com::sun::star::chart;
 
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 namespace {
 
@@ -143,7 +143,7 @@ OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 
 } // namespace
 
-// ============================================================================
+
 
 struct ConverterData
 {
@@ -210,7 +210,7 @@ ConverterData::~ConverterData()
     }
 }
 
-// ============================================================================
+
 
 ConverterRoot::ConverterRoot(
         XmlFilterBase& rFilter,
@@ -295,7 +295,7 @@ void ConverterRoot::convertTitlePositions()
     }
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -430,7 +430,7 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
     return false;
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

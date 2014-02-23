@@ -320,7 +320,7 @@ namespace slideshow
 
 
             // calc sprite position, size and content transformation
-            // =====================================================
+
 
             // the shape transformation for a sprite is always a
             // simple scale-up to the nominal shape size. Everything
@@ -437,7 +437,7 @@ namespace slideshow
 
 
             // process flags
-            // =============
+
 
             bool bRedrawRequired( mbForceUpdate || (nUpdateFlags & FORCE) );
 
@@ -497,7 +497,7 @@ namespace slideshow
 
 
             // sprite needs repaint - output to sprite canvas
-            // ==============================================
+
 
             ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
 

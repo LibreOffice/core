@@ -34,9 +34,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdb;
 
-//====================================================================
+
 //= SwDbtoolsClient
-//====================================================================
+
 namespace
 {
 

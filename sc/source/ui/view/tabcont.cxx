@@ -36,7 +36,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//==================================================================
+
 
 ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
     TabBar( pParent,

@@ -28,7 +28,7 @@
 #include "scresid.hxx"
 
 
-//==================================================================
+
 
 ScGroupDlg::ScGroupDlg(Window* pParent, bool bUngroup, bool bRows)
     : ModalDialog(pParent,

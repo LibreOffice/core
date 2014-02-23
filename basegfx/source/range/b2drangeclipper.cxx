@@ -42,7 +42,7 @@ namespace basegfx
         // Generating a poly-polygon from a bunch of rectangles
         //
         // Helper functionality for sweep-line algorithm
-        // ====================================================
+
 
         typedef std::vector<B2DRange> VectorOfRanges;
 
@@ -558,7 +558,7 @@ namespace basegfx
             o_rEventVector.reserve( 2*rRanges.size() );
 
             // generate events
-            // ===============
+
 
             // first pass: add all left edges in increasing order
             std::vector<B2DRange>::const_iterator aCurrRect=rRanges.begin();
@@ -594,7 +594,7 @@ namespace basegfx
             }
 
             // sort events
-            // ===========
+
 
             // since we use stable_sort, the order of events with the
             // same x value will not change. The elaborate two-pass
@@ -881,7 +881,7 @@ namespace basegfx
         {
             // sweep-line algorithm to generate a poly-polygon
             // from a bunch of rectangles
-            // ===============================================
+
             //
             // This algorithm uses the well-known sweep line
             // concept, explained in every good text book about

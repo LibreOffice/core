@@ -197,7 +197,7 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
     }
 }
 
-//============================================================================
+
 //PropertySetInfoImpl
 
 PropertySetInfoImpl::PropertySetInfoImpl()

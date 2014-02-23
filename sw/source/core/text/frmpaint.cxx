@@ -58,7 +58,7 @@
 
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////
+
 
 static bool bInitFont = true;
 

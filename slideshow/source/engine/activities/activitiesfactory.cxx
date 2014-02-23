@@ -73,7 +73,7 @@ template<> struct FormulaTraits<double>
 };
 
 // Various ActivityBase specializations for different animator types
-// =================================================================
+
 
 /** FromToBy handler
 
@@ -678,7 +678,7 @@ AnimationActivitySharedPtr createActivity(
     = Interpolator< typename AnimationType::ValueType >() )
 {
     // setup common parameters
-    // =======================
+
 
     ActivityParameters aActivityParms( rParms.mpEndEvent,
                                        rParms.mrEventQueue,
@@ -727,7 +727,7 @@ AnimationActivitySharedPtr createActivity(
     if( nValueLen )
     {
         // Value list activity
-        // ===================
+
 
         // fake keytimes, if necessary
         if( !aKeyTimes.hasElements() )
@@ -793,7 +793,7 @@ AnimationActivitySharedPtr createActivity(
     else
     {
         // FromToBy activity
-        // =================
+
 
         // determine type of animation needed here:
         // FromToBy activities are possible with

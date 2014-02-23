@@ -27,17 +27,17 @@
 #include <functional>
 #include <algorithm>
 
-//............................................................................
+
 namespace rptui
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star;
 
-    //========================================================================
+
     //= OPropertyInfoImpl
-    //========================================================================
+
     struct OPropertyInfoImpl
     {
         OUString        sName;
@@ -75,9 +75,9 @@ namespace rptui
         }
     };
 
-    //========================================================================
+
     //= OPropertyInfoService
-    //========================================================================
+
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
             OUString( ModuleRes( RID_STR_##uinameres ) ), HID_RPT_PROP_##helpid, flags )
@@ -303,8 +303,8 @@ namespace rptui
     }
 
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrRectObj::CreateObjectSpecificProperties()
@@ -52,7 +52,7 @@ sdr::properties::BaseProperties* SdrRectObj::CreateObjectSpecificProperties()
     return new sdr::properties::RectangleProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
@@ -60,7 +60,7 @@ sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrRectObj(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrRectObj,SdrTextObj);
 
@@ -377,7 +377,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
     return pH;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrRectObj::hasSpecialDrag() const
 {
@@ -468,7 +468,7 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {

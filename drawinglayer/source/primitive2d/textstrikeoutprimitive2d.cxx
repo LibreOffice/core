@@ -27,7 +27,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -60,7 +60,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -145,7 +145,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

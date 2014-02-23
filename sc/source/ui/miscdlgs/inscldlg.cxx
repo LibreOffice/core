@@ -31,7 +31,7 @@
 
 static sal_uInt8 nInsItemChecked=0;
 
-//==================================================================
+
 
 ScInsertCellDlg::ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove) :
     ModalDialog     ( pParent, "InsertCellsDialog", "modules/scalc/ui/insertcells.ui")

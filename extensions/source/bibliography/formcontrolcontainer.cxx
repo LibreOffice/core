@@ -23,19 +23,19 @@
 #include <algorithm>
 #include <functional>
 
-//.........................................................................
+
 namespace bib
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::awt;
 
-    //=====================================================================
+
     //= FormControlContainer
-    //=====================================================================
+
 
     FormControlContainer::FormControlContainer( )
         :OLoadListener( m_aMutex )
@@ -142,8 +142,8 @@ namespace bib
         implSetDesignMode( sal_False );
     }
 
-//.........................................................................
+
 }   // namespace bib
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

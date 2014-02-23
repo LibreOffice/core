@@ -21,7 +21,7 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

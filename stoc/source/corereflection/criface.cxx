@@ -38,7 +38,7 @@
 namespace stoc_corefl
 {
 
-//==================================================================================================
+
 class IdlAttributeFieldImpl
     : public IdlMemberImpl
     , public XIdlField
@@ -335,7 +335,7 @@ void IdlAttributeFieldImpl::checkException(
 //##################################################################################################
 
 
-//==================================================================================================
+
 class IdlInterfaceMethodImpl
     : public IdlMemberImpl
     , public XIdlMethod

@@ -28,10 +28,10 @@
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -114,9 +114,9 @@ namespace sfx2
 
     }
 
-    //====================================================================
+
     //= UserInputInterception
-    //====================================================================
+
 
     UserInputInterception::UserInputInterception( ::cppu::OWeakObject& _rControllerImpl, ::osl::Mutex& _rMutex )
         :m_pData( new UserInputInterception_Data( _rControllerImpl, _rMutex ) )
@@ -260,8 +260,8 @@ namespace sfx2
         return bHandled;
     }
 
-//........................................................................
+
 } // namespace sfx2
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

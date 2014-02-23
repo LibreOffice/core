@@ -98,9 +98,9 @@ using ::svt::FolderDescriptor;
 
 namespace
 {
-    //====================================================================
+
     //= ITimeoutHandler
-    //====================================================================
+
     class CallbackTimer;
     class ITimeoutHandler
     {
@@ -111,9 +111,9 @@ namespace
         ~ITimeoutHandler() {}
     };
 
-    //====================================================================
+
     //= CallbackTimer
-    //====================================================================
+
     class CallbackTimer : public ::salhelper::Timer
     {
     protected:
@@ -434,9 +434,9 @@ public:
                                             // returns the name for the file, which contains the translation strings
 };
 
-//====================================================================
+
 //= SvtFileView_Impl
-//====================================================================
+
 
 class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
                         ,public ITimeoutHandler

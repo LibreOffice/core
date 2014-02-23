@@ -38,9 +38,9 @@ static sal_uInt16 pProtectionRanges[] =
     0
 };
 
-//========================================================================
+
 // Zellschutz-Tabpage:
-//========================================================================
+
 
 ScTabPageProtection::ScTabPageProtection(Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "CellProtectionPage",

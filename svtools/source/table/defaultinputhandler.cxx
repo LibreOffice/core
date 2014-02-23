@@ -27,10 +27,10 @@
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 
-//......................................................................................................................
+
 namespace svt { namespace table
 {
-//......................................................................................................................
+
 
     typedef ::rtl::Reference< IMouseFunction >  PMouseFunction;
     typedef ::std::vector< PMouseFunction >     MouseFunctions;
@@ -40,9 +40,9 @@ namespace svt { namespace table
         MouseFunctions  aMouseFunctions;
     };
 
-    //==================================================================================================================
+
     //= DefaultInputHandler
-    //==================================================================================================================
+
 
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
@@ -231,8 +231,8 @@ namespace svt { namespace table
         // TODO
         return false;
     }
-//......................................................................................................................
+
 } } // namespace svt::table
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

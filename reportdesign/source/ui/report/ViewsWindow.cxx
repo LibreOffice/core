@@ -1741,8 +1741,8 @@ void OViewsWindow::fillControlModelSelection(::std::vector< uno::Reference< uno:
         (*aIter)->getReportSection().fillControlModelSelection(_rSelection);
     }
 }
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

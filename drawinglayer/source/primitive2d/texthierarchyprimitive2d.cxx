@@ -20,11 +20,11 @@
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -41,7 +41,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -58,7 +58,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -75,7 +75,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -92,7 +92,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -126,7 +126,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

@@ -362,7 +362,7 @@ XclExpMsoDrawing::XclExpMsoDrawing( XclEscherEx& rEscherEx ) :
 {
 }
 
-// ============================================================================
+
 
 XclExpImgData::XclExpImgData( const Graphic& rGraphic, sal_uInt16 nRecId ) :
     maGraphic( rGraphic ),
@@ -423,7 +423,7 @@ void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
-// ============================================================================
+
 
 XclExpControlHelper::XclExpControlHelper( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -1208,7 +1208,7 @@ void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, 
     pFS->endElementNS( XML_xdr, XML_xfrm );
 }
 
-// ============================================================================
+
 
 XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         const ScPostIt* pScNote, const OUString& rAddText ) :
@@ -1388,7 +1388,7 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
     rComments->endElement( XML_comment );
 }
 
-// ============================================================================
+
 
 XclMacroHelper::XclMacroHelper( const XclExpRoot& rRoot ) :
     XclExpControlHelper( rRoot )
@@ -1454,7 +1454,7 @@ void XclExpShapeObj::WriteSubRecs( XclExpStream& rStrm )
     WriteMacroSubRec( rStrm );
 }
 
-// ============================================================================
+
 
 XclExpComments::XclExpComments( SCTAB nTab, XclExpRecordList< XclExpNote >& rNotes )
     : mnTab( nTab ), mrNotes( rNotes )
@@ -1653,6 +1653,6 @@ XclExpDffAnchorBase* XclExpEmbeddedObjectManager::CreateDffAnchor() const
     return new XclExpDffEmbeddedAnchor( GetRoot(), maPageSize, mnScaleX, mnScaleY );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

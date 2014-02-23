@@ -21,17 +21,17 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //====================================================================
+
     //= OListenerContainer
-    //====================================================================
+
 
     OListenerContainer::OListenerContainer( ::osl::Mutex& _rMutex )
         :m_aListeners( _rMutex )
@@ -109,8 +109,8 @@ namespace comphelper
         return !bCancelled;
     }
 
-//........................................................................
+
 }   // namespace comphelper
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

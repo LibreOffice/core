@@ -49,7 +49,7 @@ typedef WeakImplHelper3< lang::XServiceInfo,
                          XCurrentContext,
                          reflection::XProxyFactory > t_impl;
 
-//==============================================================================
+
 class TargetObject : public t_impl
 {
 public:
@@ -99,7 +99,7 @@ Any TargetObject::queryInterface( Type const & type )
 int TargetObject::s_obj = 0;
 
 
-//==============================================================================
+
 class TestMaster : public WeakImplHelper1< lang::XServiceInfo >
 {
     Reference< XAggregation > m_xProxyTarget;

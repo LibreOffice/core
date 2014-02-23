@@ -28,7 +28,7 @@
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

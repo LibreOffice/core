@@ -81,7 +81,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
@@ -139,7 +139,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 
 }
 
-// =======================================================================
+
 int ImplSVMain()
 {
     // The 'real' SVMain()

@@ -58,15 +58,15 @@ public:
     }
 };
 
-//====================================================================
+
 
 DBG_NAME(SfxShell)
 
-//====================================================================
+
 
 TYPEINIT0(SfxShell);
 
-//====================================================================
+
 class SfxVerbSlotArr_Impl : public std::vector<SfxSlot*>
 {
 public:
@@ -79,9 +79,9 @@ public:
 
 using namespace com::sun::star;
 
-//=========================================================================
+
 // SfxShell_Impl
-//=========================================================================
+
 struct SfxShell_Impl: public SfxBroadcaster
 {
     OUString                 aObjectName;   // Name of Sbx-Objects
@@ -105,9 +105,9 @@ struct SfxShell_Impl: public SfxBroadcaster
     ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
 
-//=========================================================================
+
 // SfxShell
-//=========================================================================
+
 
 void SfxShell::EmptyExecStub(SfxShell *, SfxRequest &)
 {

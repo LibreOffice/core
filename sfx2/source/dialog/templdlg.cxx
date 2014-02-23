@@ -69,7 +69,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 
-//=========================================================================
+
 // Window is now created dynamically. So here margins, etc.
 
 #define SFX_TEMPLDLG_HFRAME         3
@@ -85,7 +85,7 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 // filter box has maximum 14 entries visible
 #define MAX_FILTER_ENTRIES          14
 
-//=========================================================================
+
 
 TYPEINIT0(SfxCommonTemplateDialog_Impl);
 TYPEINIT1(SfxTemplateDialog_Impl,SfxCommonTemplateDialog_Impl);

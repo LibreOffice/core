@@ -189,7 +189,7 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
     m_aValue.setBound(true);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+
 // Implementation of the operators
 
 

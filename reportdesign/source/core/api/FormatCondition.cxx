@@ -27,10 +27,10 @@
 #include "Tools.hxx"
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include "ReportHelperImpl.hxx"
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
@@ -148,8 +148,8 @@ void SAL_CALL OFormatCondition::setFormula( const OUString& _formula ) throw (un
 
 // XReportControlFormat
 REPORTCONTROLFORMAT_IMPL(OFormatCondition,m_aFormatProperties)
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

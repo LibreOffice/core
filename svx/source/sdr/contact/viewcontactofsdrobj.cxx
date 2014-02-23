@@ -34,7 +34,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdhdl.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -137,7 +137,7 @@ namespace sdr
             return &GetSdrObject();
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // primitive stuff
 
         // add Gluepoints (if available)

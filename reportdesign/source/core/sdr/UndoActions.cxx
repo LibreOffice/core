@@ -424,8 +424,8 @@ Reference< XPropertySet> OUndoPropertyReportSectionAction::getObject()
 {
     return m_pMemberFunction(&m_aReportHelper).get();
 }
-//============================================================================
+
 } // rptui
-//============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/sdr/properties/properties.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

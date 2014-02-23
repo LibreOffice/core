@@ -33,10 +33,10 @@
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
+
 
     // class AccessibleListBox -----------------------------------------------------
 
@@ -593,8 +593,8 @@ namespace accessibility
     }
 
 
-//........................................................................
+
 }// namespace accessibility
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

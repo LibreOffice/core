@@ -22,9 +22,9 @@
 #include <svx/svxids.hrc>
 #include <tools/stream.hxx>
 
-//========================================================================
+
 // class FmInterfaceItem
-//========================================================================
+
 TYPEINIT1(FmInterfaceItem, SfxPoolItem);
 
 

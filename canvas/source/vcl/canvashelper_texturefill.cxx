@@ -119,7 +119,7 @@ namespace vclcanvas
         {
             // determine general position of gradient in relation to
             // the bound rect
-            // =====================================================
+
 
             ::basegfx::B2DPoint aLeftTop( 0.0, 0.0 );
             ::basegfx::B2DPoint aLeftBottom( 0.0, 1.0 );
@@ -157,7 +157,7 @@ namespace vclcanvas
 
 
             // render gradient
-            // ===============
+
 
             // for linear gradients, it's easy to render
             // non-overlapping polygons: just split the gradient into
@@ -369,7 +369,7 @@ namespace vclcanvas
                 rOutDev.DrawRect( rBounds );
 
                 // render polygon
-                // ==============
+
 
                 for( unsigned int i=1,p; i<nStepCount; ++i )
                 {
@@ -411,7 +411,7 @@ namespace vclcanvas
             else
             {
                 // render polygon
-                // ==============
+
 
                 // For performance reasons, we create a temporary VCL polygon
                 // here, keep it all the way and only change the vertex values
@@ -746,7 +746,7 @@ namespace vclcanvas
 
                 // first of all, determine whether we have a
                 // drawBitmap() in disguise
-                // =========================================
+
 
                 const bool bRectangularPolygon( tools::isRectangle( aPolyPoly ) );
 
@@ -810,7 +810,7 @@ namespace vclcanvas
                 {
                     // No easy mapping to drawBitmap() - calculate
                     // texturing parameters
-                    // ===========================================
+
 
                     BitmapEx aBmpEx( tools::bitmapExFromXBitmap( textures[0].Bitmap ) );
 
@@ -876,7 +876,7 @@ namespace vclcanvas
 
 
                     // render texture tiled into polygon
-                    // =================================
+
 
                     // calc device space direction vectors. We employ
                     // the followin approach for tiled output: the
@@ -1017,7 +1017,7 @@ namespace vclcanvas
                     {
                         // output texture the hard way: XORing out the
                         // polygon
-                        // ===========================================
+
 
                         if( !::rtl::math::approxEqual( textures[0].Alpha,
                                                        1.0 ) )

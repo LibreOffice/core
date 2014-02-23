@@ -897,7 +897,7 @@ void OleEmbeddedObject::OnViewChanged_Impl()
         SaveObject_Impl();
         MakeEventListenerNotification_Impl( OUString( "OnVisAreaChanged" ) );
     }
-    // ===============================================================
+
 }
 
 

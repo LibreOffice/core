@@ -38,7 +38,7 @@ using namespace editeng;
 namespace svx {
 namespace frame {
 
-// ============================================================================
+
 
 namespace {
 
@@ -182,7 +182,7 @@ struct LinePoints
                             maEnd( bTLBR ? rRect.BottomRight() : rRect.BottomLeft() ) {}
 };
 
-// ============================================================================
+
 
 /** Rounds and casts a double value to a long value. */
 inline long lclD2L( double fValue )
@@ -336,9 +336,9 @@ inline long lclGetBeforeBeg( const Style& rBorder )
 inline long lclGetBehindEnd( const Style& rBorder )
 { return rBorder.Prim() ? (lclGetEnd( rBorder ) + 256) : 0; }
 
-// ============================================================================
+
 // Linking functions
-// ============================================================================
+
 
 // ----------------------------------------------------------------------------
 // Linking of single horizontal line ends.
@@ -607,7 +607,7 @@ void lclLinkVerFrameBorder(
         rBFromTL.Mirror(), rBFromL, rBFromB, rBFromR, rBFromTR );
 }
 
-// ============================================================================
+
 
 // ----------------------------------------------------------------------------
 // Linking of diagonal frame borders.
@@ -689,9 +689,9 @@ void lclLinkDiagFrameBorders(
     lclLinkBLTRFrameBorder( rResult.maBLTR, rBLTR, rBLFromT, rBLFromR, rTRFromB, rTRFromL );
 }
 
-// ============================================================================
+
 // Drawing functions
-// ============================================================================
+
 
 // ----------------------------------------------------------------------------
 // Simple helper functions
@@ -748,7 +748,7 @@ void lclSetColorToOutDev( OutputDevice& rDev, const Color& rColor, const Color* 
 }
 
 // ----------------------------------------------------------------------------
-// ============================================================================
+
 // Drawing of horizontal frame borders.
 
 /** Draws a horizontal thin or thick line into the passed output device.
@@ -887,7 +887,7 @@ void lclDrawVerFrameBorder(
     }
 }
 
-// ============================================================================
+
 // Drawing of diagonal frame borders, incudes clipping functions.
 
 /** Returns the drawing coordinates for a diagonal thin line.
@@ -1114,13 +1114,13 @@ void lclDrawDiagFrameBorders(
     }
 }
 
-// ============================================================================
+
 
 } // namespace
 
-// ============================================================================
+
 // Classes
-// ============================================================================
+
 
 #define SCALEVALUE( value ) lclScaleValue( value, fScale, nMaxWidth )
 
@@ -1303,16 +1303,16 @@ bool operator<( const Style& rL, const Style& rR )
 
 #undef SCALEVALUE
 
-// ============================================================================
+
 // Various helper functions
-// ============================================================================
+
 
 double GetHorDiagAngle( long nWidth, long nHeight )
 {
     return atan2( static_cast< double >( std::abs( nHeight ) ), static_cast< double >( std::abs( nWidth ) ) );
 }
 
-// ============================================================================
+
 
 long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
 {
@@ -1334,7 +1334,7 @@ long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
     return -lclD2L( nVerOffs / tan( fAngle ) - nDiagOffs / sin( fAngle ) );
 }
 
-// ============================================================================
+
 
 bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         const Style& rTFromTL, const Style& rTFromT, const Style& rTFromTR,
@@ -1359,9 +1359,9 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         );
 }
 
-// ============================================================================
+
 // Drawing functions
-// ============================================================================
+
 
 double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOpposite,
                       long nAngleSide = 9000, long nAngleOpposite = 9000 )
@@ -1508,7 +1508,7 @@ void DrawVerFrameBorder( OutputDevice& rDev,
     }
 }
 
-// ============================================================================
+
 
 void DrawDiagFrameBorders(
         OutputDevice& rDev, const Rectangle& rRect, const Style& rTLBR, const Style& rBLTR,
@@ -1525,7 +1525,7 @@ void DrawDiagFrameBorders(
     }
 }
 
-// ============================================================================
+
 
 } // namespace frame
 } // namespace svx

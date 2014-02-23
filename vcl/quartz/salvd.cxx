@@ -58,7 +58,7 @@ void AquaSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
     delete pDevice;
 }
 
-// =======================================================================
+
 
 AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 :   mbGraphicsUsed( false )

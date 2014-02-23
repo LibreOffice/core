@@ -40,10 +40,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ucb;
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
 
 OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
@@ -327,8 +327,8 @@ IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent*, _pEvent )
     return 0L;
 }
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

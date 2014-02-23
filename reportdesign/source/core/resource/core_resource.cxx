@@ -31,13 +31,13 @@
 
 #include <svl/solar.hrc>
 #include "ModuleHelper.hxx"
-//.........................................................................
+
 namespace reportdesign
 {
     using namespace ::com::sun::star;
-    //==================================================================
+
     //= ResourceManager
-    //==================================================================
+
     SimpleResMgr* ResourceManager::m_pImpl = NULL;
 
 
@@ -70,8 +70,8 @@ namespace reportdesign
         return sReturn;
     }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

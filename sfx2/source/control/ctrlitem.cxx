@@ -26,7 +26,7 @@
 #include "statcach.hxx"
 #include <sfx2/viewfrm.hxx>
 
-//====================================================================
+
 
 DBG_NAME(SfxControllerItem);
 
@@ -70,7 +70,7 @@ sal_Bool SfxControllerItem::IsBound() const
     return pNext != this;
 }
 
-//====================================================================
+
 // registeres with the id at the bindings
 
 void SfxControllerItem::Bind( sal_uInt16 nNewId, SfxBindings *pBindinx )
@@ -110,7 +110,7 @@ void SfxControllerItem::BindInternal_Impl( sal_uInt16 nNewId, SfxBindings *pBind
 }
 
 
-//====================================================================
+
 
 void SfxControllerItem::UnBind()
 
@@ -135,7 +135,7 @@ void SfxControllerItem::UnBind()
     pNext = this;
 }
 
-//====================================================================
+
 
 void SfxControllerItem::ReBind()
 

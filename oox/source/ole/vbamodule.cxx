@@ -36,7 +36,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script::vba;
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 using ::com::sun::star::awt::KeyEvent;
-// ============================================================================
+
 typedef ::cppu::WeakImplHelper1< container::XIndexContainer > OleIdToNameContainer_BASE;
 typedef boost::unordered_map< sal_Int32, OUString >  ObjIdToName;
 
@@ -111,7 +111,7 @@ public:
     }
 };
 
- // ============================================================================
+
 
 VbaModule::VbaModule( const Reference< XComponentContext >& rxContext,
                       const Reference< frame::XModel >& rxDocModel,
@@ -406,7 +406,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     }
 }
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

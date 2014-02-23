@@ -184,7 +184,7 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
 
 //
 // EditorWindow
-// ============
+
 //
 
 class EditorWindow::ChangesListener:
@@ -1353,7 +1353,7 @@ void EditorWindow::ForceSyntaxTimeout()
 
 //
 // BreakPointWindow
-// ================
+
 //
 
 BreakPointWindow::BreakPointWindow (Window* pParent, ModulWindow* pModulWindow)
@@ -1573,7 +1573,7 @@ void BreakPointWindow::setBackgroundColor(Color aColor)
 
 //
 // WatchWindow
-// ===========
+
 //
 
 namespace
@@ -1873,7 +1873,7 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 
 //
 // StackWindow
-// ===========
+
 //
 
 StackWindow::StackWindow (Layout* pParent) :
@@ -2007,7 +2007,7 @@ void StackWindow::UpdateCalls()
 
 //
 // ComplexEditorWindow
-// ===================
+
 //
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
@@ -2114,7 +2114,7 @@ EditorWindow::GetComponentInterface(sal_Bool bCreate)
 
 //
 // WatchTreeListBox
-// ================
+
 //
 
 WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )

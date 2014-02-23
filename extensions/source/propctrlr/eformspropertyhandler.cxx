@@ -38,10 +38,10 @@ extern "C" void SAL_CALL createRegistryInfo_EFormsPropertyHandler()
     ::pcr::EFormsPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -53,9 +53,9 @@ namespace pcr
     using namespace ::com::sun::star::form::binding;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= EFormsPropertyHandler
-    //====================================================================
+
     DBG_NAME( EFormsPropertyHandler )
 
     EFormsPropertyHandler::EFormsPropertyHandler( const Reference< XComponentContext >& _rxContext )
@@ -598,8 +598,8 @@ namespace pcr
         }
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

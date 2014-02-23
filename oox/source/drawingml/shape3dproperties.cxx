@@ -45,9 +45,9 @@ using ::oox::core::XmlFilterBase;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
 
-// ============================================================================
+
+
 
 } // namespace drawingml
 } // namespace oox

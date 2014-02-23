@@ -289,14 +289,14 @@ void SvxHyperlinkNewDocTp::DoApply ()
     if ( aStrNewName == aEmptyStr )
         aStrNewName = maStrInitURL;
 
-    ///////////////////////////////////////////////////////
+
     // create a real URL-String
 
     INetURLObject aURL;
     if ( ImplGetURLObject( aStrNewName, maCbbPath.GetBaseURL(), aURL ) )
     {
 
-        ///////////////////////////////////////////////////////
+
         // create Document
 
         aStrNewName = aURL.GetURLPath( INetURLObject::NO_DECODE );

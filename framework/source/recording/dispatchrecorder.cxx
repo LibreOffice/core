@@ -68,7 +68,7 @@ void flatten_struct_members(
             Any( (char const *)data + pTD->pMemberOffsets[ nPos ], pTD->ppTypeRefs[ nPos ] ) );
     }
 }
-//==================================================================================================
+
 Sequence< Any > make_seq_out_of_struct(
     Any const & val )
     SAL_THROW( (RuntimeException) )

@@ -40,10 +40,10 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/outdev.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::utl;
     using ::com::sun::star::uno::Reference;
@@ -73,7 +73,7 @@ namespace svxform
 
     namespace
     {
-        //....................................................................
+
         template< class INTERFACE_TYPE >
         Reference< INTERFACE_TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
         {
@@ -90,7 +90,7 @@ namespace svxform
             }
         }
 
-        //....................................................................
+
         static bool lcl_getDocumentDefaultStyleAndFamily( const Reference< XInterface >& _rxDocument, OUString& _rFamilyName, OUString& _rStyleName ) SAL_THROW(( Exception ))
         {
             bool bSuccess = true;
@@ -122,7 +122,7 @@ namespace svxform
             return bSuccess;
         }
 
-        //....................................................................
+
         static void lcl_initializeControlFont( const Reference< XPropertySet >& _rxModel )
         {
             try
@@ -190,9 +190,9 @@ namespace svxform
         }
     }
 
-    //====================================================================
+
     //= ControlLayouter
-    //====================================================================
+
 
     Reference< XPropertySet > ControlLayouter::getDefaultDocumentTextStyle( const Reference< XPropertySet >& _rxModel )
     {
@@ -311,8 +311,8 @@ namespace svxform
         return bUseRefDevice;
     }
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

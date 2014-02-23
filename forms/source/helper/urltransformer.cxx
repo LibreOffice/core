@@ -23,18 +23,18 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
 
-    //====================================================================
+
     //= UrlTransformer
-    //====================================================================
+
 
     UrlTransformer::UrlTransformer( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
@@ -82,8 +82,8 @@ namespace frm
             m_xTransformer->parseSmart( _rURL, OUString::createFromAscii( _pAsciiURL ) );
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

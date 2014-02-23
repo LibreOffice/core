@@ -26,10 +26,10 @@
 
 #include <list>
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -37,7 +37,7 @@ namespace utl
 
     namespace
     {
-        //................................................................
+
         typedef ::std::list< ITerminationListener* > Listeners;
 
         struct ListenerAdminData
@@ -49,16 +49,16 @@ namespace utl
             ListenerAdminData() : bAlreadyTerminated( false ), bCreatedAdapter( false ) { }
         };
 
-        //................................................................
+
         ListenerAdminData& getListenerAdminData()
         {
             static ListenerAdminData s_aData;
             return s_aData;
         }
 
-        //================================================================
+
         //= OObserverImpl
-        //================================================================
+
         class OObserverImpl : public ::cppu::WeakImplHelper1< XTerminateListener >
         {
         public:
@@ -169,9 +169,9 @@ namespace utl
         }
     }
 
-    //====================================================================
+
     //= DesktopTerminationObserver
-    //====================================================================
+
 
     void DesktopTerminationObserver::registerTerminationListener( ITerminationListener* _pListener )
     {
@@ -210,8 +210,8 @@ namespace utl
         }
     }
 
-//........................................................................
+
 } // namespace utl
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

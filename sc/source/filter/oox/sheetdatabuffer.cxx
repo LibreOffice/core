@@ -58,7 +58,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -68,7 +68,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 
-// ============================================================================
+
 
 CellModel::CellModel() :
     mnCellType( XML_TOKEN_INVALID ),
@@ -111,7 +111,7 @@ DataTableModel::DataTableModel() :
 {
 }
 
-// ============================================================================
+
 
 CellBlockBuffer::CellBlockBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -131,7 +131,7 @@ void CellBlockBuffer::finalizeImport()
 {
 }
 
-// ============================================================================
+
 
 SheetDataBuffer::SheetDataBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),

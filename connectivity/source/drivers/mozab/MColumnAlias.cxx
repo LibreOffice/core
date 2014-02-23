@@ -98,7 +98,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
     {
         try
         {
-            //.............................................................
+
             Reference< XNameAccess > xAliasesNode;
             xDriverNode->getPropertyValue("ColumnAliases") >>= xAliasesNode;
             OSL_ENSURE( xAliasesNode.is(), "OColumnAlias::setAlias: missing the aliases node!" );
@@ -108,7 +108,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
             if ( xAliasesNode.is() )
                 aProgrammaticNames = xAliasesNode->getElementNames();
 
-            //.............................................................
+
             // travel through all the set elements
             const OUString* pProgrammaticNames = aProgrammaticNames.getConstArray();
             const OUString* pProgrammaticNamesEnd = pProgrammaticNames + aProgrammaticNames.getLength();
@@ -124,7 +124,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
                       sAssignedAlias = *pProgrammaticNames;
 
                 OString sAsciiProgrammaticName( OUStringToOString( *pProgrammaticNames, RTL_TEXTENCODING_ASCII_US ) );
-                //.............................................................
+
             #if OSL_DEBUG_LEVEL > 0
                 bool bFound = false;
             #endif

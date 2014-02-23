@@ -156,7 +156,7 @@ namespace dxcanvas
                                   "BmpEx not transparent" );
 
                 // convert transparent bitmap to 32bit RGBA
-                // ========================================
+
 
                 const ::Size aBmpSize( rBmpEx.GetSizePixel() );
 

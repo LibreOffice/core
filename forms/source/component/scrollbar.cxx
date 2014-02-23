@@ -28,10 +28,10 @@ extern "C" void SAL_CALL createRegistryInfo_OScrollBarModel()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::OScrollBarModel >   aRegisterModel;
 }
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -42,9 +42,9 @@ namespace frm
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::form::binding;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
 
     Any translateExternalDoubleToControlIntValue(
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
@@ -94,9 +94,9 @@ namespace frm
         return aExternalDoubleValue;
     }
 
-    //====================================================================
+
     //= OScrollBarModel
-    //====================================================================
+
 
 
     OScrollBarModel::OScrollBarModel( const Reference<XComponentContext>& _rxFactory )
@@ -300,8 +300,8 @@ namespace frm
         return Sequence< Type >( &::getCppuType( static_cast< double* >( NULL ) ), 1 );
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

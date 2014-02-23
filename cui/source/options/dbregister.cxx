@@ -50,10 +50,10 @@
 #define TAB_WIDTH2      1000
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
@@ -449,9 +449,9 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, OUString*, _pName )
     }
     return 1L;
 }
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

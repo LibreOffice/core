@@ -144,12 +144,12 @@ sal_Int32 SAL_CALL SkeletonDriver::getMinorVersion(  ) throw(RuntimeException)
 }
 
 
-//.........................................................................
+
 namespace connectivity
 {
     namespace skeleton
     {
-//.........................................................................
+
 
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
@@ -194,9 +194,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         throw DisposedException();
 
 }
-//.........................................................................
+
     }
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

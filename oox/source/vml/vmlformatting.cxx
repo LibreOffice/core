@@ -35,7 +35,7 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::geometry;
@@ -50,7 +50,7 @@ using ::com::sun::star::drawing::PolygonFlags;
 using ::com::sun::star::drawing::PolygonFlags_NORMAL;
 using ::com::sun::star::drawing::PolygonFlags_CONTROL;
 
-// ============================================================================
+
 
 namespace {
 
@@ -497,7 +497,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
     }
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -620,7 +620,7 @@ sal_Int32 lclGetDmlLineJoint( const OptValue< sal_Int32 >& roJoinStyle )
 
 } // namespace
 
-// ============================================================================
+
 
 void StrokeArrowModel::assignUsed( const StrokeArrowModel& rSource )
 {
@@ -629,7 +629,7 @@ void StrokeArrowModel::assignUsed( const StrokeArrowModel& rSource )
     moArrowLength.assignIfUsed( rSource.moArrowLength );
 }
 
-// ============================================================================
+
 
 void StrokeModel::assignUsed( const StrokeModel& rSource )
 {
@@ -671,7 +671,7 @@ void StrokeModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper
     aLineProps.pushToPropMap( rPropMap, rGraphicHelper );
 }
 
-// ============================================================================
+
 
 void FillModel::assignUsed( const FillModel& rSource )
 {
@@ -809,7 +809,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
     aFillProps.pushToPropMap( rPropMap, rGraphicHelper );
 }
 
-// ============================================================================
+
 
 ShadowModel::ShadowModel()
         : mbHasShadow(false)

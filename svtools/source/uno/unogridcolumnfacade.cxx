@@ -86,9 +86,9 @@ namespace svt { namespace table
         }
     }
 
-    //==================================================================================================================
+
     //= ColumnChangeMultiplexer
-    //==================================================================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XGridColumnListener
                                     >   ColumnChangeMultiplexer_Base;
     class ColumnChangeMultiplexer   :public ColumnChangeMultiplexer_Base
@@ -169,9 +169,9 @@ namespace svt { namespace table
         OSL_UNUSED( i_event );
     }
 
-    //==================================================================================================================
+
     //= UnoGridColumnFacade
-    //==================================================================================================================
+
 
     UnoGridColumnFacade::UnoGridColumnFacade( UnoControlTableModel const & i_owner, Reference< XGridColumn > const & i_gridColumn )
         :m_pOwner( &i_owner )

@@ -42,10 +42,10 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-// =======================================================================
 
 
-// =======================================================================
+
+
 
 static int const s_ImplArySize = MAP_PIXEL+1;
 static const long aImplNumeratorAry[s_ImplArySize] =

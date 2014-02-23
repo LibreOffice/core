@@ -29,11 +29,11 @@
 //... namespace frm .......................................................
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 //= PropertyInfoService
-//==================================================================
+
 PropertyInfoService::PropertyMap PropertyInfoService::s_AllKnownProperties;
 
 sal_Int32 PropertyInfoService::getPropertyId(const OUString& _rName)
@@ -66,7 +66,7 @@ sal_Int32 ConcreteInfoService::getPreferredPropertyId(const OUString& _rName)
 
 #define ADD_PROP_ASSIGNMENT(varname) \
     s_AllKnownProperties.push_back(PropertyAssignment(PROPERTY_##varname, PROPERTY_ID_##varname))
-//..................................................................
+
 void PropertyInfoService::initialize()
 {
     if (!s_AllKnownProperties.empty())
@@ -242,7 +242,7 @@ void PropertyInfoService::initialize()
     );
 }
 
-//.........................................................................
+
 }
 //... namespace frm .......................................................
 

@@ -36,7 +36,7 @@
 #include <vcl/settings.hxx>
 
 
-// =======================================================================
+
 
 static void ImplInitMsgBoxImageList()
 {
@@ -54,7 +54,7 @@ static void ImplInitMsgBoxImageList()
     }
 }
 
-// =======================================================================
+
 
 void MessBox::ImplInitMessBoxData()
 {
@@ -432,7 +432,7 @@ Size MessBox::GetOptimalSize() const
     return Size( 250, 100 );
 }
 
-// ============================================================================
+
 
 void InfoBox::ImplInitInfoBoxData()
 {
@@ -475,7 +475,7 @@ Image InfoBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 4 );
 }
 
-// ============================================================================
+
 
 void WarningBox::ImplInitWarningBoxData()
 {
@@ -520,7 +520,7 @@ Image WarningBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 3 );
 }
 
-// ============================================================================
+
 
 void ErrorBox::ImplInitErrorBoxData()
 {
@@ -565,7 +565,7 @@ Image ErrorBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 1 );
 }
 
-// ============================================================================
+
 
 void QueryBox::ImplInitQueryBoxData()
 {

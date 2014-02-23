@@ -108,7 +108,7 @@ template<typename T> inline T* get_pointer(PrioritizedHandlerEntry<T> const& han
 
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 
 typedef cppu::WeakComponentImplHelper2<
@@ -163,7 +163,7 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 
 struct EventMultiplexerImpl
@@ -322,7 +322,7 @@ struct EventMultiplexerImpl
 };
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 void SAL_CALL EventMultiplexerListener::disposing()
@@ -418,7 +418,7 @@ void SAL_CALL EventMultiplexerListener::mouseMoved(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 bool EventMultiplexerImpl::notifyAllAnimationHandlers( ImplAnimationHandlers const& rContainer,
@@ -717,7 +717,7 @@ bool EventMultiplexerImpl::notifyNextEffect()
                 _1 )) );
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 
 
 EventMultiplexer::EventMultiplexer( EventQueue&             rEventQueue,

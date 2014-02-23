@@ -40,10 +40,10 @@
 #include <functional>
 #include <algorithm>
 
-//........................................................................
+
 namespace toolkitform
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -277,7 +277,7 @@ namespace toolkitform
                 // if we survived classifyFormControl, then it's a real form control, and they all have
                 // service infos
 
-            // ================================
+
             // set the common widget properties
 
 
@@ -414,7 +414,7 @@ namespace toolkitform
                 _rpDescriptor->TabOrder = nIndex;
             }
 
-            // ================================
+
             // special widget properties
 
             // edits
@@ -593,7 +593,7 @@ namespace toolkitform
                 pComboWidget->Sort = false;
             }
 
-            // ================================
+
             // some post-processing
 
             // text line ends
@@ -606,8 +606,8 @@ namespace toolkitform
         }
     }
 
-//........................................................................
+
 } // namespace toolkitform
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

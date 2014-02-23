@@ -271,12 +271,12 @@ using namespace ::com::sun::star::script;
 using namespace ::svxform;
 using namespace ::svx;
 
-//==============================================================================
+
 //= helper
-//==============================================================================
+
 namespace
 {
-    //..........................................................................
+
     void collectInterfacesFromMarkList( const SdrMarkList& _rMarkList, InterfaceBag& /* [out] */ _rInterfaces )
     {
         _rInterfaces.clear();
@@ -314,7 +314,7 @@ namespace
         }
     }
 
-    //..........................................................................
+
     sal_Int16 GridView2ModelPos(const Reference< XIndexAccess>& rColumns, sal_Int16 nViewPos)
     {
         try
@@ -348,7 +348,7 @@ namespace
         return (sal_Int16)-1;
     }
 
-    //..........................................................................
+
     void TransferEventScripts(const Reference< XControlModel>& xModel, const Reference< XControl>& xControl,
         const Sequence< ScriptEventDescriptor>& rTransferIfAvailable)
     {
@@ -614,9 +614,9 @@ Reference< XForm > GetForm(const Reference< XInterface>& _rxElement)
     return Reference< XForm >();
 }
 
-//========================================================================
+
 // class FmXFormShell_Base_Disambiguation
-//========================================================================
+
 FmXFormShell_Base_Disambiguation::FmXFormShell_Base_Disambiguation( ::osl::Mutex& _rMutex )
     :FmXFormShell_BD_BASE( _rMutex )
 {
@@ -633,9 +633,9 @@ void SAL_CALL FmXFormShell_Base_Disambiguation::disposing()
     // base classes.
 }
 
-//========================================================================
+
 // class FmXFormShell
-//========================================================================
+
 DBG_NAME(FmXFormShell);
 
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
@@ -4024,8 +4024,8 @@ bool FmXFormShell::HasControlFocus() const
     return bHasControlFocus;
 }
 
-//==============================================================================
-//==============================================================================
+
+
 SearchableControlIterator::SearchableControlIterator(Reference< XInterface> xStartingPoint)
     :IndexAccessIterator(xStartingPoint)
 {
@@ -4069,8 +4069,8 @@ bool SearchableControlIterator::ShouldStepInto(const Reference< XInterface>& /*x
     return true;
 }
 
-//==============================================================================
-//==============================================================================
+
+
 
 SFX_IMPL_MENU_CONTROL(ControlConversionMenuController, SfxBoolItem);
 
@@ -4148,6 +4148,6 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
     }
 }
 
-//==============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

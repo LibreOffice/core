@@ -505,7 +505,7 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::
 #endif
 }
 
-// ============================================================================
+
 
 uno::Sequence< OUString > VBAMacroResolver_getSupportedServiceNames()
 {
@@ -524,7 +524,7 @@ uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( cons
     return static_cast< ::cppu::OWeakObject* >( new VBAMacroResolver );
 }
 
-// ============================================================================
+
 
 VBAMacroResolver::VBAMacroResolver() :
     mpObjShell( 0 )
@@ -779,7 +779,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
         xAcc->setKeyEvent( rKeyEvent, ooo::vba::makeMacroURL( MacroName ) );
 
 }
-// ============================================================================
+
 
 } // namespace vba
 } // namespace ooo

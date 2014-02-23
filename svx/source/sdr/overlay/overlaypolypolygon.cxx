@@ -24,7 +24,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

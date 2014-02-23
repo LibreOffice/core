@@ -43,10 +43,10 @@
 #include "frm_resource.hrc"
 #include <tools/debug.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -579,8 +579,8 @@ IMPL_COLUMN(ComboBoxColumn,         FRM_SUN_COMPONENT_COMBOBOX,         sal_Fals
 IMPL_COLUMN(ListBoxColumn,          FRM_SUN_COMPONENT_LISTBOX,          sal_False);
 IMPL_COLUMN(FormattedFieldColumn,   FRM_SUN_COMPONENT_FORMATTEDFIELD,   sal_False);
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,18 +20,18 @@
 #include "comphelper/containermultiplexer.hxx"
 #include "comphelper/uno3.hxx"
 #include <osl/diagnose.h>
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    //=====================================================================
+
     //= OContainerListener
-    //=====================================================================
+
 
     OContainerListener::OContainerListener(::osl::Mutex& _rMutex)
         :m_pAdapter(NULL)
@@ -87,9 +87,9 @@ namespace comphelper
         }
     }
 
-    //=====================================================================
+
     //= OContainerListenerAdapter
-    //=====================================================================
+
 
     OContainerListenerAdapter::OContainerListenerAdapter(OContainerListener* _pListener,
             const  Reference< XContainer >& _rxContainer)
@@ -175,8 +175,8 @@ namespace comphelper
             m_pListener->_elementReplaced(_rEvent);
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

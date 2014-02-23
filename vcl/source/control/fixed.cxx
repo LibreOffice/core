@@ -32,7 +32,7 @@
 #include "impimagetree.hxx"
 #include "window.h"
 
-// =======================================================================
+
 
 #define FIXEDLINE_TEXT_BORDER    4
 
@@ -51,7 +51,7 @@
                                  WB_TOP | WB_VCENTER | WB_BOTTOM |  \
                                  WB_SCALE)
 
-// =======================================================================
+
 
 static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
                           const Size& rObjSize, const Size& rWinSize )
@@ -85,7 +85,7 @@ static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
     return aPos;
 }
 
-// =======================================================================
+
 
 void FixedText::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -523,7 +523,7 @@ void SelectableFixedText::LoseFocus()
     Invalidate();
 }
 
-// =======================================================================
+
 
 void FixedLine::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -775,7 +775,7 @@ Size FixedLine::GetOptimalSize() const
     return CalcWindowSize( FixedText::CalcMinimumTextSize ( this, 0x7fffffff ) );
 }
 
-// =======================================================================
+
 
 void FixedBitmap::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -969,7 +969,7 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
     queue_resize();
 }
 
-// =======================================================================
+
 
 void FixedImage::ImplInit( Window* pParent, WinBits nStyle )
 {

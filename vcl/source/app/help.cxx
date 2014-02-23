@@ -33,7 +33,7 @@
 #include "helpwin.hxx"
 #include "svdata.hxx"
 
-// =======================================================================
+
 
 #define HELPWINSTYLE_QUICK      0
 #define HELPWINSTYLE_BALLOON    1
@@ -47,7 +47,7 @@
 
 #define HELPTEXTMAXLEN        150
 
-// =======================================================================
+
 
 Help::Help()
 {
@@ -290,7 +290,7 @@ void Help::HideTip( sal_uLong nId )
     ImplGetSVData()->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
 }
 
-// =======================================================================
+
 
 HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
     FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
@@ -539,7 +539,7 @@ OUString HelpTextWindow::GetText() const
 }
 
 
-// =======================================================================
+
 
 void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                          const OUString& rHelpText, const OUString& rStatusText,

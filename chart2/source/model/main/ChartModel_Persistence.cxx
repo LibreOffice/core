@@ -289,7 +289,7 @@ void SAL_CALL ChartModel::storeToURL(
     if(!aGuard.startApiCall(sal_True)) //start LongLastingCall
         return; //behave passive if already disposed or closed or throw exception @todo?
     //do not change the internal state of the document here
-    //...
+
 
     aGuard.clear();
 

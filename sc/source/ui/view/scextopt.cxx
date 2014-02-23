@@ -23,7 +23,7 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 
-// ============================================================================
+
 
 ScExtDocSettings::ScExtDocSettings() :
     mfTabBarWidth( -1.0 ),
@@ -32,7 +32,7 @@ ScExtDocSettings::ScExtDocSettings() :
 {
 }
 
-// ============================================================================
+
 
 ScExtTabSettings::ScExtTabSettings() :
     maUsedArea( ScAddress::INITIALIZE_INVALID ),
@@ -52,7 +52,7 @@ ScExtTabSettings::ScExtTabSettings() :
 {
 }
 
-// ============================================================================
+
 
 /** A container for ScExtTabSettings objects.
     @descr  Internally, a std::map with shared pointers to ScExtTabSettings is
@@ -123,7 +123,7 @@ void ScExtTabSettingsCont::CopyFromMap( const ScExtTabSettingsMap& rMap )
         maMap[ aIt->first ].reset( new ScExtTabSettings( *aIt->second ) );
 }
 
-// ============================================================================
+
 
 /** Implementation struct for ScExtDocOptions containing all members. */
 struct ScExtDocOptionsImpl
@@ -223,6 +223,6 @@ void ScExtDocOptions::SetCodeName( SCTAB nTab, const OUString& rCodeName )
     }
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

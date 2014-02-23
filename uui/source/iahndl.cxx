@@ -834,9 +834,9 @@ UUIInteractionHelper::handleRequest_impl(
         }
 
 
-        ///////////////////////////////////////////////////////////////////
+
         // Handle requests which do not have a plain string representation.
-        ///////////////////////////////////////////////////////////////////
+
         if (!bObtainErrorStringOnly)
         {
             if ( handleAuthenticationRequest( rRequest ) )
@@ -899,9 +899,9 @@ UUIInteractionHelper::handleRequest_impl(
                 return true;
             }
 
-            ///////////////////////////////////////////////////////////////
+
             // Last chance: interaction handlers registered in the configuration
-            ///////////////////////////////////////////////////////////////
+
 
             // typed InteractionHandlers (ooo.Interactions)
             if ( handleTypedHandlerImplementations( rRequest ) )
@@ -1447,9 +1447,9 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     }
 }
 
-//=========================================================================
+
 // ErrorResource Implementation
-//=========================================================================
+
 
 bool
 ErrorResource::getString(ErrCode nErrorCode, OUString &rString)

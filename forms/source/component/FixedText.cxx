@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -115,8 +115,8 @@ void SAL_CALL OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInSt
         readHelpTextCompatibly(_rxInStream);
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

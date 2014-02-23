@@ -27,9 +27,9 @@
 #include "dbfunc.hxx"
 
 
-//=============================================================================
+
 // struct ScConflictsListEntry
-//=============================================================================
+
 
 bool ScConflictsListEntry::HasSharedAction( sal_uLong nSharedAction ) const
 {
@@ -60,9 +60,9 @@ bool ScConflictsListEntry::HasOwnAction( sal_uLong nOwnAction ) const
 }
 
 
-//=============================================================================
+
 // class ScConflictsListHelper
-//=============================================================================
+
 
 bool ScConflictsListHelper::HasOwnAction( ScConflictsList& rConflictsList, sal_uLong nOwnAction )
 {
@@ -148,9 +148,9 @@ void ScConflictsListHelper::TransformConflictsList( ScConflictsList& rConflictsL
 }
 
 
-//=============================================================================
+
 // class ScConflictsFinder
-//=============================================================================
+
 
 ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartShared, sal_uLong nEndShared,
         sal_uLong nStartOwn, sal_uLong nEndOwn, ScConflictsList& rConflictsList )
@@ -284,9 +284,9 @@ bool ScConflictsFinder::Find()
     return bReturn;
 }
 
-//=============================================================================
+
 // class ScConflictsResolver
-//=============================================================================
+
 
 ScConflictsResolver::ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList& rConflictsList )
     :mpTrack ( pTrack )
@@ -380,9 +380,9 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
     }
 }
 
-//=============================================================================
+
 // class ScConflictsDlg
-//=============================================================================
+
 
 ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList )
     :ModalDialog( pParent, ScResId( RID_SCDLG_CONFLICTS ) )

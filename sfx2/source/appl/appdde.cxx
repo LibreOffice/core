@@ -44,7 +44,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
-//========================================================================
+
 
 OUString SfxDdeServiceName_Impl( const OUString& sIn )
 {

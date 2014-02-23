@@ -72,7 +72,7 @@
 #include <svx/xpoly.hxx>
 #include <unotools/syslocale.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
 SdrMeasureObjGeoData::~SdrMeasureObjGeoData() {}
@@ -195,7 +195,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
     return aStr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrMeasureObj::CreateObjectSpecificProperties()
@@ -203,7 +203,7 @@ sdr::properties::BaseProperties* SdrMeasureObj::CreateObjectSpecificProperties()
     return new sdr::properties::MeasureProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
@@ -211,7 +211,7 @@ sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrMeasureObj(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrMeasureObj,SdrTextObj);
 
@@ -799,7 +799,7 @@ SdrHdl* SdrMeasureObj::GetHdl(sal_uInt32 nHdlNum) const
     return pHdl;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrMeasureObj::hasSpecialDrag() const
 {
@@ -970,7 +970,7 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
     } // switch
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrMeasureObj::BegCreate(SdrDragStat& rStat)
 {
@@ -1376,7 +1376,7 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
     return (sal_uInt16)eRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #i97878#
 // TRGetBaseGeometry/TRSetBaseGeometry needs to be based on two positions,
 // same as line geometry in SdrPathObj. Thus needs to be overloaded and

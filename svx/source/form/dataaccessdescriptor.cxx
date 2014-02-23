@@ -26,10 +26,10 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/urlobj.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -37,9 +37,9 @@ namespace svx
     using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
 
-    //====================================================================
+
     //= ODADescriptorImpl
-    //====================================================================
+
     class ODADescriptorImpl
     {
     protected:
@@ -272,9 +272,9 @@ namespace svx
         m_bSequenceOutOfDate = sal_False;
     }
 
-    //====================================================================
+
     //= ODataAccessDescriptor
-    //====================================================================
+
 
     ODataAccessDescriptor::ODataAccessDescriptor()
         :m_pImpl(new ODADescriptorImpl)
@@ -405,9 +405,9 @@ namespace svx
             (*this)[ daDataSource ] <<= OUString();
     }
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

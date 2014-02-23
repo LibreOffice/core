@@ -77,14 +77,14 @@ inline int IntTimes256FromFixed(FIXED f)
     return nFixedTimes256;
 }
 
-// =======================================================================
+
 
 // these variables can be static because they store system wide settings
 static bool bImplSalCourierScalable = false;
 static bool bImplSalCourierNew = false;
 
 
-// =======================================================================
+
 
 
 
@@ -228,7 +228,7 @@ void ImplFontAttrCache::AddFontAttr( const OUString& rFontFileName, const ImplDe
     }
 }
 
-// =======================================================================
+
 
 // raw font data with a scoped lifetime
 class RawFontData
@@ -294,7 +294,7 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
     }
 }
 
-// ===========================================================================
+
 // platform specific font substitution hooks for glyph fallback enhancement
 // TODO: move into i18n module (maybe merge with svx/ucsubset.*
 //       or merge with i18nutil/source/utility/unicode_data.h)
@@ -601,7 +601,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     return bFound;
 }
 
-// =======================================================================
+
 
 struct ImplEnumInfo
 {
@@ -618,7 +618,7 @@ struct ImplEnumInfo
     int                 mnFontCount;
 };
 
-// =======================================================================
+
 
 static rtl_TextEncoding ImplCharSetToSal( BYTE nCharSet )
 {
@@ -1033,7 +1033,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
     }
 }
 
-// =======================================================================
+
 #if ENABLE_GRAPHITE
 
 #ifdef DEBUG
@@ -1415,7 +1415,7 @@ void ImplWinFontData::GetFontCapabilities( HDC hDC ) const
     }
 }
 
-// =======================================================================
+
 
 void WinSalGraphics::SetTextColor( SalColor nSalColor )
 {
@@ -2098,7 +2098,7 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     // byte offsets 0x4CE/0x4CF: winascent
     // byte offsets 0x4D0/0x4D1: winascent+windescent-emunits
     // byte offsets 0x4DF/0x4E0: avgwidth
-    //...
+
 
     return true;
 }

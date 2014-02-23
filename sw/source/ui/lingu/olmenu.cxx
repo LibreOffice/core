@@ -414,7 +414,7 @@ SwSpellPopup::SwSpellPopup(
     EnableItem( MN_ADD_TO_DIC_SINGLE, ((nItemId - MN_DICTIONARIES_START) == 1)?sal_True:sal_False );
 
     //ADD NEW LANGUAGE MENU ITEM
-    ///////////////////////////////////////////////////////////////////////////
+
     OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
     SvtLanguageTable aLanguageTable;
 
@@ -453,7 +453,7 @@ SwSpellPopup::SwSpellPopup(
         SetItemImage( MN_SPELLING_DLG, rImg );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
+
 
     checkRedline();
     RemoveDisabledEntries( true, true );
@@ -568,7 +568,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     EnableItem( MN_ADD_TO_DIC_SINGLE, false );
 
     //ADD NEW LANGUAGE MENU ITEM
-    ///////////////////////////////////////////////////////////////////////////
+
     OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
     SvtLanguageTable aLanguageTable;
 
@@ -607,7 +607,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
         SetItemImage( MN_SPELLING_DLG, rImg );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
+
 
     checkRedline();
     RemoveDisabledEntries( true, true );

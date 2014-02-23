@@ -61,7 +61,7 @@ namespace
     }
 }
 
-//===================================================================
+
 
 void BrowseBox::ConstructImpl( BrowserMode nMode )
 {

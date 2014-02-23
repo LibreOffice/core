@@ -25,7 +25,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -169,8 +169,8 @@ void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStrea
     OControlModel::read(_rxInStream);
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

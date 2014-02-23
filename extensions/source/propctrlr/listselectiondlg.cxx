@@ -25,17 +25,17 @@
 #include "formstrings.hxx"
 #include <vcl/msgbox.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= ListSelectionDialog
-    //====================================================================
+
 
     ListSelectionDialog::ListSelectionDialog( Window* _pParent, const Reference< XPropertySet >& _rxListBox,
             const OUString& _rPropertyName, const OUString& _rPropertyUIName )
@@ -149,8 +149,8 @@ namespace pcr
             m_aEntries.SelectEntryPos( *pSelection );
     }
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -267,9 +267,9 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(Runtime
 }
 
 
-//======================================================================================================================
+
 //= UnoGridControl
-//======================================================================================================================
+
 UnoGridControl::UnoGridControl()
     :UnoGridControl_Base()
     ,m_aSelectionListeners( *this )

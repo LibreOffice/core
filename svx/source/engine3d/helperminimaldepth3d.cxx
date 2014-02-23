@@ -29,7 +29,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -138,7 +138,7 @@ namespace drawinglayer
     } // end of namespace processor3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // changed to create values using VCs, Primitive3DSequence and ViewInformation3D to allow
 // removal of old 3D bucket geometry. There is one slight difference in the result, it's
 // in [0.0 .. 1.0] for Z-Depth since the scaling of the scene as 2D object is no longer

@@ -29,7 +29,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i101872# new Object HitTest as View-tooling
 
 SdrObject* SdrObjectPrimitiveHit(
@@ -88,7 +88,7 @@ SdrObject* SdrObjectPrimitiveHit(
     return pResult;
 }
 
-/////////////////////////////////////////////////////////////////////
+
 
 SdrObject* SdrObjListPrimitiveHit(
     const SdrObjList& rList,
@@ -112,7 +112,7 @@ SdrObject* SdrObjListPrimitiveHit(
     return pRetval;
 }
 
-/////////////////////////////////////////////////////////////////////
+
 
 bool ViewObjectContactPrimitiveHit(
     const sdr::contact::ViewObjectContact& rVOC,

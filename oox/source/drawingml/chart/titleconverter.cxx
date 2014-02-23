@@ -39,7 +39,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::chart2;
@@ -49,7 +49,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 TextConverter::TextConverter( const ConverterRoot& rParent, TextModel& rModel ) :
     ConverterBase< TextModel >( rParent, rModel )
@@ -134,7 +134,7 @@ Reference< XFormattedString > TextConverter::appendFormattedString(
     return xFmtStr;
 }
 
-// ============================================================================
+
 
 TitleConverter::TitleConverter( const ConverterRoot& rParent, TitleModel& rModel ) :
     ConverterBase< TitleModel >( rParent, rModel )
@@ -178,7 +178,7 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
     }
 }
 
-// ============================================================================
+
 
 LegendConverter::LegendConverter( const ConverterRoot& rParent, LegendModel& rModel ) :
     ConverterBase< LegendModel >( rParent, rModel )
@@ -260,7 +260,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
     }
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

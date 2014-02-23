@@ -69,9 +69,9 @@ public:
     }
 };
 
-//=============================================================================
+
 // class ScShareDocumentDlg
-//=============================================================================
+
 
 ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     : ModalDialog(pParent, "ShareDocumentDialog", "modules/scalc/ui/sharedocumentdlg.ui")

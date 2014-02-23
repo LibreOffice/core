@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////
+
 
 SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
        LanguageType nSourceLanguage, LanguageType nTargetLanguage,
@@ -177,6 +177,6 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
     return bNextDoc;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

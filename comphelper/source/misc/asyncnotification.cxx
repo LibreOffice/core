@@ -28,14 +28,14 @@
 #include <functional>
 #include <algorithm>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= AnyEvent
-    //====================================================================
+
 
     AnyEvent::AnyEvent()
         :m_refCount( 0 )
@@ -64,9 +64,9 @@ namespace comphelper
         return m_refCount;
     }
 
-    //====================================================================
+
     //= ProcessableEvent
-    //====================================================================
+
     struct ProcessableEvent
     {
         AnyEventRef                         aEvent;
@@ -92,10 +92,10 @@ namespace comphelper
         }
     };
 
-    //====================================================================
+
     typedef ::std::deque< ProcessableEvent >    EventQueue;
 
-    //====================================================================
+
     struct EqualProcessor : public ::std::unary_function< ProcessableEvent, bool >
     {
         const ::rtl::Reference< IEventProcessor >&  rProcessor;
@@ -107,9 +107,9 @@ namespace comphelper
         }
     };
 
-    //====================================================================
+
     //= EventNotifierImpl
-    //====================================================================
+
     struct EventNotifierImpl
     {
         ::osl::Mutex        aMutex;
@@ -129,9 +129,9 @@ namespace comphelper
         EventNotifierImpl& operator=( const EventNotifierImpl& );   // never implemented
     };
 
-    //====================================================================
+
     //= AsyncEventNotifier
-    //====================================================================
+
 
     AsyncEventNotifier::AsyncEventNotifier(char const * name):
         Thread(name), m_pImpl(new EventNotifierImpl)
@@ -234,8 +234,8 @@ namespace comphelper
         while ( true );
     }
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
