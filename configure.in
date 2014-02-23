@@ -3354,9 +3354,9 @@ if test "$enable_epm" = "yes"; then
          AC_PATH_PROG(EPM, epm, no)
       fi
 
-      if test "$EPM" = "no" && test -n "$with_epm_url" ; then
+      # Override system epm and --with-epm if --with-epm-url is used.
+      if test -n "$with_epm_url" ; then
          # At this moment we can not verify the URL or the content that we want to download.
-      	 # Neither can we apply the test below for ruling out that it is the SunStudio dmake.
        	 EPM_URL=$with_epm_url
        	 AC_MSG_RESULT([epm will be downloaded and compiled in bootstrap])
        	 EPM=
