@@ -2503,9 +2503,11 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
         {
             PptSlidePersistEntry* pE = (*pPageList)[ nAktPageNum ];
             if ( pE )
+            {
                 nSlideFlags = pE->aSlideAtom.nFlags;
-            if ( ! ( nSlideFlags & 2 ) )
-                ((SdrPowerPointImport*)this)->aPageColors = pE->aColorScheme;
+                if ( ! ( nSlideFlags & 2 ) )
+                    ((SdrPowerPointImport*)this)->aPageColors = pE->aColorScheme;
+            }
         }
         if ( nSlideFlags & 2 )      // follow master colorscheme?
         {
