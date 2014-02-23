@@ -2183,7 +2183,8 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
         {
             failure = true;
 
-            sal_Size nLastFkpPos = ( ( nPN + nIMax - 1 ) << 9 );
+            sal_Size nLastFkpPos = nPN + nIMax - 1;
+            nLastFkpPos = nLastFkpPos << 9;
             // Anz. Fkp-Eintraege des letzten Fkp
             if (!checkSeek(rSt, nLastFkpPos + 511))
                 break;
