@@ -558,7 +558,9 @@ Point SvxRectCtl::SetActualRPWithoutInvalidate( RECT_POINT eNewRP )
     if( (m_nState & CS_NOVERT) != 0 )
         aPtNew.Y() = aPtMM.Y();
 
-    eNewRP = GetRPFromPoint( aPtNew );
+    // fdo#74751 this fix reverse base point on RTL UI.
+    bool bRTL = Application::GetSettings().GetLayoutRTL();
+    eNewRP = GetRPFromPoint( aPtNew, bRTL );
 
     eDefRP = eNewRP;
     eRP = eNewRP;
@@ -621,19 +623,20 @@ Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
 
 // Converts Point in RECT_POINT
 
-RECT_POINT SvxRectCtl::GetRPFromPoint( Point aPt ) const
+RECT_POINT SvxRectCtl::GetRPFromPoint( Point aPt, bool bRTL ) const
 {
-    if     ( aPt == aPtLT) return RP_LT;
-    else if( aPt == aPtMT) return RP_MT;
-    else if( aPt == aPtRT) return RP_RT;
-    else if( aPt == aPtLM) return RP_LM;
-    else if( aPt == aPtRM) return RP_RM;
-    else if( aPt == aPtLB) return RP_LB;
-    else if( aPt == aPtMB) return RP_MB;
-    else if( aPt == aPtRB) return RP_RB;
+    RECT_POINT rPoint = RP_MM;  // default
 
-    else
-        return RP_MM; // default
+    if     ( aPt == aPtLT) rPoint = bRTL ? RP_RT : RP_LT;
+    else if( aPt == aPtMT) rPoint = RP_MT;
+    else if( aPt == aPtRT) rPoint = bRTL ? RP_LT : RP_RT;
+    else if( aPt == aPtLM) rPoint = bRTL ? RP_RM : RP_LM;
+    else if( aPt == aPtRM) rPoint = bRTL ? RP_LM : RP_RM;
+    else if( aPt == aPtLB) rPoint = bRTL ? RP_RB : RP_LB;
+    else if( aPt == aPtMB) rPoint = RP_MB;
+    else if( aPt == aPtRB) rPoint = bRTL ? RP_LB : RP_RB;
+
+    return rPoint;
 }
 
 // Resets to the original state of the control

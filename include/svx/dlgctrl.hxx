@@ -89,7 +89,7 @@ protected:
 
     sal_Bool                        mbCompleteDisable;
 
-    RECT_POINT          GetRPFromPoint( Point ) const;
+    RECT_POINT          GetRPFromPoint( Point, bool bRTL = false ) const;
     Point               GetPointFromRP( RECT_POINT ) const;
     void                SetFocusRect( const Rectangle* pRect = NULL );      // pRect == NULL -> calculate rectangle in method
     Point               SetActualRPWithoutInvalidate( RECT_POINT eNewRP );  // returns the last point
