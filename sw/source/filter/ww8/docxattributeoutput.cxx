@@ -1124,6 +1124,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w, XML_rPrChange ),
         FSNS( XML_w14, XML_glow ),
         FSNS( XML_w14, XML_shadow ),
+        FSNS( XML_w14, XML_reflection ),
     };
 
     // postpone the output so that we can later [in EndParagraphProperties()]
@@ -1150,12 +1151,18 @@ const NameToId constNameToIdMapping[] =
 {
     { OUString("glow"),      FSNS( XML_w14, XML_glow ) },
     { OUString("shadow"),    FSNS( XML_w14, XML_shadow ) },
+    { OUString("reflection"),FSNS( XML_w14, XML_reflection ) },
 
     { OUString("val"),       FSNS( XML_w14, XML_val ) },
     { OUString("rad"),       FSNS( XML_w14, XML_rad ) },
     { OUString("blurRad"),   FSNS( XML_w14, XML_blurRad ) },
+    { OUString("stA"),       FSNS( XML_w14, XML_stA ) },
+    { OUString("stPos"),     FSNS( XML_w14, XML_stPos ) },
+    { OUString("endA"),      FSNS( XML_w14, XML_endA ) },
+    { OUString("endPos"),    FSNS( XML_w14, XML_endPos ) },
     { OUString("dist"),      FSNS( XML_w14, XML_dist ) },
     { OUString("dir"),       FSNS( XML_w14, XML_dir ) },
+    { OUString("fadeDir"),   FSNS( XML_w14, XML_fadeDir ) },
     { OUString("sx"),        FSNS( XML_w14, XML_sx ) },
     { OUString("sy"),        FSNS( XML_w14, XML_sy ) },
     { OUString("kx"),        FSNS( XML_w14, XML_kx ) },
@@ -6465,7 +6472,8 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             // just skip these, they were processed before
         }
         else if (i->first == "CharGlowTextEffect" ||
-                 i->first == "CharShadowTextEffect")
+                 i->first == "CharShadowTextEffect" ||
+                 i->first == "CharReflectionTextEffect")
         {
             beans::PropertyValue aPropertyValue;
             i->second >>= aPropertyValue;
