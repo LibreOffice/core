@@ -3737,7 +3737,7 @@ throw (uno::RuntimeException)
                         SolarMutexGuard aGuard;
                         if ( pToolBox )
                             aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIDockingElement.m_aDockedData.m_nDockedArea ) );
-                        else
+                        else if ( pWindow )
                             aSize = pWindow->GetSizePixel();
                     }
 
