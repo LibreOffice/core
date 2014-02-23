@@ -1442,6 +1442,9 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
 
     // OOXTODO: XML_pivotFields
 
+    // Until we figure out how to fill these elements don't export them. It makes
+    // our documents invalid. The code below is correct so don't remove it!!!
+#if 0
     // maPTInfo.mnFields?
     if( maPTInfo.mnRowFields )
     {
@@ -1478,6 +1481,7 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
                 FSEND );
         aPivotTableDefinition->endElement( XML_dataFields );
     }
+#endif
 
     // OOXTODO: XML_formats, XML_conditionalFormats, XML_chartFormats,
     //          XML_pivotHierarchies, XML_pivotTableStyleInfo, XML_filters,
