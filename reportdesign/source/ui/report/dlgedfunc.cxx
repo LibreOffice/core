@@ -402,7 +402,7 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
             if (!bIsInplaceOle)
             {
                 SdrOle2Obj* pOleObj = dynamic_cast<SdrOle2Obj*>(_pObj);
-                if ( pOleObj->GetObjRef().is() )
+                if (pOleObj && pOleObj->GetObjRef().is())
                 {
                     if (m_rView.IsTextEdit())
                     {
