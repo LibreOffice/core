@@ -3389,11 +3389,11 @@ void Test::testCopyPasteSkipEmpty()
         bool mbHasNote;
     };
 
-    struct Test
+    struct TestRange
     {
         ScDocument* mpDoc;
 
-        Test( ScDocument* pDoc ) : mpDoc(pDoc) {}
+        TestRange( ScDocument* pDoc ) : mpDoc(pDoc) {}
 
         bool checkRange( const ScAddress& rPos, const Check* p, const Check* pEnd )
         {
