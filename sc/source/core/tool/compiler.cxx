@@ -2796,10 +2796,17 @@ bool ScCompiler::IsMacro( const OUString& rName )
 
     SfxApplication* pSfxApp = SFX_APP();
 
-    if( pDocSh )//XXX
-        pObj = pDocSh->GetBasic();
-    else
-        pObj = pSfxApp->GetBasic();
+    try
+    {
+        if( pDocSh )//XXX
+            pObj = pDocSh->GetBasic();
+        else
+            pObj = pSfxApp->GetBasic();
+    }
+    catch (...)
+    {
+        return false;
+    }
 
     // ODFF recommends to store user-defined functions prefixed with "USER.",
     // use only unprefixed name if encountered. BASIC doesn't allow '.' in a
