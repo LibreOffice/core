@@ -137,12 +137,15 @@ namespace cppcanvas
             }
 
 #ifdef OSL_BIGENDIAN
-// currently unused
+// little endian <-> big endian switch
 static float GetSwapFloat( SvStream& rSt )
 {
         float   fTmp;
         sal_Int8* pPtr = (sal_Int8*)&fTmp;
-        rSt >> pPtr[3] >> pPtr[2] >> pPtr[1] >> pPtr[0];        // Little Endian <-> Big Endian switch
+        rSt.ReadSChar( pPtr[3] );
+        rSt.ReadSChar( pPtr[2] );
+        rSt.ReadSChar( pPtr[1] );
+        rSt.ReadSChar( pPtr[0] );
         return fTmp;
 }
 #endif
