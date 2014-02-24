@@ -147,7 +147,8 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
 static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
                                    const SfxItemPropertySimpleEntry* pEntry,
                                    const uno::Any& aValue)
-    throw (lang::IllegalArgumentException)
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
 {
     // special treatment for "non-items"
     switch(pEntry->nWID)
