@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_702bce30",
+        "filename": "solenv/gbuild/platform/macosx.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-02-24T16:56:37Z",
+      "side": 1,
+      "message": "we use ?\u003d for that very reason: to allow gb_MKTEMP to be pre-defined.. so that patch is completely unnecessary and\nif you want/need another gb_MKTEMP, defined it in your env.. or at the _very_ least in the PPC platform specific part of things",
+      "revId": "7c33315298ecdf44576085fb65b93220eb1b8c93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
