@@ -76,7 +76,8 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createIns
 extern uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScXMLOOoExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_createInstance(
-            const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+            const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+                throw (uno::Exception, std::exception);
 extern uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Meta_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScXMLOOoExport_Meta_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Meta_createInstance(
