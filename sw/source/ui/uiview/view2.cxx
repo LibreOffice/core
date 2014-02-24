@@ -1336,6 +1336,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 OUString::number(selectionStats.nWord ? selectionStats.nWord : documentStats.nWord));
                 wordCount = wordCount.replaceFirst("%2",
                                 OUString::number(selectionStats.nChar ? selectionStats.nChar : documentStats.nChar));
+
+                if ((selectionStats.nWord ? selectionStats.nWord : documentStats.nWord) == 1)
+                    wordCount = wordCount.replaceFirst("s","");
+                if ((selectionStats.nChar ? selectionStats.nChar : documentStats.nChar) == 1)
+                    wordCount = wordCount.replaceFirst("s","");
+
                 rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, wordCount));
 
                 SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
