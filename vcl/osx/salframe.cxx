@@ -38,6 +38,11 @@
 #include "osx/a11yfactory.h"
 #include "quartz/utils.h"
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#include "vcl/timer.hxx"
+#include "osx/saltimer.h"
+#endif
+
 #include "salwtype.hxx"
 
 #include "premac.h"
@@ -201,7 +206,12 @@ void AquaSalFrame::initWindowAndView()
     else
         [mpNSWindow setAcceptsMouseMovedEvents: YES];
     [mpNSWindow setHasShadow: YES];
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+    objc_msgSend(mpNSWindow, @selector(setDelegate:), mpNSWindow);
+#else
     [mpNSWindow setDelegate: static_cast<id<NSWindowDelegate> >(mpNSWindow)];
+#endif
 
     if( [mpNSWindow respondsToSelector: @selector(setRestorable:)])
     {
@@ -819,6 +829,27 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 
 
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+class PreventSleepTimer : public AutoTimer
+{
+public:
+    PreventSleepTimer()
+    {
+        SetTimeout( 30000 );
+        Start();
+    }
+
+    virtual ~PreventSleepTimer()
+    {
+    }
+
+    virtual void Timeout()
+    {
+        UpdateSystemActivity(OverallAct);
+    }
+};
+#endif
+
 void AquaSalFrame::StartPresentation( sal_Bool bStart )
 {
     if ( !mpNSWindow )
@@ -830,10 +861,14 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
     if( bStart )
     {
         GetSalData()->maPresentationFrames.push_back( this );
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+        mpActivityTimer.reset( new PreventSleepTimer() );
+#else /* OS X 10.6 and above */
         IOPMAssertionCreateWithName(kIOPMAssertionTypeNoDisplaySleep,
                                     kIOPMAssertionLevelOn,
                                     CFSTR("LibreOffice presentation running"),
                                     &mnAssertionID);
+#endif
         [mpNSWindow setLevel: NSPopUpMenuWindowLevel];
         if( mbShown )
             [mpNSWindow makeMainWindow];
@@ -841,7 +876,11 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
     else
     {
         GetSalData()->maPresentationFrames.remove( this );
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+        mpActivityTimer.reset();
+#else
         IOPMAssertionRelease(mnAssertionID);
+#endif
         [mpNSWindow setLevel: NSNormalWindowLevel];
     }
 }

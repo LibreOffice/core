@@ -95,7 +95,11 @@ public:
     sal_uLong                           mnICOptions;
 
     // To prevent display sleep during presentation
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+    boost::shared_ptr< Timer >      mpActivityTimer;
+#else
     IOPMAssertionID                 mnAssertionID;
+#endif
 
 public:
     /** Constructor
