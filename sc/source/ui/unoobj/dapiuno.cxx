@@ -3463,7 +3463,8 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
 }
 
 Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw (UnknownPropertyException, WrappedTargetException,
+               RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Any aRet;
