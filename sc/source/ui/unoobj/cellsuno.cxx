@@ -4420,8 +4420,9 @@ static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const OUS
 }
 
 void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::Any& aElement )
-                            throw(lang::IllegalArgumentException, container::ElementExistException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                            throw (lang::IllegalArgumentException, container::ElementExistException,
+                                   lang::WrappedTargetException, uno::RuntimeException,
+                                   std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
