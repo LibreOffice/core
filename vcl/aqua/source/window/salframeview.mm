@@ -461,7 +461,7 @@ static AquaSalFrame* getMouseContainerFrame()
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         // FIXME: does this leak the returned NSCursor of getCurrentCursor ?
-        const NSRect aRect = NSMakeRect( 0, 0, mpFrame->maGeometry.nWidth, mpFrame->maGeometry.nHeight);
+        const NSRect aRect = { NSZeroPoint, NSMakeSize( mpFrame->maGeometry.nWidth, mpFrame->maGeometry.nHeight) };
         [self addCursorRect: aRect cursor: mpFrame->getCurrentCursor()];
     }
 }

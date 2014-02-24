@@ -32,7 +32,7 @@
 @implementation AquaPrintView
 -(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
 {
-    NSRect aRect = { { 0, 0 }, [pInfoPrinter->getPrintInfo() paperSize] };
+    NSRect aRect = { NSZeroPoint, [pInfoPrinter->getPrintInfo() paperSize] };
     if( (self = [super initWithFrame: aRect]) != nil )
     {
         mpController = pController;
@@ -62,8 +62,7 @@
 -(NSPoint)locationOfPrintRect: (NSRect)aRect
 {
     (void)aRect;
-    NSPoint aPoint = { 0, 0 };
-    return aPoint;
+    return NSZeroPoint;
 }
 
 -(void)drawRect: (NSRect)rect

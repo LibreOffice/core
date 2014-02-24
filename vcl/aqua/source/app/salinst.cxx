@@ -213,9 +213,8 @@ sal_Bool ImplSVMainHook( sal_Bool * pbInit )
     bNoSVMain = false;
     initNSApp();
 
-    NSPoint aPt = { 0, 0 };
     NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                               location: aPt
+                               location: NSZeroPoint
                                modifierFlags: 0
                                timestamp: 0
                                windowNumber: 0
@@ -495,9 +494,8 @@ void AquaSalInstance::wakeupYield()
     if( mbWaitingYield )
     {
         SalData::ensureThreadAutoreleasePool();
-        NSPoint aPt = { 0, 0 };
         NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                                   location: aPt
+                                   location: NSZeroPoint
                                    modifierFlags: 0
                                    timestamp: 0
                                    windowNumber: 0
