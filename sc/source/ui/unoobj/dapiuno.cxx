@@ -1984,7 +1984,8 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
 }
 
 Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyName )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw (UnknownPropertyException, WrappedTargetException,
+               RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aNameString(aPropertyName);
