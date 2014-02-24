@@ -229,8 +229,9 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(const OUString& aName)
 // container::XNameContainer
 
 void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::Any& aElement )
-                            throw(lang::IllegalArgumentException, container::ElementExistException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                            throw (lang::IllegalArgumentException, container::ElementExistException,
+                                   lang::WrappedTargetException, uno::RuntimeException,
+                                   std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bDone = false;

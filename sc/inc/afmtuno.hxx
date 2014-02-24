@@ -75,7 +75,8 @@ public:
                                     throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::container::ElementExistException,
                                         ::com::sun::star::lang::WrappedTargetException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                        ::com::sun::star::uno::RuntimeException,
+                                        std::exception);
     virtual void SAL_CALL   removeByName( const OUString& Name )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
