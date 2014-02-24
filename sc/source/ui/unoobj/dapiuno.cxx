@@ -1865,7 +1865,8 @@ OUString SAL_CALL ScDataPilotFieldObj::getName()
     return aName;
 }
 
-void SAL_CALL ScDataPilotFieldObj::setName( const OUString& rName ) throw(RuntimeException)
+void SAL_CALL ScDataPilotFieldObj::setName(const OUString& rName)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
