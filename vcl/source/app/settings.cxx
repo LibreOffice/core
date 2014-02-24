@@ -207,7 +207,7 @@ ImplStyleData::ImplStyleData() :
     mnOptions                   = 0;
     mnAutoMnemonic              = 1;
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
-    mnUseImagesInMenus          = TRISTATE_INDET;
+    meUseImagesInMenus          = TRISTATE_INDET;
     mpFontOptions              = NULL;
     mnEdgeBlending = 35;
     maEdgeBlendingTopLeftColor = RGB_COLORDATA(0xC0, 0xC0, 0xC0);
@@ -323,7 +323,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseFlatBorders            = rData.mnUseFlatBorders;
     mnUseFlatMenus              = rData.mnUseFlatMenus;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
-    mnUseImagesInMenus          = rData.mnUseImagesInMenus;
+    meUseImagesInMenus          = rData.meUseImagesInMenus;
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mbSkipDisabledInMenus       = rData.mbSkipDisabledInMenus;
     mbHideDisabledMenuItems     = rData.mbHideDisabledMenuItems;
@@ -519,7 +519,7 @@ void StyleSettings::SetCheckedColorSpecialCase( )
 bool StyleSettings::GetUseImagesInMenus() const
 {
     // icon mode selected in Tools -> Options... -> OpenOffice.org -> View
-    switch (mpData->mnUseImagesInMenus) {
+    switch (mpData->meUseImagesInMenus) {
     case TRISTATE_FALSE:
         return false;
     case TRISTATE_TRUE:
@@ -774,7 +774,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maPushButtonFont          == rSet.mpData->maPushButtonFont)           &&
          (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
          (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
-         (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
+         (mpData->meUseImagesInMenus        == rSet.mpData->meUseImagesInMenus)         &&
          (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
          (mpData->mbSkipDisabledInMenus     == rSet.mpData->mbSkipDisabledInMenus)      &&
          (mpData->mbHideDisabledMenuItems   == rSet.mpData->mbHideDisabledMenuItems)    &&

@@ -21,6 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
+#include <tools/gen.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 
@@ -87,8 +88,8 @@ class SVT_DLLPUBLIC SAL_WARN_UNUSED SvtMenuOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         sal_Bool IsEntryHidingEnabled() const;
-        sal_Int16 GetMenuIconsState() const;
-        void SetMenuIconsState( sal_Int16 bState );
+        TriState GetMenuIconsState() const;
+        void SetMenuIconsState(TriState eState);
 
     private:
 

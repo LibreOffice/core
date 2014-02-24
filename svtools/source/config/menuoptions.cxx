@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno   ;
 #define ROOTNODE_MENU                           OUString("Office.Common/View/Menu"  )
 #define DEFAULT_DONTHIDEDISABLEDENTRIES         sal_False
 #define DEFAULT_FOLLOWMOUSE                     sal_True
-#define DEFAULT_MENUICONS                       2
+#define DEFAULT_MENUICONS                       TRISTATE_INDET
 
 #define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString("DontHideDisabledEntry"    )
 #define PROPERTYNAME_FOLLOWMOUSE                OUString("FollowMouse"              )
@@ -73,7 +73,7 @@ class SvtMenuOptions_Impl : public ConfigItem
         ::std::list<Link> aList;
         sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
-        sal_Int16   m_nMenuIcons                        ;   /// cache "MenuIcons" of Menu section
+        TriState    m_eMenuIcons                        ;   /// cache "MenuIcons" of Menu section
 
 
     //  public methods
@@ -149,8 +149,8 @@ class SvtMenuOptions_Impl : public ConfigItem
         sal_Bool    IsFollowMouseEnabled() const
                     { return m_bFollowMouse; }
 
-        sal_Int16   GetMenuIconsState() const
-                    { return m_nMenuIcons; }
+        TriState    GetMenuIconsState() const
+                    { return m_eMenuIcons; }
 
         void        SetEntryHidingState ( sal_Bool bState )
                     {
@@ -170,9 +170,9 @@ class SvtMenuOptions_Impl : public ConfigItem
                         Commit();
                     }
 
-        void        SetMenuIconsState ( sal_Int16 nState    )
+        void        SetMenuIconsState(TriState eState)
                     {
-                        m_nMenuIcons = nState;
+                        m_eMenuIcons = eState;
                         SetModified();
                         for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
                             iter->Call( this );
@@ -210,7 +210,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     // Init member then.
     ,   m_bDontHideDisabledEntries  ( DEFAULT_DONTHIDEDISABLEDENTRIES   )
     ,   m_bFollowMouse              ( DEFAULT_FOLLOWMOUSE               )
-    ,   m_nMenuIcons                ( DEFAULT_MENUICONS                 )
+    ,   m_eMenuIcons                ( DEFAULT_MENUICONS                 )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = impl_GetPropertyNames();
@@ -223,12 +223,12 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
 
     sal_Bool bMenuIcons = sal_True;
     sal_Bool bSystemMenuIcons = sal_True;
-    if (m_nMenuIcons == 2)
+    if (m_eMenuIcons == TRISTATE_INDET)
         bMenuIcons = (sal_Bool)(Application::GetSettings().GetStyleSettings().GetPreferredUseImagesInMenus());
     else
     {
         bSystemMenuIcons = sal_False;
-        bMenuIcons = m_nMenuIcons ? sal_True : sal_False;
+        bMenuIcons = m_eMenuIcons ? sal_True : sal_False;
     }
 
     // Copy values from list in right order to our internal member.
@@ -269,7 +269,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
         }
     }
 
-    m_nMenuIcons = bSystemMenuIcons ? 2 : bMenuIcons;
+    m_eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
 
     EnableNotification( seqNames );
 }
@@ -301,12 +301,12 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     bool bMenuSettingsChanged = false;
     sal_Bool bMenuIcons = sal_True;
     sal_Bool bSystemMenuIcons = sal_True;
-    if (m_nMenuIcons == 2)
+    if (m_eMenuIcons == TRISTATE_INDET)
         bMenuIcons = (sal_Bool)(Application::GetSettings().GetStyleSettings().GetUseImagesInMenus());
     else
     {
         bSystemMenuIcons = sal_False;
-        bMenuIcons = m_nMenuIcons ? sal_True : sal_False;
+        bMenuIcons = m_eMenuIcons ? sal_True : sal_False;
     }
 
     // Step over list of property names and get right value from coreesponding value list to set it on internal members!
@@ -340,7 +340,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     }
 
     if ( bMenuSettingsChanged )
-        m_nMenuIcons = bSystemMenuIcons ? 2 : bMenuIcons;
+        m_eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
 
     for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
         iter->Call( this );
@@ -375,7 +375,7 @@ void SvtMenuOptions_Impl::Commit()
                                                             }
                                                             break;
             case PROPERTYHANDLE_SYSTEMICONSINMENUES     :   {
-                                                                sal_Bool bValue = (m_nMenuIcons == 2 ? sal_True : sal_False) ;
+                                                                sal_Bool bValue = (m_eMenuIcons == TRISTATE_INDET ? sal_True : sal_False) ;
                                                                 seqValues[nProperty] <<= bValue;
                                                             }
                                                             break;
@@ -477,7 +477,7 @@ sal_Bool SvtMenuOptions::IsEntryHidingEnabled() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Int16 SvtMenuOptions::GetMenuIconsState() const
+TriState SvtMenuOptions::GetMenuIconsState() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetMenuIconsState();
@@ -486,10 +486,10 @@ sal_Int16 SvtMenuOptions::GetMenuIconsState() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtMenuOptions::SetMenuIconsState( sal_Int16 bState )
+void SvtMenuOptions::SetMenuIconsState(TriState eState)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetMenuIconsState( bState );
+    m_pDataContainer->SetMenuIconsState(eState);
 }
 
 //*****************************************************************************************************************

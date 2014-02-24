@@ -338,7 +338,7 @@ private:
     bool                       mbHighContrast;
     bool                       mbUseSystemUIFonts;
     sal_uInt16                 mnAutoMnemonic;
-    TriState                   mnUseImagesInMenus;
+    TriState                   meUseImagesInMenus;
     bool                       mnUseFlatBorders;
     bool                       mbPreferredUseImagesInMenus;
     long                       mnMinThumbSize;
@@ -648,18 +648,18 @@ public:
                                         { CopyData(); mpData->mnUseFlatMenus = bUseFlatMenus; }
     bool                            GetUseFlatMenus() const
                                         { return mpData->mnUseFlatMenus; }
-    void                            SetUseImagesInMenus( bool bUseImagesInMenus )
-    { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus ? TRISTATE_TRUE : TRISTATE_FALSE; }
+    void                            SetUseImagesInMenus( TriState eUseImagesInMenus )
+    { CopyData(); mpData->meUseImagesInMenus = eUseImagesInMenus; }
     bool                            GetUseImagesInMenus() const;
-    void                                                       SetPreferredUseImagesInMenus( bool bPreferredUseImagesInMenus )
+    void                            SetPreferredUseImagesInMenus( bool bPreferredUseImagesInMenus )
                                         { CopyData(); mpData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus; }
-    bool                                                   GetPreferredUseImagesInMenus() const
+    bool                            GetPreferredUseImagesInMenus() const
                                         { return mpData->mbPreferredUseImagesInMenus; }
-    void                                                       SetSkipDisabledInMenus( bool bSkipDisabledInMenus )
+    void                            SetSkipDisabledInMenus( bool bSkipDisabledInMenus )
                                         { CopyData(); mpData->mbSkipDisabledInMenus = bSkipDisabledInMenus; }
     bool                            GetSkipDisabledInMenus() const
                                         { return mpData->mbSkipDisabledInMenus; }
-    void                                                       SetHideDisabledMenuItems( bool bHideDisabledMenuItems )
+    void                            SetHideDisabledMenuItems( bool bHideDisabledMenuItems )
                                         { CopyData(); mpData->mbHideDisabledMenuItems = bHideDisabledMenuItems; }
     bool                            GetHideDisabledMenuItems() const
                                         { return mpData->mbHideDisabledMenuItems; }

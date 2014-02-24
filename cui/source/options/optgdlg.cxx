@@ -752,7 +752,9 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
 
     if(m_pMenuIconsLB->GetSelectEntryPos() != m_pMenuIconsLB->GetSavedValue())
     {
-        aMenuOpt.SetMenuIconsState( m_pMenuIconsLB->GetSelectEntryPos() == 0 ? 2 : m_pMenuIconsLB->GetSelectEntryPos() - 1);
+        aMenuOpt.SetMenuIconsState(m_pMenuIconsLB->GetSelectEntryPos() == 0 ?
+            TRISTATE_INDET :
+            static_cast<TriState>(m_pMenuIconsLB->GetSelectEntryPos() - 1));
         bModified = sal_True;
         bMenuOptModified = sal_True;
         bAppearanceChanged = sal_True;
