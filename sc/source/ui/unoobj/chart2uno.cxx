@@ -3387,7 +3387,7 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
 // XModifyBroadcaster ========================================================
 
 void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // like ScCellRangesBase::addModifyListener
     SolarMutexGuard aGuard;
