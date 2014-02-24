@@ -1200,7 +1200,8 @@ public:
                                            std::exception);
     virtual void SAL_CALL   ungroup( const ::com::sun::star::table::CellRangeAddress& aRange,
                                 ::com::sun::star::table::TableOrientation nOrientation )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException,
+                                           std::exception);
     virtual void SAL_CALL   autoOutline( const ::com::sun::star::table::CellRangeAddress& aRange )
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception);
