@@ -3485,8 +3485,8 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
     // finally check the embedded files are present in the zipped document
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
     uno::Sequence<OUString> names = xNameAccess->getElementNames();
-    sal_Int32 nSheetFiles = 0;
-    sal_Int32 nImageFiles = 0;
+    int nSheetFiles = 0;
+    int nImageFiles = 0;
     for (int i=0; i<names.getLength(); i++)
     {
         if(names[i].startsWith("word/embeddings/Microsoft_Excel_Worksheet"))
