@@ -103,6 +103,7 @@ struct DocxSdrExport::Impl
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
     void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt, int nAnchorId);
     void textFrameShadow(const SwFrmFmt& rFrmFmt);
+    bool isSupportedDMLShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape);
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
@@ -549,6 +550,17 @@ void DocxSdrExport::Impl::textFrameShadow(const SwFrmFmt& rFrmFmt)
                                    FSEND);
 }
 
+bool DocxSdrExport::Impl::isSupportedDMLShape(uno::Reference<drawing::XShape> xShape)
+{
+    bool supported = true;
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
+    if (xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonShape"))
+        supported = false;
+
+    return supported;
+}
+
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId)
 {
     // Depending on the shape type, we actually don't write the shape as DML.
@@ -557,7 +569,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType(xShape, nMirrorFlags, sShapeType);
 
-    if (eShapeType != ESCHER_ShpInst_TextPlainText)
+    if (eShapeType != ESCHER_ShpInst_TextPlainText && m_pImpl->isSupportedDMLShape(xShape))
     {
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 
