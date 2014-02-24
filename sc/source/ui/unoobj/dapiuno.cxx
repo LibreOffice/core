@@ -2539,7 +2539,8 @@ bool ScDataPilotFieldObj::HasString(const Sequence< OUString >& rItems, const OU
 
 // XDataPilotFieldGrouping
 Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( const Sequence< OUString >& rItems )
-         throw (RuntimeException, IllegalArgumentException)
+         throw (RuntimeException, IllegalArgumentException,
+                std::exception)
 {
     SolarMutexGuard aGuard;
 
