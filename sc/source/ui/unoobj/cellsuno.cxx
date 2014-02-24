@@ -6623,7 +6623,8 @@ sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException)
 
 // XFormulaTokens
 
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens() throw(uno::RuntimeException)
+uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence<sheet::FormulaToken> aSequence;
