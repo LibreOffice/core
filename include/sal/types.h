@@ -153,15 +153,17 @@ typedef unsigned char sal_uChar;
 typedef void *                   sal_Handle;
 
 /* sal_Size should currently be the native width of the platform */
-#if SAL_TYPES_SIZEOFPOINTER == 4
-    typedef sal_uInt32          sal_Size;
-    typedef sal_Int32           sal_sSize;
-#elif SAL_TYPES_SIZEOFPOINTER == 8
-    typedef sal_uInt64          sal_Size;
-    typedef sal_Int64           sal_sSize;
-#else
-    #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
-#endif
+#define sal_Size size_t
+#define sal_sSize ptrdiff_t
+//#if SAL_TYPES_SIZEOFPOINTER == 4
+//    typedef sal_uInt32          sal_Size;
+//    typedef sal_Int32           sal_sSize;
+//#elif SAL_TYPES_SIZEOFPOINTER == 8
+//    typedef sal_uInt64          sal_Size;
+//    typedef sal_Int64           sal_sSize;
+//#else
+//    #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
+//#endif
 
 /* sal_PtrDiff holds the result of a pointer subtraction */
 #if SAL_TYPES_SIZEOFPOINTER == 4
