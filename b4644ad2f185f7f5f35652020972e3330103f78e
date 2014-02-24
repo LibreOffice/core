@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_50ca52a2",
+        "filename": "UnoControls/inc/basecontrol.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-02-24T10:07:51Z",
+      "side": 1,
+      "message": "Can you remove these sort of lines also?",
+      "revId": "b4644ad2f185f7f5f35652020972e3330103f78e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
