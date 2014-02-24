@@ -244,10 +244,7 @@ gb_PCHWARNINGS = \
 gb_STDLIBS := \
 	advapi32.lib \
 
-ifneq ($(ENABLE_WERROR),)
-gb_CFLAGS_WERROR := -WX
-gb_CXXFLAGS_WERROR := -WX
-endif
+gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-WX)
 
 ifneq ($(MERGELIBS),)
 gb_CFLAGS += -DLIBO_MERGELIBS

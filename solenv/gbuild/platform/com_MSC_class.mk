@@ -34,40 +34,17 @@ endef
 
 # CObject class
 
-# $(call gb_CObject__command,object,relative-source,source,dep-file)
-define gb_CObject__command
-$(call gb_Output_announce,$(2).c,$(true),C  ,3)
+# $(call gb_CObject__command_pattern,object,flags,source,dep-file)
+define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(if $(filter YES,$(COBJECT_X64)), $(CXX_X64_BINARY), $(gb_CC)) \
+	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), \
+		$(if $(filter %.c,$(3)), $(gb_CC), $(gb_CXX))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
-		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
+		$(2) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
-		-Fd$(PDBFILE) \
-		$(gb_COMPILERDEPFLAGS) \
-		-I$(dir $(3)) \
-		$(INCLUDE) \
-		$(if $(filter YES,$(COBJECT_X64)), -U_X86_ -D_AMD64_,) \
-		-c $(3) \
-		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
-endef
-
-
-# CxxObject class
-
-# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
-define gb_CxxObject__command
-$(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	unset INCLUDE && \
-	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
-		$(DEFS) \
-		$(gb_LTOFLAGS) \
-		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(PCHFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \
@@ -77,7 +54,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
 endef
-
 
 # PrecompiledHeader class
 

@@ -27,6 +27,15 @@
 # OBJCXXFLAGS
 # LDFLAGS
 
+# defined by platform
+#  gb_AsmObject_get_source (.asm on Windows, .s elsewhere)
+#  gb_AsmObject__command
+#  gb_CObject__command_pattern
+#  gb_LinkTarget_CXXFLAGS
+#  gb_LinkTarget_LDFLAGS
+#  gb_LinkTarget_INCLUDE
+#  gb_YaccTarget__command(grammar-file, stem-for-message, source-target, include-target)
+
 # enable if: no "-TARGET" defined AND [module is enabled OR "TARGET" defined]
 gb_LinkTarget__debug_enabled = \
  $(and $(if $(filter -$(1),$(ENABLE_DEBUGINFO_FOR)),,$(true)),\
@@ -120,15 +129,14 @@ endif
 # CObject class
 
 gb_CObject_get_source = $(1)/$(2).c
-# defined by platform
-#  gb_CObject__command
 
 ifneq ($(COMPILER_PLUGIN_TOOL),)
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_CObject__tool_command,$*,$<)
 else
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
-	$(call gb_CObject__command,$@,$*,$<,$(call gb_CObject_get_dep_target,$*))
+	$(call gb_Output_announce,$*.c,$(true),C  ,3)
+	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$<,$(call gb_CObject_get_dep_target,$*))
 endif
 
 # Note: if the *Object_dep_target does not exist it will be created by
@@ -143,8 +151,6 @@ endif
 # CxxObject class
 
 gb_CxxObject_get_source = $(1)/$(2).cxx
-# defined by platform
-#  gb_CxxObject__command
 
 # Only enable PCH if the PCH_CXXFLAGS and the PCH_DEFS (from the linktarget)
 # are the same as the T_CXXFLAGS and DEFS we want to use for this object. This
@@ -174,8 +180,9 @@ $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) 
 	$(call gb_CxxObject__tool_command,$*,$<)
 else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
+	$(call gb_Output_announce,$*.cxx,$(true),CXX,3)
 	$(eval $(gb_CxxObject__set_pchflags))
-	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_CxxObject_get_dep_target,$*))
+	$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$<,$(call gb_CxxObject_get_dep_target,$*))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -195,12 +202,11 @@ endif
 # GenCObject class
 
 gb_GenCObject_get_source = $(WORKDIR)/$(1).c
-# defined by platform
-#  gb_CObject__command
 
 $(call gb_GenCObject_get_target,%) :
+	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
-	$(call gb_CObject__command,$@,$*,$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*))
+	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCObject_get_dep_target,%) :
@@ -212,13 +218,12 @@ endif
 # GenCxxObject class
 
 gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
-# defined by platform
-#  gb_CxxObject__command
 
 $(call gb_GenCxxObject_get_target,%) :
+	$(call gb_Output_announce,$*.cxx,$(true),CXX,3)
 	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
 	$(eval $(gb_CxxObject__set_pchflags))
-	$(call gb_CxxObject__command,$@,$*,$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*))
+	$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) :
@@ -236,8 +241,6 @@ endif
 # tries to use it.
 
 gb_YaccTarget_get_source = $(1)/$(2).y
-# defined by platform
-#  gb_YaccTarget__command(grammar-file, stem-for-message, source-target, include-target)
 
 .PHONY : $(call gb_YaccTarget_get_clean_target,%)
 $(call gb_YaccTarget_get_clean_target,%) :
@@ -293,8 +296,6 @@ endef
 #
 
 gb_ObjCxxObject_get_source = $(1)/$(2).mm
-# defined by platform
-#  gb_ObjCxxObject__command
 
 ifneq ($(COMPILER_PLUGIN_TOOL),)
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
@@ -302,7 +303,8 @@ $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDI
 else
 
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
-	$(call gb_ObjCxxObject__command,$@,$*,$<,$(call gb_ObjCxxObject_get_dep_target,$*))
+	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
+	$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$<,$(call gb_ObjCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCxxObject_get_dep_target,%) :
@@ -316,8 +318,6 @@ endif
 #
 
 gb_ObjCObject_get_source = $(1)/$(2).m
-# defined by platform
-#  gb_ObjCObject__command
 
 ifneq ($(COMPILER_PLUGIN_TOOL),)
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
@@ -325,7 +325,8 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 else
 
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
-	$(call gb_ObjCObject__command,$@,$*,$<,$(call gb_ObjCObject_get_dep_target,$*))
+	$(call gb_Output_announce,$*.m,$(true),OCC,3)
+	$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$<,$(call gb_ObjCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCObject_get_dep_target,%) :
@@ -336,10 +337,6 @@ endif
 
 
 # AsmObject class
-
-# defined by platform
-#  gb_AsmObject_get_source (.asm on Windows, .s elsewhere)
-#  gb_AsmObject__command
 
 $(call gb_AsmObject_get_target,%) : $(call gb_AsmObject_get_source,$(SRCDIR),%)
 	$(call gb_AsmObject__command,$@,$*,$<,$(call gb_AsmObject_get_dep_target,$*))
@@ -364,11 +361,6 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 define gb_LinkTarget_rtl_defs
 $(if $(filter-out sal salhelper cppu cppuhelper odk, $(gb_Module_CURRENTMODULE_NAME)), -DRTL_USING)
 endef
-
-# defined by platform
-#  gb_LinkTarget_CXXFLAGS
-#  gb_LinkTarget_LDFLAGS
-#  gb_LinkTarget_INCLUDE
 
 .PHONY : $(WORKDIR)/Clean/LinkTarget/%
 $(WORKDIR)/Clean/LinkTarget/% :
@@ -1142,7 +1134,7 @@ endef
 # call gb_LinkTarget_add_x64_generated_cobjects,linktarget,sourcefiles,cflags,linktargetmakefilename
 define gb_LinkTarget_add_x64_generated_cobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),$(4)))
-$(foreach obj,$(2),$(eval $(call gb_GenCObject_get_target,$(obj)) : COBJECT_X64 := YES))
+$(foreach obj,$(2),$(eval $(call gb_GenCObject_get_target,$(obj)) : CXXOBJECT_X64 := YES))
 endef
 
 # call gb_LinkTarget_add_generated_cxxobjects,linktarget,sourcefiles,cxxflags,linktargetmakefilename
