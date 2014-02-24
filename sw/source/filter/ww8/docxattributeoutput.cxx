@@ -1183,12 +1183,12 @@ const NameToId constNameToIdMapping[] =
     { OUString("lumMod"),    FSNS( XML_w14, XML_lumMod ) },
 };
 
-boost::optional<sal_Int32> lclGetElementIdForName(OUString aName)
+boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
 {
     sal_Int32 aLength = sizeof (constNameToIdMapping) / sizeof(NameToId);
     for (sal_Int32 i=0; i < aLength; ++i)
     {
-        if(aName == constNameToIdMapping[i].maName)
+        if (rName == constNameToIdMapping[i].maName)
         {
             return constNameToIdMapping[i].maId;
         }
@@ -1196,16 +1196,16 @@ boost::optional<sal_Int32> lclGetElementIdForName(OUString aName)
     return boost::optional<sal_Int32>();
 }
 
-void lclProcessRecursiveGrabBag(sal_Int32 aElementId, css::uno::Sequence<css::beans::PropertyValue> aElements, sax_fastparser::FSHelperPtr pSerializer)
+void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<css::beans::PropertyValue>& rElements, sax_fastparser::FSHelperPtr pSerializer)
 {
     css::uno::Sequence<css::beans::PropertyValue> aAttributes;
     FastAttributeList* pAttributes = pSerializer->createAttrList();
 
-    for (sal_Int32 j=0; j < aElements.getLength(); ++j)
+    for (sal_Int32 j=0; j < rElements.getLength(); ++j)
     {
-        if( aElements[j].Name == "attributes")
+        if (rElements[j].Name == "attributes")
         {
-            aElements[j].Value >>= aAttributes;
+            rElements[j].Value >>= aAttributes;
         }
     }
 
@@ -1232,14 +1232,14 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, css::uno::Sequence<css::be
 
     pSerializer->startElement(aElementId, xAttributesList);
 
-    for (sal_Int32 j=0; j < aElements.getLength(); ++j)
+    for (sal_Int32 j=0; j < rElements.getLength(); ++j)
     {
         css::uno::Sequence<css::beans::PropertyValue> aSumElements;
 
-        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(aElements[j].Name);
+        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rElements[j].Name);
         if(aSubElementId)
         {
-            aElements[j].Value >>= aSumElements;
+            rElements[j].Value >>= aSumElements;
             lclProcessRecursiveGrabBag(*aSubElementId, aSumElements, pSerializer);
         }
     }
@@ -2759,9 +2759,9 @@ void DocxAttributeOutput::StartStyles()
     LatentStyles();
 }
 
-sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, OUString aName)
+sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, const OUString& rName)
 {
-    OString sName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
+    OString sName = OUStringToOString(rName, RTL_TEXTENCODING_UTF8);
     while (pMap->pToken)
     {
         if (sName == pMap->pToken)

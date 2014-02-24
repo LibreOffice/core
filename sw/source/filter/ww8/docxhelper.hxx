@@ -18,7 +18,7 @@ struct DocxStringTokenMap
     sal_Int32 nToken;
 };
 
-sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, OUString aName);
+sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, const OUString& rName);
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXHELPER_HXX
 
