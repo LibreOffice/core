@@ -1888,7 +1888,9 @@ Reference<XPropertySetInfo> SAL_CALL ScDataPilotFieldObj::getPropertySetInfo()
 }
 
 void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
-        throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+        throw (UnknownPropertyException, PropertyVetoException,
+               IllegalArgumentException, WrappedTargetException,
+               RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aNameString(aPropertyName);
