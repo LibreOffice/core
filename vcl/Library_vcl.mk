@@ -45,8 +45,6 @@ $(eval $(call gb_Library_set_include,vcl,\
 
 $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
-    -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,cui)\" \
-    -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vcl))
@@ -491,8 +489,6 @@ vcl_headless_freetype_code=\
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_defs,vcl,\
-    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
@@ -518,8 +514,6 @@ endif
 
 ifeq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_Library_add_defs,vcl,\
-    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
@@ -549,8 +543,6 @@ $(eval $(call gb_Library_add_libs,vcl,\
 	-llo-bootstrap \
 ))
 $(eval $(call gb_Library_add_defs,vcl,\
-    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\

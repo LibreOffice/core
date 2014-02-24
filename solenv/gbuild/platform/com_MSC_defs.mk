@@ -246,11 +246,6 @@ gb_STDLIBS := \
 
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-WX)
 
-ifneq ($(MERGELIBS),)
-gb_CFLAGS += -DLIBO_MERGELIBS
-gb_CXXFLAGS += -DLIBO_MERGELIBS
-endif
-
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-EHa \

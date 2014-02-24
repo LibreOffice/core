@@ -1551,9 +1551,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             sModuleBuf.append(SAL_DLLPREFIX);
 #endif
             sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
-#ifdef SAL_DLLEXTENSION
             sModuleBuf.append(SAL_DLLEXTENSION);
-#endif
 #endif
             OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
 #ifndef DISABLE_DYNLOADING

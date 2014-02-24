@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_libraries.h>
+
 #include "osl/module.h"
 #include "osl/process.h"
 
@@ -49,7 +51,11 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
     {
         return NULL;
     }
-    OUString aModule(SAL_DLLPREFIX "vclplug_" + rModuleBase + SAL_DLLPOSTFIX);
+    OUString aModule(
+#ifdef SAL_DLLPREFIX
+            SAL_DLLPREFIX
+#endif
+            "vclplug_" + rModuleBase + "lo" SAL_DLLEXTENSION );
 
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
@@ -111,15 +117,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 
 static DesktopType get_desktop_environment()
 {
-    OUString aModule(
-        SAL_DLLPREFIX
-#if defined LIBO_MERGELIBS
-        "merged"
-#else
-        "desktop_detector"
-#endif
-        SAL_DLLPOSTFIX);
-
+    OUString aModule(LIBO_LIBRARY(desktop_detector));
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
         SAL_LOADMODULE_DEFAULT );

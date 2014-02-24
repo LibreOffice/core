@@ -18,11 +18,11 @@
  */
 
 #include <config_features.h>
+#include <config_libraries.h>
 
 #include "swabstdlg.hxx"
 
 #include <osl/module.hxx>
-#include <vcl/unohelp.hxx>
 
 typedef SwAbstractDialogFactory* (SAL_CALL *SwFuncPtrCreateDialogFactory)();
 
@@ -42,7 +42,7 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
-    static const OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", true));
+    static const OUString sLibName(LIBO_LIBRARY(swui));
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName,
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SwAbstractDialogFactory* (SAL_CALL*)() )

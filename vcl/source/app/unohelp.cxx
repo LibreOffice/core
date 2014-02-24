@@ -45,37 +45,6 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     return i18n::CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
-OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, bool bSUPD )
-{
-    // create variable library name suffixes
-    OUString aDLLSuffix = OUString::createFromAscii( SAL_STRINGIFY( DLLPOSTFIX ) );
-
-    OUString aLibName;
-
-#if defined( WNT)
-    aLibName = OUString::createFromAscii( pModName );
-    if ( bSUPD )
-    {
-        aLibName += aDLLSuffix;
-    }
-    aLibName += ".dll";
-#else
-    aLibName = "lib";
-    aLibName += OUString::createFromAscii( pModName );
-    if ( bSUPD )
-    {
-        aLibName += aDLLSuffix;
-    }
-#ifdef MACOSX
-    aLibName += ".dylib";
-#else
-    aLibName += ".so";
-#endif
-#endif
-
-    return aLibName;
-}
-
 void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > xExtToolkit( Application::GetVCLToolkit(), uno::UNO_QUERY );

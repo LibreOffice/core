@@ -94,11 +94,6 @@ endif
 
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
 
-ifneq ($(MERGELIBS),)
-gb_CFLAGS_COMMON += -DLIBO_MERGELIBS
-gb_CXXFLAGS_COMMON += -DLIBO_MERGELIBS
-endif
-
 ifeq ($(ENABLE_LTO),TRUE)
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 gb_LTOFLAGS := -flto

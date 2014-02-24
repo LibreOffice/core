@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_libraries.h>
+
 #include "comphelper/processfactory.hxx"
 
 #include "osl/module.h"
@@ -1416,13 +1418,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
 #ifndef DISABLE_DYNLOADING
-        OUString aLibName = ::vcl::unohelper::CreateLibraryName(
-#ifdef LIBO_MERGELIBS
-                                                                       "merged",
-#else
-                                                                       "tk",
-#endif
-                                                                       true );
+        OUString aLibName(LIBO_LIBRARY(tk));
         oslModule hTkLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hTkLib )

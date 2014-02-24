@@ -326,6 +326,8 @@ include $(foreach class, \
 $(eval $(call gb_Helper_process_executable_registrations))
 $(eval $(call gb_Postprocess_make_targets))
 
+$(eval $(call gb_Helper_generate_config_libraries))
+
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/post_*.mk)

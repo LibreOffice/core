@@ -18,12 +18,12 @@
  */
 
 #include <config_features.h>
+#include <config_libraries.h>
 
 #include "sdabstdlg.hxx"
 
 #include <osl/module.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/unohelp.hxx>
 
 typedef SdAbstractDialogFactory* (SAL_CALL *SdFuncPtrCreateDialogFactory)();
 
@@ -43,7 +43,7 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
-    static const OUString sLibName(::vcl::unohelper::CreateLibraryName("sdui", true));
+    static const OUString sLibName(LIBO_LIBRARY(sdui));
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
         fp = ( SdAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" );
