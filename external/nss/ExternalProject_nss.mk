@@ -60,9 +60,10 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter MACOSX,$(OS)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
-			NSS_USE_SYSTEM_SQLITE=1) \
+			$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),,NSS_USE_SYSTEM_SQLITE=1)) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(filter YES,$(CROSS_COMPILING)),\
+		$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
 		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		NSDISTMODE=copy \
 		$(MAKE) -j1 AR="$(AR)" RANLIB="$(RANLIB)" NMEDIT="$(NM)edit" nss_build_all \
