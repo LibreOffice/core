@@ -197,6 +197,13 @@ gb_Package_MODULE_$(1) += $(2)
 
 endef
 
+# call gb_Helper_replace_if_different_and_touch,source,target,optional-touch-reference-file
+define gb_Helper_replace_if_different_and_touch
+if cmp -s $(1) $(2); then rm $(1); \
+else mv $(1) $(2) $(if $(3),&& touch -r $(3) $(2)); \
+fi
+endef
+
 define gb_Helper_define_if_set
 $(foreach def,$(1),$(if $(filter TRUE YES,$($(def))),-D$(def)))
 endef

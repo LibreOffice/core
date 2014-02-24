@@ -158,11 +158,8 @@ $(call gb_Helper_abbreviate_dirs,\
 			> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(NM) -g -P $(1) | cut -d' ' -f1-2 | grep -v U$$ \
 			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
-		if cmp -s $(WORKDIR)/LinkTarget/$(2).exports.tmp $(WORKDIR)/LinkTarget/$(2).exports; \
-			then rm $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
-			else mv $(WORKDIR)/LinkTarget/$(2).exports.tmp $(WORKDIR)/LinkTarget/$(2).exports && \
-				touch -r $(1) $(WORKDIR)/LinkTarget/$(2).exports; \
-		fi &&) \
+		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp, \
+			$(WORKDIR)/LinkTarget/$(2).exports,$(1)) &&) \
 	:)
 endef
 
