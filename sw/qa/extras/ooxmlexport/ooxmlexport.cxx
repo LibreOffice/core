@@ -97,6 +97,12 @@ protected:
     void assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes);
 
     /**
+     * Get the position of the child named rName of the parent node specified by rXPath.
+     * Useful for checking relative order of elements.
+     */
+    int getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rName);
+
+    /**
      * Same as the assertXPath(), but don't assert: return the string instead.
      */
     OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
@@ -187,6 +193,23 @@ void Test::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNu
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         OString("XPath '" + rXPath + "' number of child-nodes is incorrect").getStr(),
         nNumberOfChildNodes, (int)xmlChildElementCount(pXmlNode));
+}
+
+int Test::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName)
+{
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+                                 1,
+                                 xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    int nRet = 0;
+    for (xmlNodePtr pChild = pXmlNode->children; pChild; pChild = pChild->next)
+    {
+        if (OUString::createFromAscii((const char*)pChild->name) == rChildName)
+            break;
+        ++nRet;
+    }
+    return nRet;
 }
 
 OUString Test::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
@@ -3429,6 +3452,19 @@ DECLARE_OOXMLEXPORT_TEST(testW14TextEffects, "TextEffects.docx")
 
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow", "rad").match("63500"));
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow", "rad").match("228600"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testAbi11739, "abi11739.docx")
+{
+    // Validation test: order of elements were wrong.
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    if (!pXmlDoc)
+        return;
+    // Order was: uiPriority, link, basedOn.
+    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "basedOn") < getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "link"));
+    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "link") < getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "uiPriority"));
+    // Order was: qFormat, unhideWhenUsed.
+    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "unhideWhenUsed") < getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "qFormat"));
 }
 
 #endif

@@ -618,12 +618,12 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
         m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
                                        FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
                                        FSEND);
-    if (bQFormat)
-        m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
     if (bSemiHidden)
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
+    if (bQFormat)
+        m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
     if (!aRsid.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_rsid,
                                        FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),

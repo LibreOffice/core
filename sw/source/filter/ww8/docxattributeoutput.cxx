@@ -3739,7 +3739,18 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             FSNS( XML_w, XML_val ), OUStringToOString( OUString( rName ), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
-    // Output properties from grab-bag.
+    if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_basedOn,
+                FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nBase).getStr(),
+                FSEND );
+    }
+
+    if (!aLink.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_link,
+                FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
+
     if (!aUiPriority.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
                 FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
@@ -3750,23 +3761,12 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
-    if (!aLink.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_link,
-                FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
     if (bLocked)
         m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
     if (!aRsid.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_rsid,
                 FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
-
-    if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
-    {
-        m_pSerializer->singleElementNS( XML_w, XML_basedOn,
-                FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nBase).getStr(),
-                FSEND );
-    }
 
     if ( nNext != nId && eType != STYLE_TYPE_LIST)
     {
