@@ -54,6 +54,22 @@
 @end
 
 @implementation VCL_NSApplication
+
+-(void)applicationDidFinishLaunching:(NSNotification*)aNotification
+{
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+                               location: NSZeroPoint
+                               modifierFlags: 0
+                               timestamp: 0
+                               windowNumber: 0
+                               context: nil
+                               subtype: AquaSalInstance::AppExecuteSVMain
+                               data1: 0
+                               data2: 0 ];
+    if( pEvent )
+        [NSApp postEvent: pEvent atStart: NO];
+}
+
 -(void)sendEvent:(NSEvent*)pEvent
 {
     NSEventType eType = [pEvent type];

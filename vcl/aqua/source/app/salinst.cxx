@@ -213,19 +213,6 @@ sal_Bool ImplSVMainHook( sal_Bool * pbInit )
     bNoSVMain = false;
     initNSApp();
 
-    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                               location: NSZeroPoint
-                               modifierFlags: 0
-                               timestamp: 0
-                               windowNumber: 0
-                               context: nil
-                               subtype: AquaSalInstance::AppExecuteSVMain
-                               data1: 0
-                               data2: 0 ];
-    if( pEvent )
-    {
-        [NSApp postEvent: pEvent atStart: NO];
-
         rtl::OUString aExeURL, aExe;
         osl_getExecutableFile( &aExeURL.pData );
         osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
@@ -239,11 +226,6 @@ sal_Bool ImplSVMainHook( sal_Bool * pbInit )
         const char* pArgv[] = { aByteExe.getStr(), NULL };
         NSApplicationMain( 1, pArgv );
 #endif
-    }
-    else
-    {
-        DBG_ERROR( "NSApplication initialization could not be done" );
-    }
 
     return TRUE;   // indicate that ImplSVMainHook is implemented
 }
