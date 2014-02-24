@@ -588,7 +588,7 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
         _pStream->Read( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
         #else
         for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
-            *_pStream >> _pContentOfs[n];
+            _pStream->ReadUInt32( _pContentOfs[n] );
         #endif
         _pStream->Seek( nContentPos );
     }
