@@ -235,7 +235,7 @@ void callVirtualMethod( void * pAdjustedThisPtr,
         "=m"(o0),
         "=m"(o1),
         "=m"(f0d),
-        "=m"(f0f),
+        "=m"(f0f)
         :
         "r"(&saveReg[0])
         :
