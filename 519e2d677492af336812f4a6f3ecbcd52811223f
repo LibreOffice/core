@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_f0ba5e09",
+        "filename": "include/sal/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-24T11:02:20Z",
+      "side": 1,
+      "message": "Please do not change the definition of sal_Size.  Even though it does not appear to be used for non-inline C++ functions in the URE inteface (where potential name-mangling differences would break compatibility), it is probably safest to just stick with the exact existing typedefs.  (And it would never be good to use a define instead of a typedef, anyway.)",
+      "revId": "519e2d677492af336812f4a6f3ecbcd52811223f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
