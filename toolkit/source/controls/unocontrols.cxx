@@ -3575,7 +3575,7 @@ void UnoDateFieldControl::setLongFormat( sal_Bool bLong ) throw(uno::RuntimeExce
 
 sal_Bool UnoDateFieldControl::isLongFormat() throw(uno::RuntimeException)
 {
-    return ( mbLongFormat != TRISTATE_INDET ) ? mbLongFormat : sal_False;
+    return mbLongFormat == TRISTATE_TRUE;
 }
 
 void UnoDateFieldControl::setEmpty() throw(uno::RuntimeException)
