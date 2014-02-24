@@ -764,9 +764,7 @@ bool ScValidationData::GetSelectionFromFormula(
                     }
                     else
                     {
-                        OUString sTmp(aValStr);
-                        pFormatter->GetInputLineString( nMatVal.fVal, 0, sTmp );
-                        aValStr = sTmp;
+                        pFormatter->GetInputLineString( nMatVal.fVal, 0, aValStr );
                     }
                 }
 

@@ -502,7 +502,7 @@ OUString SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumbe
 
     double fDiffDate = aDate - *(rFormatter.GetNullDate());
     OUString aStr;
-       Color* pColor = NULL;
+    Color* pColor = NULL;
     rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, &pColor );
     return aStr;
 }

@@ -234,8 +234,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             }
             else if( nFormatType == NUMBERFORMAT_TEXT )
             {
-                OUString sTxt("\"ABC\"");
-                pFormatter->GetOutputString( sTxt, nFormat, sValue, &pCol);
+                pFormatter->GetOutputString( "\"ABC\"", nFormat, sValue, &pCol);
             }
 
             if (nFormat != nSysNumFmt       &&
@@ -309,11 +308,12 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
     if (nType == NUMBERFORMAT_TEXT)
     {
-        OUString sTxt("\"ABC\"");
-        pFormatter->GetOutputString(sTxt, nDefFmt, sValue, &pCol);
+        pFormatter->GetOutputString("\"ABC\"", nDefFmt, sValue, &pCol);
     }
     else
+    {
         pFormatter->GetOutputString(fValue, nDefFmt, sValue, &pCol);
+    }
 
     sal_uInt16 nPos = 0;
     while ((sal_uLong)GetEntryData(nPos) == ULONG_MAX)

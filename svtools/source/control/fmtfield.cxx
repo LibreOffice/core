@@ -382,11 +382,10 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
     }
     else
     {
-        OUString sTempIn(m_sCurrentTextValue);
-        OUString sTempOut(sFormatted);
-        ImplGetFormatter()->GetOutputString(sTempIn, m_nFormatKey, sTempOut, &m_pLastOutputColor);
-        m_sCurrentTextValue = sTempIn;
-        sFormatted = sTempOut;
+        ImplGetFormatter()->GetOutputString(m_sCurrentTextValue,
+                                            m_nFormatKey,
+                                            sFormatted,
+                                            &m_pLastOutputColor);
     }
 
     // calculate the new selection
@@ -913,10 +912,8 @@ void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
         // first convert the number as string in standard format
         OUString sTemp;
         ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
-        // than encode the string in the corresponding text format
-        {
-            ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
-        }
+        // then encode the string in the corresponding text format
+        ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
     }
     else
     {

@@ -118,8 +118,8 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                     }
                     else
                     {
-                        OUString aCellString = pFCell->GetString().getString();
-                        rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor, bUseStarFormat );
+                        rFormatter.GetOutputString( pFCell->GetString().getString(),
+                                                    nFormat, rString, ppColor, bUseStarFormat );
                     }
                 }
             }
@@ -212,8 +212,8 @@ OUString ScCellFormat::GetString(
                     }
                     else
                     {
-                        OUString aCellString = pFCell->GetString().getString();
-                        rFormatter.GetOutputString(aCellString, nFormat, aString, ppColor, bUseStarFormat);
+                        rFormatter.GetOutputString(pFCell->GetString().getString(),
+                                                   nFormat, aString, ppColor, bUseStarFormat);
                     }
                 }
             }

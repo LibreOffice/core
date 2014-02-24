@@ -372,9 +372,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                                 pFormatter->GetFormatForLanguageIfBuiltIn(
                                         nIndex, LANGUAGE_SYSTEM);
                             OSL_ENSURE( nNewIndex != nIndex, "ScEEImport::WriteToDocument: NumbersEnglishUS not a built-in format?");
-                            OUString sTemp(aStr);
-                            pFormatter->GetInputLineString( fEnVal, nNewIndex, sTemp);
-                            aStr = sTemp;
+                            pFormatter->GetInputLineString( fEnVal, nNewIndex, aStr);
                         }
                         else
                             bTextFormat = true;

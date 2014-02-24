@@ -478,8 +478,8 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
 
     if( pFormatter->IsTextFormat( nFmt ) )
     {
-        OUString sTempIn(DoubleToString(rVal, nFmtLng));
-        pFormatter->GetOutputString(sTempIn, nFmt, sExpand, &pCol);
+        pFormatter->GetOutputString(DoubleToString(rVal, nFmtLng), nFmt,
+                                    sExpand, &pCol);
     }
     else
     {

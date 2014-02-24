@@ -313,9 +313,7 @@ start:
                                             nIndex,
                                             LANGUAGE_GERMAN,
                                             eLangType );
-            OUString aTmpString;
-            pFormatter->GetOutputString( n, nIndex, aTmpString, &pColor );
-            *p->pOUString = aTmpString;
+            pFormatter->GetOutputString( n, nIndex, *p->pOUString, &pColor );
             delete pFormatter;
             break;
         }

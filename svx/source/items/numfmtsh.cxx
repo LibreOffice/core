@@ -429,11 +429,8 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
     if ( nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         //  real preview - not implemented in NumberFormatter for text formats
-        OUString sTempOut(rPreviewStr);
-
-        pFormatter->GetPreviewString( rFormatStr, nValNum, sTempOut,
+        pFormatter->GetPreviewString( rFormatStr, nValNum, rPreviewStr,
                                       &rpFontColor, eCurLanguage, bUseStarFormat );
-        rPreviewStr = sTempOut;
     }
     else
     {
@@ -444,19 +441,13 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
                             ( !aValStr.isEmpty() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
         if ( bUseText )
         {
-            OUString sTempIn(aValStr);
-            OUString sTempOut(rPreviewStr);
-            pFormatter->GetOutputString( sTempIn, nExistingFormat,
-                                         sTempOut, &rpFontColor );
-            aValStr = sTempIn;
-            rPreviewStr = sTempOut;
+            pFormatter->GetOutputString( aValStr, nExistingFormat,
+                                         rPreviewStr, &rpFontColor );
         }
         else
         {
-            OUString sTemp(rPreviewStr);
             pFormatter->GetOutputString( nValNum, nExistingFormat,
-                                         sTemp, &rpFontColor, bUseStarFormat );
-            rPreviewStr = sTemp;
+                                         rPreviewStr, &rpFontColor, bUseStarFormat );
         }
     }
 }
@@ -1134,17 +1125,11 @@ void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpC
 
     if ( bUseText )
     {
-        OUString sTempIn(aValStr);
-        OUString sTempOut(rString);
-        pFormatter->GetOutputString( sTempIn, nCurFormatKey, sTempOut, &rpColor );
-        aValStr = sTempIn;
-        rString = sTempOut;
+        pFormatter->GetOutputString( aValStr, nCurFormatKey, rString, &rpColor );
     }
     else
     {
-        OUString sTemp(rString);
-        pFormatter->GetOutputString( nValNum, nCurFormatKey, sTemp, &rpColor, bUseStarFormat );
-        rString = sTemp;
+        pFormatter->GetOutputString( nValNum, nCurFormatKey, rString, &rpColor, bUseStarFormat );
     }
 }
 
@@ -1246,9 +1231,7 @@ void SvxNumberFormatShell::MakePrevStringFromVal(
         double  nValue)
 {
     rpFontColor = NULL;
-    OUString sTempOut(rPreviewStr);
-    pFormatter->GetPreviewString( rFormatStr, nValue, sTempOut, &rpFontColor, eCurLanguage );
-    rPreviewStr = sTempOut;
+    pFormatter->GetPreviewString( rFormatStr, nValue, rPreviewStr, &rpFontColor, eCurLanguage );
 }
 
 /*************************************************************************

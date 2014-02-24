@@ -243,9 +243,8 @@ OUString SAL_CALL SvNumberFormatterServiceObj::formatString( sal_Int32 nKey,
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        OUString aTemp = aString;
         Color* pColor = NULL;
-        pFormatter->GetOutputString(aTemp, nKey, aRet, &pColor);
+        pFormatter->GetOutputString(aString, nKey, aRet, &pColor);
     }
     else
     {
@@ -265,10 +264,9 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        OUString aTemp = aString;
         OUString aStr;
         Color* pColor = NULL;
-        pFormatter->GetOutputString(aTemp, nKey, aStr, &pColor);
+        pFormatter->GetOutputString(aString, nKey, aStr, &pColor);
         if (pColor)
         {
             nRet = pColor->GetColor();

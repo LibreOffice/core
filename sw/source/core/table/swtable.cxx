@@ -2142,12 +2142,9 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         if( NUMBERFORMAT_TEXT != nFmt )
         {
             // special text format:
-            OUString sTmp, sTxt( pTNd->GetTxt() );
-            OUString sTempIn(sTxt);
-            OUString sTempOut;
-            pDoc->GetNumberFormatter()->GetOutputString( sTempIn, nFmt, sTempOut, &pCol );
-            sTxt = sTempIn;
-            sTmp = sTempOut;
+            OUString sTmp;
+            const OUString sTxt( pTNd->GetTxt() );
+            pDoc->GetNumberFormatter()->GetOutputString( sTxt, nFmt, sTmp, &pCol );
             if( sTxt != sTmp )
             {
                 // exchange text

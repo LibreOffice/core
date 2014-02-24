@@ -341,23 +341,17 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
         if ( pFCell->IsValue() )
         {
             double n = pFCell->GetValue();
-            OUString sTempOut(rStrResult);
             sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
                             pFCell->GetFormatType(), ScGlobal::eLnge );
-
             aFormatter.GetOutputString( n, nFormat,
-                                        sTempOut, &pColor );
-            rStrResult = sTempOut;
+                                        rStrResult, &pColor );
         }
         else
         {
-            OUString aStr = pFCell->GetString().getString();
-            OUString sTempOut(rStrResult);
             sal_uLong nFormat = aFormatter.GetStandardFormat(
                             pFCell->GetFormatType(), ScGlobal::eLnge);
-            aFormatter.GetOutputString( aStr, nFormat,
-                                        sTempOut, &pColor );
-            rStrResult = sTempOut;
+            aFormatter.GetOutputString( pFCell->GetString().getString(), nFormat,
+                                        rStrResult, &pColor );
         }
 
         ScRange aTestRange;

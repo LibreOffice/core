@@ -799,8 +799,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                         aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
                         OUString aTime;
                         aFormatter.GetOutputString( nNumber, nIndex, aTime, &pCol );
-                        rRes += " ";
-                        rRes += aTime;
+                        rRes += " " + aTime;
                     }
                 }
                 else
