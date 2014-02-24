@@ -1852,7 +1852,10 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
     {
         Clear();
 
+        // Undo document shares its pooled resources with the source document.
         xPoolHelper = pSrcDoc->xPoolHelper;
+        mpCellStringPool = pSrcDoc->mpCellStringPool;
+
         if (pSrcDoc->pShell->GetMedium())
             maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
 

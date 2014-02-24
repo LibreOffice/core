@@ -46,6 +46,8 @@
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include "markdata.hxx"
 
 namespace editeng { class SvxBorderLine; }
@@ -260,7 +262,7 @@ private:
 
     rtl::Reference<ScPoolHelper> xPoolHelper;
 
-    boost::scoped_ptr<svl::SharedStringPool> mpCellStringPool;
+    boost::shared_ptr<svl::SharedStringPool> mpCellStringPool;
     boost::scoped_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
     mutable boost::scoped_ptr<sc::DocumentLinkManager> mpDocLinkMgr;
 
