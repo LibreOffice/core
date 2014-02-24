@@ -67,6 +67,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 
 #include <rtl/ref.hxx>
 #include <svtools/templatefoldercache.hxx>
@@ -187,6 +188,7 @@ class SfxDocTplService_Impl
 
     ::osl::Mutex                maMutex;
     Sequence< OUString >        maTemplateDirs;
+    Sequence< OUString >        maInternalTemplateDirs;
     OUString                    maRootURL;
     NameList_Impl               maNames;
     Locale                      maLocale;
@@ -271,8 +273,16 @@ class SfxDocTplService_Impl
 
     void                        updateData( DocTemplates_EntryData_Impl *pData );
 
+    //See: #i66157# and rhbz#1065807
+    //return which template dir the rURL is a subpath of
+    OUString                    findParentTemplateDir(const OUString& rURL) const;
+
+    //See: #i66157# and rhbz#1065807
+    //return true if rURL is a path (or subpath of) a dir which is not a user path
+    //which implies neither it or its contents can be removed
+    bool                        isInternalTemplateDir(const OUString& rURL) const;
 public:
-                                 SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext );
+                                SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext );
                                 ~SfxDocTplService_Impl();
 
     sal_Bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
@@ -552,7 +562,7 @@ void SfxDocTplService_Impl::getDirList()
     // TODO/LATER: let use service, register listener
     INetURLObject   aURL;
     OUString    aDirs = SvtPathOptions().GetTemplatePath();
-    sal_uInt16  nCount = comphelper::string::getTokenCount(aDirs, C_DELIM);
+    sal_Int32 nCount = comphelper::string::getTokenCount(aDirs, C_DELIM);
 
     maTemplateDirs = Sequence< OUString >( nCount );
 
@@ -560,7 +570,7 @@ void SfxDocTplService_Impl::getDirList()
     const OUString aPrefix(
         "vnd.sun.star.expand:"  );
 
-    for ( sal_uInt16 i=0; i<nCount; i++ )
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetURL( aDirs.getToken( i, C_DELIM ) );
@@ -577,6 +587,23 @@ void SfxDocTplService_Impl::getDirList()
     }
 
     aValue <<= maTemplateDirs;
+
+    css::uno::Reference< css::util::XPathSettings > xPathSettings =
+        css::util::thePathSettings::get(mxContext);
+
+    // load internal paths
+    OUString sProp( "Template_internal" );
+    Any aAny = xPathSettings->getPropertyValue( sProp );
+    aAny >>= maInternalTemplateDirs;
+
+    nCount = maInternalTemplateDirs.getLength();
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        //expand vnd.sun.star.expand: and remove "..." from them
+        //to normalize into the expected url patterns
+        maRelocator.makeRelocatableURL(maInternalTemplateDirs[i]);
+        maRelocator.makeAbsoluteURL(maInternalTemplateDirs[i]);
+    }
 
     // Store the template dir list
     setProperty( maRootContent, aPropName, aValue );
@@ -1538,13 +1565,16 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 
         if ( !maTemplateDirs.getLength() )
             return sal_False;
-        OUString aGeneralTempPath = maTemplateDirs[ maTemplateDirs.getLength() - 1 ];
 
         // check that the fs location is in writeble folder and this is not a "My templates" folder
         INetURLObject aGroupParentFolder( aGroupTargetURL );
-        if ( !aGroupParentFolder.removeSegment()
-          || !::utl::UCBContentHelper::IsSubPath( aGeneralTempPath,
-                                                      aGroupParentFolder.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        if (!aGroupParentFolder.removeSegment())
+            return sal_False;
+
+        OUString aGeneralTempPath = findParentTemplateDir(
+            aGroupParentFolder.GetMainURL(INetURLObject::NO_DECODE));
+
+        if (aGeneralTempPath.isEmpty())
             return sal_False;
 
         // now get the content of the Group
@@ -1652,14 +1682,14 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
 
     if ( !maTemplateDirs.getLength() )
         return sal_False;
-    OUString aGeneralTempPath = maTemplateDirs[ maTemplateDirs.getLength() - 1 ];
 
     // check that the fs location is in writeble folder and this is not a "My templates" folder
     INetURLObject aGroupParentFolder( aGroupTargetURL );
-    if ( !aGroupParentFolder.removeSegment()
-      || !::utl::UCBContentHelper::IsSubPath( aGeneralTempPath,
-                                                  aGroupParentFolder.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if (!aGroupParentFolder.removeSegment() ||
+        isInternalTemplateDir(aGroupParentFolder.GetMainURL(INetURLObject::NO_DECODE)))
+    {
         return sal_False;
+    }
 
     // check that the group can be renamed ( all the contents must be in target location )
     sal_Bool bCanBeRenamed = sal_False;
@@ -1761,7 +1791,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             aValue >>= aTemplateToRemoveTargetURL;
 
         if ( aGroupTargetURL.isEmpty() || !maTemplateDirs.getLength()
-          || (!aTemplateToRemoveTargetURL.isEmpty() && !::utl::UCBContentHelper::IsSubPath( maTemplateDirs[ maTemplateDirs.getLength() - 1 ], aTemplateToRemoveTargetURL )) )
+          || (!aTemplateToRemoveTargetURL.isEmpty() && isInternalTemplateDir(aTemplateToRemoveTargetURL)) )
             return sal_False; // it is not allowed to remove the template
     }
 
@@ -2050,6 +2080,29 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     return sal_False;
 }
 
+bool SfxDocTplService_Impl::isInternalTemplateDir(const OUString& rURL) const
+{
+    const sal_Int32 nDirs = maInternalTemplateDirs.getLength();
+    const OUString* pDirs = maInternalTemplateDirs.getConstArray();
+    for (sal_Int32 i = 0; i < nDirs; ++i, ++pDirs)
+    {
+        if (::utl::UCBContentHelper::IsSubPath(*pDirs, rURL))
+            return true;
+    }
+    return false;
+}
+
+OUString SfxDocTplService_Impl::findParentTemplateDir(const OUString& rURL) const
+{
+    const sal_Int32 nDirs = maTemplateDirs.getLength();
+    const OUString* pDirs = maTemplateDirs.getConstArray();
+    for (sal_Int32 i = 0; i < nDirs; ++i, ++pDirs)
+    {
+        if (::utl::UCBContentHelper::IsSubPath(*pDirs, rURL))
+            return *pDirs;
+    }
+    return OUString();
+}
 
 sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
                                                 const OUString& rTemplateName )
@@ -2091,8 +2144,7 @@ sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
     // delete the target template
     if ( !aTargetURL.isEmpty() )
     {
-        if ( !maTemplateDirs.getLength()
-          || !::utl::UCBContentHelper::IsSubPath( maTemplateDirs[ maTemplateDirs.getLength() - 1 ], aTargetURL ) )
+        if (isInternalTemplateDir(aTargetURL))
             return sal_False;
 
         removeContent( aTargetURL );
