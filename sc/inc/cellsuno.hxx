@@ -694,7 +694,8 @@ public:
 
                             // XArrayFormulaTokens
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getArrayTokens()
-                                throw (::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual void SAL_CALL   setArrayTokens( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::sheet::FormulaToken >& aTokens )
                                 throw (::com::sun::star::uno::RuntimeException);

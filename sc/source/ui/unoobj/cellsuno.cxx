@@ -5146,7 +5146,8 @@ void ScCellRangeObj::SetArrayFormulaWithGrammar( const OUString& rFormula,
 
 // XArrayFormulaTokens
 
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens() throw(uno::RuntimeException)
+uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
