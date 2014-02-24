@@ -49,9 +49,8 @@
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
-using ::std::auto_ptr;
 using namespace com::sun::star;
 
 
@@ -207,9 +206,7 @@ void ScMyTables::DeleteTable()
         uno::Sequence<sal_Int8> aHash;
         ::sax::Converter::decodeBase64(aHash, maProtectionData.maPassword);
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<ScTableProtection> pProtect(new ScTableProtection);
         pProtect->setProtected(maProtectionData.mbProtected);
         pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
         pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);

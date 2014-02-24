@@ -3468,7 +3468,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             // no hyperlink property
         }
 
-        std::auto_ptr< SvXMLElementExport > pDrawA;
+        boost::scoped_ptr< SvXMLElementExport > pDrawA;
         // enlose shapes with <draw:a> element only if sHlink contains something
         if ( !sHlink.isEmpty() )
         {

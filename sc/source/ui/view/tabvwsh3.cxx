@@ -66,9 +66,7 @@
 #include <comphelper/string.hxx>
 #include "scabstdlg.hxx"
 
-#include <memory>
-
-using ::std::auto_ptr;
+#include <boost/scoped_ptr.hpp>
 
 
 
@@ -1066,7 +1064,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if (pProtect && pProtect->isProtectedWithPass())
                 {
                     OUString aText( ScResId(SCSTR_PASSWORDOPT) );
-                    auto_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
+                    boost::scoped_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
                     pDlg->SetMinLen( 0 );
                     pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand() );
@@ -1092,7 +1090,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 // Protect a current sheet.
 
-                auto_ptr<ScTableProtectionDlg> pDlg(new ScTableProtectionDlg(GetDialogParent()));
+                boost::scoped_ptr<ScTableProtectionDlg> pDlg(new ScTableProtectionDlg(GetDialogParent()));
 
                 ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
                 if (pProtect)

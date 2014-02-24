@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -156,9 +155,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
     if (bSetError)
         aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
     ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
     pCode = pNewCode;
     if( !pCode->GetCodeError() )
     {
@@ -266,9 +263,7 @@ void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const For
 void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                 const FormulaGrammar::Grammar eGrammar )
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<ScTokenArray> pTemp( pCode->Clone() );
     ScCompiler aComp( pDoc, rPos, *pTemp.get());
     aComp.SetGrammar(eGrammar);
     aComp.MoveRelWrap(GetMaxCol(), GetMaxRow());

@@ -50,7 +50,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <sal/types.h>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 
 using namespace com::sun::star;
@@ -265,9 +265,7 @@ void ScXMLBodyContext::EndElement()
         // #i37959# handle document protection after the sheet settings
         if (bProtected)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<ScDocProtection> pProtection(new ScDocProtection);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            boost::scoped_ptr<ScDocProtection> pProtection(new ScDocProtection);
             pProtection->setProtected(true);
 
             uno::Sequence<sal_Int8> aPass;

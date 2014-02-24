@@ -65,7 +65,9 @@
 // #i74769#
 #include <svx/sdrpaintwindow.hxx>
 
+#include <boost/scoped_ptr.hpp>
 
+//------------------------------------------------------------------------
 
 static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 {
@@ -491,7 +493,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.SetMirrorWidth( nMirrorWidth );         // needed for RTL
     aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());
 
-    std::auto_ptr< VirtualDevice > xFmtVirtDev;
+    boost::scoped_ptr< VirtualDevice > xFmtVirtDev;
     sal_Bool bLogicText = bTextWysiwyg;                     // call DrawStrings in logic MapMode?
 
     if ( bTextWysiwyg )

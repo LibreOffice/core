@@ -48,7 +48,7 @@
 #include "scmatrix.hxx"
 
 #include <math.h>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace formula;
 
@@ -863,9 +863,7 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
         5)  A formula resulting in a cell/range reference or matrix/array.
     */
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
 
     // *** try if formula is a string list ***
 

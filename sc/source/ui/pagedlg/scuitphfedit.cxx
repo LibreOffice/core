@@ -50,7 +50,7 @@
 #include "AccessibleEditObject.hxx"
 
 #include "scuitphfedit.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -307,11 +307,9 @@ void ScHFEditPage::SetSelectDefinedList()
     // default to customized
     ScHFEntryId eSelectEntry = eEntryCount;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< EditTextObject > pLeftObj;
-    ::std::auto_ptr< EditTextObject > pCenterObj;
-    ::std::auto_ptr< EditTextObject > pRightObj;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr< EditTextObject > pLeftObj;
+    boost::scoped_ptr< EditTextObject > pCenterObj;
+    boost::scoped_ptr< EditTextObject > pRightObj;
 
     OUString aLeftEntry;
     OUString aCenterEntry;
@@ -508,9 +506,7 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
             {
                 aSel.nStartPos = aSel.nEndPos;
                 aSel.nEndPos++;
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                ::std::auto_ptr< EditTextObject > pPageObj;
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                boost::scoped_ptr< EditTextObject > pPageObj;
                 pPageObj.reset(pEngine->CreateTextObject(aSel));
                 if(pPageObj.get() && pPageObj->IsFieldObject() )
                 {
@@ -568,9 +564,7 @@ bool ScHFEditPage::IsExtFileNameEntry(EditTextObject* pTextObj)
 void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 {
     SvtUserOptions aUserOpt;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< EditTextObject > pTextObj;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr< EditTextObject > pTextObj;
 
     switch(eSel)
     {

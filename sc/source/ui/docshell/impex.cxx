@@ -54,6 +54,8 @@
 #include "globstr.hrc"
 #include <vcl/svapp.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //========================================================================
 
 // We don't want to end up with 2GB read in one line just because of malformed
@@ -1277,7 +1279,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     sal_uLong nOldPos = rStrm.Tell();
     rStrm.Seek( STREAM_SEEK_TO_END );
-    ::std::auto_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
+    boost::scoped_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
             ScGlobal::GetRscString( STR_LOAD_DOC ), rStrm.Tell() - nOldPos ));
     rStrm.Seek( nOldPos );
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );

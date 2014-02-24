@@ -28,7 +28,6 @@
 using namespace com::sun::star;
 using ::std::vector;
 using ::std::list;
-using ::std::auto_ptr;
 using ::std::unary_function;
 using ::std::for_each;
 

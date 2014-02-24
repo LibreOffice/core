@@ -105,6 +105,7 @@
 #include "scextopt.hxx"
 
 #include "namebuff.hxx"
+#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <sfx2/docfile.hxx>
 
@@ -1471,7 +1472,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
             if( maTextData.mxString->IsRich() )
             {
                 // rich text
-                ::std::auto_ptr< EditTextObject > xEditObj(
+                boost::scoped_ptr< EditTextObject > xEditObj(
                     XclImpStringHelper::CreateTextObject( GetRoot(), *maTextData.mxString ) );
                 OutlinerParaObject* pOutlineObj = new OutlinerParaObject( *xEditObj );
                 pOutlineObj->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );

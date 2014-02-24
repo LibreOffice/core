@@ -29,6 +29,7 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/shared_array.hpp>
 
 
@@ -196,7 +197,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
                             ( rGradientId = "Gradient_" ) += OUString::number( nCurGradientId++ ) );
 
         {
-            ::std::auto_ptr< SvXMLElementExport >   apGradient;
+            boost::scoped_ptr< SvXMLElementExport >   apGradient;
             OUString                         aColorStr;
 
             if( rGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )

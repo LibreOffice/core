@@ -39,7 +39,6 @@ using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::accessibility::XAccessibleContext;
 using ::std::vector;
 using ::boost::unordered_map;
-using ::std::auto_ptr;
 
 ScMenuFloatingWindow::MenuItemData::MenuItemData() :
     mbEnabled(true), mbSeparator(false),

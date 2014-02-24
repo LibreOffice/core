@@ -52,6 +52,8 @@
 #include "com/sun/star/uri/UriReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarScriptUrl.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -190,7 +192,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             }
 
             // attempt to protect the document against the script tampering with its Undo Context
-            ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+            boost::scoped_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
             if ( bIsDocumentScript )
                 pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 

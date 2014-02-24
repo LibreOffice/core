@@ -67,9 +67,9 @@
 #include "markdata.hxx"
 #include "stringutil.hxx"
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <memory>
 #include <list>
 #include <vector>
 
@@ -81,7 +81,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::sheet::XDimensionsSupplier;
-using ::std::auto_ptr;
 using ::std::list;
 using ::std::vector;
 
@@ -1763,7 +1762,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
 
     // Update the datapilot with the newly sorted field members.
 
-    auto_ptr<ScDPObject> pNewObj(new ScDPObject(*pDPObj));
+    boost::scoped_ptr<ScDPObject> pNewObj(new ScDPObject(*pDPObj));
     pNewObj->SetSaveData(aNewSaveData);
     ScDBDocFunc aFunc(*GetViewData()->GetDocShell());
 
@@ -2017,7 +2016,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     SCTAB nNewTab = GetViewData()->GetTabNo();
 
-    auto_ptr<ScDocument> pInsDoc(new ScDocument(SCDOCMODE_CLIP));
+    boost::scoped_ptr<ScDocument> pInsDoc(new ScDocument(SCDOCMODE_CLIP));
     pInsDoc->ResetClip( pDoc, nNewTab );
     for (SCROW nRow = 0; nRow < nRowSize; ++nRow)
     {
