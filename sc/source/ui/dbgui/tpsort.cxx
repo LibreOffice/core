@@ -273,7 +273,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         // If the "OK" was selected on the Options page while the sort
         // direction was changed, then the first field (i.e. nFieldArr[0])
         // of the respective direction is chosen as the sorting criterion:
-        if ( bSortByRows != pDlg->GetByRows() )
+        if ( pDlg && bSortByRows != pDlg->GetByRows() )
         {
             for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
                 aNewSortData.maKeyState[i].nField = ( bSortByRows ?
