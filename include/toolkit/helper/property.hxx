@@ -242,8 +242,8 @@ const ::com::sun::star::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
 TOOLKIT_DLLPUBLIC const OUString&    GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );
 sal_uInt16                          GetPropertyOrderNr( sal_uInt16 nPropertyId );
-sal_Bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );
-sal_Bool                            CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 );
+bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );
+bool                            CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 );
 
 
 

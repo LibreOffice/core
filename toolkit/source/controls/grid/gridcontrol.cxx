@@ -224,11 +224,11 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             return uno::makeAny( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
         case BASEPROPERTY_USE_GRID_LINES:
-            return uno::makeAny( (sal_Bool)sal_False );
+            return uno::makeAny( false );
         case BASEPROPERTY_ROW_HEADER_WIDTH:
             return uno::makeAny( sal_Int32( 10 ) );
         case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
-            return uno::makeAny( (sal_Bool)sal_True );
+            return uno::makeAny( true );
         case BASEPROPERTY_COLUMN_HEADER_HEIGHT:
         case BASEPROPERTY_ROW_HEIGHT:
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:

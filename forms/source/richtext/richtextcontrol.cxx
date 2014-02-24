@@ -198,7 +198,7 @@ namespace frm
 
         if (!getPeer().is())
         {
-            mbCreatingPeer = sal_True;
+            mbCreatingPeer = true;
 
             // determine the VLC window for the parent
             Window* pParentWin = NULL;
@@ -242,7 +242,7 @@ namespace frm
                 peerCreated();
             }
 
-            mbCreatingPeer = sal_False;
+            mbCreatingPeer = false;
 
             OControl::initFormControlPeer( getPeer() );
         }
@@ -295,7 +295,7 @@ namespace frm
     }
 
 
-    sal_Bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const
+    bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const
     {
         return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName.equals( PROPERTY_RICH_TEXT );
     }

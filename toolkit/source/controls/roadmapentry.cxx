@@ -37,7 +37,7 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
                       ::com::sun::star::beans::PropertyAttribute::BOUND |
                       ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
                       & m_nID, ::getCppuType( &m_nID ) );
-    m_bEnabled = sal_True;
+    m_bEnabled = true;
     registerProperty( OUString("Enabled"), RM_PROPERTY_ID_ENABLED,
                     ::com::sun::star::beans::PropertyAttribute::BOUND |
                     ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,

@@ -88,10 +88,10 @@ static void lcl_throwIndexOutOfBoundsException( )
         switch (nPropId)
         {
                 case BASEPROPERTY_COMPLETE:
-                    aReturn <<= (sal_Bool) sal_True;
+                    aReturn <<= true;
                     break;
                 case BASEPROPERTY_ACTIVATED:
-                    aReturn <<= (sal_Bool) sal_True;
+                    aReturn <<= true;
                     break;
                 case BASEPROPERTY_CURRENTITEMID:
                     aReturn <<= (sal_Int16) -1;
@@ -186,7 +186,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         if ( !xRoadmapItem.is() )
             lcl_throwIllegalArgumentException();
         Reference< XServiceInfo > xServiceInfo( xRoadmapItem, UNO_QUERY );
-        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService("com.sun.star.awt.RoadmapItem");
+        bool bIsRoadmapItem = xServiceInfo->supportsService("com.sun.star.awt.RoadmapItem");
         if ( !bIsRoadmapItem )
             lcl_throwIllegalArgumentException();
     }
@@ -217,13 +217,13 @@ static void lcl_throwIndexOutOfBoundsException( )
        sal_Int32 UnoControlRoadmapModel::GetUniqueID()
       {
           Any aAny;
-          sal_Bool bIncrement = sal_True;
+          bool bIncrement = true;
           sal_Int32 CurID = 0;
           sal_Int32 n_CurItemID = 0;
           Reference< XInterface > CurRoadmapItem;
           while ( bIncrement )
           {
-              bIncrement = sal_False;
+              bIncrement = false;
               for ( RoadmapItemHolderList::iterator i = maRoadmapItems.begin(); i < maRoadmapItems.end(); ++i )
               {
                 CurRoadmapItem = *i;
@@ -232,7 +232,7 @@ static void lcl_throwIndexOutOfBoundsException( )
                 aAny >>= n_CurItemID;
                 if (n_CurItemID == CurID)
                 {
-                    bIncrement = sal_True;
+                    bIncrement = true;
                     CurID++;
                     break;
                 }
@@ -375,7 +375,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
         if ( xC.is() )
             xC->removeContainerListener( this );
 
-        sal_Bool bReturn = UnoControlBase::setModel( _rModel );
+        bool bReturn = UnoControlBase::setModel( _rModel );
 
         xC = xC.query( getModel());
         if ( xC.is() )

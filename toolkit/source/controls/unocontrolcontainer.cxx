@@ -324,12 +324,12 @@ void implUpdateVisibility
         aCtrls = xControlContainer->getControls();
     const uno::Reference< awt::XControl >* pCtrls = aCtrls.getConstArray();
     sal_uInt32 nCtrls = aCtrls.getLength();
-    sal_Bool bCompleteVisible = (nDialogStep == 0);
+    bool bCompleteVisible = (nDialogStep == 0);
     for( sal_uInt32 n = 0; n < nCtrls; n++ )
     {
         uno::Reference< awt::XControl > xControl = pCtrls[ n ];
 
-        sal_Bool bVisible = bCompleteVisible;
+        bool bVisible = bCompleteVisible;
         if( !bVisible )
         {
             uno::Reference< awt::XControlModel > xModel( xControl->getModel() );
@@ -407,7 +407,7 @@ UnoControlContainer::UnoControlContainer(const uno::Reference< awt::XWindowPeer 
     ,maCListeners( *this )
 {
     setPeer( xP );
-    mbDisposePeer = sal_False;
+    mbDisposePeer = false;
     mpControls = new UnoControlHolderList;
 }
 
@@ -757,7 +757,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
 
     if( !getPeer().is() )
     {
-        sal_Bool bVis = maComponentInfos.bVisible;
+        bool bVis = maComponentInfos.bVisible;
         if( bVis )
             UnoControl::setVisible( sal_False );
 

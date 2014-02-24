@@ -57,7 +57,7 @@ void VCLXDevice::DestroyOutputDevice()
     mpOutputDevice = NULL;
 }
 
-void VCLXDevice::SetCreatedWithToolkit( sal_Bool bCreatedWithToolkit )
+void VCLXDevice::SetCreatedWithToolkit( bool bCreatedWithToolkit )
 {
     if ( bCreatedWithToolkit )
         nFlags |= FLAGS_CREATEDWITHTOOLKIT;

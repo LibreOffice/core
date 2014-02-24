@@ -151,7 +151,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR );
 
         Any aTreatAsNumber;
-        aTreatAsNumber <<= (sal_Bool) sal_True;
+        aTreatAsNumber <<= true;
         ImplRegisterProperty( BASEPROPERTY_TREATASNUMBER, aTreatAsNumber );
 
         lcl_registerDefaultFormatsClient();
@@ -332,7 +332,7 @@ namespace toolkit
         {
             double dVal = 0;
             OUString sVal;
-            sal_Bool bStreamed = (rValue >>= dVal);
+            bool bStreamed = (rValue >>= dVal);
             if ( bStreamed )
             {
                 rConvertedValue <<= dVal;
@@ -380,7 +380,7 @@ namespace toolkit
         {
             case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= OUString( OUString::createFromAscii( szServiceName_UnoControlFormattedField ) ); break;
 
-            case BASEPROPERTY_TREATASNUMBER: aReturn <<= (sal_Bool)sal_True; break;
+            case BASEPROPERTY_TREATASNUMBER: aReturn <<= true; break;
 
             case BASEPROPERTY_EFFECTIVE_DEFAULT:
             case BASEPROPERTY_EFFECTIVE_VALUE:
@@ -446,7 +446,7 @@ namespace toolkit
         aValues[0] = xPeer->getProperty( aNames[0] );
         aValues[1] = xPeer->getProperty( aNames[1] );
 
-        ImplSetPropertyValues( aNames, aValues, sal_False );
+        ImplSetPropertyValues( aNames, aValues, false );
 
         if ( GetTextListeners().getLength() )
             GetTextListeners().textChanged( e );

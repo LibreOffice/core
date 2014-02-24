@@ -45,16 +45,16 @@
 
 struct UnoControlComponentInfos
 {
-    sal_Bool    bVisible;
-    sal_Bool    bEnable;
+    bool    bVisible;
+    bool    bEnable;
     long        nX, nY, nWidth, nHeight;
     sal_uInt16  nFlags;
     float       nZoomX, nZoomY;
 
     UnoControlComponentInfos()
     {
-        bVisible = sal_True;
-        bEnable = sal_True;
+        bVisible = true;
+        bEnable = true;
         nX = nY = nWidth = nHeight = 0;
         nFlags = 0; // POSSIZE_POSSIZE;
         nZoomX = nZoomY = 1.0f;
@@ -101,11 +101,11 @@ protected:
     ::com::sun::star::uno::WeakReferenceHelper
                                         maAccessibleContext;    /// our most recent XAccessibleContext instance
 
-    sal_Bool                            mbDisposePeer;
-    sal_Bool                            mbRefeshingPeer;
-    sal_Bool                            mbCreatingPeer;
-    sal_Bool                            mbCreatingCompatiblePeer;
-    sal_Bool                            mbDesignMode;
+    bool                            mbDisposePeer;
+    bool                            mbRefeshingPeer;
+    bool                            mbCreatingPeer;
+    bool                            mbCreatingCompatiblePeer;
+    bool                            mbDesignMode;
 
     UnoControlComponentInfos            maComponentInfos;
     UnoControl_Data*                    mpData;
@@ -116,7 +116,7 @@ protected:
     virtual void                                                                updateFromModel();
     void                                                                        peerCreated();
     bool                                                                        ImplCheckLocalize( OUString& _rPossiblyLocalizable );
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( bool bAcceptExistingPeer );
     virtual void                                                                ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
     virtual void                                                                ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents );
@@ -133,7 +133,7 @@ protected:
         mxVclWindowPeer = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >(mxPeer,::com::sun::star::uno::UNO_QUERY); // just to avoid the query_interface thing
     }
 
-    virtual sal_Bool   requiresNewPeer( const OUString& _rPropertyName ) const;
+    virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const;
 
 public:
                 UnoControl();

@@ -41,7 +41,7 @@ UnoPropertyArrayHelper::UnoPropertyArrayHelper( const std::list< sal_uInt16 > &r
       maIDs.insert( *iter );
 }
 
-sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
+bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
         nPropId = BASEPROPERTY_FONTDESCRIPTOR;
@@ -53,7 +53,7 @@ sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
 sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nPropId )
 {
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >(nPropId);
-    sal_Bool bValid = ImplHasProperty( id );
+    bool bValid = ImplHasProperty( id );
     if ( bValid )
     {
         if ( pPropName )

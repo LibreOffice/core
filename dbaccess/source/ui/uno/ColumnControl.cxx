@@ -62,7 +62,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     if ( !getPeer().is() )
     {
-        mbCreatingPeer = sal_True;
+        mbCreatingPeer = true;
 
         Window* pParentWin = NULL;
         if (rParentPeer.is())
@@ -128,7 +128,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
         xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
         xPeerView->setGraphics( xGraphics );
 
-        mbCreatingPeer = sal_False;
+        mbCreatingPeer = false;
     }
 }
 

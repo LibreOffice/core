@@ -32,25 +32,25 @@ using namespace com::sun::star;
 //  class UnoControlBase
 //  ----------------------------------------------------
 
-sal_Bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
+bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
 {
     OUString aPropName( GetPropertyName( nPropId ) );
     return ImplHasProperty( aPropName );
 }
 
-sal_Bool UnoControlBase::ImplHasProperty( const OUString& aPropertyName )
+bool UnoControlBase::ImplHasProperty( const OUString& aPropertyName )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
     if ( !xPSet.is() )
-        return sal_False;
+        return false;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
     if ( !xInfo.is() )
-        return sal_False;
+        return false;
 
     return xInfo->hasPropertyByName( aPropertyName );
 }
 
-void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis )
+void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, bool bUpdateThis )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > xMPS( mxModel, ::com::sun::star::uno::UNO_QUERY );
     if ( !mxModel.is() )
@@ -81,7 +81,7 @@ void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequenc
     }
 }
 
-void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis )
+void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, bool bUpdateThis )
 {
     // Model might be logged off already but an event still fires
     if ( mxModel.is() )
@@ -136,7 +136,7 @@ template <typename T> T UnoControlBase::ImplGetPropertyValueClass( sal_uInt16 nP
     return t;
 }
 
-sal_Bool UnoControlBase::ImplGetPropertyValue_BOOL( sal_uInt16 nProp )
+bool UnoControlBase::ImplGetPropertyValue_BOOL( sal_uInt16 nProp )
 {
     return ImplGetPropertyValuePOD<sal_Bool>(nProp);
 }
@@ -174,7 +174,7 @@ util::Time UnoControlBase::ImplGetPropertyValue_Time( sal_uInt16 nProp )
 ::com::sun::star::awt::Size UnoControlBase::Impl_getMinimumSize()
 {
     ::com::sun::star::awt::Size aSz;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( sal_True );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( true );
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
@@ -191,7 +191,7 @@ util::Time UnoControlBase::ImplGetPropertyValue_Time( sal_uInt16 nProp )
 ::com::sun::star::awt::Size UnoControlBase::Impl_getPreferredSize()
 {
     ::com::sun::star::awt::Size aSz;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( sal_True );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( true );
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
@@ -208,7 +208,7 @@ util::Time UnoControlBase::ImplGetPropertyValue_Time( sal_uInt16 nProp )
 ::com::sun::star::awt::Size UnoControlBase::Impl_calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize )
 {
     ::com::sun::star::awt::Size aSz;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( sal_True );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( true );
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
@@ -225,7 +225,7 @@ util::Time UnoControlBase::ImplGetPropertyValue_Time( sal_uInt16 nProp )
 ::com::sun::star::awt::Size UnoControlBase::Impl_getMinimumSize( sal_Int16 nCols, sal_Int16 nLines )
 {
     ::com::sun::star::awt::Size aSz;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( sal_True );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( true );
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
@@ -241,7 +241,7 @@ util::Time UnoControlBase::ImplGetPropertyValue_Time( sal_uInt16 nProp )
 
 void UnoControlBase::Impl_getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( sal_True );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( true );
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {

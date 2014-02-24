@@ -75,7 +75,7 @@ protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault );
     ::com::sun::star::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
     virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    sal_Bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
+    bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
 
     /** called before setting multiple properties, allows to care for property dependencies
 

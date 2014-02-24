@@ -80,7 +80,7 @@ namespace com { namespace sun { namespace star {
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > m_xStrResolver;
         // </properties>
 
-        sal_Bool        m_bCloneable;
+        bool        m_bCloneable;
 
     protected:
         virtual ::com::sun::star::uno::Any          ImplGetDefaultValueByHandle(sal_Int32 nHandle) const;

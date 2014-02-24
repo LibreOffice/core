@@ -506,7 +506,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
 
     if (!getPeer().is())
     {
-        mbCreatingPeer = sal_True;
+        mbCreatingPeer = true;
         // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
         // to prevent recursion.
 
@@ -642,7 +642,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
             xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
             xPeerView->setGraphics( mxGraphics );
         }
-        mbCreatingPeer = sal_False;
+        mbCreatingPeer = false;
     }
 }
 
@@ -752,7 +752,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 
         Reference< XRowSetSupplier >  xGrid(getPeer(), UNO_QUERY);
 
-        if (xGrid.is() && (bOn != mbDesignMode || (!bOn && !xGrid->getRowSet().is())))
+        if (xGrid.is() && (bool(bOn) != mbDesignMode || (!bOn && !xGrid->getRowSet().is())))
         {
             if (bOn)
             {

@@ -340,7 +340,7 @@ namespace toolkit {
             return makeAny( (sal_Int32) 100 );
 
         case BASEPROPERTY_AUTO_REPEAT:
-            return makeAny( (sal_Bool)sal_True );
+            return makeAny( true );
 
         case BASEPROPERTY_IMAGE_SCALE_MODE:
             return makeAny( ImageScaleMode::NONE );
@@ -379,7 +379,7 @@ namespace toolkit {
 
     ::sal_Bool SAL_CALL AnimatedImagesControlModel::getAutoRepeat() throw (RuntimeException)
     {
-        sal_Bool bAutoRepeat( sal_True );
+        bool bAutoRepeat( true );
         OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ) ) >>= bAutoRepeat );
         return bAutoRepeat;
     }

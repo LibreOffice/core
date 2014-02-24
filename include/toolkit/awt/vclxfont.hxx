@@ -45,7 +45,7 @@ private:
     FontMetric*     mpFontMetric;
 
 protected:
-    sal_Bool            ImplAssertValidFontMetric();
+    bool            ImplAssertValidFontMetric();
     ::osl::Mutex&   GetMutex() { return maMutex; }
 
 public:

@@ -74,7 +74,7 @@ VCLXPrinterPropertySet::VCLXPrinterPropertySet( const OUString& rPrinterName )
     SolarMutexGuard aSolarGuard;
 
     mnOrientation = 0;
-    mbHorizontal = sal_False;
+    mbHorizontal = false;
 }
 
 VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
@@ -120,7 +120,7 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    sal_Bool bDifferent = sal_False;
+    bool bDifferent = false;
     switch ( nHandle )
     {
         case PROPERTY_Orientation:
@@ -130,18 +130,18 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno
             {
                 rConvertedValue <<= n;
                 rOldValue <<= mnOrientation;
-                bDifferent = sal_True;
+                bDifferent = true;
             }
         }
         break;
         case PROPERTY_Horizontal:
         {
-            sal_Bool b;
+            bool b;
             if( ( rValue >>= b ) && ( b != mbHorizontal ) )
             {
                 rConvertedValue <<= b;
                 rOldValue <<= mbHorizontal;
-                bDifferent = sal_True;
+                bDifferent = true;
             }
         }
         break;
@@ -278,7 +278,7 @@ sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    sal_Bool bDone = sal_True;
+    bool bDone = true;
     if ( mpPrinter.get() )
     {
         maInitJobSetup = mpPrinter->GetJobSetup();

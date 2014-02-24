@@ -181,7 +181,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setResizeable(sal_Bool value) throw (::com::sun::star::uno::RuntimeException)
     {
-        impl_set( m_bResizeable, value, "Resizeable" );
+        impl_set( m_bResizeable, bool(value), "Resizeable" );
     }
 
 

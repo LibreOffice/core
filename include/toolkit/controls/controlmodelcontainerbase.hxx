@@ -82,9 +82,9 @@ protected:
     UnoControlModelHolderList           maModels;
 
     AllGroups                           maGroups;
-    sal_Bool                            mbGroupsUpToDate;
+    bool                            mbGroupsUpToDate;
 
-    sal_Bool                         m_bEnabled;
+    bool                         m_bEnabled;
     OUString                         m_sImageURL;
     OUString                         m_sTooltip;
     sal_Int16                        m_nTabPageId;

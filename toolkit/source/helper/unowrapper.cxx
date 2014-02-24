@@ -205,7 +205,7 @@ void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
 
 }
 
-static sal_Bool lcl_ImplIsParent( Window* pParentWindow, Window* pPossibleChild )
+static bool lcl_ImplIsParent( Window* pParentWindow, Window* pPossibleChild )
 {
     Window* pWindow = ( pPossibleChild != pParentWindow ) ? pPossibleChild : NULL;
     while ( pWindow && ( pWindow != pParentWindow ) )

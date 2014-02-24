@@ -359,7 +359,7 @@ namespace toolkit
             }
             case BASEPROPERTY_AUTO_REPEAT:
             {
-                sal_Bool bRepeat( sal_True );
+                bool bRepeat( true );
                 if ( i_value >>= bRepeat )
                     pThrobber->setRepeat( bRepeat );
                 break;

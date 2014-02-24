@@ -64,7 +64,7 @@ public:
     void                    SetOutputDevice( OutputDevice* pOutDev ) { mpOutputDevice = pOutDev; }
     OutputDevice*           GetOutputDevice() const { return mpOutputDevice; }
 
-    void                    SetCreatedWithToolkit( sal_Bool bCreatedWithToolkit );
+    void                    SetCreatedWithToolkit( bool bCreatedWithToolkit );
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

@@ -195,7 +195,7 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XComponentContext
     ImplRegisterProperty( BASEPROPERTY_SCROLLLEFT );
 
     Any aBool;
-    aBool <<= (sal_Bool) sal_True;
+    aBool <<= true;
     ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
     // #TODO separate class for 'UserForm' ( instead of re-using Dialog ? )
@@ -321,7 +321,7 @@ UnoDialogControl::~UnoDialogControl()
 OUString UnoDialogControl::GetComponentServiceName()
 {
 
-    sal_Bool bDecoration( sal_True );
+    bool bDecoration( true );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
         return OUString("Dialog");
@@ -350,7 +350,7 @@ sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
 {
         // #Can we move all the Resource stuff to the ControlContainerBase ?
     SolarMutexGuard aGuard;
-        sal_Bool bRet = ControlContainerBase::setModel( rxModel );
+        bool bRet = ControlContainerBase::setModel( rxModel );
     ImplStartListingForResourceEvents();
     return bRet;
 }
@@ -387,7 +387,7 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
 void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
 {
     UnoControlContainer::PrepareWindowDescriptor( rDesc );
-    sal_Bool bDecoration( sal_True );
+    bool bDecoration( true );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( !bDecoration )
     {
@@ -411,7 +411,7 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
                                  uno::makeAny( aImageURL ) );
 
         xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
-        ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), sal_True );
+        ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), true );
     }
 }
 
@@ -570,7 +570,7 @@ void UnoDialogControl::setTitle( const OUString& Title ) throw(RuntimeException)
     SolarMutexGuard aGuard;
     Any aAny;
     aAny <<= Title;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ), aAny, true );
 }
 
 OUString UnoDialogControl::getTitle() throw(RuntimeException)
@@ -588,9 +588,9 @@ sal_Int16 UnoDialogControl::execute() throw(RuntimeException)
         Reference< XDialog > xDlg( getPeer(), UNO_QUERY );
         if( xDlg.is() )
         {
-            GetComponentInfos().bVisible = sal_True;
+            GetComponentInfos().bVisible = true;
             nDone = xDlg->execute();
-            GetComponentInfos().bVisible = sal_False;
+            GetComponentInfos().bVisible = false;
         }
     }
     return nDone;
@@ -605,7 +605,7 @@ void UnoDialogControl::endExecute() throw(RuntimeException)
         if( xDlg.is() )
         {
             xDlg->endExecute();
-            GetComponentInfos().bVisible = sal_False;
+            GetComponentInfos().bVisible = false;
         }
     }
 }
@@ -625,7 +625,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
     {
         const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
         Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
-        sal_Bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
+        bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
         if ( bOwnModel && rEvt.PropertyName == "ImageURL" )
         {
             OUString aImageURL;
@@ -641,7 +641,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
 
                 xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
             }
-            ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), sal_True );
+            ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), true );
             break;
         }
     }
@@ -674,7 +674,7 @@ void SAL_CALL UnoMultiPageControl::changed( SAL_UNUSED_PARAMETER ::sal_Int32,
 }
 void SAL_CALL UnoMultiPageControl::activated( ::sal_Int32 ID ) throw (RuntimeException)
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), sal_False );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), false );
 
 }
 void SAL_CALL UnoMultiPageControl::deactivated( SAL_UNUSED_PARAMETER ::sal_Int32 ) throw (RuntimeException)
@@ -731,7 +731,7 @@ void SAL_CALL UnoMultiPageControl::activateTab( ::sal_Int32 ID ) throw (IndexOut
     if ( !xMultiPage.is() )
         throw RuntimeException();
     xMultiPage->activateTab( ID );
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), true );
 
 }
 
@@ -777,7 +777,7 @@ uno::Any UnoMultiPageControl::queryAggregation( const uno::Type & rType ) throw(
 
 OUString UnoMultiPageControl::GetComponentServiceName()
 {
-    sal_Bool bDecoration( sal_True );
+    bool bDecoration( true );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
         return OUString("tabcontrol");
@@ -827,7 +827,7 @@ void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, c
         if ( nActiveTab && nCtrls ) // Ensure peer is initialise with correct activated tab
         {
             xTabCntrl->activateTab( nActiveTab );
-            ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( nActiveTab ), sal_True );
+            ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( nActiveTab ), true );
         }
     }
 }
@@ -867,7 +867,7 @@ UnoMultiPageModel::UnoMultiPageModel( const Reference< XComponentContext >& rxCo
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES );
 
     Any aBool;
-    aBool <<= (sal_Bool) sal_True;
+    aBool <<= true;
     ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
     ImplRegisterProperty( BASEPROPERTY_DECORATION, aBool );
@@ -989,7 +989,7 @@ UnoPageModel::UnoPageModel( const Reference< XComponentContext >& rxContext ) : 
 //    ImplRegisterProperty( BASEPROPERTY_DIALOGSOURCEURL );
 
     Any aBool;
-    aBool <<= (sal_Bool) sal_True;
+    aBool <<= true;
     ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
     //ImplRegisterProperty( BASEPROPERTY_TABSTOP, aBool );
@@ -1107,7 +1107,7 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
         }
         else
         {
-            Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer( sal_True );
+            Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer( true );
             Reference< XDevice > xD( xPeer, UNO_QUERY );
 
             SimpleFontMetric aFM;

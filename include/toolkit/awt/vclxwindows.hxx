@@ -944,8 +944,8 @@ public:
 
     void            SetFormatter( FormatterBase* pFormatter ) { mpFormatter = pFormatter; }
 
-    void            setStrictFormat( sal_Bool bStrict );
-    sal_Bool        isStrictFormat();
+    void            setStrictFormat( bool bStrict );
+    bool        isStrictFormat();
 
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);

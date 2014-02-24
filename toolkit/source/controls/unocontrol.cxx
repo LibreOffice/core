@@ -146,11 +146,11 @@ UnoControl::UnoControl() :
     , mpData( new UnoControl_Data )
 {
     DBG_CTOR( UnoControl, NULL );
-    mbDisposePeer = sal_True;
-    mbRefeshingPeer = sal_False;
-    mbCreatingPeer = sal_False;
-    mbCreatingCompatiblePeer = sal_False;
-    mbDesignMode = sal_False;
+    mbDisposePeer = true;
+    mbRefeshingPeer = false;
+    mbCreatingPeer = false;
+    mbCreatingCompatiblePeer = false;
+    mbDesignMode = false;
 }
 
 UnoControl::~UnoControl()
@@ -164,11 +164,11 @@ OUString UnoControl::GetComponentServiceName()
     return OUString();
 }
 
-Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer )
+Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( bool bAcceptExistingPeer )
 {
     DBG_ASSERT( !mbCreatingCompatiblePeer, "ImplGetCompatiblePeer - rekursive?" );
 
-    mbCreatingCompatiblePeer = sal_True;
+    mbCreatingCompatiblePeer = true;
 
     Reference< XWindowPeer > xCompatiblePeer;
 
@@ -178,9 +178,9 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
     if ( !xCompatiblePeer.is() )
     {
         // Create the pair as invisible
-        sal_Bool bVis = maComponentInfos.bVisible;
+        bool bVis = maComponentInfos.bVisible;
         if( bVis )
-            maComponentInfos.bVisible = sal_False;
+            maComponentInfos.bVisible = false;
 
         Reference< XWindowPeer >    xCurrentPeer = getPeer();
         setPeer( NULL );
@@ -201,7 +201,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
         }
         catch( const Exception& )
         {
-            mbCreatingCompatiblePeer = sal_False;
+            mbCreatingCompatiblePeer = false;
             throw;
         }
         xCompatiblePeer = getPeer();
@@ -215,10 +215,10 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
         }
 
         if( bVis )
-            maComponentInfos.bVisible = sal_True;
+            maComponentInfos.bVisible = true;
     }
 
-    mbCreatingCompatiblePeer = sal_False;
+    mbCreatingCompatiblePeer = false;
 
     return xCompatiblePeer;
 }
@@ -404,9 +404,9 @@ void UnoControl::removeEventListener( const Reference< XEventListener >& rxListe
     maDisposeListeners.removeInterface( rxListener );
 }
 
-sal_Bool UnoControl::requiresNewPeer( const OUString& /* _rPropertyName */ ) const
+bool UnoControl::requiresNewPeer( const OUString& /* _rPropertyName */ ) const
 {
-    return sal_False;
+    return false;
 }
 
 // XPropertiesChangeListener
@@ -482,7 +482,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             // position where to insert the independent properties into aPeerPropertiesToSet,
             // dependent ones are inserted at the end of the vector
 
-        sal_Bool bNeedNewPeer = sal_False;
+        bool bNeedNewPeer = false;
             // some properties require a re-creation of the peer, 'cause they can't be changed on the fly
 
         Reference< XControlModel > xOwnModel( getModel(), UNO_QUERY );
@@ -499,7 +499,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         for( sal_Int32 i = 0; i < nLen; ++i, ++pEvents )
         {
             Reference< XControlModel > xModel( pEvents->Source, UNO_QUERY );
-            sal_Bool bOwnModel = xModel.get() == xOwnModel.get();
+            bool bOwnModel = xModel.get() == xOwnModel.get();
             if ( !bOwnModel )
                 continue;
 
@@ -635,10 +635,10 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             getPeer()->dispose();
             mxPeer.clear();
             mxVclWindowPeer = NULL;
-            mbRefeshingPeer = sal_True;
+            mbRefeshingPeer = true;
             Reference< XWindowPeer >    xP( xParent, UNO_QUERY );
             xThis->createPeer( Reference< XToolkit > (), xP );
-            mbRefeshingPeer = sal_False;
+            mbRefeshingPeer = false;
             aPeerPropertiesToSet.clear();
         }
 
@@ -704,8 +704,8 @@ void SAL_CALL UnoControl::setOutputSize( const awt::Size& aSize ) throw (Runtime
 
 namespace
 {
-    template < typename RETVALTYPE >
-    RETVALTYPE lcl_askPeer( const uno::Reference< awt::XWindowPeer >& _rxPeer, RETVALTYPE (SAL_CALL XWindow2::*_pMethod)(), RETVALTYPE _aDefault )
+    template < typename RETVALTYPE, typename DEFAULTTYPE >
+    RETVALTYPE lcl_askPeer( const uno::Reference< awt::XWindowPeer >& _rxPeer, RETVALTYPE (SAL_CALL XWindow2::*_pMethod)(), DEFAULTTYPE _aDefault )
     {
         RETVALTYPE aReturn( _aDefault );
 
@@ -1009,7 +1009,7 @@ void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        xDrawPeer = ImplGetCompatiblePeer( sal_True );
+        xDrawPeer = ImplGetCompatiblePeer( true );
         bDisposeDrawPeer = xDrawPeer.is() && ( xDrawPeer != getPeer() );
 
         xDrawPeerView.set( xDrawPeer, UNO_QUERY );
@@ -1097,7 +1097,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
 
     if( !getPeer().is() )
     {
-        mbCreatingPeer = sal_True;
+        mbCreatingPeer = true;
 
         WindowClass eType;
         Reference< XToolkit >  xToolkit = rxToolkit;
@@ -1163,7 +1163,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
                 aVal = xPSet->getPropertyValue( aPropName );
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( ( aVal >>= b ) && b)
                     aDescr.ParentIndex = -1;
             }
@@ -1173,7 +1173,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= WindowAttribute::MOVEABLE;
         }
@@ -1183,7 +1183,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= WindowAttribute::CLOSEABLE;
         }
@@ -1193,7 +1193,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::DROPDOWN;
         }
@@ -1203,7 +1203,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::SPIN;
         }
@@ -1213,7 +1213,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::HSCROLL;
         }
@@ -1223,7 +1223,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::VSCROLL;
         }
@@ -1233,7 +1233,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::AUTOHSCROLL;
         }
@@ -1243,7 +1243,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::AUTOVSCROLL;
         }
@@ -1254,7 +1254,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( ( aVal >>=b ) && b )
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::NOLABEL;
         }
@@ -1293,7 +1293,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         // Unfortunately, the VCL used in the peers is not threadsafe, and by definition needs a locked SolarMutex.)
         // 82300 - 12/21/00 - FS
         UnoControlComponentInfos aComponentInfos(maComponentInfos);
-        sal_Bool bDesignMode(mbDesignMode);
+        bool bDesignMode(mbDesignMode);
 
         Reference< XGraphics >  xGraphics( mxGraphics           );
         Reference< XView >      xView    ( getPeer(), UNO_QUERY_THROW );
@@ -1322,7 +1322,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
 
         peerCreated();
 
-        mbCreatingPeer = sal_False;
+        mbCreatingPeer = false;
     }
 }
 
@@ -1388,7 +1388,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
     Reference<XComponent> xAccessibleComp;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        if ( bOn == mbDesignMode )
+        if ( bool(bOn) == mbDesignMode )
             return;
 
         // remember this

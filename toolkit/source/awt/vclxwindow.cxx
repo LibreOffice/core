@@ -94,8 +94,8 @@ private:
     ::toolkit::AccessibilityClient      maAccFactory;
     bool                                mbDisposed;
     bool                                mbDrawingOntoParent;    // no bit mask, is passed around  by reference
-    sal_Bool                            mbEnableVisible;
-    sal_Bool                            mbDirectVisible;
+    bool                            mbEnableVisible;
+    bool                            mbDirectVisible;
 
     ::osl::Mutex                        maListenerContainerMutex;
     ::cppu::OInterfaceContainerHelper   maWindow2Listeners;
@@ -147,12 +147,12 @@ public:
 
     /** synchronously mbEnableVisible
     */
-    void    setEnableVisible( sal_Bool bEnableVisible ) { mbEnableVisible = bEnableVisible; }
-    sal_Bool    isEnableVisible() { return mbEnableVisible; }
+    void    setEnableVisible( bool bEnableVisible ) { mbEnableVisible = bEnableVisible; }
+    bool    isEnableVisible() { return mbEnableVisible; }
     /** synchronously mbDirectVisible;
     */
-    void    setDirectVisible( sal_Bool bDirectVisible ) { mbDirectVisible = bDirectVisible; }
-    sal_Bool    isDirectVisible() { return mbDirectVisible; }
+    void    setDirectVisible( bool bDirectVisible ) { mbDirectVisible = bDirectVisible; }
+    bool    isDirectVisible() { return mbDirectVisible; }
 
     /** impl-version of VCLXWindow::ImplExecuteAsyncWithoutSolarLock
     */
@@ -203,8 +203,8 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps 
     :mrAntiImpl( _rAntiImpl )
     ,mbDisposed( false )
     ,mbDrawingOntoParent( false )
-    ,mbEnableVisible(sal_True)
-    ,mbDirectVisible(sal_True)
+    ,mbEnableVisible(true)
+    ,mbDirectVisible(true)
     ,maListenerContainerMutex( )
     ,maWindow2Listeners( maListenerContainerMutex )
     ,maDockableWindowListeners( maListenerContainerMutex )
@@ -408,7 +408,7 @@ void VCLXWindow::SetWindow( Window* pWindow )
     if ( GetWindow() )
     {
         GetWindow()->AddEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
-        sal_Bool bDirectVisible = pWindow ? pWindow->IsVisible() : false;
+        bool bDirectVisible = pWindow ? pWindow->IsVisible() : false;
         mpImpl->setDirectVisible( bDirectVisible );
     }
 }
@@ -907,12 +907,12 @@ uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessible
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-void VCLXWindow::SetSynthesizingVCLEvent( sal_Bool _b )
+void VCLXWindow::SetSynthesizingVCLEvent( bool _b )
 {
     mpImpl->mbSynthesizingVCLEvent = _b;
 }
 
-sal_Bool VCLXWindow::IsSynthesizingVCLEvent() const
+bool VCLXWindow::IsSynthesizingVCLEvent() const
 {
     return mpImpl->mbSynthesizingVCLEvent;
 }
@@ -1202,7 +1202,7 @@ sal_Bool VCLXWindow::isChild( const ::com::sun::star::uno::Reference< ::com::sun
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bIsChild = sal_False;
+    bool bIsChild = false;
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
@@ -1374,11 +1374,11 @@ namespace
 {
     void    lcl_updateWritingMode( Window& _rWindow, const sal_Int16 _nWritingMode, const sal_Int16 _nContextWritingMode )
     {
-        sal_Bool bEnableRTL = sal_False;
+        bool bEnableRTL = false;
         switch ( _nWritingMode )
         {
-        case WritingMode2::LR_TB:   bEnableRTL = sal_False; break;
-        case WritingMode2::RL_TB:   bEnableRTL = sal_True; break;
+        case WritingMode2::LR_TB:   bEnableRTL = false; break;
+        case WritingMode2::RL_TB:   bEnableRTL = true; break;
         case WritingMode2::CONTEXT:
         {
             // consult our ContextWritingMode. If it has an explicit RTL/LTR value, then use
@@ -1386,8 +1386,8 @@ namespace
             // own window for its RTL mode
             switch ( _nContextWritingMode )
             {
-                case WritingMode2::LR_TB:   bEnableRTL = sal_False; break;
-                case WritingMode2::RL_TB:   bEnableRTL = sal_True; break;
+                case WritingMode2::LR_TB:   bEnableRTL = false; break;
+                case WritingMode2::RL_TB:   bEnableRTL = true; break;
                 case WritingMode2::CONTEXT:
                 {
                     const Window* pParent = _rWindow.GetParent();
@@ -1417,7 +1417,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
     if ( !pWindow )
         return;
 
-    sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
     WindowType eWinType = pWindow->GetType();
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1445,7 +1445,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 
         case BASEPROPERTY_WRITING_MODE:
         {
-            sal_Bool bProperType = ( Value >>= mpImpl->mnWritingMode );
+            bool bProperType = ( Value >>= mpImpl->mnWritingMode );
             OSL_ENSURE( bProperType, "VCLXWindow::setProperty( 'WritingMode' ): illegal value type!" );
             if ( bProperType )
                 lcl_updateWritingMode( *pWindow, mpImpl->mnWritingMode, mpImpl->mnContextWritingMode );
@@ -1478,7 +1478,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 
         case BASEPROPERTY_NATIVE_WIDGET_LOOK:
         {
-            sal_Bool bEnable( sal_True );
+            bool bEnable( true );
             OSL_VERIFY( Value >>= bEnable );
             pWindow->EnableNativeWidget( bEnable );
         }
@@ -1493,14 +1493,14 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 
         case BASEPROPERTY_ENABLED:
         {
-            sal_Bool b = sal_Bool();
+            bool b = bool();
             if ( Value >>= b )
                 setEnable( b );
         }
         break;
         case BASEPROPERTY_ENABLEVISIBLE:
         {
-            sal_Bool b = sal_False;
+            bool b = false;
             if ( Value >>= b )
             {
                 if( b != mpImpl->isEnableVisible() )
@@ -1745,7 +1745,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             WinBits nStyle = pWindow->GetStyle() & ~WB_TABSTOP;
             if ( !bVoid )
             {
-                sal_Bool bTab = false;
+                bool bTab = false;
                 Value >>= bTab;
                 if ( bTab )
                     nStyle |= WB_TABSTOP;
@@ -1827,7 +1827,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                 )
             {
                 WinBits nStyle = pWindow->GetStyle();
-                sal_Bool bMulti = false;
+                bool bMulti = false;
                 Value >>= bMulti;
                 if ( bMulti )
                     nStyle |= WB_WORDBREAK;
@@ -1876,14 +1876,14 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
         break;
         case BASEPROPERTY_MOUSETRANSPARENT:
         {
-            sal_Bool bMouseTransparent = false;
+            bool bMouseTransparent = false;
             Value >>= bMouseTransparent;
             pWindow->SetMouseTransparent( bMouseTransparent );
         }
         break;
         case BASEPROPERTY_PAINTTRANSPARENT:
         {
-            sal_Bool bPaintTransparent = false;
+            bool bPaintTransparent = false;
             Value >>= bPaintTransparent;
             pWindow->SetPaintTransparent( bPaintTransparent );
 //                pWindow->SetBackground();
@@ -1892,7 +1892,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 
         case BASEPROPERTY_REPEAT:
         {
-            sal_Bool bRepeat( sal_False );
+            bool bRepeat( false );
             Value >>= bRepeat;
 
             WinBits nStyle = pWindow->GetStyle();
@@ -1985,19 +1985,19 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             break;
 
             case BASEPROPERTY_NATIVE_WIDGET_LOOK:
-                aProp <<= (sal_Bool) GetWindow()->IsNativeWidgetEnabled();
+                aProp <<= GetWindow()->IsNativeWidgetEnabled();
                 break;
 
             case BASEPROPERTY_ENABLED:
-                aProp <<= (sal_Bool) GetWindow()->IsEnabled();
+                aProp <<= GetWindow()->IsEnabled();
                 break;
 
             case BASEPROPERTY_ENABLEVISIBLE:
-                aProp <<= (sal_Bool) mpImpl->isEnableVisible();
+                aProp <<= mpImpl->isEnableVisible();
                 break;
 
             case BASEPROPERTY_HIGHCONTRASTMODE:
-                aProp <<= (sal_Bool) GetWindow()->GetSettings().GetStyleSettings().GetHighContrastMode();
+                aProp <<= GetWindow()->GetSettings().GetStyleSettings().GetHighContrastMode();
                 break;
 
             case BASEPROPERTY_TEXT:
@@ -2066,7 +2066,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             }
             break;
             case BASEPROPERTY_TABSTOP:
-                aProp <<= (sal_Bool) ( GetWindow()->GetStyle() & WB_TABSTOP ) ? sal_True : sal_False;
+                aProp <<= ( GetWindow()->GetStyle() & WB_TABSTOP ) != 0;
             break;
             case BASEPROPERTY_VERTICALALIGN:
             {
@@ -2118,30 +2118,30 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                     || ( eWinType == WINDOW_CANCELBUTTON )
                     || ( eWinType == WINDOW_HELPBUTTON )
                     )
-                    aProp <<= (sal_Bool) ( GetWindow()->GetStyle() & WB_WORDBREAK ) ? sal_True : sal_False;
+                    aProp <<= ( GetWindow()->GetStyle() & WB_WORDBREAK ) != 0;
             }
             break;
             case BASEPROPERTY_AUTOMNEMONICS:
             {
-                sal_Bool bAutoMnemonics = GetWindow()->GetSettings().GetStyleSettings().GetAutoMnemonic();
+                bool bAutoMnemonics = GetWindow()->GetSettings().GetStyleSettings().GetAutoMnemonic();
                 aProp <<= bAutoMnemonics;
             }
             break;
             case BASEPROPERTY_MOUSETRANSPARENT:
             {
-                sal_Bool bMouseTransparent = GetWindow()->IsMouseTransparent();
+                bool bMouseTransparent = GetWindow()->IsMouseTransparent();
                 aProp <<= bMouseTransparent;
             }
             break;
             case BASEPROPERTY_PAINTTRANSPARENT:
             {
-                sal_Bool bPaintTransparent = GetWindow()->IsPaintTransparent();
+                bool bPaintTransparent = GetWindow()->IsPaintTransparent();
                 aProp <<= bPaintTransparent;
             }
             break;
 
             case BASEPROPERTY_REPEAT:
-                aProp <<= (sal_Bool)( 0 != ( GetWindow()->GetStyle() & WB_REPEAT ) );
+                aProp <<= ( 0 != ( GetWindow()->GetStyle() & WB_REPEAT ) );
                 break;
 
             case BASEPROPERTY_REPEAT_DELAY:
@@ -2295,7 +2295,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             {
                 ::comphelper::FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
 
-                sal_Bool bWasVisible = pWindow->IsVisible();
+                bool bWasVisible = pWindow->IsVisible();
                 Point aOldPos( pWindow->GetPosPixel() );
 
                 if ( bWasVisible && aOldPos == aPos )
@@ -2339,7 +2339,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             }
             else
             {
-                sal_Bool bOldNW =pWindow->IsNativeWidgetEnabled();
+                bool bOldNW =pWindow->IsNativeWidgetEnabled();
                 if( bOldNW )
                     pWindow->EnableNativeWidget(false);
                 pWindow->PaintToDevice( pDev, aP, aSz );

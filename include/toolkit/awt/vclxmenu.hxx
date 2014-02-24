@@ -67,7 +67,7 @@ protected:
 
     DECL_LINK( MenuEventListener, VclSimpleEvent* );
 
-    void ImplCreateMenu( sal_Bool bPopup );
+    void ImplCreateMenu( bool bPopup );
 
 public:
     VCLXMenu();
@@ -76,7 +76,7 @@ public:
 
 
     Menu*    GetMenu() const { return mpMenu; }
-    sal_Bool IsPopupMenu() const;
+    bool IsPopupMenu() const;
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException);

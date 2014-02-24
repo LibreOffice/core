@@ -145,7 +145,7 @@ UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
     return aIDs;
 }
 
-sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
+bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
         nPropId = BASEPROPERTY_FONTDESCRIPTOR;
@@ -274,7 +274,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_PAINTTRANSPARENT:
             case BASEPROPERTY_DESKTOP_AS_PARENT:
             case BASEPROPERTY_HARDLINEBREAKS:
-            case BASEPROPERTY_NOLABEL:              aDefault <<= (sal_Bool) sal_False; break;
+            case BASEPROPERTY_NOLABEL:              aDefault <<= false; break;
 
             case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
             case BASEPROPERTY_HIDEINACTIVESELECTION:
@@ -284,7 +284,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_ENABLED:
             case BASEPROPERTY_PRINTABLE:
             case BASEPROPERTY_ENABLEVISIBLE:
-            case BASEPROPERTY_DECORATION:           aDefault <<= (sal_Bool) sal_True; break;
+            case BASEPROPERTY_DECORATION:           aDefault <<= true; break;
 
             case BASEPROPERTY_GROUPNAME:
             case BASEPROPERTY_HELPTEXT:
@@ -555,7 +555,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
         const ::com::sun::star::uno::Any* pProp = &(maData[*it]);
         OutStream->writeShort( *it );
 
-        sal_Bool bVoid = pProp->getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = pProp->getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         OutStream->writeBoolean( bVoid );
 
@@ -566,7 +566,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
 
             if ( rType == ::getBooleanCppuType() )
             {
-                sal_Bool b = false;
+                bool b = false;
                 rValue >>= b;
                 OutStream->writeBoolean( b );
             }
@@ -766,7 +766,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
     sal_uInt32 nProps = (sal_uInt32)InStream->readLong();
     ::com::sun::star::uno::Sequence< OUString> aProps( nProps );
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> aValues( nProps );
-    sal_Bool bInvalidEntries = sal_False;
+    bool bInvalidEntries = false;
 
     // Unfortunately, there's no mark for the whole block, thus only properties may be changed.
     // No data for the model may be added following the properties
@@ -783,7 +783,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
         sal_uInt16 nPropId = (sal_uInt16)InStream->readShort();
 
         ::com::sun::star::uno::Any aValue;
-        sal_Bool bIsVoid = InStream->readBoolean();
+        bool bIsVoid = InStream->readBoolean();
         if ( !bIsVoid )
         {
             if ( maData.find( nPropId ) != maData.end() )
@@ -791,7 +791,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                 const ::com::sun::star::uno::Type* pType = GetPropertyType( nPropId );
                 if ( *pType == ::getBooleanCppuType() )
                 {
-                    sal_Bool b = InStream->readBoolean();
+                    bool b = InStream->readBoolean();
                     aValue <<= b;
                 }
                 else if ( *pType == ::getCppuType((const OUString*)0) )
@@ -981,7 +981,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
         }
         else
         {
-            bInvalidEntries = sal_True;
+            bInvalidEntries = true;
         }
 
         // Skip rest of input if there is more data in stream than this version can handle
@@ -1042,13 +1042,13 @@ sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(
 
 
 template <class TYPE>
-sal_Bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYPE* /* _pTypeDisambiguation */)
+bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYPE* /* _pTypeDisambiguation */)
 {
     TYPE tValue;
     if (_rNewValueTest >>= tValue)
     {
         _rConvertedValue <<= tValue;
-        return sal_True;
+        return true;
     }
 }
 
@@ -1057,7 +1057,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    sal_Bool bVoid = rValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+    bool bVoid = rValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
     if ( bVoid )
     {
         rConvertedValue.clear();
@@ -1077,7 +1077,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
             }
             else
             {
-                sal_Bool bConverted = sal_False;
+                bool bConverted = false;
                 // 13.03.2001 - 84923 - frank.schoenheit@germany.sun.com
 
                 switch (pDestType->getTypeClass())
@@ -1139,7 +1139,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                                 rConvertedValue = xPure->queryInterface( *pDestType );
                             else
                                 rConvertedValue.setValue( NULL, *pDestType );
-                            bConverted = sal_True;
+                            bConverted = true;
                         }
                     }
                     break;

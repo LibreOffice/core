@@ -183,14 +183,14 @@ UnoEditControl::UnoEditControl()
     :UnoControlBase()
     ,maTextListeners( *this )
     ,mnMaxTextLen( 0 )
-    ,mbSetTextInPeer( sal_False )
-    ,mbSetMaxTextLenInPeer( sal_False )
-    ,mbHasTextProperty( sal_False )
+    ,mbSetTextInPeer( false )
+    ,mbSetMaxTextLenInPeer( false )
+    ,mbHasTextProperty( false )
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
     mnMaxTextLen = 0;
-    mbSetMaxTextLenInPeer = sal_False;
+    mbSetMaxTextLenInPeer = false;
 }
 
 uno::Any SAL_CALL UnoEditControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
@@ -225,7 +225,7 @@ OUString UnoEditControl::GetComponentServiceName()
 
     // but maybe we are to display multi-line text?
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
-    sal_Bool b = sal_Bool();
+    bool b = bool();
     if ( ( aVal >>= b ) && b )
         sName = "MultiLineEdit";
 
@@ -234,14 +234,14 @@ OUString UnoEditControl::GetComponentServiceName()
 
 sal_Bool SAL_CALL UnoEditControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
 {
-    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
+    bool bReturn = UnoControlBase::setModel( _rModel );
     mbHasTextProperty = ImplHasProperty( BASEPROPERTY_TEXT );
     return bReturn;
 }
 
 void UnoEditControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
 {
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
     if ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT )
     {
         // #96986# use setText(), or text listener will not be called.
@@ -252,7 +252,7 @@ void UnoEditControl::ImplSetPeerProperty( const OUString& rPropName, const uno::
             rVal >>= sText;
             ImplCheckLocalize( sText );
             xTextComponent->setText( sText );
-            bDone = sal_True;
+            bDone = true;
         }
     }
 
@@ -291,7 +291,7 @@ void UnoEditControl::textChanged(const awt::TextEvent& e) throw(uno::RuntimeExce
     {
         uno::Any aAny;
         aAny <<= xText->getText();
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, sal_False );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, false );
     }
     else
     {
@@ -318,12 +318,12 @@ void UnoEditControl::setText( const OUString& aText ) throw(uno::RuntimeExceptio
     {
         uno::Any aAny;
         aAny <<= aText;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, sal_True );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, true );
     }
     else
     {
         maText = aText;
-        mbSetTextInPeer = sal_True;
+        mbSetTextInPeer = true;
             uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
         if ( xText.is() )
             xText->setText( maText );
@@ -424,8 +424,8 @@ sal_Bool UnoEditControl::isEditable( void ) throw(uno::RuntimeException)
 void UnoEditControl::setEditable( sal_Bool bEditable ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
-    aAny <<= (sal_Bool)!bEditable;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_READONLY ), aAny, sal_True );
+    aAny <<= !bEditable;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_READONLY ), aAny, true );
 }
 
 sal_Int16 UnoEditControl::getMaxTextLen() throw(uno::RuntimeException)
@@ -444,12 +444,12 @@ void UnoEditControl::setMaxTextLen( sal_Int16 nLen ) throw(uno::RuntimeException
     {
         uno::Any aAny;
         aAny <<= (sal_Int16)nLen;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), aAny, sal_True );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), aAny, true );
     }
     else
     {
         mnMaxTextLen = nLen;
-        mbSetMaxTextLenInPeer = sal_True;
+        mbSetMaxTextLenInPeer = true;
             uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
         if ( xText.is() )
             xText->setMaxTextLen( mnMaxTextLen );
@@ -691,11 +691,11 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     case BASEPROPERTY_DEFAULTCONTROL:
         return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlButton ) );
     case BASEPROPERTY_TOGGLE:
-        return uno::makeAny( (sal_Bool)sal_False );
+        return uno::makeAny( false );
     case BASEPROPERTY_ALIGN:
         return uno::makeAny( (sal_Int16)PROPERTY_ALIGN_CENTER );
     case BASEPROPERTY_FOCUSONCLICK:
-        return uno::makeAny( (sal_Bool)sal_True );
+        return uno::makeAny( true );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -827,7 +827,7 @@ void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
     // forward to model
     uno::Any aAny;
     aAny <<= (sal_Int16)rEvent.Selected;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_False );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, false );
 
     // multiplex
     ItemEvent aEvent( rEvent );
@@ -839,7 +839,7 @@ void UnoButtonControl::setLabel( const OUString&  rLabel ) throw(uno::RuntimeExc
 {
     uno::Any aAny;
     aAny <<= rLabel;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
 }
 
 void UnoButtonControl::setActionCommand( const OUString& rCommand ) throw(uno::RuntimeException)
@@ -934,7 +934,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
                 mbAdjustingImageScaleMode = true;
                 sal_Int16 nScaleMode( awt::ImageScaleMode::ANISOTROPIC );
                 OSL_VERIFY( _rValue >>= nScaleMode );
-                setDependentFastPropertyValue( BASEPROPERTY_SCALEIMAGE, uno::makeAny( sal_Bool( nScaleMode != awt::ImageScaleMode::NONE ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_SCALEIMAGE, uno::makeAny( nScaleMode != awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -942,7 +942,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
             if ( !mbAdjustingImageScaleMode && ImplHasProperty( BASEPROPERTY_IMAGE_SCALE_MODE ) )
             {
                 mbAdjustingImageScaleMode = true;
-                sal_Bool bScale = sal_True;
+                bool bScale = true;
                 OSL_VERIFY( _rValue >>= bScale );
                 setDependentFastPropertyValue( BASEPROPERTY_IMAGE_SCALE_MODE, uno::makeAny( bScale ? awt::ImageScaleMode::ANISOTROPIC : awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
@@ -1157,7 +1157,7 @@ void UnoRadioButtonControl::setLabel( const OUString&  rLabel ) throw(uno::Runti
 {
     uno::Any aAny;
     aAny <<= rLabel;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
 }
 
 void UnoRadioButtonControl::setActionCommand( const OUString& rCommand ) throw(uno::RuntimeException)
@@ -1175,7 +1175,7 @@ void UnoRadioButtonControl::setState( sal_Bool bOn ) throw(uno::RuntimeException
     sal_Int16 nState = bOn ? 1 : 0;
     uno::Any aAny;
     aAny <<= nState;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, true );
 }
 
 sal_Bool UnoRadioButtonControl::getState() throw(uno::RuntimeException)
@@ -1190,7 +1190,7 @@ void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) thr
 {
     uno::Any aAny;
     aAny <<= (sal_Int16)rEvent.Selected;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_False );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, false );
 
     // compatibility:
     // in OOo 1.0.x, when the user clicked a radio button in a group of buttons, this resulted
@@ -1383,14 +1383,14 @@ void UnoCheckBoxControl::setLabel( const OUString&  rLabel ) throw(uno::RuntimeE
 {
     uno::Any aAny;
     aAny <<= rLabel;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
 }
 
 void UnoCheckBoxControl::setState( short n ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= (sal_Int16)n;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, true );
 }
 
 short UnoCheckBoxControl::getState() throw(uno::RuntimeException)
@@ -1405,14 +1405,14 @@ void UnoCheckBoxControl::enableTriState( sal_Bool b ) throw(uno::RuntimeExceptio
 {
     uno::Any aAny;
     aAny <<= b;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TRISTATE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TRISTATE ), aAny, true );
 }
 
 void UnoCheckBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= (sal_Int16)rEvent.Selected;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_False );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, false );
 
     if ( maItemListeners.getLength() )
         maItemListeners.itemStateChanged( rEvent );
@@ -1546,7 +1546,7 @@ void UnoFixedHyperlinkControl::setText( const OUString& Text ) throw(uno::Runtim
 {
     uno::Any aAny;
     aAny <<= Text;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
 }
 
 OUString UnoFixedHyperlinkControl::getText() throw(uno::RuntimeException)
@@ -1558,7 +1558,7 @@ void UnoFixedHyperlinkControl::setURL( const OUString& URL ) throw(::com::sun::s
 {
     uno::Any aAny;
     aAny <<= URL;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), aAny, true );
 }
 
 OUString UnoFixedHyperlinkControl::getURL(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -1570,7 +1570,7 @@ void UnoFixedHyperlinkControl::setAlignment( short nAlign ) throw(uno::RuntimeEx
 {
     uno::Any aAny;
     aAny <<= (sal_Int16)nAlign;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), aAny, true );
 }
 
 short UnoFixedHyperlinkControl::getAlignment() throw(uno::RuntimeException)
@@ -1742,7 +1742,7 @@ void UnoFixedTextControl::setText( const OUString& Text ) throw(uno::RuntimeExce
 {
     uno::Any aAny;
     aAny <<= Text;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
 }
 
 OUString UnoFixedTextControl::getText() throw(uno::RuntimeException)
@@ -1754,7 +1754,7 @@ void UnoFixedTextControl::setAlignment( short nAlign ) throw(uno::RuntimeExcepti
 {
     uno::Any aAny;
     aAny <<= (sal_Int16)nAlign;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), aAny, true );
 }
 
 short UnoFixedTextControl::getAlignment() throw(uno::RuntimeException)
@@ -2470,7 +2470,7 @@ void UnoListBoxControl::ImplUpdateSelectedItemsProperty()
         uno::Sequence<sal_Int16> aSeq = xListBox->getSelectedItemsPos();
         uno::Any aAny;
         aAny <<= aSeq;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), aAny, sal_False );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), aAny, false );
     }
 }
 
@@ -2581,7 +2581,7 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
 
     uno::Any aAny;
     aAny <<= aNewSeq;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, true );
 }
 
 void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(uno::RuntimeException)
@@ -2612,7 +2612,7 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(un
 
         uno::Any aAny;
         aAny <<= aNewSeq;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, sal_True );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, true );
     }
 }
 
@@ -2730,7 +2730,7 @@ void UnoListBoxControl::setDropDownLineCount( sal_Int16 nLines ) throw(uno::Runt
 {
     uno::Any aAny;
     aAny <<= (sal_Int16)nLines;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), aAny, true );
 }
 
 sal_Int16 UnoListBoxControl::getDropDownLineCount() throw(uno::RuntimeException)
@@ -2747,7 +2747,7 @@ void UnoListBoxControl::setMultipleMode( sal_Bool bMulti ) throw(uno::RuntimeExc
 {
     uno::Any aAny;
     aAny <<= bMulti;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTISELECTION ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTISELECTION ), aAny, true );
 }
 
 void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(uno::RuntimeException)
@@ -3188,7 +3188,7 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
 
     uno::Any aAny;
     aAny <<= aNewSeq;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, true );
 }
 
 void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(uno::RuntimeException)
@@ -3219,7 +3219,7 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(u
 
         uno::Any aAny;
         aAny <<= aNewSeq;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, sal_True );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, true );
     }
 }
 
@@ -3254,7 +3254,7 @@ void UnoComboBoxControl::setDropDownLineCount( sal_Int16 nLines ) throw(uno::Run
 {
     uno::Any aAny;
     aAny <<= nLines;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), aAny, true );
 }
 
 sal_Int16 UnoComboBoxControl::getDropDownLineCount() throw(uno::RuntimeException)
@@ -3277,7 +3277,7 @@ UnoSpinFieldControl::UnoSpinFieldControl()
     :UnoEditControl()
     ,maSpinListeners( *this )
 {
-    mbRepeat = sal_False;
+    mbRepeat = false;
 }
 
 // uno::XInterface
@@ -3422,7 +3422,7 @@ UnoDateFieldControl::UnoDateFieldControl()
 {
     mnFirst = util::Date( 1, 1, 1900 );
     mnLast = util::Date( 31, 12, 2200 );
-    mbLongFormat = 2;
+    mbLongFormat = AUTO_STATE_AUTO;
 }
 
 OUString UnoDateFieldControl::GetComponentServiceName()
@@ -3451,7 +3451,7 @@ void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
     uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
-    if ( mbLongFormat != 2 )    // not set
+    if ( mbLongFormat != AUTO_STATE_AUTO )    // not set
         xField->setLongFormat( mbLongFormat );
 }
 
@@ -3464,7 +3464,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
     if ( xPeer.is() )
     {
         OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
-        ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
+        ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), false );
     }
 
     // re-calc the Date property
@@ -3473,7 +3473,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
     if ( xField->isEmpty() )
     {
         // the field says it's empty
-        sal_Bool bEnforceFormat = sal_True;
+        bool bEnforceFormat = true;
         if ( xPeer.is() )
             xPeer->getProperty( GetPropertyName( BASEPROPERTY_ENFORCE_FORMAT ) ) >>= bEnforceFormat;
         if ( !bEnforceFormat )
@@ -3490,7 +3490,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
     else
         aValue <<= xField->getDate();
 
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), aValue, sal_False );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), aValue, false );
 
     // multiplex the event
     if ( GetTextListeners().getLength() )
@@ -3501,7 +3501,7 @@ void UnoDateFieldControl::setDate( const util::Date& Date ) throw(uno::RuntimeEx
 {
     uno::Any aAny;
     aAny <<= Date;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), aAny, true );
 }
 
 util::Date UnoDateFieldControl::getDate() throw(uno::RuntimeException)
@@ -3513,7 +3513,7 @@ void UnoDateFieldControl::setMin( const util::Date& Date ) throw(uno::RuntimeExc
 {
     uno::Any aAny;
     aAny <<= Date;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMIN ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMIN ), aAny, true );
 }
 
 util::Date UnoDateFieldControl::getMin() throw(uno::RuntimeException)
@@ -3525,7 +3525,7 @@ void UnoDateFieldControl::setMax( const util::Date& Date ) throw(uno::RuntimeExc
 {
     uno::Any aAny;
     aAny <<= Date;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMAX ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMAX ), aAny, true );
 }
 
 util::Date UnoDateFieldControl::getMax() throw(uno::RuntimeException)
@@ -3565,7 +3565,7 @@ util::Date UnoDateFieldControl::getLast() throw(uno::RuntimeException)
 
 void UnoDateFieldControl::setLongFormat( sal_Bool bLong ) throw(uno::RuntimeException)
 {
-    mbLongFormat = bLong;
+    mbLongFormat = bLong ? AUTO_STATE_ON : AUTO_STATE_OFF;
     if ( getPeer().is() )
     {
         uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
@@ -3575,7 +3575,7 @@ void UnoDateFieldControl::setLongFormat( sal_Bool bLong ) throw(uno::RuntimeExce
 
 sal_Bool UnoDateFieldControl::isLongFormat() throw(uno::RuntimeException)
 {
-    return ( mbLongFormat != 2 ) ? mbLongFormat : sal_False;
+    return ( mbLongFormat != AUTO_STATE_AUTO ) ? mbLongFormat : sal_False;
 }
 
 void UnoDateFieldControl::setEmpty() throw(uno::RuntimeException)
@@ -3589,7 +3589,7 @@ void UnoDateFieldControl::setEmpty() throw(uno::RuntimeException)
 
 sal_Bool UnoDateFieldControl::isEmpty() throw(uno::RuntimeException)
 {
-    sal_Bool bEmpty = sal_False;
+    bool bEmpty = false;
     if ( getPeer().is() )
     {
         uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
@@ -3602,7 +3602,7 @@ void UnoDateFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::Runtime
 {
     uno::Any aAny;
     aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
 }
 
 sal_Bool UnoDateFieldControl::isStrictFormat() throw(uno::RuntimeException)
@@ -3713,14 +3713,14 @@ void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
     // also change the text property (#i25106#)
     uno::Reference< awt::XVclWindowPeer > xPeer( getPeer(), uno::UNO_QUERY );
     OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
-    ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
+    ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), false );
 
     // re-calc the Time property
     uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aValue;
     if ( !xField->isEmpty() )
         aValue <<= xField->getTime();
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aValue, sal_False );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aValue, false );
 
     // multiplex the event
     if ( GetTextListeners().getLength() )
@@ -3731,7 +3731,7 @@ void UnoTimeFieldControl::setTime( const util::Time& Time ) throw(uno::RuntimeEx
 {
     uno::Any aAny;
     aAny <<= Time;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aAny, true );
 }
 
 util::Time UnoTimeFieldControl::getTime() throw(uno::RuntimeException)
@@ -3743,7 +3743,7 @@ void UnoTimeFieldControl::setMin( const util::Time& Time ) throw(uno::RuntimeExc
 {
     uno::Any aAny;
     aAny <<= Time;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMIN ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMIN ), aAny, true );
 }
 
 util::Time UnoTimeFieldControl::getMin() throw(uno::RuntimeException)
@@ -3755,7 +3755,7 @@ void UnoTimeFieldControl::setMax( const util::Time& Time ) throw(uno::RuntimeExc
 {
     uno::Any aAny;
     aAny <<= Time;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMAX ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMAX ), aAny, true );
 }
 
 util::Time UnoTimeFieldControl::getMax() throw(uno::RuntimeException)
@@ -3804,7 +3804,7 @@ void UnoTimeFieldControl::setEmpty() throw(uno::RuntimeException)
 
 sal_Bool UnoTimeFieldControl::isEmpty() throw(uno::RuntimeException)
 {
-    sal_Bool bEmpty = sal_False;
+    bool bEmpty = false;
     if ( getPeer().is() )
     {
         uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
@@ -3817,7 +3817,7 @@ void UnoTimeFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::Runtime
 {
     uno::Any aAny;
     aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
 }
 
 sal_Bool UnoTimeFieldControl::isStrictFormat() throw(uno::RuntimeException)
@@ -3929,7 +3929,7 @@ void UnoNumericFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::R
     uno::Reference < awt::XNumericField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aAny;
     aAny <<= xField->getValue();
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, sal_False );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, false );
 
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
@@ -3939,7 +3939,7 @@ void UnoNumericFieldControl::setValue( double Value ) throw(uno::RuntimeExceptio
 {
     uno::Any aAny;
     aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, true );
 }
 
 double UnoNumericFieldControl::getValue() throw(uno::RuntimeException)
@@ -3951,7 +3951,7 @@ void UnoNumericFieldControl::setMin( double Value ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), aAny, true );
 }
 
 double UnoNumericFieldControl::getMin() throw(uno::RuntimeException)
@@ -3963,7 +3963,7 @@ void UnoNumericFieldControl::setMax( double Value ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), aAny, true );
 }
 
 double UnoNumericFieldControl::getMax() throw(uno::RuntimeException)
@@ -4005,7 +4005,7 @@ void UnoNumericFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::Runt
 {
     uno::Any aAny;
     aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
 }
 
 sal_Bool UnoNumericFieldControl::isStrictFormat() throw(uno::RuntimeException)
@@ -4017,7 +4017,7 @@ void UnoNumericFieldControl::setSpinSize( double Digits ) throw(uno::RuntimeExce
 {
     uno::Any aAny;
     aAny <<= Digits;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), aAny, true );
 }
 
 double UnoNumericFieldControl::getSpinSize() throw(uno::RuntimeException)
@@ -4029,7 +4029,7 @@ void UnoNumericFieldControl::setDecimalDigits( sal_Int16 Digits ) throw(uno::Run
 {
     uno::Any aAny;
     aAny <<= Digits;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), aAny, true );
 }
 
 sal_Int16 UnoNumericFieldControl::getDecimalDigits() throw(uno::RuntimeException)
@@ -4070,7 +4070,7 @@ uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId )
     if ( nPropId == BASEPROPERTY_CURSYM_POSITION )
     {
         uno::Any aAny;
-        aAny <<= (sal_Bool)sal_False;
+        aAny <<= false;
         return aAny;
     }
 
@@ -4146,7 +4146,7 @@ void UnoCurrencyFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::
     uno::Reference < awt::XCurrencyField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aAny;
     aAny <<= xField->getValue();
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, sal_False );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, false );
 
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
@@ -4156,7 +4156,7 @@ void UnoCurrencyFieldControl::setValue( double Value ) throw(uno::RuntimeExcepti
 {
     uno::Any aAny;
     aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, true );
 }
 
 double UnoCurrencyFieldControl::getValue() throw(uno::RuntimeException)
@@ -4168,7 +4168,7 @@ void UnoCurrencyFieldControl::setMin( double Value ) throw(uno::RuntimeException
 {
     uno::Any aAny;
     aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), aAny, true );
 }
 
 double UnoCurrencyFieldControl::getMin() throw(uno::RuntimeException)
@@ -4180,7 +4180,7 @@ void UnoCurrencyFieldControl::setMax( double Value ) throw(uno::RuntimeException
 {
     uno::Any aAny;
     aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), aAny, true );
 }
 
 double UnoCurrencyFieldControl::getMax() throw(uno::RuntimeException)
@@ -4222,7 +4222,7 @@ void UnoCurrencyFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::Run
 {
     uno::Any aAny;
     aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
 }
 
 sal_Bool UnoCurrencyFieldControl::isStrictFormat() throw(uno::RuntimeException)
@@ -4234,7 +4234,7 @@ void UnoCurrencyFieldControl::setSpinSize( double Digits ) throw(uno::RuntimeExc
 {
     uno::Any aAny;
     aAny <<= Digits;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), aAny, true );
 }
 
 double UnoCurrencyFieldControl::getSpinSize() throw(uno::RuntimeException)
@@ -4246,7 +4246,7 @@ void UnoCurrencyFieldControl::setDecimalDigits( sal_Int16 Digits ) throw(uno::Ru
 {
     uno::Any aAny;
     aAny <<= Digits;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), aAny, true );
 }
 
 sal_Int16 UnoCurrencyFieldControl::getDecimalDigits() throw(uno::RuntimeException)
@@ -4379,9 +4379,9 @@ void UnoPatternFieldControl::setMasks( const OUString& EditMask, const OUString&
 {
     uno::Any aAny;
     aAny <<= EditMask;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_EDITMASK ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_EDITMASK ), aAny, true );
     aAny <<= LiteralMask;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LITERALMASK ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LITERALMASK ), aAny, true );
 }
 
 void UnoPatternFieldControl::getMasks( OUString& EditMask, OUString& LiteralMask ) throw(uno::RuntimeException)
@@ -4394,7 +4394,7 @@ void UnoPatternFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::Runt
 {
     uno::Any aAny;
     aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
 }
 
 sal_Bool UnoPatternFieldControl::isStrictFormat() throw(uno::RuntimeException)
@@ -4506,21 +4506,21 @@ void UnoProgressBarControl::setForegroundColor( sal_Int32 nColor ) throw(::com::
 {
     uno::Any aAny;
     aAny <<= nColor;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_FILLCOLOR ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_FILLCOLOR ), aAny, true );
 }
 
 void UnoProgressBarControl::setBackgroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= nColor;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BACKGROUNDCOLOR ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BACKGROUNDCOLOR ), aAny, true );
 }
 
 void UnoProgressBarControl::setValue( sal_Int32 nValue ) throw(::com::sun::star::uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= nValue;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE ), aAny, true );
 }
 
 void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException )
@@ -4541,8 +4541,8 @@ void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::c
         aMax <<= nMin;
     }
 
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE_MIN ), aMin, sal_True );
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE_MAX ), aMax, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE_MIN ), aMin, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE_MAX ), aMax, true );
 }
 
 sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::RuntimeException)

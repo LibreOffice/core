@@ -354,7 +354,7 @@ namespace toolkitform
             static const OUString FM_PROP_MULTILINE("MultiLine");
             if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
             {
-                sal_Bool bMultiLine = sal_False;
+                bool bMultiLine = false;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_MULTILINE ) >>= bMultiLine );
                 if ( bMultiLine )
                     _rpDescriptor->TextStyle |= TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;

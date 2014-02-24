@@ -65,12 +65,12 @@ VCLXMenu::~VCLXMenu()
     }
 }
 
-sal_Bool VCLXMenu::IsPopupMenu() const
+bool VCLXMenu::IsPopupMenu() const
 {
     return (mpMenu && ! mpMenu->IsMenuBar());
 }
 
-void VCLXMenu::ImplCreateMenu( sal_Bool bPopup )
+void VCLXMenu::ImplCreateMenu( bool bPopup )
 {
     DBG_ASSERT( !mpMenu, "CreateMenu: Menu exists!" );
 
@@ -172,7 +172,7 @@ OUString SAL_CALL VCLXMenu::getImplementationName(  )
 throw (css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
-    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    const bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
     OUString implName( "stardiv.Toolkit." );
@@ -188,7 +188,7 @@ css::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
 throw (css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
-    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    const bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
     css::uno::Sequence< OUString > aNames( 1 );
@@ -211,7 +211,7 @@ css::uno::Any VCLXMenu::queryInterface(
 throw(css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
-    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    const bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
     css::uno::Any aRet;
@@ -241,7 +241,7 @@ css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
 throw(css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
-    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    const bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
     static ::cppu::OTypeCollection* pCollectionMenuBar = NULL;
@@ -289,7 +289,7 @@ css::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
 throw(css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
-    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    const bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
     static ::cppu::OImplementationId* pIdMenuBar = NULL;
@@ -636,7 +636,7 @@ namespace
 {
     static Image lcl_XGraphic2VCLImage(
         const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
-        sal_Bool bResize )
+        bool bResize )
     {
         Image aImage;
         if ( !xGraphic.is() )
@@ -657,7 +657,7 @@ namespace
 
                 ::Size aNewSize( nIdealWidth, nIdealHeight );
 
-                sal_Bool bModified( sal_False );
+                bool bModified( false );
                 BitmapEx aBitmapEx = aImage.GetBitmapEx();
                 bModified = aBitmapEx.Scale( aNewSize, BMP_SCALE_BESTQUALITY );
 
@@ -690,10 +690,10 @@ namespace
 
     KeyCode lcl_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     {
-        sal_Bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
-        sal_Bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
-        sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
-        sal_Bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
+        bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
+        bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
+        bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+        bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
         sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
 
         return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
@@ -931,7 +931,7 @@ DBG_NAME(VCLXMenuBar);
 VCLXMenuBar::VCLXMenuBar()
 {
     DBG_CTOR( VCLXMenuBar, 0 );
-    ImplCreateMenu( sal_False );
+    ImplCreateMenu( false );
 }
 
 VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
@@ -952,7 +952,7 @@ DBG_NAME(VCLXPopupMenu);
 VCLXPopupMenu::VCLXPopupMenu()
 {
     DBG_CTOR( VCLXPopupMenu, 0 );
-    ImplCreateMenu( sal_True );
+    ImplCreateMenu( true );
 }
 
 VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( (Menu *)pPopMenu )

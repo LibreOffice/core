@@ -90,8 +90,8 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
 
-    void            SetSynthesizingVCLEvent( sal_Bool b );
-    sal_Bool            IsSynthesizingVCLEvent() const;
+    void            SetSynthesizingVCLEvent( bool b );
+    bool            IsSynthesizingVCLEvent() const;
 
     void        SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle );
 

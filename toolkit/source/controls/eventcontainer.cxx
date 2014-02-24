@@ -50,7 +50,7 @@ Type NameContainer_Impl::getElementType()
 sal_Bool NameContainer_Impl::hasElements()
     throw(RuntimeException)
 {
-    sal_Bool bRet = (mnElementCount > 0);
+    bool bRet = (mnElementCount > 0);
     return bRet;
 }
 
@@ -78,7 +78,7 @@ sal_Bool NameContainer_Impl::hasByName( const OUString& aName )
     throw(RuntimeException)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
-    sal_Bool bRet = ( aIt != mHashMap.end() );
+    bool bRet = ( aIt != mHashMap.end() );
     return bRet;
 }
 

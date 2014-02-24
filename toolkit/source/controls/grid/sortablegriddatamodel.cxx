@@ -157,7 +157,7 @@ private:
         Neither <member>m_currentSortColumn</member> nor <member>m_sortAscending</member> are touched by this method.
         Also, the given column index is not checked, this is the responsibility of the caller.
     */
-    bool    impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, sal_Bool const i_sortAscending );
+    bool    impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, bool const i_sortAscending );
 
     /** translates the given event, obtained from our delegator, to a version which can be broadcasted to our own
         clients.
@@ -196,7 +196,7 @@ private:
     css::uno::Reference< css::awt::grid::XMutableGridDataModel >  m_delegator;
     css::uno::Reference< css::i18n::XCollator >                   m_collator;
     ::sal_Int32                                                   m_currentSortColumn;
-    ::sal_Bool                                                    m_sortAscending;
+    bool                                                    m_sortAscending;
     ::std::vector< ::sal_Int32 >                                  m_publicToPrivateRowIndex;
     ::std::vector< ::sal_Int32 >                                  m_privateToPublicRowIndex;
 };
@@ -572,7 +572,7 @@ private:
             CellDataLessComparison(
                 ::std::vector< Any > const & i_data,
                 ::comphelper::IKeyPredicateLess& i_predicate,
-                sal_Bool const i_sortAscending
+                bool const i_sortAscending
             )
                 :m_data( i_data )
                 ,m_predicate( i_predicate )
@@ -600,12 +600,12 @@ private:
         private:
             ::std::vector< Any > const &            m_data;
             ::comphelper::IKeyPredicateLess const & m_predicate;
-            sal_Bool const                          m_sortAscending;
+            bool const                          m_sortAscending;
         };
     }
 
 
-    bool SortableGridDataModel::impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, sal_Bool const i_sortAscending )
+    bool SortableGridDataModel::impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, bool const i_sortAscending )
     {
         ::sal_Int32 const rowCount( getRowCount() );
         ::std::vector< ::sal_Int32 > aPublicToPrivate( rowCount );
@@ -679,7 +679,7 @@ private:
         lcl_clear( m_privateToPublicRowIndex );
 
         m_currentSortColumn = -1;
-        m_sortAscending = sal_True;
+        m_sortAscending = true;
     }
 
 

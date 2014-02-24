@@ -87,7 +87,7 @@ class MutableTreeNode: public ::cppu::WeakAggImplHelper2< XMutableTreeNode, XSer
     friend class MutableTreeDataModel;
 
 public:
-    MutableTreeNode( const MutableTreeDataModelRef& xModel, const Any& rValue, sal_Bool bChildrenOnDemand );
+    MutableTreeNode( const MutableTreeDataModelRef& xModel, const Any& rValue, bool bChildrenOnDemand );
     virtual ~MutableTreeNode();
 
     void setParent( MutableTreeNode* pParent );
@@ -132,7 +132,7 @@ private:
     TreeNodeVector  maChildren;
     Any maDisplayValue;
     Any maDataValue;
-    sal_Bool mbHasChildrenOnDemand;
+    bool mbHasChildrenOnDemand;
     ::osl::Mutex maMutex;
     MutableTreeNode* mpParent;
     MutableTreeDataModelRef mxModel;
@@ -266,7 +266,7 @@ Sequence< OUString > SAL_CALL MutableTreeDataModel::getSupportedServiceNames(  )
     return aSeq;
 }
 
-MutableTreeNode::MutableTreeNode( const MutableTreeDataModelRef& xModel, const Any& rValue, sal_Bool bChildrenOnDemand )
+MutableTreeNode::MutableTreeNode( const MutableTreeDataModelRef& xModel, const Any& rValue, bool bChildrenOnDemand )
 : maDisplayValue( rValue )
 , mbHasChildrenOnDemand( bChildrenOnDemand )
 , mpParent( 0 )
@@ -397,7 +397,7 @@ void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDeman
 
     {
         ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
-        bChanged = mbHasChildrenOnDemand != bChildrenOnDemand;
+        bChanged = mbHasChildrenOnDemand != bool(bChildrenOnDemand);
         mbHasChildrenOnDemand = bChildrenOnDemand;
     }
 

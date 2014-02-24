@@ -148,7 +148,7 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
             nStyle &= ~(WB_TABSTOP|WB_NOTABSTOP|WB_GROUP);
             if ( pTabs[n].getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN )
             {
-                sal_Bool bTab = false;
+                bool bTab = false;
                 pTabs[n] >>= bTab;
                 nStyle |= ( bTab ? WB_TABSTOP : WB_NOTABSTOP );
             }
@@ -183,7 +183,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
         {
             Window* pSortBehind = pPrevWin;
             // #57096# Sort all radios consecutively
-            sal_Bool bNewPrevWin = sal_True;
+            bool bNewPrevWin = true;
             if ( pWin->GetType() == WINDOW_RADIOBUTTON )
             {
                 if ( pPrevRadio )

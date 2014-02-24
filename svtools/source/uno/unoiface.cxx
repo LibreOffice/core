@@ -220,10 +220,10 @@ void VCLXMultiLineEdit::setText( const OUString& aText ) throw(::com::sun::star:
         pEdit->SetText( aText );
 
         // #107218# Call same listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pEdit->SetModifyFlag();
         pEdit->Modify();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 

@@ -154,10 +154,10 @@ namespace toolkit
         return makeAny( nBackgroundColor );
     }
 
-    static void adjustBooleanWindowStyle( const Any& _rValue, Window* _pWindow, WinBits _nBits, sal_Bool _bInverseSemantics )
+    static void adjustBooleanWindowStyle( const Any& _rValue, Window* _pWindow, WinBits _nBits, bool _bInverseSemantics )
     {
         WinBits nStyle = _pWindow->GetStyle();
-        sal_Bool bValue( sal_False );
+        bool bValue( false );
         OSL_VERIFY( _rValue >>= bValue );
         if ( bValue != _bInverseSemantics )
             nStyle |= _nBits;
@@ -490,17 +490,17 @@ void VCLXButton::setProperty( const OUString& PropertyName, const ::com::sun::st
         switch ( nPropType )
         {
             case BASEPROPERTY_FOCUSONCLICK:
-                ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_NOPOINTERFOCUS, sal_True );
+                ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_NOPOINTERFOCUS, true );
                 break;
 
             case BASEPROPERTY_TOGGLE:
-                ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_TOGGLE, sal_False );
+                ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_TOGGLE, false );
                 break;
 
             case BASEPROPERTY_DEFAULTBUTTON:
             {
                 WinBits nStyle = pButton->GetStyle() | WB_DEFBUTTON;
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( ( Value >>= b ) && !b )
                     nStyle &= ~WB_DEFBUTTON;
                 pButton->SetStyle( nStyle );
@@ -536,16 +536,16 @@ void VCLXButton::setProperty( const OUString& PropertyName, const ::com::sun::st
         switch ( nPropType )
         {
             case BASEPROPERTY_FOCUSONCLICK:
-                aProp <<= (sal_Bool)( ( pButton->GetStyle() & WB_NOPOINTERFOCUS ) == 0 );
+                aProp <<= ( ( pButton->GetStyle() & WB_NOPOINTERFOCUS ) == 0 );
                 break;
 
             case BASEPROPERTY_TOGGLE:
-                aProp <<= (sal_Bool)( ( pButton->GetStyle() & WB_TOGGLE ) != 0 );
+                aProp <<= ( ( pButton->GetStyle() & WB_TOGGLE ) != 0 );
                 break;
 
             case BASEPROPERTY_DEFAULTBUTTON:
             {
-                aProp <<= (sal_Bool) ( ( pButton->GetStyle() & WB_DEFBUTTON ) ? sal_True : sal_False );
+                aProp <<= ( pButton->GetStyle() & WB_DEFBUTTON ) != 0;
             }
             break;
             case BASEPROPERTY_STATE:
@@ -705,7 +705,7 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
         case BASEPROPERTY_SCALEIMAGE:
         {
             // this is for compatibility only, nowadays, the ImageScaleMode property should be used
-            sal_Bool bScaleImage = sal_False;
+            bool bScaleImage = false;
             if ( pImageControl && ( Value >>= bScaleImage ) )
             {
                 pImageControl->SetScaleMode( bScaleImage ? ImageScaleMode::ANISOTROPIC : ImageScaleMode::NONE );
@@ -873,10 +873,10 @@ void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeExcep
         // pCheckBox->GetClickHdl().Call( pCheckBox );
 
         // #107218# Call same virtual methods and listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pCheckBox->Toggle();
         pCheckBox->Click();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -958,7 +958,7 @@ void VCLXCheckBox::setProperty( const OUString& PropertyName, const ::com::sun::
 
             case BASEPROPERTY_TRISTATE:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                      pCheckBox->EnableTriState( b );
             }
@@ -993,7 +993,7 @@ void VCLXCheckBox::setProperty( const OUString& PropertyName, const ::com::sun::
                 aProp = ::toolkit::getVisualEffect( pCheckBox );
                 break;
             case BASEPROPERTY_TRISTATE:
-                 aProp <<= (sal_Bool)pCheckBox->IsTriStateEnabled();
+                 aProp <<= pCheckBox->IsTriStateEnabled();
                 break;
             case BASEPROPERTY_STATE:
                  aProp <<= (sal_Int16)pCheckBox->GetState();
@@ -1133,7 +1133,7 @@ void VCLXRadioButton::setProperty( const OUString& PropertyName, const ::com::su
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                 {
-                    sal_Bool b = n ? sal_True : sal_False;
+                    bool b = n ? sal_True : sal_False;
                     if ( pButton->IsRadioCheckEnabled() )
                         pButton->Check( b );
                     else
@@ -1143,7 +1143,7 @@ void VCLXRadioButton::setProperty( const OUString& PropertyName, const ::com::su
             break;
             case BASEPROPERTY_AUTOTOGGLE:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                     pButton->EnableRadioCheck( b );
             }
@@ -1174,7 +1174,7 @@ void VCLXRadioButton::setProperty( const OUString& PropertyName, const ::com::su
                 aProp <<= (sal_Int16) ( pButton->IsChecked() ? 1 : 0 );
                 break;
             case BASEPROPERTY_AUTOTOGGLE:
-                aProp <<= (sal_Bool) pButton->IsRadioCheckEnabled();
+                aProp <<= pButton->IsRadioCheckEnabled();
                 break;
             default:
             {
@@ -1237,9 +1237,9 @@ void VCLXRadioButton::setState( sal_Bool b ) throw(::com::sun::star::uno::Runtim
         // pRadioButton->GetClickHdl().Call( pRadioButton );
 
         // #107218# Call same virtual methods and listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pRadioButton->Click();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -1686,9 +1686,9 @@ void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com:
         // ImplCallItemListeners();
 
         // #107218# Call same listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pBox->Select();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -1699,14 +1699,14 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
     {
-        sal_Bool bChanged = sal_False;
+        bool bChanged = false;
         for ( sal_uInt16 n = (sal_uInt16)aPositions.getLength(); n; )
         {
             sal_uInt16 nPos = (sal_uInt16) aPositions.getConstArray()[--n];
             if ( pBox->IsEntryPosSelected( nPos ) != bool(bSelect) )
             {
                 pBox->SelectEntryPos( nPos, bSelect );
-                bChanged = sal_True;
+                bChanged = true;
             }
         }
 
@@ -1716,9 +1716,9 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
             // ImplCallItemListeners();
 
             // #107218# Call same listeners like VCL would do after user interaction
-            SetSynthesizingVCLEvent( sal_True );
+            SetSynthesizingVCLEvent( true );
             pBox->Select();
-            SetSynthesizingVCLEvent( sal_False );
+            SetSynthesizingVCLEvent( false );
         }
     }
 }
@@ -1760,7 +1760,7 @@ sal_Bool VCLXListBox::isMutipleMode() throw(::com::sun::star::uno::RuntimeExcept
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bMulti = sal_False;
+    bool bMulti = false;
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
         bMulti = pBox->IsMultiSelectionEnabled();
@@ -1800,7 +1800,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
             if( pListBox )
             {
-                sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
+                bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
                 if ( bDropDown && !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
                 {
                     // Call ActionListener on DropDown event
@@ -1860,20 +1860,20 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
             break;
             case BASEPROPERTY_READONLY:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                      pListBox->SetReadOnly( b);
             }
             break;
             case BASEPROPERTY_MULTISELECTION:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                      pListBox->EnableMultiSelection( b );
             }
             break;
             case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
-                ::toolkit::adjustBooleanWindowStyle( Value, pListBox, WB_SIMPLEMODE, sal_False );
+                ::toolkit::adjustBooleanWindowStyle( Value, pListBox, WB_SIMPLEMODE, false );
                 break;
             case BASEPROPERTY_LINECOUNT:
             {
@@ -1934,17 +1934,17 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
                 break;
             case BASEPROPERTY_READONLY:
             {
-                 aProp <<= (sal_Bool) pListBox->IsReadOnly();
+                 aProp <<= pListBox->IsReadOnly();
             }
             break;
             case BASEPROPERTY_MULTISELECTION:
             {
-                 aProp <<= (sal_Bool) pListBox->IsMultiSelectionEnabled();
+                 aProp <<= pListBox->IsMultiSelectionEnabled();
             }
             break;
             case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
             {
-                aProp <<= (sal_Bool)( ( pListBox->GetStyle() & WB_SIMPLEMODE ) == 0 );
+                aProp <<= ( ( pListBox->GetStyle() & WB_SIMPLEMODE ) == 0 );
             }
             break;
             case BASEPROPERTY_LINECOUNT:
@@ -2406,7 +2406,7 @@ throw(::com::sun::star::uno::RuntimeException)
     Dialog* pDialog = (Dialog*)GetWindow();
     if ( pDialog )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
@@ -2559,7 +2559,7 @@ throw(::com::sun::star::uno::RuntimeException)
     TabControl* pTabControl = (TabControl*)GetWindow();
     if ( pTabControl )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
@@ -2809,7 +2809,7 @@ throw(::com::sun::star::uno::RuntimeException)
     TabPage* pTabPage = (TabPage*)GetWindow();
     if ( pTabPage )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
@@ -3536,14 +3536,14 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun:
     ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
     if ( pScrollBar )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
             case BASEPROPERTY_LIVE_SCROLL:
             {
-                sal_Bool bDo = sal_False;
+                bool bDo = false;
                 if ( !bVoid )
                 {
                     OSL_VERIFY( Value >>= bDo );
@@ -3658,7 +3658,7 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun:
         {
             case BASEPROPERTY_LIVE_SCROLL:
             {
-                aProp <<= (sal_Bool)( 0 != ( pScrollBar->GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SCROLL ) );
+                aProp <<= ( 0 != ( pScrollBar->GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SCROLL ) );
             }
             break;
             case BASEPROPERTY_SCROLLVALUE:
@@ -3872,10 +3872,10 @@ void VCLXEdit::setText( const OUString& aText ) throw(::com::sun::star::uno::Run
         pEdit->SetText( aText );
 
         // #107218# Call same listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pEdit->SetModifyFlag();
         pEdit->Modify();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -3890,10 +3890,10 @@ void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const O
         pEdit->ReplaceSelected( aText );
 
         // #107218# Call same listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pEdit->SetModifyFlag();
         pEdit->Modify();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -3995,14 +3995,14 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const ::com::sun::star
         switch ( nPropType )
         {
             case BASEPROPERTY_HIDEINACTIVESELECTION:
-                ::toolkit::adjustBooleanWindowStyle( Value, pEdit, WB_NOHIDESELECTION, sal_True );
+                ::toolkit::adjustBooleanWindowStyle( Value, pEdit, WB_NOHIDESELECTION, true );
                 if ( pEdit->GetSubEdit() )
-                    ::toolkit::adjustBooleanWindowStyle( Value, pEdit->GetSubEdit(), WB_NOHIDESELECTION, sal_True );
+                    ::toolkit::adjustBooleanWindowStyle( Value, pEdit->GetSubEdit(), WB_NOHIDESELECTION, true );
                 break;
 
             case BASEPROPERTY_READONLY:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                      pEdit->SetReadOnly( b );
             }
@@ -4041,10 +4041,10 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const ::com::sun::star
         switch ( nPropType )
         {
             case BASEPROPERTY_HIDEINACTIVESELECTION:
-                aProp <<= (sal_Bool)( ( pEdit->GetStyle() & WB_NOHIDESELECTION ) == 0 );
+                aProp <<= ( ( pEdit->GetStyle() & WB_NOHIDESELECTION ) == 0 );
                 break;
             case BASEPROPERTY_READONLY:
-                 aProp <<= (sal_Bool) pEdit->IsReadOnly();
+                 aProp <<= pEdit->IsReadOnly();
                 break;
             case BASEPROPERTY_ECHOCHAR:
                  aProp <<= (sal_Int16) pEdit->GetEchoChar();
@@ -4410,7 +4410,7 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
             break;
             case BASEPROPERTY_AUTOCOMPLETE:
             {
-                 aProp <<= (sal_Bool) pComboBox->IsAutocompleteEnabled();
+                 aProp <<= pComboBox->IsAutocompleteEnabled();
             }
             break;
             case BASEPROPERTY_STRINGITEMLIST:
@@ -4660,7 +4660,7 @@ VCLXFormattedSpinField::~VCLXFormattedSpinField()
 {
 }
 
-void VCLXFormattedSpinField::setStrictFormat( sal_Bool bStrict )
+void VCLXFormattedSpinField::setStrictFormat( bool bStrict )
 {
     SolarMutexGuard aGuard;
 
@@ -4669,7 +4669,7 @@ void VCLXFormattedSpinField::setStrictFormat( sal_Bool bStrict )
         pFormatter->SetStrictFormat( bStrict );
 }
 
-sal_Bool VCLXFormattedSpinField::isStrictFormat()
+bool VCLXFormattedSpinField::isStrictFormat()
 {
     FormatterBase* pFormatter = GetFormatter();
     return pFormatter ? pFormatter->IsStrictFormat() : sal_False;
@@ -4688,7 +4688,7 @@ void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const ::
         {
             case BASEPROPERTY_SPIN:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                 {
                     WinBits nStyle = GetWindow()->GetStyle() | WB_SPIN;
@@ -4700,7 +4700,7 @@ void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const ::
             break;
             case BASEPROPERTY_STRICTFORMAT:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                 {
                      pFormatter->SetStrictFormat( b );
@@ -4728,12 +4728,12 @@ void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const ::
         {
             case BASEPROPERTY_TABSTOP:
             {
-                aProp <<= (sal_Bool) ( ( GetWindow()->GetStyle() & WB_SPIN ) ? sal_True : sal_False );
+                aProp <<= ( GetWindow()->GetStyle() & WB_SPIN ) != 0;
             }
             break;
             case BASEPROPERTY_STRICTFORMAT:
             {
-                aProp <<= (sal_Bool) pFormatter->IsStrictFormat();
+                aProp <<= pFormatter->IsStrictFormat();
             }
             break;
             default:
@@ -4826,7 +4826,7 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const ::com::sun:
 
     if ( GetWindow() )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
@@ -4869,14 +4869,14 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const ::com::sun:
             break;
             case BASEPROPERTY_DATESHOWCENTURY:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                      ((DateField*)GetWindow())->SetShowDateCentury( b );
             }
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
             {
-                sal_Bool bEnforce( sal_True );
+                bool bEnforce( true );
                 OSL_VERIFY( Value >>= bEnforce );
                 static_cast< DateField* >( GetWindow() )->EnforceValidValue( bEnforce );
             }
@@ -4922,7 +4922,7 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const ::com::sun:
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
             {
-                aProp <<= (sal_Bool)static_cast< DateField* >( GetWindow() )->IsEnforceValidValue( );
+                aProp <<= static_cast< DateField* >( GetWindow() )->IsEnforceValidValue( );
             }
             break;
             default:
@@ -4945,10 +4945,10 @@ void VCLXDateField::setDate( const util::Date& aDate ) throw(::com::sun::star::u
         pDateField->SetDate( aDate );
 
         // #107218# Call same listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pDateField->SetModifyFlag();
         pDateField->Modify();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -5070,10 +5070,10 @@ void VCLXDateField::setEmpty() throw(::com::sun::star::uno::RuntimeException)
         pDateField->SetEmptyDate();
 
         // #107218# Call same listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pDateField->SetModifyFlag();
         pDateField->Modify();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -5178,10 +5178,10 @@ void VCLXTimeField::setTime( const util::Time& aTime ) throw(::com::sun::star::u
         pTimeField->SetTime( aTime );
 
         // #107218# Call same listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pTimeField->SetModifyFlag();
         pTimeField->Modify();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -5310,7 +5310,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
 
     if ( GetWindow() )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
@@ -5353,7 +5353,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
             {
-                sal_Bool bEnforce( sal_True );
+                bool bEnforce( true );
                 OSL_VERIFY( Value >>= bEnforce );
                 static_cast< TimeField* >( GetWindow() )->EnforceValidValue( bEnforce );
             }
@@ -5393,7 +5393,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
             {
-                aProp <<= (sal_Bool)static_cast< TimeField* >( GetWindow() )->IsEnforceValidValue( );
+                aProp <<= static_cast< TimeField* >( GetWindow() )->IsEnforceValidValue( );
             }
             break;
             default:
@@ -5484,10 +5484,10 @@ void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
         Edit* pEdit = (Edit*)GetWindow();
         if ( pEdit )
         {
-            SetSynthesizingVCLEvent( sal_True );
+            SetSynthesizingVCLEvent( true );
             pEdit->SetModifyFlag();
             pEdit->Modify();
-            SetSynthesizingVCLEvent( sal_False );
+            SetSynthesizingVCLEvent( false );
         }
     }
 }
@@ -5640,7 +5640,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
 
     if ( GetWindow() )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
@@ -5690,7 +5690,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                      ((NumericField*)GetWindow())->SetUseThousandSep( b );
             }
@@ -5736,7 +5736,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                aProp <<= (sal_Bool) ((NumericField*)GetWindow())->IsUseThousandSep();
+                aProp <<= ((NumericField*)GetWindow())->IsUseThousandSep();
             }
             break;
             default:
@@ -5865,10 +5865,10 @@ void VCLXMetricField::CallListeners()
     Edit* pEdit = (Edit*)GetWindow();
     if ( pEdit )
     {
-        SetSynthesizingVCLEvent( sal_True );
+        SetSynthesizingVCLEvent( true );
         pEdit->SetModifyFlag();
         pEdit->Modify();
-        SetSynthesizingVCLEvent( sal_False );
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -5940,7 +5940,7 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::su
             }
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                sal_Bool b = sal_False;
+                bool b = false;
                 if ( Value >>= b )
                      ((NumericField*)GetWindow())->SetUseThousandSep( b );
             }
@@ -5980,7 +5980,7 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::su
         switch ( nPropType )
         {
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
-                aProp <<= (sal_Bool) ((NumericField*)GetWindow())->IsUseThousandSep();
+                aProp <<= ((NumericField*)GetWindow())->IsUseThousandSep();
                 break;
             case BASEPROPERTY_UNIT:
                 aProp <<= (sal_uInt16) ((MetricField*)GetWindow())->GetUnit();
@@ -6080,10 +6080,10 @@ void VCLXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::Ru
         Edit* pEdit = (Edit*)GetWindow();
         if ( pEdit )
         {
-            SetSynthesizingVCLEvent( sal_True );
+            SetSynthesizingVCLEvent( true );
             pEdit->SetModifyFlag();
             pEdit->Modify();
-            SetSynthesizingVCLEvent( sal_False );
+            SetSynthesizingVCLEvent( false );
         }
     }
 }
@@ -6236,7 +6236,7 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
 
     if ( GetWindow() )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+        bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
@@ -6293,7 +6293,7 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                sal_Bool b = sal_Bool();
+                bool b = bool();
                 if ( Value >>= b )
                      ((LongCurrencyField*)GetWindow())->SetUseThousandSep( b );
             }
@@ -6344,7 +6344,7 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                aProp <<= (sal_Bool) ((LongCurrencyField*)GetWindow())->IsUseThousandSep();
+                aProp <<= ((LongCurrencyField*)GetWindow())->IsUseThousandSep();
             }
             break;
             default:

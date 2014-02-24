@@ -45,7 +45,7 @@ namespace toolkit
 
     namespace
     {
-        void lcl_modifyStyle( Window* _pWindow, WinBits _nStyleBits, sal_Bool _bShouldBePresent )
+        void lcl_modifyStyle( Window* _pWindow, WinBits _nStyleBits, bool _bShouldBePresent )
         {
             WinBits nStyle = _pWindow->GetStyle();
             if ( _bShouldBePresent )
@@ -247,7 +247,7 @@ namespace toolkit
         SolarMutexGuard aGuard;
 
         sal_Int32 nValue = 0;
-        sal_Bool  bIsLongValue = ( Value >>= nValue );
+        bool  bIsLongValue = ( Value >>= nValue );
 
         if ( GetWindow() )
         {

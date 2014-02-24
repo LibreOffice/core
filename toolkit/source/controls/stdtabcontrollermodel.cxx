@@ -91,7 +91,7 @@ void UnoControlModelEntryList::insert( size_t i, UnoControlModelEntry* item ) {
 //  ----------------------------------------------------
 StdTabControllerModel::StdTabControllerModel()
 {
-    mbGroupControl = sal_True;
+    mbGroupControl = true;
 }
 
 StdTabControllerModel::~StdTabControllerModel()
@@ -136,7 +136,7 @@ void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rLis
     for ( sal_uInt32 n = 0; n < nControls; n++ )
     {
         UnoControlModelEntry* pNewEntry = new UnoControlModelEntry;
-        pNewEntry->bGroup = sal_False;
+        pNewEntry->bGroup = false;
         pNewEntry->pxControl = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ;
         *pNewEntry->pxControl = pRefs[n];
         rList.push_back( pNewEntry );
@@ -269,12 +269,12 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
     // Nested groups are not possible.
     // The first element of a group determines its position.
     UnoControlModelEntry* pNewEntry = new UnoControlModelEntry;
-    pNewEntry->bGroup = sal_True;
+    pNewEntry->bGroup = true;
     pNewEntry->pGroup = new UnoControlModelEntryList;
     pNewEntry->pGroup->SetName( GroupName );
     ImplSetControlModels( *pNewEntry->pGroup, Group );
 
-    sal_Bool bInserted = sal_False;
+    bool bInserted = false;
     size_t nElements = pNewEntry->pGroup->size();
     for ( size_t n = 0; n < nElements; n++ )
     {
@@ -290,7 +290,7 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
                 if ( !bInserted )
                 {
                     maControls.insert( nPos, pNewEntry );
-                    bInserted = sal_True;
+                    bInserted = true;
                 }
             }
         }

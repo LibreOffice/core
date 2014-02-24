@@ -1093,7 +1093,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                 // use sal_Int64 here to accommodate all int types
                                 // uno::Any shift operator whill upcast if necessary
                                 sal_Int64 nWindowHandle = 0;
-                                sal_Bool bXEmbed = sal_False;
+                                bool bXEmbed = false;
 
                                 bool bUseParentData = true;
                                 if( ! (anyHandle >>= nWindowHandle) )
@@ -1286,7 +1286,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         }
         else
         {
-            pNewComp->SetCreatedWithToolkit( sal_True );
+            pNewComp->SetCreatedWithToolkit( true );
             xRef = pNewComp;
             pNewWindow->SetComponentInterface( xRef );
         }
@@ -1328,7 +1328,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         // use sal_Int64 here to accommodate all int types
         // uno::Any shift operator whill upcast if necessary
         sal_Int64 nWindowHandle = 0;
-        sal_Bool bXEmbed = sal_False;
+        bool bXEmbed = false;
 
         bool bUseParentData = true;
         if( ! (Parent >>= nWindowHandle) )

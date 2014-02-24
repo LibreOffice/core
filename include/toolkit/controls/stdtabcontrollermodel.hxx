@@ -61,7 +61,7 @@ public:
 
 struct UnoControlModelEntry
 {
-    sal_Bool        bGroup;
+    bool        bGroup;
     union
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >* pxControl;
@@ -88,7 +88,7 @@ class StdTabControllerModel :   public ::com::sun::star::awt::XTabControllerMode
 private:
     ::osl::Mutex                maMutex;
     UnoControlModelEntryList    maControls;
-    sal_Bool                    mbGroupControl;
+    bool                    mbGroupControl;
 
 protected:
     ::osl::Mutex&           GetMutex() { return maMutex; }

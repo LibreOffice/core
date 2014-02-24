@@ -108,7 +108,7 @@ public:
     static FontWeight                               ConvertFontWeight( float f );
 
     // Rectangle
-    static sal_Bool                                 IsZero( ::com::sun::star::awt::Rectangle rRect );
+    static bool                                 IsZero( ::com::sun::star::awt::Rectangle rRect );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>  CreateControlContainer( Window* pWindow );
 

@@ -65,17 +65,17 @@ struct ImplPropertyInfo
     sal_uInt16                      nPropId;
     ::com::sun::star::uno::Type     aType;
     sal_Int16                       nAttribs;
-    sal_Bool                        bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
+    bool                        bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
 
     ImplPropertyInfo()
      {
          nPropId = 0;
         nAttribs = 0;
-           bDependsOnOthers = sal_False;
+           bDependsOnOthers = false;
      }
 
     ImplPropertyInfo( OUString const & theName, sal_uInt16 nId, const ::com::sun::star::uno::Type& rType,
-                        sal_Int16 nAttrs, sal_Bool bDepends = sal_False )
+                        sal_Int16 nAttrs, bool bDepends = false )
      : aName( theName )
      {
          nPropId = nId;
@@ -94,9 +94,9 @@ struct ImplPropertyInfo
     ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3 )
 
 #define DECL_DEP_PROP_2( asciiname, id, type, attrib1, attrib2 ) \
-    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2, sal_True )
+    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2, true )
 #define DECL_DEP_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
-    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3, sal_True )
+    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3, true )
 
 ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 {
@@ -319,13 +319,13 @@ struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,
 
 void ImplAssertValidPropertyArray()
 {
-    static sal_Bool bSorted = sal_False;
+    static bool bSorted = false;
     if( !bSorted )
     {
         sal_uInt16 nElements;
         ImplPropertyInfo* pInfos = ImplGetPropertyInfos( nElements );
         ::std::sort(pInfos, pInfos+nElements,ImplPropertyInfoCompareFunctor());
-        bSorted = sal_True;
+        bSorted = true;
     }
 }
 
@@ -392,14 +392,14 @@ sal_Int16 GetPropertyAttribs( sal_uInt16 nPropertyId )
     return pImplPropertyInfo ? pImplPropertyInfo->nAttribs : 0;
 }
 
-sal_Bool DoesDependOnOthers( sal_uInt16 nPropertyId )
+bool DoesDependOnOthers( sal_uInt16 nPropertyId )
 {
     const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
     DBG_ASSERT( pImplPropertyInfo, "Invalid PropertyId!" );
     return pImplPropertyInfo ? pImplPropertyInfo->bDependsOnOthers : sal_False;
 }
 
-sal_Bool CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 )
+bool CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 )
 {
     return ::comphelper::compare( r1, r2 );
 }

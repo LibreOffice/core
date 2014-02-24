@@ -130,7 +130,7 @@ namespace frm
 
         if (!getPeer().is())
         {
-            mbCreatingPeer = sal_True;
+            mbCreatingPeer = true;
 
             // determine the VLC window for the parent
             Window* pParentWin = NULL;
@@ -171,7 +171,7 @@ namespace frm
 
             peerCreated();
 
-            mbCreatingPeer = sal_False;
+            mbCreatingPeer = false;
 
             OControl::initFormControlPeer( getPeer() );
         }

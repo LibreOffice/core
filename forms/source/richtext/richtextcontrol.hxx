@@ -80,7 +80,7 @@ namespace frm
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& Requests ) throw (::com::sun::star::uno::RuntimeException);
 
         // UnoControl
-        virtual sal_Bool   requiresNewPeer( const OUString& _rPropertyName ) const;
+        virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const;
     };
 
     //==================================================================

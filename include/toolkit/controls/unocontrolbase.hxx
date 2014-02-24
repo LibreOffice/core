@@ -35,15 +35,15 @@ class TOOLKIT_DLLPUBLIC UnoControlBase : public UnoControl
 protected:
     UnoControlBase() :UnoControl() {}
 
-    sal_Bool                    ImplHasProperty( sal_uInt16 nProp );
-    sal_Bool                    ImplHasProperty( const OUString& aPropertyName );
-    void                        ImplSetPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis );
-    void                        ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis );
+    bool                    ImplHasProperty( sal_uInt16 nProp );
+    bool                    ImplHasProperty( const OUString& aPropertyName );
+    void                        ImplSetPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, bool bUpdateThis );
+    void                        ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, bool bUpdateThis );
     ::com::sun::star::uno::Any  ImplGetPropertyValue( const OUString& aPropertyName );
 
     template <typename T> T ImplGetPropertyValuePOD( sal_uInt16 nProp );
     template <typename T> T ImplGetPropertyValueClass( sal_uInt16 nProp );
-    sal_Bool        ImplGetPropertyValue_BOOL( sal_uInt16 nProp );
+    bool        ImplGetPropertyValue_BOOL( sal_uInt16 nProp );
     sal_Int16       ImplGetPropertyValue_INT16( sal_uInt16 nProp );
     sal_Int32       ImplGetPropertyValue_INT32( sal_uInt16 nProp );
     double          ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp );

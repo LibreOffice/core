@@ -51,7 +51,7 @@ void VCLXFont::Init( ::com::sun::star::awt::XDevice& rxDev, const Font& rFont )
     maFont = rFont;
 }
 
-sal_Bool VCLXFont::ImplAssertValidFontMetric()
+bool VCLXFont::ImplAssertValidFontMetric()
 {
     if ( !mpFontMetric && mxDevice.is() )
     {

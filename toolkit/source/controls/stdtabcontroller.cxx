@@ -49,14 +49,14 @@ StdTabController::~StdTabController()
 {
 }
 
-sal_Bool StdTabController::ImplCreateComponentSequence(
+bool StdTabController::ImplCreateComponentSequence(
         Sequence< Reference< XControl > >&              rControls,
         const Sequence< Reference< XControlModel > >&   rModels,
         Sequence< Reference< XWindow > >&               rComponents,
         Sequence< Any>*                                 pTabStops,
-        sal_Bool bPeerComponent ) const
+        bool bPeerComponent ) const
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
 
     // Get only the requested controls
     sal_Int32 nModels = rModels.getLength();
@@ -123,13 +123,13 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
         else
         {
             OSL_TRACE( "ImplCreateComponentSequence: Control not found" );
-            bOK = sal_False;
+            bOK = false;
         }
     }
     return bOK;
 }
 
-void StdTabController::ImplActivateControl( sal_Bool bFirst ) const
+void StdTabController::ImplActivateControl( bool bFirst ) const
 {
     // HACK due to bug #53688#, map controls onto an interface if remote controls may occur
     Reference< XTabController >  xTabController(const_cast< ::cppu::OWeakObject* >(static_cast< const ::cppu::OWeakObject* >(this)), UNO_QUERY);
@@ -244,7 +244,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
 
     // #58317# Some Models may be missing from the Container. Plus there is a
     // autoTabOrder call later on.
-    if( !ImplCreateComponentSequence( aControls, aSeq, aCompSeq, NULL, sal_False ) )
+    if( !ImplCreateComponentSequence( aControls, aSeq, aCompSeq, NULL, false ) )
         return;
 
     sal_uInt32 nCtrls = aCompSeq.getLength();
@@ -320,7 +320,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 
     // #58317# Some Models may be missing from the Container. Plus there is a
     // autoTabOrder call later on.
-    if( !ImplCreateComponentSequence( aControls, aModels, aCompSeq, &aTabSeq, sal_True ) )
+    if( !ImplCreateComponentSequence( aControls, aModels, aCompSeq, &aTabSeq, true ) )
         return;
 
     xVclContainerPeer->setTabOrder( aCompSeq, aTabSeq, mxModel->getGroupControl() );
@@ -342,7 +342,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 
         aControlComponents.realloc( 0 );
 
-        ImplCreateComponentSequence( aControls, aThisGroupModels, aControlComponents, NULL, sal_True );
+        ImplCreateComponentSequence( aControls, aThisGroupModels, aControlComponents, NULL, true );
         xVclContainerPeer->setGroup( aControlComponents );
     }
 }
@@ -352,7 +352,7 @@ void StdTabController::activateFirst(  ) throw(RuntimeException)
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); //TODO: necessary?
 
-    ImplActivateControl( sal_True );
+    ImplActivateControl( true );
 }
 
 void StdTabController::activateLast(  ) throw(RuntimeException)
@@ -360,7 +360,7 @@ void StdTabController::activateLast(  ) throw(RuntimeException)
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); //TODO: necessary?
 
-    ImplActivateControl( sal_False );
+    ImplActivateControl( false );
 }
 
 

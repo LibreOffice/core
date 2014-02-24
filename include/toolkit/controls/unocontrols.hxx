@@ -48,6 +48,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/settings.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -121,9 +122,9 @@ private:
     OUString     maText;
     sal_uInt16              mnMaxTextLen;
 
-    sal_Bool            mbSetTextInPeer;
-    sal_Bool            mbSetMaxTextLenInPeer;
-    sal_Bool            mbHasTextProperty;
+    bool            mbSetTextInPeer;
+    bool            mbSetMaxTextLenInPeer;
+    bool            mbHasTextProperty;
 
 public:
 
@@ -1016,7 +1017,7 @@ class UnoSpinFieldControl : public UnoEditControl,
 {
 private:
     SpinListenerMultiplexer     maSpinListeners;
-    sal_Bool                        mbRepeat;
+    bool                        mbRepeat;
 
 public:
                                 UnoSpinFieldControl();
@@ -1082,7 +1083,7 @@ class UnoDateFieldControl : public UnoSpinFieldControl,
 private:
     ::com::sun::star::util::Date       mnFirst;
     ::com::sun::star::util::Date       mnLast;
-    sal_Bool        mbLongFormat;
+    AutoState        mbLongFormat;
 public:
                             UnoDateFieldControl();
     OUString         GetComponentServiceName();

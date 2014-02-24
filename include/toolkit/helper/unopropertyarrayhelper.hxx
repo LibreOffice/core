@@ -35,7 +35,7 @@ private:
     std::set<sal_Int32>       maIDs;
 
 protected:
-    sal_Bool    ImplHasProperty( sal_uInt16 nPropId ) const;
+    bool    ImplHasProperty( sal_uInt16 nPropId ) const;
 
 public:
                 UnoPropertyArrayHelper( const ::com::sun::star::uno::Sequence<sal_Int32>& rIDs );

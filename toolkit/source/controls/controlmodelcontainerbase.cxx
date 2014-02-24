@@ -214,8 +214,8 @@ ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponen
     :ControlModelContainer_IBase( rxContext )
     ,maContainerListeners( *this )
     ,maChangeListeners ( GetMutex() )
-    ,mbGroupsUpToDate( sal_False )
-    ,m_bEnabled( sal_True )
+    ,mbGroupsUpToDate( false )
+    ,m_bEnabled( true )
     ,m_nTabPageId(0)
 {
 }
@@ -224,7 +224,7 @@ ControlModelContainerBase::ControlModelContainerBase( const ControlModelContaine
     : ControlModelContainer_IBase( rModel )
     , maContainerListeners( *this )
     , maChangeListeners ( GetMutex() )
-    , mbGroupsUpToDate( sal_False )
+    , mbGroupsUpToDate( false )
     , m_bEnabled( rModel.m_bEnabled )
     , m_nTabPageId( rModel.m_nTabPageId )
 {
@@ -233,7 +233,7 @@ ControlModelContainerBase::ControlModelContainerBase( const ControlModelContaine
 ControlModelContainerBase::~ControlModelContainerBase()
 {
     maModels.clear();
-    mbGroupsUpToDate = sal_False;
+    mbGroupsUpToDate = false;
 }
 
 Any ControlModelContainerBase::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -296,7 +296,7 @@ void SAL_CALL ControlModelContainerBase::dispose(  ) throw(RuntimeException)
     ::std::for_each( aChildModels.begin(), aChildModels.end(), DisposeControlModel() );
     aChildModels.clear();
 
-    mbGroupsUpToDate = sal_False;
+    mbGroupsUpToDate = false;
 }
 
 // XMultiPropertySet
@@ -609,7 +609,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
     if ( xAllChildren.is() )
         updateUserFormChildren( xAllChildren, aName, Insert, xM );
     maModels.push_back( UnoControlModelHolder( xM, aName ) );
-    mbGroupsUpToDate = sal_False;
+    mbGroupsUpToDate = false;
     startControlListening( xM );
 
     ContainerEvent aEvent;
@@ -648,7 +648,7 @@ void ControlModelContainerBase::removeByName( const OUString& aName ) throw(NoSu
     stopControlListening( aElementPos->first );
     Reference< XPropertySet > xPS( aElementPos->first, UNO_QUERY );
     maModels.erase( aElementPos );
-    mbGroupsUpToDate = sal_False;
+    mbGroupsUpToDate = false;
 
     if ( xPS.is() )
     {
@@ -708,7 +708,7 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
             if ( xPSI.is() && xPSI->hasPropertyByName( getTabIndexPropertyName() ) )
                 xProps->setPropertyValue( getTabIndexPropertyName(), makeAny( nTabIndex++ ) );
         }
-        mbGroupsUpToDate = sal_False;
+        mbGroupsUpToDate = false;
     }
 }
 
@@ -958,7 +958,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     Reference< XServiceInfo > xModelSI;                 // for checking for a radion button
     AllGroups::iterator aCurrentGroup = maGroups.end(); // the group which we're currently building
     sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
-    sal_Bool    bIsRadioButton;                         // is it a radio button?
+    bool    bIsRadioButton;                         // is it a radio button?
 
 #if OSL_DEBUG_LEVEL > 1
     ::std::vector< OUString > aCurrentGroupLabels;
@@ -1066,7 +1066,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
         }
     }
 
-    mbGroupsUpToDate = sal_True;
+    mbGroupsUpToDate = true;
 }
 
 
@@ -1089,7 +1089,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
         sAccessor = aPos->second;
 
     // our groups are not up-to-date
-    mbGroupsUpToDate = sal_False;
+    mbGroupsUpToDate = false;
 
     // notify
     implNotifyTabModelChange( sAccessor );
@@ -1440,7 +1440,7 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
     }
     else
     {
-        Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer( sal_True );
+        Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer( true );
         Reference< XDevice > xD( xPeer, UNO_QUERY );
 
         SimpleFontMetric aFM;
@@ -1533,7 +1533,7 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
             xChangeNotifier->removeChangesListener( this );
     }
 
-    sal_Bool bRet = UnoControl::setModel( rxModel );
+    bool bRet = UnoControl::setModel( rxModel );
 
     if ( getModel().is() )
     {
@@ -1690,7 +1690,7 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
         {
             const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
             Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
-            sal_Bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
+            bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
             if ( ( rEvt.PropertyName == s1 ) ||
                  ( rEvt.PropertyName == s2 ) ||
                  ( rEvt.PropertyName == s3 ) ||

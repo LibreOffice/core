@@ -79,7 +79,7 @@
         ,m_nHeight(0)
         ,m_nTabIndex(-1)
         ,m_nStep(0)
-        ,m_bCloneable(sal_False)
+        ,m_bCloneable(false)
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 

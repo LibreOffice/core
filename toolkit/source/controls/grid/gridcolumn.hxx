@@ -118,7 +118,7 @@ private:
     sal_Int32                                       m_nMaxWidth;
     sal_Int32                                       m_nMinWidth;
     sal_Int32                                       m_nFlexibility;
-    sal_Bool                                        m_bResizeable;
+    bool                                        m_bResizeable;
     OUString                                 m_sTitle;
     OUString                                 m_sHelpText;
     ::com::sun::star::style::HorizontalAlignment    m_eHorizontalAlign;

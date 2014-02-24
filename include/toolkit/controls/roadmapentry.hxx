@@ -72,8 +72,8 @@ protected:
     // <properties>
     OUString     m_sLabel;
     sal_Int32           m_nID;
-    sal_Bool            m_bEnabled;
-    sal_Bool            m_bInteractive;
+    bool            m_bEnabled;
+    bool            m_bInteractive;
 
     // </properties>
 };
