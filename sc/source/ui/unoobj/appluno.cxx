@@ -600,8 +600,8 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
 }
 
 uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+                       uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString = aPropertyName;
