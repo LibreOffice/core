@@ -1845,7 +1845,8 @@ ScDataPilotFieldObj::~ScDataPilotFieldObj()
 
 // XNamed
 
-OUString SAL_CALL ScDataPilotFieldObj::getName() throw(RuntimeException)
+OUString SAL_CALL ScDataPilotFieldObj::getName()
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aName;

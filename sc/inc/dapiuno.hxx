@@ -511,7 +511,9 @@ public:
     virtual             ~ScDataPilotFieldObj();
 
                             // XNamed
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL   setName( const OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
