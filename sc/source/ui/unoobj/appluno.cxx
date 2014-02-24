@@ -107,7 +107,8 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_createInstanc
 extern uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Meta_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScXMLOasisExport_Meta_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Meta_createInstance(
-            const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+            const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+                throw (uno::Exception, std::exception);
 extern uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Styles_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScXMLOasisExport_Styles_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Styles_createInstance(
