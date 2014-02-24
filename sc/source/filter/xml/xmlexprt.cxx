@@ -306,7 +306,8 @@ uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Content_getSupportedServiceNam
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Content_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+    throw (uno::Exception, std::exception)
 {
     return (cppu::OWeakObject*)new ScXMLExport( comphelper::getComponentContext(rSMgr), ScXMLOOoExport_Content_getImplementationName(), EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
 }
