@@ -92,10 +92,7 @@ gb_CXXFLAGS_COMMON += -fvisibility-inlines-hidden
 endif
 endif
 
-ifneq ($(ENABLE_WERROR),)
-gb_CFLAGS_WERROR := -Werror
-gb_CXXFLAGS_WERROR := -Werror
-endif
+gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
 
 ifneq ($(MERGELIBS),)
 gb_CFLAGS_COMMON += -DLIBO_MERGELIBS

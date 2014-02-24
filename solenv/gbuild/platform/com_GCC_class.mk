@@ -42,24 +42,24 @@ endef
 
 # CObject class
 
-# $(call gb_CObject__command,object,relative-source,source,dep-file)
-define gb_CObject__command
-$(call gb_Output_announce,$(2).c,$(true),C  ,3)
+# $(call gb_CObject__command_pattern,object,flags,source,dep-file)
+define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
 	$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS_SETUP)) \
-	$(gb_CC) \
+	$(if $(filter %.c %.m,$(3)), $(gb_CC), $(gb_CXX)) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \
-		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
+		$(2) \
 		-c $(3) \
 		-o $(1) \
 		$(call gb_cxx_dep_generation_options,$(1),$(4)) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
+		$(PCHFLAGS) \
 		$(call gb_cxx_dep_copy,$(4)) \
 		)
 endef
@@ -83,31 +83,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		)
 endef
 
-# CxxObject class
-
-# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
-define gb_CxxObject__command
-$(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
-	$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS_SETUP)) \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(gb_LTOFLAGS) \
-		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
-		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \
-		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
-		-c $(3) \
-		-o $(1) \
-		$(call gb_cxx_dep_generation_options,$(1),$(4)) \
-		-I$(dir $(3)) \
-		$(INCLUDE) \
-		$(PCHFLAGS) \
-		$(call gb_cxx_dep_copy,$(4)) \
-		)
-endef
-
 # Used to run a compiler plugin tool.
 # $(call gb_CxxObject__tool_command,relative-source,source)
 define gb_CxxObject__tool_command
@@ -118,51 +93,13 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
 		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		-c $(2) \
 		-I$(dir $(2)) \
 		$(INCLUDE) \
 		)
-endef
-
-# ObjCxxObject class
-
-define gb_ObjCxxObject__command
-$(call gb_Output_announce,$(2).mm,$(true),OCX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
-		$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
-endef
-
-# ObjCObject class
-
-define gb_ObjCObject__command
-$(call gb_Output_announce,$(2).m,$(true),OCC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CC) \
-		$(DEFS) \
-		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
-		$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
 endef
 
 define gb_SrsPartTarget__command_dep
