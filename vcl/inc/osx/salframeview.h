@@ -22,7 +22,11 @@
 
 #include "osx/a11ywrapper.h"
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+@interface SalFrameWindow : NSWindow
+#else
 @interface SalFrameWindow : NSWindow<NSWindowDelegate>
+#endif
 {
     AquaSalFrame*       mpFrame;
     id mDraggingDestinationHandler;
