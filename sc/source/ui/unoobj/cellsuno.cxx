@@ -3395,8 +3395,8 @@ sal_Bool SAL_CALL ScCellRangesBase::isNotANumber( double nNumber ) throw(uno::Ru
 
 // XModifyBroadcaster
 
-void SAL_CALL ScCellRangesBase::addModifyListener( const uno::Reference<util::XModifyListener>& aListener )
-                                throw(uno::RuntimeException)
+void SAL_CALL ScCellRangesBase::addModifyListener(const uno::Reference<util::XModifyListener>& aListener)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( aRanges.empty() )
