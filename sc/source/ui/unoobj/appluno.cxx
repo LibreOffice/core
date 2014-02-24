@@ -453,9 +453,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSpreadsheetSettings::getPrope
 
 void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+                       lang::IllegalArgumentException, lang::WrappedTargetException,
+                       uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString(aPropertyName);
