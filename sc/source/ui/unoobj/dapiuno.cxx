@@ -1052,7 +1052,8 @@ void SAL_CALL ScDataPilotDescriptorBase::removeVetoableChangeListener(
 
 // XDataPilotDataLayoutFieldSupplier
 
-Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutField() throw(RuntimeException)
+Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutField()
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( ScDPObject* pDPObject = GetDPObject() )

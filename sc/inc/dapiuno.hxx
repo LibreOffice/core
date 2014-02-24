@@ -249,7 +249,8 @@ public:
                             // XDataPilotDataLayoutFieldSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
                             SAL_CALL getDataLayoutField()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
 
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
