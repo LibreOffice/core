@@ -3467,6 +3467,37 @@ DECLARE_OOXMLEXPORT_TEST(testAbi11739, "abi11739.docx")
     CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "unhideWhenUsed") < getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "qFormat"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
+{
+    // check there are two objects and they are FrameShapes
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(1)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(2)->getShapeType());
+
+    // check the objects are present in the exported document.xml
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:object", 2);
+
+    // finally check the embedded files are present in the zipped document
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+    uno::Sequence<OUString> names = xNameAccess->getElementNames();
+    sal_Int32 nSheetFiles = 0;
+    sal_Int32 nImageFiles = 0;
+    for (int i=0; i<names.getLength(); i++)
+    {
+        if(names[i].startsWith("word/embeddings/Microsoft_Excel_Worksheet"))
+            nSheetFiles++;
+        if(names[i].startsWith("word/media/image"))
+            nImageFiles++;
+    }
+    CPPUNIT_ASSERT_EQUAL(2, nSheetFiles);
+    CPPUNIT_ASSERT_EQUAL(2, nImageFiles);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
