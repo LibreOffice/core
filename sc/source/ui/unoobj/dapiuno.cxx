@@ -3410,7 +3410,9 @@ Reference< XPropertySetInfo >
 }
 
 void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
-        throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+        throw (UnknownPropertyException, PropertyVetoException,
+               IllegalArgumentException, WrappedTargetException,
+               RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
