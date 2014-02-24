@@ -108,6 +108,32 @@ public:
     }
 };
 
+namespace
+{
+
+OUString getNameForElementId(sal_uInt32 aId)
+{
+    static std::map<sal_uInt32, OUString> aIdMap;
+    if(aIdMap.empty())
+    {
+        aIdMap[NS_ooxml::LN_EG_ColorChoice_srgbClr]   = "srgbClr";
+        aIdMap[NS_ooxml::LN_EG_ColorChoice_schemeClr] = "schemeClr";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_tint]   = "tint";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_shade]  = "shade";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_alpha]  = "alpha";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_hueMod] = "hueMod";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_sat]    = "sat";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_satOff] = "satOff";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_satMod] = "satMod";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lum]    = "lum";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumOff] = "lumOff";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumMod] = "lumMod";
+    }
+    return aIdMap[aId];
+}
+
+}
+
 OUString TextEffectsHandler::getSchemeColorValTypeString(sal_Int32 nType)
 {
     switch (nType)
@@ -287,49 +313,14 @@ void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
         mpGrabBagStack->pop();
 
     sal_uInt32 nSprmId = rSprm.getId();
-
-    switch(nSprmId)
+    OUString aElementName = getNameForElementId(nSprmId);
+    if(aElementName.isEmpty())
     {
-        case NS_ooxml::LN_EG_ColorChoice_srgbClr:
-            mpGrabBagStack->push("srgbClr");
-            break;
-        case NS_ooxml::LN_EG_ColorChoice_schemeClr:
-            mpGrabBagStack->push("schemeClr");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_tint:
-            mpGrabBagStack->push("tint");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_shade:
-            mpGrabBagStack->push("shade");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_alpha:
-            mpGrabBagStack->push("alpha");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_hueMod:
-            mpGrabBagStack->push("hueMod");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_sat:
-            mpGrabBagStack->push("sat");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_satOff:
-            mpGrabBagStack->push("satOff");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_satMod:
-            mpGrabBagStack->push("satMod");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_lum:
-            mpGrabBagStack->push("lum");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_lumOff:
-            mpGrabBagStack->push("lumOff");
-            break;
-        case NS_ooxml::LN_EG_ColorTransform_lumMod:
-            mpGrabBagStack->push("lumMod");
-            break;
-
-        default:
-            break;
+        printf("Unknown element: %d\n", nSprmId);
+        // Element is unknown - leave the method.
+        return;
     }
+    mpGrabBagStack->push(aElementName);
 
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
     if( !pProperties.get())
@@ -340,23 +331,7 @@ void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
     if (mpGrabBagStack->getCurrentName() == "attributes")
         mpGrabBagStack->pop();
 
-    switch(nSprmId)
-    {
-        case NS_ooxml::LN_EG_ColorChoice_srgbClr:
-        case NS_ooxml::LN_EG_ColorChoice_schemeClr:
-        case NS_ooxml::LN_EG_ColorTransform_tint:
-        case NS_ooxml::LN_EG_ColorTransform_shade:
-        case NS_ooxml::LN_EG_ColorTransform_alpha:
-        case NS_ooxml::LN_EG_ColorTransform_hueMod:
-        case NS_ooxml::LN_EG_ColorTransform_sat:
-        case NS_ooxml::LN_EG_ColorTransform_satOff:
-        case NS_ooxml::LN_EG_ColorTransform_satMod:
-        case NS_ooxml::LN_EG_ColorTransform_lum:
-        case NS_ooxml::LN_EG_ColorTransform_lumOff:
-        case NS_ooxml::LN_EG_ColorTransform_lumMod:
-            mpGrabBagStack->pop();
-            break;
-    }
+    mpGrabBagStack->pop();
 }
 
 beans::PropertyValue TextEffectsHandler::getInteropGrabBag()
