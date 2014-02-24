@@ -356,7 +356,8 @@ public:
                             // XModifyBroadcaster
     virtual void SAL_CALL   addModifyListener( const ::com::sun::star::uno::Reference<
                                                 ::com::sun::star::util::XModifyListener >& aListener )
-                                throw (::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual void SAL_CALL   removeModifyListener( const ::com::sun::star::uno::Reference<
                                                 ::com::sun::star::util::XModifyListener >& aListener )
                                 throw (::com::sun::star::uno::RuntimeException);

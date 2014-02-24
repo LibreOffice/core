@@ -1325,7 +1325,7 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRangeByType( sal_Int32 n
 }
 
 void SAL_CALL ScDataPilotTableObj::addModifyListener( const uno::Reference<util::XModifyListener>& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
