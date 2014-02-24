@@ -164,6 +164,36 @@ published service Shape
         first moved out from this grab bag to a separate property.</p>
     */
     [optional, property] sequence<com::sun::star::beans::PropertyValue> InteropGrabBag;
+
+    /** contains the relative height of the object.
+        <p> It is only valid if it is greater than zero.</p>
+
+        @since LibreOffice 4.3
+     */
+    [optional, property] short RelativeHeight;
+
+    /** contains the relative width of the object.
+        <p> It is only valid if it is greater than zero. </p>
+
+        @since LibreOffice 4.3
+     */
+    [optional, property] short RelativeWidth;
+
+    /** contains the relation of the relative height of the object.
+        <p> It is only valid if RelativeHeight is greater than zero.</p>
+
+        @see com::sun::star::text::RelOrientation
+        @since LibreOffice 4.3
+     */
+    [optional, property] short RelativeHeightRelation;
+
+    /** contains the relation of the relative width of the object.
+        <p> It is only valid if RelativeWidth is greater than zero.</p>
+
+        @see com::sun::star::text::RelOrientation
+        @since LibreOffice 4.3
+     */
+    [optional, property] short RelativeWidthRelation;
 };
 
 
