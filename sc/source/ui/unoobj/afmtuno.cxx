@@ -530,7 +530,7 @@ OUString SAL_CALL ScAutoFormatObj::getName() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
-                                                throw(uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aNewString(aNewName);
