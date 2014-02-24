@@ -637,13 +637,13 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     OUString aDfltProp;
     aClassName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_ASCII_US);
     aDfltProp = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_ASCII_US);
-    sal_uIntPtr nPos = rStrm.Tell();
+    sal_Size nPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
     if( !LoadPrivateData( rStrm, nVer ) )
     {
         return sal_False;
     }
-    sal_uIntPtr nNewPos = rStrm.Tell();
+    sal_Size nNewPos = rStrm.Tell();
     nPos += nSize;
     DBG_ASSERT( nPos >= nNewPos, "SBX: Loaded too much data" );
     if( nPos != nNewPos )
@@ -678,13 +678,13 @@ sal_Bool SbxObject::StoreData( SvStream& rStrm ) const
     }
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aClassName, RTL_TEXTENCODING_ASCII_US);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aDfltProp, RTL_TEXTENCODING_ASCII_US);
-    sal_uIntPtr nPos = rStrm.Tell();
+    sal_Size nPos = rStrm.Tell();
     rStrm.WriteUInt32( (sal_uInt32) 0L );
     if( !StorePrivateData( rStrm ) )
     {
         return sal_False;
     }
-    sal_uIntPtr nNew = rStrm.Tell();
+    sal_Size nNew = rStrm.Tell();
     rStrm.Seek( nPos );
     rStrm.WriteUInt32( (sal_uInt32) ( nNew - nPos ) );
     rStrm.Seek( nNew );

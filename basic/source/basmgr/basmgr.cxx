@@ -1157,7 +1157,7 @@ sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurS
 
 sal_Bool BasicManager::ImplEncryptStream( SvStream& rStrm ) const
 {
-    sal_uIntPtr nPos = rStrm.Tell();
+    sal_Size nPos = rStrm.Tell();
     sal_uInt32 nCreator;
     rStrm.ReadUInt32( nCreator );
     rStrm.Seek( nPos );
@@ -2062,7 +2062,7 @@ uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
 {
     SvMemoryStream aMemStream;
     pDialog->Store( aMemStream );
-    sal_Int32 nLen = aMemStream.Tell();
+    sal_Size nLen = aMemStream.Tell();
     uno::Sequence< sal_Int8 > aData( nLen );
     sal_Int8* pDestData = aData.getArray();
     const sal_Int8* pSrcData = (const sal_Int8*)aMemStream.GetData();

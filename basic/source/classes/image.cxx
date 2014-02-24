@@ -83,15 +83,15 @@ bool SbiGood( SvStream& r )
 // Open Record
 sal_uIntPtr SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem )
 {
-    sal_uIntPtr nPos = r.Tell();
+    sal_Size nPos = r.Tell();
     r.WriteUInt16( nSignature ).WriteInt32( (sal_Int32) 0 ).WriteUInt16( nElem );
     return nPos;
 }
 
 // Close Record
-void SbiCloseRecord( SvStream& r, sal_uIntPtr nOff )
+void SbiCloseRecord( SvStream& r, sal_Size nOff )
 {
-    sal_uIntPtr nPos = r.Tell();
+    sal_Size nPos = r.Tell();
     r.Seek( nOff + 2 );
     r.WriteInt32( (sal_Int32) ( nPos - nOff - 8 ) );
     r.Seek( nPos );
@@ -112,7 +112,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     Clear();
     // Read Master-Record
     r.ReadUInt16( nSign ).ReadUInt32( nLen ).ReadUInt16( nCount );
-    sal_uIntPtr nLast = r.Tell() + nLen;
+    sal_Size nLast = r.Tell() + nLen;
     sal_uInt32 nCharSet;               // System charset
     sal_uInt32 lDimBase;
     sal_uInt16 nReserved1;
@@ -131,7 +131,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 
     bool bLegacy = ( nVersion < B_EXT_IMG_VERSION );
 
-    sal_uIntPtr nNext;
+    sal_Size nNext;
     while( ( nNext = r.Tell() ) < nLast )
     {
 

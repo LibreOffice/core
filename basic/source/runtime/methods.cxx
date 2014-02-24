@@ -913,7 +913,7 @@ RTLFUNC(InStr)
     (void)pBasic;
     (void)bWrite;
 
-    sal_uIntPtr nArgCount = rPar.Count()-1;
+    sal_Size nArgCount = rPar.Count()-1;
     if ( nArgCount < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -986,7 +986,7 @@ RTLFUNC(InStrRev)
     (void)pBasic;
     (void)bWrite;
 
-    sal_uIntPtr nArgCount = rPar.Count()-1;
+    sal_Size nArgCount = rPar.Count()-1;
     if ( nArgCount < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1343,7 +1343,7 @@ RTLFUNC(Replace)
     (void)pBasic;
     (void)bWrite;
 
-    sal_uIntPtr nArgCount = rPar.Count()-1;
+    sal_Size nArgCount = rPar.Count()-1;
     if ( nArgCount < 3 || nArgCount > 6 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3392,7 +3392,7 @@ RTLFUNC(Loc)
             return;
         }
         SvStream* pSvStrm = pSbStrm->GetStrm();
-        sal_uIntPtr nPos;
+        sal_Size nPos;
         if( pSbStrm->IsRandom())
         {
             short nBlockLen = pSbStrm->GetBlockLen();
@@ -3440,8 +3440,8 @@ RTLFUNC(Lof)
             return;
         }
         SvStream* pSvStrm = pSbStrm->GetStrm();
-        sal_uIntPtr nOldPos = pSvStrm->Tell();
-        sal_uIntPtr nLen = pSvStrm->Seek( STREAM_SEEK_TO_END );
+        sal_Size nOldPos = pSvStrm->Tell();
+        sal_Size nLen = pSvStrm->Seek( STREAM_SEEK_TO_END );
         pSvStrm->Seek( nOldPos );
         rPar.Get(0)->PutLong( (sal_Int32)nLen );
     }
@@ -3472,7 +3472,7 @@ RTLFUNC(Seek)
 
     if ( nArgs == 2 )   // Seek-Function
     {
-        sal_uIntPtr nPos = pStrm->Tell();
+        sal_Size nPos = pStrm->Tell();
         if( pSbStrm->IsRandom() )
         {
             nPos = nPos / pSbStrm->GetBlockLen();
@@ -3494,7 +3494,7 @@ RTLFUNC(Seek)
         {
             nPos *= pSbStrm->GetBlockLen();
         }
-        pStrm->Seek( (sal_uIntPtr)nPos );
+        pStrm->Seek( (sal_Size)nPos );
         pSbStrm->SetExpandOnWriteTo( nPos );
     }
 }
@@ -3585,7 +3585,7 @@ RTLFUNC(Shell)
         return;
     }
 
-    sal_uIntPtr nArgCount = rPar.Count();
+    sal_Size nArgCount = rPar.Count();
     if ( nArgCount < 2 || nArgCount > 5 )
     {
         rPar.Get(0)->PutLong(0);
@@ -4204,10 +4204,10 @@ RTLFUNC(RGB)
         return;
     }
 
-    sal_uIntPtr nRed     = rPar.Get(1)->GetInteger() & 0xFF;
-    sal_uIntPtr nGreen = rPar.Get(2)->GetInteger() & 0xFF;
-    sal_uIntPtr nBlue  = rPar.Get(3)->GetInteger() & 0xFF;
-    sal_uIntPtr nRGB;
+    sal_Int32 nRed     = rPar.Get(1)->GetInteger() & 0xFF;
+    sal_Int32 nGreen = rPar.Get(2)->GetInteger() & 0xFF;
+    sal_Int32 nBlue  = rPar.Get(3)->GetInteger() & 0xFF;
+    sal_Int32 nRGB;
 
     SbiInstance* pInst = GetSbData()->pInst;
     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
@@ -4269,7 +4269,7 @@ RTLFUNC(StrConv)
     (void)pBasic;
     (void)bWrite;
 
-    sal_uIntPtr nArgCount = rPar.Count()-1;
+    sal_Size nArgCount = rPar.Count()-1;
     if( nArgCount < 2 || nArgCount > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
