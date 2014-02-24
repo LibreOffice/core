@@ -159,6 +159,7 @@ public:
     void testColumnStyleXLSX();
 
     void testSharedFormulaHorizontalXLS();
+    void testExternalRefCacheXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -234,6 +235,7 @@ public:
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
     CPPUNIT_TEST(testSharedFormulaHorizontalXLS);
+    CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2467,6 +2469,21 @@ void ScFiltersTest::testSharedFormulaHorizontalXLS()
     // J2 has a string of "MW".
     aPos.SetCol(9);
     CPPUNIT_ASSERT_EQUAL(OUString("MW"), pDoc->GetString(aPos));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testExternalRefCacheXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("external-refs.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // These string values are cached external cell values.
+    CPPUNIT_ASSERT_EQUAL(OUString("Name"), pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Andy"), pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Bruce"), pDoc->GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Charlie"), pDoc->GetString(ScAddress(0,3,0)));
 
     xDocSh->DoClose();
 }
