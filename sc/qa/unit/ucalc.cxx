@@ -599,6 +599,38 @@ void Test::testSharedStringPool()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedStringPoolUndoDoc()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(ScAddress(0,0,0), "Header");
+    m_pDoc->SetString(ScAddress(0,1,0), "A1");
+    m_pDoc->SetString(ScAddress(0,2,0), "A2");
+    m_pDoc->SetString(ScAddress(0,3,0), "A3");
+
+    ScDocument aUndoDoc(SCDOCMODE_UNDO);
+    aUndoDoc.InitUndo(m_pDoc, 0, 0);
+
+    // Copy A1:A4 to the undo document.
+    for (SCROW i = 0; i <= 4; ++i)
+    {
+        ScAddress aPos(0,i,0);
+        aUndoDoc.SetString(aPos, m_pDoc->GetString(aPos));
+    }
+
+
+    // String values in A1:A4 should have identical hash.
+    for (SCROW i = 0; i <= 4; ++i)
+    {
+        ScAddress aPos(0,i,0);
+        svl::SharedString aSS1 = m_pDoc->GetSharedString(aPos);
+        svl::SharedString aSS2 = aUndoDoc.GetSharedString(aPos);
+        CPPUNIT_ASSERT_MESSAGE("String hash values are not equal.", aSS1.getDataIgnoreCase() == aSS2.getDataIgnoreCase());
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testRangeList()
 {
     m_pDoc->InsertTab(0, "foo");

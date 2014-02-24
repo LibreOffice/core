@@ -89,6 +89,7 @@ public:
     void testPerf();
     void testCollator();
     void testSharedStringPool();
+    void testSharedStringPoolUndoDoc();
     void testRangeList();
     void testMarkData();
     void testInput();
@@ -341,6 +342,7 @@ public:
 #endif
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testSharedStringPool);
+    CPPUNIT_TEST(testSharedStringPoolUndoDoc);
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testMarkData);
     CPPUNIT_TEST(testInput);
