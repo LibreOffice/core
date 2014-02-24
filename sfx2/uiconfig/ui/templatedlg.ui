@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkWindow" id="TemplateDialog">
     <property name="width_request">800</property>
@@ -301,7 +302,6 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">●</property>
-                    <property name="invisible_char_set">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -324,8 +324,8 @@
                 </child>
                 <child>
                   <object class="sfxlo-TemplateSearchView" id="search_view">
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                   </object>
@@ -337,8 +337,8 @@
                 </child>
                 <child>
                   <object class="sfxlo-TemplateRemoteView" id="remote_view">
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                   </object>
