@@ -7857,7 +7857,8 @@ void SAL_CALL ScTableSheetObj::clearArrows() throw(uno::RuntimeException)
 
 void SAL_CALL ScTableSheetObj::group( const table::CellRangeAddress& rGroupRange,
                                         table::TableOrientation nOrientation )
-                                    throw(uno::RuntimeException)
+                                    throw (uno::RuntimeException,
+                                           std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
