@@ -2062,8 +2062,8 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     }
 
     OSL_ENSURE( pStyleSet, "PageStyle-Set not found! :-(" );
-
-
+    if (!pStyleSet)
+        return;
 
     const SvxSetItem*   pSetItem = NULL;
     const SfxItemSet*   pSet     = NULL;
