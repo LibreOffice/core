@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_70874e10",
+        "filename": "canvas/source/directx/dx_9rm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-02-24T23:46:07Z",
+      "side": 0,
+      "message": "this looks redundant, too",
+      "revId": "3b45f92ba6659836572d366aeda2b5bcedcae7f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_907bda28",
+        "filename": "canvas/source/directx/dx_9rm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-02-24T23:46:07Z",
+      "side": 0,
+      "message": "and this, and most of the others",
+      "revId": "3b45f92ba6659836572d366aeda2b5bcedcae7f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
