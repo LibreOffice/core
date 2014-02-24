@@ -187,12 +187,12 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbStartInside->EnableTriState( false );
         sal_Bool bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
         if( bValue )
-            m_pTsbStartInside->SetState( STATE_CHECK );
+            m_pTsbStartInside->SetState( TRISTATE_TRUE );
         else
-            m_pTsbStartInside->SetState( STATE_NOCHECK );
+            m_pTsbStartInside->SetState( TRISTATE_FALSE );
     }
     else
-        m_pTsbStartInside->SetState( STATE_DONTKNOW );
+        m_pTsbStartInside->SetState( TRISTATE_INDET );
     m_pTsbStartInside->SaveValue();
 
     // Stop inside
@@ -204,12 +204,12 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbStopInside->EnableTriState( false );
         sal_Bool bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
         if( bValue )
-            m_pTsbStopInside->SetState( STATE_CHECK );
+            m_pTsbStopInside->SetState( TRISTATE_TRUE );
         else
-            m_pTsbStopInside->SetState( STATE_NOCHECK );
+            m_pTsbStopInside->SetState( TRISTATE_FALSE );
     }
     else
-        m_pTsbStopInside->SetState( STATE_DONTKNOW );
+        m_pTsbStopInside->SetState( TRISTATE_INDET );
     m_pTsbStopInside->SaveValue();
 
     // quantity
@@ -225,22 +225,22 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         {
             if( eAniKind == SDRTEXTANI_SLIDE )
             {
-                m_pTsbEndless->SetState( STATE_NOCHECK );
+                m_pTsbEndless->SetState( TRISTATE_FALSE );
                 m_pTsbEndless->Enable( false );
             }
             else
             {
-                m_pTsbEndless->SetState( STATE_CHECK );
+                m_pTsbEndless->SetState( TRISTATE_TRUE );
                 m_pNumFldCount->SetEmptyFieldValue();
             }
         }
         else
-            m_pTsbEndless->SetState( STATE_NOCHECK );
+            m_pTsbEndless->SetState( TRISTATE_FALSE );
     }
     else
     {
         m_pNumFldCount->SetEmptyFieldValue();
-        m_pTsbEndless->SetState( STATE_DONTKNOW );
+        m_pTsbEndless->SetState( TRISTATE_INDET );
     }
     m_pTsbEndless->SaveValue();
     m_pNumFldCount->SaveValue();
@@ -256,16 +256,16 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         m_pMtrFldDelay->SetValue( nValue );
         if( nValue == 0 )
         {
-            m_pTsbAuto->SetState( STATE_CHECK );
+            m_pTsbAuto->SetState( TRISTATE_TRUE );
             m_pMtrFldDelay->SetEmptyFieldValue();
         }
         else
-            m_pTsbAuto->SetState( STATE_NOCHECK );
+            m_pTsbAuto->SetState( TRISTATE_FALSE );
     }
     else
     {
         m_pMtrFldDelay->SetEmptyFieldValue();
-        m_pTsbAuto->SetState( STATE_DONTKNOW );
+        m_pTsbAuto->SetState( TRISTATE_INDET );
     }
     m_pTsbAuto->SaveValue();
     m_pMtrFldDelay->SaveValue();
@@ -280,7 +280,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         long nValue = (long) ( ( const SdrTextAniAmountItem* )pItem )->GetValue();
         if( nValue <= 0 )
         {
-            m_pTsbPixel->SetState( STATE_CHECK );
+            m_pTsbPixel->SetState( TRISTATE_TRUE );
             nValue = -nValue;
             if( nValue == 0 )
                 nValue++;
@@ -297,7 +297,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         }
         else
         {
-            m_pTsbPixel->SetState( STATE_NOCHECK );
+            m_pTsbPixel->SetState( TRISTATE_FALSE );
             m_pMtrFldAmount->SetUnit( eFUnit );
             m_pMtrFldAmount->SetDecimalDigits( 2 );
 
@@ -314,7 +314,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     {
         m_pMtrFldAmount->Disable();
         m_pMtrFldAmount->SetEmptyFieldValue();
-        m_pTsbPixel->SetState( STATE_DONTKNOW );
+        m_pTsbPixel->SetState( TRISTATE_INDET );
     }
     m_pTsbPixel->SaveValue();
     m_pMtrFldAmount->SaveValue();
@@ -362,7 +362,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     eState = m_pTsbStartInside->GetState();
     if( eState != m_pTsbStartInside->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAniStartInsideItem( (sal_Bool) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrTextAniStartInsideItem( (sal_Bool) TRISTATE_TRUE == eState ) );
         bModified = sal_True;
     }
 
@@ -370,7 +370,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     eState = m_pTsbStopInside->GetState();
     if( eState != m_pTsbStopInside->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAniStopInsideItem( (sal_Bool) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrTextAniStopInsideItem( (sal_Bool) TRISTATE_TRUE == eState ) );
         bModified = sal_True;
     }
 
@@ -381,7 +381,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         aStr != m_pNumFldCount->GetSavedValue() )
     {
         sal_Int64 nValue = 0;
-        if( eState == STATE_CHECK /*#89844#*/ && m_pTsbEndless->IsEnabled())
+        if( eState == TRISTATE_TRUE /*#89844#*/ && m_pTsbEndless->IsEnabled())
             bModified = sal_True;
         else
         {
@@ -402,7 +402,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         aStr != m_pMtrFldDelay->GetSavedValue() )
     {
         sal_Int64 nValue = 0;
-        if( eState == STATE_CHECK )
+        if( eState == TRISTATE_TRUE )
             bModified = sal_True;
         else
         {
@@ -423,7 +423,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         aStr != m_pMtrFldAmount->GetSavedValue() )
     {
         sal_Int64 nValue = 0;
-        if( eState == STATE_CHECK )
+        if( eState == TRISTATE_TRUE )
         {
             nValue = m_pMtrFldAmount->GetValue();
             nValue = -nValue;
@@ -521,7 +521,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
     if( eAniKind != SDRTEXTANI_SLIDE )
     {
         TriState eState = m_pTsbEndless->GetState();
-        if( eState != STATE_NOCHECK )
+        if( eState != TRISTATE_FALSE )
         {
             m_pNumFldCount->Disable();
             m_pNumFldCount->SetEmptyFieldValue();
@@ -538,7 +538,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
 {
     TriState eState = m_pTsbAuto->GetState();
-    if( eState != STATE_NOCHECK )
+    if( eState != TRISTATE_FALSE )
     {
         m_pMtrFldDelay->Disable();
         m_pMtrFldDelay->SetEmptyFieldValue();
@@ -555,7 +555,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
 {
     TriState eState = m_pTsbPixel->GetState();
-    if( eState == STATE_CHECK )
+    if( eState == TRISTATE_TRUE )
     {
         sal_Int64 nValue = m_pMtrFldAmount->GetValue() / 10;
         m_pMtrFldAmount->Enable();
@@ -571,7 +571,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
 
         m_pMtrFldAmount->SetValue( nValue );
     }
-    else if( eState == STATE_NOCHECK )
+    else if( eState == TRISTATE_FALSE )
     {
         sal_Int64 nValue = m_pMtrFldAmount->GetValue() * 10;
         m_pMtrFldAmount->Enable();

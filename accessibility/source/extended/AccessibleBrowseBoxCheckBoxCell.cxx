@@ -58,7 +58,7 @@ namespace accessibility
         {
             mpBrowseBox->FillAccessibleStateSetForCell(
                 *pStateSetHelper, getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
-            if ( m_eState == STATE_CHECK )
+            if ( m_eState == TRISTATE_TRUE )
                 pStateSetHelper->AddState( AccessibleStateType::CHECKED );
         }
         return pStateSetHelper;
@@ -73,13 +73,13 @@ namespace accessibility
         sal_Int32 nValue = 0;
         switch( m_eState )
         {
-            case STATE_NOCHECK:
+            case TRISTATE_FALSE:
                 nValue = 0;
                 break;
-            case STATE_CHECK:
+            case TRISTATE_TRUE:
                 nValue = 1;
                 break;
-            case STATE_DONTKNOW:
+            case TRISTATE_INDET:
                 nValue = 2;
                 break;
         }
@@ -139,7 +139,7 @@ namespace accessibility
 
     void AccessibleCheckBoxCell::SetChecked( sal_Bool _bChecked )
     {
-        m_eState = _bChecked ? STATE_CHECK : STATE_NOCHECK;
+        m_eState = _bChecked ? TRISTATE_TRUE : TRISTATE_FALSE;
         Any aOldValue, aNewValue;
         if ( _bChecked )
             aNewValue <<= AccessibleStateType::CHECKED;

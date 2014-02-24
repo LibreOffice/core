@@ -897,7 +897,7 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) 
     mpOKAction(NULL),
     mpPopupEndAction(NULL),
     maWndSize(200, 330),
-    mePrevToggleAllState(STATE_DONTKNOW)
+    mePrevToggleAllState(TRISTATE_INDET)
 {
     maTabStopCtrls.reserve(7);
     maTabStopCtrls.push_back(this);
@@ -1146,17 +1146,17 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl)
 {
     switch (mePrevToggleAllState)
     {
-        case STATE_NOCHECK:
-            maChkToggleAll.SetState(STATE_CHECK);
+        case TRISTATE_FALSE:
+            maChkToggleAll.SetState(TRISTATE_TRUE);
             setAllMemberState(true);
         break;
-        case STATE_CHECK:
-            maChkToggleAll.SetState(STATE_NOCHECK);
+        case TRISTATE_TRUE:
+            maChkToggleAll.SetState(TRISTATE_FALSE);
             setAllMemberState(false);
         break;
-        case STATE_DONTKNOW:
+        case TRISTATE_INDET:
         default:
-            maChkToggleAll.SetState(STATE_CHECK);
+            maChkToggleAll.SetState(TRISTATE_TRUE);
             setAllMemberState(true);
         break;
     }
@@ -1175,12 +1175,12 @@ IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
     size_t nNumChecked = maChecks.GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
-        maChkToggleAll.SetState(STATE_CHECK);
+        maChkToggleAll.SetState(TRISTATE_TRUE);
     else if (nNumChecked == 0)
         // no members visible
-        maChkToggleAll.SetState(STATE_NOCHECK);
+        maChkToggleAll.SetState(TRISTATE_FALSE);
     else
-        maChkToggleAll.SetState(STATE_DONTKNOW);
+        maChkToggleAll.SetState(TRISTATE_INDET);
 
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
@@ -1530,19 +1530,19 @@ void ScCheckListMenuWindow::initMembers()
     if (nVisMemCount == n)
     {
         // all members visible
-        maChkToggleAll.SetState(STATE_CHECK);
-        mePrevToggleAllState = STATE_CHECK;
+        maChkToggleAll.SetState(TRISTATE_TRUE);
+        mePrevToggleAllState = TRISTATE_TRUE;
     }
     else if (nVisMemCount == 0)
     {
         // no members visible
-        maChkToggleAll.SetState(STATE_NOCHECK);
-        mePrevToggleAllState = STATE_NOCHECK;
+        maChkToggleAll.SetState(TRISTATE_FALSE);
+        mePrevToggleAllState = TRISTATE_FALSE;
     }
     else
     {
-        maChkToggleAll.SetState(STATE_DONTKNOW);
-        mePrevToggleAllState = STATE_DONTKNOW;
+        maChkToggleAll.SetState(TRISTATE_INDET);
+        mePrevToggleAllState = TRISTATE_INDET;
     }
     maChecks.SetUpdateMode(true);
 }

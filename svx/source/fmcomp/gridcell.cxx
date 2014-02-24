@@ -1707,14 +1707,14 @@ CellControllerRef DbCheckBox::CreateController() const
 static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                         CheckBoxControl* _pCheckBoxControl )
 {
-    TriState eState = STATE_DONTKNOW;
+    TriState eState = TRISTATE_INDET;
     if (_rxField.is())
     {
         try
         {
             sal_Bool bValue = _rxField->getBoolean();
             if (!_rxField->wasNull())
-                eState = bValue ? STATE_CHECK : STATE_NOCHECK;
+                eState = bValue ? TRISTATE_TRUE : TRISTATE_FALSE;
         }
         catch( const Exception& )
         {
@@ -1744,7 +1744,7 @@ void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbCheckBox::updateFromModel: invalid call!" );
 
-    sal_Int16 nState = STATE_DONTKNOW;
+    sal_Int16 nState = TRISTATE_INDET;
     _rxModel->getPropertyValue( FM_PROP_STATE ) >>= nState;
     static_cast< CheckBoxControl* >( m_pWindow )->GetBox().SetState( static_cast< TriState >( nState ) );
 }
@@ -3028,11 +3028,11 @@ void DbFilterField::SetText(const OUString& rText)
         {
             TriState eState;
             if (rText == "1")
-                eState = STATE_CHECK;
+                eState = TRISTATE_TRUE;
             else if (rText == "0")
-                eState = STATE_NOCHECK;
+                eState = TRISTATE_FALSE;
             else
-                eState = STATE_DONTKNOW;
+                eState = TRISTATE_INDET;
 
             ((CheckBoxControl*)m_pWindow)->GetBox().SetState(eState);
             ((CheckBoxControl*)m_pPainter)->GetBox().SetState(eState);
@@ -3191,13 +3191,13 @@ IMPL_LINK_NOARG(DbFilterField, OnClick)
 
     switch (eState)
     {
-        case STATE_CHECK:
+        case TRISTATE_TRUE:
             aText = "1";
             break;
-        case STATE_NOCHECK:
+        case TRISTATE_FALSE:
             aText = "0";
             break;
-        case STATE_DONTKNOW:
+        case TRISTATE_INDET:
             break;
     }
 
@@ -4008,7 +4008,7 @@ short SAL_CALL FmXCheckBoxCell::getState() throw( RuntimeException )
         UpdateFromColumn();
         return (short)m_pBox->GetState();
     }
-    return STATE_DONTKNOW;
+    return TRISTATE_INDET;
 }
 
 

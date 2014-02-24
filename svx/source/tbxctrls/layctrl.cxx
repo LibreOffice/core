@@ -778,7 +778,7 @@ void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, cons
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId,
-        ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+        ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 // class SvxColumnsToolBoxControl ------------------------------------------

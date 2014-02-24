@@ -722,7 +722,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                             makeAny( sal_Bool( ColumnValue::NO_NULLS != nNullable ) )
                         ) );
                         if ( ColumnValue::NO_NULLS == nNullable )
-                            aDefault <<= (sal_Int16)STATE_NOCHECK;
+                            aDefault <<= (sal_Int16)TRISTATE_FALSE;
                     }
                     break;
 
@@ -771,9 +771,9 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     if ( nType == DataType::BIT || nType == DataType::BOOLEAN )
                     {
                         if ( aDefault.hasValue() )
-                            aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
+                            aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)TRISTATE_FALSE : (sal_Int16)TRISTATE_TRUE;
                         else
-                            aDefault <<= ((sal_Int16)STATE_DONTKNOW);
+                            aDefault <<= ((sal_Int16)TRISTATE_INDET);
                     }
                 }
 

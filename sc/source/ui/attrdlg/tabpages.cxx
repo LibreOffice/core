@@ -169,12 +169,12 @@ int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
 {
     TriState eState = pBox->GetState();
-    if ( eState == STATE_DONTKNOW )
+    if ( eState == TRISTATE_INDET )
         bDontCare = true;                           // everything combined at DontCare
     else
     {
         bDontCare = false;                          // DontCare from everywhere
-        sal_Bool bOn = ( eState == STATE_CHECK );       // from a selected value
+        sal_Bool bOn = ( eState == TRISTATE_TRUE );       // from a selected value
 
         if ( pBox == m_pBtnProtect )
             bProtect = bOn;
@@ -201,20 +201,20 @@ void ScTabPageProtection::UpdateButtons()
 {
     if ( bDontCare )
     {
-        m_pBtnProtect->SetState( STATE_DONTKNOW );
-        m_pBtnHideCell->SetState( STATE_DONTKNOW );
-        m_pBtnHideFormula->SetState( STATE_DONTKNOW );
-        m_pBtnHidePrint->SetState( STATE_DONTKNOW );
+        m_pBtnProtect->SetState( TRISTATE_INDET );
+        m_pBtnHideCell->SetState( TRISTATE_INDET );
+        m_pBtnHideFormula->SetState( TRISTATE_INDET );
+        m_pBtnHidePrint->SetState( TRISTATE_INDET );
     }
     else
     {
-        m_pBtnProtect->SetState( bProtect ? STATE_CHECK : STATE_NOCHECK );
-        m_pBtnHideCell->SetState( bHideCell ? STATE_CHECK : STATE_NOCHECK );
-        m_pBtnHideFormula->SetState( bHideForm ? STATE_CHECK : STATE_NOCHECK );
-        m_pBtnHidePrint->SetState( bHidePrint ? STATE_CHECK : STATE_NOCHECK );
+        m_pBtnProtect->SetState( bProtect ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_pBtnHideCell->SetState( bHideCell ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_pBtnHideFormula->SetState( bHideForm ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_pBtnHidePrint->SetState( bHidePrint ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
 
-    sal_Bool bEnable = ( m_pBtnHideCell->GetState() != STATE_CHECK );
+    sal_Bool bEnable = ( m_pBtnHideCell->GetState() != TRISTATE_TRUE );
     {
         m_pBtnProtect->Enable( bEnable );
         m_pBtnHideFormula->Enable( bEnable );

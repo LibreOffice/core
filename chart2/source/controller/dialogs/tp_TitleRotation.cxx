@@ -48,7 +48,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
 
     m_pCbStacked->EnableTriState( false );
     m_pOrientHlp->Enable( true );
-    m_pOrientHlp->AddDependentWindow( *m_pFtRotate, STATE_CHECK );
+    m_pOrientHlp->AddDependentWindow( *m_pFtRotate, TRISTATE_TRUE );
 
     if( !bWithRotation )
     {
@@ -76,7 +76,7 @@ SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
 sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     //Since 04/1998 text can be rotated by an arbitrary angle: SCHATTR_TEXT_DEGREES
-    bool bStacked = m_pOrientHlp->GetStackedState() == STATE_CHECK;
+    bool bStacked = m_pOrientHlp->GetStackedState() == TRISTATE_TRUE;
     rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
     sal_Int32 nDegrees = bStacked ? 0 : m_pCtrlDial->GetRotation();
@@ -97,7 +97,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
 
     pItem = GetItem( rInAttrs, SCHATTR_TEXT_STACKED );
     bool bStacked = pItem && ((const SfxBoolItem*)pItem)->GetValue();
-    m_pOrientHlp->SetStackedState( bStacked ? STATE_CHECK : STATE_NOCHECK );
+    m_pOrientHlp->SetStackedState( bStacked ? TRISTATE_TRUE : TRISTATE_FALSE );
 
     if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SFX_ITEM_SET)
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );

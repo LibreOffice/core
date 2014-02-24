@@ -302,7 +302,7 @@ void VCLXAccessibleToolBox::UpdateIndeterminate_Impl( sal_Int32 _nPos )
             VCLXAccessibleToolBoxItem* pItem =
                 static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
             if ( pItem )
-                pItem->SetIndeterminate( pToolBox->GetItemState( nItemId ) == STATE_DONTKNOW );
+                pItem->SetIndeterminate( pToolBox->GetItemState( nItemId ) == TRISTATE_INDET );
         }
     }
 }
@@ -738,7 +738,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
                 pChild->SetFocus( sal_True );
             if ( pToolBox->IsItemChecked( nItemId ) )
                 pChild->SetChecked( sal_True );
-            if ( pToolBox->GetItemState( nItemId ) == STATE_DONTKNOW )
+            if ( pToolBox->GetItemState( nItemId ) == TRISTATE_INDET )
                 pChild->SetIndeterminate( true );
             m_aAccessibleChildren.insert( ToolBoxItemsMap::value_type( i, xChild ) );
         }

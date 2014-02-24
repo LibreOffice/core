@@ -3159,11 +3159,11 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         return;
     }
 
-    if ( pItem->meState == STATE_CHECK )
+    if ( pItem->meState == TRISTATE_TRUE )
     {
         nStyle |= BUTTON_DRAW_CHECKED;
     }
-    else if ( pItem->meState == STATE_DONTKNOW )
+    else if ( pItem->meState == TRISTATE_INDET )
     {
         nStyle |= BUTTON_DRAW_DONTKNOW;
     }
@@ -3176,7 +3176,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     {
         if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
         {
-            if ( (pItem->meState != STATE_NOCHECK) || !bPaint )
+            if ( (pItem->meState != TRISTATE_FALSE) || !bPaint )
             {
                 ImplErase( this, pItem->maRect, nHighlight != 0, bHasOpenPopup );
             }
@@ -3244,12 +3244,12 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
             nImageOffX += (nBtnWidth-aImageSize.Width())/2;
             nImageOffY += (nBtnHeight-aImageSize.Height())/2;
         }
-        if ( nHighlight != 0 || (pItem->meState == STATE_CHECK) )
+        if ( nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) )
         {
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder( pItem );
             else
-                ImplDrawButton( this, aButtonRect, nHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
+                ImplDrawButton( this, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
 
             if( nHighlight != 0 )
             {
@@ -3298,12 +3298,12 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         }
 
         // draw selection only if not already drawn during image output (see above)
-        if ( !bLayout && !bImage && (nHighlight != 0 || (pItem->meState == STATE_CHECK) ) )
+        if ( !bLayout && !bImage && (nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) ) )
         {
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder( pItem );
             else
-                ImplDrawButton( this, pItem->maRect, nHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
+                ImplDrawButton( this, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
         }
 
         sal_uInt16 nTextStyle = 0;
@@ -3340,12 +3340,12 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         {
             ImplErase( this, aDropDownRect, nHighlight != 0, bHasOpenPopup );
 
-            if( nHighlight != 0 || (pItem->meState == STATE_CHECK) )
+            if( nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) )
             {
                 if( bHasOpenPopup )
                     ImplDrawFloatwinBorder( pItem );
                 else
-                    ImplDrawButton( this, aDropDownRect, nHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), false );
+                    ImplDrawButton( this, aDropDownRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), false );
             }
         }
         ImplDrawDropdownArrow( this, aDropDownRect, bSetColor, bRotate );
@@ -3576,15 +3576,15 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
                     {
                         if ( pItem->mnBits & TIB_RADIOCHECK )
                         {
-                            if ( pItem->meState != STATE_CHECK )
-                                SetItemState( pItem->mnId, STATE_CHECK );
+                            if ( pItem->meState != TRISTATE_TRUE )
+                                SetItemState( pItem->mnId, TRISTATE_TRUE );
                         }
                         else
                         {
-                            if ( pItem->meState != STATE_CHECK )
-                                pItem->meState = STATE_CHECK;
+                            if ( pItem->meState != TRISTATE_TRUE )
+                                pItem->meState = TRISTATE_TRUE;
                             else
-                                pItem->meState = STATE_NOCHECK;
+                                pItem->meState = TRISTATE_FALSE;
                         }
                     }
 
@@ -5080,15 +5080,15 @@ bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
             {
                 if ( pItem->mnBits & TIB_RADIOCHECK )
                 {
-                    if ( pItem->meState != STATE_CHECK )
-                        SetItemState( pItem->mnId, STATE_CHECK );
+                    if ( pItem->meState != TRISTATE_TRUE )
+                        SetItemState( pItem->mnId, TRISTATE_TRUE );
                 }
                 else
                 {
-                    if ( pItem->meState != STATE_CHECK )
-                        pItem->meState = STATE_CHECK;
+                    if ( pItem->meState != TRISTATE_TRUE )
+                        pItem->meState = TRISTATE_TRUE;
                     else
-                        pItem->meState = STATE_NOCHECK;
+                        pItem->meState = TRISTATE_FALSE;
                 }
             }
             mnMouseModifier = aKeyCode.GetModifier();

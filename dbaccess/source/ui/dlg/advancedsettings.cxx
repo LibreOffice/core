@@ -237,7 +237,7 @@ namespace dbaui
 
             if ( !aValue )
             {
-                (*setting->ppControl)->SetState( STATE_DONTKNOW );
+                (*setting->ppControl)->SetState( TRISTATE_INDET );
             }
             else
             {

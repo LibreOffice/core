@@ -207,7 +207,7 @@ ImplStyleData::ImplStyleData() :
     mnOptions                   = 0;
     mnAutoMnemonic              = 1;
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
-    mnUseImagesInMenus          = AUTO_STATE_AUTO;
+    mnUseImagesInMenus          = TRISTATE_INDET;
     mpFontOptions              = NULL;
     mnEdgeBlending = 35;
     maEdgeBlendingTopLeftColor = RGB_COLORDATA(0xC0, 0xC0, 0xC0);
@@ -520,11 +520,11 @@ bool StyleSettings::GetUseImagesInMenus() const
 {
     // icon mode selected in Tools -> Options... -> OpenOffice.org -> View
     switch (mpData->mnUseImagesInMenus) {
-    case AUTO_STATE_OFF:
+    case TRISTATE_FALSE:
         return false;
-    case AUTO_STATE_ON:
+    case TRISTATE_TRUE:
         return true;
-    default: // AUTO_STATE_AUTO:
+    default: // TRISTATE_INDET:
         return GetPreferredUseImagesInMenus();
     }
 }
@@ -800,8 +800,8 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 
 ImplMiscData::ImplMiscData()
 {
-    mnEnableATT                 = AUTO_STATE_AUTO;
-    mnDisablePrinting           = AUTO_STATE_AUTO;
+    mnEnableATT                 = TRISTATE_INDET;
+    mnDisablePrinting           = TRISTATE_INDET;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != NULL) ? sal_True : sal_False;
 }
@@ -872,16 +872,16 @@ bool MiscSettings::operator ==( const MiscSettings& rSet ) const
 
 bool MiscSettings::GetDisablePrinting() const
 {
-    if( mpData->mnDisablePrinting == AUTO_STATE_AUTO )
+    if( mpData->mnDisablePrinting == TRISTATE_INDET )
     {
         OUString aEnable =
             vcl::SettingsConfigItem::get()->
             getValue( OUString( "DesktopManagement"  ),
                       OUString( "DisablePrinting"  ) );
-        mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? AUTO_STATE_ON : AUTO_STATE_OFF;
+        mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
-    return mpData->mnDisablePrinting != AUTO_STATE_OFF;
+    return mpData->mnDisablePrinting != TRISTATE_FALSE;
 }
 // -----------------------------------------------------------------------
 
@@ -889,7 +889,7 @@ bool MiscSettings::GetEnableATToolSupport() const
 {
 
 #ifdef WNT
-    if( mpData->mnEnableATT == AUTO_STATE_AUTO )
+    if( mpData->mnEnableATT == TRISTATE_INDET )
     {
         // Check in the Windows registry if an AT tool wants Accessibility support to
         // be activated ..
@@ -909,19 +909,19 @@ bool MiscSettings::GetEnableATToolSupport() const
                 switch (dwType)
                 {
                     case REG_SZ:
-                        mpData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true"))) ? AUTO_STATE_ON : AUTO_STATE_OFF;
+                        mpData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true"))) ? TRISTATE_TRUE : TRISTATE_FALSE;
                         break;
                     case REG_DWORD:
                         switch (((DWORD *) Data)[0]) {
                         case 0:
-                            mpData->mnEnableATT = AUTO_STATE_OFF;
+                            mpData->mnEnableATT = TRISTATE_FALSE;
                             break;
                         case 1:
-                            mpData->mnEnableATT = AUTO_STATE_ON;
+                            mpData->mnEnableATT = TRISTATE_TRUE;
                             break;
                         default:
-                            mpData->mnEnableATT = AUTO_STATE_AUTO;
-                                //TODO: or AUTO_STATE_ON?
+                            mpData->mnEnableATT = TRISTATE_INDET;
+                                //TODO: or TRISTATE_TRUE?
                             break;
                         }
                         break;
@@ -936,7 +936,7 @@ bool MiscSettings::GetEnableATToolSupport() const
     }
 #endif
 
-    if( mpData->mnEnableATT == AUTO_STATE_AUTO )
+    if( mpData->mnEnableATT == TRISTATE_INDET )
     {
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( !pEnv || !*pEnv )
@@ -945,21 +945,21 @@ bool MiscSettings::GetEnableATToolSupport() const
                 vcl::SettingsConfigItem::get()->
                 getValue( OUString( "Accessibility"  ),
                           OUString( "EnableATToolSupport"  ) );
-            mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? AUTO_STATE_ON : AUTO_STATE_OFF;
+            mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
         }
         else
         {
-            mpData->mnEnableATT = AUTO_STATE_ON;
+            mpData->mnEnableATT = TRISTATE_TRUE;
         }
     }
 
-    return mpData->mnEnableATT != AUTO_STATE_OFF;
+    return mpData->mnEnableATT != TRISTATE_FALSE;
 }
 
 #ifdef WNT
 void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
 {
-    if ( (bEnable ? AUTO_STATE_ON : AUTO_STATE_OFF) != mpData->mnEnableATT )
+    if ( (bEnable ? TRISTATE_TRUE : TRISTATE_FALSE) != mpData->mnEnableATT )
     {
         if( bEnable && !ImplInitAccessBridge() )
             return;
@@ -1004,7 +1004,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
             setValue( OUString( "Accessibility"  ),
                       OUString( "EnableATToolSupport"  ),
                       bEnable ? OUString("true") : OUString("false" ) );
-        mpData->mnEnableATT = bEnable ? AUTO_STATE_ON : AUTO_STATE_OFF;
+        mpData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 }
 #endif

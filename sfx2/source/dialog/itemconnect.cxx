@@ -35,7 +35,7 @@ namespace {
 
 TriState lclConvertToTriState( bool bKnown, bool bIsKnownFlag, bool bIsUnknownFlag )
 {
-    return (bKnown && bIsKnownFlag) ? STATE_CHECK : ((!bKnown && bIsUnknownFlag) ? STATE_NOCHECK : STATE_DONTKNOW);
+    return (bKnown && bIsKnownFlag) ? TRISTATE_TRUE : ((!bKnown && bIsUnknownFlag) ? TRISTATE_FALSE : TRISTATE_INDET);
 }
 
 } // namespace
@@ -114,13 +114,13 @@ CheckBoxWrapper::CheckBoxWrapper( CheckBox& rCheckBox ) :
 
 bool CheckBoxWrapper::IsControlDontKnow() const
 {
-    return GetControl().GetState() == STATE_DONTKNOW;
+    return GetControl().GetState() == TRISTATE_INDET;
 }
 
 void CheckBoxWrapper::SetControlDontKnow( bool bSet )
 {
     GetControl().EnableTriState( bSet );
-    GetControl().SetState( bSet ? STATE_DONTKNOW : STATE_NOCHECK );
+    GetControl().SetState( bSet ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 sal_Bool CheckBoxWrapper::GetControlValue() const

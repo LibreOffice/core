@@ -66,7 +66,7 @@ void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
             Any aNewValue;
 
             PushButton* pButton = (PushButton*) GetWindow();
-            if ( pButton && pButton->GetState() == STATE_CHECK )
+            if ( pButton && pButton->GetState() == TRISTATE_TRUE )
                 aNewValue <<= AccessibleStateType::CHECKED;
             else
                 aOldValue <<= AccessibleStateType::CHECKED;
@@ -90,7 +90,7 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
     {
         rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
-        if ( pButton->GetState() == STATE_CHECK )
+        if ( pButton->GetState() == TRISTATE_TRUE )
             rStateSet.AddState( AccessibleStateType::CHECKED );
 
         if ( pButton->IsPressed() )

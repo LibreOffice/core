@@ -196,12 +196,12 @@ public:
 
 inline void PushButton::Check( bool bCheck )
 {
-    SetState( (bCheck) ? STATE_CHECK : STATE_NOCHECK );
+    SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
 inline bool PushButton::IsChecked() const
 {
-    return (GetState() == STATE_CHECK);
+    return (GetState() == TRISTATE_TRUE);
 }
 
 // ------------
@@ -504,12 +504,12 @@ public:
 
 inline void CheckBox::Check( bool bCheck )
 {
-    SetState( (bCheck) ? STATE_CHECK : STATE_NOCHECK );
+    SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
 inline bool CheckBox::IsChecked() const
 {
-    return (GetState() == STATE_CHECK);
+    return (GetState() == TRISTATE_TRUE);
 }
 
 // ---------------------------------

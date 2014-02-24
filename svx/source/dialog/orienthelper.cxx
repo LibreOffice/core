@@ -60,8 +60,8 @@ OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox
     mbEnabled( rCtrlDial.IsEnabled() ),
     mbVisible( rCtrlDial.IsVisible() )
 {
-    maWinVec.push_back( WindowPair( &mrCtrlDial, STATE_CHECK ) );
-    maWinVec.push_back( WindowPair( &mrCbStacked, STATE_DONTKNOW ) );
+    maWinVec.push_back( WindowPair( &mrCtrlDial, TRISTATE_TRUE ) );
+    maWinVec.push_back( WindowPair( &mrCbStacked, TRISTATE_INDET ) );
     mrCbStacked.SetClickHdl( LINK( this, OrientationHelper_Impl, ClickHdl ) );
 }
 
@@ -82,10 +82,10 @@ void OrientationHelper_Impl::EnableWindow( Window& rWindow, TriState eDisableIfS
     bool bDisableOnStacked = false;
     switch( eDisableIfStacked )
     {
-        // STATE_CHECK: Disable window, if stacked text is turned on or "don't know".
-        case STATE_CHECK:   bDisableOnStacked = (mrCbStacked.GetState() != STATE_NOCHECK);  break;
-        // STATE_NOCHECK: Disable window, if stacked text is turned off or "don't know".
-        case STATE_NOCHECK: bDisableOnStacked = (mrCbStacked.GetState() != STATE_CHECK);    break;
+        // TRISTATE_TRUE: Disable window, if stacked text is turned on or "don't know".
+        case TRISTATE_TRUE:   bDisableOnStacked = (mrCbStacked.GetState() != TRISTATE_FALSE);  break;
+        // TRISTATE_FALSE: Disable window, if stacked text is turned off or "don't know".
+        case TRISTATE_FALSE: bDisableOnStacked = (mrCbStacked.GetState() != TRISTATE_TRUE);    break;
         default: ;//prevent warning
     }
     rWindow.Enable( mbEnabled && !bDisableOnStacked );
@@ -162,23 +162,23 @@ OrientStackedWrapper::OrientStackedWrapper( OrientationHelper& rOrientHlp ) :
 
 bool OrientStackedWrapper::IsControlDontKnow() const
 {
-    return GetControl().GetStackedState() == STATE_DONTKNOW;
+    return GetControl().GetStackedState() == TRISTATE_INDET;
 }
 
 void OrientStackedWrapper::SetControlDontKnow( bool bSet )
 {
     GetControl().EnableStackedTriState( bSet );
-    GetControl().SetStackedState( bSet ? STATE_DONTKNOW : STATE_NOCHECK );
+    GetControl().SetStackedState( bSet ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 bool OrientStackedWrapper::GetControlValue() const
 {
-    return GetControl().GetStackedState() == STATE_CHECK;
+    return GetControl().GetStackedState() == TRISTATE_TRUE;
 }
 
 void OrientStackedWrapper::SetControlValue( bool bValue )
 {
-    GetControl().SetStackedState( bValue ? STATE_CHECK : STATE_NOCHECK );
+    GetControl().SetStackedState( bValue ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
 // ============================================================================

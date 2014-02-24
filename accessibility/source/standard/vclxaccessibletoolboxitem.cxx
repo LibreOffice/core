@@ -76,7 +76,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_nItemId = m_pToolBox->GetItemId( (sal_uInt16)m_nIndexInParent );
     m_sOldName = GetText( true );
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );
-    m_bIndeterminate = ( m_pToolBox->GetItemState( m_nItemId ) == STATE_DONTKNOW );
+    m_bIndeterminate = ( m_pToolBox->GetItemState( m_nItemId ) == TRISTATE_INDET );
     ToolBoxItemType eType = m_pToolBox->GetItemType( (sal_uInt16)m_nIndexInParent );
     switch ( eType )
     {

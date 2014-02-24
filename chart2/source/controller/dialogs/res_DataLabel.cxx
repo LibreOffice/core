@@ -85,7 +85,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId,
     else
     {
         rCheckbox.EnableTriState( true );
-        rCheckbox.SetState( STATE_DONTKNOW );
+        rCheckbox.SetState( TRISTATE_INDET );
     }
 }
 
@@ -251,11 +251,11 @@ void DataLabelResources::EnableControls()
     // box states. Note that the check boxes are tri-state.
     {
         long nNumberOfCheckedLabelParts = 0;
-        if (m_pCBNumber->GetState() != STATE_NOCHECK)
+        if (m_pCBNumber->GetState() != TRISTATE_FALSE)
             ++nNumberOfCheckedLabelParts;
-        if (m_pCBPercent->GetState() != STATE_NOCHECK && m_pCBPercent->IsEnabled())
+        if (m_pCBPercent->GetState() != TRISTATE_FALSE && m_pCBPercent->IsEnabled())
             ++nNumberOfCheckedLabelParts;
-        if (m_pCBCategory->GetState() != STATE_NOCHECK)
+        if (m_pCBCategory->GetState() != TRISTATE_FALSE)
             ++nNumberOfCheckedLabelParts;
 
         m_pSeparatorResources->Enable( nNumberOfCheckedLabelParts > 1 );
@@ -290,13 +290,13 @@ sal_Bool DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
             rOutAttrs.Put( SfxBoolItem( SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_bSourceFormatForPercent ));
     }
 
-    if( m_pCBNumber->GetState()!= STATE_DONTKNOW )
+    if( m_pCBNumber->GetState()!= TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_NUMBER, m_pCBNumber->IsChecked() ) );
-    if( m_pCBPercent->GetState()!= STATE_DONTKNOW )
+    if( m_pCBPercent->GetState()!= TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_PERCENTAGE, m_pCBPercent->IsChecked() ) );
-    if( m_pCBCategory->GetState()!= STATE_DONTKNOW )
+    if( m_pCBCategory->GetState()!= TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_pCBCategory->IsChecked() ) );
-    if( m_pCBSymbol->GetState()!= STATE_DONTKNOW )
+    if( m_pCBSymbol->GetState()!= TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_pCBSymbol->IsChecked()) );
 
     OUString aSep = m_aEntryMap[m_pLB_Separator->GetSelectEntryPos()];

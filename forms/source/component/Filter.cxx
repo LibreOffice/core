@@ -202,7 +202,7 @@ namespace frm
                 {
                     // checkboxes always have a tristate-mode
                     xVclWindow->setProperty( PROPERTY_TRISTATE, makeAny( sal_Bool( sal_True ) ) );
-                    xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( STATE_DONTKNOW ) ) );
+                    xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( TRISTATE_INDET ) ) );
 
                     Reference< XCheckBox >  xBox( getPeer(), UNO_QUERY_THROW );
                     xBox->addItemListener( this );
@@ -212,7 +212,7 @@ namespace frm
 
                 case FormComponentType::RADIOBUTTON:
                 {
-                    xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( STATE_NOCHECK ) ) );
+                    xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( TRISTATE_FALSE ) ) );
 
                     Reference< XRadioButton >  xRadio( getPeer(), UNO_QUERY_THROW );
                     xRadio->addItemListener( this );
@@ -295,11 +295,11 @@ namespace frm
         {
             case FormComponentType::CHECKBOX:
             {
-                if ( ( rEvent.Selected == STATE_CHECK ) || ( rEvent.Selected == STATE_NOCHECK ) )
+                if ( ( rEvent.Selected == TRISTATE_TRUE ) || ( rEvent.Selected == TRISTATE_FALSE ) )
                 {
                     sal_Int32 nBooleanComparisonMode = ::dbtools::DatabaseMetaData( m_xConnection ).getBooleanComparisonMode();
 
-                    bool bSelected = ( rEvent.Selected == STATE_CHECK );
+                    bool bSelected = ( rEvent.Selected == TRISTATE_TRUE );
 
                     OUString sExpressionMarker( "$expression$" );
                     ::dbtools::getBoleanComparisonPredicate(
@@ -360,7 +360,7 @@ namespace frm
 
             case FormComponentType::RADIOBUTTON:
             {
-                if ( rEvent.Selected == STATE_CHECK )
+                if ( rEvent.Selected == TRISTATE_TRUE )
                     aText.append( ::comphelper::getString( Reference< XPropertySet >( getModel(), UNO_QUERY )->getPropertyValue( PROPERTY_REFVALUE ) ) );
             }
             break;
@@ -585,14 +585,14 @@ namespace frm
                         ||  aText.equalsIgnoreAsciiCase("IS TRUE")
                         )
                     {
-                        aValue <<= (sal_Int32)STATE_CHECK;
+                        aValue <<= (sal_Int32)TRISTATE_TRUE;
                     }
                     else if ( aText == "0" || aText.equalsIgnoreAsciiCase("FALSE") )
                     {
-                        aValue <<= (sal_Int32)STATE_NOCHECK;
+                        aValue <<= (sal_Int32)TRISTATE_FALSE;
                     }
                     else
-                        aValue <<= (sal_Int32)STATE_DONTKNOW;
+                        aValue <<= (sal_Int32)TRISTATE_INDET;
 
                     m_aText = aText;
                     xVclWindow->setProperty( PROPERTY_STATE, aValue );
@@ -606,9 +606,9 @@ namespace frm
                     OUString aRefText = ::comphelper::getString(com::sun::star::uno::Reference< XPropertySet > (getModel(), UNO_QUERY)->getPropertyValue(PROPERTY_REFVALUE));
                     Any aValue;
                     if (aText == aRefText)
-                        aValue <<= (sal_Int32)STATE_CHECK;
+                        aValue <<= (sal_Int32)TRISTATE_TRUE;
                     else
-                        aValue <<= (sal_Int32)STATE_NOCHECK;
+                        aValue <<= (sal_Int32)TRISTATE_FALSE;
                     m_aText = aText;
                     xVclWindow->setProperty(PROPERTY_STATE, aValue);
                 }

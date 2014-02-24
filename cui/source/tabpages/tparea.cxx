@@ -1138,7 +1138,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             sal_uInt16 nValue = 0;
             sal_Bool   bValueModified = sal_False;
             TriState eState = m_pTsbStepCount->GetState();
-            if( eState == STATE_CHECK )
+            if( eState == TRISTATE_TRUE )
             {
                 if( eState != m_pTsbStepCount->GetSavedValue() )
                     bValueModified = sal_True;
@@ -1206,12 +1206,12 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         if( eState != m_pTsbScale->GetSavedValue() ||
             ( !m_pTsbScale->IsEnabled() &&
               m_pTsbOriginal->IsEnabled() &&
-              m_pTsbScale->GetSavedValue() != STATE_CHECK ) )
+              m_pTsbScale->GetSavedValue() != TRISTATE_TRUE ) )
         {
             XFillBmpSizeLogItem* pItem = NULL;
             if( m_pTsbScale->IsEnabled() )
-                pItem = new XFillBmpSizeLogItem( eState == STATE_NOCHECK );
-            else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == STATE_CHECK )
+                pItem = new XFillBmpSizeLogItem( eState == TRISTATE_FALSE );
+            else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == TRISTATE_TRUE )
                 pItem = new XFillBmpSizeLogItem( sal_True );
 
             if( pItem )
@@ -1236,7 +1236,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 !aStr.isEmpty()  &&
                 aStr != m_pMtrFldXSize->GetSavedValue() )
             {
-                if( eScaleState == STATE_NOCHECK )
+                if( eScaleState == TRISTATE_FALSE )
                     pItem = new XFillBmpSizeXItem( GetCoreValue( *m_pMtrFldXSize, ePoolUnit ) );
                 else
                 {
@@ -1246,7 +1246,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 }
             }
             else if( m_pTsbOriginal->IsEnabled() &&
-                     m_pTsbOriginal->GetState() == STATE_CHECK &&
+                     m_pTsbOriginal->GetState() == TRISTATE_TRUE &&
                      !m_pMtrFldXSize->GetSavedValue().isEmpty() )
                 pItem = new XFillBmpSizeXItem( 0 );
 
@@ -1272,7 +1272,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 !aStr.isEmpty()  &&
                 aStr != m_pMtrFldYSize->GetSavedValue() )
             {
-                if( eScaleState == STATE_NOCHECK )
+                if( eScaleState == TRISTATE_FALSE )
                     pItem = new XFillBmpSizeYItem( GetCoreValue( *m_pMtrFldYSize, ePoolUnit ) );
                 else
                 {
@@ -1283,7 +1283,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 }
             }
             else if( m_pTsbOriginal->IsEnabled() &&
-                     m_pTsbOriginal->GetState() == STATE_CHECK &&
+                     m_pTsbOriginal->GetState() == TRISTATE_TRUE &&
                      !m_pMtrFldYSize->GetSavedValue().isEmpty() )
                 pItem = new XFillBmpSizeYItem( 0 );
 
@@ -1519,19 +1519,19 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         sal_uInt16 nValue = ( ( const XGradientStepCountItem& ) rAttrs.Get( XATTR_GRADIENTSTEPCOUNT ) ).GetValue();
         if( nValue == 0 )
         {
-            m_pTsbStepCount->SetState( STATE_CHECK );
+            m_pTsbStepCount->SetState( TRISTATE_TRUE );
             m_pNumFldStepCount->SetText( "" );
         }
         else
         {
-            m_pTsbStepCount->SetState( STATE_NOCHECK );
+            m_pTsbStepCount->SetState( TRISTATE_FALSE );
             m_pNumFldStepCount->SetValue( nValue );
         }
         ModifyStepCountHdl_Impl( m_pTsbStepCount );
     }
     else
     {
-        m_pTsbStepCount->SetState( STATE_DONTKNOW );
+        m_pTsbStepCount->SetState( TRISTATE_INDET );
         m_pNumFldStepCount->SetText( "" );
     }
 
@@ -1542,24 +1542,24 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbTile->EnableTriState( false );
 
         if( ( ( const XFillBmpTileItem& ) rAttrs.Get( XATTR_FILLBMP_TILE ) ).GetValue() )
-            m_pTsbTile->SetState( STATE_CHECK );
+            m_pTsbTile->SetState( TRISTATE_TRUE );
         else
-            m_pTsbTile->SetState( STATE_NOCHECK );
+            m_pTsbTile->SetState( TRISTATE_FALSE );
     }
     else
-        m_pTsbTile->SetState( STATE_DONTKNOW );
+        m_pTsbTile->SetState( TRISTATE_INDET );
 
     if( rAttrs.GetItemState( XATTR_FILLBMP_STRETCH ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbStretch->EnableTriState( false );
 
         if( ( ( const XFillBmpStretchItem& ) rAttrs.Get( XATTR_FILLBMP_STRETCH ) ).GetValue() )
-            m_pTsbStretch->SetState( STATE_CHECK );
+            m_pTsbStretch->SetState( TRISTATE_TRUE );
         else
-            m_pTsbStretch->SetState( STATE_NOCHECK );
+            m_pTsbStretch->SetState( TRISTATE_FALSE );
     }
     else
-        m_pTsbStretch->SetState( STATE_DONTKNOW );
+        m_pTsbStretch->SetState( TRISTATE_INDET );
 
 
     //aTsbScale
@@ -1568,24 +1568,24 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbScale->EnableTriState( false );
 
         if( ( ( const XFillBmpSizeLogItem& ) rAttrs.Get( XATTR_FILLBMP_SIZELOG ) ).GetValue() )
-            m_pTsbScale->SetState( STATE_NOCHECK );
+            m_pTsbScale->SetState( TRISTATE_FALSE );
         else
-            m_pTsbScale->SetState( STATE_CHECK );
+            m_pTsbScale->SetState( TRISTATE_TRUE );
 
         ClickScaleHdl_Impl( NULL );
     }
     else
-        m_pTsbScale->SetState( STATE_DONTKNOW );
+        m_pTsbScale->SetState( TRISTATE_INDET );
 
 
     // determine status for the original size
-    TriState eOriginal = STATE_NOCHECK;
+    TriState eOriginal = TRISTATE_FALSE;
 
     //aMtrFldXSize
     if( rAttrs.GetItemState( XATTR_FILLBMP_SIZEX ) != SFX_ITEM_DONTCARE )
     {
         sal_Int32 nValue = ( ( const XFillBmpSizeXItem& ) rAttrs.Get( XATTR_FILLBMP_SIZEX ) ).GetValue();
-        if( m_pTsbScale->GetState() == STATE_CHECK )
+        if( m_pTsbScale->GetState() == TRISTATE_TRUE )
         {
             // If there's a percentage value in the item,
             // it is negative because of the MetricItems.
@@ -1597,7 +1597,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 
         if( nValue == 0 )
         {
-            eOriginal = STATE_CHECK;
+            eOriginal = TRISTATE_TRUE;
             // value would be too small otherwise when turning off the original size
             // (performance problem)
             m_pMtrFldXSize->SetValue( 100 );
@@ -1613,7 +1613,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     if( rAttrs.GetItemState( XATTR_FILLBMP_SIZEY ) != SFX_ITEM_DONTCARE )
     {
         sal_Int32 nValue = ( ( const XFillBmpSizeYItem& ) rAttrs.Get( XATTR_FILLBMP_SIZEY ) ).GetValue();
-        if( m_pTsbScale->GetState() == STATE_CHECK )
+        if( m_pTsbScale->GetState() == TRISTATE_TRUE )
         {
             // If there's a percentage value in the item,
             // it is negative because of the MetricItems.
@@ -1626,13 +1626,13 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         if( nValue == 0 )
             m_pMtrFldYSize->SetValue( 100 ); //s.o.
         else
-            eOriginal = STATE_NOCHECK;
+            eOriginal = TRISTATE_FALSE;
     }
     else
     {
         m_pMtrFldYSize->SetText( "" );
         m_pMtrFldYSize->SaveValue();
-        eOriginal = STATE_NOCHECK;
+        eOriginal = TRISTATE_FALSE;
     }
 
     // aTsbOriginal
@@ -2114,7 +2114,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
 {
     if( p == m_pTsbStepCount )
     {
-        if( m_pTsbStepCount->GetState() == STATE_NOCHECK )
+        if( m_pTsbStepCount->GetState() == TRISTATE_FALSE )
         {
             if( m_pNumFldStepCount->GetText().isEmpty() )
                 m_pNumFldStepCount->SetText("64");
@@ -2126,7 +2126,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     }
 
     sal_uInt16 nValue = 0;
-    if( m_pTsbStepCount->GetState() != STATE_CHECK )
+    if( m_pTsbStepCount->GetState() != TRISTATE_TRUE )
     {
         // condition != Disabled ?
         if( !m_pNumFldStepCount->GetText().isEmpty() )
@@ -2144,7 +2144,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 {
     TriState eState = m_pTsbTile->GetState();
-    if( eState == STATE_CHECK )
+    if( eState == TRISTATE_TRUE )
     {
         m_pTsbStretch->Disable();
         m_pFlOffset->Enable();
@@ -2154,7 +2154,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
         m_pFlSize->Enable();
     }
-    else if( eState == STATE_NOCHECK )
+    else if( eState == TRISTATE_FALSE )
     {
         m_pTsbStretch->Enable();
         m_pFlOffset->Disable();
@@ -2162,7 +2162,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
         m_pCtlPosition->Invalidate();
         m_pFlPosition->Disable();
 
-        if( m_pTsbStretch->GetState() != STATE_NOCHECK )
+        if( m_pTsbStretch->GetState() != TRISTATE_FALSE )
         {
 
             m_pFlSize->Disable();
@@ -2183,7 +2183,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
         m_pFlSize->Disable();
     }
 
-    if( m_pTsbOriginal->GetState() == STATE_CHECK )
+    if( m_pTsbOriginal->GetState() == TRISTATE_TRUE )
     {
         m_pMtrFldXSize->SetText( "" );
         m_pMtrFldYSize->SetText( "" );
@@ -2204,14 +2204,14 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
                 sal::static_int_cast< sal_Bool >( m_pTsbStretch->GetState() ) ) );
 
     if( m_pTsbScale->IsEnabled() )
-        rXFSet.Put( XFillBmpSizeLogItem( m_pTsbScale->GetState() == STATE_NOCHECK ) );
+        rXFSet.Put( XFillBmpSizeLogItem( m_pTsbScale->GetState() == TRISTATE_FALSE ) );
 
     if( m_pMtrFldXSize->IsEnabled() )
     {
         XFillBmpSizeXItem* pItem = NULL;
         TriState eScaleState = m_pTsbScale->GetState();
 
-        if( eScaleState == STATE_NOCHECK )
+        if( eScaleState == TRISTATE_FALSE )
             pItem = new XFillBmpSizeXItem( GetCoreValue( *m_pMtrFldXSize, ePoolUnit ) );
         else
             pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(m_pMtrFldXSize->GetValue()) ) );
@@ -2220,7 +2220,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
         delete pItem;
     }
-    else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == STATE_CHECK )
+    else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == TRISTATE_TRUE )
     {
         // original size -> size == 0
         rXFSet.Put( XFillBmpSizeXItem( 0 ) );
@@ -2232,7 +2232,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
         XFillBmpSizeYItem* pItem = NULL;
         TriState eScaleState = m_pTsbScale->GetState();
 
-        if( eScaleState == STATE_NOCHECK )
+        if( eScaleState == TRISTATE_FALSE )
             pItem = new XFillBmpSizeYItem( GetCoreValue( *m_pMtrFldYSize, ePoolUnit ) );
         else
             pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(m_pMtrFldYSize->GetValue()) ) );
@@ -2241,7 +2241,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
         delete pItem;
     }
-    else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == STATE_CHECK )
+    else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == TRISTATE_TRUE )
     {
         // original size -> size == 0
         rXFSet.Put( XFillBmpSizeYItem( 0 ) );
@@ -2282,7 +2282,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
 {
-    if( m_pTsbScale->GetState() == STATE_CHECK )
+    if( m_pTsbScale->GetState() == TRISTATE_TRUE )
     {
         m_pMtrFldXSize->SetDecimalDigits( 0 );
         m_pMtrFldXSize->SetUnit(FUNIT_PERCENT);

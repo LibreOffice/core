@@ -97,8 +97,8 @@ sal_Bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
        m_pNewStartNF->GetText() != m_pNewStartNF->GetSavedValue())
     {
         mbModified = true;
-        sal_Bool bNewStartChecked = STATE_CHECK == m_pNewStartCB->GetState();
-        sal_Bool bNumberNewStartChecked = STATE_CHECK == m_pNewStartNumberCB->GetState();
+        sal_Bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
+        sal_Bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
         rSet.Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
 
         const sal_Int16 nStartAt = (sal_Int16)m_pNewStartNF->GetValue();
@@ -114,12 +114,12 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     if(eItemState > SFX_ITEM_AVAILABLE )
     {
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(ATTR_NUMBER_NEWSTART);
-        m_pNewStartCB->SetState( rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        m_pNewStartCB->SetState( rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pNewStartCB->EnableTriState(false);
     }
     else
     {
-        m_pNewStartCB->SetState(STATE_DONTKNOW);
+        m_pNewStartCB->SetState(TRISTATE_INDET);
         m_pNewStartCB->Disable();
     }
     m_pNewStartCB->SaveValue();
@@ -137,7 +137,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        m_pNewStartCB->SetState(STATE_DONTKNOW);
+        m_pNewStartCB->SetState(TRISTATE_INDET);
     }
     ImplNewStartHdl(m_pNewStartCB);
     m_pNewStartNF->SaveValue();

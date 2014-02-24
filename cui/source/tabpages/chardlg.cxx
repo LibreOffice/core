@@ -149,7 +149,7 @@ static sal_uInt16 pTwoLinesRanges[] =
 
 inline bool StateToAttr( TriState aState )
 {
-    return ( STATE_CHECK == aState );
+    return ( TRISTATE_TRUE == aState );
 }
 
 // class SvxCharBasePage -------------------------------------------------
@@ -1886,7 +1886,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             break;
 
         case SFX_ITEM_DONTCARE:
-            m_pIndividualWordsBtn->SetState( STATE_DONTKNOW );
+            m_pIndividualWordsBtn->SetState( TRISTATE_INDET );
             break;
 
         case SFX_ITEM_DEFAULT:
@@ -2036,7 +2036,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             break;
 
         case SFX_ITEM_DONTCARE:
-            m_pOutlineBtn->SetState( STATE_DONTKNOW );
+            m_pOutlineBtn->SetState( TRISTATE_INDET );
             break;
 
         case SFX_ITEM_DEFAULT:
@@ -2065,7 +2065,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             break;
 
         case SFX_ITEM_DONTCARE:
-            m_pShadowBtn->SetState( STATE_DONTKNOW );
+            m_pShadowBtn->SetState( TRISTATE_INDET );
             break;
 
         case SFX_ITEM_DEFAULT:
@@ -2094,7 +2094,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             break;
 
         case SFX_ITEM_DONTCARE:
-            m_pBlinkingBtn->SetState( STATE_DONTKNOW );
+            m_pBlinkingBtn->SetState( TRISTATE_INDET );
             break;
 
         case SFX_ITEM_DEFAULT:
@@ -2122,7 +2122,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             break;
 
         case SFX_ITEM_DONTCARE:
-            m_pHiddenBtn->SetState( STATE_DONTKNOW );
+            m_pHiddenBtn->SetState( TRISTATE_INDET );
             break;
 
         case SFX_ITEM_DEFAULT:
@@ -2391,7 +2391,7 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
          !StateToAttr( eState ) && ( (SvxContourItem*)pItem )->GetValue() )
         bChanged = true;
 
-    if ( bChanged && eState != STATE_DONTKNOW )
+    if ( bChanged && eState != TRISTATE_INDET )
     {
         rSet.Put( SvxContourItem( StateToAttr( eState ), nWhich ) );
         bModified = sal_True;
@@ -2417,7 +2417,7 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
          !StateToAttr( eState ) && ( (SvxShadowedItem*)pItem )->GetValue() )
         bChanged = true;
 
-    if ( bChanged && eState != STATE_DONTKNOW )
+    if ( bChanged && eState != TRISTATE_INDET )
     {
         rSet.Put( SvxShadowedItem( StateToAttr( eState ), nWhich ) );
         bModified = sal_True;
@@ -2443,7 +2443,7 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
          !StateToAttr( eState ) && ( (SvxBlinkItem*)pItem )->GetValue() )
         bChanged = true;
 
-    if ( bChanged && eState != STATE_DONTKNOW )
+    if ( bChanged && eState != TRISTATE_INDET )
     {
         rSet.Put( SvxBlinkItem( StateToAttr( eState ), nWhich ) );
         bModified = true;
@@ -2468,7 +2468,7 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
          !StateToAttr( eState ) && ( (SvxCharHiddenItem*)pItem )->GetValue() )
         bChanged = true;
 
-    if ( bChanged && eState != STATE_DONTKNOW )
+    if ( bChanged && eState != TRISTATE_INDET )
     {
         rSet.Put( SvxCharHiddenItem( StateToAttr( eState ), nWhich ) );
         bModified = sal_True;

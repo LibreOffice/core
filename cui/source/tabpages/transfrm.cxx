@@ -628,7 +628,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
                      , rInAttrs ),
 
     mrOutAttrs       ( rInAttrs ),
-    mnProtectSizeState( STATE_NOCHECK ),
+    mnProtectSizeState( TRISTATE_FALSE ),
     mbPageDisabled   ( false ),
     mbProtectDisabled( false ),
     mbSizeDisabled( false ),
@@ -821,7 +821,7 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
         if ( m_pTsbPosProtect->GetState() != m_pTsbPosProtect->GetSavedValue() )
         {
-            if( m_pTsbPosProtect->GetState() == STATE_DONTKNOW )
+            if( m_pTsbPosProtect->GetState() == TRISTATE_INDET )
             {
                 rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
             }
@@ -829,7 +829,7 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             {
                 rOutAttrs.Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
-                    m_pTsbPosProtect->GetState() == STATE_CHECK ? sal_True : sal_False ) );
+                    m_pTsbPosProtect->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
             }
 
             bModified |= sal_True;
@@ -863,12 +863,12 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
     if ( m_pTsbSizeProtect->GetState() != m_pTsbSizeProtect->GetSavedValue() )
     {
-        if ( m_pTsbSizeProtect->GetState() == STATE_DONTKNOW )
+        if ( m_pTsbSizeProtect->GetState() == TRISTATE_INDET )
             rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
         else
             rOutAttrs.Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
-                m_pTsbSizeProtect->GetState() == STATE_CHECK ? sal_True : sal_False ) );
+                m_pTsbSizeProtect->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         bModified |= sal_True;
     }
 
@@ -876,12 +876,12 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     {
         if ( !m_pTsbAutoGrowWidth->IsTriStateEnabled() )
         {
-            if( m_pTsbAutoGrowWidth->GetState() == STATE_DONTKNOW )
+            if( m_pTsbAutoGrowWidth->GetState() == TRISTATE_INDET )
                 rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_AUTOWIDTH );
             else
                 rOutAttrs.Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOWIDTH ),
-                    m_pTsbAutoGrowWidth->GetState() == STATE_CHECK ? sal_True : sal_False ) );
+                    m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         }
         bModified |= sal_True;
     }
@@ -890,12 +890,12 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     {
         if ( !m_pTsbAutoGrowHeight->IsTriStateEnabled() )
         {
-            if( m_pTsbAutoGrowHeight->GetState() == STATE_DONTKNOW )
+            if( m_pTsbAutoGrowHeight->GetState() == TRISTATE_INDET )
                 rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_AUTOHEIGHT );
             else
                 rOutAttrs.Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOHEIGHT ),
-                    m_pTsbAutoGrowHeight->GetState() == STATE_CHECK ? sal_True : sal_False ) );
+                    m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         }
         bModified |= sal_True;
     }
@@ -931,12 +931,12 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
         if ( pItem )
         {
             sal_Bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
-            m_pTsbPosProtect->SetState( bProtected ? STATE_CHECK : STATE_NOCHECK );
+            m_pTsbPosProtect->SetState( bProtected ? TRISTATE_TRUE : TRISTATE_FALSE );
             m_pTsbPosProtect->EnableTriState( false );
         }
         else
         {
-            m_pTsbPosProtect->SetState( STATE_DONTKNOW );
+            m_pTsbPosProtect->SetState( TRISTATE_INDET );
         }
 
         m_pTsbPosProtect->SaveValue();
@@ -974,29 +974,29 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
     if ( pItem )
     {
         m_pTsbSizeProtect->SetState( ( (const SfxBoolItem*)pItem )->GetValue()
-                              ? STATE_CHECK : STATE_NOCHECK );
+                              ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbSizeProtect->EnableTriState( false );
     }
     else
-        m_pTsbSizeProtect->SetState( STATE_DONTKNOW );
+        m_pTsbSizeProtect->SetState( TRISTATE_INDET );
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_AUTOWIDTH );
     if ( pItem )
     {
         m_pTsbAutoGrowWidth->SetState( ( ( const SfxBoolItem* )pItem )->GetValue()
-                           ? STATE_CHECK : STATE_NOCHECK );
+                           ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
     else
-        m_pTsbAutoGrowWidth->SetState( STATE_DONTKNOW );
+        m_pTsbAutoGrowWidth->SetState( TRISTATE_INDET );
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_AUTOHEIGHT );
     if ( pItem )
     {
         m_pTsbAutoGrowHeight->SetState( ( ( const SfxBoolItem* )pItem )->GetValue()
-                           ? STATE_CHECK : STATE_NOCHECK );
+                           ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
     else
-        m_pTsbAutoGrowHeight->SetState( STATE_DONTKNOW );
+        m_pTsbAutoGrowHeight->SetState( TRISTATE_INDET );
 
     // Is matching set?
     OUString aStr = GetUserData();
@@ -1068,7 +1068,7 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl)
 {
     // #106572# Remember user's last choice
-    m_pTsbSizeProtect->SetState( m_pTsbPosProtect->GetState() == STATE_CHECK ?  STATE_CHECK : mnProtectSizeState );
+    m_pTsbSizeProtect->SetState( m_pTsbPosProtect->GetState() == TRISTATE_TRUE ?  TRISTATE_TRUE : mnProtectSizeState );
     UpdateControlStates();
     return( 0L );
 }
@@ -1077,10 +1077,10 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl)
 
 void SvxPositionSizeTabPage::UpdateControlStates()
 {
-    const bool bPosProtect =  m_pTsbPosProtect->GetState() == STATE_CHECK;
-    const bool bSizeProtect = m_pTsbSizeProtect->GetState() == STATE_CHECK;
-    const bool bHeightChecked = !m_pTsbAutoGrowHeight->IsTriStateEnabled() && (m_pTsbAutoGrowHeight->GetState() == STATE_CHECK);
-    const bool bWidthChecked = !m_pTsbAutoGrowWidth->IsTriStateEnabled() && (m_pTsbAutoGrowWidth->GetState() == STATE_CHECK);
+    const bool bPosProtect =  m_pTsbPosProtect->GetState() == TRISTATE_TRUE;
+    const bool bSizeProtect = m_pTsbSizeProtect->GetState() == TRISTATE_TRUE;
+    const bool bHeightChecked = !m_pTsbAutoGrowHeight->IsTriStateEnabled() && (m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE);
+    const bool bWidthChecked = !m_pTsbAutoGrowWidth->IsTriStateEnabled() && (m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE);
 
     m_pFlPosition->Enable( !bPosProtect && !mbPageDisabled );
 

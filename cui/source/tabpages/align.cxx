@@ -199,11 +199,11 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     InitVsRefEgde();
 
     // windows to be disabled, if stacked text is turned ON
-    m_pOrientHlp->AddDependentWindow( *m_pFtRotate,     STATE_CHECK );
-    m_pOrientHlp->AddDependentWindow( *m_pFtRefEdge,    STATE_CHECK );
-    m_pOrientHlp->AddDependentWindow( *m_pVsRefEdge,    STATE_CHECK );
+    m_pOrientHlp->AddDependentWindow( *m_pFtRotate,     TRISTATE_TRUE );
+    m_pOrientHlp->AddDependentWindow( *m_pFtRefEdge,    TRISTATE_TRUE );
+    m_pOrientHlp->AddDependentWindow( *m_pVsRefEdge,    TRISTATE_TRUE );
     // windows to be disabled, if stacked text is turned OFF
-    m_pOrientHlp->AddDependentWindow( *m_pCbAsianMode,  STATE_NOCHECK );
+    m_pOrientHlp->AddDependentWindow( *m_pCbAsianMode,  TRISTATE_FALSE );
 
     Link aLink = LINK( this, AlignmentTabPage, UpdateEnableHdl );
 
@@ -375,7 +375,7 @@ void AlignmentTabPage::UpdateEnableControls()
     m_pBtnHyphen->Enable( m_pBtnWrap->IsChecked() || bHorBlock );
 
     // shrink only without automatic line break, and not for block, fill or distribute.
-    m_pBtnShrink->Enable( (m_pBtnWrap->GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill && !bHorDist );
+    m_pBtnShrink->Enable( (m_pBtnWrap->GetState() == TRISTATE_FALSE) && !bHorBlock && !bHorFill && !bHorDist );
 
     // visibility of frames
     m_pAlignmentFrame->Show(m_pLbHorAlign->IsVisible() || m_pEdIndent->IsVisible() ||

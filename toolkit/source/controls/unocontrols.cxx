@@ -3422,7 +3422,7 @@ UnoDateFieldControl::UnoDateFieldControl()
 {
     mnFirst = util::Date( 1, 1, 1900 );
     mnLast = util::Date( 31, 12, 2200 );
-    mbLongFormat = AUTO_STATE_AUTO;
+    mbLongFormat = TRISTATE_INDET;
 }
 
 OUString UnoDateFieldControl::GetComponentServiceName()
@@ -3451,7 +3451,7 @@ void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
     uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
-    if ( mbLongFormat != AUTO_STATE_AUTO )    // not set
+    if ( mbLongFormat != TRISTATE_INDET )
         xField->setLongFormat( mbLongFormat );
 }
 
@@ -3565,7 +3565,7 @@ util::Date UnoDateFieldControl::getLast() throw(uno::RuntimeException)
 
 void UnoDateFieldControl::setLongFormat( sal_Bool bLong ) throw(uno::RuntimeException)
 {
-    mbLongFormat = bLong ? AUTO_STATE_ON : AUTO_STATE_OFF;
+    mbLongFormat = bLong ? TRISTATE_TRUE : TRISTATE_FALSE;
     if ( getPeer().is() )
     {
         uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
@@ -3575,7 +3575,7 @@ void UnoDateFieldControl::setLongFormat( sal_Bool bLong ) throw(uno::RuntimeExce
 
 sal_Bool UnoDateFieldControl::isLongFormat() throw(uno::RuntimeException)
 {
-    return ( mbLongFormat != AUTO_STATE_AUTO ) ? mbLongFormat : sal_False;
+    return ( mbLongFormat != TRISTATE_INDET ) ? mbLongFormat : sal_False;
 }
 
 void UnoDateFieldControl::setEmpty() throw(uno::RuntimeException)

@@ -44,7 +44,7 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 
 #include <sax/tools/converter.hxx>
-#include <tools/wintypes.hxx>
+#include <tools/gen.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
@@ -1077,7 +1077,7 @@ namespace xmloff
                     OAttributeMetaData::getSpecialAttributeName(SCA_STATE),
                     PROPERTY_DEFAULT_STATE,
                     OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
-                    STATE_NOCHECK);
+                    TRISTATE_FALSE);
             #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_STATE;
@@ -1091,7 +1091,7 @@ namespace xmloff
                     OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE),
                     PROPERTY_STATE,
                     OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
-                    STATE_NOCHECK);
+                    TRISTATE_FALSE);
             #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_CURRENT_STATE;

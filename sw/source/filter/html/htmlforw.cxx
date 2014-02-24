@@ -764,7 +764,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         aTmp = xPropSet->getPropertyValue(
                         OUString("DefaultState") );
         if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0) &&
-            STATE_NOCHECK != *(sal_Int16*) aTmp.getValue() )
+            TRISTATE_FALSE != *(sal_Int16*) aTmp.getValue() )
         {
             sOptions.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_checked);
         }

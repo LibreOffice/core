@@ -929,7 +929,7 @@ void SfxToolBoxControl::StateChanged
 
     sal_uInt16 nItemBits = pImpl->pBox->GetItemBits( GetId() );
     nItemBits &= ~TIB_CHECKABLE;
-    ::TriState eTri = STATE_NOCHECK;
+    ::TriState eTri = TRISTATE_FALSE;
     switch ( eState )
     {
         case SFX_ITEM_AVAILABLE:
@@ -938,7 +938,7 @@ void SfxToolBoxControl::StateChanged
             {
                 // BoolItem for checking
                 if ( ((const SfxBoolItem*)pState)->GetValue() )
-                    eTri = STATE_CHECK;
+                    eTri = TRISTATE_TRUE;
                 nItemBits |= TIB_CHECKABLE;
             }
             else if ( pState->ISA(SfxEnumItemInterface) &&
@@ -946,7 +946,7 @@ void SfxToolBoxControl::StateChanged
             {
                 // EnumItem is handled as Bool
                 if ( ((const SfxEnumItemInterface *)pState)->GetBoolValue() )
-                    eTri = STATE_CHECK;
+                    eTri = TRISTATE_TRUE;
                 nItemBits |= TIB_CHECKABLE;
             }
             else if ( pImpl->bShowString && pState->ISA(SfxStringItem) )
@@ -956,7 +956,7 @@ void SfxToolBoxControl::StateChanged
 
         case SFX_ITEM_DONTCARE:
         {
-            eTri = STATE_DONTKNOW;
+            eTri = TRISTATE_INDET;
             nItemBits |= TIB_CHECKABLE;
         }
     }

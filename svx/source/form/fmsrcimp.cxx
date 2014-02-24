@@ -201,8 +201,8 @@ OUString CheckBoxWrapper::getCurrentText() const
 {
     switch ((TriState)m_xBox->getState())
     {
-        case STATE_NOCHECK: return OUString("0");
-        case STATE_CHECK: return OUString("1");
+        case TRISTATE_FALSE: return OUString("0");
+        case TRISTATE_TRUE: return OUString("1");
         default: break;
     }
     return OUString();

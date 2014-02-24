@@ -377,7 +377,7 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) thr
 Any ORadioButtonModel::translateDbColumnToControlValue()
 {
     return makeAny( (sal_Int16)
-        ( ( m_xColumn->getString() == getReferenceValue() ) ? STATE_CHECK : STATE_NOCHECK )
+        ( ( m_xColumn->getString() == getReferenceValue() ) ? TRISTATE_TRUE : TRISTATE_FALSE )
     );
 }
 
@@ -385,10 +385,10 @@ Any ORadioButtonModel::translateDbColumnToControlValue()
 Any ORadioButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
     Any aControlValue = OReferenceValueComponent::translateExternalValueToControlValue( _rExternalValue );
-    sal_Int16 nState = STATE_NOCHECK;
-    if ( ( aControlValue >>= nState ) && ( nState == STATE_DONTKNOW ) )
+    sal_Int16 nState = TRISTATE_FALSE;
+    if ( ( aControlValue >>= nState ) && ( nState == TRISTATE_INDET ) )
         // radio buttons do not have the DONTKNOW state
-        aControlValue <<= (sal_Int16)STATE_NOCHECK;
+        aControlValue <<= (sal_Int16)TRISTATE_FALSE;
     return aControlValue;
 }
 

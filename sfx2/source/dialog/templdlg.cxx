@@ -2682,9 +2682,9 @@ sal_Bool SfxTemplateDialog_Impl::IsCheckedItem(sal_uInt16 nMesId)
     switch(nMesId)
     {
         case SID_STYLE_WATERCAN :
-            return m_aActionTbR.GetItemState(SID_STYLE_WATERCAN)==STATE_CHECK;
+            return m_aActionTbR.GetItemState(SID_STYLE_WATERCAN)==TRISTATE_TRUE;
         default:
-            return m_aActionTbL.GetItemState(nMesId)==STATE_CHECK;
+            return m_aActionTbL.GetItemState(nMesId)==TRISTATE_TRUE;
     }
 }
 

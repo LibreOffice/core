@@ -698,7 +698,7 @@ sal_Bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, Tr
             {
                 bRet = true;
                 _rState = ( ( pItem->GetButtonFlags() & SV_ITEMSTATE_UNCHECKED ) == 0 )
-                            ? STATE_CHECK : STATE_NOCHECK;
+                            ? TRISTATE_TRUE : TRISTATE_FALSE;
             }
         }
         else
@@ -917,7 +917,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
 
     if ( !xChild.is() )
     {
-        TriState eState = STATE_DONTKNOW;
+        TriState eState = TRISTATE_INDET;
         sal_Bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
         if ( bIsCheckBox )
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(

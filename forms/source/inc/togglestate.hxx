@@ -25,7 +25,7 @@ namespace frm
 {
 //........................................................................
 
-    enum ToggleState { STATE_NOCHECK = 0, STATE_CHECK = 1, STATE_DONTKNOW = 2 };
+    enum ToggleState { TRISTATE_FALSE = 0, TRISTATE_TRUE = 1, TRISTATE_INDET = 2 };
 
 //........................................................................
 } // namespace frm

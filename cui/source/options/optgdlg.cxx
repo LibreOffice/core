@@ -1193,7 +1193,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
      */
     if (
          m_pCTLSupportCB->IsChecked() &&
-         (m_pCTLSupportCB->GetSavedValue() != STATE_CHECK ||
+         (m_pCTLSupportCB->GetSavedValue() != TRISTATE_TRUE ||
          m_pComplexLanguageLB->GetSavedValue() != m_pComplexLanguageLB->GetSelectEntryPos())
        )
     {

@@ -1055,7 +1055,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     bool bVisible = mpSearchEdit->IsVisible();
 
     mpActionBar->SetItemState(mpActionBar->GetItemId(ACTIONBAR_SEARCH),
-            bVisible? STATE_NOCHECK: STATE_CHECK);
+            bVisible? TRISTATE_FALSE: TRISTATE_TRUE);
 
     // fdo#74782 We are switching views. No matter to which state,
     // deselect and hide our current SearchView items.

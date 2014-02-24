@@ -394,9 +394,9 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
     {
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(m_nDataPos);
         if(aFind != m_aPrivMap.end())
-            PaintTristate(rDev, rRect, isAllowed(nColumnId,aFind->second.nRights) ? STATE_CHECK : STATE_NOCHECK,isAllowed(nColumnId,aFind->second.nWithGrant));
+            PaintTristate(rDev, rRect, isAllowed(nColumnId,aFind->second.nRights) ? TRISTATE_TRUE : TRISTATE_FALSE,isAllowed(nColumnId,aFind->second.nWithGrant));
         else
-            PaintTristate(rDev, rRect, STATE_NOCHECK,sal_False);
+            PaintTristate(rDev, rRect, TRISTATE_FALSE,sal_False);
     }
     else
     {
@@ -440,14 +440,14 @@ Reference< XAccessible > OTableGrantControl::CreateAccessibleCell( sal_Int32 _nR
     sal_uInt16 nColumnId = GetColumnId( _nColumnPos );
     if(nColumnId != COL_TABLE_NAME)
     {
-        TriState eState = STATE_NOCHECK;
+        TriState eState = TRISTATE_FALSE;
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(_nRow);
         if(aFind != m_aPrivMap.end())
         {
-            eState = isAllowed(nColumnId,aFind->second.nRights) ? STATE_CHECK : STATE_NOCHECK;
+            eState = isAllowed(nColumnId,aFind->second.nRights) ? TRISTATE_TRUE : TRISTATE_FALSE;
         }
         else
-            eState = STATE_NOCHECK;
+            eState = TRISTATE_FALSE;
 
         return EditBrowseBox::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eState );
     }

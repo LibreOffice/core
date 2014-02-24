@@ -152,7 +152,7 @@ throw ( RuntimeException )
 
         sal_uInt16 nItemBits = m_pToolbar->GetItemBits( m_nID );
         nItemBits &= ~TIB_CHECKABLE;
-        TriState eTri = STATE_NOCHECK;
+        TriState eTri = TRISTATE_FALSE;
 
         sal_Bool        bValue = sal_Bool();
         OUString   aStrValue;
@@ -167,7 +167,7 @@ throw ( RuntimeException )
                 m_pToolbar->ShowItem( m_nID, true );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
-                eTri = STATE_CHECK;
+                eTri = TRISTATE_TRUE;
             nItemBits |= TIB_CHECKABLE;
         }
         else if ( Event.State >>= aStrValue )
@@ -181,7 +181,7 @@ throw ( RuntimeException )
         }
         else if ( Event.State >>= aItemState )
         {
-            eTri = STATE_DONTKNOW;
+            eTri = TRISTATE_INDET;
             nItemBits |= TIB_CHECKABLE;
             if ( m_bMadeInvisible )
                 m_pToolbar->ShowItem( m_nID, true );

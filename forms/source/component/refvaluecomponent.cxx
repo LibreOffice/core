@@ -39,7 +39,7 @@ namespace frm
 
     OReferenceValueComponent::OReferenceValueComponent( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
         :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False, sal_True, sal_True )
-        ,m_eDefaultChecked( STATE_NOCHECK )
+        ,m_eDefaultChecked( TRISTATE_FALSE )
         ,m_bSupportSecondRefValue( _bSupportNoCheckRefValue )
     {
     }
@@ -103,7 +103,7 @@ namespace frm
 
         case PROPERTY_ID_DEFAULT_STATE:
         {
-            sal_Int16 nDefaultChecked( (sal_Int16)STATE_NOCHECK );
+            sal_Int16 nDefaultChecked( (sal_Int16)TRISTATE_FALSE );
             OSL_VERIFY( _rValue >>= nDefaultChecked );
             m_eDefaultChecked = (ToggleState)nDefaultChecked;
             resetNoBroadcast();
@@ -178,29 +178,29 @@ namespace frm
 
     Any OReferenceValueComponent::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
-        sal_Int16 nState = STATE_DONTKNOW;
+        sal_Int16 nState = TRISTATE_INDET;
 
         sal_Bool bExternalState = sal_False;
         OUString sExternalValue;
         if ( _rExternalValue >>= bExternalState )
         {
-            nState = ::sal::static_int_cast< sal_Int16 >( bExternalState ? STATE_CHECK : STATE_NOCHECK );
+            nState = ::sal::static_int_cast< sal_Int16 >( bExternalState ? TRISTATE_TRUE : TRISTATE_FALSE );
         }
         else if ( _rExternalValue >>= sExternalValue )
         {
             if ( sExternalValue == m_sReferenceValue )
-                nState = STATE_CHECK;
+                nState = TRISTATE_TRUE;
             else
             {
                 if ( !m_bSupportSecondRefValue || ( sExternalValue == m_sNoCheckReferenceValue ) )
-                    nState = STATE_NOCHECK;
+                    nState = TRISTATE_FALSE;
                 else
-                    nState = STATE_DONTKNOW;
+                    nState = TRISTATE_INDET;
             }
         }
         else if ( !_rExternalValue.hasValue() )
         {
-            nState = STATE_DONTKNOW;
+            nState = TRISTATE_INDET;
         }
         else
         {
@@ -218,7 +218,7 @@ namespace frm
         try
         {
             Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
-            sal_Int16 nControlValue = STATE_DONTKNOW;
+            sal_Int16 nControlValue = TRISTATE_INDET;
             aControlValue >>= nControlValue;
 
             bool bBooleanExchange = getExternalValueType().getTypeClass() == TypeClass_BOOLEAN;
@@ -228,7 +228,7 @@ namespace frm
 
             switch( nControlValue )
             {
-            case STATE_CHECK:
+            case TRISTATE_TRUE:
                 if ( bBooleanExchange )
                 {
                     aExternalValue <<= (sal_Bool)sal_True;
@@ -239,7 +239,7 @@ namespace frm
                 }
                 break;
 
-            case STATE_NOCHECK:
+            case TRISTATE_FALSE:
                 if ( bBooleanExchange )
                 {
                     aExternalValue <<= (sal_Bool)sal_False;
@@ -266,16 +266,16 @@ namespace frm
             return Any();
 
         Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
-        sal_Int16 nControlValue = STATE_DONTKNOW;
+        sal_Int16 nControlValue = TRISTATE_INDET;
         aControlValue >>= nControlValue;
 
         Any aValidatableValue;
         switch ( nControlValue )
         {
-        case STATE_CHECK:
+        case TRISTATE_TRUE:
             aValidatableValue <<= (sal_Bool)sal_True;
             break;
-        case STATE_NOCHECK:
+        case TRISTATE_FALSE:
             aValidatableValue <<= (sal_Bool)sal_False;
             break;
         }

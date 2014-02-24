@@ -33,7 +33,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
-#include <tools/wintypes.hxx>
+#include <tools/gen.hxx>
 #include <xmloff/xmltoken.hxx>
 
 namespace xmloff
@@ -173,9 +173,9 @@ namespace xmloff
                 {
                     static const SvXMLEnumMapEntry aCheckStateMap[] =
                     {
-                        { XML_UNCHECKED, STATE_NOCHECK },
-                        { XML_CHECKED, STATE_CHECK },
-                        { XML_UNKNOWN, STATE_DONTKNOW },
+                        { XML_UNCHECKED, TRISTATE_FALSE },
+                        { XML_CHECKED, TRISTATE_TRUE },
+                        { XML_UNKNOWN, TRISTATE_INDET },
                         { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aCheckStateMap;

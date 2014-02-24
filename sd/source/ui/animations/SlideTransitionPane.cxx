@@ -653,7 +653,7 @@ void SlideTransitionPane::updateControls()
 
     if( aEffect.mbLoopSoundAmbiguous )
     {
-        mpCB_LOOP_SOUND->SetState( STATE_DONTKNOW );
+        mpCB_LOOP_SOUND->SetState( TRISTATE_INDET );
     }
     else
     {

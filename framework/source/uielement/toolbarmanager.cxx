@@ -1316,7 +1316,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         m_pToolBar->SetItemText( nId, aString );
                     }
                     m_pToolBar->EnableItem( nId, true );
-                    m_pToolBar->SetItemState( nId, STATE_NOCHECK );
+                    m_pToolBar->SetItemState( nId, TRISTATE_FALSE );
 
                     // Fill command map. It stores all our commands and from what
                     // image manager we got our image. So we can decide if we have to use an

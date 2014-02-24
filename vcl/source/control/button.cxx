@@ -626,8 +626,8 @@ void PushButton::ImplInitPushButtonData()
     mpWindowImpl->mbPushButton    = true;
 
     meSymbol        = SYMBOL_NOSYMBOL;
-    meState         = STATE_NOCHECK;
-    meSaveValue     = STATE_NOCHECK;
+    meState         = TRISTATE_FALSE;
+    meSaveValue     = TRISTATE_FALSE;
     mnDDStyle       = 0;
     mbPressed       = false;
     mbInUserDraw    = false;
@@ -1639,14 +1639,14 @@ void PushButton::SetState( TriState eState )
     if ( meState != eState )
     {
         meState = eState;
-        if ( meState == STATE_NOCHECK )
+        if ( meState == TRISTATE_FALSE )
             ImplGetButtonState() &= ~(BUTTON_DRAW_CHECKED | BUTTON_DRAW_DONTKNOW);
-        else if ( meState == STATE_CHECK )
+        else if ( meState == TRISTATE_TRUE )
         {
             ImplGetButtonState() &= ~BUTTON_DRAW_DONTKNOW;
             ImplGetButtonState() |= BUTTON_DRAW_CHECKED;
         }
-        else // STATE_DONTKNOW
+        else // TRISTATE_INDET
         {
             ImplGetButtonState() &= ~BUTTON_DRAW_CHECKED;
             ImplGetButtonState() |= BUTTON_DRAW_DONTKNOW;
@@ -3129,8 +3129,8 @@ Size RadioButton::GetOptimalSize() const
 
 void CheckBox::ImplInitCheckBoxData()
 {
-    meState         = STATE_NOCHECK;
-    meSaveValue     = STATE_NOCHECK;
+    meState         = TRISTATE_FALSE;
+    meSaveValue     = TRISTATE_FALSE;
     mbTriState      = false;
 }
 
@@ -3240,7 +3240,7 @@ void CheckBox::ImplDrawCheckBoxState()
 
     if ( (bNativeOK=IsNativeControlSupported(CTRL_CHECKBOX, PART_ENTIRE_CONTROL)) )
     {
-        ImplControlValue    aControlValue( meState == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
+        ImplControlValue    aControlValue( meState == TRISTATE_TRUE ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
         Rectangle           aCtrlRegion( maStateRect );
         ControlState        nState = 0;
 
@@ -3249,9 +3249,9 @@ void CheckBox::ImplDrawCheckBoxState()
         if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )   nState |= CTRL_STATE_PRESSED;
         if ( IsEnabled() )                      nState |= CTRL_STATE_ENABLED;
 
-        if ( meState == STATE_CHECK )
+        if ( meState == TRISTATE_TRUE )
             aControlValue.setTristateVal( BUTTONVALUE_ON );
-        else if ( meState == STATE_DONTKNOW )
+        else if ( meState == TRISTATE_INDET )
             aControlValue.setTristateVal( BUTTONVALUE_MIXED );
 
         if ( IsMouseOver() && maMouseRect.IsInside( GetPointerPosPixel() ) )
@@ -3266,9 +3266,9 @@ void CheckBox::ImplDrawCheckBoxState()
         sal_uInt16 nStyle = ImplGetButtonState();
         if ( !IsEnabled() )
             nStyle |= BUTTON_DRAW_DISABLED;
-        if ( meState == STATE_DONTKNOW )
+        if ( meState == TRISTATE_INDET )
             nStyle |= BUTTON_DRAW_DONTKNOW;
-        else if ( meState == STATE_CHECK )
+        else if ( meState == TRISTATE_TRUE )
             nStyle |= BUTTON_DRAW_CHECKED;
         Image aImage = GetCheckImage( GetSettings(), nStyle );
         if ( IsZoom() )
@@ -3410,14 +3410,14 @@ void CheckBox::ImplDrawCheckBox( bool bLayout )
 void CheckBox::ImplCheck()
 {
     TriState eNewState;
-    if ( meState == STATE_NOCHECK )
-        eNewState = STATE_CHECK;
+    if ( meState == TRISTATE_FALSE )
+        eNewState = TRISTATE_TRUE;
     else if ( !mbTriState )
-        eNewState = STATE_NOCHECK;
-    else if ( meState == STATE_CHECK )
-        eNewState = STATE_DONTKNOW;
+        eNewState = TRISTATE_FALSE;
+    else if ( meState == TRISTATE_TRUE )
+        eNewState = TRISTATE_INDET;
     else
-        eNewState = STATE_NOCHECK;
+        eNewState = TRISTATE_FALSE;
     meState = eNewState;
 
     ImplDelData aDelData;
@@ -3619,13 +3619,13 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     aStateRect.Top()    += aBrd1Size.Height();
     aStateRect.Right()  -= aBrd1Size.Width();
     aStateRect.Bottom() -= aBrd1Size.Height();
-    if ( meState == STATE_DONTKNOW )
+    if ( meState == TRISTATE_INDET )
         pDev->SetFillColor( Color( COL_LIGHTGRAY ) );
     else
         pDev->SetFillColor( Color( COL_WHITE ) );
     pDev->DrawRect( aStateRect );
 
-    if ( meState == STATE_CHECK )
+    if ( meState == TRISTATE_TRUE )
     {
         aStateRect.Left()   += aBrd2Size.Width();
         aStateRect.Top()    += aBrd2Size.Height();
@@ -3829,8 +3829,8 @@ void CheckBox::Toggle()
 
 void CheckBox::SetState( TriState eState )
 {
-    if ( !mbTriState && (eState == STATE_DONTKNOW) )
-        eState = STATE_NOCHECK;
+    if ( !mbTriState && (eState == TRISTATE_INDET) )
+        eState = TRISTATE_FALSE;
 
     if ( meState != eState )
     {
@@ -3843,7 +3843,7 @@ void CheckBox::SetState( TriState eState )
 bool CheckBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "active")
-        SetState(toBool(rValue) ? STATE_CHECK : STATE_NOCHECK);
+        SetState(toBool(rValue) ? TRISTATE_TRUE : TRISTATE_FALSE);
     else
         return Button::set_property(rKey, rValue);
     return true;
@@ -3857,8 +3857,8 @@ void CheckBox::EnableTriState( bool bTriState )
     {
         mbTriState = bTriState;
 
-        if ( !bTriState && (meState == STATE_DONTKNOW) )
-            SetState( STATE_NOCHECK );
+        if ( !bTriState && (meState == TRISTATE_INDET) )
+            SetState( TRISTATE_FALSE );
     }
 }
 
@@ -4129,7 +4129,7 @@ void DisclosureButton::ImplDrawCheckBoxState()
 
     Rectangle aStateRect( GetStateRect() );
 
-    ImplControlValue    aControlValue( GetState() == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
+    ImplControlValue    aControlValue( GetState() == TRISTATE_TRUE ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
     Rectangle           aCtrlRegion( aStateRect );
     ControlState        nState = 0;
 

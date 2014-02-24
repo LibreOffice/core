@@ -179,7 +179,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCB_SetIntercept->EnableTriState( true );
-        m_pCB_SetIntercept->SetState( STATE_DONTKNOW );
+        m_pCB_SetIntercept->SetState( TRISTATE_INDET );
     }
     else
     {
@@ -192,7 +192,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCB_ShowEquation->EnableTriState( true );
-        m_pCB_ShowEquation->SetState( STATE_DONTKNOW );
+        m_pCB_ShowEquation->SetState( TRISTATE_INDET );
     }
     else
     {
@@ -205,7 +205,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCB_ShowCorrelationCoeff->EnableTriState( true );
-        m_pCB_ShowCorrelationCoeff->SetState( STATE_DONTKNOW );
+        m_pCB_ShowCorrelationCoeff->SetState( TRISTATE_INDET );
     }
     else
     {
@@ -247,10 +247,10 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
     if( m_bTrendLineUnique )
         rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
 
-    if( m_pCB_ShowEquation->GetState() != STATE_DONTKNOW )
+    if( m_pCB_ShowEquation->GetState() != TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_pCB_ShowEquation->IsChecked() ));
 
-    if( m_pCB_ShowCorrelationCoeff->GetState() != STATE_DONTKNOW )
+    if( m_pCB_ShowCorrelationCoeff->GetState() != TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_COEFF, m_pCB_ShowCorrelationCoeff->IsChecked() ));
 
     OUString aName = m_pEE_Name->GetText();
@@ -271,7 +271,7 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
     m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateBackward->GetText(),nIndex,aValue);
     rOutAttrs.Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) );
 
-    if( m_pCB_SetIntercept->GetState() != STATE_DONTKNOW )
+    if( m_pCB_SetIntercept->GetState() != TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SET_INTERCEPT, m_pCB_SetIntercept->IsChecked() ));
 
     aValue = 0.0;
@@ -301,8 +301,8 @@ void TrendlineResources::UpdateControlStates()
     m_pFmtFld_InterceptValue->Enable( bInterceptAvailable );
     if(bMovingAverage)
     {
-        m_pCB_ShowEquation->SetState( STATE_NOCHECK );
-        m_pCB_ShowCorrelationCoeff->SetState( STATE_NOCHECK );
+        m_pCB_ShowEquation->SetState( TRISTATE_FALSE );
+        m_pCB_ShowCorrelationCoeff->SetState( TRISTATE_FALSE );
     }
     m_pCB_ShowEquation->Enable(!bMovingAverage);
     m_pCB_ShowCorrelationCoeff->Enable(!bMovingAverage);

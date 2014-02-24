@@ -65,10 +65,10 @@ public:
 
     /** Registers the passed window to be enabled/disabled on call of Enable().
         @param eDisableIfStacked
-        STATE_CHECK:    Window always disabled, if stacked text is turned on.
-        STATE_NOCHECK:  Window always disabled, if stacked text is turned off.
-        STATE_DONTKNOW: Window will be enabled/disabled independent from stacked text. */
-    void                AddDependentWindow( Window& rWindow, TriState eDisableIfStacked = STATE_DONTKNOW );
+        TRISTATE_TRUE:    Window always disabled, if stacked text is turned on.
+        TRISTATE_FALSE:  Window always disabled, if stacked text is turned off.
+        TRISTATE_INDET: Window will be enabled/disabled independent from stacked text. */
+    void                AddDependentWindow( Window& rWindow, TriState eDisableIfStacked = TRISTATE_INDET );
 
     /** Enables or disables the dial control and all dependent windows. */
     void                Enable( bool bEnable = true );

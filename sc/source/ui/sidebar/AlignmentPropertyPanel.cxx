@@ -442,7 +442,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
             else if(eState == SFX_ITEM_DONTCARE)
             {
                 mpCBXWrapText->EnableTriState(true);
-                mpCBXWrapText->SetState(STATE_DONTKNOW);
+                mpCBXWrapText->SetState(TRISTATE_INDET);
             }
         }
         break;
@@ -515,7 +515,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
             mpMtrAngle->Disable();
             mpCtrlDial->Disable();
             mpCbStacked->EnableTriState(true);
-            mpCbStacked->SetState(STATE_DONTKNOW);
+            mpCbStacked->SetState(TRISTATE_INDET);
         }
     }
 }
@@ -546,10 +546,10 @@ void AlignmentPropertyPanel::UpdateHorAlign()
     const sal_uInt16 nIdRight = mpTBHorizontal->GetItemId(UNO_ALIGNRIGHT);
     const sal_uInt16 nIdBlock = mpTBHorizontal->GetItemId(UNO_ALIGNBLOCK);
 
-    mpTBHorizontal->SetItemState(nIdLeft, STATE_NOCHECK);
-    mpTBHorizontal->SetItemState(nIdCenter, STATE_NOCHECK);
-    mpTBHorizontal->SetItemState(nIdRight, STATE_NOCHECK);
-    mpTBHorizontal->SetItemState(nIdBlock, STATE_NOCHECK);
+    mpTBHorizontal->SetItemState(nIdLeft, TRISTATE_FALSE);
+    mpTBHorizontal->SetItemState(nIdCenter, TRISTATE_FALSE);
+    mpTBHorizontal->SetItemState(nIdRight, TRISTATE_FALSE);
+    mpTBHorizontal->SetItemState(nIdBlock, TRISTATE_FALSE);
     mpFTLeftIndent->Disable();
     mpMFLeftIndent->Disable();
     if(meHorAlignState==SVX_HOR_JUSTIFY_REPEAT)
@@ -578,13 +578,13 @@ void AlignmentPropertyPanel::UpdateHorAlign()
     switch(meHorAlignState)
     {
     case SVX_HOR_JUSTIFY_LEFT:
-        mpTBHorizontal->SetItemState(nIdLeft, STATE_CHECK);
+        mpTBHorizontal->SetItemState(nIdLeft, TRISTATE_TRUE);
         mpFTLeftIndent->Enable();
         mpMFLeftIndent->Enable();
         break;
-    case SVX_HOR_JUSTIFY_CENTER:mpTBHorizontal->SetItemState(nIdCenter, STATE_CHECK);break;
-    case SVX_HOR_JUSTIFY_RIGHT: mpTBHorizontal->SetItemState(nIdRight, STATE_CHECK);break;
-    case SVX_HOR_JUSTIFY_BLOCK: mpTBHorizontal->SetItemState(nIdBlock, STATE_CHECK);break;
+    case SVX_HOR_JUSTIFY_CENTER:mpTBHorizontal->SetItemState(nIdCenter, TRISTATE_TRUE);break;
+    case SVX_HOR_JUSTIFY_RIGHT: mpTBHorizontal->SetItemState(nIdRight, TRISTATE_TRUE);break;
+    case SVX_HOR_JUSTIFY_BLOCK: mpTBHorizontal->SetItemState(nIdBlock, TRISTATE_TRUE);break;
     default:;
     }
 }
@@ -597,15 +597,15 @@ void AlignmentPropertyPanel::UpdateVerAlign()
     const sal_uInt16 nIdVCenter = mpTBVertical->GetItemId(UNO_ALIGNVCENTER);
     const sal_uInt16 nIdBottom = mpTBVertical->GetItemId(UNO_ALIGNBOTTOM);
 
-    mpTBVertical->SetItemState(nIdTop, STATE_NOCHECK);
-    mpTBVertical->SetItemState(nIdVCenter, STATE_NOCHECK);
-    mpTBVertical->SetItemState(nIdBottom, STATE_NOCHECK);
+    mpTBVertical->SetItemState(nIdTop, TRISTATE_FALSE);
+    mpTBVertical->SetItemState(nIdVCenter, TRISTATE_FALSE);
+    mpTBVertical->SetItemState(nIdBottom, TRISTATE_FALSE);
 
     switch(meVerAlignState)
     {
-    case SVX_VER_JUSTIFY_TOP:   mpTBVertical->SetItemState(nIdTop, STATE_CHECK);break;
-    case SVX_VER_JUSTIFY_CENTER:mpTBVertical->SetItemState(nIdVCenter, STATE_CHECK);break;
-    case SVX_VER_JUSTIFY_BOTTOM:mpTBVertical->SetItemState(nIdBottom, STATE_CHECK);break;
+    case SVX_VER_JUSTIFY_TOP:   mpTBVertical->SetItemState(nIdTop, TRISTATE_TRUE);break;
+    case SVX_VER_JUSTIFY_CENTER:mpTBVertical->SetItemState(nIdVCenter, TRISTATE_TRUE);break;
+    case SVX_VER_JUSTIFY_BOTTOM:mpTBVertical->SetItemState(nIdBottom, TRISTATE_TRUE);break;
     default:;
     }
 }

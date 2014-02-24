@@ -108,7 +108,7 @@ namespace accessibility
                             if ( m_pTabListBox->IsTransientChildrenDisabled() )
                             {
                                 aNewValue <<= AccessibleStateType::FOCUSED;
-                                TriState eState = STATE_DONTKNOW;
+                                TriState eState = TRISTATE_INDET;
                                 if ( m_pTabListBox->IsCellCheckBox( nRow, nCol, eState ) )
                                 {
                                     AccessibleCheckBoxCell* pCell =
@@ -153,7 +153,7 @@ namespace accessibility
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
                             Reference< XAccessible > xChild = m_pTabListBox->CreateAccessibleCell( nRow, m_pTabListBox->GetCurrColumn() );
-                            TriState eState = STATE_DONTKNOW;
+                            TriState eState = TRISTATE_INDET;
                             if ( m_pTabListBox->IsCellCheckBox( nRow, m_pTabListBox->GetCurrColumn(), eState ) )
                             {
                                 AccessibleCheckBoxCell* pCell = static_cast< AccessibleCheckBoxCell* >( xChild.get() );
@@ -198,7 +198,7 @@ namespace accessibility
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
                             sal_uInt16 nCol = m_pTabListBox->GetCurrColumn();
-                            TriState eState = STATE_DONTKNOW;
+                            TriState eState = TRISTATE_INDET;
                             if ( m_pTabListBox->IsCellCheckBox( nRow, nCol, eState ) )
                             {
                                 Reference< XAccessible > xChild =
@@ -229,7 +229,7 @@ namespace accessibility
                             aOldValue <<= OUString( pData->m_sOldText );
                             OUString sNewText( m_pTabListBox->GetCellText( nRow, nCol ) );
                             aNewValue <<= sNewText;
-                            TriState eState = STATE_DONTKNOW;
+                            TriState eState = TRISTATE_INDET;
 
                             if ( m_pTabListBox->IsCellCheckBox( nRow, nCol, eState ) )
                             {

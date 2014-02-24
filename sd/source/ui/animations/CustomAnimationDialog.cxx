@@ -1845,7 +1845,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
         }
         else
         {
-            mpCBXRewind->SetState( STATE_DONTKNOW );
+            mpCBXRewind->SetState( TRISTATE_INDET );
         }
     }
 
@@ -2019,7 +2019,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 
 
 
-    if( mpCBXRewind->GetState() != STATE_DONTKNOW )
+    if( mpCBXRewind->GetState() != TRISTATE_INDET )
     {
         sal_Int16 nFill = mpCBXRewind->IsChecked() ? AnimationFill::REMOVE : AnimationFill::HOLD;
 
@@ -2126,10 +2126,10 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     }
     else
     {
-        maCBXGroupAuto->SetState( STATE_DONTKNOW );
+        maCBXGroupAuto->SetState( TRISTATE_INDET );
     }
 
-    maCBXAnimateForm->SetState( STATE_DONTKNOW );
+    maCBXAnimateForm->SetState( TRISTATE_INDET );
     if( pSet->getPropertyState( nHandleAnimateForm ) != STLPropertyState_AMBIGUOUS )
     {
         sal_Bool bAnimateForm = sal_False;
@@ -2143,7 +2143,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
         maCBXAnimateForm->Enable( false );
     }
 
-    maCBXReverse->SetState( STATE_DONTKNOW );
+    maCBXReverse->SetState( TRISTATE_INDET );
     if( pSet->getPropertyState( nHandleTextReverse ) != STLPropertyState_AMBIGUOUS )
     {
         sal_Bool bTextReverse = sal_False;

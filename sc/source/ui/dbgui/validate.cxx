@@ -728,9 +728,9 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
     const SfxPoolItem* pItem;
 
     if ( rArgSet.GetItemState( FID_VALID_SHOWHELP, true, &pItem ) == SFX_ITEM_SET )
-        pTsbHelp->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        pTsbHelp->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
-        pTsbHelp->SetState( STATE_NOCHECK );
+        pTsbHelp->SetState( TRISTATE_FALSE );
 
     if ( rArgSet.GetItemState( FID_VALID_HELPTITLE, true, &pItem ) == SFX_ITEM_SET )
         pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
@@ -747,7 +747,7 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 
 sal_Bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
-    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, pTsbHelp->GetState() == STATE_CHECK ) );
+    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, pTsbHelp->GetState() == TRISTATE_TRUE ) );
     rArgSet.Put( SfxStringItem( FID_VALID_HELPTITLE, pEdtTitle->GetText() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_HELPTEXT, pEdInputHelp->GetText() ) );
 
@@ -817,9 +817,9 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     const SfxPoolItem* pItem;
 
     if ( rArgSet.GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SFX_ITEM_SET )
-        m_pTsbShow->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        m_pTsbShow->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
-        m_pTsbShow->SetState( STATE_CHECK );   // check by default
+        m_pTsbShow->SetState( TRISTATE_TRUE );   // check by default
 
     if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SFX_ITEM_SET )
         m_pLbAction->SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
@@ -843,7 +843,7 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 
 sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
-    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == STATE_CHECK ) );
+    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == TRISTATE_TRUE ) );
     rArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_pLbAction->GetSelectEntryPos() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_ERRTITLE, m_pEdtTitle->GetText() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_ERRTEXT, m_pEdError->GetText() ) );

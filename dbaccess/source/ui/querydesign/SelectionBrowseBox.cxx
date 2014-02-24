@@ -910,7 +910,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         {
             case BROW_VIS_ROW:
                 {
-                    sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue() != STATE_NOCHECK;
+                    sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue() != TRISTATE_FALSE;
                     strOldCellContents = bOldValue ? g_strOne : g_strZero;
                     sNewValue          = !bOldValue ? g_strOne : g_strZero;
                 }
@@ -1234,7 +1234,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
 
     long nRow = GetRealRow(m_nSeekRow);
     if (nRow == BROW_VIS_ROW)
-        PaintTristate(rDev, rRect, pEntry->IsVisible() ? STATE_CHECK : STATE_NOCHECK);
+        PaintTristate(rDev, rRect, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
     else
         rDev.DrawText(rRect, GetCellText(nRow, nColumnId),TEXT_DRAW_VCENTER);
 
@@ -2699,7 +2699,7 @@ Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _n
         pEntry = getFields()[_nColumnPos - 1];
 
     if ( _nRow == BROW_VIS_ROW && pEntry.is() )
-        return EditBrowseBox::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,pEntry->IsVisible() ? STATE_CHECK : STATE_NOCHECK );
+        return EditBrowseBox::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE );
 
     return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }

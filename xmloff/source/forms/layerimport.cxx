@@ -41,7 +41,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
-#include <tools/wintypes.hxx>
+#include <tools/gen.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <xmloff/controlpropertyhdl.hxx>
 #include "controlpropertymap.hxx"
@@ -196,11 +196,11 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         ListSourceType_VALUELIST, OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
         &::getCppuType( static_cast<ListSourceType*>(NULL) ));
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_STATE), PROPERTY_DEFAULT_STATE, STATE_NOCHECK,
+        OAttributeMetaData::getSpecialAttributeName(SCA_STATE), PROPERTY_DEFAULT_STATE, TRISTATE_FALSE,
         OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
         &::getCppuType( static_cast< sal_Int16* >(NULL)));
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE), PROPERTY_STATE, STATE_NOCHECK,
+        OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE), PROPERTY_STATE, TRISTATE_FALSE,
         OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
         &::getCppuType( static_cast< sal_Int16* >(NULL)));
     m_aAttributeMetaData.addEnumProperty(

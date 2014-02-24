@@ -63,7 +63,7 @@ OButtonModel::OButtonModel(const Reference<XComponentContext>& _rxFactory)
     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_SUN_CONTROL_COMMANDBUTTON )
                                     // use the old control name for compatibility reasons
     ,m_aResetHelper( *this, m_aMutex )
-    ,m_eDefaultState( STATE_NOCHECK )
+    ,m_eDefaultState( TRISTATE_FALSE )
 {
     m_nClassId = FormComponentType::COMMANDBUTTON;
 }
@@ -270,7 +270,7 @@ void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle
     {
     case PROPERTY_ID_DEFAULT_STATE:
     {
-        sal_Int16 nDefaultState( (sal_Int16)STATE_NOCHECK );
+        sal_Int16 nDefaultState( (sal_Int16)TRISTATE_FALSE );
         OSL_VERIFY( _rValue >>= nDefaultState );
         m_eDefaultState = (ToggleState)nDefaultState;
         impl_resetNoBroadcast_nothrow();
@@ -307,7 +307,7 @@ Any OButtonModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     switch ( _nHandle )
     {
     case PROPERTY_ID_DEFAULT_STATE:
-        aDefault <<= (sal_Int16)STATE_NOCHECK;
+        aDefault <<= (sal_Int16)TRISTATE_FALSE;
         break;
 
     default:

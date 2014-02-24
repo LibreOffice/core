@@ -429,13 +429,13 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         // percent
         TRISTATE eState = mpDrawView->IsMarkedGluePointsPercent();
-        if( eState == STATE_DONTKNOW )
+        if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_PERCENT );
         else
-            rSet.Put( SfxBoolItem( SID_GLUE_PERCENT, eState == STATE_CHECK ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_PERCENT, eState == TRISTATE_TRUE ) );
 
         // alignment has no effect by percent
-        if( eState == STATE_CHECK )
+        if( eState == TRISTATE_TRUE )
         {
             rSet.DisableItem( SID_GLUE_HORZALIGN_CENTER );
             rSet.DisableItem( SID_GLUE_HORZALIGN_LEFT );
@@ -464,28 +464,28 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         // Escape direction
         // left
         eState = mpDrawView->IsMarkedGluePointsEscDir( SDRESC_LEFT );
-        if( eState == STATE_DONTKNOW )
+        if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_LEFT );
         else
-            rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_LEFT, eState == STATE_CHECK ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_LEFT, eState == TRISTATE_TRUE ) );
         // right
         eState = mpDrawView->IsMarkedGluePointsEscDir( SDRESC_RIGHT );
-        if( eState == STATE_DONTKNOW )
+        if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_RIGHT );
         else
-            rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_RIGHT, eState == STATE_CHECK ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_RIGHT, eState == TRISTATE_TRUE ) );
         // top
         eState = mpDrawView->IsMarkedGluePointsEscDir( SDRESC_TOP );
-        if( eState == STATE_DONTKNOW )
+        if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_TOP );
         else
-            rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_TOP, eState == STATE_CHECK ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_TOP, eState == TRISTATE_TRUE ) );
         // bottom
         eState = mpDrawView->IsMarkedGluePointsEscDir( SDRESC_BOTTOM );
-        if( eState == STATE_DONTKNOW )
+        if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_BOTTOM );
         else
-            rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_BOTTOM, eState == STATE_CHECK ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_BOTTOM, eState == TRISTATE_TRUE ) );
     }
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GRID_FRONT ) ||

@@ -235,8 +235,6 @@ struct FrameStyle
     {}
 };
 
-enum AutoState { AUTO_STATE_OFF, AUTO_STATE_ON, AUTO_STATE_AUTO };
-
 // -----------------
 // - ImplStyleData -
 // -----------------
@@ -340,7 +338,7 @@ private:
     bool                       mbHighContrast;
     bool                       mbUseSystemUIFonts;
     sal_uInt16                 mnAutoMnemonic;
-    AutoState                  mnUseImagesInMenus;
+    TriState                   mnUseImagesInMenus;
     bool                       mnUseFlatBorders;
     bool                       mbPreferredUseImagesInMenus;
     long                       mnMinThumbSize;
@@ -651,7 +649,7 @@ public:
     bool                            GetUseFlatMenus() const
                                         { return mpData->mnUseFlatMenus; }
     void                            SetUseImagesInMenus( bool bUseImagesInMenus )
-    { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus ? AUTO_STATE_ON : AUTO_STATE_OFF; }
+    { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus ? TRISTATE_TRUE : TRISTATE_FALSE; }
     bool                            GetUseImagesInMenus() const;
     void                                                       SetPreferredUseImagesInMenus( bool bPreferredUseImagesInMenus )
                                         { CopyData(); mpData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus; }
@@ -958,9 +956,9 @@ public:
                                     ImplMiscData( const ImplMiscData& rData );
 
 private:
-    AutoState                       mnEnableATT;
+    TriState                        mnEnableATT;
     bool                            mbEnableLocalizedDecimalSep;
-    AutoState                       mnDisablePrinting;
+    TriState                        mnDisablePrinting;
 };
 
 // ----------------

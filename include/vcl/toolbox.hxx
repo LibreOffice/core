@@ -579,12 +579,12 @@ public:
 
 inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )
 {
-    SetItemState( nItemId, (bCheck) ? STATE_CHECK : STATE_NOCHECK );
+    SetItemState( nItemId, (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
 inline bool ToolBox::IsItemChecked( sal_uInt16 nItemId ) const
 {
-    return (GetItemState( nItemId ) == STATE_CHECK);
+    return (GetItemState( nItemId ) == TRISTATE_TRUE);
 }
 
 inline Size ToolBox::CalcWindowSizePixel() const

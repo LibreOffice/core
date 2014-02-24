@@ -718,14 +718,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnDoubleSided.Check( bValue );
             bUpdate = sal_True;
         }
-        else if( aBtnDoubleSided.GetState() == STATE_DONTKNOW )
+        else if( aBtnDoubleSided.GetState() == TRISTATE_INDET )
             aBtnDoubleSided.Check( bValue );
     }
     else
     {
-        if( aBtnDoubleSided.GetState() != STATE_DONTKNOW )
+        if( aBtnDoubleSided.GetState() != TRISTATE_INDET )
         {
-            aBtnDoubleSided.SetState( STATE_DONTKNOW );
+            aBtnDoubleSided.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -842,14 +842,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnNormalsInvert.Check( bValue );
             bUpdate = sal_True;
         }
-        else if( aBtnNormalsInvert.GetState() == STATE_DONTKNOW )
+        else if( aBtnNormalsInvert.GetState() == TRISTATE_INDET )
             aBtnNormalsInvert.Check( bValue );
     }
     else
     {
-        if( aBtnNormalsInvert.GetState() != STATE_DONTKNOW )
+        if( aBtnNormalsInvert.GetState() != TRISTATE_INDET )
         {
-            aBtnNormalsInvert.SetState( STATE_DONTKNOW );
+            aBtnNormalsInvert.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -864,14 +864,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnTwoSidedLighting.Check( bValue );
             bUpdate = sal_True;
         }
-        else if( aBtnTwoSidedLighting.GetState() == STATE_DONTKNOW )
+        else if( aBtnTwoSidedLighting.GetState() == TRISTATE_INDET )
             aBtnTwoSidedLighting.Check( bValue );
     }
     else
     {
-        if( aBtnTwoSidedLighting.GetState() != STATE_DONTKNOW )
+        if( aBtnTwoSidedLighting.GetState() != TRISTATE_INDET )
         {
-            aBtnTwoSidedLighting.SetState( STATE_DONTKNOW );
+            aBtnTwoSidedLighting.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -909,14 +909,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aMtrSlant.Enable( bValue );
             bUpdate = sal_True;
         }
-        else if( aBtnShadow3d.GetState() == STATE_DONTKNOW )
+        else if( aBtnShadow3d.GetState() == TRISTATE_INDET )
             aBtnShadow3d.Check( bValue );
     }
     else
     {
-        if( aBtnShadow3d.GetState() != STATE_DONTKNOW )
+        if( aBtnShadow3d.GetState() != TRISTATE_INDET )
         {
-            aBtnShadow3d.SetState( STATE_DONTKNOW );
+            aBtnShadow3d.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1023,14 +1023,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             SetUILightState( aBtnLight1, bOn );
             bUpdate = sal_True;
         }
-        if( aBtnLight1.GetState() == STATE_DONTKNOW )
+        if( aBtnLight1.GetState() == TRISTATE_INDET )
             aBtnLight1.Check( aBtnLight1.IsChecked() );
     }
     else
     {
-        if( aBtnLight1.GetState() != STATE_DONTKNOW )
+        if( aBtnLight1.GetState() != TRISTATE_INDET )
         {
-            aBtnLight1.SetState( STATE_DONTKNOW );
+            aBtnLight1.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1072,14 +1072,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             SetUILightState( aBtnLight2, bOn );
             bUpdate = sal_True;
         }
-        if( aBtnLight2.GetState() == STATE_DONTKNOW )
+        if( aBtnLight2.GetState() == TRISTATE_INDET )
             aBtnLight2.Check( aBtnLight2.IsChecked() );
     }
     else
     {
-        if( aBtnLight2.GetState() != STATE_DONTKNOW )
+        if( aBtnLight2.GetState() != TRISTATE_INDET )
         {
-            aBtnLight2.SetState( STATE_DONTKNOW );
+            aBtnLight2.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1121,14 +1121,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             SetUILightState( aBtnLight3, bOn );
             bUpdate = sal_True;
         }
-        if( aBtnLight3.GetState() == STATE_DONTKNOW )
+        if( aBtnLight3.GetState() == TRISTATE_INDET )
             aBtnLight3.Check( aBtnLight3.IsChecked() );
     }
     else
     {
-        if( aBtnLight3.GetState() != STATE_DONTKNOW )
+        if( aBtnLight3.GetState() != TRISTATE_INDET )
         {
-            aBtnLight3.SetState( STATE_DONTKNOW );
+            aBtnLight3.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1170,14 +1170,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             SetUILightState( aBtnLight4, bOn );
             bUpdate = sal_True;
         }
-        if( aBtnLight4.GetState() == STATE_DONTKNOW )
+        if( aBtnLight4.GetState() == TRISTATE_INDET )
             aBtnLight4.Check( aBtnLight4.IsChecked() );
     }
     else
     {
-        if( aBtnLight4.GetState() != STATE_DONTKNOW )
+        if( aBtnLight4.GetState() != TRISTATE_INDET )
         {
-            aBtnLight4.SetState( STATE_DONTKNOW );
+            aBtnLight4.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1219,14 +1219,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             SetUILightState( aBtnLight5, bOn );
             bUpdate = sal_True;
         }
-        if( aBtnLight5.GetState() == STATE_DONTKNOW )
+        if( aBtnLight5.GetState() == TRISTATE_INDET )
             aBtnLight5.Check( aBtnLight5.IsChecked() );
     }
     else
     {
-        if( aBtnLight5.GetState() != STATE_DONTKNOW )
+        if( aBtnLight5.GetState() != TRISTATE_INDET )
         {
-            aBtnLight5.SetState( STATE_DONTKNOW );
+            aBtnLight5.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1268,14 +1268,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             SetUILightState( aBtnLight6, bOn );
             bUpdate = sal_True;
         }
-        if( aBtnLight6.GetState() == STATE_DONTKNOW )
+        if( aBtnLight6.GetState() == TRISTATE_INDET )
             aBtnLight6.Check( aBtnLight6.IsChecked() );
     }
     else
     {
-        if( aBtnLight6.GetState() != STATE_DONTKNOW )
+        if( aBtnLight6.GetState() != TRISTATE_INDET )
         {
-            aBtnLight6.SetState( STATE_DONTKNOW );
+            aBtnLight6.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1317,14 +1317,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             SetUILightState( aBtnLight7 , bOn );
             bUpdate = sal_True;
         }
-        if( aBtnLight7.GetState() == STATE_DONTKNOW )
+        if( aBtnLight7.GetState() == TRISTATE_INDET )
             aBtnLight7.Check( aBtnLight7.IsChecked() );
     }
     else
     {
-        if( aBtnLight7.GetState() != STATE_DONTKNOW )
+        if( aBtnLight7.GetState() != TRISTATE_INDET )
         {
-            aBtnLight7.SetState( STATE_DONTKNOW );
+            aBtnLight7.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1366,14 +1366,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             SetUILightState( aBtnLight8, bOn );
             bUpdate = sal_True;
         }
-        if( aBtnLight8.GetState() == STATE_DONTKNOW )
+        if( aBtnLight8.GetState() == TRISTATE_INDET )
             aBtnLight8.Check( aBtnLight8.IsChecked() );
     }
     else
     {
-        if( aBtnLight8.GetState() != STATE_DONTKNOW )
+        if( aBtnLight8.GetState() != TRISTATE_INDET )
         {
-            aBtnLight8.SetState( STATE_DONTKNOW );
+            aBtnLight8.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1527,14 +1527,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 aBtnTexFilter.Check( bValue );
                 bUpdate = sal_True;
             }
-            if( aBtnTexFilter.GetState() == STATE_DONTKNOW )
+            if( aBtnTexFilter.GetState() == TRISTATE_INDET )
                 aBtnTexFilter.Check( bValue );
         }
         else
         {
-            if( aBtnTexFilter.GetState() != STATE_DONTKNOW )
+            if( aBtnTexFilter.GetState() != TRISTATE_INDET )
             {
-                aBtnTexFilter.SetState( STATE_DONTKNOW );
+                aBtnTexFilter.SetState( TRISTATE_INDET );
                 bUpdate = sal_True;
             }
         }
@@ -1640,14 +1640,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnPerspective.Check( ePT == PR_PERSPECTIVE );
             bUpdate = sal_True;
         }
-        if( aBtnPerspective.GetState() == STATE_DONTKNOW )
+        if( aBtnPerspective.GetState() == TRISTATE_INDET )
             aBtnPerspective.Check( ePT == PR_PERSPECTIVE );
     }
     else
     {
-        if( aBtnPerspective.GetState() != STATE_DONTKNOW )
+        if( aBtnPerspective.GetState() != TRISTATE_INDET )
         {
-            aBtnPerspective.SetState( STATE_DONTKNOW );
+            aBtnPerspective.SetState( TRISTATE_INDET );
             bUpdate = sal_True;
         }
     }
@@ -1731,7 +1731,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 //Others must stand as the front on all sides
     // Perspective
-    if( aBtnPerspective.GetState() != STATE_DONTKNOW )
+    if( aBtnPerspective.GetState() != TRISTATE_INDET )
     {
         sal_uInt16 nValue;
         if( aBtnPerspective.IsChecked() )
@@ -1784,9 +1784,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
     // Double-sided
     TriState eState = aBtnDoubleSided.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = STATE_CHECK == eState;
+        sal_Bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DDoubleSidedItem(bValue));
     }
     else
@@ -1835,9 +1835,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
     // Normal inverted
     eState = aBtnNormalsInvert.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = STATE_CHECK == eState;
+        sal_Bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DNormalsInvertItem(bValue));
     }
     else
@@ -1845,9 +1845,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
     // 2-sided lighting
     eState = aBtnTwoSidedLighting.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = STATE_CHECK == eState;
+        sal_Bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DTwoSidedLightingItem(bValue));
     }
     else
@@ -1865,9 +1865,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
     // 3D-Shadow
     eState = aBtnShadow3d.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = STATE_CHECK == eState;
+        sal_Bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DShadow3DItem(bValue));
         rAttrs.Put(SdrShadowItem(bValue));
     }
@@ -1920,7 +1920,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_1);
     // Light 1 (on/off)
     eState = aBtnLight1.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
         sal_Bool bValue = GetUILightState( aBtnLight1 );
         rAttrs.Put(Svx3DLightOnOff1Item(bValue));
@@ -1945,7 +1945,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_2);
     // Light 2 (on/off)
     eState = aBtnLight2.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
         sal_Bool bValue = GetUILightState( aBtnLight2 );
         rAttrs.Put(Svx3DLightOnOff2Item(bValue));
@@ -1969,7 +1969,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_3);
     // Light 3 (on/off)
     eState = aBtnLight3.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
         sal_Bool bValue = GetUILightState( aBtnLight3 );
         rAttrs.Put(Svx3DLightOnOff3Item(bValue));
@@ -1993,7 +1993,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_4);
     // Light 4 (on/off)
     eState = aBtnLight4.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
         sal_Bool bValue = GetUILightState( aBtnLight4 );
         rAttrs.Put(Svx3DLightOnOff4Item(bValue));
@@ -2017,7 +2017,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_5);
     // Light 5 (on/off)
     eState = aBtnLight5.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
         sal_Bool bValue = GetUILightState( aBtnLight5 );
         rAttrs.Put(Svx3DLightOnOff5Item(bValue));
@@ -2041,7 +2041,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_6);
     // Light 6 (on/off)
     eState = aBtnLight6.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
         sal_Bool bValue = GetUILightState( aBtnLight6 );
         rAttrs.Put(Svx3DLightOnOff6Item(bValue));
@@ -2065,7 +2065,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_7);
     // Light 7 (on/off)
     eState = aBtnLight7.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
         sal_Bool bValue = GetUILightState( aBtnLight7 );
         rAttrs.Put(Svx3DLightOnOff7Item(bValue));
@@ -2089,7 +2089,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_8);
     // Light 8 (on/off)
     eState = aBtnLight8.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
         sal_Bool bValue = GetUILightState( aBtnLight8 );
         rAttrs.Put(Svx3DLightOnOff8Item(bValue));
@@ -2169,9 +2169,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
     // Filter
     eState = aBtnTexFilter.GetState();
-    if( eState != STATE_DONTKNOW )
+    if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = STATE_CHECK == eState;
+        sal_Bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DTextureFilterItem(bValue));
     }
     else

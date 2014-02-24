@@ -250,12 +250,12 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     if( rAttrs.GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbBelowRefEdge->SetState( ( ( const SdrMeasureBelowRefEdgeItem& )rAttrs.Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
-                        GetValue() ? STATE_CHECK : STATE_NOCHECK );
+                        GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbBelowRefEdge->EnableTriState( false );
     }
     else
     {
-        m_pTsbBelowRefEdge->SetState( STATE_DONTKNOW );
+        m_pTsbBelowRefEdge->SetState( TRISTATE_INDET );
     }
     m_pTsbBelowRefEdge->SaveValue();
 
@@ -279,12 +279,12 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     if( rAttrs.GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbParallel->SetState( ( ( const SdrMeasureTextRota90Item& )rAttrs.Get( SDRATTR_MEASURETEXTROTA90 ) ).
-                        GetValue() ? STATE_NOCHECK : STATE_CHECK );
+                        GetValue() ? TRISTATE_FALSE : TRISTATE_TRUE );
         m_pTsbParallel->EnableTriState( false );
     }
     else
     {
-        m_pTsbParallel->SetState( STATE_DONTKNOW );
+        m_pTsbParallel->SetState( TRISTATE_INDET );
     }
     m_pTsbParallel->SaveValue();
 
@@ -292,12 +292,12 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     if( rAttrs.GetItemState( SDRATTR_MEASURESHOWUNIT ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbShowUnit->SetState( ( ( const SdrMeasureShowUnitItem& )rAttrs.Get( SDRATTR_MEASURESHOWUNIT ) ).
-                        GetValue() ? STATE_CHECK : STATE_NOCHECK );
+                        GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbShowUnit->EnableTriState( false );
     }
     else
     {
-        m_pTsbShowUnit->SetState( STATE_DONTKNOW );
+        m_pTsbShowUnit->SetState( TRISTATE_INDET );
     }
     m_pTsbShowUnit->SaveValue();
 
@@ -381,13 +381,13 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
                 if( eHPos == SDRMEASURE_TEXTHAUTO )
                 {
-                    m_pTsbAutoPosH->SetState( STATE_CHECK );
+                    m_pTsbAutoPosH->SetState( TRISTATE_TRUE );
                     nState = CS_NOHORZ;
                 }
 
                 if( eVPos == SDRMEASURE_TEXTVAUTO )
                 {
-                    m_pTsbAutoPosV->SetState( STATE_CHECK );
+                    m_pTsbAutoPosV->SetState( TRISTATE_TRUE );
                     nState |= CS_NOVERT;
                 }
 
@@ -399,8 +399,8 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     else
     {
         m_pCtlPosition->Reset();
-        m_pTsbAutoPosV->SetState( STATE_DONTKNOW );
-        m_pTsbAutoPosH->SetState( STATE_DONTKNOW );
+        m_pTsbAutoPosV->SetState( TRISTATE_INDET );
+        m_pTsbAutoPosH->SetState( TRISTATE_INDET );
     }
 
     // put the attributes to the preview-control,
@@ -462,7 +462,7 @@ sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
     eState = m_pTsbBelowRefEdge->GetState();
     if( eState != m_pTsbBelowRefEdge->GetSavedValue() )
     {
-        rAttrs.Put( SdrMeasureBelowRefEdgeItem( (sal_Bool) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrMeasureBelowRefEdgeItem( (sal_Bool) TRISTATE_TRUE == eState ) );
         bModified = sal_True;
     }
 
@@ -478,14 +478,14 @@ sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
     eState = m_pTsbParallel->GetState();
     if( eState != m_pTsbParallel->GetSavedValue() )
     {
-        rAttrs.Put( SdrMeasureTextRota90Item( (sal_Bool) STATE_NOCHECK == eState ) );
+        rAttrs.Put( SdrMeasureTextRota90Item( (sal_Bool) TRISTATE_FALSE == eState ) );
         bModified = sal_True;
     }
 
     eState = m_pTsbShowUnit->GetState();
     if( eState != m_pTsbShowUnit->GetSavedValue() )
     {
-        rAttrs.Put( SdrMeasureShowUnitItem( (sal_Bool) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrMeasureShowUnitItem( (sal_Bool) TRISTATE_TRUE == eState ) );
         bModified = sal_True;
     }
 
@@ -530,10 +530,10 @@ sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
             case RP_RB: eVPos = SDRMEASURE_BELOW;
                         eHPos = SDRMEASURE_TEXTRIGHTOUTSIDE; break;
         }
-        if( m_pTsbAutoPosH->GetState() == STATE_CHECK )
+        if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )
             eHPos = SDRMEASURE_TEXTHAUTO;
 
-        if( m_pTsbAutoPosV->GetState() == STATE_CHECK )
+        if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
             eVPos = SDRMEASURE_TEXTVAUTO;
 
         if ( rAttrs.GetItemState( SDRATTR_MEASURETEXTVPOS ) != SFX_ITEM_DONTCARE )
@@ -611,7 +611,7 @@ void SvxMeasurePage::PointChanged( Window* pWindow, RECT_POINT /*eRP*/ )
 
 IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
 {
-    if( m_pTsbAutoPosH->GetState() == STATE_CHECK )
+    if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )
     {
         switch( m_pCtlPosition->GetActualRP() )
         {
@@ -632,7 +632,7 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
             default: ;//prevent warning
         }
     }
-    if( m_pTsbAutoPosV->GetState() == STATE_CHECK )
+    if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
     {
         switch( m_pCtlPosition->GetActualRP() )
         {
@@ -694,8 +694,8 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     if( p == m_pTsbBelowRefEdge )
     {
         TriState eState = m_pTsbBelowRefEdge->GetState();
-        if( eState != STATE_DONTKNOW )
-            aAttrSet.Put( SdrMeasureBelowRefEdgeItem( (sal_Bool) STATE_CHECK == eState ) );
+        if( eState != TRISTATE_INDET )
+            aAttrSet.Put( SdrMeasureBelowRefEdgeItem( (sal_Bool) TRISTATE_TRUE == eState ) );
     }
 
     if( p == m_pMtrFldDecimalPlaces )
@@ -708,15 +708,15 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     if( p == m_pTsbParallel )
     {
         TriState eState = m_pTsbParallel->GetState();
-        if( eState != STATE_DONTKNOW )
-            aAttrSet.Put( SdrMeasureTextRota90Item( (sal_Bool) STATE_NOCHECK == eState ) );
+        if( eState != TRISTATE_INDET )
+            aAttrSet.Put( SdrMeasureTextRota90Item( (sal_Bool) TRISTATE_FALSE == eState ) );
     }
 
     if( p == m_pTsbShowUnit )
     {
         TriState eState = m_pTsbShowUnit->GetState();
-        if( eState != STATE_DONTKNOW )
-            aAttrSet.Put( SdrMeasureShowUnitItem( (sal_Bool) STATE_CHECK == eState ) );
+        if( eState != TRISTATE_INDET )
+            aAttrSet.Put( SdrMeasureShowUnitItem( (sal_Bool) TRISTATE_TRUE == eState ) );
     }
 
     if( p == m_pLbUnit )
@@ -764,13 +764,13 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 
         CTL_STATE nState = 0;
 
-        if( m_pTsbAutoPosH->GetState() == STATE_CHECK )
+        if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )
         {
             eHPos = SDRMEASURE_TEXTHAUTO;
             nState = CS_NOHORZ;
         }
 
-        if( m_pTsbAutoPosV->GetState() == STATE_CHECK )
+        if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
         {
             eVPos = SDRMEASURE_TEXTVAUTO;
             nState |= CS_NOVERT;

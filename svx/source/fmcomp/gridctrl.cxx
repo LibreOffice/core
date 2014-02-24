@@ -3643,17 +3643,17 @@ Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, s
         Reference< ::com::sun::star::awt::XCheckBox> xBox(xInt,UNO_QUERY);
         if ( xBox.is() )
         {
-            TriState eValue = STATE_NOCHECK;
+            TriState eValue = TRISTATE_FALSE;
             switch( xBox->getState() )
             {
                 case 0:
-                    eValue = STATE_NOCHECK;
+                    eValue = TRISTATE_FALSE;
                     break;
                 case 1:
-                    eValue = STATE_CHECK;
+                    eValue = TRISTATE_TRUE;
                     break;
                 case 2:
-                    eValue = STATE_DONTKNOW;
+                    eValue = TRISTATE_INDET;
                     break;
             }
             return DbGridControl_Base::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eValue );

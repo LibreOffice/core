@@ -1010,13 +1010,13 @@ void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState 
         {
             mpTBxNumBullet->SetItemState(
                 nIdNumber,
-                aBool ? STATE_CHECK : STATE_NOCHECK );
+                aBool ? TRISTATE_TRUE : TRISTATE_FALSE );
         }
         else if (nSID==FN_NUM_BULLET_ON)
         {
             mpTBxNumBullet->SetItemState(
                 nIdBullet,
-                aBool ? STATE_CHECK : STATE_NOCHECK );
+                aBool ? TRISTATE_TRUE : TRISTATE_FALSE );
         }
     }
 }

@@ -1062,14 +1062,14 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
     rXLSet.Put( XLineColorItem( m_pLbColor->GetSelectEntry(), m_pLbColor->GetSelectEntryColor() ) );
 
     // Centered line end
-    if( m_pTsbCenterStart->GetState() == STATE_CHECK )
+    if( m_pTsbCenterStart->GetState() == TRISTATE_TRUE )
         rXLSet.Put( XLineStartCenterItem( sal_True ) );
-    else if( m_pTsbCenterStart->GetState() == STATE_NOCHECK )
+    else if( m_pTsbCenterStart->GetState() == TRISTATE_FALSE )
         rXLSet.Put( XLineStartCenterItem( sal_False ) );
 
-    if( m_pTsbCenterEnd->GetState() == STATE_CHECK )
+    if( m_pTsbCenterEnd->GetState() == TRISTATE_TRUE )
         rXLSet.Put( XLineEndCenterItem( sal_True ) );
-    else if( m_pTsbCenterEnd->GetState() == STATE_NOCHECK )
+    else if( m_pTsbCenterEnd->GetState() == TRISTATE_FALSE )
         rXLSet.Put( XLineEndCenterItem( sal_False ) );
 
     // Transparency
@@ -1362,13 +1362,13 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbCenterStart->EnableTriState( false );
 
         if( ( ( const XLineStartCenterItem& ) rAttrs.Get( XATTR_LINESTARTCENTER ) ).GetValue() )
-            m_pTsbCenterStart->SetState( STATE_CHECK );
+            m_pTsbCenterStart->SetState( TRISTATE_TRUE );
         else
-            m_pTsbCenterStart->SetState( STATE_NOCHECK );
+            m_pTsbCenterStart->SetState( TRISTATE_FALSE );
     }
     else
     {
-        m_pTsbCenterStart->SetState( STATE_DONTKNOW );
+        m_pTsbCenterStart->SetState( TRISTATE_INDET );
     }
 
     // Centered line end (end)
@@ -1381,13 +1381,13 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbCenterEnd->EnableTriState( false );
 
         if( ( ( const XLineEndCenterItem& ) rAttrs.Get( XATTR_LINEENDCENTER ) ).GetValue() )
-            m_pTsbCenterEnd->SetState( STATE_CHECK );
+            m_pTsbCenterEnd->SetState( TRISTATE_TRUE );
         else
-            m_pTsbCenterEnd->SetState( STATE_NOCHECK );
+            m_pTsbCenterEnd->SetState( TRISTATE_FALSE );
     }
     else
     {
-        m_pTsbCenterEnd->SetState( STATE_DONTKNOW );
+        m_pTsbCenterEnd->SetState( TRISTATE_INDET );
     }
 
     // Transparency

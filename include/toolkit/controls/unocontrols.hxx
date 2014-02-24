@@ -48,7 +48,6 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/settings.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -1083,7 +1082,7 @@ class UnoDateFieldControl : public UnoSpinFieldControl,
 private:
     ::com::sun::star::util::Date       mnFirst;
     ::com::sun::star::util::Date       mnLast;
-    AutoState        mbLongFormat;
+    TriState         mbLongFormat;
 public:
                             UnoDateFieldControl();
     OUString         GetComponentServiceName();

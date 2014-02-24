@@ -73,7 +73,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
 
     maMenuType = TOOLBOX_MENUTYPE_NONE;
     maMenubuttonItem.maItemSize = Size( TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET, TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET );
-    maMenubuttonItem.meState = STATE_NOCHECK;
+    maMenubuttonItem.meState = TRISTATE_FALSE;
     mnMenuButtonWidth = TB_MENUBUTTON_SIZE;
 
 
@@ -106,7 +106,7 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
     mpUserData      = NULL;
     meType          = TOOLBOXITEM_BUTTON;
     mnBits          = nItemBits;
-    meState         = STATE_NOCHECK;
+    meState         = TRISTATE_FALSE;
     mbEnabled       = true;
     mbVisible       = true;
     mbEmptyBtn      = bEmptyBtn;
@@ -1672,7 +1672,7 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
         if ( pItem->meState != eState )
         {
             // Wenn RadioCheck, dann vorherigen unchecken
-            if ( (eState == STATE_CHECK) && (pItem->mnBits & TIB_AUTOCHECK) &&
+            if ( (eState == TRISTATE_TRUE) && (pItem->mnBits & TIB_AUTOCHECK) &&
                  (pItem->mnBits & TIB_RADIOCHECK) )
             {
                 ImplToolItem*    pGroupItem;
@@ -1685,8 +1685,8 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
                     pGroupItem = &mpData->m_aItems[nGroupPos-1];
                     if ( pGroupItem->mnBits & TIB_RADIOCHECK )
                     {
-                        if ( pGroupItem->meState != STATE_NOCHECK )
-                            SetItemState( pGroupItem->mnId, STATE_NOCHECK );
+                        if ( pGroupItem->meState != TRISTATE_FALSE )
+                            SetItemState( pGroupItem->mnId, TRISTATE_FALSE );
                     }
                     else
                         break;
@@ -1699,8 +1699,8 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
                     pGroupItem = &mpData->m_aItems[nGroupPos];
                     if ( pGroupItem->mnBits & TIB_RADIOCHECK )
                     {
-                        if ( pGroupItem->meState != STATE_NOCHECK )
-                            SetItemState( pGroupItem->mnId, STATE_NOCHECK );
+                        if ( pGroupItem->meState != TRISTATE_FALSE )
+                            SetItemState( pGroupItem->mnId, TRISTATE_FALSE );
                     }
                     else
                         break;
@@ -1730,7 +1730,7 @@ TriState ToolBox::GetItemState( sal_uInt16 nItemId ) const
     if ( pItem )
         return pItem->meState;
     else
-        return STATE_NOCHECK;
+        return TRISTATE_FALSE;
 }
 
 
@@ -2139,7 +2139,7 @@ void ToolBox::UpdateCustomMenu()
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
                 pMenu->InsertItem( id, it->maText, it->maImage, 0, OString(), 0 );
                 pMenu->EnableItem( id, it->mbEnabled );
-                pMenu->CheckItem ( id, it->meState == STATE_CHECK );
+                pMenu->CheckItem ( id, it->meState == TRISTATE_TRUE );
                 nSepPos++;
             }
         }
@@ -2156,7 +2156,7 @@ void ToolBox::UpdateCustomMenu()
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
                 pMenu->InsertItem( id, it->maText, it->maImage, 0, OString(), nSepPos+1 );
                 pMenu->EnableItem( id, it->mbEnabled );
-                pMenu->CheckItem( id, it->meState == STATE_CHECK );
+                pMenu->CheckItem( id, it->meState == TRISTATE_TRUE );
             }
         }
     }

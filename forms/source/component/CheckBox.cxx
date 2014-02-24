@@ -233,7 +233,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
         sal_Bool bTriState = sal_True;
         if ( m_xAggregateSet.is() )
             m_xAggregateSet->getPropertyValue( PROPERTY_TRISTATE ) >>= bTriState;
-        aValue <<= (sal_Int16)( bTriState ? STATE_DONTKNOW : getDefaultChecked() );
+        aValue <<= (sal_Int16)( bTriState ? TRISTATE_INDET : getDefaultChecked() );
     }
     else if ( !aValue.hasValue() )
     {
@@ -241,7 +241,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
         // bValue cannot be used uninitialised here.
         // But GCC does not see/understand that, which breaks -Werror builds,
         // so we explicitly default-initialise it.
-        aValue <<= (sal_Int16)( bValue ? STATE_CHECK : STATE_NOCHECK );
+        aValue <<= (sal_Int16)( bValue ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
 
     return aValue;
@@ -256,20 +256,20 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
         try
         {
-            sal_Int16 nValue = STATE_DONTKNOW;
+            sal_Int16 nValue = TRISTATE_INDET;
             aControlValue >>= nValue;
             switch (nValue)
             {
-                case STATE_DONTKNOW:
+                case TRISTATE_INDET:
                     m_xColumnUpdate->updateNull();
                     break;
-                case STATE_CHECK:
+                case TRISTATE_TRUE:
                     if (DbUseBool())
                         m_xColumnUpdate->updateBoolean( sal_True );
                     else
                         m_xColumnUpdate->updateString( getReferenceValue() );
                     break;
-                case STATE_NOCHECK:
+                case TRISTATE_FALSE:
                     if (DbUseBool())
                         m_xColumnUpdate->updateBoolean( sal_False );
                     else

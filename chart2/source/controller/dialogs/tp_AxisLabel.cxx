@@ -69,7 +69,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
 
     m_pCbStacked->EnableTriState( false );
     m_pOrientHlp->AddDependentWindow( *m_pFlOrient );
-    m_pOrientHlp->AddDependentWindow( *m_pFtRotate, STATE_CHECK );
+    m_pOrientHlp->AddDependentWindow( *m_pFtRotate, TRISTATE_TRUE );
 
     m_pCbShowDescription->SetClickHdl( LINK( this, SchAxisLabelTabPage, ToggleShowLabel ) );
 
@@ -91,9 +91,9 @@ SfxTabPage* SchAxisLabelTabPage::Create( Window* pParent, const SfxItemSet& rAtt
 sal_Bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     bool bStacked = false;
-    if( m_pOrientHlp->GetStackedState() != STATE_DONTKNOW )
+    if( m_pOrientHlp->GetStackedState() != TRISTATE_INDET )
     {
-        bStacked = m_pOrientHlp->GetStackedState() == STATE_CHECK;
+        bStacked = m_pOrientHlp->GetStackedState() == TRISTATE_TRUE;
         if( !m_bHasInitialStacking || (bStacked != m_bInitialStacking) )
             rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
     }
@@ -125,11 +125,11 @@ sal_Bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             rOutAttrs.Put( SvxChartTextOrderItem( eOrder, SCHATTR_AXIS_LABEL_ORDER ));
     }
 
-    if( m_pCbTextOverlap->GetState() != STATE_DONTKNOW )
+    if( m_pCbTextOverlap->GetState() != TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_OVERLAP, m_pCbTextOverlap->IsChecked() ) );
-    if( m_pCbTextBreak->GetState() != STATE_DONTKNOW )
+    if( m_pCbTextBreak->GetState() != TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_BREAK, m_pCbTextBreak->IsChecked() ) );
-    if( m_pCbShowDescription->GetState() != STATE_DONTKNOW )
+    if( m_pCbShowDescription->GetState() != TRISTATE_INDET )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_pCbShowDescription->IsChecked() ) );
 
     if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
@@ -147,7 +147,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCbShowDescription->EnableTriState( true );
-        m_pCbShowDescription->SetState( STATE_DONTKNOW );
+        m_pCbShowDescription->SetState( TRISTATE_INDET );
     }
     else
     {
@@ -183,9 +183,9 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 
     m_bHasInitialStacking = aState != SFX_ITEM_DONTCARE;
     if( m_bHasInitialDegrees )
-        m_pOrientHlp->SetStackedState( m_bInitialStacking ? STATE_CHECK : STATE_NOCHECK );
+        m_pOrientHlp->SetStackedState( m_bInitialStacking ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
-        m_pOrientHlp->SetStackedState( STATE_DONTKNOW );
+        m_pOrientHlp->SetStackedState( TRISTATE_INDET );
 
     if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SFX_ITEM_SET )
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
@@ -195,7 +195,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCbTextOverlap->EnableTriState( true );
-        m_pCbTextOverlap->SetState( STATE_DONTKNOW );
+        m_pCbTextOverlap->SetState( TRISTATE_INDET );
     }
     else
     {
@@ -214,7 +214,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCbTextBreak->EnableTriState( true );
-        m_pCbTextBreak->SetState( STATE_DONTKNOW );
+        m_pCbTextBreak->SetState( TRISTATE_INDET );
     }
     else
     {
@@ -284,7 +284,7 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
 
 IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 {
-    sal_Bool bEnable = ( m_pCbShowDescription->GetState() != STATE_NOCHECK );
+    sal_Bool bEnable = ( m_pCbShowDescription->GetState() != TRISTATE_FALSE );
 
     m_pOrientHlp->Enable( bEnable );
     m_pFlOrder->Enable( bEnable );

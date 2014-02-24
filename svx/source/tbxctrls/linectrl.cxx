@@ -752,7 +752,7 @@ void SvxLineEndToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, co
     ToolBox& rTbx = GetToolBox();
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

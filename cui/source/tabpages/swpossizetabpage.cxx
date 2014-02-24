@@ -738,23 +738,23 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
     }
     if ( m_pPositionCB->GetState() != m_pPositionCB->GetSavedValue() )
     {
-        if( m_pPositionCB->GetState() == STATE_DONTKNOW )
+        if( m_pPositionCB->GetState() == TRISTATE_INDET )
             rSet.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
         else
             rSet.Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
-                m_pPositionCB->GetState() == STATE_CHECK ? sal_True : sal_False ) );
+                m_pPositionCB->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         bModified = true;
     }
 
     if ( m_pSizeCB->GetState() != m_pSizeCB->GetSavedValue() )
     {
-        if ( m_pSizeCB->GetState() == STATE_DONTKNOW )
+        if ( m_pSizeCB->GetState() == TRISTATE_INDET )
             rSet.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
         else
             rSet.Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
-                m_pSizeCB->GetState() == STATE_CHECK ? sal_True : sal_False ) );
+                m_pSizeCB->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         bModified = true;
     }
 
@@ -918,13 +918,13 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
     if ( pItem )
     {
         sal_Bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
-        m_pPositionCB->SetState( bProtected ? STATE_CHECK : STATE_NOCHECK );
+        m_pPositionCB->SetState( bProtected ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pPositionCB->EnableTriState( false );
         m_pSizeCB->Enable( !bProtected );
     }
     else
     {
-        m_pPositionCB->SetState( STATE_DONTKNOW );
+        m_pPositionCB->SetState( TRISTATE_INDET );
     }
 
     m_pPositionCB->SaveValue();
@@ -934,11 +934,11 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
     if ( pItem )
     {
         m_pSizeCB->SetState( ( (const SfxBoolItem*)pItem )->GetValue()
-                              ? STATE_CHECK : STATE_NOCHECK );
+                              ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pSizeCB->EnableTriState( false );
     }
     else
-        m_pSizeCB->SetState( STATE_DONTKNOW );
+        m_pSizeCB->SetState( TRISTATE_INDET );
     m_pSizeCB->SaveValue();
 
     pItem = GetItem( rSet, SID_HTML_MODE );

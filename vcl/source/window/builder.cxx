@@ -1237,7 +1237,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             new TriStateBox(pParent, nBits) :
             new CheckBox(pParent, nBits);
         if (bIsTriState)
-            pCheckBox->SetState(STATE_DONTKNOW);
+            pCheckBox->SetState(TRISTATE_INDET);
         pCheckBox->SetImageAlign(IMAGEALIGN_LEFT); //default to left
         pWindow = pCheckBox;
     }

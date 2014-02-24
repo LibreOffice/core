@@ -1021,7 +1021,7 @@ void ExtrusionColorControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, 
     }
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 }

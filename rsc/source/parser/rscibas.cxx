@@ -27,6 +27,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <tools/fldunit.hxx>
+#include <tools/gen.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/rc.h>
 #include <tools/wintypes.hxx>
@@ -383,9 +384,9 @@ RscEnum * RscTypCont::InitTriState()
     RscEnum * pTriState;
     pTriState = new RscEnum( pHS->getID( "EnumTriState" ), RSC_NOTYPE );
 
-    SETCONST( pTriState, "STATE_NOCHECK",      STATE_NOCHECK  );
-    SETCONST( pTriState, "STATE_CHECK",        STATE_CHECK    );
-    SETCONST( pTriState, "STATE_DONTKNOW",     STATE_DONTKNOW );
+    SETCONST( pTriState, "STATE_NOCHECK",      TRISTATE_FALSE  );
+    SETCONST( pTriState, "STATE_CHECK",        TRISTATE_TRUE    );
+    SETCONST( pTriState, "STATE_DONTKNOW",     TRISTATE_INDET );
 
     return pTriState;
 }

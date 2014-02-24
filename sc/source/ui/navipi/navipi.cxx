@@ -1408,7 +1408,7 @@ void ScNavigatorDlg::CheckDataArea()
             || nCurRow <  pMarkArea->nRowStart+1
             || nCurRow >  pMarkArea->nRowEnd+1 )
         {
-            aTbxCmd.SetItemState( IID_DATA, TriState(STATE_CHECK) );
+            aTbxCmd.SetItemState( IID_DATA, TriState(TRISTATE_TRUE) );
             aTbxCmd.Select( IID_DATA );
         }
     }

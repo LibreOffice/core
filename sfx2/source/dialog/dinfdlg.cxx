@@ -955,7 +955,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
             SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
-            sal_Bool bUseData = ( STATE_CHECK == m_pUseUserDataCB->GetState() );
+            sal_Bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             m_pInfoItem->SetUseUserData( bUseData );
             rSet.Put( SfxDocumentInfoItem( *m_pInfoItem ) );
             bRet = sal_True;
@@ -974,8 +974,8 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             newItem.resetUserData( bUseAuthor
                 ? SvtUserOptions().GetFullName()
                 : OUString() );
-            m_pInfoItem->SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
-            newItem.SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
+            m_pInfoItem->SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
+            newItem.SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
 
             newItem.SetDeleteUserData( sal_True );
             rSet.Put( newItem );
@@ -1117,7 +1117,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 
     TriState eState = (TriState)m_bUseUserData;
 
-    if ( STATE_DONTKNOW == eState )
+    if ( TRISTATE_INDET == eState )
         m_pUseUserDataCB->EnableTriState( true );
 
     m_pUseUserDataCB->SetState( eState );

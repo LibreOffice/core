@@ -1489,7 +1489,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
             m_pSplitRowCB->Check( ((const SwFmtRowSplit*)pItem)->GetValue() );
         }
         else
-            m_pSplitRowCB->SetState(STATE_DONTKNOW);
+            m_pSplitRowCB->SetState(TRISTATE_INDET);
         m_pSplitRowCB->SaveValue();
 
         if(bPageBreak)

@@ -2190,7 +2190,7 @@ void SvxStyleToolBoxControl::StateChanged(
     sal_uInt16       nId    = GetId();
     ToolBox&     rTbx   = GetToolBox();
     SvxStyleBox_Impl* pBox   = (SvxStyleBox_Impl*)(rTbx.GetItemWindow( nId ));
-    TriState     eTri   = STATE_NOCHECK;
+    TriState     eTri   = TRISTATE_FALSE;
 
     DBG_ASSERT( pBox, "Control not found!" );
 
@@ -2205,12 +2205,12 @@ void SvxStyleToolBoxControl::StateChanged(
     {
         case SFX_ITEM_AVAILABLE:
             eTri = ((const SfxBoolItem*)pState)->GetValue()
-                        ? STATE_CHECK
-                        : STATE_NOCHECK;
+                        ? TRISTATE_TRUE
+                        : TRISTATE_FALSE;
             break;
 
         case SFX_ITEM_DONTCARE:
-            eTri = STATE_DONTKNOW;
+            eTri = TRISTATE_INDET;
             break;
     }
 
@@ -2373,7 +2373,7 @@ void SvxFontColorToolBoxControl::StateChanged(
     }
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 //========================================================================
@@ -2445,7 +2445,7 @@ void SvxColorToolBoxControl::StateChanged(
     sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 //========================================================================
@@ -2563,7 +2563,7 @@ void SvxColorExtToolBoxControl::StateChanged(
         ToolBox& rTbx = GetToolBox();
         sal_uInt16 nId = GetId();
         rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-        rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+        rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 
         if (bChoiceFromPalette)
         {
@@ -2679,8 +2679,8 @@ void SvxFrameToolBoxControl::StateChanged(
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, (SFX_ITEM_DONTCARE == eState)
-                            ? STATE_DONTKNOW
-                            : STATE_NOCHECK );
+                            ? TRISTATE_INDET
+                            : TRISTATE_FALSE );
 }
 
 //========================================================================
@@ -2729,8 +2729,8 @@ void SvxFrameLineStyleToolBoxControl::StateChanged(
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, (SFX_ITEM_DONTCARE == eState)
-                                ? STATE_DONTKNOW
-                                : STATE_NOCHECK );
+                                ? TRISTATE_INDET
+                                : TRISTATE_FALSE );
 }
 
 //========================================================================
@@ -2791,7 +2791,7 @@ void SvxFrameLineColorToolBoxControl::StateChanged(
     sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 
     const SvxColorItem* pItem = 0;
     if ( SFX_ITEM_DONTCARE != eState )

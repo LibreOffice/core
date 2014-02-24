@@ -141,13 +141,13 @@ void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
 
     switch( m_pCB_ObjectLines->GetState())
     {
-        case STATE_NOCHECK:
+        case TRISTATE_FALSE:
             nObjectLines = 0;
             break;
-        case STATE_CHECK:
+        case TRISTATE_TRUE:
             nObjectLines = 1;
             break;
-        case STATE_DONTKNOW:
+        case TRISTATE_INDET:
             nObjectLines = -1;
             break;
     }
@@ -155,13 +155,13 @@ void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
     sal_Int32 nCurrentRoundedEdges = -1;
     switch( m_pCB_RoundedEdge->GetState() )
     {
-        case STATE_NOCHECK:
+        case TRISTATE_FALSE:
             nCurrentRoundedEdges = 0;
             break;
-        case STATE_CHECK:
+        case TRISTATE_TRUE:
             nCurrentRoundedEdges = 5;
             break;
-        case STATE_DONTKNOW:
+        case TRISTATE_INDET:
             nCurrentRoundedEdges = -1;
             break;
     }
@@ -181,13 +181,13 @@ void ThreeD_SceneAppearance_TabPage::applyShadeModeToModel()
 
     switch( m_pCB_Shading->GetState())
     {
-        case STATE_NOCHECK:
+        case TRISTATE_FALSE:
             aShadeMode = drawing::ShadeMode_FLAT;
             break;
-        case STATE_CHECK:
+        case TRISTATE_TRUE:
             aShadeMode = drawing::ShadeMode_SMOOTH;
             break;
-        case STATE_DONTKNOW:
+        case TRISTATE_INDET:
             // nothing
             break;
     }
@@ -215,7 +215,7 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
     else
     {
         m_pCB_Shading->EnableTriState( true );
-        m_pCB_Shading->SetState( STATE_DONTKNOW );
+        m_pCB_Shading->SetState( TRISTATE_INDET );
     }
 
     if(aProps.m_nObjectLines == 0)
@@ -231,7 +231,7 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
     else
     {
         m_pCB_ObjectLines->EnableTriState( true );
-        m_pCB_ObjectLines->SetState( STATE_DONTKNOW );
+        m_pCB_ObjectLines->SetState( TRISTATE_INDET );
     }
 
     if(aProps.m_nRoundedEdges >= 5)
@@ -242,7 +242,7 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
     else if(aProps.m_nRoundedEdges<0)
     {
         m_pCB_RoundedEdge->EnableTriState( false );
-        m_pCB_RoundedEdge->SetState( STATE_DONTKNOW );
+        m_pCB_RoundedEdge->SetState( TRISTATE_INDET );
     }
     else
     {

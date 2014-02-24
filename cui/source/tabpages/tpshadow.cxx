@@ -366,14 +366,14 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
             m_pTsbShowShadow->EnableTriState( false );
 
             if( ( ( const SdrShadowItem& ) rAttrs.Get( SDRATTR_SHADOW ) ).GetValue() )
-                m_pTsbShowShadow->SetState( STATE_CHECK );
+                m_pTsbShowShadow->SetState( TRISTATE_TRUE );
             else
             {
-                m_pTsbShowShadow->SetState( STATE_NOCHECK );
+                m_pTsbShowShadow->SetState( TRISTATE_FALSE );
             }
         }
         else
-            m_pTsbShowShadow->SetState( STATE_DONTKNOW );
+            m_pTsbShowShadow->SetState( TRISTATE_INDET );
 
         // distance (only 8 possible positions),
         // so there is only one item evaluated
@@ -473,7 +473,7 @@ sal_uInt16* SvxShadowTabPage::GetRanges()
 
 IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
 {
-    if( m_pTsbShowShadow->GetState() == STATE_NOCHECK )
+    if( m_pTsbShowShadow->GetState() == TRISTATE_FALSE )
     {
         m_pGridShadow->Disable();
     }
@@ -492,7 +492,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
 
 IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 {
-    if( m_pTsbShowShadow->GetState() == STATE_CHECK )
+    if( m_pTsbShowShadow->GetState() == TRISTATE_TRUE )
         rXFSet.Put( XFillStyleItem( XFILL_SOLID ) );
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );

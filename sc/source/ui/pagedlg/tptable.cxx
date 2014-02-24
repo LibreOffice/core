@@ -241,17 +241,17 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NOTES),
                                      rCoreSet, rOldSet,
                                      m_pBtnNotes->IsChecked(),
-                                     m_pBtnNotes->GetSavedValue() != STATE_NOCHECK );
+                                     m_pBtnNotes->GetSavedValue() != TRISTATE_FALSE );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_GRID),
                                      rCoreSet, rOldSet,
                                      m_pBtnGrid->IsChecked(),
-                                     m_pBtnGrid->GetSavedValue() != STATE_NOCHECK );
+                                     m_pBtnGrid->GetSavedValue() != TRISTATE_FALSE );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_HEADERS),
                                      rCoreSet, rOldSet,
                                      m_pBtnHeaders->IsChecked(),
-                                     m_pBtnHeaders->GetSavedValue() != STATE_NOCHECK );
+                                     m_pBtnHeaders->GetSavedValue() != TRISTATE_FALSE );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_TOPDOWN),
                                      rCoreSet, rOldSet,
@@ -261,12 +261,12 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_FORMULAS),
                                      rCoreSet, rOldSet,
                                      m_pBtnFormulas->IsChecked(),
-                                     m_pBtnFormulas->GetSavedValue() != STATE_NOCHECK );
+                                     m_pBtnFormulas->GetSavedValue() != TRISTATE_FALSE );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NULLVALS),
                                      rCoreSet, rOldSet,
                                      m_pBtnNullVals->IsChecked(),
-                                     m_pBtnNullVals->GetSavedValue() != STATE_NOCHECK );
+                                     m_pBtnNullVals->GetSavedValue() != TRISTATE_FALSE );
 
     // first printed page:
     sal_Bool bUseValue = m_pBtnPageNo->IsChecked();

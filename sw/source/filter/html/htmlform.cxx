@@ -1467,7 +1467,7 @@ void SwHTMLParser::InsertInput()
     std::vector<OUString> aUnoMacroParamTbl;
     sal_uInt16 nSize = 0;
     sal_Int16 nMaxLen = 0;
-    sal_Int16 nChecked = STATE_NOCHECK;
+    sal_Int16 nChecked = TRISTATE_FALSE;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
     HTMLInputType eType = HTML_IT_TEXT;
     sal_Bool bDisabled = sal_False, bValue = sal_False;
@@ -1511,7 +1511,7 @@ void SwHTMLParser::InsertInput()
             bValue = sal_True;
             break;
         case HTML_O_CHECKED:
-            nChecked = STATE_CHECK;
+            nChecked = TRISTATE_TRUE;
             break;
         case HTML_O_DISABLED:
             bDisabled = sal_True;

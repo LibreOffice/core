@@ -202,7 +202,7 @@ namespace dbaui
             if ( _pCheckBox->IsTriStateEnabled() )
             {
                 OptionalBoolItem aValue( _nID );
-                if ( _pCheckBox->GetState() != STATE_DONTKNOW )
+                if ( _pCheckBox->GetState() != TRISTATE_INDET )
                     aValue.SetValue( bValue );
                 _rSet.Put( aValue );
             }

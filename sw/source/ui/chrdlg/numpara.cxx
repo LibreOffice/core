@@ -56,16 +56,16 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent, const SfxItemSet& 
 
     get(m_pNewStartBX,             "boxNEW_START");
     get(m_pNewStartCB,             "checkCB_NEW_START");
-    m_pNewStartCB->SetState(STATE_NOCHECK);
+    m_pNewStartCB->SetState(TRISTATE_FALSE);
     get(m_pNewStartNumberCB,       "checkCB_NUMBER_NEW_START");
-    m_pNewStartNumberCB->SetState(STATE_NOCHECK);
+    m_pNewStartNumberCB->SetState(TRISTATE_FALSE);
     get(m_pNewStartNF,             "spinNF_NEW_START");
 
     get(m_pCountParaFram,          "frameFL_COUNT_PARA");
     get(m_pCountParaCB,            "checkCB_COUNT_PARA");
-    m_pCountParaCB->SetState(STATE_NOCHECK);
+    m_pCountParaCB->SetState(TRISTATE_FALSE);
     get(m_pRestartParaCountCB,     "checkCB_RESTART_PARACOUNT");
-    m_pRestartParaCountCB->SetState(STATE_NOCHECK);
+    m_pRestartParaCountCB->SetState(TRISTATE_FALSE);
 
     get(m_pRestartBX,              "boxRESTART_NO");
     get(m_pRestartNF,              "spinNF_RESTART_PARA");
@@ -134,8 +134,8 @@ sal_Bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
        m_pNewStartNF->GetText() != m_pNewStartNF->GetSavedValue())
     {
         bModified = sal_True;
-        bool bNewStartChecked = STATE_CHECK == m_pNewStartCB->GetState();
-        bool bNumberNewStartChecked = STATE_CHECK == m_pNewStartNumberCB->GetState();
+        bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
+        bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
         rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART, bNewStartChecked));
         rSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
                   bNumberNewStartChecked && bNewStartChecked ? (sal_uInt16)m_pNewStartNF->GetValue() : USHRT_MAX));
@@ -146,7 +146,7 @@ sal_Bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
        m_pRestartNF->GetSavedValue() != m_pRestartNF->GetText() )
     {
         SwFmtLineNumber aFmt;
-        aFmt.SetStartValue( static_cast< sal_uLong >(m_pRestartParaCountCB->GetState() == STATE_CHECK ?
+        aFmt.SetStartValue( static_cast< sal_uLong >(m_pRestartParaCountCB->GetState() == TRISTATE_TRUE ?
                                 m_pRestartNF->GetValue() : 0 ));
         aFmt.SetCountLines( m_pCountParaCB->IsChecked() );
         rSet.Put(aFmt);
@@ -207,12 +207,12 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         bCurNumrule = sal_True;
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(FN_NUMBER_NEWSTART);
 
-        m_pNewStartCB->SetState(rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        m_pNewStartCB->SetState(rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
 
         m_pNewStartCB->EnableTriState(false);
     }
     else
-        m_pNewStartCB->SetState(bHasNumberStyle ? STATE_NOCHECK : STATE_DONTKNOW);
+        m_pNewStartCB->SetState(bHasNumberStyle ? TRISTATE_FALSE : TRISTATE_INDET);
 
     m_pNewStartCB->SaveValue();
 
@@ -228,7 +228,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         m_pNewStartNumberCB->EnableTriState(false);
     }
     else
-        m_pNewStartCB->SetState(STATE_DONTKNOW);
+        m_pNewStartCB->SetState(TRISTATE_INDET);
     NewStartHdl_Impl(m_pNewStartCB);
     m_pNewStartNF->SaveValue();
     m_pNewStartNumberCB->SaveValue();
@@ -238,8 +238,8 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         SwFmtLineNumber& rNum = (SwFmtLineNumber&)rSet.Get(RES_LINENUMBER);
         sal_uLong nStartValue = rNum.GetStartValue();
         bool bCount = rNum.IsCount();
-        m_pCountParaCB->SetState( bCount ? STATE_CHECK : STATE_NOCHECK );
-        m_pRestartParaCountCB->SetState( 0 != nStartValue ? STATE_CHECK : STATE_NOCHECK );
+        m_pCountParaCB->SetState( bCount ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_pRestartParaCountCB->SetState( 0 != nStartValue ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pRestartNF->SetValue(nStartValue == 0 ? 1 : nStartValue);
         LineCountHdl_Impl(m_pCountParaCB);
         m_pCountParaCB->EnableTriState(false);
@@ -247,8 +247,8 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        m_pCountParaCB->SetState(STATE_DONTKNOW);
-        m_pRestartParaCountCB->SetState(STATE_DONTKNOW);
+        m_pCountParaCB->SetState(TRISTATE_INDET);
+        m_pRestartParaCountCB->SetState(TRISTATE_INDET);
     }
     m_pCountParaCB->SaveValue();
     m_pRestartParaCountCB->SaveValue();

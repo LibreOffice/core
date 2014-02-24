@@ -668,7 +668,7 @@ void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, CommandToInfoMap& rCom
     pToolbar->SetQuickHelpText( nItemId, rItem.aLabel );
     pToolbar->SetItemText( nItemId, rItem.aLabel );
     pToolbar->EnableItem( nItemId, true );
-    pToolbar->SetItemState( nItemId, STATE_NOCHECK );
+    pToolbar->SetItemState( nItemId, TRISTATE_FALSE );
 
     CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
     if ( pIter != rCommandMap.end() )

@@ -601,7 +601,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 ::com::sun::star::awt::ItemEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.Selected = ( rButton.GetState() == STATE_CHECK ) ? 1 : 0;
+                aEvent.Selected = ( rButton.GetState() == TRISTATE_TRUE ) ? 1 : 0;
                 maItemListeners.itemStateChanged( aEvent );
             }
         }
@@ -862,10 +862,10 @@ void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeExcep
         TriState eState;
         switch ( n )
         {
-            case 0:     eState = STATE_NOCHECK;     break;
-            case 1:     eState = STATE_CHECK;       break;
-            case 2:     eState = STATE_DONTKNOW;    break;
-            default:    eState = STATE_NOCHECK;
+            case 0:     eState = TRISTATE_FALSE;     break;
+            case 1:     eState = TRISTATE_TRUE;       break;
+            case 2:     eState = TRISTATE_INDET;    break;
+            default:    eState = TRISTATE_FALSE;
         }
         pCheckBox->SetState( eState );
 
@@ -890,9 +890,9 @@ short VCLXCheckBox::getState() throw(::com::sun::star::uno::RuntimeException)
     {
         switch ( pCheckBox->GetState() )
         {
-            case STATE_NOCHECK:     nState = 0; break;
-            case STATE_CHECK:       nState = 1; break;
-            case STATE_DONTKNOW:    nState = 2; break;
+            case TRISTATE_FALSE:     nState = 0; break;
+            case TRISTATE_TRUE:       nState = 1; break;
+            case TRISTATE_INDET:    nState = 2; break;
             default:                OSL_FAIL( "VCLXCheckBox::getState(): unknown TriState!" );
         }
     }

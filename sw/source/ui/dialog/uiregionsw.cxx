@@ -329,7 +329,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     get(m_pTree, "tree");
     m_pTree->set_height_request(m_pTree->GetTextHeight() * 16);
     get(m_pFileCB, "link");
-    m_pFileCB->SetState(STATE_NOCHECK);
+    m_pFileCB->SetState(TRISTATE_FALSE);
     get(m_pDDECB, "dde");
     get(m_pDDEFrame, "ddedepend");
     get(m_pFileNameFT, "filenameft");
@@ -340,16 +340,16 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     get(m_pSubRegionED, "section");
     m_pSubRegionED->SetStyle(m_pSubRegionED->GetStyle() | WB_SORT);
     get(m_pProtectCB, "protect");
-    m_pProtectCB->SetState(STATE_NOCHECK);
+    m_pProtectCB->SetState(TRISTATE_FALSE);
     get(m_pPasswdCB, "withpassword");
     get(m_pPasswdPB, "password");
     get(m_pHideCB, "hide");
-    m_pHideCB->SetState(STATE_NOCHECK);
+    m_pHideCB->SetState(TRISTATE_FALSE);
     get(m_pConditionFT, "conditionft");
     get(m_pConditionED, "condition");
     // edit in readonly sections
     get(m_pEditInReadonlyCB, "editinro");
-    m_pEditInReadonlyCB->SetState(STATE_NOCHECK);
+    m_pEditInReadonlyCB->SetState(TRISTATE_FALSE);
     get(m_pOptionsPB, "options");
     get(m_pDismiss, "remove");
     get(m_pOK, "ok");
@@ -438,7 +438,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
     {
         //reset old button state
         if(pBox->IsTriStateEnabled())
-            pBox->SetState(pBox->IsChecked() ? STATE_NOCHECK : STATE_DONTKNOW);
+            pBox->SetState(pBox->IsChecked() ? TRISTATE_FALSE : TRISTATE_INDET);
         else
             pBox->Check(!pBox->IsChecked());
     }
@@ -632,16 +632,16 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             bFirst = false;
         }
 
-        m_pHideCB->SetState(!bHiddenValid ? STATE_DONTKNOW :
-                    bHidden ? STATE_CHECK : STATE_NOCHECK);
-        m_pProtectCB->SetState(!bProtectValid ? STATE_DONTKNOW :
-                    bProtect ? STATE_CHECK : STATE_NOCHECK);
+        m_pHideCB->SetState(!bHiddenValid ? TRISTATE_INDET :
+                    bHidden ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_pProtectCB->SetState(!bProtectValid ? TRISTATE_INDET :
+                    bProtect ? TRISTATE_TRUE : TRISTATE_FALSE);
         // edit in readonly sections
-        m_pEditInReadonlyCB->SetState(!bEditInReadonlyValid ? STATE_DONTKNOW :
-                    bEditInReadonly ? STATE_CHECK : STATE_NOCHECK);
+        m_pEditInReadonlyCB->SetState(!bEditInReadonlyValid ? TRISTATE_INDET :
+                    bEditInReadonly ? TRISTATE_TRUE : TRISTATE_FALSE);
 
-        m_pFileCB->SetState(!bFileValid ? STATE_DONTKNOW :
-                    bFile ? STATE_CHECK : STATE_NOCHECK);
+        m_pFileCB->SetState(!bFileValid ? TRISTATE_INDET :
+                    bFile ? TRISTATE_TRUE : TRISTATE_FALSE);
 
         if (bConditionValid)
             m_pConditionED->SetText(sCondition);
@@ -655,7 +655,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         m_pDDECB->Enable(false);
         m_pDDEFrame->Enable(false);
         m_pOptionsPB->Enable(false);
-        bool bPasswdEnabled = m_pProtectCB->GetState() == STATE_CHECK;
+        bool bPasswdEnabled = m_pProtectCB->GetState() == TRISTATE_TRUE;
         m_pPasswdCB->Enable(bPasswdEnabled);
         m_pPasswdPB->Enable(bPasswdEnabled);
         if(!bPasswdValid)
@@ -677,8 +677,8 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         SwSectionData const& rData( pRepr->GetSectionData() );
         m_pConditionED->SetText(rData.GetCondition());
         m_pHideCB->Enable();
-        m_pHideCB->SetState((rData.IsHidden()) ? STATE_CHECK : STATE_NOCHECK);
-        bool bHide = STATE_CHECK == m_pHideCB->GetState();
+        m_pHideCB->SetState((rData.IsHidden()) ? TRISTATE_TRUE : TRISTATE_FALSE);
+        bool bHide = TRISTATE_TRUE == m_pHideCB->GetState();
         m_pConditionED->Enable(bHide);
         m_pConditionFT->Enable(bHide);
         m_pPasswdCB->Check(rData.GetPassword().getLength() > 0);
@@ -709,12 +709,12 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         UseFileHdl(m_pFileCB);
         DDEHdl(m_pDDECB);
         m_pProtectCB->SetState((rData.IsProtectFlag())
-                ? STATE_CHECK : STATE_NOCHECK);
+                ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_pProtectCB->Enable();
 
         // edit in readonly sections
         m_pEditInReadonlyCB->SetState((rData.IsEditInReadonlyFlag())
-                ? STATE_CHECK : STATE_NOCHECK);
+                ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_pEditInReadonlyCB->Enable();
 
         bool bPasswdEnabled = m_pProtectCB->IsChecked();
@@ -839,13 +839,13 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     pBox->EnableTriState(false);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
-    sal_Bool bCheck = STATE_CHECK == pBox->GetState();
+    sal_Bool bCheck = TRISTATE_TRUE == pBox->GetState();
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetProtectFlag(bCheck);
         Image aImage = BuildBitmap(bCheck,
-                                   STATE_CHECK == m_pHideCB->GetState());
+                                   TRISTATE_TRUE == m_pHideCB->GetState());
         m_pTree->SetExpandedEntryBmp(  pEntry, aImage );
         m_pTree->SetCollapsedEntryBmp( pEntry, aImage );
         pEntry = m_pTree->NextSelected(pEntry);
@@ -868,17 +868,17 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
-        pRepr->GetSectionData().SetHidden(STATE_CHECK == pBox->GetState());
+        pRepr->GetSectionData().SetHidden(TRISTATE_TRUE == pBox->GetState());
 
-        Image aImage = BuildBitmap(STATE_CHECK == m_pProtectCB->GetState(),
-                                    STATE_CHECK == pBox->GetState());
+        Image aImage = BuildBitmap(TRISTATE_TRUE == m_pProtectCB->GetState(),
+                                    TRISTATE_TRUE == pBox->GetState());
         m_pTree->SetExpandedEntryBmp(  pEntry, aImage );
         m_pTree->SetCollapsedEntryBmp( pEntry, aImage );
 
         pEntry = m_pTree->NextSelected(pEntry);
     }
 
-    bool bHide = STATE_CHECK == pBox->GetState();
+    bool bHide = TRISTATE_TRUE == pBox->GetState();
     m_pConditionED->Enable(bHide);
     m_pConditionFT->Enable(bHide);
     return 0;
@@ -898,7 +898,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetEditInReadonlyFlag(
-                STATE_CHECK == pBox->GetState());
+                TRISTATE_TRUE == pBox->GetState());
         pEntry = m_pTree->NextSelected(pEntry);
     }
 
@@ -960,10 +960,10 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
         m_pHideCB->Enable(false);
         // edit in readonly sections
         m_pEditInReadonlyCB->Enable(false);
-        m_pEditInReadonlyCB->SetState(STATE_NOCHECK);
-        m_pProtectCB->SetState(STATE_NOCHECK);
+        m_pEditInReadonlyCB->SetState(TRISTATE_FALSE);
+        m_pProtectCB->SetState(TRISTATE_FALSE);
         m_pPasswdCB->Check(false);
-        m_pHideCB->SetState(STATE_NOCHECK);
+        m_pHideCB->SetState(TRISTATE_FALSE);
         m_pFileCB->Check(false);
         // otherwise the focus would be on HelpButton
         m_pOK->GrabFocus();
@@ -1009,7 +1009,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
         m_pDDEFrame->Enable(bFile && ! bMulti);
         if( bFile )
         {
-            m_pProtectCB->SetState(STATE_CHECK);
+            m_pProtectCB->SetState(TRISTATE_TRUE);
             m_pFileNameED->GrabFocus();
 
         }
@@ -1989,15 +1989,15 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
     switch( eState )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
-        pNtNumFmtCB->SetState( STATE_CHECK );
+        pNtNumFmtCB->SetState( TRISTATE_TRUE );
         // no break;
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
-        pNtNumCB->SetState( STATE_CHECK );
+        pNtNumCB->SetState( TRISTATE_TRUE );
         // no break;
 
     case FTNEND_ATTXTEND:
-        pNtAtTextEndCB->SetState( STATE_CHECK );
+        pNtAtTextEndCB->SetState( TRISTATE_TRUE );
         // no break;
     }
 
@@ -2081,9 +2081,9 @@ IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
         pSuffixED = pEndSuffixED;
     }
 
-    sal_Bool bEnableAtEnd = STATE_CHECK == pEndBox->GetState();
-    sal_Bool bEnableNum = bEnableAtEnd && STATE_CHECK == pNumBox->GetState();
-    sal_Bool bEnableNumFmt = bEnableNum && STATE_CHECK == pNumFmtBox->GetState();
+    sal_Bool bEnableAtEnd = TRISTATE_TRUE == pEndBox->GetState();
+    sal_Bool bEnableNum = bEnableAtEnd && TRISTATE_TRUE == pNumBox->GetState();
+    sal_Bool bEnableNumFmt = bEnableNum && TRISTATE_TRUE == pNumFmtBox->GetState();
 
     pNumBox->Enable( bEnableAtEnd );
     pOffsetTxt->Enable( bEnableNum );
