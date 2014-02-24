@@ -291,8 +291,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     pMEdit = aMEFormula.GetEdit();
 
     aMEFormula.SetAccessibleName(aFtFormula.GetText());
-    if (pMEdit)
-        pMEdit->SetAccessibleName(aFtFormula.GetText());
+    pMEdit->SetAccessibleName(aFtFormula.GetText());
 
     m_aEditHelpId = pMEdit->GetHelpId();
     pMEdit->SetUniqueId( m_aEditHelpId );
