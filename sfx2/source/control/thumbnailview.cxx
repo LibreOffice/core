@@ -86,7 +86,7 @@ ThumbnailView::~ThumbnailView()
 void ThumbnailView::MouseMove(const MouseEvent& rMEvt)
 {
     size_t nItemCount = mFilteredItemList.size();
-    Point aPoint = GetPointerState().maPos;
+    Point aPoint = rMEvt.GetPosPixel();
     OUString aHelp;
 
     for (size_t i = 0; i < nItemCount; i++)
