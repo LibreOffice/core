@@ -1325,17 +1325,34 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             {
                 SwDocStat selectionStats;
                 SwDocStat documentStats;
+                OUString charString(SW_RES(STR_STATUSBAR_CHARCOUNT_PLURAL));
+                OUString wordString(SW_RES(STR_STATUSBAR_WORDCOUNT_PLURAL));
+                OUString selectionString = "";
+
                 {
                     rShell.CountWords(selectionStats);
                     documentStats = rShell.GetDoc()->GetUpdatedDocStat( true /* complete-async */, false /* don't update fields */ );
                 }
 
-                OUString wordCount(SW_RES(selectionStats.nWord ?
-                                          STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION));
+                int selWordStats = selectionStats.nWord;
+                int selCharStats = selectionStats.nChar;
+                int selWordDocStats = documentStats.nWord;
+                int selCharDocStats = documentStats.nChar;
+
+                if (selWordStats || selWordStats)
+                    selectionString = SW_RES(STR_STATUSBAR_WORDCOUNT_SEL);
+
+                if ((selWordStats ? selWordStats : selWordDocStats) == 1)
+                    wordString = SW_RES(STR_STATUSBAR_WORDCOUNT);
+                if ((selCharStats ? selCharStats : selCharDocStats) == 1)
+                    charString = SW_RES(STR_STATUSBAR_CHARCOUNT);
+
+                OUString wordCount(wordString + ", " + charString + " " + selectionString);
                 wordCount = wordCount.replaceFirst("%1",
-                                OUString::number(selectionStats.nWord ? selectionStats.nWord : documentStats.nWord));
+                                OUString::number(selWordStats ? selWordStats : selWordDocStats));
                 wordCount = wordCount.replaceFirst("%2",
-                                OUString::number(selectionStats.nChar ? selectionStats.nChar : documentStats.nChar));
+                                OUString::number(selCharStats ? selCharStats : selCharDocStats));
+
                 rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, wordCount));
 
                 SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
