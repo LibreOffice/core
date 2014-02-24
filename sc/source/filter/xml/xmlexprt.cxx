@@ -288,7 +288,8 @@ uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Styles_getSupportedServiceName
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Styles_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+    throw (uno::Exception, std::exception)
 {
     return (cppu::OWeakObject*)new ScXMLExport( comphelper::getComponentContext(rSMgr), ScXMLOOoExport_Styles_getImplementationName(), EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS);
 }
