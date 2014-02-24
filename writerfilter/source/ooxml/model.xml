@@ -5329,7 +5329,6 @@
     <start name="stylisticSets"/>
     <start name="cntxtAlts"/>
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
-
       <define name="ST_SchemeColorVal">
         <choice>
           <value>bg1</value>
@@ -5344,7 +5343,6 @@
           <value>accent6</value>
         </choice>
       </define>
-
       <define name="ST_RectAlignment">
         <choice>
           <value>none</value>
@@ -5357,6 +5355,28 @@
           <value>bl</value>
           <value>b</value>
           <value>br</value>
+        </choice>
+      </define>
+      <define name="ST_LineCap">
+        <choice>
+          <value>rnd</value>
+          <value>sq</value>
+          <value>flat</value>
+        </choice>
+      </define>
+      <define name="ST_CompoundLine">
+        <choice>
+          <value>sng</value>
+          <value>dbl</value>
+          <value>thickThin</value>
+          <value>thinThick</value>
+          <value>tri</value>
+        </choice>
+      </define>
+      <define name="ST_PenAlignment">
+        <choice>
+          <value>ctr</value>
+          <value>in</value>
         </choice>
       </define>
 
@@ -5412,6 +5432,14 @@
           <xs:documentation>Fixed angle</xs:documentation>
           <param name="minInclusive">-5400000</param>
           <param name="maxInclusive">5400000</param>
+        </data>
+      </define>
+
+      <define name="ST_LineWidth">
+        <data type="int">
+          <xs:documentation>Line width</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">20116800</param>
         </data>
       </define>
 
@@ -5637,7 +5665,26 @@
       </define>
 
       <define name="CT_TextOutlineEffect">
-        <empty/>
+        <optional>
+          <attribute name="w">
+            <ref name="ST_LineWidth"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="cap">
+            <ref name="ST_LineCap"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="cmpd">
+            <ref name="ST_CompoundLine"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="algn">
+            <ref name="ST_PenAlignment"/>
+          </attribute>
+        </optional>
       </define>
 
       <define name="glow">
@@ -5741,6 +5788,26 @@
       <value name="br" tokenid="ooxml:ST_RectAlignment_br">br</value>
     </resource>
 
+    <resource name="ST_LineCap" resource="List" generated="yes">
+      <value name="rnd" tokenid="ooxml:ST_LineCap_rnd">rnd</value>
+      <value name="sq" tokenid="ooxml:ST_LineCap_sq">sq</value>
+      <value name="flat" tokenid="ooxml:ST_LineCap_flat">flat</value>
+    </resource>
+
+    <resource name="ST_CompoundLine" resource="List" generated="yes">
+      <value name="sng" tokenid="ooxml:ST_CompoundLine_sng">sng</value>
+      <value name="dbl" tokenid="ooxml:ST_CompoundLine_dbl">dbl</value>
+      <value name="thickThin" tokenid="ooxml:ST_CompoundLine_thickThin">thickThin</value>
+      <value name="thinThick" tokenid="ooxml:ST_CompoundLine_thinThick">thinThick</value>
+      <value name="tri" tokenid="ooxml:ST_CompoundLine_tri">tri</value>
+    </resource>
+
+    <resource name="ST_PenAlignment" resource="List" generated="yes">
+      <value name="ctr" tokenid="ooxml:ST_PenAlignment_ctr">ctr</value>
+      <value name="in" tokenid="ooxml:ST_PenAlignment_in">in</value>
+      <value name="flat" tokenid="ooxml:ST_PenAlignment_flat">flat</value>
+    </resource>
+
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
     <resource name="ST_HexColorRGB" resource="Hex"/>
     <resource name="ST_PositivePercentage" resource="Integer" generated="yes"/>
@@ -5748,6 +5815,7 @@
     <resource name="ST_Percentage" resource="Integer" generated="yes"/>
     <resource name="ST_PositiveFixedAngle" resource="Integer" generated="yes"/>
     <resource name="ST_FixedAngle" resource="Integer" generated="yes"/>
+    <resource name="ST_LineWidth" resource="Integer" generated="yes"/>
 
     <!-- Groups Resource Definitions -->
     <resource name="EG_ColorTransform" resource="Properties" tag="character">
@@ -5811,6 +5879,13 @@
       <attribute name="ky" tokenid="ooxml:CT_Reflection_ky"/>
       <attribute name="algn" tokenid="ooxml:CT_Reflection_algn"/>
     </resource>
+    <resource name="CT_TextOutlineEffect" resource="Properties" tag="character">
+      <attribute name="w" tokenid="ooxml:CT_TextOutlineEffect_w"/>
+      <attribute name="cap" tokenid="ooxml:CT_TextOutlineEffect_cap"/>
+      <attribute name="cmpd" tokenid="ooxml:CT_TextOutlineEffect_cmpd"/>
+      <attribute name="algn" tokenid="ooxml:CT_TextOutlineEffect_algn"/>
+    </resource>
+
     <resource name="glow" resource="Properties" tag="character">
       <element name="glow" tokenid="ooxml:glow_glow"/>
     </resource>
