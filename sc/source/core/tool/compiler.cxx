@@ -454,7 +454,7 @@ static bool lcl_parseExternalName(
         OUString& rName,
         const sal_Unicode cSep,
         const ScDocument* pDoc = NULL,
-        const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks = NULL )
+        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks = NULL )
 {
     /* TODO: future versions will have to support sheet-local names too, thus
      * return a possible sheet name as well. */
@@ -818,8 +818,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument* pDoc,
-            const ::com::sun::star::uno::Sequence<
-                const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
+            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const
     {
         return lcl_parseExternalName(rSymbol, rFile, rName, '#', pDoc, pExternalLinks);
     }
@@ -1045,8 +1044,7 @@ struct ConventionXL
 
     static bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument* pDoc,
-            const ::com::sun::star::uno::Sequence<
-                const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks )
+            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
     {
         return lcl_parseExternalName( rSymbol, rFile, rName, '!', pDoc, pExternalLinks);
     }
@@ -1261,8 +1259,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument* pDoc,
-            const ::com::sun::star::uno::Sequence<
-                const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
+            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const
     {
         return ConventionXL::parseExternalName( rSymbol, rFile, rName, pDoc, pExternalLinks);
     }
@@ -1436,8 +1433,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument* pDoc,
-            const ::com::sun::star::uno::Sequence<
-                const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
+            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const
     {
         return ConventionXL::parseExternalName( rSymbol, rFile, rName, pDoc, pExternalLinks);
     }

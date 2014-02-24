@@ -254,7 +254,7 @@ public:
         virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
                 const ScDocument* pDoc,
                 const ::com::sun::star::uno::Sequence<
-                    const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const = 0;
+                    com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks ) const = 0;
 
         virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const = 0;
 
@@ -312,7 +312,7 @@ private:
     SvNumberFormatter* mpFormatter;
 
     // For CONV_XL_OOX, may be set via API by MOOXML filter.
-    ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
+    com::sun::star::uno::Sequence<com::sun::star::sheet::ExternalLinkInfo> maExternalLinks;
 
     sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
     OUString    aFormula;                           // formula source code
@@ -425,9 +425,9 @@ private:
 public:
 
     /// Set external link info for ScAddress::CONV_XL_OOX.
-    inline  void    SetExternalLinks(
-            const ::com::sun::star::uno::Sequence<
-            const ::com::sun::star::sheet::ExternalLinkInfo > & rLinks )
+    void SetExternalLinks(
+        const ::com::sun::star::uno::Sequence<
+            com::sun::star::sheet::ExternalLinkInfo>& rLinks )
     {
         maExternalLinks = rLinks;
     }

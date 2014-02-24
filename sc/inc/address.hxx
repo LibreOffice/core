@@ -285,7 +285,7 @@ public:
                   const Details& rDetails = detailsOOOa1,
                   ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
-                    const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+                    com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
 
     SC_DLLPUBLIC OUString Format( sal_uInt16 = 0, const ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
@@ -449,7 +449,7 @@ public:
                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                   ScAddress::ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
-                    const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+                    com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
 
     SC_DLLPUBLIC sal_uInt16 ParseAny( const OUString&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
@@ -482,7 +482,7 @@ public:
             OUString& rExternDocName, OUString& rStartTabName, OUString& rEndTabName, sal_uInt16& nFlags,
             bool bOnlyAcceptSingle,
             const ::com::sun::star::uno::Sequence<
-                const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+                com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
 
     SC_DLLPUBLIC OUString Format(sal_uInt16 = 0, const ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
