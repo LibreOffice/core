@@ -56,7 +56,7 @@ class ScFormulaParserObj : public ::cppu::WeakImplHelper3<
 {
 private:
     ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::FormulaOpCodeMapEntry > maOpCodeMapping;
-    ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
+    ::com::sun::star::uno::Sequence<com::sun::star::sheet::ExternalLinkInfo> maExternalLinks;
     ScCompiler::OpCodeMapPtr    mxOpCodeMap;
     ScDocShell*         mpDocShell;
     sal_Int16           mnConv;

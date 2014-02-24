@@ -9,6 +9,7 @@
 
 #include "formulabuffer.hxx"
 #include "formulaparser.hxx"
+#include <externallinkbuffer.hxx>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -178,6 +179,7 @@ void applySharedFormulas(
 
 void applyCellFormulas(
     ScDocumentImport& rDoc, CachedTokenArray& rCache, SvNumberFormatter& rFormatter,
+    const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks,
     const std::vector<FormulaBuffer::TokenAddressItem>& rCells )
 {
     std::vector<FormulaBuffer::TokenAddressItem>::const_iterator it = rCells.begin(), itEnd = rCells.end();
@@ -220,6 +222,7 @@ void applyCellFormulas(
         ScCompiler aCompiler(&rDoc.getDoc(), aPos);
         aCompiler.SetNumberFormatter(&rFormatter);
         aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
+        aCompiler.SetExternalLinks(rExternalLinks);
         ScTokenArray* pCode = aCompiler.CompileString(it->maTokenStr);
         if (!pCode)
             continue;
@@ -271,7 +274,8 @@ void applyCellFormulaValues(
 }
 
 void processSheetFormulaCells(
-    ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter& rFormatter )
+    ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter& rFormatter,
+    const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks )
 {
     if (rItem.mpSharedFormulaEntries && rItem.mpSharedFormulaIDs)
         applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries, *rItem.mpSharedFormulaIDs);
@@ -279,7 +283,7 @@ void processSheetFormulaCells(
     if (rItem.mpCellFormulas)
     {
         CachedTokenArray aCache(rDoc.getDoc());
-        applyCellFormulas(rDoc, aCache, rFormatter, *rItem.mpCellFormulas);
+        applyCellFormulas(rDoc, aCache, rFormatter, rExternalLinks, *rItem.mpCellFormulas);
     }
 
     if (rItem.mpArrayFormulas)
@@ -294,21 +298,24 @@ class WorkerThread : public salhelper::Thread
     ScDocumentImport& mrDoc;
     FormulaBuffer::SheetItem& mrItem;
     boost::scoped_ptr<SvNumberFormatter> mpFormatter;
+    const uno::Sequence<sheet::ExternalLinkInfo>& mrExternalLinks;
 
     WorkerThread( const WorkerThread& );
     WorkerThread& operator= ( const WorkerThread& );
 
 public:
-    WorkerThread( ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter* pFormatter ) :
+    WorkerThread(
+        ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter* pFormatter,
+        const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks ) :
         salhelper::Thread("xlsx-import-formula-buffer-worker-thread"),
-        mrDoc(rDoc), mrItem(rItem), mpFormatter(pFormatter) {}
+        mrDoc(rDoc), mrItem(rItem), mpFormatter(pFormatter), mrExternalLinks(rExternalLinks) {}
 
     virtual ~WorkerThread() {}
 
 protected:
     virtual void execute()
     {
-        processSheetFormulaCells(mrDoc, mrItem, *mpFormatter);
+        processSheetFormulaCells(mrDoc, mrItem, *mpFormatter, mrExternalLinks);
     }
 };
 
@@ -366,7 +373,7 @@ void FormulaBuffer::finalizeImport()
     if (nThreadCount == 1)
     {
         for (; it != itEnd; ++it)
-            processSheetFormulaCells(rDoc, *it, *rDoc.getDoc().GetFormatTable());
+            processSheetFormulaCells(rDoc, *it, *rDoc.getDoc().GetFormatTable(), getExternalLinks().getLinkInfos());
     }
     else
     {
@@ -384,7 +391,7 @@ void FormulaBuffer::finalizeImport()
                 if (it == itEnd)
                     break;
 
-                WorkerThreadRef xThread(new WorkerThread(rDoc, *it, rDoc.getDoc().CreateFormatTable()));
+                WorkerThreadRef xThread(new WorkerThread(rDoc, *it, rDoc.getDoc().CreateFormatTable(), getExternalLinks().getLinkInfos()));
                 ++it;
                 aThreads.push_back(xThread);
                 xThread->launch();
