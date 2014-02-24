@@ -1574,6 +1574,19 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     // without conversion to layout direction as below
                     aRet = _getPropAtAggrObj( OUString("EndPosition") );
                 }
+                else if (pEntry->nWID == RES_FRM_SIZE && pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT)
+                {
+                    SvxShape* pSvxShape = GetSvxShape();
+                    SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
+                    sal_Int16 nPercent = 0;
+                    if (pSvxShape)
+                    {
+                        SdrObject* pObj = pSvxShape->GetSdrObject();
+                        if (pObj->GetRelativeHeight())
+                            nPercent = *pObj->GetRelativeHeight() * 100;
+                    }
+                    aRet = uno::makeAny(nPercent);
+                }
                 else
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
