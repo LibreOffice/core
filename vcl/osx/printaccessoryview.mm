@@ -640,7 +640,7 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
     
     NSArray* pSubViews = [pNSView subviews];
     unsigned int nViews = [pSubViews count];
-    NSRect aUnion = { { 0, 0 }, { 0, 0 } };
+    NSRect aUnion = NSZeroRect;
 
     // get the combined frame of all subviews
     for( unsigned int n = 0; n < nViews; n++ )
@@ -709,7 +709,7 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
 static NSControl* createLabel( const rtl::OUString& i_rText )
 {
     NSString* pText = CreateNSString( i_rText );
-    NSRect aTextRect = { { 0, 0 }, {20, 15} };
+    NSRect aTextRect = { NSZeroPoint, {20, 15} };
     NSTextField* pTextView = [[NSTextField alloc] initWithFrame: aTextRect];
     [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
     [pTextView setEditable: NO];
@@ -1100,9 +1100,9 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     NSView* pCurParent = 0;
     long nCurY = 0;
     long nCurX = 0;
-    NSRect aViewFrame = { { 0, 0 }, {600, 400 } };
+    NSRect aViewFrame = { NSZeroPoint, {600, 400 } };
     NSRect aTabViewFrame = { { 190, 0 }, {410, 400 } };
-    NSSize aMaxTabSize = { 0, 0 };
+    NSSize aMaxTabSize = NSZeroSize;
     NSView* pAccessoryView = [[NSView alloc] initWithFrame: aViewFrame];
     NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aTabViewFrame];
     [pAccessoryView addSubview: [pTabView autorelease]];

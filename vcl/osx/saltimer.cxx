@@ -65,9 +65,8 @@ void ImplSalStartTimer( sal_uLong nMS )
     {
         SalData::ensureThreadAutoreleasePool();
         // post an event so we can get into the main thread
-        NSPoint aPt = { 0, 0 };
         NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                                   location: aPt
+                                   location: NSZeroPoint
                                    modifierFlags: 0
                                    timestamp: [NSDate timeIntervalSinceReferenceDate]
                                    windowNumber: 0

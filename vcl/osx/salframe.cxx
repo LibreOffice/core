@@ -207,7 +207,7 @@ void AquaSalFrame::initWindowAndView()
     {
         objc_msgSend(mpNSWindow, @selector(setRestorable:), NO);
     }
-    NSRect aRect = { { 0,0 }, { static_cast<CGFloat>(maGeometry.nWidth), static_cast<CGFloat>(maGeometry.nHeight) } };
+    const NSRect aRect = { NSZeroPoint, NSMakeSize( maGeometry.nWidth, maGeometry.nHeight )};
     mnTrackingRectTag = [mpNSView addTrackingRect: aRect owner: mpNSView userData: nil assumeInside: NO];
 
     maSysData.mpNSView = mpNSView;
@@ -743,7 +743,7 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         // which is always on index 0 according to documentation
         bool bHideMenu = (nDisplay == 0);
 
-        NSRect aNewContentRect = { { 0, 0 }, { 0, 0 } };
+        NSRect aNewContentRect = NSZeroRect;
         // get correct screen
         NSScreen* pScreen = nil;
         NSArray* pScreens = [NSScreen screens];
@@ -1621,7 +1621,7 @@ void AquaSalFrame::UpdateFrameGeometry()
     // release old track rect
     [mpNSView removeTrackingRect: mnTrackingRectTag];
     // install the new track rect
-    NSRect aTrackRect = { { 0, 0 }, aContentRect.size };
+    NSRect aTrackRect = { NSZeroPoint, aContentRect.size };
     mnTrackingRectTag = [mpNSView addTrackingRect: aTrackRect owner: mpNSView userData: nil assumeInside: NO];
 
     // convert to vcl convention

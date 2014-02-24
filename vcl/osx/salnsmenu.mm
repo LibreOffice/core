@@ -131,9 +131,8 @@
         NSRect aImgRect = { { 2, 0 }, { 0, 0 } };
         for( size_t i = 0; i < rButtons.size(); ++i )
         {
-            NSRect aFromRect = { { 0, 0 },
-                                 { static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Width()),
-                                   static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Height()) } };
+            const Size aPixSize = rButtons[i].maButton.maImage.GetSizePixel();
+            const NSRect aFromRect = { NSZeroPoint, NSMakeSize( aPixSize.Width(), aPixSize.Height()) };
             aImgRect.origin.y = floor((aFrame.size.height - aFromRect.size.height)/2);
             aImgRect.size = aFromRect.size;
             if( rButtons[i].mpNSImage )
@@ -155,9 +154,8 @@
         NSPoint aMousePt = [pEvent locationInWindow];
         for( size_t i = 0; i < rButtons.size(); ++i )
         {
-            NSRect aFromRect = { { 0, 0 },
-                                 { static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Width()),
-                                   static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Height()) } };
+            const Size aPixSize = rButtons[i].maButton.maImage.GetSizePixel();
+            const NSRect aFromRect = { NSZeroPoint, NSMakeSize( aPixSize.Width(), aPixSize.Height()) };
             aImgRect.origin.y = (aFrame.size.height - aFromRect.size.height)/2;
             aImgRect.size = aFromRect.size;
             if( aMousePt.x >= aImgRect.origin.x && aMousePt.x <= (aImgRect.origin.x+aImgRect.size.width) &&
