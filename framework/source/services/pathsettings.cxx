@@ -644,6 +644,12 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
     // read the writeable path
     xPath->getByName(CFGPROP_WRITEPATH) >>= aPathVal.sWritePath;
 
+    // avoid duplicates, by removing the writeable path from
+    // the user defined path list if it happens to be there too
+    OUStringList::iterator aI = aPathVal.lUserPaths.find(aPathVal.sWritePath);
+    if (aI != aPathVal.lUserPaths.end())
+        aPathVal.lUserPaths.erase(aI);
+
     // read state props
     xPath->getByName(CFGPROP_ISSINGLEPATH) >>= aPathVal.bIsSinglePath;
 

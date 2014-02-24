@@ -153,11 +153,22 @@ css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    if ( PropertyName == "EnableATToolSupport" || PropertyName == "ExternalMailer" || PropertyName == "SourceViewFontHeight"
-      || PropertyName == "SourceViewFontName" || PropertyName == "WorkPathVariable" || PropertyName == "ooInetFTPProxyName"
-      || PropertyName == "ooInetFTPProxyPort" || PropertyName == "ooInetHTTPProxyName" || PropertyName == "ooInetHTTPProxyPort"
-      || PropertyName == "ooInetHTTPSProxyName" || PropertyName == "ooInetHTTPSProxyPort" || PropertyName == "ooInetNoProxy"
-      || PropertyName == "ooInetProxyType" || PropertyName == "givenname" || PropertyName == "sn" )
+    if ( PropertyName == "EnableATToolSupport" ||
+         PropertyName == "ExternalMailer" ||
+         PropertyName == "SourceViewFontHeight" ||
+         PropertyName == "SourceViewFontName" ||
+         PropertyName == "TemplatePathVariable" ||
+         PropertyName == "WorkPathVariable" ||
+         PropertyName == "ooInetFTPProxyName" ||
+         PropertyName == "ooInetFTPProxyPort" ||
+         PropertyName == "ooInetHTTPProxyName" ||
+         PropertyName == "ooInetHTTPProxyPort" ||
+         PropertyName == "ooInetHTTPSProxyName" ||
+         PropertyName == "ooInetHTTPSProxyPort" ||
+         PropertyName == "ooInetNoProxy" ||
+         PropertyName == "ooInetProxyType" ||
+         PropertyName == "givenname" ||
+         PropertyName == "sn" )
     {
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     }

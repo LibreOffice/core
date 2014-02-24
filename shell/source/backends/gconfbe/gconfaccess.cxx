@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
 #include "osl/file.hxx"
 #include "osl/security.hxx"
 #include "osl/thread.h"
@@ -189,18 +190,9 @@ static OUString xdg_user_dir_lookup (const char *type)
         if( osl::FileBase::E_None == aDocumentsDir.open() )
             return aDocumentsDirURL;
     }
-    /* Special case desktop for historical compatibility */
-    if (strcmp (type, "DESKTOP") == 0)
-    {
-        return aHomeDirURL + "/Desktop";
-    }
-    else
-    {
-        return aHomeDirURL + "/Documents";
-    }
+    /* Use fallbacks historical compatibility if nothing else exists */
+    return aHomeDirURL + "/" + OUString::createFromAscii(type);
 }
-
-
 
 uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
 {
@@ -317,9 +309,16 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
 
         case SETTING_WORK_DIRECTORY:
         {
-            OUString aDocumentsDirURL = xdg_user_dir_lookup("DOCUMENTS");
+            OUString aDocumentsDirURL = xdg_user_dir_lookup("Documents");
 
             return uno::makeAny( aDocumentsDirURL );
+        }
+
+        case SETTING_TEMPLATE_DIRECTORY:
+        {
+            OUString aTemplatesDirURL = xdg_user_dir_lookup("Templates");
+
+            return uno::makeAny( aTemplatesDirURL );
         }
 
         case SETTING_USER_GIVENNAME:
@@ -392,10 +391,20 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
 
         case SETTING_WORK_DIRECTORY:
         {
-            OUString aDocumentsDirURL = xdg_user_dir_lookup("DOCUMENTS");
+            OUString aDocumentsDirURL = xdg_user_dir_lookup("Documents");
             osl::Directory aDocumentsDir( aDocumentsDirURL );
 
             if( osl::FileBase::E_None == aDocumentsDir.open() )
+                return sal_True;
+        }
+            break;
+
+        case SETTING_TEMPLATE_DIRECTORY:
+        {
+            OUString aTemplatesDirURL = xdg_user_dir_lookup("Templates");
+            osl::Directory aTemplatesDir( aTemplatesDirURL );
+
+            if( osl::FileBase::E_None == aTemplatesDir.open() )
                 return sal_True;
         }
             break;
@@ -560,6 +569,14 @@ ConfigurationValue const ConfigurationValues[] =
         RTL_CONSTASCII_STRINGPARAM("WorkPathVariable"),
         sal_True,
         SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
+    },
+
+    {
+        SETTING_TEMPLATE_DIRECTORY,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        RTL_CONSTASCII_STRINGPARAM("TemplatePathVariable"),
+        sal_True,
+        SETTING_TEMPLATE_DIRECTORY, // so that the existence of the dir can be checked
     },
 
     {
