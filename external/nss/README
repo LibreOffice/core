@@ -63,7 +63,7 @@ The direct link:
 
 The system sqlite in Mac OS X versions older than 10.6 is incompatible
 with the softokn3 in nss which requires a later version of sqlite.
-Since the baseline is Mac OS X 10.6 we use
+With SDK 10.6 (and more current SDK) we use
 NSS_USE_SYSTEM_SQLITE=1
 to build using the system sqlite.
 

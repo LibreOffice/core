@@ -24,6 +24,7 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libsmime3.dylib \
 		dist/out/lib/libsoftokn3.dylib \
 		dist/out/lib/libssl3.dylib \
+		$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),dist/out/lib/libsqlite3.dylib) \
 ))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
