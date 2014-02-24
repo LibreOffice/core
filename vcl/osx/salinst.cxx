@@ -194,37 +194,19 @@ sal_Bool ImplSVMainHook( int * pnInit )
     bNoSVMain = false;
     initNSApp();
 
-    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                               location: NSZeroPoint
-                               modifierFlags: 0
-                               timestamp: 0
-                               windowNumber: 0
-                               context: nil
-                               subtype: AquaSalInstance::AppExecuteSVMain
-                               data1: 0
-                               data2: 0 ];
-    if( pEvent )
-    {
-        [NSApp postEvent: pEvent atStart: NO];
-
-        OUString aExeURL, aExe;
-        osl_getExecutableFile( &aExeURL.pData );
-        osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
-        OString aByteExe( OUStringToOString( aExe, osl_getThreadTextEncoding() ) );
+    OUString aExeURL, aExe;
+    osl_getExecutableFile( &aExeURL.pData );
+    osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
+    OString aByteExe( OUStringToOString( aExe, osl_getThreadTextEncoding() ) );
 
 #ifdef DEBUG
-        aByteExe += OString ( " NSAccessibilityDebugLogLevel 1" );
-        const char* pArgv[] = { aByteExe.getStr(), NULL };
-        NSApplicationMain( 3, pArgv );
+    aByteExe += OString ( " NSAccessibilityDebugLogLevel 1" );
+    const char* pArgv[] = { aByteExe.getStr(), NULL };
+    NSApplicationMain( 3, pArgv );
 #else
-        const char* pArgv[] = { aByteExe.getStr(), NULL };
-        NSApplicationMain( 1, pArgv );
+    const char* pArgv[] = { aByteExe.getStr(), NULL };
+    NSApplicationMain( 1, pArgv );
 #endif
-    }
-    else
-    {
-        OSL_FAIL( "NSApplication initialization could not be done" );
-    }
 
     return TRUE;   // indicate that ImplSVMainHook is implemented
 }

@@ -38,6 +38,7 @@ class AquaSalFrame;
 @interface VCL_NSApplication : NSApplication
 {
 }
+-(void)applicationDidFinishLaunching:(NSNotification*)pNotification;
 -(void)sendEvent:(NSEvent*)pEvent;
 -(void)sendSuperEvent:(NSEvent*)pEvent;
 -(NSMenu*)applicationDockMenu:(NSApplication *)sender;
