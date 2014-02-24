@@ -618,7 +618,6 @@ void Test::testSharedStringPoolUndoDoc()
         aUndoDoc.SetString(aPos, m_pDoc->GetString(aPos));
     }
 
-
     // String values in A1:A4 should have identical hash.
     for (SCROW i = 0; i <= 4; ++i)
     {
