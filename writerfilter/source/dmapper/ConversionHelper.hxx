@@ -46,7 +46,6 @@ namespace ConversionHelper{
     sal_Int32 convertTwipToMM100(sal_Int32 _t);
     // probably the most useless unit in the world - English Metric Units (EMU) 360 000 EMU == 1cm
     sal_Int32 convertEMUToMM100(sal_Int32 _t);
-    sal_Int32 ConvertColor(sal_Int32 nWordColor );
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
     sal_Int16 ConvertNumberingType(sal_Int32 nFmt);
 

@@ -1709,8 +1709,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         // the following are not part of the official documentation
     case 0x6870: //TxtForeColor
         {
-            //contains a color as 0xTTRRGGBB while SO uses 0xTTRRGGBB
-            sal_Int32 nColor = ConversionHelper::ConvertColor(nIntValue);
+            sal_Int32 nColor = msfilter::util::BGRToRGB(nIntValue);
             rContext->Insert(PROP_CHAR_COLOR, uno::makeAny( nColor ) );
         }
         break;

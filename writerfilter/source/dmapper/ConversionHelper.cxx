@@ -240,20 +240,6 @@ sal_Int32 convertEMUToMM100(sal_Int32 _t)
     return _t / 360;
 }
 
-/*-------------------------------------------------------------------------
-    contains a color from 0xTTRRGGBB to 0xTTRRGGBB
-  -----------------------------------------------------------------------*/
-sal_Int32 ConvertColor(sal_Int32 nWordColor)
-{
-    sal_uInt8
-        r(static_cast<sal_uInt8>(nWordColor&0xFF)),
-        g(static_cast<sal_uInt8>(((nWordColor)>>8)&0xFF)),
-        b(static_cast<sal_uInt8>((nWordColor>>16)&0xFF)),
-        t(static_cast<sal_uInt8>((nWordColor>>24)&0xFF));
-    sal_Int32 nRet = (t<<24) + (r<<16) + (g<<8) + b;
-    return nRet;
-}
-
 sal_Int16 convertTableJustification( sal_Int32 nIntValue )
 {
     sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
