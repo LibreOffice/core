@@ -175,172 +175,175 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     }
     else
     {
-        // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
-        aMedium.UseInteractionHandler( sal_True );
-        if ( aMedium.GetErrorCode() == ERRCODE_NONE )
+        try
         {
-            // remember input stream and content and put them into the descriptor later
-            // should be done here since later the medium can switch to a version
-            xStream = aMedium.GetInputStream();
-            xContent = aMedium.GetContent();
-            bReadOnly = aMedium.IsReadOnly();
-
-            sal_Bool bIsStorage = aMedium.IsStorage();
-            if ( bIsStorage )
+            // ctor of SfxMedium uses owner transition of ItemSet
+            SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
+            aMedium.UseInteractionHandler( sal_True );
+            if ( aMedium.GetErrorCode() == ERRCODE_NONE )
             {
-                Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
-                if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
+                // remember input stream and content and put them into the descriptor later
+                // should be done here since later the medium can switch to a version
+                xStream = aMedium.GetInputStream();
+                xContent = aMedium.GetContent();
+                bReadOnly = aMedium.IsReadOnly();
+
+                sal_Bool bIsStorage = aMedium.IsStorage();
+                if ( bIsStorage )
                 {
-                    // error during storage creation means _here_ that the medium
-                    // is broken, but we can not handle it in medium since impossibility
-                    // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState(), OUString( OSL_LOG_PREFIX  ) );
-                    if ( xInteraction.is() )
+                    Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
+                    if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                     {
-                        OUString empty;
+                        // error during storage creation means _here_ that the medium
+                        // is broken, but we can not handle it in medium since impossibility
+                        // to create a storage does not _always_ means that the medium is broken
+                        aMedium.SetError( aMedium.GetLastStorageCreationState(), OUString( OSL_LOG_PREFIX  ) );
+                        if ( xInteraction.is() )
+                        {
+                            OUString empty;
+                            try
+                            {
+                                InteractiveAppException xException( empty,
+                                                                Reference< XInterface >(),
+                                                                InteractionClassification_ERROR,
+                                                                aMedium.GetError() );
+
+                                Reference< XInteractionRequest > xRequest(
+                                    new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
+                                                                          ucbhelper::CONTINUATION_APPROVE ) );
+                                xInteraction->handle( xRequest );
+                            }
+                            catch (const Exception&)
+                            {
+                            }
+                        }
+                    }
+                    else
+                    {
+                        OSL_ENSURE( xStorage.is(), "At this point storage must exist!" );
+
                         try
                         {
-                            InteractiveAppException xException( empty,
-                                                            Reference< XInterface >(),
-                                                            InteractionClassification_ERROR,
-                                                            aMedium.GetError() );
-
-                            Reference< XInteractionRequest > xRequest(
-                                new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
-                                                                      ucbhelper::CONTINUATION_APPROVE ) );
-                            xInteraction->handle( xRequest );
-                        }
-                        catch (const Exception&)
-                        {
-                        }
-                    }
-                }
-                else
-                {
-                    OSL_ENSURE( xStorage.is(), "At this point storage must exist!" );
-
-                    try
-                    {
-                        const SfxFilter* pPreFilter = !aPreselectedFilterName.isEmpty() ?
-                                SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : !aTypeName.isEmpty() ?
-                                SfxFilterMatcher(OUString("swriter")).GetFilter4EA( aTypeName ) : 0;
-                        if (!pPreFilter)
-                            pPreFilter = SfxFilterMatcher(OUString("sweb")).GetFilter4EA( aTypeName );
-                        OUString aFilterName;
-                        if ( pPreFilter )
-                        {
-                            aFilterName = pPreFilter->GetName();
-                            aTypeName = pPreFilter->GetTypeName();
-                        }
-
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : sal_False, &aFilterName );
-                    }
-                    catch (const WrappedTargetException& aWrap)
-                    {
-                        if (!bDeepDetection)
-                            // Bail out early unless it's a deep detection.
-                            return OUString();
-
-                        packages::zip::ZipIOException aZipException;
-
-                        // repairing is done only if this type is requested from outside
-                        // we don't do any type detection on broken packages (f.e. because it might be impossible), so any requested
-                        // type will be accepted if the user allows to repair the file
-                        if ( ( aWrap.TargetException >>= aZipException ) && ( !aTypeName.isEmpty() || !aPreselectedFilterName.isEmpty() ) )
-                        {
-                            if ( xInteraction.is() )
+                            const SfxFilter* pPreFilter = !aPreselectedFilterName.isEmpty() ?
+                                    SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : !aTypeName.isEmpty() ?
+                                    SfxFilterMatcher(OUString("swriter")).GetFilter4EA( aTypeName ) : 0;
+                            if (!pPreFilter)
+                                pPreFilter = SfxFilterMatcher(OUString("sweb")).GetFilter4EA( aTypeName );
+                            OUString aFilterName;
+                            if ( pPreFilter )
                             {
-                                // the package is a broken one
-                                   aDocumentTitle = aMedium.GetURLObject().getName(
-                                                            INetURLObject::LAST_SEGMENT,
-                                                            true,
-                                                            INetURLObject::DECODE_WITH_CHARSET );
+                                aFilterName = pPreFilter->GetName();
+                                aTypeName = pPreFilter->GetTypeName();
+                            }
 
-                                if ( !bRepairPackage )
+                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : sal_False, &aFilterName );
+                        }
+                        catch (const WrappedTargetException& aWrap)
+                        {
+                            if (!bDeepDetection)
+                                // Bail out early unless it's a deep detection.
+                                return OUString();
+
+                            packages::zip::ZipIOException aZipException;
+
+                            // repairing is done only if this type is requested from outside
+                            // we don't do any type detection on broken packages (f.e. because it might be impossible), so any requested
+                            // type will be accepted if the user allows to repair the file
+                            if ( ( aWrap.TargetException >>= aZipException ) && ( !aTypeName.isEmpty() || !aPreselectedFilterName.isEmpty() ) )
+                            {
+                                if ( xInteraction.is() )
                                 {
-                                    // ask the user whether he wants to try to repair
-                                    RequestPackageReparation aRequest( aDocumentTitle );
-                                    xInteraction->handle( aRequest.GetRequest() );
-                                    bRepairAllowed = aRequest.isApproved();
+                                    // the package is a broken one
+                                       aDocumentTitle = aMedium.GetURLObject().getName(
+                                                                INetURLObject::LAST_SEGMENT,
+                                                                true,
+                                                                INetURLObject::DECODE_WITH_CHARSET );
+
+                                    if ( !bRepairPackage )
+                                    {
+                                        // ask the user whether he wants to try to repair
+                                        RequestPackageReparation aRequest( aDocumentTitle );
+                                        xInteraction->handle( aRequest.GetRequest() );
+                                        bRepairAllowed = aRequest.isApproved();
+                                    }
+
+                                    if ( !bRepairAllowed )
+                                    {
+                                        // repair either not allowed or not successful
+                                        // repair either not allowed or not successful
+                                        NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
+                                        xInteraction->handle( aNotifyRequest.GetRequest() );
+
+                                        Reference< ::comphelper::OIHWrapNoFilterDialog > xHandler = new ::comphelper::OIHWrapNoFilterDialog( xInteraction );
+                                        if ( nIndexOfInteractionHandler != -1 )
+                                            lDescriptor[nIndexOfInteractionHandler].Value <<= Reference< XInteractionHandler >( static_cast< XInteractionHandler* >( xHandler.get() ) );
+
+                                        aMedium.SetError( ERRCODE_ABORT, OUString( OSL_LOG_PREFIX  ) );
+                                    }
                                 }
+                                else
+                                    // no interaction, error handling as usual
+                                    aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, OUString( OSL_LOG_PREFIX  ) );
 
                                 if ( !bRepairAllowed )
                                 {
-                                    // repair either not allowed or not successful
-                                    // repair either not allowed or not successful
-                                    NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
-                                    xInteraction->handle( aNotifyRequest.GetRequest() );
-
-                                    Reference< ::comphelper::OIHWrapNoFilterDialog > xHandler = new ::comphelper::OIHWrapNoFilterDialog( xInteraction );
-                                    if ( nIndexOfInteractionHandler != -1 )
-                                        lDescriptor[nIndexOfInteractionHandler].Value <<= Reference< XInteractionHandler >( static_cast< XInteractionHandler* >( xHandler.get() ) );
-
-                                    aMedium.SetError( ERRCODE_ABORT, OUString( OSL_LOG_PREFIX  ) );
+                                    aTypeName = "";
+                                    aPreselectedFilterName = "";
                                 }
-                            }
-                            else
-                                // no interaction, error handling as usual
-                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, OUString( OSL_LOG_PREFIX  ) );
-
-                            if ( !bRepairAllowed )
-                            {
-                                aTypeName = "";
-                                aPreselectedFilterName = "";
                             }
                         }
                     }
-                    catch (const RuntimeException&)
-                    {
-                        throw;
-                    }
-                    catch (const Exception&)
-                    {
-                        aTypeName = "";
-                        aPreselectedFilterName = "";
-                    }
                 }
-            }
-            else
-            {
-                aMedium.GetInStream();
-                if ( aMedium.GetErrorCode() == ERRCODE_NONE )
-                {
-                    if ( !aPreselectedFilterName.isEmpty() )
-                        pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
-                    else
-                        pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
-
-                    bool bTestWriter = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.TextDocument" ||
-                        pFilter->GetServiceName() == "com.sun.star.text.WebDocument";
-                    bool bTestGlobal = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.GlobalDocument";
-
-                    const SfxFilter* pOrigFilter = NULL;
-                    if ( !bTestWriter && !bTestGlobal && pFilter )
-                    {
-                        // cross filter; now this should be a type detection only, not a filter detection
-                        // we can simulate it by preserving the preselected filter if the type matches
-                        // example: HTML filter for Calc
-                        pOrigFilter = pFilter;
-                        pFilter = SfxFilterMatcher().GetFilter4EA( pFilter->GetTypeName() );
-                        bTestWriter = true;
-                    }
-
-                    sal_uLong nErr = ERRCODE_NONE;
-                    if ( pFilter || bTestWriter )
-                        nErr = DetectFilter( aMedium, &pFilter );
-                    if ( nErr != ERRCODE_NONE )
-                        pFilter = NULL;
-                    else if ( pOrigFilter && pFilter && pFilter->GetTypeName() == pOrigFilter->GetTypeName() )
-                        // cross filter, see above
-                        pFilter = pOrigFilter;
-                }
-
-                if ( pFilter )
-                    aTypeName = pFilter->GetTypeName();
                 else
-                    aTypeName = "";
+                {
+                    aMedium.GetInStream();
+                    if ( aMedium.GetErrorCode() == ERRCODE_NONE )
+                    {
+                        if ( !aPreselectedFilterName.isEmpty() )
+                            pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
+                        else
+                            pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
+
+                        bool bTestWriter = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.TextDocument" ||
+                            pFilter->GetServiceName() == "com.sun.star.text.WebDocument";
+                        bool bTestGlobal = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.GlobalDocument";
+
+                        const SfxFilter* pOrigFilter = NULL;
+                        if ( !bTestWriter && !bTestGlobal && pFilter )
+                        {
+                            // cross filter; now this should be a type detection only, not a filter detection
+                            // we can simulate it by preserving the preselected filter if the type matches
+                            // example: HTML filter for Calc
+                            pOrigFilter = pFilter;
+                            pFilter = SfxFilterMatcher().GetFilter4EA( pFilter->GetTypeName() );
+                            bTestWriter = true;
+                        }
+
+                        sal_uLong nErr = ERRCODE_NONE;
+                        if ( pFilter || bTestWriter )
+                            nErr = DetectFilter( aMedium, &pFilter );
+                        if ( nErr != ERRCODE_NONE )
+                            pFilter = NULL;
+                        else if ( pOrigFilter && pFilter && pFilter->GetTypeName() == pOrigFilter->GetTypeName() )
+                            // cross filter, see above
+                            pFilter = pOrigFilter;
+                    }
+
+                    if ( pFilter )
+                        aTypeName = pFilter->GetTypeName();
+                    else
+                        aTypeName = "";
+                }
             }
+        }
+        catch (const RuntimeException&)
+        {
+            throw;
+        }
+        catch (const Exception&)
+        {
+            aTypeName = "";
+            aPreselectedFilterName = "";
         }
     }
 
