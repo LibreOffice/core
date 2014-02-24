@@ -222,7 +222,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     if( nFlags & SBX_RESERVED )
         nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
 
-    sal_uIntPtr nOldPos = rStrm.Tell();
+    sal_Size nOldPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
     SbxBase* p = Create( nSbxId, nCreator );
     if( p )
@@ -230,7 +230,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
         p->nFlags = nFlags;
         if( p->LoadData( rStrm, nVer ) )
         {
-            sal_uIntPtr nNewPos = rStrm.Tell();
+            sal_Size nNewPos = rStrm.Tell();
             nOldPos += nSize;
             DBG_ASSERT( nOldPos >= nNewPos, "SBX: Too much data loaded" );
             if( nOldPos != nNewPos )
@@ -262,7 +262,7 @@ void SbxBase::Skip( SvStream& rStrm )
     sal_uInt32 nCreator, nSize;
     rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlags ).ReadUInt16( nVer );
 
-    sal_uIntPtr nStartPos = rStrm.Tell();
+    sal_Size nStartPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
 
     rStrm.Seek( nStartPos + nSize );
@@ -277,10 +277,10 @@ sal_Bool SbxBase::Store( SvStream& rStrm )
              .WriteUInt16( (sal_uInt16) GetSbxId() )
              .WriteUInt16( (sal_uInt16) GetFlags() )
              .WriteUInt16( (sal_uInt16) GetVersion() );
-        sal_uIntPtr nOldPos = rStrm.Tell();
+        sal_Size nOldPos = rStrm.Tell();
         rStrm.WriteUInt32( (sal_uInt32) 0L );
         sal_Bool bRes = StoreData( rStrm );
-        sal_uIntPtr nNewPos = rStrm.Tell();
+        sal_Size nNewPos = rStrm.Tell();
         rStrm.Seek( nOldPos );
         rStrm.WriteUInt32( (sal_uInt32) ( nNewPos - nOldPos ) );
         rStrm.Seek( nNewPos );

@@ -654,7 +654,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     SvMemoryStream aMemStream;
                     /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
-                    sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
+                    sal_Size nSize = aMemStream.Tell();
                     Sequence< sal_Int8 > aBinSeq( nSize );
                     sal_Int8* pData = aBinSeq.getArray();
                     memcpy( pData, aMemStream.GetData(), nSize );
@@ -797,7 +797,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         SvMemoryStream aMemStream;
                         /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
-                        sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
+                        sal_Size nSize = aMemStream.Tell();
                         Sequence< sal_Int8 > aBinSeq( nSize );
                         sal_Int8* pData = aBinSeq.getArray();
                         memcpy( pData, aMemStream.GetData(), nSize );

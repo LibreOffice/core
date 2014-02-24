@@ -541,7 +541,7 @@ RTLFUNC(Red)
     }
     else
     {
-        sal_uIntPtr nRGB = (sal_uIntPtr)rPar.Get(1)->GetLong();
+        sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x00FF0000;
         nRGB >>= 16;
         rPar.Get(0)->PutInteger( (sal_Int16)nRGB );
@@ -559,7 +559,7 @@ RTLFUNC(Green)
     }
     else
     {
-        sal_uIntPtr nRGB = (sal_uIntPtr)rPar.Get(1)->GetLong();
+        sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x0000FF00;
         nRGB >>= 8;
         rPar.Get(0)->PutInteger( (sal_Int16)nRGB );
@@ -577,7 +577,7 @@ RTLFUNC(Blue)
     }
     else
     {
-        sal_uIntPtr nRGB = (sal_uIntPtr)rPar.Get(1)->GetLong();
+        sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x000000FF;
         rPar.Get(0)->PutInteger( (sal_Int16)nRGB );
     }
@@ -982,7 +982,7 @@ RTLFUNC(FindPropertyObject)
 static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                                       sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
 {
-    sal_uIntPtr nFPos = pStrm->Tell();
+    sal_Size nFPos = pStrm->Tell();
 
     sal_Bool bIsVariant = !rVar.IsFixed();
     SbxDataType eType = rVar.GetType();
@@ -1089,7 +1089,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
     double aDouble;
 
-    sal_uIntPtr nFPos = pStrm->Tell();
+    sal_Size nFPos = pStrm->Tell();
 
     sal_Bool bIsVariant = !rVar.IsFixed();
     SbxDataType eVarType = rVar.GetType();
@@ -1259,7 +1259,7 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
 
     if( bHasRecordNo )
     {
-        sal_uIntPtr nFilePos = bRandom ? (sal_uIntPtr)(nBlockLen*nRecordNo) : (sal_uIntPtr)nRecordNo;
+        sal_Size nFilePos = bRandom ? (sal_Size)(nBlockLen * nRecordNo) : (sal_Size)nRecordNo;
         pStrm->Seek( nFilePos );
     }
 
@@ -1275,7 +1275,7 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
 
     if( pArr )
     {
-        sal_uIntPtr nFPos = pStrm->Tell();
+        sal_Size nFPos = pStrm->Tell();
         short nDims = pArr->GetDims();
         short* pDims = new short[ nDims ];
         bRet = lcl_WriteReadSbxArray(*pArr,pStrm,!bRandom,nDims,pDims,bPut);
