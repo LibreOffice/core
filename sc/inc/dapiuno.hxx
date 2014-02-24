@@ -595,7 +595,8 @@ public:
     virtual com::sun::star::uno::Reference < com::sun::star::sheet::XDataPilotField > SAL_CALL
         createDateGroup(const com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo)
              throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IllegalArgumentException);
+                    ::com::sun::star::lang::IllegalArgumentException,
+                    std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

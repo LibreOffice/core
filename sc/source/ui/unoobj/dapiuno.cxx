@@ -2709,7 +2709,8 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 }
 
 Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( const DataPilotFieldGroupInfo& rInfo )
-        throw (RuntimeException, IllegalArgumentException)
+        throw (RuntimeException, IllegalArgumentException,
+               std::exception)
 {
     SolarMutexGuard aGuard;
     using namespace ::com::sun::star::sheet::DataPilotFieldGroupBy;
