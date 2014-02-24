@@ -959,7 +959,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
     m_bEnable = _rxInStream->readBoolean();
     if (nAnyMask & TABSTOP)
     {
-        m_aTabStop = makeBoolAny(_rxInStream->readBoolean());
+        m_aTabStop = makeBoolAny(_rxInStream->readBoolean() != 0);
     }
     if (nVersion > 3)
         m_bNavigation = _rxInStream->readBoolean();

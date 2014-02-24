@@ -579,7 +579,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     }
 
                     if ( rProps.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ) )
-                        impl_AddBool( pAttrList, XML_detectmouseclick, nValue );
+                        impl_AddBool( pAttrList, XML_detectmouseclick, nValue != 0 );
 
                     if (rProps.GetOpt(ESCHER_Prop_fillOpacity, nValue))
                         // Partly undo the transformation at the end of EscherPropertyContainer::CreateFillProperties(): VML opacity is 0..1.
@@ -777,7 +777,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
             case ESCHER_Prop_fNoLineDrawDash:
                 {
                     // See DffPropertyReader::ApplyLineAttributes().
-                    impl_AddBool( m_pShapeAttrList, XML_stroked, it->nPropValue & 8 );
+                    impl_AddBool( m_pShapeAttrList, XML_stroked, (it->nPropValue & 8) != 0 );
                     bAlreadyWritten[ESCHER_Prop_fNoLineDrawDash] = true;
                 }
                 break;

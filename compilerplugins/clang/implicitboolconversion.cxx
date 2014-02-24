@@ -26,6 +26,14 @@ template<> struct std::iterator_traits<ExprIterator> {
     typedef std::random_access_iterator_tag iterator_category;
 };
 
+template<> struct std::iterator_traits<ConstExprIterator> {
+    typedef std::ptrdiff_t difference_type;
+    typedef Expr const * value_type;
+    typedef Expr const ** pointer;
+    typedef Expr const & reference;
+    typedef std::random_access_iterator_tag iterator_category;
+};
+
 namespace {
 
 bool isBool(Expr const * expr, bool allowTypedefs = true) {
@@ -147,11 +155,13 @@ private:
     void reportWarning(ImplicitCastExpr const * expr);
 
     std::stack<std::vector<ImplicitCastExpr const *>> nested;
+    std::stack<CallExpr const *> calls;
     bool externCIntFunctionDefinition = false;
 };
 
 bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
+    calls.push(expr);
     bool ret = RecursiveASTVisitor::TraverseCallExpr(expr);
     Decl const * d = expr->getCalleeDecl();
     bool ext = false;
@@ -203,6 +213,7 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
             reportWarning(i);
         }
     }
+    calls.pop();
     nested.pop();
     return ret;
 }
@@ -540,21 +551,40 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         } else {
             nested.top().push_back(expr);
         }
-    } else {
-        ExplicitCastExpr const * sub = dyn_cast<ExplicitCastExpr>(
-            expr->getSubExpr()->IgnoreParenImpCasts());
-        if (sub != nullptr
-            && (sub->getSubExpr()->IgnoreParenImpCasts()->getType().IgnoreParens()
-                == expr->getType().IgnoreParens())
-            && isBool(sub->getSubExpr()->IgnoreParenImpCasts()))
+        return true;
+    }
+    ExplicitCastExpr const * sub = dyn_cast<ExplicitCastExpr>(
+        expr->getSubExpr()->IgnoreParenImpCasts());
+    if (sub != nullptr
+        && (sub->getSubExpr()->IgnoreParenImpCasts()->getType().IgnoreParens()
+            == expr->getType().IgnoreParens())
+        && isBool(sub->getSubExpr()->IgnoreParenImpCasts()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "explicit conversion (%0) from %1 to %2 implicitly cast back to %3",
+            expr->getLocStart())
+            << sub->getCastKindName()
+            << sub->getSubExpr()->IgnoreParenImpCasts()->getType()
+            << sub->getType() << expr->getType() << expr->getSourceRange();
+        return true;
+    }
+    if (expr->getType()->isBooleanType() && !isBool(expr->getSubExpr())
+        && !calls.empty())
+    {
+        CallExpr const * call = calls.top();
+        if (std::find_if(
+                call->arg_begin(), call->arg_end(),
+                [expr](Expr const * e) { return expr == e->IgnoreParens(); })
+            != call->arg_end())
         {
             report(
                 DiagnosticsEngine::Warning,
-                "explicit conversion (%0) from %1 to %2 implicitly cast back to %3",
+                "implicit conversion (%0) of call argument from %1 to %2",
                 expr->getLocStart())
-                << sub->getCastKindName()
-                << sub->getSubExpr()->IgnoreParenImpCasts()->getType()
-                << sub->getType() << expr->getType() << expr->getSourceRange();
+                << expr->getCastKindName() << expr->getSubExpr()->getType()
+                << expr->getType() << expr->getSourceRange();
+            return true;
         }
     }
     return true;

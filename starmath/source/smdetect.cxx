@@ -230,7 +230,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                         OUString aTmpFilterName;
                         if ( pFilter )
                             aTmpFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : sal_False, &aTmpFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter && pFilter->IsAllowedAsTemplate(), &aTmpFilterName );
                     }
                     catch( const WrappedTargetException& aWrap )
                     {

@@ -246,12 +246,12 @@ bool ItemConnectionBase::DoFillItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
 
 TriState ItemConnectionBase::GetEnableState( bool bKnown ) const
 {
-    return lclConvertToTriState( bKnown, mnFlags & ITEMCONN_ENABLE_KNOWN, mnFlags & ITEMCONN_DISABLE_UNKNOWN );
+    return lclConvertToTriState( bKnown, (mnFlags & ITEMCONN_ENABLE_KNOWN) != 0, (mnFlags & ITEMCONN_DISABLE_UNKNOWN) != 0 );
 }
 
 TriState ItemConnectionBase::GetShowState( bool bKnown ) const
 {
-    return lclConvertToTriState( bKnown, mnFlags & ITEMCONN_SHOW_KNOWN, mnFlags & ITEMCONN_HIDE_UNKNOWN );
+    return lclConvertToTriState( bKnown, (mnFlags & ITEMCONN_SHOW_KNOWN) != 0, (mnFlags & ITEMCONN_HIDE_UNKNOWN) != 0 );
 }
 
 // ============================================================================

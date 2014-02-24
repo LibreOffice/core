@@ -8930,7 +8930,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
             ScBreakType nBreak = pDoc->HasColBreak(nCol, nTab);
-            ScUnoHelpFunctions::SetBoolInAny(rAny, (nBreak & BREAK_MANUAL));
+            ScUnoHelpFunctions::SetBoolInAny(rAny, (nBreak & BREAK_MANUAL) != 0);
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);

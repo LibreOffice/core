@@ -1398,14 +1398,14 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_showMemberPropertyTips,
             // OOXTODO: XML_showDataTips,
             // OOXTODO: XML_enableWizard,
-            XML_enableDrill,                XclXmlUtils::ToPsz( maPTExtInfo.mnFlags & EXC_SXEX_DRILLDOWN ), // ???
+            XML_enableDrill,                XclXmlUtils::ToPsz( (maPTExtInfo.mnFlags & EXC_SXEX_DRILLDOWN) != 0 ), // ???
             // OOXTODO: XML_enableFieldProperties,      [ SXEx fEnableFieldDialog (maPTExtInfo.mnFlags) ]
             // OOXTODO: XML_preserveFormatting,         [ SXEx fPreserveFormatting (maPTExtInfo.mnFlags) ]
             // OOXTODO: XML_pageWrap,                   [ SXEx cWrapPage (maPTExtInfo.mnFlags) ]
             // OOXTODO: XML_pageOverThenDown,           [ SXEx fAcrossPageLay (maPTExtInfo.mnFlags) ]
             // OOXTODO: XML_subtotalHiddenItems,        [ SXEx fSubtotalHiddenPageItems (maPTExtInfo.mnFlags) ]
-            XML_rowGrandTotals,             XclXmlUtils::ToPsz( maPTInfo.mnFlags & EXC_SXVIEW_ROWGRAND ),
-            XML_colGrandTotals,             XclXmlUtils::ToPsz( maPTInfo.mnFlags & EXC_SXVIEW_COLGRAND ),
+            XML_rowGrandTotals,             XclXmlUtils::ToPsz( (maPTInfo.mnFlags & EXC_SXVIEW_ROWGRAND) != 0 ),
+            XML_colGrandTotals,             XclXmlUtils::ToPsz( (maPTInfo.mnFlags & EXC_SXVIEW_COLGRAND) != 0 ),
             // OOXTODO: XML_fieldPrintTitles,
             // OOXTODO: XML_itemPrintTitles,
             // OOXTODO: XML_mergeItem,

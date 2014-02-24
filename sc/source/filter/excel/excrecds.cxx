@@ -468,7 +468,7 @@ void XclExpWsbool::SaveXml( XclExpXmlStream& rStrm )
     // OOXTODO: elements XML_tabColor, XML_outlinePr
     rWorksheet->singleElement( XML_pageSetUpPr,
             // OOXTODO: XML_autoPageBreaks,
-            XML_fitToPage,  XclXmlUtils::ToPsz( GetValue() & EXC_WSBOOL_FITTOPAGE ),
+            XML_fitToPage,  XclXmlUtils::ToPsz( (GetValue() & EXC_WSBOOL_FITTOPAGE) != 0 ),
             FSEND );
     rWorksheet->endElement( XML_sheetPr );
 }

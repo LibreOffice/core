@@ -1089,7 +1089,7 @@ SwTxtAttr* MakeTxtAttr(
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
         pNew = SwTxtMeta::CreateTxtMeta( rDoc.GetMetaFieldManager(), pTxtNode,
-                static_cast<SwFmtMeta&>(rNew), nStt, nEnd, bIsCopy );
+                static_cast<SwFmtMeta&>(rNew), nStt, nEnd, bIsCopy == COPY );
         break;
     default:
         OSL_ENSURE(RES_TXTATR_AUTOFMT == rNew.Which(), "unknown attribute");

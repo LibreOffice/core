@@ -1790,16 +1790,16 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
         if( nFlags & SCA_VALID_COL )
-            lcl_a1_append_c ( r, nCol, nFlags & SCA_COL_ABSOLUTE );
+            lcl_a1_append_c ( r, nCol, (nFlags & SCA_COL_ABSOLUTE) != 0 );
         if( nFlags & SCA_VALID_ROW )
-            lcl_a1_append_r ( r, nRow, nFlags & SCA_ROW_ABSOLUTE );
+            lcl_a1_append_r ( r, nRow, (nFlags & SCA_ROW_ABSOLUTE) != 0 );
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
         if( nFlags & SCA_VALID_ROW )
-            lcl_r1c1_append_r ( r, nRow, nFlags & SCA_ROW_ABSOLUTE, rDetails );
+            lcl_r1c1_append_r ( r, nRow, (nFlags & SCA_ROW_ABSOLUTE) != 0, rDetails );
         if( nFlags & SCA_VALID_COL )
-            lcl_r1c1_append_c ( r, nCol, nFlags & SCA_COL_ABSOLUTE, rDetails );
+            lcl_r1c1_append_c ( r, nCol, (nFlags & SCA_COL_ABSOLUTE) != 0, rDetails );
         break;
     }
     return r;
@@ -1901,28 +1901,28 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
         if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL )
         {
             // Full col refs always require 2 rows (2:2)
-            lcl_a1_append_r( r, aStart.Row(), nFlags & SCA_ROW_ABSOLUTE );
+            lcl_a1_append_r( r, aStart.Row(), (nFlags & SCA_ROW_ABSOLUTE) != 0 );
             r += ":";
-            lcl_a1_append_r( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE );
+            lcl_a1_append_r( r, aEnd.Row(), (nFlags & SCA_ROW2_ABSOLUTE) != 0 );
         }
         else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW )
         {
             // Full row refs always require 2 cols (A:A)
-            lcl_a1_append_c( r, aStart.Col(), nFlags & SCA_COL_ABSOLUTE );
+            lcl_a1_append_c( r, aStart.Col(), (nFlags & SCA_COL_ABSOLUTE) != 0 );
             r += ":";
-            lcl_a1_append_c( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE );
+            lcl_a1_append_c( r, aEnd.Col(), (nFlags & SCA_COL2_ABSOLUTE) != 0 );
         }
         else
         {
-            lcl_a1_append_c ( r, aStart.Col(), nFlags & SCA_COL_ABSOLUTE );
-            lcl_a1_append_r ( r, aStart.Row(), nFlags & SCA_ROW_ABSOLUTE );
+            lcl_a1_append_c ( r, aStart.Col(), (nFlags & SCA_COL_ABSOLUTE) != 0 );
+            lcl_a1_append_r ( r, aStart.Row(), (nFlags & SCA_ROW_ABSOLUTE) != 0 );
             if( aStart.Col() != aEnd.Col() ||
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE ) ||
                 aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
                 r += ":";
-                lcl_a1_append_c ( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE );
-                lcl_a1_append_r ( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE );
+                lcl_a1_append_c ( r, aEnd.Col(), (nFlags & SCA_COL2_ABSOLUTE) != 0 );
+                lcl_a1_append_r ( r, aEnd.Row(), (nFlags & SCA_ROW2_ABSOLUTE) != 0 );
             }
         }
     break;
@@ -1931,33 +1931,33 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
         if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL )
         {
-            lcl_r1c1_append_r( r, aStart.Row(), nFlags & SCA_ROW_ABSOLUTE, rDetails );
+            lcl_r1c1_append_r( r, aStart.Row(), (nFlags & SCA_ROW_ABSOLUTE) != 0, rDetails );
             if( aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
                 r += ":";
-                lcl_r1c1_append_r( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE, rDetails );
+                lcl_r1c1_append_r( r, aEnd.Row(), (nFlags & SCA_ROW2_ABSOLUTE) != 0, rDetails );
             }
         }
         else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW )
         {
-            lcl_r1c1_append_c( r, aStart.Col(), nFlags & SCA_COL_ABSOLUTE, rDetails );
+            lcl_r1c1_append_c( r, aStart.Col(), (nFlags & SCA_COL_ABSOLUTE) != 0, rDetails );
             if( aStart.Col() != aEnd.Col() ||
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE )) {
                 r += ":";
-                lcl_r1c1_append_c( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE, rDetails );
+                lcl_r1c1_append_c( r, aEnd.Col(), (nFlags & SCA_COL2_ABSOLUTE) != 0, rDetails );
             }
         }
         else
         {
-            lcl_r1c1_append_r( r, aStart.Row(), nFlags & SCA_ROW_ABSOLUTE, rDetails );
-            lcl_r1c1_append_c( r, aStart.Col(), nFlags & SCA_COL_ABSOLUTE, rDetails );
+            lcl_r1c1_append_r( r, aStart.Row(), (nFlags & SCA_ROW_ABSOLUTE) != 0, rDetails );
+            lcl_r1c1_append_c( r, aStart.Col(), (nFlags & SCA_COL_ABSOLUTE) != 0, rDetails );
             if( aStart.Col() != aEnd.Col() ||
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE ) ||
                 aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
                 r += ":";
-                lcl_r1c1_append_r( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE, rDetails );
-                lcl_r1c1_append_c( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE, rDetails );
+                lcl_r1c1_append_r( r, aEnd.Row(), (nFlags & SCA_ROW2_ABSOLUTE) != 0, rDetails );
+                lcl_r1c1_append_c( r, aEnd.Col(), (nFlags & SCA_COL2_ABSOLUTE) != 0, rDetails );
             }
         }
     }

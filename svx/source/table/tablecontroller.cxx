@@ -2745,10 +2745,10 @@ void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellB
     {
         // current cell is inside the selection
 
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), BOX_LINE_TOP, VALID_TOP, nCellFlags & CELL_TOP);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), BOX_LINE_BOTTOM, VALID_BOTTOM, nCellFlags & CELL_BOTTOM);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), BOX_LINE_LEFT, VALID_LEFT, nCellFlags & CELL_LEFT);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), BOX_LINE_RIGHT, VALID_RIGHT, nCellFlags & CELL_RIGHT);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), BOX_LINE_TOP, VALID_TOP, (nCellFlags & CELL_TOP) != 0);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), BOX_LINE_BOTTOM, VALID_BOTTOM, (nCellFlags & CELL_BOTTOM) != 0);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), BOX_LINE_LEFT, VALID_LEFT, (nCellFlags & CELL_LEFT) != 0);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), BOX_LINE_RIGHT, VALID_RIGHT, (nCellFlags & CELL_RIGHT) != 0);
 
         lcl_MergeDistance(rLinesState, BOX_LINE_TOP, rCellBoxItem.GetDistance(BOX_LINE_TOP));
         lcl_MergeDistance(rLinesState, BOX_LINE_BOTTOM, rCellBoxItem.GetDistance(BOX_LINE_BOTTOM));

@@ -277,7 +277,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                             OUString sFilterName;
                             if ( pFilter )
                                 sFilterName = pFilter->GetName();
-                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : sal_False, &sFilterName );
+                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter && pFilter->IsOwnTemplateFormat(), &sFilterName );
                         }
                         catch( const WrappedTargetException& aWrap )
                         {

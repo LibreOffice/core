@@ -273,7 +273,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             }
 
             // set onlinelayout property after setting the zoom
-            disableScrollBars(xViewProps, nStyleFlags&EX_SHOW_ONLINE_LAYOUT);
+            disableScrollBars(xViewProps, (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) != 0);
             bIsInitialized = sal_True;
         }
 
@@ -369,7 +369,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
         // can only be done here - the SFX changes the ScrollBar values
-        disableScrollBars(xViewProps, nStyleFlags&EX_SHOW_ONLINE_LAYOUT);
+        disableScrollBars(xViewProps, (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) != 0);
 
         if (aInitializedLink.IsSet())
             aInitializedLink.Call(this);

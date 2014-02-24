@@ -249,9 +249,9 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
 bool RangeChooserTabPage::isValid()
 {
     OUString aRange( m_pED_Range->GetText());
-    sal_Bool bFirstCellAsLabel = ( m_pCB_FirstColumnAsLabel->IsChecked() && !m_pRB_Columns->IsChecked() )
+    bool bFirstCellAsLabel = ( m_pCB_FirstColumnAsLabel->IsChecked() && !m_pRB_Columns->IsChecked() )
         || ( m_pCB_FirstRowAsLabel->IsChecked()    && !m_pRB_Rows->IsChecked() );
-    sal_Bool bHasCategories = ( m_pCB_FirstColumnAsLabel->IsChecked() && m_pRB_Columns->IsChecked() )
+    bool bHasCategories = ( m_pCB_FirstColumnAsLabel->IsChecked() && m_pRB_Columns->IsChecked() )
         || ( m_pCB_FirstRowAsLabel->IsChecked()    && m_pRB_Rows->IsChecked() );
     bool bIsValid = ( aRange.isEmpty() ) ||
         m_rDialogModel.getRangeSelectionHelper()->verifyArguments(

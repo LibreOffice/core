@@ -236,7 +236,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                                 aTypeName = pPreFilter->GetTypeName();
                             }
 
-                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : sal_False, &aFilterName );
+                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter && pPreFilter->IsOwnTemplateFormat(), &aFilterName );
                         }
                         catch (const WrappedTargetException& aWrap)
                         {

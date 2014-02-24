@@ -3165,7 +3165,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
     else if ( aNameString.equalsAscii( SC_UNONAME_MANPAGE ) )
     {
         ScBreakType nBreak = pDoc->HasColBreak(nStartCol, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, (nBreak & BREAK_MANUAL) );
+        ScUnoHelpFunctions::SetBoolInAny( aAny, (nBreak & BREAK_MANUAL) != 0 );
     }
 
     return aAny;
@@ -3444,7 +3444,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     else if ( aNameString.equalsAscii( SC_UNONAME_MANPAGE ) )
     {
         ScBreakType nBreak = pDoc->HasRowBreak(nStartRow, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, (nBreak & BREAK_MANUAL) );
+        ScUnoHelpFunctions::SetBoolInAny( aAny, (nBreak & BREAK_MANUAL) != 0 );
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_CELLBACK ) || aNameString.equalsAscii( SC_UNONAME_CELLTRAN ) )
     {
