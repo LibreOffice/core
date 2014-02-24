@@ -44,9 +44,9 @@ public:
                 }
 };
 
-static sal_uIntPtr GetSvError( DWORD nWntError )
+static sal_Size GetSvError( DWORD nWntError )
 {
-    static struct { DWORD wnt; sal_uIntPtr sv; } errArr[] =
+    static struct { DWORD wnt; sal_Size sv; } errArr[] =
     {
         { ERROR_SUCCESS,                SVSTREAM_OK },
         { ERROR_ACCESS_DENIED,          SVSTREAM_ACCESS_DENIED },
@@ -86,7 +86,7 @@ static sal_uIntPtr GetSvError( DWORD nWntError )
         { (DWORD)0xFFFFFFFF, SVSTREAM_GENERALERROR }
     };
 
-    sal_uIntPtr nRetVal = SVSTREAM_GENERALERROR;    // default error
+    sal_Size nRetVal = SVSTREAM_GENERALERROR;    // default error
     int i=0;
     do
     {
@@ -139,7 +139,7 @@ sal_uInt16 SvFileStream::IsA() const
 }
 
 /// Does not check for EOF, makes isEof callable
-sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
+sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -147,14 +147,14 @@ sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
         bool bResult = ReadFile(pInstanceData->hFile,(LPVOID)pData,nSize,&nCount,NULL);
         if( !bResult )
         {
-            sal_uIntPtr nTestError = GetLastError();
+            sal_Size nTestError = GetLastError();
             SetError(::GetSvError( nTestError ) );
         }
     }
     return (DWORD)nCount;
 }
 
-sal_uIntPtr SvFileStream::PutData( const void* pData, sal_uIntPtr nSize )
+sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -165,7 +165,7 @@ sal_uIntPtr SvFileStream::PutData( const void* pData, sal_uIntPtr nSize )
     return nCount;
 }
 
-sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
+sal_Size SvFileStream::SeekPos( sal_Size nPos )
 {
     DWORD nNewPos = 0;
     if( IsOpen() )
@@ -184,7 +184,7 @@ sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
     }
     else
         SetError( SVSTREAM_GENERALERROR );
-    return (sal_uIntPtr)nNewPos;
+    return (sal_Size)nNewPos;
 }
 
 void SvFileStream::FlushData()
@@ -196,7 +196,7 @@ void SvFileStream::FlushData()
     }
 }
 
-bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
+bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -208,7 +208,7 @@ bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
     return bRetVal;
 }
 
-bool SvFileStream::UnlockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
+bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -347,7 +347,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     if( (pInstanceData->hFile==INVALID_HANDLE_VALUE) &&
          (nAccessMode & GENERIC_WRITE))
     {
-        sal_uIntPtr nErr = ::GetSvError( GetLastError() );
+        sal_Size nErr = ::GetSvError( GetLastError() );
         if(nErr==SVSTREAM_ACCESS_DENIED || nErr==SVSTREAM_SHARING_VIOLATION)
         {
             nMode &= (~STREAM_WRITE);
@@ -410,14 +410,14 @@ void SvFileStream::ResetError()
     SvStream::ClearError();
 }
 
-void SvFileStream::SetSize( sal_uIntPtr nSize )
+void SvFileStream::SetSize( sal_Size nSize )
 {
 
     if( IsOpen() )
     {
         int bError = false;
         HANDLE hFile = pInstanceData->hFile;
-        sal_uIntPtr nOld = SetFilePointer( hFile, 0L, NULL, FILE_CURRENT );
+        sal_Size nOld = SetFilePointer( hFile, 0L, NULL, FILE_CURRENT );
         if( nOld != 0xffffffff )
         {
             if( SetFilePointer(hFile,nSize,NULL,FILE_BEGIN ) != 0xffffffff)
