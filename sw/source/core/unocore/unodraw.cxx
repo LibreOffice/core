@@ -1576,7 +1576,9 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 }
                 else if (pEntry->nWID == RES_FRM_SIZE &&
                          (pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT ||
-                          pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH))
+                          pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH ||
+                          pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT_RELATION ||
+                          pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH_RELATION))
                 {
                     SvxShape* pSvxShape = GetSvxShape();
                     SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
@@ -1593,6 +1595,12 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         case MID_FRMSIZE_REL_HEIGHT:
                             if (pObj->GetRelativeHeight())
                                 nRet = *pObj->GetRelativeHeight() * 100;
+                            break;
+                        case MID_FRMSIZE_REL_WIDTH_RELATION:
+                            nRet = pObj->GetRelativeWidthRelation();
+                            break;
+                        case MID_FRMSIZE_REL_HEIGHT_RELATION:
+                            nRet = pObj->GetRelativeHeightRelation();
                             break;
                         }
                     }
