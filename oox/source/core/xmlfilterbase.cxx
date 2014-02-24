@@ -163,6 +163,7 @@ struct XmlFilterBaseImpl
     TextFieldStack                 maTextFieldStack;
 
     explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
+    ~XmlFilterBaseImpl();
 };
 
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
@@ -172,6 +173,10 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
 {
     // register XML namespaces
     registerNamespaces(maFastParser);
+}
+
+XmlFilterBaseImpl::~XmlFilterBaseImpl()
+{
 }
 
 XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
@@ -184,6 +189,14 @@ XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) 
 
 XmlFilterBase::~XmlFilterBase()
 {
+    // #i118640# Reset the DocumentHandler at the FastSaxParser manually; this is
+    // needed since the mechanism is that instances of FragmentHandler execute
+    // their stuff (creating objects, setting attributes, ...) on being destroyed.
+    // They get destroyed by setting a new DocumentHandler. This also happens in
+    // the following implicit destruction chain of ~XmlFilterBaseImpl, but in that
+    // case it's member RelationsMap maRelationsMap will be destroyed, but maybe
+    // still be used by ~FragmentHandler -> crash.
+    mxImpl->maFastParser.setDocumentHandler( 0 );
 }
 
 
