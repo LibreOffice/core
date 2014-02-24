@@ -2089,7 +2089,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
     }
     break;
-    case NS_sprm::LN_CFNoProof: //0x875 no grammar and spell checking, unsupported
+    case NS_ooxml::LN_EG_RPrBase_noProof: // no grammar and spell checking, unsupported
     break;
     case NS_ooxml::LN_anchor_anchor: // at_character drawing
     case NS_ooxml::LN_inline_inline: // as_character drawing

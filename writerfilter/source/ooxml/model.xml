@@ -23482,7 +23482,7 @@
       <element name="shadow" tokenid="ooxml:EG_RPrBase_shadow"/>
       <element name="emboss" tokenid="ooxml:EG_RPrBase_emboss"/>
       <element name="imprint" tokenid="ooxml:EG_RPrBase_imprint"/>
-      <element name="noProof" tokenid="sprm:CFNoProof"/>
+      <element name="noProof" tokenid="ooxml:EG_RPrBase_noProof"/>
       <element name="snapToGrid" tokenid="ooxml:EG_RPrBase_snapToGrid"/>
       <element name="vanish" tokenid="sprm:CFVanish"/>
       <element name="webHidden" tokenid="sprm:CFVanish"/>
