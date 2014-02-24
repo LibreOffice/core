@@ -916,7 +916,8 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
 }
 
 Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPropertyName )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw (UnknownPropertyException, WrappedTargetException,
+               RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Any aRet;
