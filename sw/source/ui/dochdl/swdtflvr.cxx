@@ -1820,6 +1820,9 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             Graphic aGraphic;
             sal_uLong nGrFormat = 0;
 
+            if( rData.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+                nGrFormat = SOT_FORMAT_GDIMETAFILE;
+
             // insert replacement image ( if there is one ) into the object helper
             if ( nGrFormat )
             {
