@@ -2992,8 +2992,8 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     }
     else
     {
-        if ( ( rRef.aStart.Tab() != aCursorPos.Tab() ||
-                rRef.aStart.Tab() != rRef.aEnd.Tab() ) && pDoc )
+        if ( rRef.aStart.Tab() != aCursorPos.Tab() ||
+             rRef.aStart.Tab() != rRef.aEnd.Tab() )
             aRefStr = rRef.Format(SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails);
         else
             aRefStr = rRef.Format(SCA_VALID, pDoc, aAddrDetails);
