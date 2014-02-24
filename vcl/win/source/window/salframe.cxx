@@ -867,7 +867,7 @@ WinSalFrame::WinSalFrame()
     mbBorder            = FALSE;
     mbFixBorder         = FALSE;
     mbSizeBorder        = FALSE;
-    mbFullScreen        = FALSE;
+    mbFullScreen        = false;
     mbPresentation      = FALSE;
     mbInShow            = FALSE;
     mbRestoreMaximize   = FALSE;

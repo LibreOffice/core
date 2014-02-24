@@ -61,7 +61,7 @@ public:
     sal_Bool                    mbSizeBorder;           // has window a sizeable border
     sal_Bool                    mbNoIcon;               // is an window without an icon
     sal_Bool                    mbFloatWin;             // is a FloatingWindow
-    sal_Bool                    mbFullScreen;           // TRUE: in full screen mode
+    bool                    mbFullScreen;           // TRUE: in full screen mode
     sal_Bool                    mbPresentation;         // TRUE: Presentation Mode running
     sal_Bool                    mbInShow;               // innerhalb eines Show-Aufrufs
     sal_Bool                    mbRestoreMaximize;      // Restore-Maximize
