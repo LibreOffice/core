@@ -101,7 +101,8 @@ public:
                                        std::exception);
     virtual void SAL_CALL   setTokens( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::sheet::FormulaToken >& aTokens )
-                                throw (::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
 
                             /// XNamed
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);

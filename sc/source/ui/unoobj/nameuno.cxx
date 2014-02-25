@@ -337,7 +337,8 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens()
     return aSequence;
 }
 
-void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException)
+void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens )
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( pDocShell )
