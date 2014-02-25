@@ -456,7 +456,7 @@ void OFlatTable::construct()
     if(m_pFileStream)
     {
         m_pFileStream->Seek(STREAM_SEEK_TO_END);
-        sal_Int32 nSize = m_pFileStream->Tell();
+        sal_Size nSize = m_pFileStream->Tell();
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
         // Buffersize is dependent on the file-size
@@ -927,7 +927,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
     do
     {
         if (pStartPos)
-            *pStartPos = m_pFileStream->Tell();
+            *pStartPos = (sal_Int32)m_pFileStream->Tell();
         m_pFileStream->ReadByteStringLine(m_aCurrentLine, nEncoding);
         if (m_pFileStream->IsEof())
             return false;
@@ -949,7 +949,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
     while(nonEmpty && m_aCurrentLine.Len() == 0);
 
     if(pEndPos)
-        *pEndPos = m_pFileStream->Tell();
+        *pEndPos = (sal_Int32)m_pFileStream->Tell();
     return true;
 }
 

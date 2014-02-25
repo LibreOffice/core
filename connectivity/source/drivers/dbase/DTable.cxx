@@ -78,9 +78,9 @@ using namespace ::com::sun::star::i18n;
 
 namespace
 {
-sal_Int32 lcl_getFileSize(SvStream& _rStream)
+sal_Size lcl_getFileSize(SvStream& _rStream)
 {
-    sal_Int32 nFileSize = 0;
+    sal_Size nFileSize = 0;
     _rStream.Seek(STREAM_SEEK_TO_END);
     _rStream.SeekRel(-1);
     char cEOL;
@@ -526,7 +526,7 @@ void ODbaseTable::construct()
         }
         fillColumns();
 
-        sal_uInt32 nFileSize = lcl_getFileSize(*m_pFileStream);
+        sal_Size nFileSize = lcl_getFileSize(*m_pFileStream);
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
         if ( m_aHeader.db_anz == 0 && ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng) > 0) // seems to be empty or someone wrote bullshit into the dbase file
             m_aHeader.db_anz = ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng);
@@ -1498,13 +1498,13 @@ sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Ref
 
     // Copy new row completely:
     // ... and add at the end as new Record:
-    sal_uInt32 nTempPos = m_nFilePos;
+    sal_Size nTempPos = m_nFilePos;
 
-    m_nFilePos = (sal_uIntPtr)m_aHeader.db_anz + 1;
+    m_nFilePos = (sal_Size)m_aHeader.db_anz + 1;
     sal_Bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols, true );
     if ( bInsertRow )
     {
-        sal_uInt32 nFileSize = 0, nMemoFileSize = 0;
+        sal_Size nFileSize = 0, nMemoFileSize = 0;
 
         nFileSize = lcl_getFileSize(*m_pFileStream);
 
@@ -1553,11 +1553,11 @@ sal_Bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,con
     AllocBuffer();
 
     // position on desired record:
-    long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
     m_pFileStream->Read((char*)m_pBuffer, m_aHeader.db_slng);
 
-    sal_uInt32 nMemoFileSize( 0 );
+    sal_Size nMemoFileSize( 0 );
     if (HasMemoFields() && m_pMemoStream)
     {
         m_pMemoStream->Seek(STREAM_SEEK_TO_END);
@@ -1581,7 +1581,7 @@ sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::DeleteRow" );
     // Set the Delete-Flag (be it set or not):
     // Position on desired record:
-    long nFilePos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    sal_Size nFilePos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nFilePos);
 
     OValueRefRow aRow = new OValueRefVector(_rCols.get().size());
@@ -1944,7 +1944,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
                     char cNext = pData[nLen]; // Mark's scratch and replaced by 0
                     pData[nLen] = '\0';       // This is because the buffer is always a sign of greater ...
 
-                    sal_uIntPtr nBlockNo = strtol((const char *)pData,NULL,10); // Block number read
+                    sal_Size nBlockNo = strtol((const char *)pData,NULL,10); // Block number read
 
                     // Next initial character restore again:
                     pData[nLen] = cNext;
@@ -2001,11 +2001,11 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
 }
 
 
-sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlockNr)
+sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::WriteMemo" );
     // if the BlockNo 0 is given, the block will be appended at the end
-    sal_uIntPtr nSize = 0;
+    sal_Size nSize = 0;
     OString aStr;
     ::com::sun::star::uno::Sequence<sal_Int8> aValue;
     sal_uInt8 nHeader[4];
@@ -2038,7 +2038,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
                 m_pMemoStream->SeekRel(4L);
                 m_pMemoStream->Read(sHeader,4);
 
-                sal_uIntPtr nOldSize;
+                sal_Size nOldSize;
                 if (m_aMemoHeader.db_typ == MemoFoxPro)
                     nOldSize = ((((unsigned char)sHeader[0]) * 256 +
                                  (unsigned char)sHeader[1]) * 256 +
@@ -2051,7 +2051,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
                                  (unsigned char)sHeader[0]  - 8;
 
                 // fits the new length in the used blocks
-                sal_uIntPtr nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
+                sal_Size nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
                       nOldUsedBlocks = ((nOldSize + 8) / m_aMemoHeader.db_size) + (((nOldSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0);
                 bAppend = nUsedBlocks > nOldUsedBlocks;
             }
@@ -2060,7 +2060,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
 
     if (bAppend)
     {
-        sal_uIntPtr nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        sal_Size nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         // fill last block
         rBlockNr = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
@@ -2124,7 +2124,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
     // Write the new block number
     if (bAppend)
     {
-        sal_uIntPtr nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        sal_Size nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
         // Write the new block number
@@ -2627,7 +2627,7 @@ sal_Bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
         sal_uInt16 nEntryLen = m_aHeader.db_slng;
 
         OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
-        sal_Int32 nPos = m_aHeader.db_kopf + (sal_Int32)(m_nFilePos-1) * nEntryLen;
+        sal_Size nPos = m_aHeader.db_kopf + (sal_Int32)(m_nFilePos-1) * nEntryLen;
 
         m_pFileStream->Seek(nPos);
         if (m_pFileStream->GetError() != ERRCODE_NONE)
@@ -2665,7 +2665,7 @@ End:
     return sal_True;
 }
 
-sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
+sal_Bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ReadMemo" );
     bool bIsText = true;
@@ -2768,7 +2768,7 @@ sal_Bool ODbaseTable::WriteBuffer()
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
 
     // postion on desired record:
-    long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
     return m_pFileStream->Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
 }
