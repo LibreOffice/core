@@ -80,7 +80,7 @@ static void lcl_getFormatter(com::sun::star::uno::Reference<com::sun::star::text
 
 SvxNumberType::SvxNumberType(sal_Int16 nType) :
     nNumType(nType),
-    bShowSymbol(sal_True)
+    bShowSymbol(true)
 {
     nRefCount++;
 }
@@ -349,7 +349,7 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
     return *this;
 }
 
-sal_Bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
+bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
 {
     if( GetNumberingType()  != rFormat.GetNumberingType() ||
         eNumAdjust          != rFormat.eNumAdjust ||
@@ -374,14 +374,14 @@ sal_Bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         IsShowSymbol()      != rFormat.IsShowSymbol() ||
         sCharStyleName      != rFormat.sCharStyleName
         )
-        return sal_False;
+        return false;
     if (
         (pGraphicBrush && !rFormat.pGraphicBrush) ||
         (!pGraphicBrush && rFormat.pGraphicBrush) ||
         (pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush)
        )
     {
-        return sal_False;
+        return false;
     }
     if (
         (pBulletFont && !rFormat.pBulletFont) ||
@@ -389,9 +389,9 @@ sal_Bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         (pBulletFont && *pBulletFont != *rFormat.pBulletFont)
        )
     {
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
@@ -547,7 +547,7 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
     return aRetSize;
 }
 
-OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
+OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
 {
     nNo %= 4000;            // more can not be displayed
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
@@ -603,7 +603,7 @@ static SvxNumberFormat* pStdNumFmt = 0;
 static SvxNumberFormat* pStdOutlineNumFmt = 0;
 SvxNumRule::SvxNumRule( sal_uLong nFeatures,
                         sal_uInt16 nLevels,
-                        sal_Bool bCont,
+                        bool bCont,
                         SvxNumRuleType eType,
                         SvxNumberFormat::SvxNumPositionAndSpaceMode
                                     eDefaultNumberFormatPositionAndSpaceMode )
@@ -652,7 +652,7 @@ SvxNumRule::SvxNumRule( sal_uLong nFeatures,
         }
         else
             aFmts[i] = 0;
-        aFmtsSet[i] = sal_False;
+        aFmtsSet[i] = false;
     }
 }
 
@@ -697,7 +697,7 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
         else
         {
             aFmts[i] = 0;
-            aFmtsSet[i] = sal_False; // actually only false is valid
+            aFmtsSet[i] = false; // actually only false is valid
         }
     }
     //second nFeatureFlags for new versions
@@ -820,7 +820,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(sal_uInt16 nLevel)const
                                                         *pStdNumFmt : *pStdOutlineNumFmt;
 }
 
-void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, sal_Bool bIsValid )
+void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, bool bIsValid )
 {
     DBG_ASSERT(i < SVX_MAX_NUM, "Wrong Level" );
 
@@ -849,7 +849,7 @@ void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
     }
 }
 
-OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings ) const
+OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, bool bInclStrings ) const
 {
     OUString aStr;
     if( SVX_NO_NUM > rNum.GetLevel() && !( SVX_NO_NUMLEVEL & rNum.GetLevel() ) )
@@ -904,7 +904,7 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclString
 }
 
 // changes linked to embedded bitmaps
-sal_Bool SvxNumRule::UnLinkGraphics()
+bool SvxNumRule::UnLinkGraphics()
 {
     sal_Bool bRet = sal_False;
     for(sal_uInt16 i = 0; i < GetLevelCount(); i++)

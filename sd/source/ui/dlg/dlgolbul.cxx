@@ -116,7 +116,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         if(pRule)
         {
             SvxNumRule aNewRule( *pRule );
-            aNewRule.SetFeatureFlag( NUM_NO_NUMBERS, sal_True );
+            aNewRule.SetFeatureFlag( NUM_NO_NUMBERS, true );
 
             SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
             aInputSet.Put(aNewItem);
@@ -184,7 +184,7 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
         SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pBulletItem->GetNumRule();
         if(pRule)
-            pRule->SetFeatureFlag( NUM_NO_NUMBERS, sal_False );
+            pRule->SetFeatureFlag( NUM_NO_NUMBERS, false );
     }
 
     return pOutputSet;

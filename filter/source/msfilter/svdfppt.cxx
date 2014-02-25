@@ -4314,7 +4314,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
         }
         SvxNumRule aRule( NUM_BULLET_REL_SIZE | NUM_BULLET_COLOR |
                         NUM_CHAR_TEXT_DISTANCE | NUM_SYMBOL_ALIGNMENT,
-                        nLevels, sal_False, eNumRuleType );
+                        nLevels, false, eNumRuleType );
         for ( sal_uInt16 nCount = 0; nDepth < nLevels; nCount++ )
         {
             const PPTParaLevel& rParaLevel = mpParaSheet[ i ]->maParaLevel[ nCount ];

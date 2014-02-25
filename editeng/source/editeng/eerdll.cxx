@@ -101,7 +101,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
 
         // Paragraph attributes:
         SvxNumRule aDefaultNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE,
-                                    SVX_MAX_NUM, sal_False );
+                                    SVX_MAX_NUM, false );
 
         ppDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );

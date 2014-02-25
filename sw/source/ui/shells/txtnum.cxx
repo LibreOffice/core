@@ -132,7 +132,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 }
             }
             if(bHtml)
-                aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
+                aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, false);
 
             aSet.Put(SvxNumBulletItem(aRule));
             OSL_ENSURE( GetShell().GetNumLevel() < MAXLEVEL,
@@ -169,9 +169,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     {
                         aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
                     }
-                    aSvxRule.SetLevel( n, aFmt, sal_False );
+                    aSvxRule.SetLevel( n, aFmt, false );
                 }
-                aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
+                aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, false);
             }
             aSet.Put(SvxNumBulletItem(aSvxRule));
         }
@@ -262,9 +262,9 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
             {
                 aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
             }
-            aSvxRule.SetLevel( n, aFmt, sal_False );
+            aSvxRule.SetLevel( n, aFmt, false );
         }
-        aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
+        aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, false);
     }
 
     const SwNumRule* pCurRule = GetShell().GetCurNumRule();

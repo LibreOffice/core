@@ -228,7 +228,7 @@ void NBOTypeMgrBase::ImplStore(OUString filename)
         pOStm->WriteUInt32( nVersion );
         for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ ) {
             if (IsCustomized(nItem)) {
-                SvxNumRule aDefNumRule( NUM_BULLET_REL_SIZE|NUM_CONTINUOUS|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,10, sal_False ,
+                SvxNumRule aDefNumRule( NUM_BULLET_REL_SIZE|NUM_CONTINUOUS|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,10, false,
                     SVX_RULETYPE_NUMBERING,SvxNumberFormat::LABEL_ALIGNMENT);
                 sal_uInt16 mLevel = 0x1;
                 pOStm->WriteInt32( nItem );
@@ -1588,7 +1588,7 @@ void OutlineTypeMgr::Init()
     {
         aOutlineAccess = xDefNum->getDefaultOutlineNumberings( aLocale );
 
-        SvxNumRule aDefNumRule( NUM_BULLET_REL_SIZE|NUM_CONTINUOUS|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,10, sal_False ,
+        SvxNumRule aDefNumRule( NUM_BULLET_REL_SIZE|NUM_CONTINUOUS|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT, 10, false,
             SVX_RULETYPE_NUMBERING,SvxNumberFormat::LABEL_ALIGNMENT);
 
         for(sal_Int32 nItem = 0;

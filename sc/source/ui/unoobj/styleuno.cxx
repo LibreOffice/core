@@ -1153,7 +1153,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
 
 uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 {
-    SvxNumRule aRule( 0, 0, sal_True );         // nothing supported
+    SvxNumRule aRule( 0, 0, true );         // nothing supported
     return SvxCreateNumRule( &aRule );
 }
 

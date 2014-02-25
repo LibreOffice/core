@@ -65,7 +65,7 @@ class EDITENG_DLLPUBLIC SvxNumberType
     static com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
 
     sal_Int16       nNumType;
-    sal_Bool        bShowSymbol;        // Also show Symbol ?
+    bool            bShowSymbol;        // Also show Symbol ?
 
 public:
     explicit SvxNumberType(sal_Int16 nType = com::sun::star::style::NumberingType::ARABIC);
@@ -78,10 +78,10 @@ public:
     void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
     sal_Int16       GetNumberingType() const {return nNumType;}
 
-    void            SetShowSymbol(sal_Bool bSet) {bShowSymbol = bSet;}
-    sal_Bool        IsShowSymbol()const{return bShowSymbol;}
+    void            SetShowSymbol(bool bSet) {bShowSymbol = bSet;}
+    bool            IsShowSymbol()const{return bShowSymbol;}
 
-    sal_Bool        IsTxtFmt() const
+    bool            IsTxtFmt() const
                     {
                         return com::sun::star::style::NumberingType::NUMBER_NONE != nNumType &&
                                com::sun::star::style::NumberingType::CHAR_SPECIAL != nNumType &&
@@ -165,8 +165,8 @@ public:
     SvxNumberFormat* Create(SvStream& rStream );
 
     SvxNumberFormat& operator=( const SvxNumberFormat&  );
-    sal_Bool            operator==( const SvxNumberFormat&  ) const;
-    sal_Bool            operator!=( const SvxNumberFormat& rFmt) const {return !(*this == rFmt);}
+    bool            operator==( const SvxNumberFormat&  ) const;
+    bool            operator!=( const SvxNumberFormat& rFmt) const {return !(*this == rFmt);}
 
     void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
@@ -222,7 +222,7 @@ public:
     long GetIndentAt() const;
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
-    static OUString CreateRomanString( sal_uLong nNo, sal_Bool bUpper );
+    static OUString CreateRomanString( sal_uLong nNo, bool bUpper );
 };
 
 enum SvxNumRuleType
@@ -238,17 +238,17 @@ class EDITENG_DLLPUBLIC SvxNumRule
     sal_uInt16          nLevelCount;            // Number of supported levels
     sal_uInt32          nFeatureFlags;          // What is supported?
     SvxNumRuleType      eNumberingType;         // Type of numbering
-    sal_Bool            bContinuousNumbering;   // sequential numbering
+    bool                bContinuousNumbering;   // sequential numbering
 
     SvxNumberFormat*    aFmts[SVX_MAX_NUM];
-    sal_Bool            aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
+    bool                aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
 
     static sal_Int32    nRefCount;
     com::sun::star::lang::Locale aLocale;
 public:
     SvxNumRule( sal_uLong nFeatures,
                 sal_uInt16 nLevels,
-                sal_Bool bCont,
+                bool bCont,
                 SvxNumRuleType eType = SVX_RULETYPE_NUMBERING,
                 SvxNumberFormat::SvxNumPositionAndSpaceMode
                         eDefaultNumberFormatPositionAndSpaceMode
@@ -266,26 +266,26 @@ public:
     SvxNumRule*             Create(SvStream &rStream);
     const SvxNumberFormat*  Get(sal_uInt16 nLevel)const;
     const SvxNumberFormat&  GetLevel(sal_uInt16 nLevel)const;
-    void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, sal_Bool bIsValid = sal_True);
+    void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, bool bIsValid = true);
     void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt);
 
-    sal_Bool                IsContinuousNumbering()const
+    bool                    IsContinuousNumbering()const
                                             {return bContinuousNumbering;}
-    void                    SetContinuousNumbering(sal_Bool bSet)
+    void                    SetContinuousNumbering(bool bSet)
                                             {bContinuousNumbering = bSet;}
 
     sal_uInt16              GetLevelCount() const {return nLevelCount;}
-    sal_Bool                IsFeatureSupported(sal_uInt32 nFeature) const
+    bool                    IsFeatureSupported(sal_uInt32 nFeature) const
                                             {return 0 != (nFeatureFlags & nFeature);}
     sal_uInt32              GetFeatureFlags() const {return nFeatureFlags;}
-    void                    SetFeatureFlag( sal_uInt32 nFlag, sal_Bool bSet = sal_True ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
+    void                    SetFeatureFlag( sal_uInt32 nFlag, bool bSet = true ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
 
-    OUString                MakeNumString( const SvxNodeNum&, sal_Bool bInclStrings = sal_True ) const;
+    OUString                MakeNumString( const SvxNodeNum&, bool bInclStrings = true ) const;
 
     SvxNumRuleType          GetNumRuleType() const { return eNumberingType; }
     void                    SetNumRuleType( const SvxNumRuleType& rType ) { eNumberingType = rType; }
 
-    sal_Bool                UnLinkGraphics();
+    bool                    UnLinkGraphics();
 };
 
 class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
@@ -313,8 +313,8 @@ class SvxNodeNum
 {
     sal_uInt16 nLevelVal[ SVX_MAX_NUM ];    // Numbers of all levels
     sal_uInt16 nSetValue;                   // predetermined number
-    sal_uInt8 nMyLevel;                     // Current Level
-    sal_Bool bStartNum;                     // Restart numbering
+    sal_uInt8  nMyLevel;                     // Current Level
+    bool       bStartNum;                     // Restart numbering
 
 public:
     explicit inline SvxNodeNum( sal_uInt8 nLevel = SVX_NO_NUM, sal_uInt16 nSetVal = USHRT_MAX );
@@ -323,8 +323,8 @@ public:
     sal_uInt8 GetLevel() const                  { return nMyLevel; }
     void SetLevel( sal_uInt8 nVal )             { nMyLevel = nVal; }
 
-    sal_Bool IsStart() const                    { return bStartNum; }
-    void SetStart( sal_Bool bFlag = sal_True )      { bStartNum = bFlag; }
+    bool IsStart() const                        { return bStartNum; }
+    void SetStart( bool bFlag = true )          { bStartNum = bFlag; }
 
     sal_uInt16 GetSetValue() const              { return nSetValue; }
     void SetSetValue( sal_uInt16 nVal )         { nSetValue = nVal; }
@@ -334,7 +334,7 @@ public:
 };
 
 SvxNodeNum::SvxNodeNum( sal_uInt8 nLevel, sal_uInt16 nSetVal )
-    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( sal_False )
+    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( false )
 {
     memset( nLevelVal, 0, sizeof( nLevelVal ) );
 }
