@@ -86,7 +86,10 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //XStyleLoader
-    virtual void SAL_CALL loadStylesFromURL(const OUString& rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aOptions) throw( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL loadStylesFromURL(const OUString& rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aOptions)
+        throw (::com::sun::star::io::IOException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getStyleLoaderOptions(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XServiceInfo

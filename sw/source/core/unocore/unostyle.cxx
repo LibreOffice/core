@@ -366,7 +366,8 @@ sal_Bool SwXStyleFamilies::hasElements(void) throw( uno::RuntimeException )
 
 void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& aOptions)
-    throw( io::IOException, uno::RuntimeException )
+    throw (io::IOException, uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool    bLoadStyleText = sal_True;
