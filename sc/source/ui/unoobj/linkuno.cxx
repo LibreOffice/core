@@ -1218,7 +1218,7 @@ uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
 }
 
 void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >& aResults )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     bool bSuccess = false;

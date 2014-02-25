@@ -420,7 +420,8 @@ public:
                std::exception);
     virtual void SAL_CALL setResults(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aResults )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
