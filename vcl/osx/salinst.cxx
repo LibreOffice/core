@@ -64,7 +64,7 @@
 using namespace std;
 using namespace ::com::sun::star;
 
-extern sal_Bool ImplSVMain();
+extern int ImplSVMain();
 
 static int* gpnInit = 0;
 static NSMenu* pDockMenu = nil;
@@ -184,7 +184,7 @@ static void initNSApp()
 #endif
 }
 
-sal_Bool ImplSVMainHook( int * pnInit )
+bool ImplSVMainHook( int * pnInit )
 {
     unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.plist", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
     unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.txt", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
@@ -310,7 +310,7 @@ bool SalYieldMutex::tryToAcquire()
 
 // some convenience functions regarding the yield mutex, aka solar mutex
 
-sal_Bool ImplSalYieldMutexTryToAcquire()
+bool ImplSalYieldMutexTryToAcquire()
 {
     AquaSalInstance* pInst = (AquaSalInstance*) GetSalData()->mpFirstInstance;
     if ( pInst )

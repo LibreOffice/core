@@ -178,7 +178,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         return SetData( ~0, io_pSetupData );
 
 
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
 
     // set system type
     io_pSetupData->mnSystem = JOBSETUP_SYSTEM_MAC;
@@ -211,7 +211,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         io_pSetupData->mnDriverDataLen = 4;
     }
     else
-        bSuccess = sal_False;
+        bSuccess = false;
 
 
     return bSuccess;
@@ -378,7 +378,7 @@ static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPag
     return aPageSize;
 }
 
-sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
+bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                                    const OUString& i_rJobName,
                                    const OUString& /*i_rAppName*/,
                                    ImplJobSetup* i_pSetupData,
@@ -386,9 +386,9 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                                    )
 {
     if( mbJob )
-        return sal_False;
+        return false;
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     bool bWasAborted = false;
     AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
     PrintAccessoryViewState aAccViewState;
@@ -402,15 +402,15 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
         SetData( ~0, i_pSetupData );
 
     // do we want a progress panel ?
-    sal_Bool bShowProgressPanel = sal_True;
+    bool bShowProgressPanel = true;
     beans::PropertyValue* pMonitor = i_rController.getValue( OUString( "MonitorVisible" ) );
     if( pMonitor )
         pMonitor->Value >>= bShowProgressPanel;
     if( ! i_rController.isShowDialogs() )
-        bShowProgressPanel = sal_False;
+        bShowProgressPanel = false;
 
     // possibly create one job for collated output
-    sal_Bool bSinglePrintJobs = sal_False;
+    bool bSinglePrintJobs = false;
     beans::PropertyValue* pSingleValue = i_rController.getValue( OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
     {
@@ -526,7 +526,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                 if( bShowPanel && mnCurPageRangeStart == 0 && nCurJob == 0) // only the first range of pages (in the first job) gets the accesory view
                     pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withController: &i_rController withState: &aAccViewState];
 
-                bSuccess = sal_True;
+                bSuccess = true;
                 mbJob = true;
                 pInst->startedPrintJob();
                 [pPrintOperation runOperation];
@@ -562,26 +562,26 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
 
 
 
-sal_Bool AquaSalInfoPrinter::EndJob()
+bool AquaSalInfoPrinter::EndJob()
 {
     mnStartPageOffsetX = mnStartPageOffsetY = 0;
     mbJob = false;
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool AquaSalInfoPrinter::AbortJob()
+bool AquaSalInfoPrinter::AbortJob()
 {
     mbJob = false;
 
     // FIXME: implementation
-    return sal_False;
+    return false;
 }
 
 
 
-SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData )
+SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData )
 {
     if( i_bNewJobData && i_pSetupData )
         SetPrinterData( i_pSetupData );
@@ -595,10 +595,10 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool
 
 
 
-sal_Bool AquaSalInfoPrinter::EndPage()
+bool AquaSalInfoPrinter::EndPage()
 {
     mpGraphics->InvalidateContext();
-    return sal_True;
+    return true;
 }
 
 

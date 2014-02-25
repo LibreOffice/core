@@ -501,7 +501,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     const ImplControlValue& aValue,
                     const OUString& )
 {
-    sal_Bool bOK = sal_False;
+    bool bOK = false;
 
     if( ! CheckContext() )
         return false;
@@ -1215,7 +1215,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 
 {
-    sal_Bool toReturn = sal_False;
+    bool toReturn = false;
 
     Rectangle aCtrlBoundRect( rControlRegion );
     short x = aCtrlBoundRect.Left();
@@ -1250,7 +1250,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 Rectangle aRect;
                 if( AquaGetScrollRect( /* m_nScreen */ nPart, aCtrlBoundRect, aRect ) )
                 {
-                    toReturn = sal_True;
+                    toReturn = true;
                     rNativeBoundingRegion = aRect;
                     rNativeContentRegion = aRect;
                 }
@@ -1280,7 +1280,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h + nBorderCleanup) );
                 rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
-                toReturn = sal_True;
+                toReturn = true;
             }
             break;
         case CTRL_PROGRESS:
@@ -1292,7 +1292,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     aRect.Bottom() = aRect.Top() + 15; // values taken from HIG for large progress
                 rNativeBoundingRegion = aRect;
                 rNativeContentRegion = aRect;
-                toReturn = sal_True;
+                toReturn = true;
             }
             break;
 
@@ -1302,7 +1302,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 aRect.Bottom() = aRect.Top() + INTRO_PROGRESS_HEIGHT; // values taken from HIG for medium progress
                 rNativeBoundingRegion = aRect;
                 rNativeContentRegion = aRect;
-                toReturn = sal_True;
+                toReturn = true;
             }
             break;
 
@@ -1318,7 +1318,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
             rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
-            toReturn = sal_True;
+            toReturn = true;
 
             break;
 
@@ -1334,7 +1334,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*(FOCUS_RING_WIDTH+1), h-2*(FOCUS_RING_WIDTH+1) ) );
                 rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
-                toReturn = sal_True;
+                toReturn = true;
             }
             break;
         case CTRL_LISTBOX:
@@ -1348,7 +1348,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*FOCUS_RING_WIDTH, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
 
-                    toReturn = sal_True;
+                    toReturn = true;
                 }
                 else if( nPart == PART_BUTTON_DOWN )
                 {
@@ -1397,7 +1397,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y ), Size( w-2*FOCUS_RING_WIDTH, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
 
-                    toReturn = sal_True;
+                    toReturn = true;
                 }
                 else if( nPart == PART_SUB_EDIT ) {
                     w = aCtrlBoundRect.GetWidth() - SPIN_BUTTON_SPACE - SPIN_BUTTON_WIDTH;
@@ -1410,7 +1410,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     rNativeContentRegion = Rectangle( Point( x + FOCUS_RING_WIDTH, y + FOCUS_RING_WIDTH ), Size( w - 2* FOCUS_RING_WIDTH, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
 
-                    toReturn = sal_True;
+                    toReturn = true;
                 }
                 else if( nPart == PART_BUTTON_UP ) {
                     //aCtrlBoundRect.GetWidth() contains the width of the full control
@@ -1424,7 +1424,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
-                    toReturn = sal_True;
+                    toReturn = true;
                 }
                 else if( nPart == PART_BUTTON_DOWN ) {
                     x += aCtrlBoundRect.GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE - CLIP_FUZZ;
@@ -1435,7 +1435,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
-                    toReturn = sal_True;
+                    toReturn = true;
                 }
             break;
         case CTRL_FRAME:
@@ -1463,7 +1463,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     rNativeContentRegion = aRect;
                     rNativeBoundingRegion = aRect;
 
-                    toReturn = sal_True;
+                    toReturn = true;
                 }
             }
             break;
@@ -1479,7 +1479,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
-                    toReturn = sal_True;
+                    toReturn = true;
                 }
             }
             break;
