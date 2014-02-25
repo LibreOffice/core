@@ -60,7 +60,7 @@ public:
 	typedef std::pair<typename LruItMap::iterator,bool> MapPair;
 	MapPair aMP = map_.insert( MappedType( list_.begin(), 0));
 	*pbFound = !aMP.second;
-	
+
 	if( !aMP.second) { // insertion not needed => found the entry
 		list_.pop_front(); // remove the temp entry
 		list_.splice( list_.begin(), list_, aMP.first->first); // the found entry is moved to front
