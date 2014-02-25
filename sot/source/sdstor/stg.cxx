@@ -41,7 +41,7 @@ static long nTmpCount = 0;
 
 #define INTERNAL_MODE ( STREAM_READ | STREAM_TRUNC )
 
-///////////////////////// class StorageBase //////////////////////////////
+///////////////////////// class StorageBase
 
 TYPEINIT0( StorageBase );
 TYPEINIT1( BaseStorageStream, StorageBase );
@@ -159,7 +159,7 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
 }
 
 
-//////////////////////// class StorageStream /////////////////////////////
+//////////////////////// class StorageStream
 
 TYPEINIT1( StorageStream, BaseStorageStream );
 
@@ -319,7 +319,7 @@ bool StorageStream::ValidateMode( StreamMode nMode ) const
     return bRet;
 }
 
-///////////////////////// class SvStorageInfo //////////////////////////////
+///////////////////////// class SvStorageInfo
 
 SvStorageInfo::SvStorageInfo( const StgDirEntry& rE )
 {
@@ -329,7 +329,7 @@ SvStorageInfo::SvStorageInfo( const StgDirEntry& rE )
     nSize    = bStorage ? 0 : rE.aEntry.GetSize();
 }
 
-/////////////////////////// class Storage ////////////////////////////////
+/////////////////////////// class Storage
 
 bool Storage::IsStorageFile( const OUString & rFileName )
 {
@@ -927,7 +927,7 @@ bool Storage::Revert()
     return true;
 }
 
-///////////////////////////// OLE Support ////////////////////////////////
+///////////////////////////// OLE Support
 
 // Set the storage type
 
