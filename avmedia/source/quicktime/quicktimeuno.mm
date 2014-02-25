@@ -22,9 +22,9 @@
 
 using namespace ::com::sun::star;
 
-// -------------------
+
 // - factory methods -
-// -------------------
+
 
 static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
 {

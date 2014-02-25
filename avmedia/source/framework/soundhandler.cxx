@@ -33,9 +33,9 @@
 
 namespace avmedia{
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
 
 void SAL_CALL SoundHandler::acquire() throw()
 {
@@ -189,7 +189,7 @@ void SAL_CALL SoundHandler::impl_initService()
 {
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard ctor
     @descr      These initialize a new instance of this class with needed information for work.
 
@@ -212,7 +212,7 @@ SoundHandler::SoundHandler( const css::uno::Reference< css::lang::XMultiServiceF
     m_aUpdateTimer.SetTimeoutHdl(LINK(this, SoundHandler, implts_PlayerNotify));
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard dtor
     @descr      -
 
@@ -235,7 +235,7 @@ SoundHandler::~SoundHandler()
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  ::com::sun::star::frame::XDispatch
 
     @short      try to load audio file
@@ -314,7 +314,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  ::com::sun::star::document::XExtendedFilterDetection
 
     @short      try to detect file (given as argument included in "lDescriptor")
@@ -366,7 +366,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
     return sTypeName;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      call back of sound player
     @descr      Our player call us back to give us some information.
                 We use this information to callback our might existing listener.

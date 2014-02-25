@@ -26,9 +26,9 @@
 
 namespace avmedia { namespace quicktime {
 
-// ----------------
+
 // - FrameGrabber -
-// ----------------
+
 
 class FrameGrabber : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XFrameGrabber,
                                                       ::com::sun::star::lang::XServiceInfo >

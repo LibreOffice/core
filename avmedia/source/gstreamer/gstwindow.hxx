@@ -27,9 +27,9 @@
 
 namespace avmedia { namespace gstreamer {
 
-// ---------------
+
 // - Window -
-// ---------------
+
 
 class Player;
 
