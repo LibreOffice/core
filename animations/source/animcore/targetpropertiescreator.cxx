@@ -143,13 +143,13 @@ namespace animcore
                 // TODO(P2): Maybe a better hash function would be to
                 // spread mnParagraphIndex to 32 bit: a0b0c0d0e0... Hakmem
                 // should have a formula.
-                //
+
                 // Yes it has:
                 // x = (x & 0x0000FF00) << 8) | (x >> 8) & 0x0000FF00 | x & 0xFF0000FF;
                 // x = (x & 0x00F000F0) << 4) | (x >> 4) & 0x00F000F0 | x & 0xF00FF00F;
                 // x = (x & 0x0C0C0C0C) << 2) | (x >> 2) & 0x0C0C0C0C | x & 0xC3C3C3C3;
                 // x = (x & 0x22222222) << 1) | (x >> 1) & 0x22222222 | x & 0x99999999;
-                //
+
                 // Costs about 17 cycles on a RISC machine with infinite
                 // instruction level parallelism (~42 basic
                 // instructions). Thus I truly doubt this pays off...
@@ -421,7 +421,7 @@ namespace animcore
         // TODO(F1): Maybe limit functor application to main sequence
         // alone (CL said something that shape visibility is only
         // affected by effects in the main sequence for PPT).
-        //
+
         // OTOH, client code can pass us only the main sequence (which
         // it actually does right now, for the slideshow implementation).
         aFunctor( xRootNode );
