@@ -21,11 +21,11 @@
 #ifndef INCLUDED_SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
 #define INCLUDED_SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
 
-// ============================================================================
+
 
 namespace svt {
 
-// ============================================================================
+
 
 /** This enumeration contains a constant for each kind of accessible object of
     a BrowseBox. */
@@ -41,11 +41,11 @@ enum AccessibleBrowseBoxObjType
     BBTYPE_CHECKBOXCELL         /// A cell with a checkbox.
 };
 
-// ============================================================================
+
 
 } // namespace svt
 
-// ============================================================================
+
 
 #endif
 

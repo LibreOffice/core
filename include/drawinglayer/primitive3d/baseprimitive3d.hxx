@@ -28,7 +28,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/range/b3drange.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 /** defines for DeclPrimitive3DIDBlock and ImplPrimitive3DIDBlock
     Added to be able to simply change identification stuff later, e.g. add
     a identification string and/or ID to the interface and to the implementation
@@ -41,7 +41,7 @@
 #define ImplPrimitive3DIDBlock(TheClass, TheID) \
     sal_uInt32 TheClass::getPrimitive3DID() const { return TheID; }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace geometry {
@@ -55,7 +55,7 @@ namespace drawinglayer { namespace primitive3d {
     typedef ::com::sun::star::uno::Sequence< Primitive3DReference > Primitive3DSequence;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 // basePrimitive3D class
 
 namespace drawinglayer
@@ -110,9 +110,9 @@ namespace drawinglayer
             /// The default implementation returns an empty sequence
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
-            //
+
             // Methods from XPrimitive3D
-            //
+
 
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will get the ViewInformation from the ViewParameters for that purpose
@@ -127,7 +127,7 @@ namespace drawinglayer
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BufferedDecompositionPrimitive3D class
 
 namespace drawinglayer
@@ -176,7 +176,7 @@ namespace drawinglayer
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // tooling
 
 namespace drawinglayer
@@ -206,7 +206,7 @@ namespace drawinglayer
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
 

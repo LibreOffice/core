@@ -36,13 +36,13 @@ namespace comphelper {
 
 namespace detail { class ConfigurationWrapper; }
 
-/// A batch of configuration changes that is committed as a whole.
-///
-/// Client code needs to call commit explicitly; otherwise the changes are lost
-/// when the instance is destroyed.
-///
-/// This is the only class from this header file that client code should use
-/// directly.
+// A batch of configuration changes that is committed as a whole.
+
+// Client code needs to call commit explicitly; otherwise the changes are lost
+// when the instance is destroyed.
+
+// This is the only class from this header file that client code should use
+// directly.
 class COMPHELPER_DLLPUBLIC ConfigurationChanges: private boost::noncopyable {
 public:
     static boost::shared_ptr< ConfigurationChanges > create(
@@ -78,7 +78,7 @@ private:
 
 namespace detail {
 
-/// @internal
+// @internal
 class COMPHELPER_DLLPUBLIC ConfigurationWrapper: private boost::noncopyable {
 public:
     static ConfigurationWrapper const & get(
@@ -134,7 +134,7 @@ private:
         com::sun::star::container::XHierarchicalNameAccess > access_;
 };
 
-/// @internal
+// @internal
 template< typename T > struct Convert: private boost::noncopyable {
     static com::sun::star::uno::Any toAny(T const & value)
     { return com::sun::star::uno::makeAny(value); }
@@ -147,7 +147,7 @@ private:
     ~Convert(); // not defined
 };
 
-/// @internal
+// @internal
 template< typename T > struct Convert< boost::optional< T > >:
     private boost::noncopyable
 {
@@ -170,17 +170,17 @@ private:
 
 }
 
-/// A type-safe wrapper around a (non-localized) configuration property.
-///
-/// Automatically generated headers for the various configuration properties
-/// derive from this template and make available its member functions to access
-/// each given configuration property.
+// A type-safe wrapper around a (non-localized) configuration property.
+
+// Automatically generated headers for the various configuration properties
+// derive from this template and make available its member functions to access
+// each given configuration property.
 template< typename T, typename U > struct ConfigurationProperty:
     private boost::noncopyable
 {
-    /// Get the value of the given (non-localized) configuration property.
-    ///
-    /// For nillable properties, U is of type boost::optional<U'>.
+    // Get the value of the given (non-localized) configuration property.
+
+    // For nillable properties, U is of type boost::optional<U'>.
     static U get(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
@@ -193,10 +193,10 @@ template< typename T, typename U > struct ConfigurationProperty:
         return detail::Convert< U >::fromAny(a);
     }
 
-    /// Set the value of the given (non-localized) configuration property, via a
-    /// given changes batch.
-    ///
-    /// For nillable properties, U is of type boost::optional<U'>.
+    // Set the value of the given (non-localized) configuration property, via a
+    // given changes batch.
+
+    // For nillable properties, U is of type boost::optional<U'>.
     static void set(
         U const & value,
         boost::shared_ptr< ConfigurationChanges > const & batch,
@@ -212,19 +212,19 @@ private:
     ~ConfigurationProperty(); // not defined
 };
 
-/// A type-safe wrapper around a localized configuration property.
-///
-/// Automatically generated headers for the various localized configuration
-/// properties derive from this template and make available its member functions
-/// to access each given localized configuration property.
+// A type-safe wrapper around a localized configuration property.
+
+// Automatically generated headers for the various localized configuration
+// properties derive from this template and make available its member functions
+// to access each given localized configuration property.
 template< typename T, typename U > struct ConfigurationLocalizedProperty:
     private boost::noncopyable
 {
-    /// Get the value of the given localized configuration property, for the
-    /// locale currently set at the
-    /// com.sun.star.configuration.theDefaultProvider.
-    ///
-    /// For nillable properties, U is of type boost::optional<U'>.
+    // Get the value of the given localized configuration property, for the
+    // locale currently set at the
+    // com.sun.star.configuration.theDefaultProvider.
+
+    // For nillable properties, U is of type boost::optional<U'>.
     static U get(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
@@ -237,12 +237,12 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
         return detail::Convert< U >::fromAny(a);
     }
 
-    /// Set the value of the given localized configuration property, for the
-    /// locale currently set at the
-    /// com.sun.star.configuration.theDefaultProvider, via a given changes
-    /// batch.
-    ///
-    /// For nillable properties, U is of type boost::optional<U'>.
+    // Set the value of the given localized configuration property, for the
+    // locale currently set at the
+    // com.sun.star.configuration.theDefaultProvider, via a given changes
+    // batch.
+
+    // For nillable properties, U is of type boost::optional<U'>.
     static void set(
         U const & value,
         boost::shared_ptr< ConfigurationChanges > const & batch,
@@ -258,13 +258,13 @@ private:
     ~ConfigurationLocalizedProperty(); // not defined
 };
 
-/// A type-safe wrapper around a configuration group.
-///
-/// Automatically generated headers for the various configuration groups derive
-/// from this template and make available its member functions to access each
-/// given configuration group.
+// A type-safe wrapper around a configuration group.
+
+// Automatically generated headers for the various configuration groups derive
+// from this template and make available its member functions to access each
+// given configuration group.
 template< typename T > struct ConfigurationGroup: private boost::noncopyable {
-    /// Get read-only access to the given configuration group.
+    // Get read-only access to the given configuration group.
     static com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
     get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -274,8 +274,8 @@ template< typename T > struct ConfigurationGroup: private boost::noncopyable {
             T::path());
     }
 
-    /// Get read/write access to the given configuration group, storing any
-    /// modifications via the given changes batch.
+    // Get read/write access to the given configuration group, storing any
+    // modifications via the given changes batch.
     static com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameReplace >
     get(boost::shared_ptr< ConfigurationChanges > const & batch,
@@ -291,13 +291,13 @@ private:
     ~ConfigurationGroup(); // not defined
 };
 
-/// A type-safe wrapper around a configuration set.
-///
-/// Automatically generated headers for the various configuration sets derive
-/// from this template and make available its member functions to access each
-/// given configuration set.
+// A type-safe wrapper around a configuration set.
+
+// Automatically generated headers for the various configuration sets derive
+// from this template and make available its member functions to access each
+// given configuration set.
 template< typename T > struct ConfigurationSet: private boost::noncopyable {
-    /// Get read-only access to the given configuration set.
+    // Get read-only access to the given configuration set.
     static
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
     get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -307,8 +307,8 @@ template< typename T > struct ConfigurationSet: private boost::noncopyable {
             T::path());
     }
 
-    /// Get read/write access to the given configuration set, storing any
-    /// modifications via the given changes batch.
+    // Get read/write access to the given configuration set, storing any
+    // modifications via the given changes batch.
     static
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
     get(boost::shared_ptr< ConfigurationChanges > const & batch,

@@ -28,7 +28,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 struct TextBodyProperties
 {
@@ -46,7 +46,7 @@ struct TextBodyProperties
     void                pushVertSimulation();
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

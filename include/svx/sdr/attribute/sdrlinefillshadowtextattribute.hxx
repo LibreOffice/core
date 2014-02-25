@@ -25,7 +25,7 @@
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -62,7 +62,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_ATTRIBUTE_SDRLINEFILLSHADOWTEXTATTRIBUTE_HXX
 

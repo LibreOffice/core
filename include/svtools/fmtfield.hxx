@@ -32,7 +32,7 @@ typedef sal_uInt16 FORMAT_CHANGE_TYPE;
 #define FCT_PRECISION       0x02        // a new precision was set
 #define FCT_THOUSANDSSEP    0x03        // the thousands separator setting changed
 
-//------------------------------------------------------------------------------
+
 class SVT_DLLPUBLIC FormattedField : public SpinField
 {
 private:
@@ -259,7 +259,7 @@ protected:
     virtual void ReFormat();
 };
 
-//------------------------------------------------------------------------------
+
 class SVT_DLLPUBLIC DoubleNumericField : public FormattedField
 {
 protected:
@@ -282,11 +282,11 @@ protected:
     void ResetConformanceTester();
 };
 
-//==============================================================================
+
 #define FCT_CURRENCY_SYMBOL     0x10
 #define FCT_CURRSYM_POSITION    0x20
 
-//------------------------------------------------------------------------------
+
 class DoubleCurrencyField : public FormattedField
 {
     OUString   m_sCurrencySymbol;

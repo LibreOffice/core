@@ -35,9 +35,9 @@
 
 class UnoControlHolderList;
 
-//  ----------------------------------------------------
+
 //  class UnoControlContainer
-//  ----------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   ::com::sun::star::awt::XUnoControlContainer
                                             ,   ::com::sun::star::awt::XControlContainer

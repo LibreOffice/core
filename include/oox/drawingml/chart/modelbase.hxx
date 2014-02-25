@@ -30,7 +30,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 template< typename ModelType >
 class ModelRef : public ::boost::shared_ptr< ModelType >
@@ -51,7 +51,7 @@ public:
     ModelType&   getOrCreate( const Param1Type& rParam1 ) { if( !*this ) this->reset( new ModelType( rParam1 ) ); return **this; }
 };
 
-// ============================================================================
+
 
 template< typename ModelType >
 class ModelVector : public RefVector< ModelType >
@@ -71,7 +71,7 @@ private:
     ModelType&   append( ModelType* pModel ) { this->push_back( value_type( pModel ) ); return *pModel; }
 };
 
-// ============================================================================
+
 
 template< typename KeyType, typename ModelType >
 class ModelMap : public RefMap< KeyType, ModelType >
@@ -92,7 +92,7 @@ private:
     ModelType&   insert( KeyType eKey, ModelType* pModel ) { (*this)[ eKey ].reset( pModel ); return *pModel; }
 };
 
-// ============================================================================
+
 
 struct NumberFormat
 {
@@ -104,7 +104,7 @@ struct NumberFormat
     void                setAttributes( const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct LayoutModel
 {
@@ -123,7 +123,7 @@ struct LayoutModel
                         ~LayoutModel();
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

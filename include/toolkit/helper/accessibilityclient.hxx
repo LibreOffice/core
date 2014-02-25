@@ -22,14 +22,14 @@
 
 #include <toolkit/helper/accessiblefactory.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= AccessibilityClient
-    //====================================================================
+
     /** a client for the accessibility implementations which have been
         outsourced from the main toolkit library
 
@@ -57,9 +57,9 @@ namespace toolkit
         void ensureInitialized();
     };
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_HELPER_ACCESSIBILITYCLIENT_HXX
 

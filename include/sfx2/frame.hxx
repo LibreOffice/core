@@ -86,7 +86,7 @@ typedef ::std::vector<OUString> TargetList;
 
 #define SFXFRAME_HASTITLE     0x0001
 
-//==========================================================================
+
 // SfxFrame is a management class for windows and their content.
 // A SfxApplication represent a hierarchy of SfxFrames, with which the actual
 // content in the derived classes is defined. The base class SfxFrame
@@ -96,7 +96,7 @@ typedef ::std::vector<OUString> TargetList;
 // parent. By calling DoCloser() on any frame in the hierarchy,
 // a part of the "framework" can be removed, where frames unsubscribe
 // from their parent frames.
-//==========================================================================
+
 
 class SFX2_DLLPUBLIC SfxFrame
 {
@@ -224,7 +224,7 @@ public:
     SfxFrame*               NextFrame( SfxFrame& rPrev );
 };
 
-//--------------------------------------------------------------------
+
 
 class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
 {

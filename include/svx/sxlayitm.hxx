@@ -24,9 +24,9 @@
 #include <svl/intitem.hxx>
 #include <svx/svdtypes.hxx>
 
-//------------------------------
+
 // class SdrLayerIdItem
-//------------------------------
+
 class SdrLayerIdItem: public SfxUInt16Item {
 public:
     SdrLayerIdItem(sal_uInt16 nId=0): SfxUInt16Item(SDRATTR_LAYERID,nId)  {}
@@ -34,9 +34,9 @@ public:
     SdrLayerID GetValue() const { return (SdrLayerID)SfxUInt16Item::GetValue(); }
 };
 
-//------------------------------
+
 // class SdrLayerNameItem
-//------------------------------
+
 
 class SdrLayerNameItem: public SfxStringItem {
 public:

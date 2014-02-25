@@ -24,7 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <svtools/statusbarcontroller.hxx>
 
-//------------------------------------------------------------------
+
 
 class SfxModule;
 class StatusBar;
@@ -52,7 +52,7 @@ struct SfxStbCtrlFactory
     {}
 };
 
-//------------------------------------------------------------------
+
 
 class CommandEvent;
 class MouseEvent;
@@ -123,7 +123,7 @@ public:
 
 };
 
-//------------------------------------------------------------------
+
 
 #define SFX_DECL_STATUSBAR_CONTROL() \
         static SfxStatusBarControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ); \

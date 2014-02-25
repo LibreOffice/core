@@ -37,16 +37,16 @@
 #include <memory>
 #include <vector>
 
-//........................................................................
+
 namespace dbtools
 {
 namespace param
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ParameterWrapper
-    //====================================================================
+
     /** wraps a parameter column as got from an SQLQueryComposer, so that it has an additional
         property "Value", which is forwarded to an XParameters interface
     */
@@ -117,14 +117,14 @@ namespace param
         ParameterWrapper(); // not implemented
     };
 
-    //====================================================================
+
     //= ParameterWrapper
-    //====================================================================
+
     typedef ::std::vector< ::rtl::Reference< ParameterWrapper > >   Parameters;
 
-    //====================================================================
+
     //= ParameterWrapperContainer
-    //====================================================================
+
     typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::container::XIndexAccess
                                                 ,   ::com::sun::star::container::XEnumerationAccess
                                                 >   ParameterWrapperContainer_Base;
@@ -186,14 +186,14 @@ namespace param
         void    impl_checkDisposed_throw();
     };
 
-    //====================================================================
+
     //= ParametersContainer
-    //====================================================================
+
     typedef ::rtl::Reference< ParameterWrapperContainer >   ParametersContainerRef;
 
-//........................................................................
+
 } } // namespace dbtools::param
-//........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 

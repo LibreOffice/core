@@ -37,7 +37,7 @@ namespace xmlscript
 
 ##################################################################################################*/
 
-//==================================================================================================
+
 class XMLSCRIPT_DLLPUBLIC XMLElement
     : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XAttributeList >
 {

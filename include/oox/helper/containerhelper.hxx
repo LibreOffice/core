@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
 
 namespace oox {
 
-// ============================================================================
+
 
 /** A range of signed 32-bit integer values. */
 struct ValueRange
@@ -55,11 +55,11 @@ struct ValueRange
     bool         intersects( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnLast) && (rRange.mnFirst <= mnLast); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef ::std::vector< ValueRange > ValueRangeVector;
 
-// ----------------------------------------------------------------------------
+
 
 /** An ordered list of value ranges. The insertion operation will merge
     consecutive value ranges.
@@ -81,7 +81,7 @@ private:
     ValueRangeVector    maRanges;
 };
 
-// ============================================================================
+
 
 /** Template for a 2-dimensional array of objects.
 
@@ -150,7 +150,7 @@ private:
     size_type           mnWidth;
 };
 
-// ============================================================================
+
 
 /** Static helper functions for improved API container handling. */
 class OOX_DLLPUBLIC ContainerHelper
@@ -310,7 +310,7 @@ public:
                             matrixToSequenceSequence( const MatrixType& rMatrix );
 };
 
-// ----------------------------------------------------------------------------
+
 
 template< typename VectorType >
 /*static*/ const typename VectorType::value_type* ContainerHelper::getVectorElement( const VectorType& rVector, sal_Int32 nIndex )
@@ -401,7 +401,7 @@ template< typename MatrixType >
     return aSeq;
 }
 
-// ============================================================================
+
 
 } // namespace oox
 

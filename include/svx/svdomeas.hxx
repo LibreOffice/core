@@ -24,9 +24,9 @@
 #include <svx/svxdllapi.h>
 #include <editeng/measfld.hxx>
 
-//************************************************************
+
 //  Initial Declarations
-//************************************************************
+
 
 class SdrOutliner;
 struct ImpMeasureRec;
@@ -36,9 +36,9 @@ namespace sdr { namespace properties {
     class MeasureProperties;
 }}
 
-//************************************************************
+
 //   Auxiliary Class SdrMeasureObjGeoData
-//************************************************************
+
 
 class SdrMeasureObjGeoData : public SdrTextObjGeoData
 {
@@ -51,9 +51,9 @@ public:
     virtual ~SdrMeasureObjGeoData();
 };
 
-//************************************************************
+
 //   SdrMeasureObj
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrMeasureObj : public SdrTextObj
 {
@@ -152,12 +152,12 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Creating:
 // ~~~~~~~~~
 // dragging reference point 1 to reference point 2 -> reference edge
-//
+
 // Defaults:
 // ~~~~~~~~~~~~~
 // dimension line and auxiliary dimension lines:  solid black hairlines
@@ -173,7 +173,7 @@ public:
 //     #             #=========#
 //     # objected to be dimensioned #
 //     #=======================#
-//
+
 // Attributes:
 // ~~~~~~~~~~
 // 1. Where is the text: middle, right or left (default=automatic)
@@ -184,7 +184,7 @@ public:
 // 5. excess lenth of the auxiliary dimension lines beyond the reference edge (2x, default=0)
 // 6. excess lenth of the auxiliary dimension lines past the dimesion line (default=2mm)
 // 7. distance between the auxiliary dimension line and the reference edge
-//
+
 // Dragging:                    Handle          Shift
 // ~~~~~~~~~
 // -  reference points        SolidQuadHdl   only the length
@@ -192,18 +192,18 @@ public:
 // 3.+4. Hdl on arrow (2x)    SolidQuadHdl   only the  Bool
 // 5.    Hdl one end point      CircHdl        both lengths ?
 // 6.+7. no dragging
-//
+
 // Open:
 // ~~~~~~
 // - radiuses  (anchor as type immediately)
-//
+
 // Special:
 // ~~~~~~~~
 // Connecting to a maximum of two objects
 // -> during Copy, etc. use the respective code of the connectors?!?
 // this probably will be pretty complicated ...
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 #endif // INCLUDED_SVX_SVDOMEAS_HXX
 

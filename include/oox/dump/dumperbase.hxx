@@ -61,7 +61,7 @@ namespace oox { namespace core {
 namespace oox {
 namespace dump {
 
-// ============================================================================
+
 
 #define OOX_DUMP_UNUSED                     "unused"
 #define OOX_DUMP_UNKNOWN                    "?unknown"
@@ -97,8 +97,8 @@ typedef ::std::pair< sal_Int64, sal_Int64 >             Int64Pair;
 typedef ::std::vector< OUString >    OUStringVector;
 typedef ::std::vector< sal_Int64 >          Int64Vector;
 
-// ============================================================================
-// ============================================================================
+
+
 
 /** Static helper functions for system file and stream access. */
 class InputOutputHelper
@@ -137,7 +137,7 @@ public:
                             rtl_TextEncoding eTextEnc );
 };
 
-// ============================================================================
+
 
 class BinaryInputStreamRef : public ::oox::BinaryInputStreamRef
 {
@@ -155,8 +155,8 @@ public:
                             ::oox::BinaryInputStreamRef( rxInStrm ) {}
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 /** Specifiers for atomic data types. */
 enum DataType
@@ -174,7 +174,7 @@ enum DataType
     DATATYPE_DOUBLE             ///< Floating-point, double precision.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Specifiers for the output format of values. */
 enum FormatType
@@ -188,7 +188,7 @@ enum FormatType
     FORMATTYPE_BOOL             ///< Boolean ('true' or 'false').
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Describes the output format of a data item.
 
@@ -249,8 +249,8 @@ struct ItemFormat
     OUStringVector      parse( const OUString& rFormatStr );
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 struct Address
 {
@@ -260,7 +260,7 @@ struct Address
     explicit            Address( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct Range
 {
@@ -269,11 +269,11 @@ struct Range
     Range() {}
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef ::std::vector< Range > RangeList;
 
-// ============================================================================
+
 
 struct TokenAddress : public Address
 {
@@ -282,7 +282,7 @@ struct TokenAddress : public Address
     TokenAddress() : mbRelCol( false ), mbRelRow( false ) {}
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct TokenRange
 {
@@ -291,8 +291,8 @@ struct TokenRange
     TokenRange() {}
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 /** Static helper functions for formatted output to strings. */
 class StringHelper
@@ -404,7 +404,7 @@ public:
     static void         convertStringToIntList( Int64Vector& orVec, const OUString& rData, bool bIgnoreEmpty );
 };
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 void StringHelper::appendFix( OUStringBuffer& rStr, Type nData, sal_Int32 nWidth )
@@ -427,7 +427,7 @@ void StringHelper::appendValue( OUStringBuffer& rStr, Type nData, FormatType eFm
     }
 }
 
-// ============================================================================
+
 
 class String : public OUString
 {
@@ -443,8 +443,8 @@ public:
 
 static const String EMPTY_STRING;
 
-// ============================================================================
-// ============================================================================
+
+
 
 class Base;
 typedef ::boost::shared_ptr< Base > BaseRef;
@@ -512,8 +512,8 @@ protected:
     virtual bool        implIsValid() const = 0;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class ConfigItemBase
 {
@@ -551,7 +551,7 @@ private:
                             const OUString& rData );
 };
 
-// ============================================================================
+
 
 class SharedConfigData;
 class Config;
@@ -641,7 +641,7 @@ private:
     const SharedConfigData& mrCfgData;
 };
 
-// ============================================================================
+
 
 class ConstList : public NameListBase
 {
@@ -673,7 +673,7 @@ private:
     bool                mbQuoteNames;
 };
 
-// ============================================================================
+
 
 class MultiList : public ConstList
 {
@@ -697,7 +697,7 @@ private:
     bool                mbIgnoreEmpty;
 };
 
-// ============================================================================
+
 
 class FlagsList : public NameListBase
 {
@@ -728,7 +728,7 @@ private:
     sal_Int64           mnIgnore;
 };
 
-// ============================================================================
+
 
 class CombiList : public FlagsList
 {
@@ -761,7 +761,7 @@ private:
     ExtItemFormatMap    maFmtMap;
 };
 
-// ============================================================================
+
 
 class UnitConverter : public NameListBase
 {
@@ -786,7 +786,7 @@ private:
     double              mfFactor;
 };
 
-// ============================================================================
+
 
 class NameListWrapper
 {
@@ -806,7 +806,7 @@ private:
 
 static const NameListWrapper NO_LIST;
 
-// ============================================================================
+
 
 class ItemFormatMap : public ::std::map< sal_Int64, ItemFormat >
 {
@@ -817,8 +817,8 @@ public:
     void         insertFormats( const NameListRef& rxNameList );
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class SharedConfigData : public Base, public ConfigItemBase
 {
@@ -876,7 +876,7 @@ private:
     bool                mbPwCancelled;
 };
 
-// ----------------------------------------------------------------------------
+
 
 template< typename ListType >
 ::boost::shared_ptr< ListType > SharedConfigData::createNameList( const OUString& rListName )
@@ -898,7 +898,7 @@ void SharedConfigData::readNameList( TextInputStream& rStrm, const OUString& rLi
         xList->readConfigBlock( rStrm );
 }
 
-// ============================================================================
+
 
 class Config : public Base
 {
@@ -964,7 +964,7 @@ private:
 
 typedef ::boost::shared_ptr< Config > ConfigRef;
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 Type Config::getIntOption( const String& rKey, Type nDefault ) const
@@ -995,8 +995,8 @@ bool Config::hasName( const NameListWrapper& rListWrp, Type nKey ) const
     return xList.get() && xList->hasName( nKey );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 class Output : public Base
 {
@@ -1005,7 +1005,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const OUString& rFileName );
 
-    // ------------------------------------------------------------------------
+
 
     void                newLine();
     void                emptyLine( size_t nCount = 1 );
@@ -1031,7 +1031,7 @@ public:
     void                startMultiItems();
     void                endMultiItems();
 
-    // ------------------------------------------------------------------------
+
 
     void                writeChar( sal_Unicode cChar, sal_Int32 nCount = 1 );
     void                writeAscii( const sal_Char* pcStr );
@@ -1062,7 +1062,7 @@ public:
     void                writeName( const Config& rCfg, Type nData, const NameListWrapper& rListWrp )
                             { writeString( rCfg.getName( rListWrp, nData ) ); }
 
-    // ------------------------------------------------------------------------
+
 protected:
     virtual bool        implIsValid() const;
 
@@ -1086,7 +1086,7 @@ private:
 
 typedef ::boost::shared_ptr< Output > OutputRef;
 
-// ============================================================================
+
 
 class IndentGuard
 {
@@ -1100,7 +1100,7 @@ private:
     Output&             mrOut;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class TableGuard
 {
@@ -1124,7 +1124,7 @@ private:
     Output&             mrOut;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ItemGuard
 {
@@ -1140,7 +1140,7 @@ private:
     Output&             mrOut;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class MultiItemsGuard
 {
@@ -1154,7 +1154,7 @@ private:
     Output&             mrOut;
 };
 
-// ============================================================================
+
 
 class StorageIterator : public Base
 {
@@ -1177,8 +1177,8 @@ private:
     OUStringVector::const_iterator maIt;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class ObjectBase : public Base
 {
@@ -1190,7 +1190,7 @@ public:
 
     void                dump();
 
-    // ------------------------------------------------------------------------
+
 protected:
                         ObjectBase() {}
 
@@ -1200,7 +1200,7 @@ protected:
     virtual bool        implIsValid() const;
     virtual void        implDump();
 
-    // ------------------------------------------------------------------------
+
 
     Config&             cfg() const { return *mxConfig; }
 
@@ -1210,8 +1210,8 @@ private:
 
 typedef ::boost::shared_ptr< ObjectBase > ObjectRef;
 
-// ============================================================================
-// ============================================================================
+
+
 
 class StorageObjectBase : public ObjectBase
 {
@@ -1284,15 +1284,15 @@ private:
 
 typedef ::boost::shared_ptr< StorageObjectBase > StorageObjectRef;
 
-// ============================================================================
-// ============================================================================
+
+
 
 class OutputObjectBase : public ObjectBase
 {
 public:
     virtual             ~OutputObjectBase();
 
-    // ------------------------------------------------------------------------
+
 protected:
                         OutputObjectBase() {}
 
@@ -1302,7 +1302,7 @@ protected:
 
     virtual bool        implIsValid() const;
 
-    // ------------------------------------------------------------------------
+
 
     void                writeEmptyItem( const String& rName );
     void                writeInfoItem( const String& rName, const String& rData );
@@ -1347,7 +1347,7 @@ protected:
 
 typedef ::boost::shared_ptr< OutputObjectBase > OutputObjectRef;
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 void OutputObjectBase::addNameToItem( Type nData, const NameListWrapper& rListWrp )
@@ -1454,15 +1454,15 @@ void OutputObjectBase::writeHexPairItem( const String& rName, Type nData1, Type 
     mxOut->writeHex( nData2 );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 class InputObjectBase : public OutputObjectBase
 {
 public:
     virtual             ~InputObjectBase();
 
-    // ------------------------------------------------------------------------
+
 protected:
                         InputObjectBase() {}
 
@@ -1473,12 +1473,12 @@ protected:
 
     virtual bool        implIsValid() const;
 
-    // ------------------------------------------------------------------------
+
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         getXInputStream() const;
 
-    // ------------------------------------------------------------------------
+
 
     void                skipBlock( sal_Int64 nBytes, bool bShowSize = true );
     void                dumpRawBinary( sal_Int64 nBytes, bool bShowOffset = true, bool bStream = false );
@@ -1543,7 +1543,7 @@ protected:
 
 typedef ::boost::shared_ptr< InputObjectBase > InputObjectRef;
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 Type InputObjectBase::dumpName( const String& rName, const NameListWrapper& rListWrp )
@@ -1666,8 +1666,8 @@ void InputObjectBase::dumpHexPair( const String& rName, sal_Unicode cSep )
     writeHexPairItem( rName, nData1, nData2, cSep );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 class BinaryStreamObject : public InputObjectBase
 {
@@ -1683,8 +1683,8 @@ protected:
     virtual void        implDump();
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class TextStreamObjectBase : public InputObjectBase
 {
@@ -1714,7 +1714,7 @@ protected:
     ::boost::shared_ptr< TextInputStream > mxTextStrm;
 };
 
-// ============================================================================
+
 
 class TextLineStreamObject : public TextStreamObjectBase
 {
@@ -1735,7 +1735,7 @@ protected:
     virtual void        implDumpLine( const OUString& rLine, sal_uInt32 nLine );
 };
 
-// ============================================================================
+
 
 class XmlStreamObject : public TextStreamObjectBase
 {
@@ -1749,8 +1749,8 @@ protected:
     virtual void        implDumpText( TextInputStream& rTextStrm );
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class RecordObjectBase : public InputObjectBase
 {
@@ -1800,7 +1800,7 @@ private:
     bool                mbBinaryOnly;
 };
 
-// ============================================================================
+
 
 class SequenceRecordObjectBase : public RecordObjectBase
 {
@@ -1825,8 +1825,8 @@ private:
     StreamDataSeqRef    mxRecData;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 /** Base class for a file dumper. Derived classes implement the implDump()
     function to add functionality.
@@ -1846,8 +1846,8 @@ protected:
     void                construct( const ConfigRef& rxConfig );
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 } // namespace dump
 } // namespace oox

@@ -24,9 +24,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//-----------------
+
 // SdrGrafRedItem -
-//-----------------
+
 
 class SVX_DLLPUBLIC SdrGrafRedItem : public SdrSignedPercentItem
 {
@@ -41,9 +41,9 @@ public:
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 };
 
-//-------------------
+
 // SdrGrafGreenItem -
-//-------------------
+
 
 class SVX_DLLPUBLIC SdrGrafGreenItem : public SdrSignedPercentItem
 {
@@ -58,9 +58,9 @@ public:
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 };
 
-//-------------------
+
 // SdrGrafBlueItem -
-//-------------------
+
 
 class SVX_DLLPUBLIC SdrGrafBlueItem : public SdrSignedPercentItem
 {

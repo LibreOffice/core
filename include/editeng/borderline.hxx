@@ -36,7 +36,7 @@
 #define DEF_LINE_WIDTH_4        100
 #define DEF_LINE_WIDTH_5        10
 
-// ============================================================================
+
 
 namespace editeng {
 

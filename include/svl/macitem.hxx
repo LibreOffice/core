@@ -36,7 +36,7 @@ class SvStream;
 
 DBG_NAMEEX(SvxMacroItem)
 
-// -----------------------------------------------------------------------
+
 
 //Ein Macro
 

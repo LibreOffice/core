@@ -25,7 +25,7 @@
 #include <editeng/outlobj.hxx>
 #include <svx/sdtaitm.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class SdrText;
@@ -42,7 +42,7 @@ namespace drawinglayer { namespace attribute {
     class ImpSdrTextAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -115,7 +115,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_ATTRIBUTE_SDRTEXTATTRIBUTE_HXX
 

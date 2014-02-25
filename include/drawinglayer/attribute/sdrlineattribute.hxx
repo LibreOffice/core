@@ -26,7 +26,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace basegfx {
@@ -37,7 +37,7 @@ namespace drawinglayer { namespace attribute {
     class ImpSdrLineAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -84,7 +84,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLINEATTRIBUTE_HXX
 

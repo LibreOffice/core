@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLTYPES_HXX
 #define INCLUDED_XMLOFF_XMLTYPES_HXX
 
-///////////////////////////////////////////////////////////////////////////////
+
 // Flags to specify how to im/export the property
-//
+
 // OLD:
 // 8421.8421.8421.8421.8421.8421.8421.8421
 //  n n   m  mmmd    m baaa tttt.tttt.tttt
@@ -57,7 +57,7 @@
 #define MID_FLAG_NO_PROPERTY            0x50000000  // both import and export
 
 // Import only: there are more entries for the same xml attribute existing
-#define MID_FLAG_MULTI_PROPERTY         0x02000000  //
+#define MID_FLAG_MULTI_PROPERTY         0x02000000
 
 // Import only: If a property with the same name has been set already, supply
 // the current value to the importXML call.
@@ -104,10 +104,10 @@
 #define XML_TYPE_PROP_CHART (0xe << XML_TYPE_PROP_SHIFT)
 #define XML_TYPE_PROP_END (0xf << XML_TYPE_PROP_SHIFT)
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 // XML-data-type-ID's
-//
+
 
 // simple types, no special compare necessary
 #define XML_TYPE_BUILDIN_CMP 0x00002000

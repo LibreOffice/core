@@ -34,9 +34,9 @@
 class UserDrawEvent;
 class ImplCommonButtonData;
 
-// ----------
+
 // - Button -
-// ----------
+
 
 class VCL_DLLPUBLIC Button : public Control
 {
@@ -89,16 +89,16 @@ public:
     virtual bool        set_property(const OString &rKey, const OString &rValue);
 };
 
-// --------------------
+
 // - PushButton-Types -
-// --------------------
+
 
 #define PUSHBUTTON_DROPDOWN_TOOLBOX         ((sal_uInt16)0x0001)
 #define PUSHBUTTON_DROPDOWN_MENUBUTTON      ((sal_uInt16)0x0002)
 
-// --------------
+
 // - PushButton -
-// --------------
+
 
 class VCL_DLLPUBLIC PushButton : public Button
 {
@@ -204,9 +204,9 @@ inline bool PushButton::IsChecked() const
     return (GetState() == TRISTATE_TRUE);
 }
 
-// ------------
+
 // - OKButton -
-// ------------
+
 
 class VCL_DLLPUBLIC OKButton : public PushButton
 {
@@ -226,9 +226,9 @@ public:
     virtual void    Click();
 };
 
-// ----------------
+
 // - CancelButton -
-// ----------------
+
 
 class VCL_DLLPUBLIC CancelButton : public PushButton
 {
@@ -255,9 +255,9 @@ public:
 };
 
 
-// --------------
+
 // - HelpButton -
-// --------------
+
 
 class VCL_DLLPUBLIC HelpButton : public PushButton
 {
@@ -277,9 +277,9 @@ public:
     virtual void    Click();
 };
 
-// ---------------
+
 // - RadioButton -
-// ---------------
+
 
 class VCL_DLLPUBLIC RadioButton : public Button
 {
@@ -408,9 +408,9 @@ public:
     void group(RadioButton &rOther);
 };
 
-// ------------
+
 // - CheckBox -
-// ------------
+
 
 class VCL_DLLPUBLIC CheckBox : public Button
 {
@@ -512,9 +512,9 @@ inline bool CheckBox::IsChecked() const
     return (GetState() == TRISTATE_TRUE);
 }
 
-// ---------------------------------
+
 // - Control-Layer fuer alten Code -
-// ---------------------------------
+
 
 class VCL_DLLPUBLIC ImageButton : public PushButton
 {

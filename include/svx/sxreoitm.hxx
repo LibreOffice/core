@@ -23,9 +23,9 @@
 
 #include <svx/sxfiitm.hxx>
 
-//------------------------------
+
 // class SdrResizeXOneItem
-//------------------------------
+
 class SdrResizeXOneItem: public SdrFractionItem {
 public:
     SdrResizeXOneItem(): SdrFractionItem(SDRATTR_RESIZEXONE,Fraction(1,1)) {}
@@ -33,9 +33,9 @@ public:
     SdrResizeXOneItem(SvStream& rIn): SdrFractionItem(SDRATTR_RESIZEXONE,rIn)    {}
 };
 
-//------------------------------
+
 // class SdrResizeYOneItem
-//------------------------------
+
 class SdrResizeYOneItem: public SdrFractionItem {
 public:
     SdrResizeYOneItem(): SdrFractionItem(SDRATTR_RESIZEYONE,Fraction(1,1)) {}

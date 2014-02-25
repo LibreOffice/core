@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -36,7 +36,7 @@
 class SvtMiscOptions_Impl;
 class Link;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about misc group
     @descr          -
 
@@ -51,7 +51,7 @@ class Link;
 class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 {
     public:
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -115,7 +115,7 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!

@@ -50,7 +50,7 @@ class SdrPageView;
 class Svx3DCtrlItem;
 class SvxConvertTo3DItem;
 
-//------------------------------------------------------------------------
+
 struct Svx3DWinImpl;
 
 class SVX_DLLPUBLIC Svx3DWin : public SfxDockingWindow
@@ -209,7 +209,7 @@ private:
 
     sal_Bool                bOnly3DChanged;
 
-    //------------------------------------
+
 
     DECL_LINK( ClickViewTypeHdl, void * );
     DECL_LINK( ClickUpdateHdl, void * );

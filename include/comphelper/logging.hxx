@@ -29,15 +29,15 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= string conversions, employed by the templatized log* members of
     //= EventLogger
-    //====================================================================
+
 
     namespace log { namespace convert
     {
@@ -62,9 +62,9 @@ namespace comphelper
 
     } } // namespace log::convert
 
-    //====================================================================
+
     //= EventLogger
-    //====================================================================
+
     class EventLogger_Impl;
     typedef ::boost::optional< OUString >    OptionalString;
 
@@ -116,7 +116,7 @@ namespace comphelper
         /// determines whether an event with the given level would be logged
         bool        isLoggable( const sal_Int32 _nLogLevel ) const;
 
-        //----------------------------------------------------------------
+
         //- XLogger::log equivalents/wrappers
         //- string messages
 
@@ -209,7 +209,7 @@ namespace comphelper
             return false;
         }
 
-        //----------------------------------------------------------------
+
         //- XLogger::log equivalents/wrappers
         //- ASCII messages
 
@@ -302,7 +302,7 @@ namespace comphelper
             return false;
         }
 
-        //----------------------------------------------------------------
+
         //- XLogger::logp equivalents/wrappers
         //- string messages
 
@@ -395,7 +395,7 @@ namespace comphelper
             return false;
         }
 
-        //----------------------------------------------------------------
+
         //- XLogger::logp equivalents/wrappers
         //- ASCII messages
 
@@ -503,9 +503,9 @@ namespace comphelper
                     ) const;
     };
 
-    //====================================================================
+
     //= ResourceBasedEventLogger
-    //====================================================================
+
     struct ResourceBasedEventLogger_Data;
     /** extends the EventLogger class with functionality to load log messages from
         a resource bundle.
@@ -533,7 +533,7 @@ namespace comphelper
             const sal_Char* _pAsciiLoggerName = NULL
         );
 
-        //----------------------------------------------------------------
+
         //- XLogger::log equivalents/wrappers
         //- resource IDs
 
@@ -626,7 +626,7 @@ namespace comphelper
             return false;
         }
 
-        //----------------------------------------------------------------
+
         //- XLogger::logp equivalents/wrappers
         //- resource IDs
 
@@ -718,9 +718,9 @@ namespace comphelper
         OUString impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const;
     };
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_LOGGING_HXX
 

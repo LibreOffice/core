@@ -137,53 +137,53 @@ public:
     inline bool SAL_CALL is() const SAL_THROW(())
         { return (_pTypeDescr != 0); }
 };
-//__________________________________________________________________________________________________
+
 inline TypeDescription::TypeDescription( typelib_TypeDescription * pTypeDescr ) SAL_THROW(())
     : _pTypeDescr( pTypeDescr )
 {
     if (_pTypeDescr)
         typelib_typedescription_acquire( _pTypeDescr );
 }
-//__________________________________________________________________________________________________
+
 inline TypeDescription::TypeDescription( typelib_TypeDescriptionReference * pTypeDescrRef ) SAL_THROW(())
     : _pTypeDescr( 0 )
 {
     if (pTypeDescrRef)
         typelib_typedescriptionreference_getDescription( &_pTypeDescr, pTypeDescrRef );
 }
-//__________________________________________________________________________________________________
+
 inline TypeDescription::TypeDescription( const ::com::sun::star::uno::Type & rType ) SAL_THROW(())
     : _pTypeDescr( 0 )
 {
     if (rType.getTypeLibType())
         typelib_typedescriptionreference_getDescription( &_pTypeDescr, rType.getTypeLibType() );
 }
-//__________________________________________________________________________________________________
+
 inline TypeDescription::TypeDescription( const TypeDescription & rTypeDescr ) SAL_THROW(())
     : _pTypeDescr( rTypeDescr._pTypeDescr )
 {
     if (_pTypeDescr)
         typelib_typedescription_acquire( _pTypeDescr );
 }
-//__________________________________________________________________________________________________
+
 inline TypeDescription::TypeDescription( rtl_uString * pTypeName ) SAL_THROW(())
     : _pTypeDescr( 0 )
 {
     typelib_typedescription_getByName( &_pTypeDescr , pTypeName );
 }
-//__________________________________________________________________________________________________
+
 inline TypeDescription::TypeDescription( const ::rtl::OUString & rTypeName ) SAL_THROW(())
     : _pTypeDescr( 0 )
 {
     typelib_typedescription_getByName( &_pTypeDescr , rTypeName.pData );
 }
-//__________________________________________________________________________________________________
+
 inline TypeDescription::~TypeDescription() SAL_THROW(())
 {
     if (_pTypeDescr)
         typelib_typedescription_release( _pTypeDescr );
 }
-//__________________________________________________________________________________________________
+
 inline TypeDescription & TypeDescription::operator = ( typelib_TypeDescription * pTypeDescr ) SAL_THROW(())
 {
     if (pTypeDescr)
@@ -193,13 +193,13 @@ inline TypeDescription & TypeDescription::operator = ( typelib_TypeDescription *
     _pTypeDescr = pTypeDescr;
     return *this;
 }
-//__________________________________________________________________________________________________
+
 inline bool TypeDescription::equals( const typelib_TypeDescription * pTypeDescr ) const SAL_THROW(())
 {
     return (_pTypeDescr && pTypeDescr &&
             typelib_typedescription_equals( _pTypeDescr, pTypeDescr ));
 }
-//__________________________________________________________________________________________________
+
 inline void TypeDescription::makeComplete() const SAL_THROW(())
 {
     if (_pTypeDescr && !_pTypeDescr->bComplete)

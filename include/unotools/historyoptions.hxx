@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
@@ -38,7 +38,7 @@
 #define HISTORY_PROPERTYNAME_PASSWORD       OUString("Password")
 #define HISTORY_PROPERTYNAME_THUMBNAIL      OUString("Thumbnail")
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          You can use these enum values to specify right history if you call ouer interface methods.
 *//*-*************************************************************************************************************/
 
@@ -49,7 +49,7 @@ enum EHistoryType
     eHELPBOOKMARKS  = 2
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -58,7 +58,7 @@ enum EHistoryType
 
 class SvtHistoryOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about history features
     @descr          -
 
@@ -71,7 +71,7 @@ class SvtHistoryOptions_Impl;
 class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail::Options
 {
     public:
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -90,13 +90,13 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
          SvtHistoryOptions();
         virtual ~SvtHistoryOptions();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/History/..."
             @descr      key "PickList"  : The last used documents displayed in the file menu.
                         key "History"   : The last opened documents general.
         *//*-*****************************************************************************************************/
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      set/get max size of specified history
             @descr      Call this methods to get information about max. size of specified list.
                         These value lay down the max count of items in these history. If a new one
@@ -114,7 +114,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
 
         sal_uInt32  GetSize( EHistoryType eHistory                      ) const ;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      clear complete sepcified list
             @descr      Call this methods to clear the whole list. After that GetItemCount() will return 0 ...
                         but GetSize() will return the old value!
@@ -129,7 +129,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
 
         void Clear( EHistoryType eHistory );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return complete sepcified list
             @descr      If you will show the whole list call this method to get it completely.
 
@@ -143,7 +143,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList( EHistoryType eHistory ) const ;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      append a new item to specified list
             @descr      You can append items to a list only - removing isn't allowed for a special item!
                         The oldest entry is deleted automaticly if max size arrived or you can call Clear() ...
@@ -169,7 +169,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      Make these class threadsafe.
 

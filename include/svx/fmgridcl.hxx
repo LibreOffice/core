@@ -26,9 +26,9 @@
 #include <svtools/transfer.hxx>
 #include <svx/svxdllapi.h>
 
-//==================================================================
+
 // FmGridHeader
-//==================================================================
+
 struct FmGridHeaderData;
 class SVX_DLLPUBLIC FmGridHeader
             :public ::svt::EditBrowserHeader
@@ -87,9 +87,9 @@ private:
     DECL_LINK( OnAsyncExecuteDrop, void* );
 };
 
-//==================================================================
+
 // FmGridControl
-//==================================================================
+
 class FmXGridPeer;
 class SVX_DLLPUBLIC FmGridControl : public DbGridControl
 

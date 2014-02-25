@@ -26,9 +26,9 @@
 
 class Gradient;
 
-//-----------------
+
 // class XGradient
-//-----------------
+
 
 class SVX_DLLPUBLIC XGradient
 {

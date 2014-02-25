@@ -24,13 +24,13 @@
 
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
     namespace animation
     {
-        //////////////////////////////////////////////////////////////////////////////
+
 
         class DRAWINGLAYER_DLLPUBLIC AnimationEntry
         {
@@ -49,7 +49,7 @@ namespace drawinglayer
             virtual double getNextEventTime(double fTime) const = 0;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryFixed : public AnimationEntry
         {
@@ -68,7 +68,7 @@ namespace drawinglayer
             virtual double getNextEventTime(double fTime) const;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryLinear : public AnimationEntry
         {
@@ -89,7 +89,7 @@ namespace drawinglayer
             virtual double getNextEventTime(double fTime) const;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryList : public AnimationEntry
         {
@@ -112,7 +112,7 @@ namespace drawinglayer
             virtual double getNextEventTime(double fTime) const;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryLoop : public AnimationEntryList
         {
@@ -130,11 +130,11 @@ namespace drawinglayer
             virtual double getNextEventTime(double fTime) const;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+
     } // end of namespace animation
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 

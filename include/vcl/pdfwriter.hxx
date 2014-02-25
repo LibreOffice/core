@@ -371,7 +371,7 @@ public:
         // radio buttons having the same RadioGroup id comprise one
         // logical radio button group, that is at most one of the RadioButtons
         // in a group can be checked at any time
-        //
+
         // note: a PDF radio button field consists of a named field
         // containing unnamed checkbox child fields. The name of the
         // radio button field is taken from the first RadioButtonWidget created

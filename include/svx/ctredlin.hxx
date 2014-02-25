@@ -151,9 +151,9 @@ public:
 
 };
 
-//==================================================================
+
 //  Filter- Tabpage
-//==================================================================
+
 class SVX_DLLPUBLIC SvxTPFilter: public TabPage
 {
 private:
@@ -284,9 +284,9 @@ public:
 };
 
 
-//==================================================================
+
 //  View- Tabpage
-//==================================================================
+
 
 class SVX_DLLPUBLIC SvxTPView: public TabPage
 {
@@ -356,9 +356,9 @@ public:
     virtual void    DeactivatePage();
 };
 
-//==================================================================
+
 //  Redlining - Control (Accept- Changes)
-//==================================================================
+
 
 class SVX_DLLPUBLIC SvxAcceptChgCtr
     : public TabControl

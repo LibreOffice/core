@@ -44,7 +44,7 @@ class XMLSdPropHdlFactory;
 class XMLPropertySetMapper;
 class SvXMLImportPropertyMapper;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 enum SdXMLGroupShapeElemTokenMap
 {
@@ -173,7 +173,7 @@ enum SdXML3DLightAttrTokenMap
     XML_TOK_3DLIGHT_SPECULAR
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 // dr3d:3dlight context
 
 class SdXML3DLightContext: public SvXMLImportContext
@@ -198,7 +198,7 @@ public:
     sal_Bool GetSpecular() { return mbSpecular; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 typedef ::std::vector< SdXML3DLightContext* > Imp3DLightList;
 
@@ -243,7 +243,7 @@ public:
     void setSceneAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet );
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class SvXMLShapeContext : public SvXMLImportContext
 {
@@ -263,7 +263,7 @@ public:
     void setHyperlink( const OUString& rHyperlink );
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ShapeSortContext;
 struct XMLShapeImportHelperImpl;

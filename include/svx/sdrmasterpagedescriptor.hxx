@@ -23,7 +23,7 @@
 #include <svx/sdrpageuser.hxx>
 #include <svx/svdsob.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 class SdrObject;
 class SfxItemSet;
@@ -37,7 +37,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -87,7 +87,7 @@ namespace sdr
     };
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDRMASTERPAGEDESCRIPTOR_HXX
 

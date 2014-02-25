@@ -27,9 +27,9 @@ namespace connectivity { class OSQLParseNode; }
 
 namespace connectivity
 {
-    //==========================================================================
+
     //= IParseContext
-    //==========================================================================
+
     class IParseContext
     {
     public:

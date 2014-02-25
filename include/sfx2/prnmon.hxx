@@ -29,7 +29,7 @@
 
 class SfxViewShell;
 
-// ------------------------------------------------------------------------
+
 
 struct SfxPrintOptDlg_Impl;
 class SfxPrintOptionsDialog : public ModalDialog

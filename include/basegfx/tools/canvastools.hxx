@@ -71,7 +71,7 @@ namespace basegfx
     namespace unotools
     {
         // Polygon conversions
-        // ===================================================================
+
 
         BASEGFX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
             xPolyPolygonFromB2DPolygon( const ::com::sun::star::uno::Reference<
@@ -115,7 +115,7 @@ namespace basegfx
                      ::com::sun::star::rendering::XPolyPolygon2D >& rPoly );
 
         // Matrix conversions
-        // ===================================================================
+
 
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::AffineMatrix2D&
             affineMatrixFromHomMatrix( ::com::sun::star::geometry::AffineMatrix2D&  matrix,
@@ -140,7 +140,7 @@ namespace basegfx
                                  const ::com::sun::star::geometry::Matrix2D& matrix );
 
         // Geometry conversions
-        // ===================================================================
+
 
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::RealSize2D        size2DFromB2DSize( const ::basegfx::B2DVector& );
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::RealPoint2D       point2DFromB2DPoint( const ::basegfx::B2DPoint& );
@@ -159,7 +159,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromAwtRectangle( const ::com::sun::star::awt::Rectangle& );
 
         // Geometry comparisons
-        // ===================================================================
+
 
         /** Return smalltest integer range, which completely contains
             given floating point range.

@@ -24,7 +24,7 @@
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -33,7 +33,7 @@
 
 class SvtLocalisationOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about localisation features
     @descr          -
 
@@ -46,7 +46,7 @@ class SvtLocalisationOptions_Impl;
 class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::detail::Options
 {
     public:
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -65,7 +65,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
          SvtLocalisationOptions();
         virtual ~SvtLocalisationOptions();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/AutoMnemonic"
             @descr      These value specifies if shortcuts should be assigned automatically.
 
@@ -79,7 +79,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
 
         bool    IsAutoMnemonic  (                   ) const ;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/DialogScale"
             @descr      These value specifies the factor for increasing controls.
                         Value from [0..100] are allowed.
@@ -100,7 +100,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
         sal_Int32   GetDialogScale(                     ) const ;
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!

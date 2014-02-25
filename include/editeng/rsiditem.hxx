@@ -12,9 +12,9 @@
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 
-//----------------------
+
 // SvxRsidItem
-//----------------------
+
 
 class EDITENG_DLLPUBLIC SvxRsidItem : public SfxUInt32Item
 {

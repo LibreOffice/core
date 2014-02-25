@@ -29,7 +29,7 @@
 namespace ucbhelper
 {
 
-//=========================================================================
+
 
 /**
   * This class implements the interface com::sun::star::io::XActiveDataSink.

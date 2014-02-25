@@ -220,9 +220,9 @@ public:
     Rectangle   GetPosSizePixel( const Window *pWin );
 };
 
-// -----------------
+
 // - DockingWindow -
-// -----------------
+
 
 class VCL_DLLPUBLIC DockingWindow : public Window
 {

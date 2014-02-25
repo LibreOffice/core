@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <xmloff/xmlimp.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class MultiImageImportHelper
 {
@@ -42,7 +42,7 @@ public:
 
     /// solve multiple imported images. The most valuable one is choosen,
     /// see imlementation for evtl. changing weights and/or adding filetypes.
-    ///
+    /
     /// @returns import context of the selected image
     SvXMLImportContextRef solveMultipleImages();
 
@@ -54,7 +54,7 @@ public:
     void setSupportsMultipleContents(bool bNew) { mbSupportsMultipleContents = bNew; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_XMLOFF_XMLMULTIIMAGEHELPER_HXX
 

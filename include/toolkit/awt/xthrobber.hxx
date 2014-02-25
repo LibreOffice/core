@@ -28,14 +28,14 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= XThrobber
-    //====================================================================
+
     typedef ::cppu::ImplInheritanceHelper1  <   VCLXWindow
                                             ,   ::com::sun::star::awt::XThrobber
                                             >   XThrobber_Base;
@@ -64,9 +64,9 @@ namespace toolkit
         XThrobber& operator=( const XThrobber& ); // never implemented
     };
 
-//........................................................................
+
 } // namespacetoolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_AWT_XTHROBBER_HXX
 

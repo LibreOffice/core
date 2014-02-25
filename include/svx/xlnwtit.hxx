@@ -23,9 +23,9 @@
 #include <svl/metitem.hxx>
 #include <svx/svxdllapi.h>
 
-//---------------------
+
 // class XLineWidthItem
-//---------------------
+
 class SVX_DLLPUBLIC XLineWidthItem : public SfxMetricItem
 {
 public:

@@ -27,11 +27,11 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <framework/fwedllapi.h>
-//_________________________________________________________________________________________________________________
-//  types, enums, ...
-//_________________________________________________________________________________________________________________
 
-/*-************************************************************************************************************//**
+//  types, enums, ...
+
+
+/*-************************************************************************************************************
     @descr          The method GetAddonsMenu() returns a list of property values.
                     Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
@@ -113,11 +113,11 @@ struct FWE_DLLPUBLIC MergeStatusbarInstruction
 
 typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionContainer;
 
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
-/*-************************************************************************************************************//**
+//  forward declarations
+
+
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -126,7 +126,7 @@ typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionCont
 
 class AddonsOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about menu features
     @descr          -
 
@@ -138,16 +138,16 @@ class AddonsOptions_Impl;
 
 class FWE_DLLPUBLIC AddonsOptions
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  constructor / destructor
+
+
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -166,11 +166,11 @@ class FWE_DLLPUBLIC AddonsOptions
          AddonsOptions();
         ~AddonsOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  interface
+
+
+        /*-****************************************************************************************************
             @short      clears completely the addons menu
             @descr      Call this methods to clear the addons menu
                         To fill it again use AppendItem().
@@ -185,7 +185,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         void Clear();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      returns if an addons menu is available
             @descr      Call to retrieve if a addons menu is available
 
@@ -195,7 +195,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         sal_Bool    HasAddonsMenu() const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      returns number of addons toolbars
             @descr      Call to retrieve the number of addons toolbars
 
@@ -204,7 +204,7 @@ class FWE_DLLPUBLIC AddonsOptions
         *//*-*****************************************************************************************************/
         sal_Int32   GetAddonsToolBarCount() const ;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      returns the  complete addons menu
             @descr      Call it to get all entries of the addon menu.
                         We return a list of all nodes with his names and properties.
@@ -218,7 +218,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenu() const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Gets the menu bar part of all addon components registered
             @descr      -
 
@@ -231,7 +231,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Gets a toolbar part of an single addon
             @descr      -
 
@@ -244,7 +244,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Gets a unique toolbar resource name of an single addon
             @descr      -
 
@@ -257,7 +257,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         const OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Retrieves all available merge instructions for the Office menu bar
             @descr      -
 
@@ -270,7 +270,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         const MergeMenuInstructionContainer& GetMergeMenuInstructions() const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Retrieves all available merge instructions for a single toolbar
             @descr      -
 
@@ -282,7 +282,7 @@ class FWE_DLLPUBLIC AddonsOptions
         *//*-*****************************************************************************************************/
         bool GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Gets the Add-On help menu part of all addon components registered
             @descr      -
 
@@ -296,7 +296,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         const MergeStatusbarInstructionContainer& GetMergeStatusbarInstructions() const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Retrieve an image for a command URL which is defined inside the addon menu configuration
             @descr      Call it to retrieve an image for a command URL which is defined inside the addon menu configuration
 
@@ -311,11 +311,11 @@ class FWE_DLLPUBLIC AddonsOptions
         Image GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
         Image GetImageFromURL( const OUString& aURL, sal_Bool bBig ) const;
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+    //  private methods
+
+
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
@@ -331,7 +331,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         static ::osl::Mutex& GetOwnStaticMutex();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
@@ -346,9 +346,9 @@ class FWE_DLLPUBLIC AddonsOptions
         *//*-*****************************************************************************************************/
         DECL_STATIC_LINK( AddonsOptions, Notify, void* );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

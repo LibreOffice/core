@@ -23,7 +23,7 @@
 #include <svl/svldllapi.h>
 #include <svl/cenumitm.hxx>
 
-//============================================================================
+
 
 class SVL_DLLPUBLIC SfxEnumItem
     : public SfxEnumItemInterface
@@ -59,7 +59,7 @@ public:
 
 };
 
-//============================================================================
+
 
 class SVL_DLLPUBLIC SfxBoolItem
     : public SfxPoolItem

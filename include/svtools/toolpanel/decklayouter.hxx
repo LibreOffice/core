@@ -32,14 +32,14 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 class Rectangle;
 class Point;
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IDeckLayouter
-    //====================================================================
+
     class IDeckLayouter : public ::rtl::IReference
     {
     public:
@@ -90,9 +90,9 @@ namespace svt
 
     typedef ::rtl::Reference< IDeckLayouter >   PDeckLayouter;
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_DECKLAYOUTER_HXX
 

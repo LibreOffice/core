@@ -24,7 +24,7 @@
 #include <tools/inetmime.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-//============================================================================
+
 /** Definitions for frequently used media type names.
  */
 #define CONTENT_TYPE_STR_APP_OCTSTREAM "application/octet-stream"
@@ -112,7 +112,7 @@
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_WRITER_GLOBAL "application/vnd.sun.xml.writer-global"
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_IMPRESSPACKED "application/vnd.sun.xml.impress-packed"
 
-//============================================================================
+
 /** Definitions for matching parts of URIs.
  */
 #define INETTYPE_URL_PROT_DATA "data"
@@ -138,7 +138,7 @@
 #define INETTYPE_URL_SSSUB_GLOB "GlobalDocument"
 #define INETTYPE_URL_SSSUB_WEB "web"
 
-//============================================================================
+
 enum INetContentType
 {
     CONTENT_TYPE_UNKNOWN,
@@ -229,7 +229,7 @@ enum INetContentType
     CONTENT_TYPE_LAST = CONTENT_TYPE_APP_VND_SUN_XML_IMPRESSPACKED
 };
 
-//============================================================================
+
 class SVL_DLLPUBLIC INetContentTypes
 {
 public:

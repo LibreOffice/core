@@ -228,7 +228,7 @@ public:
     SAL_DLLPRIVATE void SetFactory_Impl( SfxChildWinFactory* );
 };
 
-//------------------------------------------------------------------
+
 //! soon obsolete !
 #define SFX_DECL_CHILDWINDOW_CONTEXT(Class) \
         static  SfxChildWindowContext* CreateImpl(::Window *pParent, \
@@ -364,7 +364,7 @@ public:
             ((SfxToolbox*)GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
-//------------------------------------------------------------------
+
 
 #endif
 

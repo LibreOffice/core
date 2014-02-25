@@ -24,9 +24,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//--------------------
+
 // SdrGrafInvertItem -
-//--------------------
+
 
 class SVX_DLLPUBLIC SdrGrafInvertItem : public SdrOnOffItem
 {

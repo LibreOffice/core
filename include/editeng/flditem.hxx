@@ -90,9 +90,9 @@ public:
     static SvClassManager&  GetClassManager();
 };
 
-// =================================================================
+
 // The following are the derivatives of SvxFieldData ...
-// =================================================================
+
 
 enum SvxDateType { SVXDATETYPE_FIX, SVXDATETYPE_VAR };
 enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT = 0,   // Set as in App

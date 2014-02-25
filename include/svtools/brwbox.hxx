@@ -47,9 +47,9 @@ namespace utl {
     class AccessibleStateSetHelper;
 }
 
-// -------------------
+
 // - BrowseBox-Types -
-// -------------------
+
 
 #define BROWSER_INVALIDID           SAL_MAX_UINT16
 #define BROWSER_ENDOFSELECTION      (static_cast<long>(SFX_ENDOFSELECTION))
@@ -122,9 +122,9 @@ typedef sal_uLong BrowserMode;
 #define BROWSER_MOVECOLUMNLEFT          756
 #define BROWSER_MOVECOLUMNRIGHT         757
 
-// ---------------
+
 // - BrowseEvent -
-// ---------------
+
 
 class BrowseEvent
 {
@@ -148,9 +148,9 @@ public:
     const Rectangle&    GetRect() const { return aRect; }
 };
 
-// ---------------------
+
 // - BrowserMouseEvent -
-// ---------------------
+
 
 class BrowserMouseEvent: public MouseEvent, public BrowseEvent
 {
@@ -162,9 +162,9 @@ public:
                        const Rectangle& rRect );
 };
 
-// --------------------------
+
 // - BrowserAcceptDropEvent -
-// --------------------------
+
 
 class BrowserAcceptDropEvent : public AcceptDropEvent, public BrowseEvent
 {
@@ -173,9 +173,9 @@ public:
     BrowserAcceptDropEvent( BrowserDataWin* pWin, const AcceptDropEvent& rEvt );
 };
 
-// ---------------------------
+
 // - BrowserExecuteDropEvent -
-// ---------------------------
+
 
 class BrowserExecuteDropEvent : public ExecuteDropEvent, public BrowseEvent
 {
@@ -184,9 +184,9 @@ public:
     BrowserExecuteDropEvent( BrowserDataWin* pWin, const ExecuteDropEvent& rEvt );
 };
 
-// -------------
+
 // - BrowseBox -
-// -------------
+
 
 // TODO
 // The whole selection thingie in this class is somewhat .... suspicious to me.
@@ -198,10 +198,10 @@ public:
 //   and influence each other. I do not understand it very well, but this may be my fault :)
 // * There is a GetColumnSelection, but it can't be used to determine the selected columns (at least
 //   not without a const_cast)
-//
+
 // We should clearly define this somewhere in the future. Or, even better, we should re-implement this
 // whole class, which is planned for a long time :)
-//
+
 // sorry for the ranting. could not resist
 
 class SVT_DLLPUBLIC BrowseBox
@@ -352,12 +352,12 @@ protected:
     // RowInserted und RowRemoved bekanntgeben. Mit sich daraus ergebenden
     // neuen Zustand wird anschliessend ein Paint veranlasst (und entsprechend
     // SeekRow etc. gerufen).
-    //
+
     // Parameter: nNewTopRow: Nr. der neuen TopRow (kann von VisibleRowsChanged
     // durch Aufruf von RowInserted und RowDeleted noch veraendert werden).
     // nNumRows: Anzahl der sichtbaren Rows (auch eine teilweise sichtbare Row
     // wird mitgezaehlt).
-    //
+
     // Moegliche Ursachen fuer die Aenderung des sichtbaren Bereiches:
     // - Vor dem sichtbaren Bereich sind Rows eingefuegt oder geloescht worden,
     //   dadurch aendert sich nur die Numerierung der sichtbaren Rows
@@ -816,7 +816,7 @@ private:
     using Window::ToTop;
 };
 
-//-------------------------------------------------------------------
+
 inline const DataFlavorExVector& BrowseBox::GetDataFlavors() const
 {
     return *reinterpret_cast<DataFlavorExVector*>(implGetDataFlavors());

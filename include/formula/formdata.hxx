@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 
-//============================================================================
+
 namespace formula
 {
 class FORMULA_DLLPUBLIC FormEditData

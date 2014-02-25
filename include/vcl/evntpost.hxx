@@ -22,7 +22,7 @@
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
-//===================================================================
+
 
 namespace vcl
 {

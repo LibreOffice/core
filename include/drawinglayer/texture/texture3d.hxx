@@ -25,14 +25,14 @@
 #include <drawinglayer/texture/texture.hxx>
 #include <vcl/bitmapex.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 namespace drawinglayer { namespace primitive3d {
     class HatchTexturePrimitive3D;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -57,7 +57,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -95,7 +95,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -127,7 +127,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -160,7 +160,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
 

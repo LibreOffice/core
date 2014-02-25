@@ -138,7 +138,7 @@
 #define SID_SD_TP_MISC                  (RID_OFA_START + 231)
 #define RID_SC_TP_DEFAULTS              (RID_OFA_START + 253)
 
-//---------------------------------------------------------------------
+
 
 // ResId's fuer Dialoge aus StarDraw
 #define RID_SVXSW_FRAMEPOSITIONS            (RID_SVX_START + 289)
@@ -993,7 +993,7 @@
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
 #define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1270)
 
-// ----------------------------------------------------------------------------
+
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be
 // unique relative to a fixed type (you can't have two dialogs with the same
@@ -1002,16 +1002,16 @@
 // I suggest sticking to per-type ids instead of per-semantic ids, this is
 // better maintainable (IMO), and does not waste that much ids
 
-// ----------------------------------------------------------------------------
+
 // "Window" resource ids
 
 
-// ----------------------------------------------------------------------------
+
 // "ModalDialog" resource ids
 
 #define RID_SVX_MDLG_FONTWORK_GALLERY       ( RID_SVX_START +  2 )
 
-// ----------------------------------------------------------------------------
+
 // "Menu" resource ids
 #define RID_SVX_MDLG_FONTWORK_CHARSPACING   ( RID_SVX_START + 19 )
 
@@ -1025,7 +1025,7 @@
 #define RID_SVXPAGE_DOCRECOVERY_SAVE        ( RID_SVX_START +   8 )
 #define RID_SVXPAGE_DOCRECOVERY_RECOVER     ( RID_SVX_START +   9 )
 
-// ----------------------------------------------------------------------------
+
 
 // !!!! double defined ID's (see below) !!!
 #define RID_OFA_AUTOCORR_DLG            (RID_OFA_START + 101)

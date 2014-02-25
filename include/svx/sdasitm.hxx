@@ -109,18 +109,18 @@ class SdrCustomShapeReplacementURLItem : public SfxStringItem
             SdrCustomShapeReplacementURLItem();
 };
 
-//---------------------------
+
 // class SdrTextWordWrapItem
-//---------------------------
+
 class SdrTextWordWrapItem : public SdrOnOffItem {
 public:
     SdrTextWordWrapItem( sal_Bool bAuto = sal_False ):  SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
     SdrTextWordWrapItem( SvStream& rIn )  :     SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, rIn )   {}
 };
 
-//-------------------------------
+
 // class SdrTextAutoGrowSizeItem
-//-------------------------------
+
 class SdrTextAutoGrowSizeItem : public SdrOnOffItem {
 public:
     SdrTextAutoGrowSizeItem( sal_Bool bAuto = sal_False ):      SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}

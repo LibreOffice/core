@@ -24,10 +24,10 @@
 #include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -61,7 +61,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SDRCONNECTORPRIMITIVE2D_HXX
 

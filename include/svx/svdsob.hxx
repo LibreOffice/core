@@ -25,7 +25,7 @@
 
 #include <svx/svxdllapi.h>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /*
   Deklaration eines statischen Mengentyps. Die Menge kann die Elemente
   0..255 aufnehmen und verbraucht stets 32 Bytes.

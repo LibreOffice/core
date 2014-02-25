@@ -44,9 +44,9 @@ namespace connectivity
                  ::cppu::OBroadcastHelper& rBHelper,
                  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                  ::com::sun::star::lang::XComponent* _pObject);
-    //************************************************************
+
     // OSubComponent
-    //************************************************************
+
     template <class SELF, class WEAK> class OSubComponent
     {
     protected:

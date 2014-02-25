@@ -44,10 +44,10 @@ class VCLXWindow;
 class TextEngine;
 class TextView;
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     class ToolPanelDeck;
     class IToolPanelDeck;
@@ -67,9 +67,9 @@ namespace svt
     */
     typedef void* (SAL_CALL * GetSvtAccessibilityComponentFactory)( );
 
-    //================================================================
+
     //= IAccessibleFactory
-    //================================================================
+
     class IAccessibleFactory : public ::rtl::IReference
     {
     public:
@@ -175,9 +175,9 @@ namespace svt
         ~IAccessibleFactory() {}
     };
 
-//........................................................................
+
 }   // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_ACCESSIBLEFACTORY_HXX
 
