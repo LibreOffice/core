@@ -78,12 +78,12 @@
 
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #define ANSI_CHARSET            0
 #define SYMBOL_CHARSET          2
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 /* Font Families */
 #define FF_ROMAN                0x10
@@ -92,7 +92,7 @@ using namespace ::com::sun::star;
 #define FF_SCRIPT               0x40
 #define FF_DECORATIVE           0x50
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
@@ -633,7 +633,7 @@ sal_Bool PropValue::GetPropertyValue(
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        //...
+
     }
     return eRetValue;
 }
@@ -827,7 +827,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
     }
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 {
@@ -1034,7 +1034,7 @@ sal_Bool PPTWriter::ImplGetText()
     return ( mnTextSize != 0 );
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
 {
@@ -1070,7 +1070,7 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     }
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropertyContainer& rPropOpt )
 {
@@ -1104,7 +1104,7 @@ void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropert
     }
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
     TextRuleEntry* pTextRule, SvStream& rExtBuStr, EscherPropertyContainer* pPropOpt )
@@ -1423,7 +1423,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
     }
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     ::com::sun::star::presentation::AnimationEffect eAe,
@@ -1942,7 +1942,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
        .WriteUInt16( (sal_uInt16)0 );                               // PadWord
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eCa, sal_Bool bMediaClickAction )
 {
@@ -2098,7 +2098,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
     for ( int i = 0; i < 4; i++, rSt.WriteUInt32( (sal_uInt32)0 ) ) ;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPropSet,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
@@ -2126,7 +2126,7 @@ sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com
     return bHasEffect;
 };
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPage, const PageType /* ePageType */,
                                                         const sal_uInt32 nStyleInstance, const sal_uInt8 nPlaceHolderId )
@@ -2181,7 +2181,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
     return bRet;
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PPTWriter::ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& rSolver )
 {
@@ -3527,7 +3527,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     mnPagesWritten++;
 }
 
-//  -----------------------------------------------------------------------
+
 
 struct CellBorder
 {

@@ -343,9 +343,9 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
     EditEngine* pEditEngine = mpEditEngine;
     if (pEditEngine == NULL)
     {
-        //
+
         // set fonts to be used
-        //
+
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
 

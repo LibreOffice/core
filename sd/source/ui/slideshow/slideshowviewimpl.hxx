@@ -98,9 +98,9 @@ struct WrappedMouseMotionEvent : public ::com::sun::star::lang::EventObject
     ::com::sun::star::awt::MouseEvent   maEvent;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 // SlideShowViewListeners
-///////////////////////////////////////////////////////////////////////
+
 
 typedef std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XModifyListener > > ViewListenerVector;
 class SlideShowViewListeners
@@ -120,9 +120,9 @@ protected:
 
 typedef ::std::auto_ptr< SlideShowViewListeners >   SlideShowViewListenersPtr;
 
-///////////////////////////////////////////////////////////////////////
+
 // SlideShowViewPaintListeners
-///////////////////////////////////////////////////////////////////////
+
 
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XPaintListener,
                                                 ::com::sun::star::awt::PaintEvent >         SlideShowViewPaintListeners_Base;
@@ -137,9 +137,9 @@ protected:
 };
 typedef ::std::auto_ptr< SlideShowViewPaintListeners >  SlideShowViewPaintListenersPtr;
 
-///////////////////////////////////////////////////////////////////////
+
 // SlideShowViewMouseListeners
-///////////////////////////////////////////////////////////////////////
+
 
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XMouseListener, WrappedMouseEvent > SlideShowViewMouseListeners_Base;
 
@@ -156,9 +156,9 @@ protected:
 typedef ::std::auto_ptr< SlideShowViewMouseListeners >  SlideShowViewMouseListenersPtr;
 
 
-///////////////////////////////////////////////////////////////////////
+
 // SlideShowViewMouseMotionListeners
-///////////////////////////////////////////////////////////////////////
+
 
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XMouseMotionListener,
                                                 WrappedMouseMotionEvent > SlideShowViewMouseMotionListeners_Base;
@@ -175,9 +175,9 @@ protected:
 typedef ::std::auto_ptr< SlideShowViewMouseMotionListeners >    SlideShowViewMouseMotionListenersPtr;
 
 
-///////////////////////////////////////////////////////////////////////
+
 // SlideShowView
-///////////////////////////////////////////////////////////////////////
+
 
 class ShowWindow;
 class SlideshowImpl;

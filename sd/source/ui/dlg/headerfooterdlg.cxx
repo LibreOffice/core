@@ -42,9 +42,9 @@
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
 
-///////////////////////////////////////////////////////////////////////
+
 // preview control for presentation layout
-///////////////////////////////////////////////////////////////////////
+
 #include <vcl/ctrl.hxx>
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -88,9 +88,9 @@ public:
 
 }
 
-///////////////////////////////////////////////////////////////////////
+
 // tab page for slide & header'n'notes
-///////////////////////////////////////////////////////////////////////
+
 
 namespace sd
 {
@@ -173,7 +173,7 @@ public:
 
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 using namespace ::sd;
 
@@ -426,7 +426,7 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
     pPage->setHeaderFooterSettings( rNewSettings );
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
         TabPage( pWindow, "HeaderFooterTab", "modules/simpress/ui/headerfootertab.ui" ),
@@ -731,7 +731,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
     : Control(pParent)

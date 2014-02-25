@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @header        DebugServices
 
     Debugging Library
@@ -36,9 +36,9 @@
 #pragma mark == Settings ==
 #endif
 
-//===========================================================================================================================
+
 //    Settings
-//===========================================================================================================================
+
 
 // General
 
@@ -90,7 +90,7 @@
 #pragma mark == Output ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_FPRINTF_ENABLED
 
     @abstract    Enables ANSI C fprintf output.
@@ -108,7 +108,7 @@
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_MAC_OS_X_IOLOG_ENABLED
 
     @abstract    Enables IOLog (Mac OS X Kernel) output.
@@ -118,7 +118,7 @@
     #define DEBUG_MAC_OS_X_IOLOG_ENABLED        TARGET_API_MAC_OSX_KERNEL
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_KPRINTF_ENABLED
 
     @abstract    Enables kprintf (Mac OS X Kernel) output.
@@ -128,7 +128,7 @@
     #define DEBUG_KPRINTF_ENABLED               TARGET_API_MAC_OSX_KERNEL
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_IDEBUG_ENABLED
 
     @abstract    Enables iDebug (Mac OS X user and Kernel) output.
@@ -144,7 +144,7 @@
     #define DEBUG_IDEBUG_ENABLED                TARGET_API_MAC_OSX_KERNEL
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_CORE_SERVICE_ASSERTS_ENABLED
 
     @abstract    Controls whether Core Services assert handling is enabled. Enabling requires CoreServices framework.
@@ -158,7 +158,7 @@
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @typedef    DebugOutputType
 
     @abstract    Type of debug output (i.e. where the output goes).
@@ -177,7 +177,7 @@ typedef uint32_t DebugOutputType;
 #define kDebugOutputTypeWindowsEventLog     0x7765766CU // 'wevl' - 1st param = C-string name, 2nd param = HMODULE or NULL.
 
 // Console meta output kind - Any kind of Console output (in horizontal order of preference):
-//
+
 // Mac OS X            = ANSI printf (viewable in Console.app)
 // Mac OS X Kernel    = IOLog (/var/log/system.log) or kprintf (serial).
 // Windows            = ANSI printf (Console window) or OutputDebugString (debugger).
@@ -185,7 +185,7 @@ typedef uint32_t DebugOutputType;
 
 #define kDebugOutputTypeMetaConsole         0x434F4E53U // 'CONS' - no params
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @typedef    DebugOutputTypeFlags
 
     @abstract    Flags controlling how the output type is configured.
@@ -203,7 +203,7 @@ typedef unsigned int DebugOutputTypeFlags;
 #define kDebugOutputTypeFlagsStdErr     2
 #define kDebugOutputTypeFlagsFile       10
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @typedef    DebugOutputFunctionPtr
 
     @abstract    Function ptr for a custom callback to print debug output.
@@ -211,15 +211,15 @@ typedef unsigned int DebugOutputTypeFlags;
 
 typedef void ( *DebugOutputFunctionPtr )( char *inData, size_t inSize, void *inContext );
 
-//===========================================================================================================================
+
 //    Constants
-//===========================================================================================================================
+
 
 #if 0
 #pragma mark == Flags ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @typedef    DebugFlags
 
     @abstract    Flags controlling how output is printed.
@@ -239,7 +239,7 @@ typedef uint32_t DebugFlags;
 #define kDebugFlagsNo16ByteHexPad       ( 1 << 8 )
 #define kDebugFlagsNoByteCount          ( 1 << 9 )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @enum        DebugTaskLevelFlags
 
     @abstract    Flags indicating the task level.
@@ -268,11 +268,11 @@ enum
 #pragma mark == Levels ==
 #endif
 
-//===========================================================================================================================
-//    Constants & Types - Levels
-//===========================================================================================================================
 
-//---------------------------------------------------------------------------------------------------------------------------
+//    Constants & Types - Levels
+
+
+
 /*!    @typedef    DebugLevel
 
     @abstract    Level used to control debug logging.
@@ -304,7 +304,7 @@ typedef int32_t DebugLevel;
 #define kDebugLevelFlagStackTrace       0x00010000
 #define kDebugLevelFlagDebugBreak       0x00020000
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @typedef    LogLevel
 
     @abstract    Level used to control which events are logged.
@@ -333,7 +333,7 @@ typedef int32_t LogLevel;
 #pragma mark == Properties ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @typedef    DebugPropertyTag
 
     @abstract    Tag for properties.
@@ -355,7 +355,7 @@ typedef uint32_t DebugPropertyTag;
 #pragma mark == General macros ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_UNUSED
 
     @abstract    Macro to mark a paramter as unused to avoid unused parameter warnings.
@@ -368,7 +368,7 @@ typedef uint32_t DebugPropertyTag;
 
 #define DEBUG_UNUSED( X )           (void)( X )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_USE_ONLY
 
     @abstract    Macro to mark a variable as used only when debugging is enabled.
@@ -386,7 +386,7 @@ typedef uint32_t DebugPropertyTag;
     #define DEBUG_USE_ONLY( X )     (void)( X )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_LOCAL
 
     @abstract    Macros to make variables and functions static when debugging is off, but extern when debugging is on.
@@ -403,7 +403,7 @@ typedef uint32_t DebugPropertyTag;
     #define DEBUG_LOCAL         static
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_STATIC
 
     @abstract    Macros to make variables and functions static when debugging is off, but extern when debugging is on.
@@ -420,7 +420,7 @@ typedef uint32_t DebugPropertyTag;
     #define DEBUG_STATIC    static
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DEBUG_EXPORT
 
     @abstract    Macros to export variables.
@@ -438,7 +438,7 @@ typedef uint32_t DebugPropertyTag;
     #define DEBUG_EXPORT        extern
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    debug_add
 
     @abstract    Macro to add (or subtract if negative) a value when debugging is on. Does nothing if debugging is off.
@@ -450,7 +450,7 @@ typedef uint32_t DebugPropertyTag;
     #define debug_add( A, B )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    debug_perform
 
     @abstract    Macro to perform something in debug-only builds.
@@ -462,7 +462,7 @@ typedef uint32_t DebugPropertyTag;
     #define debug_perform( X )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    translate_errno
 
     @abstract    Returns 0 if the test success. If the test fails, returns errno if non-zero and othewise the alternate error.
@@ -474,7 +474,7 @@ typedef uint32_t DebugPropertyTag;
 #pragma mark == Compile Time macros ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    check_compile_time
 
     @abstract    Performs a compile-time check of something such as the size of an int.
@@ -502,7 +502,7 @@ typedef uint32_t DebugPropertyTag;
 
 #define check_compile_time( X )     extern int debug_compile_time_name[ ( X ) ? 1 : -1 ]
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    check_compile_time_code
 
     @abstract    Perform a compile-time check, suitable for placement in code, of something such as the size of an int.
@@ -533,7 +533,7 @@ typedef uint32_t DebugPropertyTag;
 #pragma mark == check macros ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    check
 
     @abstract    Check that an expression is true (non-zero).
@@ -564,7 +564,7 @@ typedef uint32_t DebugPropertyTag;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    check_string
 
     @abstract    Check that an expression is true (non-zero) with an explanation.
@@ -596,7 +596,7 @@ typedef uint32_t DebugPropertyTag;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    check_noerr
 
     @abstract    Check that an error code is noErr (0).
@@ -631,7 +631,7 @@ typedef uint32_t DebugPropertyTag;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    check_noerr_string
 
     @abstract    Check that an error code is noErr (0) with an explanation.
@@ -666,7 +666,7 @@ typedef uint32_t DebugPropertyTag;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    check_translated_errno
 
     @abstract    Check a condition and prints errno (if non-zero) to the log.
@@ -696,7 +696,7 @@ typedef uint32_t DebugPropertyTag;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    check_ptr_overlap
 
     @abstract    Checks that two ptrs do not overlap.
@@ -716,7 +716,7 @@ typedef uint32_t DebugPropertyTag;
 #pragma mark == require macros ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require
 
     @abstract    Requires that an expression evaluate to true.
@@ -743,7 +743,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_string
 
     @abstract    Requires that an expression evaluate to true with an explanation.
@@ -770,7 +770,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_quiet
 
     @abstract    Requires that an expression evaluate to true.
@@ -795,7 +795,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_noerr
 
     @abstract    Require that an error code is noErr (0).
@@ -825,7 +825,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_noerr_string
 
     @abstract    Require that an error code is noErr (0).
@@ -856,7 +856,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_noerr_action_string
 
     @abstract    Require that an error code is noErr (0).
@@ -888,7 +888,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_noerr_quiet
 
     @abstract    Require that an error code is noErr (0).
@@ -913,7 +913,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_noerr_action
 
     @abstract    Require that an error code is noErr (0) with an action to execute otherwise.
@@ -944,7 +944,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_noerr_action_quiet
 
     @abstract    Require that an error code is noErr (0) with an action to execute otherwise.
@@ -970,7 +970,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_action
 
     @abstract    Requires that an expression evaluate to true with an action to execute otherwise.
@@ -998,7 +998,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_action_quiet
 
     @abstract    Requires that an expression evaluate to true with an action to execute otherwise.
@@ -1024,7 +1024,7 @@ typedef uint32_t DebugPropertyTag;
     }   while( 0 )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_action_string
 
     @abstract    Requires that an expression evaluate to true with an explanation and action to execute otherwise.
@@ -1054,7 +1054,7 @@ typedef uint32_t DebugPropertyTag;
 
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    require_throw
 
     @abstract    Requires that an expression evaluates to true or an exception is thrown.
@@ -1082,9 +1082,9 @@ typedef uint32_t DebugPropertyTag;
 #pragma mark == Design-By-Contract macros ==
 #endif
 
-//===========================================================================================================================
+
 //    Design-By-Contract macros
-//===========================================================================================================================
+
 
 #define ensure( X )                                                 check( X )
 #define ensure_string( X, STR )                                     check_string( X, STR )
@@ -1098,9 +1098,9 @@ typedef uint32_t DebugPropertyTag;
 #pragma mark == Expect macros ==
 #endif
 
-//===========================================================================================================================
+
 //    Expect macros
-//===========================================================================================================================
+
 
 // Expect macros allow code to include runtime checking of things that should not happen in shipping code (e.g. internal
 // programmer errors, such as a NULL parameter where it is not allowed). Once the code has been verified to work correctly
@@ -1139,7 +1139,7 @@ typedef uint32_t DebugPropertyTag;
 #pragma mark == Output macros ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    debug_string
 
     @abstract    Prints a debugging C string.
@@ -1161,7 +1161,7 @@ typedef uint32_t DebugPropertyTag;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    debug_print_assert
 
     @abstract    Prints an assertion.
@@ -1174,7 +1174,7 @@ typedef uint32_t DebugPropertyTag;
     #define debug_print_assert( ERROR_CODE, ASSERT_STRING, MESSAGE, FILENAME, LINE_NUMBER, FUNCTION )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    dlog
 
     @abstract    Prints a debug-only message.
@@ -1198,7 +1198,7 @@ typedef uint32_t DebugPropertyTag;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    dlogv
 
     @abstract    Prints a debug-only message.
@@ -1210,7 +1210,7 @@ typedef uint32_t DebugPropertyTag;
     #define dlogv( LEVEL, FORMAT, LIST )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    dlogmem
 
     @abstract    Prints a debug-only dump of memory.
@@ -1223,7 +1223,7 @@ typedef uint32_t DebugPropertyTag;
     #define dlogmem( LEVEL, PTR, SIZE )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DebugNSLog
 
     @abstract    Debug-only macro for the Cocoa NSLog function.
@@ -1247,7 +1247,7 @@ typedef uint32_t DebugPropertyTag;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    DebugLogMsg
 
     @abstract    Debug-only macro for the VxWorks logMsg function.
@@ -1279,7 +1279,7 @@ typedef uint32_t DebugPropertyTag;
 extern "C" {
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugInitialize
 
     @abstract    Initializes the debugging library for a specific kind of output.
@@ -1310,7 +1310,7 @@ DEBUG_EXPORT OSStatus   DebugInitialize( DebugOutputType inType, ... );
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugFinalize
 
     @abstract    Releases any resources used by the debugging library
@@ -1326,7 +1326,7 @@ DEBUG_EXPORT void       DebugFinalize( void );
     #define debug_terminate()
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugGetProperty
 
     @abstract    Gets the specified property from the debugging library.
@@ -1354,7 +1354,7 @@ DEBUG_EXPORT OSStatus   DebugGetProperty( DebugPropertyTag inTag, ... );
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugSetProperty
 
     @abstract    Sets the specified property from the debugging library.
@@ -1386,7 +1386,7 @@ DEBUG_EXPORT OSStatus   DebugSetProperty( DebugPropertyTag inTag, ... );
 #pragma mark == Routines - Debugging Output ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugPrintF
 
     @abstract    Prints a debug message with printf-style formatting.
@@ -1406,7 +1406,7 @@ DEBUG_EXPORT OSStatus   DebugSetProperty( DebugPropertyTag inTag, ... );
 DEBUG_EXPORT size_t     DebugPrintF( DebugLevel inLevel, const char *inFormat, ... );
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugPrintFVAList
 
     @abstract    va_list version of DebugPrintF. See DebugPrintF for more info.
@@ -1416,7 +1416,7 @@ DEBUG_EXPORT size_t     DebugPrintF( DebugLevel inLevel, const char *inFormat, .
 DEBUG_EXPORT size_t     DebugPrintFVAList( DebugLevel inLevel, const char *inFormat, va_list inArgs );
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugPrintAssert
 
     @abstract    Prints a message describing the reason the (e.g. an assert failed), an optional error message,
@@ -1457,7 +1457,7 @@ DebugPrintAssert(
 #pragma mark == Routines - Utilities ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugSNPrintF
 
     @abstract    Debugging versions of standard C snprintf with extra features.
@@ -1496,7 +1496,7 @@ DebugPrintAssert(
 DEBUG_EXPORT size_t DebugSNPrintF(char *sbuffer, size_t buflen, const char *fmt, ...);
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugSNPrintFVAList
 
     @abstract    va_list version of DebugSNPrintF. See DebugSNPrintF for more info.
@@ -1506,7 +1506,7 @@ DEBUG_EXPORT size_t DebugSNPrintF(char *sbuffer, size_t buflen, const char *fmt,
 DEBUG_EXPORT size_t DebugSNPrintFVAList(char *sbuffer, size_t buflen, const char *fmt, va_list arg);
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugGetErrorString
 
     @abstract    Gets an error string from an error code.
@@ -1528,7 +1528,7 @@ DEBUG_EXPORT size_t DebugSNPrintFVAList(char *sbuffer, size_t buflen, const char
 DEBUG_EXPORT const char *   DebugGetErrorString( int_least32_t inErrorCode, char *inBuffer, size_t inBufferSize );
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugHexDump
 
     @abstract    Hex dumps data to a string or to the output device.
@@ -1560,7 +1560,7 @@ DebugHexDump(
     #define dloghex( LEVEL, INDENT, LABEL, LABEL_SIZE, LABEL_MIN_SIZE, TYPE, TYPE_SIZE, DATA_START, DATA, DATA_SIZE, FLAGS, BUFFER, BUFFER_SIZE )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugTaskLevel
 
     @abstract    Returns the current task level.
@@ -1590,7 +1590,7 @@ DebugHexDump(
 DEBUG_EXPORT uint32_t   DebugTaskLevel( void );
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    DebugServicesTest
 
     @abstract    Unit test.

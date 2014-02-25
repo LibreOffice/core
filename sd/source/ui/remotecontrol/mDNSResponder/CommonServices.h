@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @header        CommonServices
 
     Common Services for Mac OS X, Linux, Palm, VxWorks, Windows, and Windows CE.
@@ -32,9 +32,9 @@ extern "C" {
 #pragma mark == Target ==
 #endif
 
-//===========================================================================================================================
+
 //     Target
-//===========================================================================================================================
+
 
 // Macintosh
 
@@ -135,9 +135,9 @@ extern "C" {
 #pragma mark == Includes ==
 #endif
 
-//===========================================================================================================================
+
 //     Includes
-//===========================================================================================================================
+
 
 #if ( !KERNEL )
     #if defined(WIN32) && !defined(_WSPIAPI_COUNTOF)
@@ -285,9 +285,9 @@ extern "C" {
 #pragma mark == CPU ==
 #endif
 
-//===========================================================================================================================
+
 //    CPU
-//===========================================================================================================================
+
 
 // PowerPC
 
@@ -327,9 +327,9 @@ extern "C" {
 #pragma mark == Byte Order ==
 #endif
 
-//===========================================================================================================================
+
 //    Byte Order
-//===========================================================================================================================
+
 
 // TARGET_RT_LITTLE_ENDIAN
 
@@ -401,9 +401,9 @@ extern "C" {
 #pragma mark == Constants ==
 #endif
 
-//===========================================================================================================================
+
 //    Constants
-//===========================================================================================================================
+
 
 #if ( !TARGET_OS_MAC )
     #define CR      '\r'
@@ -419,9 +419,9 @@ extern "C" {
 #pragma mark == Compatibility ==
 #endif
 
-//===========================================================================================================================
+
 //    Compatibility
-//===========================================================================================================================
+
 
 // Macros to allow the same code to work on Windows and other sockets API-compatible platforms.
 
@@ -452,7 +452,7 @@ typedef int SocketRef;
 #endif
 
 // socklen_t is not defined on the following platforms so emulate it if not defined:
-//
+
 // - Pre-Panther Mac OS X. Panther defines SO_NOADDRERR so trigger off that.
 // - Windows SDK prior to 2003. 2003+ SDK's define EAI_AGAIN so trigger off that.
 // - VxWorks
@@ -464,7 +464,7 @@ typedef int socklen_t;
 #endif
 
 // ssize_t is not defined on the following platforms so emulate it if not defined:
-//
+
 // - Mac OS X when not building with BSD headers
 // - Windows
 
@@ -483,7 +483,7 @@ typedef int ssize_t;
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    SOCKADDR_IS_IP_LOOPBACK
 
     @abstract    Determines if a sockaddr is an IPv4 or IPv6 loopback address (if IPv6 is supported).
@@ -503,7 +503,7 @@ typedef int ssize_t;
     : 0
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    SOCKADDR_IS_IP_LINK_LOCAL
 
     @abstract    Determines if a sockaddr is an IPv4 or IPv6 link-local address (if IPv6 is supported).
@@ -560,7 +560,7 @@ typedef int ssize_t;
 #pragma mark == Macros ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    kSizeCString
 
     @abstract    A meta-value to pass to supported routines to indicate the size should be calculated with strlen.
@@ -568,7 +568,7 @@ typedef int ssize_t;
 
 #define kSizeCString        ( (size_t) -1 )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    sizeof_array
 
     @abstract    Determines the number of elements in an array.
@@ -576,7 +576,7 @@ typedef int ssize_t;
 
 #define sizeof_array( X )       ( sizeof( X ) / sizeof( X[ 0 ] ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    sizeof_element
 
     @abstract    Determines the size of an array element.
@@ -584,7 +584,7 @@ typedef int ssize_t;
 
 #define sizeof_element( X )     sizeof( X[ 0 ] )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    sizeof_string
 
     @abstract    Determines the size of a constant C string, excluding the null terminator.
@@ -592,7 +592,7 @@ typedef int ssize_t;
 
 #define sizeof_string( X )      ( sizeof( ( X ) ) - 1 )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    sizeof_field
 
     @abstract    Determines the size of a field of a type.
@@ -600,7 +600,7 @@ typedef int ssize_t;
 
 #define sizeof_field( TYPE, FIELD )     sizeof( ( ( (TYPE *) 0 )->FIELD ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    RoundUp
 
     @abstract    Rounds X up to a multiple of Y.
@@ -608,7 +608,7 @@ typedef int ssize_t;
 
 #define RoundUp( X, Y )     ( ( X ) + ( ( Y ) -( ( X ) % ( Y ) ) ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    IsAligned
 
     @abstract    Returns non-zero if X is aligned to a Y byte boundary and 0 if not. Y must be a power of 2.
@@ -616,7 +616,7 @@ typedef int ssize_t;
 
 #define IsAligned( X, Y )       ( ( ( X ) &( ( Y ) -1 ) ) == 0 )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    IsFieldAligned
 
     @abstract    Returns non-zero if FIELD of type TYPE is aligned to a Y byte boundary and 0 if not. Y must be a power of 2.
@@ -624,7 +624,7 @@ typedef int ssize_t;
 
 #define IsFieldAligned( X, TYPE, FIELD, Y )     IsAligned( ( (uintptr_t)( X ) ) + offsetof( TYPE, FIELD ), ( Y ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    AlignDown
 
     @abstract    Aligns X down to a Y byte boundary. Y must be a power of 2.
@@ -632,7 +632,7 @@ typedef int ssize_t;
 
 #define AlignDown( X, Y )       ( ( X ) &~( ( Y ) -1 ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    AlignUp
 
     @abstract    Aligns X up to a Y byte boundary. Y must be a power of 2.
@@ -640,7 +640,7 @@ typedef int ssize_t;
 
 #define AlignUp( X, Y )     ( ( ( X ) + ( ( Y ) -1 ) ) & ~( ( Y ) -1 ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    Min
 
     @abstract    Returns the lesser of X and Y.
@@ -650,7 +650,7 @@ typedef int ssize_t;
     #define Min( X, Y )     ( ( ( X ) < ( Y ) ) ? ( X ) : ( Y ) )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    Max
 
     @abstract    Returns the greater of X and Y.
@@ -660,7 +660,7 @@ typedef int ssize_t;
     #define Max( X, Y )     ( ( ( X ) > ( Y ) ) ? ( X ) : ( Y ) )
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    InsertBits
 
     @abstract    Inserts BITS (both 0 and 1 bits) into X, controlled by MASK and SHIFT, and returns the result.
@@ -677,7 +677,7 @@ typedef int ssize_t;
 
 #define InsertBits( X, BITS, MASK, SHIFT )      ( ( ( X ) &~( MASK ) ) | ( ( ( BITS ) << ( SHIFT ) ) & ( MASK ) ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    ExtractBits
 
     @abstract    Extracts bits from X, controlled by MASK and SHIFT, and returns the result.
@@ -694,7 +694,7 @@ typedef int ssize_t;
 
 #define ExtractBits( X, MASK, SHIFT )           ( ( ( X ) >> ( SHIFT ) ) & ( ( MASK ) >> ( SHIFT ) ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    Stringify
 
     @abstract    Stringify's an expression.
@@ -734,9 +734,9 @@ typedef int ssize_t;
 #endif
 
 #if ( TARGET_LANGUAGE_C_LIKE )
-//===========================================================================================================================
+
 //     Standard Types
-//===========================================================================================================================
+
 
 #if ( !defined( INT8_MIN ) )
 
@@ -834,14 +834,14 @@ typedef unsigned long int uintptr_t;
 #pragma mark == bool ==
 #endif
 
-//===========================================================================================================================
+
 //     Boolean Constants and Types
-//===========================================================================================================================
+
 
 // C++ defines bool, true, and false. Metrowerks allows this to be controlled by the "bool" option though.
 // C99 defines __bool_true_false_are_defined when bool, true, and false are defined.
 // MacTypes.h defines true and false (Mac builds only).
-//
+
 // Note: The Metrowerks has to be in its own block because Microsoft Visual Studio .NET does not completely
 // short-circuit and gets confused by the option( bool ) portion of the conditional.
 
@@ -892,7 +892,7 @@ typedef int bool;
     #define TYPE_BOOL       1
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @typedef    CStr255
 
     @abstract    255 character null-terminated (C-style) string.
@@ -904,7 +904,7 @@ typedef char CStr255[ 256 ];
 
 #endif  // TARGET_LANGUAGE_C_LIKE
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    TYPE_LONGLONG_NATIVE
 
     @abstract    Defines whether long long (or its equivalent) is natively supported or requires special libraries.
@@ -918,7 +918,7 @@ typedef char CStr255[ 256 ];
     #endif
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    long_long_compat
 
     @abstract    Compatibility type to map to the closest thing to long long and unsigned long long.
@@ -943,7 +943,7 @@ typedef unsigned long long unsigned_long_long_compat;
 #pragma mark == Errors ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @enum        OSStatus
 
     @abstract    Status Code
@@ -1100,11 +1100,11 @@ typedef int32_t OSStatus;
 #pragma mark == Mac Compatibility ==
 #endif
 
-//===========================================================================================================================
-//    Mac Compatibility
-//===========================================================================================================================
 
-//---------------------------------------------------------------------------------------------------------------------------
+//    Mac Compatibility
+
+
+
 /*!    @enum        Duration
 
     @abstract    Type used to specify a duration of time.
@@ -1158,7 +1158,7 @@ typedef int32_t Duration;
 #define kWeeksPerYear                   52
 #define kMonthsPerYear                  12
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    VersionStages
 
     @abstract    NumVersion-style version stages.
@@ -1169,7 +1169,7 @@ typedef int32_t Duration;
 #define kVersionStageBeta               0x60
 #define kVersionStageFinal              0x80
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    NumVersionBuild
 
     @abstract    Builds a 32-bit Mac-style NumVersion value (e.g. NumVersionBuild( 1, 2, 3, kVersionStageBeta, 4 ) -> 1.2.3b4).
@@ -1189,7 +1189,7 @@ typedef int32_t Duration;
 #define NumVersionExtractStage( VERSION )               ( (uint8_t)( ( ( VERSION ) >>  8 ) & 0xFF ) )
 #define NumVersionExtractRevision( VERSION )            ( (uint8_t)(   ( VERSION )         & 0xFF ) )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    NumVersionCompare
 
     @abstract    Compares two NumVersion values and returns the following values:
@@ -1207,7 +1207,7 @@ int NumVersionCompare( uint32_t inLeft, uint32_t inRight );
 #pragma mark == Binary Constants ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    binary_4
 
     @abstract    Macro to generate an 4-bit constant using binary notation (e.g. binary_4( 1010 ) == 0xA).
@@ -1217,7 +1217,7 @@ int NumVersionCompare( uint32_t inLeft, uint32_t inRight );
 #define binary_4_hex_wrap( a )              binary_4_hex( a )
 #define binary_4_hex( a )                   ( 0x ## a )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    binary_8
 
     @abstract    Macro to generate an 8-bit constant using binary notation (e.g. binary_8( 01111011 ) == 0x7B).
@@ -1227,7 +1227,7 @@ int NumVersionCompare( uint32_t inLeft, uint32_t inRight );
 #define binary_8_hex_wrap( a )              binary_8_hex( a )
 #define binary_8_hex( a )                   ( 0x ## a )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    binary_16
 
     @abstract    Macro to generate an 16-bit constant using binary notation (e.g. binary_16( 01111011, 01111011 ) == 0x7B7B).
@@ -1237,7 +1237,7 @@ int NumVersionCompare( uint32_t inLeft, uint32_t inRight );
 #define binary_16_hex_wrap( a, b )          binary_16_hex( a, b )
 #define binary_16_hex( a, b )               ( 0x ## a ## b )
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @defined    binary_32
 
     @abstract    Macro to generate an 32-bit constant using binary notation
@@ -1514,7 +1514,7 @@ int NumVersionCompare( uint32_t inLeft, uint32_t inRight );
 #pragma mark == Debugging ==
 #endif
 
-//---------------------------------------------------------------------------------------------------------------------------
+
 /*!    @function    CommonServicesTest
 
     @abstract    Unit test.

@@ -526,7 +526,7 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
     return nRetValue;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
 {
@@ -665,7 +665,7 @@ sal_Bool PPTWriterBase::GetStyleSheets()
                     }
                     catch( Exception& )
                     {
-                    //
+
                     }
                 }
             }
@@ -678,7 +678,7 @@ sal_Bool PPTWriterBase::GetStyleSheets()
     return bRetValue;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::CreateMainNotes()
 {
@@ -711,7 +711,7 @@ sal_Bool PPTWriterBase::CreateMainNotes()
     return ImplCreateMainNotes();
 }
 
-//  -----------------------------------------------------------------------
+
 
 awt::Size PPTWriterBase::MapSize( const awt::Size& rSize )
 {
@@ -724,7 +724,7 @@ awt::Size PPTWriterBase::MapSize( const awt::Size& rSize )
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 
-//  -----------------------------------------------------------------------
+
 
 awt::Point PPTWriterBase::MapPoint( const awt::Point& rPoint )
 {
@@ -732,7 +732,7 @@ awt::Point PPTWriterBase::MapPoint( const awt::Point& rPoint )
     return awt::Point( aRet.X(), aRet.Y() );
 }
 
-//  -----------------------------------------------------------------------
+
 
 Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
 {
@@ -743,7 +743,7 @@ Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
     return Rectangle( Point( aP.X, aP.Y ), Size( aS.Width, aS.Height ) );
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
 {
@@ -797,7 +797,7 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
     return sal_False;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, FadeEffect eEffect, sal_uInt8& nDirection )
 {
@@ -1003,7 +1003,7 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
     return nPPTTransitionType;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX )
 {
