@@ -20,7 +20,6 @@
 #ifndef _TARGETDRAGCONTEXT_HXX_
 #define _TARGETDRAGCONTEXT_HXX_
 
-
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>

@@ -23,7 +23,6 @@
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <cppuhelper/compbase1.hxx>
 
-
 #include "source.hxx"
 
 using namespace ::com::sun::star::datatransfer;
@@ -31,7 +30,6 @@ using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-
 
 // This class fires events to XDragSourceListener implementations.
 // Of that interface only dragDropEnd and dropActionChanged are called.
@@ -68,15 +66,11 @@ public:
     virtual void SAL_CALL transferablesFlavorsChanged(  )
         throw( RuntimeException);
 
-
-
     // non - interface functions
     void fire_dragDropEnd( sal_Bool success, sal_Int8 byte);
     void fire_dropActionChanged( sal_Int8 dropAction, sal_Int8 userAction);
 
 };
-
-
 
 #endif
 

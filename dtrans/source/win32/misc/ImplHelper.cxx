@@ -41,15 +41,10 @@
 #define FORMATETC_PARTIAL_MATCH -1
 #define FORMATETC_NO_MATCH       0
 
-
 // namespace directives
-
-
-
 
 // returns a windows codepage appropriate to the
 // given mime charset parameter value
-
 
 sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
 {
@@ -79,10 +74,8 @@ sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
     return winCP;
 }
 
-
 // returns a windows codepage appropriate to the
 // given locale and locale type
-
 
 OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 {
@@ -129,22 +122,18 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
     return winCP;
 }
 
-
 // returns a mime charset parameter value appropriate
 // to the given codepage, optional a prefix can be
 // given, e.g. "windows-" or "cp"
-
 
 OUString SAL_CALL getMimeCharsetFromWinCP( sal_uInt32 cp, const OUString& aPrefix )
 {
     return aPrefix + cptostr( cp );
 }
 
-
 // returns a mime charset parameter value appropriate
 // to the given locale id and locale type, optional a
 // prefix can be given, e.g. "windows-" or "cp"
-
 
 OUString SAL_CALL getMimeCharsetFromLocaleId( LCID lcid, LCTYPE lctype, const OUString& aPrefix  )
 {
@@ -152,9 +141,7 @@ OUString SAL_CALL getMimeCharsetFromLocaleId( LCID lcid, LCTYPE lctype, const OU
     return aPrefix + charset;
 }
 
-
 // IsOEMCP
-
 
 sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage )
 {
@@ -172,9 +159,7 @@ sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage )
     return sal_False;
 }
 
-
 // converts a codepage into its string representation
-
 
 OUString SAL_CALL cptostr( sal_uInt32 codepage )
 {
@@ -182,7 +167,6 @@ OUString SAL_CALL cptostr( sal_uInt32 codepage )
 
     return OUString::number( static_cast<sal_Int64>( codepage ) );
 }
-
 
 // OleStdDeleteTargetDevice()
 //
@@ -192,8 +176,6 @@ OUString SAL_CALL cptostr( sal_uInt32 codepage )
 //
 // Return Value:
 //    SCODE  -  S_OK if successful
-
-
 void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 {
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
@@ -221,9 +203,6 @@ void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 #endif
 }
 
-
-
-
 // OleStdCopyTargetDevice()
 //
 // Purpose:
@@ -239,8 +218,6 @@ void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 //    pointer to allocated copy of ptdSrc
 //    if ptdSrc==NULL then retuns NULL is returned.
 //    if ptdSrc!=NULL and memory allocation fails, then NULL is returned
-
-
 DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 {
     DVTARGETDEVICE* ptdDest = NULL;
@@ -272,8 +249,6 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
     return ptdDest;
 }
 
-
-
 // OleStdCopyFormatEtc()
 //
 // Purpose:
@@ -297,8 +272,6 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 //  returns TRUE if copy was successful;
 //  retuns FALSE if not successful, e.g. one or both of the pointers
 //  were invalid or the pointers were equal
-
-
 sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
 {
     sal_Bool bRet = sal_False;
@@ -344,13 +317,11 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
     return bRet;
 }
 
-
 // returns:
 //  1 for exact match,
 //  0 for no match,
 // -1 for partial match (which is defined to mean the left is a subset
 //    of the right: fewer aspects, null target device, fewer medium).
-
 
 sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC* pFetcRhs )
 {
@@ -418,11 +389,6 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
 
     return nMatch;
 }
-
-
-
-//
-
 
 sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdRight )
 {

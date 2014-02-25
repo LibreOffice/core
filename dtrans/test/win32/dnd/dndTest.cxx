@@ -49,7 +49,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
-
 #define WM_CREATE_MTA_WND
 
 HRESULT doTest();
@@ -66,14 +65,12 @@ int main( int argc, char *argv[ ], char *envp[ ] )
         return -1;
     }
 
-
     _Module.Init( ObjectMap, GetModuleHandle( NULL));
 
     if( FAILED(hr=doTest()))
     {
         _com_error err( hr);
     }
-
 
     _Module.Term();
     CoUninitialize();
@@ -93,7 +90,6 @@ HRESULT doTest()
     WaitForSingleObject( evt, INFINITE);
     CloseHandle(evt);
 
-
     HRESULT hr= S_OK;
     RECT pos1={0,0,300,200};
     AWindow win(_T("DnD starting in Ole STA"), threadIdMTA, pos1);
@@ -107,7 +103,6 @@ HRESULT doTest()
 
     RECT pos4={ 300, 205, 600, 405};
     AWindow win24( _T("DnD starting in Ole MTA"), threadIdMTA, pos4, true, true);
-
 
     MSG msg;
     while( GetMessage(&msg, (HWND)NULL, 0, 0) )
@@ -178,7 +173,6 @@ DWORD WINAPI MTAFunc( void* threadData)
         TranslateMessage(  &msg);
         DispatchMessage( &msg);
     }
-
 
     CoUninitialize();
     return 0;

@@ -19,9 +19,7 @@
 
 #include "mcnttype.hxx"
 
-
 // namespace directives
-
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -29,55 +27,34 @@ using namespace com::sun::star::container;
 using namespace std;
 using namespace osl;
 
-
-
 // constants
-
 
 const char TSPECIALS[] =  "()<>@,;:\\\"/[]?=";
 const char TOKEN[] = "!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~.";
 const char SPACE[] = " ";
 const char SEMICOLON[] = ";";
 
-
 // ctor
-
 
 CMimeContentType::CMimeContentType( const OUString& aCntType )
 {
     init( aCntType );
 }
 
-
-//
-
-
 OUString SAL_CALL CMimeContentType::getMediaType( ) throw(RuntimeException)
 {
     return m_MediaType;
 }
-
-
-//
-
 
 OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
 {
     return m_MediaSubtype;
 }
 
-
-//
-
-
 OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
 {
     return m_MediaType + "/" + m_MediaSubtype;
 }
-
-
-//
-
 
 Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeException)
 {
@@ -97,19 +74,11 @@ Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeEx
     return seqParams;
 }
 
-
-//
-
-
 sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return ( m_ParameterMap.end( ) != m_ParameterMap.find( aName ) );
 }
-
-
-//
-
 
 OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) throw(NoSuchElementException, RuntimeException)
 {
@@ -121,10 +90,6 @@ OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) t
     return m_ParameterMap.find( aName )->second;
 }
 
-
-//
-
-
 void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalArgumentException )
 {
     if ( aCntType.isEmpty( ) )
@@ -135,10 +100,6 @@ void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalA
     getSym( );
     type();
 }
-
-
-//
-
 
 void SAL_CALL CMimeContentType::getSym( void )
 {
@@ -152,10 +113,6 @@ void SAL_CALL CMimeContentType::getSym( void )
     m_nxtSym = OUString( );
 }
 
-
-//
-
-
 void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
 {
     if ( pSymTlb.indexOf( m_nxtSym ) < 0 )
@@ -164,19 +121,11 @@ void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
     getSym();
 }
 
-
-//
-
-
 void SAL_CALL CMimeContentType::skipSpaces( void )
 {
     while (m_nxtSym == SPACE)
         getSym( );
 }
-
-
-//
-
 
 void SAL_CALL CMimeContentType::type( void )
 {
@@ -207,10 +156,6 @@ void SAL_CALL CMimeContentType::type( void )
     subtype( );
 }
 
-
-//
-
-
 void SAL_CALL CMimeContentType::subtype( void )
 {
     skipSpaces( );
@@ -236,10 +181,6 @@ void SAL_CALL CMimeContentType::subtype( void )
     skipSpaces( );
     trailer();
 }
-
-
-//
-
 
 void SAL_CALL CMimeContentType::trailer( void )
 {
@@ -282,10 +223,6 @@ void SAL_CALL CMimeContentType::trailer( void )
     }
 }
 
-
-//
-
-
 OUString SAL_CALL CMimeContentType::pName( )
 {
     OUString pname;
@@ -304,10 +241,6 @@ OUString SAL_CALL CMimeContentType::pName( )
 
     return pname;
 }
-
-
-//
-
 
 OUString SAL_CALL CMimeContentType::pValue( )
 {
@@ -339,11 +272,9 @@ OUString SAL_CALL CMimeContentType::pValue( )
     return pvalue;
 }
 
-
 // the following combinations within a quoted value are not allowed:
 // '";' (quote sign followed by semicolon) and '" ' (quote sign followed
 // by space)
-
 
 OUString SAL_CALL CMimeContentType::quotedPValue( )
 {
@@ -375,10 +306,6 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
     return pvalue;
 }
 
-
-//
-
-
 OUString SAL_CALL CMimeContentType::nonquotedPValue( )
 {
     OUString pvalue;
@@ -398,10 +325,6 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
     return pvalue;
 }
 
-
-//
-
-
 void SAL_CALL CMimeContentType::comment( void )
 {
     while ( !m_nxtSym.isEmpty( ) )
@@ -414,10 +337,6 @@ void SAL_CALL CMimeContentType::comment( void )
             throw IllegalArgumentException( );
     }
 }
-
-
-//
-
 
 sal_Bool SAL_CALL CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )
 {

@@ -28,7 +28,6 @@ extern CComModule _Module;
 #include <com/sun/star/uno/Reference.h>
 #include "../../source/inc/DtObjFactory.hxx"
 
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer;
@@ -68,7 +67,6 @@ public:
         if(m_hWnd)
             DestroyWindow();
     }
-
 
     BEGIN_MSG_MAP(AWindow)
         MESSAGE_HANDLER( WM_CLOSE, OnClose)

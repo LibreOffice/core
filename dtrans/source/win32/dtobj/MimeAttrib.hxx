@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _MIMEATTRIB_HXX_
 #define _MIMEATTRIB_HXX_
 
@@ -29,7 +28,6 @@ const OUString PRE_WINDOWS_CODEPAGE ("windows");
 const OUString PRE_OEM_CODEPAGE     ("cp");
 const OUString CHARSET_UTF16        ("utf-16");
 const OUString CHARSET_UNICODE      ("unicode");
-
 
 #endif
 

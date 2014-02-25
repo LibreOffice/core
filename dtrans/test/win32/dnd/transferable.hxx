@@ -46,10 +46,7 @@
 
 #include "../../source/win32/ImplHelper.hxx"
 
-
-//-------------------------------------------------------------
 // my defines
-//-------------------------------------------------------------
 
 #define TEST_CLIPBOARD
 #define RDB_SYSPATH  "d:\\projects\\src616\\dtrans\\wntmsci7\\bin\\applicat.rdb"
@@ -59,9 +56,7 @@
 #define EVT_INIT_NONSIGNALED FALSE
 #define EVT_NONAME           ""
 
-//------------------------------------------------------------
 //  namesapces
-//------------------------------------------------------------
 
 using namespace ::rtl;
 using namespace ::std;
@@ -72,27 +67,19 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
-
 class CTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
 {
 public:
     CTransferable( ){};
     CTransferable( wchar_t* dataString);
 
-    //-------------------------------------------------
     // XTransferable
-    //-------------------------------------------------
 
     virtual Any SAL_CALL getTransferData( const DataFlavor& aFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException);
     virtual Sequence< DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
 
-    //-------------------------------------------------
     // XClipboardOwner
-    //-------------------------------------------------
 
     virtual void SAL_CALL lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw(RuntimeException);
 
@@ -100,7 +87,6 @@ private:
     Sequence< DataFlavor > m_seqDFlv;
     OUString               m_Data;
 };
-
 
 #endif
 

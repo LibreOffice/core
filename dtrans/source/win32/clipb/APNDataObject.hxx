@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _APNDATAOBJECT_HXX_
 #define _APNDATAOBJECT_HXX_
 
@@ -34,17 +33,13 @@ public:
     CAPNDataObject( IDataObjectPtr rIDataObject );
     ~CAPNDataObject( );
 
-    //-----------------------------------------------------------------
     //IUnknown interface methods
-    //-----------------------------------------------------------------
 
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);
     STDMETHODIMP_( ULONG ) AddRef( );
     STDMETHODIMP_( ULONG ) Release( );
 
-    //-----------------------------------------------------------------
     // IDataObject interface methods
-    //-----------------------------------------------------------------
 
     STDMETHODIMP GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium );
     STDMETHODIMP GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium );

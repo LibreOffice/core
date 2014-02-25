@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _DTRANSHELPER_HXX_
 #define _DTRANSHELPER_HXX_
 
@@ -35,11 +34,9 @@
 #define MEM_DESTROY_ON_RELEASE    TRUE
 #define NO_MEM_DESTROY_ON_RELEASE FALSE
 
-//-------------------------------------------------------------------------
 // a helper class to manage a global memory area, the clients can write
 // into the global memory area and extract the handle to the global mem
 // note: not thread-safe
-//-------------------------------------------------------------------------
 
 class CStgTransferHelper
 {
@@ -91,19 +88,15 @@ private:
     CStgTransferHelper& operator=( const CStgTransferHelper& );
 };
 
-//-------------------------------------------------------------------------
 // something like an auto-pointer - allows access to the memory belonging
 // to a HGLOBAL and automatically unlocks a global memory at destruction
 // time
-//-------------------------------------------------------------------------
 
 class CRawHGlobalPtr
 {
 public:
 
-    //---------------------------------------------
     // ctor
-    //---------------------------------------------
 
     CRawHGlobalPtr( HGLOBAL hGlob ) :
         m_hGlob( hGlob ),
@@ -112,10 +105,7 @@ public:
     {
     }
 
-
-    //---------------------------------------------
     // ctor
-    //---------------------------------------------
 
     CRawHGlobalPtr( const CStgTransferHelper& theHGlobalHelper ) :
         m_hGlob( theHGlobalHelper.getHGlobal( ) ),
@@ -124,9 +114,7 @@ public:
     {
     }
 
-    //---------------------------------------------
     // dtor
-    //---------------------------------------------
 
     ~CRawHGlobalPtr( )
     {
@@ -134,10 +122,8 @@ public:
             GlobalUnlock( m_hGlob );
     }
 
-    //---------------------------------------------
     // lock the global memory (initializes a
     // pointer to this memory)
-    //---------------------------------------------
 
     BOOL Lock( )
     {
@@ -150,10 +136,8 @@ public:
         return m_bIsLocked;
     }
 
-    //---------------------------------------------
     // unlock the global memory (invalidates the
     // pointer to this memory)
-    //---------------------------------------------
 
     BOOL Unlock( )
     {
@@ -164,10 +148,8 @@ public:
         return ( NO_ERROR == GetLastError( ) );
     }
 
-    //---------------------------------------------
     // locks the global memory and returns a
     // pointer to this memory
-    //---------------------------------------------
 
     LPVOID GetMemPtr( )
     {
@@ -175,9 +157,7 @@ public:
         return m_pGlobMem;
     }
 
-    //---------------------------------------------
     // size of mem we point to
-    //---------------------------------------------
 
     int MemSize( ) const
     {

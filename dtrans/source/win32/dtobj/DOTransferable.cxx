@@ -31,9 +31,7 @@
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-
 // namespace directives
-
 
 using namespace std;
 using namespace osl;
@@ -43,11 +41,6 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-
-
-
-//
-
 
 namespace
 {
@@ -64,10 +57,7 @@ namespace
 
 } // end namespace
 
-
-
 // ctor
-
 
 CDOTransferable::CDOTransferable(
     const Reference< XComponentContext >& rxContext, IDataObjectPtr rDataObject ) :
@@ -79,10 +69,6 @@ CDOTransferable::CDOTransferable(
 {
 }
 
-
-//
-
-
 Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
         throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
@@ -90,16 +76,12 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
 
     MutexGuard aGuard( m_aMutex );
 
-
     // convert dataflavor to formatetc
-
 
     CFormatEtc fetc = m_DataFormatTranslator.getFormatEtcFromDataFlavor( aFlavor );
     OSL_ASSERT( CF_INVALID != fetc.getClipformat() );
 
-
     //  get the data from clipboard in a byte stream
-
 
     ByteSequence_t clipDataStream;
 
@@ -137,16 +119,12 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
             throw; // pass through exception
     }
 
-
     // return the data as any
-
 
     return byteStreamToAny( clipDataStream, aFlavor.DataType );
 }
 
-
 // getTransferDataFlavors
-
 
 Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
     throw( RuntimeException )
@@ -154,11 +132,9 @@ Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
     return m_FlavorList;
 }
 
-
 // isDataFlavorSupported
 // returns true if we find a DataFlavor with the same MimeType and
 // DataType
-
 
 sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw( RuntimeException )
@@ -172,7 +148,6 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
     return sal_False;
 }
 
-
 // helper function
 // the list of datafalvors currently on the clipboard will be initialized
 // only once; if the client of this Transferable will hold a reference
@@ -182,7 +157,6 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 // an synthesize this format on the fly if requested, to accomplish this
 // we save the first offered text format which we will later use for the
 // conversion
-
 
 void SAL_CALL CDOTransferable::initFlavorList( )
 {
@@ -231,10 +205,6 @@ void SAL_CALL CDOTransferable::initFlavorList( )
     }
 }
 
-
-//
-
-
 inline
 void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
 {
@@ -248,9 +218,7 @@ void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
     }
 }
 
-
 // helper function
-
 
 //inline
 DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
@@ -268,10 +236,8 @@ DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFo
     return m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc, lcid );
 }
 
-
 // returns the current locale on clipboard; if there is no locale on
 // clipboard the function returns the current thread locale
-
 
 LCID SAL_CALL CDOTransferable::getLocaleFromClipboard( )
 {
@@ -297,11 +263,9 @@ LCID SAL_CALL CDOTransferable::getLocaleFromClipboard( )
     return lcid;
 }
 
-
 // i think it's not necessary to call ReleaseStgMedium
 // in case of failures because nothing should have been
 // allocated etc.
-
 
 CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
 {
@@ -377,10 +341,6 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
     return byteStream;
 }
 
-
-//
-
-
 OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
 {
     ByteSequence_t aTextSequence;
@@ -422,10 +382,6 @@ OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
     return OUString(pWChar);
 }
 
-
-//
-
-
 void CDOTransferable::clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, ByteSequence_t& aByteSequence )
 {
     CStgTransferHelper memTransferHelper;
@@ -458,10 +414,6 @@ void CDOTransferable::clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, 
     memTransferHelper.read( aByteSequence.getArray( ), nMemSize );
 }
 
-
-//
-
-
 inline
 Any CDOTransferable::byteStreamToAny( ByteSequence_t& aByteStream, const Type& aRequestedDataType )
 {
@@ -478,10 +430,6 @@ Any CDOTransferable::byteStreamToAny( ByteSequence_t& aByteStream, const Type& a
     return aAny;
 }
 
-
-//
-
-
 inline
 OUString CDOTransferable::byteStreamToOUString( ByteSequence_t& aByteStream )
 {
@@ -497,10 +445,6 @@ OUString CDOTransferable::byteStreamToOUString( ByteSequence_t& aByteStream )
 
     return OUString( reinterpret_cast< sal_Unicode* >( aByteStream.getArray( ) ), nWChars );
 }
-
-
-//
-
 
 sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
     const DataFlavor& lhs, const DataFlavor& rhs )
@@ -531,19 +475,11 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
     return bRet;
 }
 
-
-//
-
-
 sal_Bool SAL_CALL CDOTransferable::cmpFullMediaType(
     const Reference< XMimeContentType >& xLhs, const Reference< XMimeContentType >& xRhs ) const
 {
     return xLhs->getFullMediaType().equalsIgnoreAsciiCase( xRhs->getFullMediaType( ) );
 }
-
-
-//
-
 
 sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
     const Reference< XMimeContentType >& xLhs, const Reference< XMimeContentType >& xRhs ) const
@@ -605,6 +541,5 @@ sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
     }
     return retVal;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

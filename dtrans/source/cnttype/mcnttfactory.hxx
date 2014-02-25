@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _MCNTTFACTORY_HXX_
 #define _MCNTTFACTORY_HXX_
 
@@ -35,16 +34,12 @@ class CMimeContentTypeFactory : public
 public:
     CMimeContentTypeFactory();
 
-    //------------------------------------------------
     // XMimeContentTypeFactory
-    //------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentType > SAL_CALL createMimeContentType( const OUString& aContentType )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
@@ -58,7 +53,6 @@ public:
 private:
     ::osl::Mutex                                                                           m_aMutex;
 };
-
 
 #endif
 
