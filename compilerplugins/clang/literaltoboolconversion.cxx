@@ -1,4 +1,3 @@
-#include<iostream>
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -47,8 +46,10 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
     if (sub->getType()->isBooleanType()) {
         return true;
     }
-    IntegerLiteral const * lit = dyn_cast<IntegerLiteral>(sub);
-    if (lit != nullptr && lit->getValue().getLimitedValue() <= 1) {
+    APSInt res;
+    if (sub->isIntegerConstantExpr(res, compiler.getASTContext())
+        && res.getLimitedValue() <= 1)
+    {
         SourceLocation loc { sub->getLocStart() };
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
@@ -66,7 +67,6 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
                 return true;
             }
         }
-
     }
     if (isa<StringLiteral>(sub)) {
         SourceLocation loc { sub->getLocStart() };
@@ -136,19 +136,14 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             << expr->getCastKindName() << expr->getSubExpr()->getType()
             << expr->getType() << expr->getSourceRange();
 #endif
-    } else if (sub->isIntegerConstantExpr(compiler.getASTContext())) {
-        CallExpr const * ce = dyn_cast<CallExpr>(sub);
-        if (ce == nullptr
-            || compat::getBuiltinCallee(*ce) != Builtin::BI__builtin_expect)
-        {
-            report(
-                DiagnosticsEngine::Warning,
-                ("implicit conversion (%0) of integer constant expression of"
-                 " type %1 to %2"),
-                expr->getLocStart())
-                << expr->getCastKindName() << expr->getSubExpr()->getType()
-                << expr->getType() << expr->getSourceRange();
-        }
+    } else if (sub->isIntegerConstantExpr(res, compiler.getASTContext())) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("implicit conversion (%0) of integer constant expression of type"
+             " %1 with value %2 to %3"),
+            expr->getLocStart())
+            << expr->getCastKindName() << expr->getSubExpr()->getType()
+            << res.toString(10) << expr->getType() << expr->getSourceRange();
     }
     return true;
 }

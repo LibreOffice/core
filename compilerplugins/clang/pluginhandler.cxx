@@ -252,7 +252,6 @@ bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const vector< string
     return true;
     }
 
-
 static FrontendPluginRegistry::Add< loplugin::LibreOfficeAction > X( "loplugin", "LibreOffice compile check plugin" );
 
 } // namespace

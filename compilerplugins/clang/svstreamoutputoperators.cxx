@@ -217,7 +217,6 @@ SourceLocation SvStreamOutputOperators::after( const SourceLocation& loc )
     return Lexer::getLocForEndOfToken( loc, 0, compiler.getASTContext().getSourceManager(), compiler.getASTContext().getLangOpts() );
 }
 
-
 static Plugin::Registration< SvStreamOutputOperators > X( "svstreamoutputoperators" );
 
 } // namespace
