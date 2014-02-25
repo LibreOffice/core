@@ -55,7 +55,7 @@ using namespace ::com::sun::star::accessibility;
 
 SvxPixelCtlAccessible::SvxPixelCtlAccessible( SvxPixelCtl& rControl) :
     SvxPixelCtlAccessible_BASE(m_aMutex),
-    pPixelCtl(&rControl),
+    mrPixelCtl(rControl),
     mnClientId(0)
 {
 }
@@ -80,13 +80,7 @@ uno::Reference< XAccessibleContext > SvxPixelCtlAccessible::getAccessibleContext
 sal_Int32 SvxPixelCtlAccessible::getAccessibleChildCount(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    if(pPixelCtl)
-    {
-        return pPixelCtl->GetSquares();
-    }
-    else
-        return 0;
+    return mrPixelCtl.GetSquares();
 }
 /*-- 04.02.2002 14:11:56---------------------------------------------------
 
@@ -95,16 +89,10 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
     if ( i < 0 || i >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
     uno::Reference <XAccessible> xAcc;
-    if(pPixelCtl)
-    {
-        return CreateChild(i, pPixelCtl->IndexToPoint(i));
-    }
-    else
-        return xAcc;
+    return CreateChild(i, mrPixelCtl.IndexToPoint(i));
 }
 
 
@@ -113,27 +101,19 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleParent(  )
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    uno::Reference< XAccessible > xRet;
-    if(pPixelCtl)
-        xRet = pPixelCtl->GetParent()->GetAccessible( true );
-    return xRet;
+    return mrPixelCtl.GetParent()->GetAccessible( true );
 }
 
 sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
     sal_uInt16 nIdx = 0;
-    if(pPixelCtl)
-    {
-        Window* pTabPage = pPixelCtl->GetParent();
-        sal_uInt16 nChildren = pTabPage->GetChildCount();
-        for(nIdx = 0; nIdx < nChildren; nIdx++)
-            if(pTabPage->GetChild( nIdx ) == pPixelCtl)
-                break;
-    }
+    Window* pTabPage = mrPixelCtl.GetParent();
+    sal_uInt16 nChildren = pTabPage->GetChildCount();
+    for(nIdx = 0; nIdx < nChildren; nIdx++)
+        if(pTabPage->GetChild( nIdx ) == &mrPixelCtl)
+            break;
     return nIdx;
 }
 /*-- 04.02.2002 14:11:57---------------------------------------------------
@@ -149,11 +129,7 @@ OUString SvxPixelCtlAccessible::getAccessibleDescription(  )
 {
 
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    if(pPixelCtl)
-        return pPixelCtl->GetAccessibleDescription();
-    else
-        return OUString();
+    return mrPixelCtl.GetAccessibleDescription();
 }
 
 OUString SvxPixelCtlAccessible::getAccessibleName(  )
@@ -161,42 +137,31 @@ OUString SvxPixelCtlAccessible::getAccessibleName(  )
 {
 
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    if(pPixelCtl)
-        return pPixelCtl->GetAccessibleName();
-    else
-        return OUString();
+    return mrPixelCtl.GetAccessibleName();
 }
 
 uno::Reference< XAccessibleRelationSet > SvxPixelCtlAccessible::getAccessibleRelationSet(  )
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    Window* pWindow = (Window*)pPixelCtl;
     utl::AccessibleRelationSetHelper* rRelationSet = new utl::AccessibleRelationSetHelper;
     uno::Reference< css::accessibility::XAccessibleRelationSet > rSet = rRelationSet;
-    if ( pWindow )
+    Window *pLabeledBy = mrPixelCtl.GetAccessibleRelationLabeledBy();
+    if ( pLabeledBy && pLabeledBy != &mrPixelCtl )
     {
-        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
-        if ( pLabeledBy && pLabeledBy != pWindow )
-        {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            aSequence[0] = pLabeledBy->GetAccessible();
-            rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
-        }
-
-        Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
-        if ( pMemberOf && pMemberOf != pWindow )
-        {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            aSequence[0] = pMemberOf->GetAccessible();
-            rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
-        }
-        return rSet;
+        uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+        aSequence[0] = pLabeledBy->GetAccessible();
+        rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
     }
 
-    return new utl::AccessibleRelationSetHelper;
+    Window* pMemberOf = mrPixelCtl.GetAccessibleRelationMemberOf();
+    if ( pMemberOf && pMemberOf != &mrPixelCtl )
+    {
+        uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+        aSequence[0] = pMemberOf->GetAccessible();
+        rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+    }
+    return rSet;
 }
 
 
@@ -207,30 +172,27 @@ uno::Reference< XAccessibleStateSet > SvxPixelCtlAccessible::getAccessibleStateS
     utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
     uno::Reference< XAccessibleStateSet > xRet = pStateSetHelper;
 
-    if(!pPixelCtl)
-        pStateSetHelper->AddState(AccessibleStateType::DEFUNC);
-    else
+    const sal_Int16 aStandardStates[] =
     {
-        const sal_Int16 aStandardStates[] =
-        {
-            AccessibleStateType::FOCUSABLE,
-                AccessibleStateType::SELECTABLE,
-                AccessibleStateType::SHOWING,
-                AccessibleStateType::VISIBLE,
-                AccessibleStateType::OPAQUE,
-                0};
+        AccessibleStateType::FOCUSABLE,
+        AccessibleStateType::SELECTABLE,
+        AccessibleStateType::SHOWING,
+        AccessibleStateType::VISIBLE,
+        AccessibleStateType::OPAQUE,
+        0
+    };
 
-            sal_Int16 nState = 0;
-            while(aStandardStates[nState])
-            {
-                pStateSetHelper->AddState(aStandardStates[nState++]);
-            }
-            if(pPixelCtl->IsEnabled())
-                pStateSetHelper->AddState(AccessibleStateType::ENABLED);
-            if(pPixelCtl->HasFocus())
-                pStateSetHelper->AddState(AccessibleStateType::FOCUSED);
-            pStateSetHelper->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
+    sal_Int16 nState = 0;
+    while(aStandardStates[nState])
+    {
+        pStateSetHelper->AddState(aStandardStates[nState++]);
     }
+    if(mrPixelCtl.IsEnabled())
+        pStateSetHelper->AddState(AccessibleStateType::ENABLED);
+    if(mrPixelCtl.HasFocus())
+        pStateSetHelper->AddState(AccessibleStateType::FOCUSED);
+    pStateSetHelper->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
+
     return xRet;
 }
 
@@ -256,15 +218,11 @@ sal_Bool SvxPixelCtlAccessible::containsPoint( const awt::Point& aPt )
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
     Point aPoint(aPt.X, aPt.Y);
-    if(pPixelCtl)
-        return (aPoint.X() >= 0)
-            && (aPoint.X() < pPixelCtl->GetSizePixel().getWidth())
-            && (aPoint.Y() >= 0)
-            && (aPoint.Y() < pPixelCtl->GetSizePixel().getHeight());
-    else
-        return sal_False;
+    return (aPoint.X() >= 0)
+        && (aPoint.X() < mrPixelCtl.GetSizePixel().getWidth())
+        && (aPoint.Y() >= 0)
+        && (aPoint.Y() < mrPixelCtl.GetSizePixel().getHeight());
 }
 uno::Reference<XAccessible > SAL_CALL SvxPixelCtlAccessible::getAccessibleAtPoint (
         const awt::Point& aPoint)
@@ -278,42 +236,29 @@ uno::Reference<XAccessible > SAL_CALL SvxPixelCtlAccessible::getAccessibleAtPoin
     childPoint.X() = aPoint.X;
     childPoint.Y() = aPoint.Y;
 
-    if(pPixelCtl)
-    {
-        Point pt= pPixelCtl->PixelToLogic(childPoint);
-        long nIndex = pPixelCtl->PointToIndex(pt);
-        return CreateChild(nIndex,pPixelCtl->IndexToPoint(nIndex));
-    }
-    else
-       return xAcc;
-
+    Point pt= mrPixelCtl.PixelToLogic(childPoint);
+    long nIndex = mrPixelCtl.PointToIndex(pt);
+    return CreateChild(nIndex, mrPixelCtl.IndexToPoint(nIndex));
 }
 
 awt::Rectangle SvxPixelCtlAccessible::getBounds(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    Size aSz;
-    Point aPos(0,0);
     awt::Rectangle aRet;
-    if(pPixelCtl)
-    {
-        aSz = pPixelCtl->GetSizePixel();
-        aPos = pPixelCtl->GetPosPixel();
-        aRet.X = aPos.X();
-        aRet.Y = aPos.Y();
-        aRet.Width = aSz.Width();
-        aRet.Height = aSz.Height();
-    }
+    Size aSz = mrPixelCtl.GetSizePixel();
+    Point aPos = mrPixelCtl.GetPosPixel();
+    aRet.X = aPos.X();
+    aRet.Y = aPos.Y();
+    aRet.Width = aSz.Width();
+    aRet.Height = aSz.Height();
     return aRet;
 }
 
 awt::Point SvxPixelCtlAccessible::getLocation(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
     Point aPos;
-    aPos = pPixelCtl->GetPosPixel();
+    aPos = mrPixelCtl.GetPosPixel();
     awt::Point aRet(aPos.X(), aPos.Y());
     return aRet;
 }
@@ -321,44 +266,34 @@ awt::Point SvxPixelCtlAccessible::getLocation(  ) throw (uno::RuntimeException)
 awt::Point SvxPixelCtlAccessible::getLocationOnScreen(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    Rectangle rect;
-    rect = pPixelCtl->GetWindowExtentsRelative(NULL);
-    awt::Point aRet(rect.Left(),rect.Top() );
-    return aRet;
+    Rectangle rect = mrPixelCtl.GetWindowExtentsRelative(NULL);
+    return awt::Point(rect.Left(),rect.Top() );
 }
 
 awt::Size SvxPixelCtlAccessible::getSize(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    Size aSz;
-    aSz = pPixelCtl->GetSizePixel();
-    awt::Size aRet(aSz.Width(),aSz.Height());
-    return aRet;
+    Size aSz = mrPixelCtl.GetSizePixel();
+    return awt::Size(aSz.Width(),aSz.Height());
 }
 void SvxPixelCtlAccessible::grabFocus(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    if(pPixelCtl)
-    pPixelCtl->GrabFocus();
+    mrPixelCtl.GrabFocus();
 }
 
 sal_Int32 SvxPixelCtlAccessible::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    return pPixelCtl->GetControlForeground().GetColor();
+    return mrPixelCtl.GetControlForeground().GetColor();
 }
 
 sal_Int32 SvxPixelCtlAccessible::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
-    return pPixelCtl->GetControlBackground().GetColor();
+    return mrPixelCtl.GetControlBackground().GetColor();
 }
 
 OUString SvxPixelCtlAccessible::getImplementationName(  ) throw (uno::RuntimeException)
@@ -389,12 +324,11 @@ uno::Sequence< OUString > SvxPixelCtlAccessible::getSupportedServiceNames(  )
 void SAL_CALL SvxPixelCtlAccessible::selectAccessibleChild( sal_Int32 nChildIndex ) throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    IsValid();
 
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
-    long nIndex = pPixelCtl->ShowPosition(pPixelCtl->IndexToPoint(nChildIndex));
+    long nIndex = mrPixelCtl.ShowPosition(mrPixelCtl.IndexToPoint(nChildIndex));
     NotifyChild(nIndex,sal_True,sal_False);
 }
 
@@ -402,33 +336,19 @@ sal_Bool SAL_CALL SvxPixelCtlAccessible::isAccessibleChildSelected( sal_Int32 nC
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
-    IsValid();
-
-    return pPixelCtl->GetFoucsPosIndex() == nChildIndex;
+    return mrPixelCtl.GetFoucsPosIndex() == nChildIndex;
 }
 
 void SAL_CALL SvxPixelCtlAccessible::clearAccessibleSelection(  ) throw (RuntimeException)
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-
-    IsValid();
-
 }
 
 void SAL_CALL SvxPixelCtlAccessible::selectAllAccessibleChildren(  ) throw (RuntimeException)
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-
-    IsValid();
-
 }
 
 sal_Int32 SAL_CALL SvxPixelCtlAccessible::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-
-    IsValid();
-
     return 1;
 }
 
@@ -436,29 +356,19 @@ uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessible::getSelectedAccessi
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
-    IsValid();
-
     if ( nSelectedChildIndex >= 1)
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference< XAccessible > xChild;
-    if(pPixelCtl)
+    if(m_xCurChild.is())
     {
-        if(m_xCurChild.is())
-        {
-            xChild = m_xCurChild;
-        }
+        xChild = m_xCurChild;
     }
     return xChild;
 }
 
 void SAL_CALL SvxPixelCtlAccessible::deselectAccessibleChild( sal_Int32 ) throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-
-    IsValid();
-
-
 }
 
 // Added by lq
@@ -472,7 +382,7 @@ void SvxPixelCtlAccessible::ensureIsAlive() const
 void SvxPixelCtlAccessible::ensureIsValidRow( sal_Int32 nRow )
     throw ( lang::IndexOutOfBoundsException )
 {
-    if( nRow >= pPixelCtl->GetHeight() || nRow <0)
+    if( nRow >= mrPixelCtl.GetHeight() || nRow <0)
         throw lang::IndexOutOfBoundsException(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "row index is invalid" ) ), *this );
 }
@@ -480,7 +390,7 @@ void SvxPixelCtlAccessible::ensureIsValidRow( sal_Int32 nRow )
 void SvxPixelCtlAccessible::ensureIsValidColumn( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException )
 {
-    if( nColumn >= pPixelCtl->GetWidth() || nColumn <0 )
+    if( nColumn >= mrPixelCtl.GetWidth() || nColumn <0 )
         throw lang::IndexOutOfBoundsException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("column index is invalid") ), *this );
 }
@@ -542,13 +452,6 @@ void SAL_CALL SvxPixelCtlAccessible::disposing()
     }
 }
 
-void SvxPixelCtlAccessible::IsValid() throw (uno::RuntimeException)
-{
-    if(!pPixelCtl)
-        throw uno::RuntimeException();
-}
-
-
 void SvxPixelCtlAccessible::NotifyChild(long nIndex,sal_Bool bSelect ,sal_Bool bCheck)
 {
     DBG_ASSERT( !(!bSelect && !bCheck),"" );//non is false
@@ -567,13 +470,13 @@ void SvxPixelCtlAccessible::NotifyChild(long nIndex,sal_Bool bSelect ,sal_Bool b
             }
             if (bCheck)
             {
-                pChild->ChangePixelColorOrBG(sal_Bool(pPixelCtl->GetBitmapPixel(sal_uInt16(nIndex))));
+                pChild->ChangePixelColorOrBG(sal_Bool(mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex))));
                 pChild->CheckChild();
             }
             return ;
         }
     }
-    uno::Reference <XAccessible> xNewChild =CreateChild(nIndex, pPixelCtl->IndexToPoint(nIndex));
+    uno::Reference <XAccessible> xNewChild =CreateChild(nIndex, mrPixelCtl.IndexToPoint(nIndex));
     SvxPixelCtlAccessibleChild *pNewChild= static_cast<SvxPixelCtlAccessibleChild*>(xNewChild.get());
     DBG_ASSERT(pNewChild,"Child Must be Valid");
 
@@ -606,13 +509,13 @@ uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Poin
     long nY = mPoint.Y();
     if( Application::GetSettings().GetLayoutRTL())
     {
-        nX = (sal_uInt16) pPixelCtl->GetWidth() - 1 - nX;
+        nX = (sal_uInt16) mrPixelCtl.GetWidth() - 1 - nX;
     }
 
-    sal_Bool bPixelColorOrBG= sal_Bool(pPixelCtl->GetBitmapPixel(sal_uInt16(nIndex)));
-    Size size(pPixelCtl->GetWidth() / pPixelCtl->GetLineCount(),pPixelCtl->GetHeight() / pPixelCtl->GetLineCount());
+    sal_Bool bPixelColorOrBG= sal_Bool(mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex)));
+    Size size(mrPixelCtl.GetWidth() / mrPixelCtl.GetLineCount(),mrPixelCtl.GetHeight() / mrPixelCtl.GetLineCount());
     uno::Reference<XAccessible> xChild;
-    xChild = new SvxPixelCtlAccessibleChild(pPixelCtl,
+    xChild = new SvxPixelCtlAccessibleChild(&mrPixelCtl,
                 bPixelColorOrBG,
                 Point(nX,nY),
                 Rectangle(mPoint,size),

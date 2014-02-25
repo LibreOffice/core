@@ -170,8 +170,7 @@ class SvxPixelCtlAccessible :
     public ::comphelper::OBaseMutex,
     public SvxPixelCtlAccessible_BASE
 {
-    SvxPixelCtl* pPixelCtl;
-    void IsValid() throw (::com::sun::star::uno::RuntimeException);
+    SvxPixelCtl& mrPixelCtl;
 
 public:
     SvxPixelCtlAccessible(SvxPixelCtl& rWindow);
