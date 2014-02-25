@@ -405,12 +405,12 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     if( pWindow )
     {
-        pWindow->SetMouseTransparent( sal_True );
+        pWindow->SetMouseTransparent( true );
         pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        pWindow->EnableEraseBackground( sal_False );
+        pWindow->EnableEraseBackground( false );
         pWindow->SetControlForeground();
         pWindow->SetControlBackground();
-        pWindow->EnablePaint(sal_False);
+        pWindow->EnablePaint(false);
         pWindow->SetPosSizePixel(pPWindow->GetPosPixel(),pPWindow->GetSizePixel());
 
     }
@@ -478,9 +478,9 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     mbUseEnteringPixmap = false;
 
     if( !mbUseLeavingPixmap )
-    LeavingBytes = mxLeavingBitmap->getData(SlideBitmapLayout,SlideRect);
+        LeavingBytes = mxLeavingBitmap->getData(SlideBitmapLayout,SlideRect);
     if( !mbUseEnteringPixmap )
-    EnteringBytes = mxEnteringBitmap->getData(SlideBitmapLayout,SlideRect);
+        EnteringBytes = mxEnteringBitmap->getData(SlideBitmapLayout,SlideRect);
 
     if(GLWin.pOpenGLContext)//if we have a rendering context, let's init the slides
         GLInitSlides();
@@ -724,7 +724,7 @@ void OGLTransitionerImpl::GLInitSlides()
 
     const OGLFormat* pFormat = NULL;
     if( !mbUseLeavingPixmap || !mbUseEnteringPixmap )
-    pFormat = chooseFormats();
+        pFormat = chooseFormats();
 
     createTexture( &GLleavingSlide,
            pTransition->mbUseMipMapLeaving,
@@ -778,7 +778,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     [context makeCurrentContext];
 
     if(pTransition)
-    pTransition->display( nTime, GLleavingSlide, GLenteringSlide, 
+        pTransition->display( nTime, GLleavingSlide, GLenteringSlide, 
                               SlideSize.Width, SlideSize.Height,
                               static_cast<double>(GLWin.Width),
                               static_cast<double>(GLWin.Height) );
@@ -892,7 +892,7 @@ void OGLTransitionerImpl::disposing()
     }
 
     if (pTransition)
-    delete pTransition;
+        delete pTransition;
 
     mxLeavingBitmap.clear();
     mxEnteringBitmap.clear();

@@ -163,7 +163,7 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
 void OGLTransitionImpl::displaySlide( double nTime, ::sal_Int32 glSlideTex, std::vector<Primitive>& primitives,
                                       double SlideWidthScale, double SlideHeightScale )
 {
-   //TODO change to foreach
+    //TODO change to foreach
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
 
     // display slide reflection
@@ -179,11 +179,11 @@ void OGLTransitionImpl::displaySlide( double nTime, ::sal_Int32 glSlideTex, std:
         glTranslated( 0, 2 - surfaceLevel, 0 );
 
         glCullFace(GL_FRONT);
-    for(unsigned int i(0); i < primitives.size(); ++i)
-        primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
+        for(unsigned int i(0); i < primitives.size(); ++i)
+            primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
         glCullFace(GL_BACK);
 
-    slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
+        slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
 
         glPopMatrix();
     }
