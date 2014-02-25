@@ -720,6 +720,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,    "bs-Latn", "BA", kSAME },   // MS, though Latn is suppress-script
     { LANGUAGE_BOSNIAN_LATIN_LSO,                   "bs-Latn", ""  , LANGUAGE_BOSNIAN_LSO },   // MS, though Latn is suppress-script
     { LANGUAGE_CHINESE_TRADITIONAL_LSO,             "zh-Hant", ""  , 0     },
+    { LANGUAGE_USER_MANINKAKAN_EASTERN_LATIN,      "emk-Latn", "GN", 0     },
     { LANGUAGE_DONTKNOW,                            "",        ""  , 0     }    // marks end of table
 };
 

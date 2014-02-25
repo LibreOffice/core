@@ -378,6 +378,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Ladin" ; LANGUAGE_USER_LADIN ; > ;
         < "French (Burkina Faso)" ; LANGUAGE_USER_FRENCH_BURKINA_FASO ; > ;
         < "Puinave" ; LANGUAGE_USER_PUINAVE ; > ;
+        < "Maninkakan, Eastern, Latin" ; LANGUAGE_USER_MANINKAKAN_EASTERN_LATIN ; > ;
     };
 };
 
