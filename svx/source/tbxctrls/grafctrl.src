@@ -105,9 +105,9 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     };
 };
 
-// -----------
+
 // - Strings -
-// -----------
+
 
 String RID_SVXSTR_UNDO_GRAFMODE
 {

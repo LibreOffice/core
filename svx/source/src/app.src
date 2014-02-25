@@ -20,7 +20,7 @@
 #include <svx/svxids.hrc>
 #include "app.hrc"
 
- //----------------------------------------------------------------------------
+
 String RID_APPTITLE
 {
     Text = "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION" ;

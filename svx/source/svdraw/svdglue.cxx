@@ -260,7 +260,7 @@ bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrO
     return aRect.IsInside(rPnt);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrGluePointList::Clear()
 {

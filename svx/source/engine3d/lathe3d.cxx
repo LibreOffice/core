@@ -35,7 +35,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* E3dLatheObj::CreateObjectSpecificViewContact()
@@ -43,14 +43,14 @@ sdr::contact::ViewContact* E3dLatheObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfE3dLathe(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dLatheProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 

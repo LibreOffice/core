@@ -23,7 +23,7 @@
 #include <svx/scene3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pObject)
 :   mpScene(0),

@@ -885,7 +885,7 @@ void SAL_CALL
 }
 
 //=====  XAccessibleSelection  ============================================
-//
+
 
 
 void SAL_CALL AccessibleShape::selectAccessibleChild( sal_Int32 )

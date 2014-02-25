@@ -29,7 +29,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/dibtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -148,7 +148,7 @@ namespace sdr
             //Region aRegionPixel(rRegionPixel);
             //RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
             //Rectangle aRegionRectanglePixel;
-            //
+
             //while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
             //{
 #ifdef DBG_U//TIL
@@ -160,17 +160,17 @@ namespace sdr
             //      getOutputDevice().SetFillColor();
             //      getOutputDevice().DrawRect(aRegionRectanglePixel);
             //  }
-#endif      //
+#endif
             //  // restore the area
             //  const Point aTopLeft(aRegionRectanglePixel.TopLeft());
             //  const Size aSize(aRegionRectanglePixel.GetSize());
-            //
+
             //  getOutputDevice().DrawOutDev(
             //      aTopLeft, aSize, // destination
             //      aTopLeft, aSize, // source
             //      maBufferDevice);
             //}
-            //
+
             //aRegionPixel.EndEnumRects(aRegionHandle);
 
             // restore MapModes
@@ -230,20 +230,20 @@ namespace sdr
 
             //RegionHandle aRegionHandle(aRegion.BeginEnumRects());
             //Rectangle aRegionRectanglePixel;
-            //
+
             //while(aRegion.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
             //{
             //  // for each rectangle, save the area
             //  Point aTopLeft(aRegionRectanglePixel.TopLeft());
             //  Size aSize(aRegionRectanglePixel.GetSize());
-            //
+
             //  maBufferDevice.DrawOutDev(
             //      aTopLeft, aSize, // destination
             //      aTopLeft, aSize, // source
             //      rSource);
-            //
+
             //}
-            //
+
             //aRegion.EndEnumRects(aRegionHandle);
 
             // restore MapModes

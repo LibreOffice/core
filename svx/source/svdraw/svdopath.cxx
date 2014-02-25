@@ -1768,7 +1768,7 @@ void SdrPathObj::ImpForceKind()
     else
     {
         // #i10659#, for polys with more than 2 points.
-        //
+
         // Here i again need to fix something, because when Path-Polys are Copy-Pasted
         // between Apps with different measurements (e.g. 100TH_MM and TWIPS) there is
         // a scaling loop started from SdrExchangeView::Paste. In itself, this is not
@@ -1777,7 +1777,7 @@ void SdrPathObj::ImpForceKind()
         // through Rect2Poly - Poly2Rect does something badly wrong since that cycle is
         // BASED on aRect. That cycle is triggered in SdrTextObj::NbcResize() which is called
         // from the local Resize() implementation.
-        //
+
         // Basic problem is that the member aRect in SdrTextObj basically is a unrotated
         // text rectangle for the text object itself and methods at SdrTextObj do handle it
         // in that way. Many draw objects derived from SdrTextObj 'abuse' aRect as SnapRect
@@ -2864,14 +2864,14 @@ void SdrPathObj::impDeleteDAC() const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // transformation interface for StarOfficeAPI. This implements support for
 // homogeneous 3x3 matrices containing the transformation of the SdrObject. At the
 // moment it contains a shearX, rotation and translation, but for setting all linear
 // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
 sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const

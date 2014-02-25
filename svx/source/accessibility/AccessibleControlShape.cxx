@@ -171,21 +171,21 @@ void AccessibleControlShape::Init()
     {
         // What we need to do here is merge the functionality of the AccessibleContext of our UNO control
         // with our own AccessibleContext-related functionality.
-        //
+
         // The problem is that we do not know the interfaces our "inner" context supports - this may be any
         // XAccessibleXXX interface (or even any other) which makes sense for it.
-        //
+
         // In theory, we could implement all possible interfaces ourself, and re-route all functionality to
         // the inner context (except those we implement ourself, like XAccessibleComponent). But this is in no
         // way future-proof - as soon as an inner context appears which implements an additional interface,
         // we would need to adjust our implementation to support this new interface, too. Bad idea.
-        //
+
         // The usual solution for such a problem is aggregation. Aggregation means using UNO's own meachnisms
         // for merging an inner with an outer component, and get a component which behaves as it is exactly one.
         // This is what XAggregation is for. Unfortunately, aggregation requires _exact_ control over the ref count
         // of the inner object, which we do not have at all.
         // Bad, too.
-        //
+
         // But there is a solution: com.sun.star.reflection.ProxyFactory. This service is able to create a proxy
         // for any component, which supports _exactly_ the same interfaces as the component. In addition, it can
         // be aggregated, as by definition the proxy's ref count is exactly 1 when returned from the factory.

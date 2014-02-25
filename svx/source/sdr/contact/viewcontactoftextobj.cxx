@@ -20,7 +20,7 @@
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdotext.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

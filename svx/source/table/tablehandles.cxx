@@ -199,7 +199,7 @@ void TableEdgeHdl::CreateB2dIAObject()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible )
 :   OverlayObject(Color(COL_GRAY))
@@ -244,7 +244,7 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
     return aRetval;
 }
 
-// ====================================================================
+
 
 TableBorderHdl::TableBorderHdl(
     const Rectangle& rRect,
@@ -310,7 +310,7 @@ void TableBorderHdl::CreateB2dIAObject()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 } // end of namespace table
 } // end of namespace sdr

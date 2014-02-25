@@ -71,10 +71,10 @@ using namespace ::connectivity::simple;
 using namespace ::connectivity;
 
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -106,7 +106,7 @@ namespace svxform
     using ::com::sun::star::awt::XTextComponent;
     using ::com::sun::star::uno::Sequence;
 
-//========================================================================
+
 OFilterItemExchange::OFilterItemExchange()
 {
 }
@@ -135,14 +135,14 @@ OLocalExchange* OFilterExchangeHelper::createExchange() const
     return new OFilterItemExchange;
 }
 
-//========================================================================
+
 TYPEINIT0(FmFilterData);
 Image FmFilterData::GetImage() const
 {
     return Image();
 }
 
-//========================================================================
+
 TYPEINIT1(FmParentData, FmFilterData);
 
 FmParentData::~FmParentData()
@@ -152,7 +152,7 @@ FmParentData::~FmParentData()
         delete (*i);
 }
 
-//========================================================================
+
 TYPEINIT1(FmFormItem, FmParentData);
 
 Image FmFormItem::GetImage() const
@@ -167,7 +167,7 @@ Image FmFormItem::GetImage() const
     return aImage;
 }
 
-//========================================================================
+
 TYPEINIT1(FmFilterItems, FmParentData);
 
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
@@ -198,7 +198,7 @@ Image FmFilterItems::GetImage() const
     return aImage;
 }
 
-//========================================================================
+
 TYPEINIT1(FmFilterItem, FmFilterData);
 
 FmFilterItem::FmFilterItem( FmFilterItems* pParent,
@@ -224,9 +224,9 @@ Image FmFilterItem::GetImage() const
     return aImage;
 }
 
-//========================================================================
+
 // Hints for communicatition between model and view
-//========================================================================
+
 class FmFilterHint : public SfxHint
 {
     FmFilterData*   m_pData;
@@ -238,7 +238,7 @@ public:
 };
 TYPEINIT1( FmFilterHint, SfxHint );
 
-//========================================================================
+
 class FmFilterInsertedHint : public FmFilterHint
 {
     sal_uLong m_nPos;   // Position relative to the parent of the data
@@ -253,7 +253,7 @@ public:
 };
 TYPEINIT1( FmFilterInsertedHint, FmFilterHint );
 
-//========================================================================
+
 class FmFilterRemovedHint : public FmFilterHint
 {
 public:
@@ -264,7 +264,7 @@ public:
 };
 TYPEINIT1( FmFilterRemovedHint, FmFilterHint );
 
-//========================================================================
+
 class FmFilterTextChangedHint : public FmFilterHint
 {
 public:
@@ -275,7 +275,7 @@ public:
 };
 TYPEINIT1( FmFilterTextChangedHint, FmFilterHint );
 
-//========================================================================
+
 class FilterClearingHint : public SfxHint
 {
 public:
@@ -284,7 +284,7 @@ public:
 };
 TYPEINIT1( FilterClearingHint, SfxHint );
 
-//========================================================================
+
 class FmFilterCurrentChangedHint : public SfxHint
 {
 public:
@@ -293,9 +293,9 @@ public:
 };
 TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 
-//========================================================================
+
 // class FmFilterAdapter, Listener an den FilterControls
-//========================================================================
+
 class FmFilterAdapter : public ::cppu::WeakImplHelper1< XFilterControllerListener >
 {
     FmFilterModel*              m_pModel;
@@ -532,9 +532,9 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
     m_pModel->Insert( insertPos, pFilterItems );
 }
 
-//========================================================================
+
 // class FmFilterModel
-//========================================================================
+
 TYPEINIT1(FmFilterModel, FmParentData);
 
 FmFilterModel::FmFilterModel()
@@ -1019,9 +1019,9 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
     }
 }
 
-//========================================================================
+
 // class FmFilterItemsString
-//========================================================================
+
 class FmFilterItemsString : public SvLBoxString
 {
 public:
@@ -1078,9 +1078,9 @@ void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pE
     pViewData->maSize = aSize;
 }
 
-//========================================================================
+
 // class FmFilterString
-//========================================================================
+
 class FmFilterString : public SvLBoxString
 {
     OUString m_aName;
@@ -1134,9 +1134,9 @@ void FmFilterString::Paint(
     rDev.DrawText( aPos, GetText() );
 }
 
-//========================================================================
+
 // class FmFilterNavigator
-//========================================================================
+
 FmFilterNavigator::FmFilterNavigator( Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
                   ,m_pModel( NULL )
@@ -1701,7 +1701,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
             // every condition could be deleted except the first one if its the only one
             aContextMenu.EnableItem( SID_FM_DELETE, !aSelectList.empty() );
 
-            //
+
             sal_Bool bEdit = PTR_CAST(FmFilterItem, (FmFilterData*)pClicked->GetUserData()) != NULL &&
                 IsSelected(pClicked) && GetSelectionCount() == 1;
 
@@ -1886,9 +1886,9 @@ void FmFilterNavigator::DeleteSelection()
 }
 
 
-//========================================================================
+
 // class FmFilterNavigatorWin
-//========================================================================
+
 FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                               Window* _pParent )
                      :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
@@ -2018,9 +2018,9 @@ void FmFilterNavigatorWin::GetFocus()
 
 
 
-//========================================================================
+
 // class FmFilterNavigatorWinMgr
-//========================================================================
+
 SFX_IMPL_DOCKINGWINDOW( FmFilterNavigatorWinMgr, SID_FM_FILTER_NAVIGATOR )
 
 
@@ -2033,8 +2033,8 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *_pParent, sal_uInt16 _
     ((SfxDockingWindow*)pWindow)->Initialize( _pInfo );
 }
 
-//........................................................................
+
 }   // namespace svxform
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include "svx/svdotable.hxx"
 #include <svx/svdpool.hxx>
 
-///////////////////////////////////////////////////////////////////////
+
 
 
 using namespace ::osl;

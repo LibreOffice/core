@@ -42,18 +42,18 @@ class SfxBindings;
 class SfxViewFrame;
 class SfxApplication;
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     class FmFocusListenerAdapter;
     class FmTextControlFeature;
     class FmMouseListenerAdapter;
 
-    //====================================================================
+
     //= IFocusObserver
-    //====================================================================
+
     class IFocusObserver
     {
     public:
@@ -64,9 +64,9 @@ namespace svx
         ~IFocusObserver() {}
     };
 
-    //====================================================================
+
     //= IFocusObserver
-    //====================================================================
+
     class IContextRequestObserver
     {
     public:
@@ -76,9 +76,9 @@ namespace svx
         ~IContextRequestObserver() {}
     };
 
-    //====================================================================
+
     //= FmTextControlShell
-    //====================================================================
+
     class FmTextControlShell :public IFocusObserver
                              ,public ISlotInvalidator
                              ,public IContextRequestObserver
@@ -211,9 +211,9 @@ namespace svx
         DECL_LINK( OnInvalidateClipboard, void* );
     };
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLSHELL_HXX
 

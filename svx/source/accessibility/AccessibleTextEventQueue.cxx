@@ -33,9 +33,9 @@
 namespace accessibility
 {
 
-    //
+
     // EventQueue implementation
-    //
+
 
 
     AccessibleTextEventQueue::AccessibleTextEventQueue()

@@ -30,7 +30,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

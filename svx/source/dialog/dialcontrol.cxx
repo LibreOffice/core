@@ -32,11 +32,11 @@
 
 namespace svx {
 
-// ============================================================================
+
 
 const long DIAL_OUTER_WIDTH = 8;
 
-// ----------------------------------------------------------------------------
+
 
 DialControlBmp::DialControlBmp( Window& rParent ) :
     VirtualDevice( rParent, 0, 0 ),
@@ -223,7 +223,7 @@ void DialControlBmp::DrawBackground()
         maRect.Right() - DIAL_OUTER_WIDTH, maRect.Bottom() - DIAL_OUTER_WIDTH ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 DialControl::DialControl_Impl::DialControl_Impl ( Window& rParent ) :
     mpBmpEnabled(new DialControlBmp(rParent)),
@@ -264,7 +264,7 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
     mpBmpBuffered->SetSize( maWinSize );
 }
 
-// ============================================================================
+
 
 DialControl::DialControl( Window* pParent, WinBits nBits ) :
     Control( pParent, nBits ),
@@ -527,7 +527,7 @@ IMPL_LINK( DialControl, LinkedFieldModifyHdl, NumericField*, pField )
     return 0;
 }
 
-// ============================================================================
+
 
 DialControlWrapper::DialControlWrapper( DialControl& rDial ) :
     SingleControlWrapperType( rDial )
@@ -555,7 +555,7 @@ void DialControlWrapper::SetControlValue( sal_Int32 nValue )
     GetControl().SetRotation( nValue );
 }
 
-// ============================================================================
+
 
 } // namespace svx
 

@@ -44,7 +44,7 @@ void WrapField::Down()
     GetDownHdl().Call( this );
 }
 
-// ============================================================================
+
 
 } // namespace svx
 

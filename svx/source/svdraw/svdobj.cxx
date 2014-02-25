@@ -129,7 +129,7 @@
 
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT0(SdrObjUserCall);
 
@@ -148,7 +148,7 @@ SdrObjMacroHitRec::SdrObjMacroHitRec() :
     nTol(0),
     bDown(false) {}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT0(SdrObjUserData);
 
@@ -256,7 +256,7 @@ void SdrObjUserDataList::DeleteUserData(size_t nNum)
     maList.erase(maList.begin()+nNum);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 DBG_NAME(SdrObjGeoData);
 
@@ -278,7 +278,7 @@ SdrObjGeoData::~SdrObjGeoData()
     delete pGPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT0(SdrObjPlusData);
 
@@ -352,7 +352,7 @@ SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
     bCanConvToPathLineToArea(true),
     bCanConvToPolyLineToArea(true) {}
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrObject::CreateObjectSpecificProperties()
@@ -371,7 +371,7 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
     return *mpProperties;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // ObjectUser section
 
 void SdrObject::AddObjectUser(sdr::ObjectUser& rNewUser)
@@ -388,7 +388,7 @@ void SdrObject::RemoveObjectUser(sdr::ObjectUser& rOldUser)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrObject::CreateObjectSpecificViewContact()
@@ -414,14 +414,14 @@ void SdrObject::ActionChanged() const
     GetViewContact().ActionChanged();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SdrObject::SetBoundRectDirty()
 {
     aOutRect = Rectangle();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 DBG_NAME(SdrObject);
 TYPEINIT1(SdrObject,SfxListener);
@@ -1395,7 +1395,7 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
     return aTmpRect;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrObject::hasSpecialDrag() const
 {
@@ -1452,7 +1452,7 @@ basegfx::B2DPolyPolygon SdrObject::getSpecialDragPoly(const SdrDragStat& /*rDrag
     return basegfx::B2DPolyPolygon();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Create
 bool SdrObject::BegCreate(SdrDragStat& rStat)
 {
@@ -1992,7 +1992,7 @@ bool SdrObject::IsMacroHit(const SdrObjMacroHitRec& rRec) const
     return CheckMacroHit(rRec) != NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObjGeoData* SdrObject::NewGeoData() const
 {
@@ -2069,7 +2069,7 @@ void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // ItemSet access
 
 const SfxItemSet& SdrObject::GetObjectItemSet() const
@@ -2383,7 +2383,7 @@ void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRe
 }
 
 // Broadcasting while setting attributes is managed by the AttrObj.
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrObject::IsNode() const
 {
@@ -2501,7 +2501,7 @@ SdrObject* SdrObject::GetConnectedNode(bool /*bTail1*/) const
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void extractLineContourFromPrimitive2DSequence(
     const drawinglayer::primitive2d::Primitive2DSequence& rxSequence,
@@ -2528,7 +2528,7 @@ void extractLineContourFromPrimitive2DSequence(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash) const
 {
@@ -2824,7 +2824,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
     return pRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 {
@@ -2846,14 +2846,14 @@ SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
     return pRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrObject::SetInserted(bool bIns)
 {
@@ -2921,7 +2921,7 @@ void SdrObject::SetVisible(bool bVisible)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt16 SdrObject::GetUserDataCount() const
 {
@@ -3171,14 +3171,14 @@ void SdrObject::notifyShapePropertyChange( const ::svx::ShapeProperty _eProperty
         return pSvxShape->getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // transformation interface for StarOfficeAPI. This implements support for
 // homogeneous 3x3 matrices containing the transformation of the SdrObject. At the
 // moment it contains a shearX, rotation and translation, but for setting all linear
 // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
 sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const

@@ -24,7 +24,7 @@
 
 #include <svx/svdhdl.hxx>
 
-// --------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 

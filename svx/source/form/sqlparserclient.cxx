@@ -20,17 +20,17 @@
 #include "sqlparserclient.hxx"
 #include "svx/ParseContext.hxx"
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //====================================================================
+
     //= OSQLParserClient
-    //====================================================================
+
 
     OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
     {
@@ -45,9 +45,9 @@ namespace svxform
         return m_xParser.is();
     }
 
-//........................................................................
+
 }   // namespace svxform
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

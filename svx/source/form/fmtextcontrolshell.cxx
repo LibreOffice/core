@@ -63,10 +63,10 @@
 #include <vcl/outdev.hxx>
 #include <osl/mutex.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -79,10 +79,10 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     typedef sal_uInt16 WhichId;
 
-    //====================================================================
+
     static SfxSlotId pTextControlSlots[] =
     {
         SID_CLIPBOARD_FORMAT_ITEMS,
@@ -158,9 +158,9 @@ namespace svx
         0
     };
 
-    //====================================================================
+
     //= FmFocusListenerAdapter
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XFocusListener
                                     >   FmFocusListenerAdapter_Base;
     class FmFocusListenerAdapter : public FmFocusListenerAdapter_Base
@@ -250,9 +250,9 @@ namespace svx
         m_xWindow.clear();
     }
 
-    //====================================================================
+
     //= FmMouseListenerAdapter
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XMouseListener
                                     >   FmMouseListenerAdapter_Base;
     class FmMouseListenerAdapter : public FmMouseListenerAdapter_Base
@@ -278,9 +278,9 @@ namespace svx
         virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
     };
 
-    //====================================================================
+
     //= FmMouseListenerAdapter
-    //====================================================================
+
 
     DBG_NAME( FmMouseListenerAdapter )
 
@@ -363,13 +363,13 @@ namespace svx
         m_xWindow.clear();
     }
 
-    //====================================================================
+
     //= FmTextControlShell
-    //====================================================================
+
 
     namespace
     {
-        //....................................................................
+
         void lcl_translateUnoStateToItem( SfxSlotId _nSlot, const Any& _rUnoState, SfxItemSet& _rSet )
         {
             WhichId nWhich = _rSet.GetPool()->GetWhich( _nSlot );
@@ -426,7 +426,7 @@ namespace svx
             }
         }
 
-        //....................................................................
+
         OUString lcl_getUnoSlotName( SfxApplication&, SfxSlotId _nSlotId )
         {
             OUString sSlotUnoName;
@@ -469,7 +469,7 @@ namespace svx
             return sSlotUnoName;
         }
 
-        //....................................................................
+
         bool lcl_determineReadOnly( const Reference< XControl >& _rxControl )
         {
             bool bIsReadOnlyModel = true;
@@ -498,7 +498,7 @@ namespace svx
             return bIsReadOnlyModel;
         }
 
-        //....................................................................
+
         static Window* lcl_getWindow( const Reference< XControl >& _rxControl )
         {
             Window* pWindow = NULL;
@@ -518,7 +518,7 @@ namespace svx
             return pWindow;
         }
 
-        //....................................................................
+
         bool lcl_isRichText( const Reference< XControl >& _rxControl )
         {
             if ( !_rxControl.is() )
@@ -1266,7 +1266,7 @@ namespace svx
         // Another possibility would be to have dedicated shells for the slots which we might
         // or might not be able to serve. However, this could probably increase the number of
         // shells too much (In theory, nearly every slot could have an own shell then).
-        //
+
         // #i51621# / 2005-08-19 / frank.schoenheit@sun.com
         // bool bHaveAnyServeableSlots = m_xActiveTextComponent.is() || !m_aControlFeatures.empty();
         // LEM: not calling m_aControlActivatonHandler causes fdo#63695, so disable this hack for now.
@@ -1379,8 +1379,8 @@ namespace svx
         m_rBindings.GetDispatcher()->ExecutePopup( SVX_RES( RID_FM_TEXTATTRIBUTE_MENU ) );
     }
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

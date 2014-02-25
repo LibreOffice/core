@@ -27,7 +27,7 @@
 
 TYPEINIT1(E3dPolygonObj, E3dCompoundObject);
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()

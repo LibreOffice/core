@@ -42,7 +42,7 @@ SfxBoolItem AbsoluteRecord SID_FM_RECORD_ABSOLUTE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem AddField SID_FM_ADD_FIELD
 
 [
@@ -69,7 +69,7 @@ SfxBoolItem AddField SID_FM_ADD_FIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AddTable SID_FM_ADDTABLE
 ()
 [
@@ -94,7 +94,7 @@ SfxVoidItem AddTable SID_FM_ADDTABLE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AlignCenter SID_OBJECT_ALIGN_CENTER
 ()
 [
@@ -119,7 +119,7 @@ SfxVoidItem AlignCenter SID_OBJECT_ALIGN_CENTER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AlignDown SID_OBJECT_ALIGN_DOWN
 ()
 [
@@ -144,7 +144,7 @@ SfxVoidItem AlignDown SID_OBJECT_ALIGN_DOWN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ObjectAlignLeft SID_OBJECT_ALIGN_LEFT
 ()
 [
@@ -169,7 +169,7 @@ SfxVoidItem ObjectAlignLeft SID_OBJECT_ALIGN_LEFT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxAdjustItem Alignment SID_ATTR_PARA_ADJUST
 
 [
@@ -196,7 +196,7 @@ SvxAdjustItem Alignment SID_ATTR_PARA_ADJUST
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AlignMiddle SID_OBJECT_ALIGN_MIDDLE
 ()
 [
@@ -221,7 +221,7 @@ SfxVoidItem AlignMiddle SID_OBJECT_ALIGN_MIDDLE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ObjectAlignRight SID_OBJECT_ALIGN_RIGHT
 ()
 [
@@ -246,7 +246,7 @@ SfxVoidItem ObjectAlignRight SID_OBJECT_ALIGN_RIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AlignUp SID_OBJECT_ALIGN_UP
 ()
 [
@@ -271,7 +271,7 @@ SfxVoidItem AlignUp SID_OBJECT_ALIGN_UP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Arc SID_DRAW_ARC
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -299,7 +299,7 @@ SfxVoidItem Arc SID_DRAW_ARC
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Assign3D SID_3D_ASSIGN
 
 [
@@ -326,7 +326,7 @@ SfxBoolItem Assign3D SID_3D_ASSIGN
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem AutoControlFocus SID_FM_AUTOCONTROLFOCUS
 
 [
@@ -353,7 +353,7 @@ SfxBoolItem AutoControlFocus SID_FM_AUTOCONTROLFOCUS
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AutoFilter SID_FM_AUTOFILTER
 ()
 [
@@ -378,7 +378,7 @@ SfxVoidItem AutoFilter SID_FM_AUTOFILTER
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AutoFormat SID_AUTOFORMAT
 (SfxStringItem aFormatName SID_AUTOFORMAT)
 [
@@ -403,7 +403,7 @@ SfxVoidItem AutoFormat SID_AUTOFORMAT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
 (SvxBrushItem Background SID_GALLERY_BG_BRUSH, SfxUInt16Item Position SID_GALLERY_BG_POS)
@@ -432,7 +432,7 @@ SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxStringItem TableStyle SID_TABLE_STYLE
 ()
@@ -458,7 +458,7 @@ SfxStringItem TableStyle SID_TABLE_STYLE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem TableStyleSettings SID_TABLE_STYLE_SETTINGS
 (SfxBoolItem UseFirstRowStyle ID_VAL_USEFIRSTROWSTYLE,
@@ -489,7 +489,7 @@ SfxVoidItem TableStyleSettings SID_TABLE_STYLE_SETTINGS
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem TableDesign SID_TABLEDESIGN
 [
     /* flags: */
@@ -512,7 +512,7 @@ SfxVoidItem TableDesign SID_TABLEDESIGN
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SvxColorItem BackgroundColor SID_BACKGROUND_COLOR
 
 [
@@ -539,7 +539,7 @@ SvxColorItem BackgroundColor SID_BACKGROUND_COLOR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxBrushItem BackgroundPattern SID_ATTR_BRUSH
 
 [
@@ -566,7 +566,7 @@ SvxBrushItem BackgroundPattern SID_ATTR_BRUSH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxBrushItem BackgroundPatternController SID_BACKGROUND_PATTERN
 
 [
@@ -593,7 +593,7 @@ SvxBrushItem BackgroundPatternController SID_BACKGROUND_PATTERN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Bezier_Unfilled SID_DRAW_BEZIER_NOFILL
 
 [
@@ -620,7 +620,7 @@ SfxBoolItem Bezier_Unfilled SID_DRAW_BEZIER_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierAppend SID_BEZIER_APPEND
 
 [
@@ -647,7 +647,7 @@ SfxBoolItem BezierAppend SID_BEZIER_APPEND
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem BezierClose SID_BEZIER_CLOSE
 
 [
@@ -674,7 +674,7 @@ SfxStringItem BezierClose SID_BEZIER_CLOSE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem BezierConvert SID_BEZIER_CONVERT
 
 [
@@ -701,7 +701,7 @@ SfxStringItem BezierConvert SID_BEZIER_CONVERT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierCutLine SID_BEZIER_CUTLINE
 
 [
@@ -728,7 +728,7 @@ SfxBoolItem BezierCutLine SID_BEZIER_CUTLINE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierDelete SID_BEZIER_DELETE
 
 [
@@ -755,7 +755,7 @@ SfxBoolItem BezierDelete SID_BEZIER_DELETE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierEdge SID_BEZIER_EDGE
 
 [
@@ -782,7 +782,7 @@ SfxBoolItem BezierEdge SID_BEZIER_EDGE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierEliminatePoints SID_BEZIER_ELIMINATE_POINTS
 
 [
@@ -809,7 +809,7 @@ SfxBoolItem BezierEliminatePoints SID_BEZIER_ELIMINATE_POINTS
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierFill SID_DRAW_BEZIER_FILL
 
 [
@@ -836,7 +836,7 @@ SfxBoolItem BezierFill SID_DRAW_BEZIER_FILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierInsert SID_BEZIER_INSERT
 
 [
@@ -863,7 +863,7 @@ SfxBoolItem BezierInsert SID_BEZIER_INSERT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierMove SID_BEZIER_MOVE
 
 [
@@ -890,7 +890,7 @@ SfxBoolItem BezierMove SID_BEZIER_MOVE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierSmooth SID_BEZIER_SMOOTH
 
 [
@@ -917,7 +917,7 @@ SfxBoolItem BezierSmooth SID_BEZIER_SMOOTH
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BezierSymmetric SID_BEZIER_SYMMTR
 
 [
@@ -944,7 +944,7 @@ SfxBoolItem BezierSymmetric SID_BEZIER_SYMMTR
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BezierTo SID_BEZIERTO
 (SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -969,7 +969,7 @@ SfxVoidItem BezierTo SID_BEZIERTO
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BmpMask SID_BMPMASK
 
 [
@@ -996,7 +996,7 @@ SfxBoolItem BmpMask SID_BMPMASK
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BmpMaskExec SID_BMPMASK_EXEC
 
 [
@@ -1023,7 +1023,7 @@ SfxBoolItem BmpMaskExec SID_BMPMASK_EXEC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BmpMaskPipette SID_BMPMASK_PIPETTE
 
 [
@@ -1050,7 +1050,7 @@ SfxBoolItem BmpMaskPipette SID_BMPMASK_PIPETTE
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxWeightItem Bold SID_ATTR_CHAR_WEIGHT
 
 [
@@ -1077,7 +1077,7 @@ SvxWeightItem Bold SID_ATTR_CHAR_WEIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxWeightItem BoldLatin SID_ATTR_CHAR_LATIN_WEIGHT
 
 [
@@ -1104,7 +1104,7 @@ SvxWeightItem BoldLatin SID_ATTR_CHAR_LATIN_WEIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxWeightItem BoldCJK SID_ATTR_CHAR_CJK_WEIGHT
 
 [
@@ -1131,7 +1131,7 @@ SvxWeightItem BoldCJK SID_ATTR_CHAR_CJK_WEIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxWeightItem BoldCTL SID_ATTR_CHAR_CTL_WEIGHT
 
 [
@@ -1158,7 +1158,7 @@ SvxWeightItem BoldCTL SID_ATTR_CHAR_CTL_WEIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem Border SID_BORDER_OBJECT
 
 [
@@ -1185,7 +1185,7 @@ SfxObjectItem Border SID_BORDER_OBJECT
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxBoxInfoItem BorderInner SID_ATTR_BORDER_INNER
 
 [
@@ -1212,7 +1212,7 @@ SvxBoxInfoItem BorderInner SID_ATTR_BORDER_INNER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxBoxItem BorderOuter SID_ATTR_BORDER_OUTER
 
 [
@@ -1239,7 +1239,7 @@ SvxBoxItem BorderOuter SID_ATTR_BORDER_OUTER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SetBorderStyle SID_ATTR_BORDER
 (SvxBoxItem OuterBorder SID_ATTR_BORDER_OUTER,SvxBoxInfoItem InnerBorder SID_ATTR_BORDER_INNER)
 [
@@ -1267,7 +1267,7 @@ SfxVoidItem SetBorderStyle SID_ATTR_BORDER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BringToFront SID_FRAME_TO_TOP
 ()
 [
@@ -1292,7 +1292,7 @@ SfxVoidItem BringToFront SID_FRAME_TO_TOP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DrawCaption SID_DRAW_CAPTION
 
 [
@@ -1319,7 +1319,7 @@ SfxBoolItem DrawCaption SID_DRAW_CAPTION
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxCaseMapItem CaseMap SID_ATTR_CHAR_CASEMAP
 
 [
@@ -1346,7 +1346,7 @@ SvxCaseMapItem CaseMap SID_ATTR_CHAR_CASEMAP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CenterPara SID_ATTR_PARA_ADJUST_CENTER
 
 [
@@ -1374,7 +1374,7 @@ SfxBoolItem CenterPara SID_ATTR_PARA_ADJUST_CENTER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToFullWidth SID_TRANSLITERATE_FULLWIDTH
 ()
 [
@@ -1399,7 +1399,7 @@ SfxVoidItem ChangeCaseToFullWidth SID_TRANSLITERATE_FULLWIDTH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToHalfWidth SID_TRANSLITERATE_HALFWIDTH
 ()
 [
@@ -1424,7 +1424,7 @@ SfxVoidItem ChangeCaseToHalfWidth SID_TRANSLITERATE_HALFWIDTH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToHiragana SID_TRANSLITERATE_HIRAGANA
 ()
 [
@@ -1449,7 +1449,7 @@ SfxVoidItem ChangeCaseToHiragana SID_TRANSLITERATE_HIRAGANA
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToKatakana SID_TRANSLITERATE_KATAGANA
 ()
 [
@@ -1474,7 +1474,7 @@ SfxVoidItem ChangeCaseToKatakana SID_TRANSLITERATE_KATAGANA
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToSentenceCase SID_TRANSLITERATE_SENTENCE_CASE
 ()
 [
@@ -1499,7 +1499,7 @@ SfxVoidItem ChangeCaseToSentenceCase SID_TRANSLITERATE_SENTENCE_CASE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToTitleCase SID_TRANSLITERATE_TITLE_CASE
 ()
 [
@@ -1524,7 +1524,7 @@ SfxVoidItem ChangeCaseToTitleCase SID_TRANSLITERATE_TITLE_CASE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToToggleCase SID_TRANSLITERATE_TOGGLE_CASE
 ()
 [
@@ -1549,7 +1549,7 @@ SfxVoidItem ChangeCaseToToggleCase SID_TRANSLITERATE_TOGGLE_CASE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseRotateCase SID_TRANSLITERATE_ROTATE_CASE
 ()
 [
@@ -1574,7 +1574,7 @@ SfxVoidItem ChangeCaseRotateCase SID_TRANSLITERATE_ROTATE_CASE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToLower SID_TRANSLITERATE_LOWER
 ()
 [
@@ -1599,7 +1599,7 @@ SfxVoidItem ChangeCaseToLower SID_TRANSLITERATE_LOWER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChangeCaseToUpper SID_TRANSLITERATE_UPPER
 ()
 [
@@ -1624,7 +1624,7 @@ SfxVoidItem ChangeCaseToUpper SID_TRANSLITERATE_UPPER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ChangeControlType SID_FM_CHANGECONTROLTYPE
 
 [
@@ -1651,7 +1651,7 @@ SfxBoolItem ChangeControlType SID_FM_CHANGECONTROLTYPE
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFontItem CharFontName SID_ATTR_CHAR_FONT
 
 [
@@ -1730,7 +1730,7 @@ SvxFontItem CharEndPreviewFontName SID_ATTR_CHAR_ENDPREVIEW_FONT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFontItem CharFontNameLatin SID_ATTR_CHAR_LATIN_FONT
 
 [
@@ -1757,7 +1757,7 @@ SvxFontItem CharFontNameLatin SID_ATTR_CHAR_LATIN_FONT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFontItem CharFontNameCJK SID_ATTR_CHAR_CJK_FONT
 
 [
@@ -1784,7 +1784,7 @@ SvxFontItem CharFontNameCJK SID_ATTR_CHAR_CJK_FONT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFontItem CharFontNameCTL SID_ATTR_CHAR_CTL_FONT
 
 [
@@ -1811,7 +1811,7 @@ SvxFontItem CharFontNameCTL SID_ATTR_CHAR_CTL_FONT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Checkbox SID_INSERT_CHECKBOX
 
 [
@@ -1838,7 +1838,7 @@ SfxBoolItem Checkbox SID_INSERT_CHECKBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CheckBox SID_FM_CHECKBOX
 
 [
@@ -1865,7 +1865,7 @@ SfxBoolItem CheckBox SID_FM_CHECKBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxChooseControlItem ChooseControls SID_CHOOSE_CONTROLS
 
 [
@@ -1894,7 +1894,7 @@ SvxChooseControlItem ChooseControls SID_CHOOSE_CONTROLS
     PseudoPrefix = SID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ChoosePolygon SID_CHOOSE_POLYGON
 
 [
@@ -1921,7 +1921,7 @@ SfxBoolItem ChoosePolygon SID_CHOOSE_POLYGON
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Circle SID_DRAW_CIRCLE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y)
 [
@@ -1949,7 +1949,7 @@ SfxVoidItem Circle SID_DRAW_CIRCLE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y)
 [
@@ -1977,7 +1977,7 @@ SfxVoidItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CircleArc SID_DRAW_CIRCLEARC
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -2005,7 +2005,7 @@ SfxVoidItem CircleArc SID_DRAW_CIRCLEARC
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CircleCut SID_DRAW_CIRCLECUT
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -2033,7 +2033,7 @@ SfxVoidItem CircleCut SID_DRAW_CIRCLECUT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -2061,7 +2061,7 @@ SfxVoidItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CirclePie SID_DRAW_CIRCLEPIE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -2089,7 +2089,7 @@ SfxVoidItem CirclePie SID_DRAW_CIRCLEPIE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -2117,7 +2117,7 @@ SfxVoidItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
 ()
 [
@@ -2142,7 +2142,7 @@ SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxColorItem Color SID_ATTR_CHAR_COLOR
 
 [
@@ -2169,7 +2169,7 @@ SvxColorItem Color SID_ATTR_CHAR_COLOR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ColorControl SID_COLOR_CONTROL
 
 [
@@ -2196,7 +2196,7 @@ SfxBoolItem ColorControl SID_COLOR_CONTROL
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ComboBox SID_FM_COMBOBOX
 
 [
@@ -2223,7 +2223,7 @@ SfxBoolItem ComboBox SID_FM_COMBOBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem NavigationBar SID_FM_NAVIGATIONBAR
 [
     /* flags: */
@@ -2249,7 +2249,7 @@ SfxBoolItem NavigationBar SID_FM_NAVIGATIONBAR
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Combobox SID_INSERT_COMBOBOX
 
 [
@@ -2276,7 +2276,7 @@ SfxBoolItem Combobox SID_INSERT_COMBOBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item Config SID_FM_CONFIG
 
 [
@@ -2305,7 +2305,7 @@ SfxUInt16Item Config SID_FM_CONFIG
     PseudoPrefix = SID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem MoreControls SID_FM_MORE_CONTROLS
 
 [
@@ -2334,7 +2334,7 @@ SfxBoolItem MoreControls SID_FM_MORE_CONTROLS
     PseudoPrefix = SID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FormDesignTools SID_FM_FORM_DESIGN_TOOLS
 
 [
@@ -2363,7 +2363,7 @@ SfxBoolItem FormDesignTools SID_FM_FORM_DESIGN_TOOLS
     PseudoPrefix = SID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ContourDialog SID_CONTOUR_DLG
 
 [
@@ -2390,7 +2390,7 @@ SfxBoolItem ContourDialog SID_CONTOUR_DLG
     GroupId = GID_GRAPHIC;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ContourExecute SID_CONTOUR_EXEC
 
 [
@@ -2417,7 +2417,7 @@ SfxBoolItem ContourExecute SID_CONTOUR_EXEC
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ControlProperties SID_FM_CTL_PROPERTIES
 
 [
@@ -2444,7 +2444,7 @@ SfxBoolItem ControlProperties SID_FM_CTL_PROPERTIES
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToButton SID_FM_CONVERTTO_BUTTON
 
 [
@@ -2471,7 +2471,7 @@ SfxBoolItem ConvertToButton SID_FM_CONVERTTO_BUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToCheckBox SID_FM_CONVERTTO_CHECKBOX
 
 [
@@ -2498,7 +2498,7 @@ SfxBoolItem ConvertToCheckBox SID_FM_CONVERTTO_CHECKBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToCombo SID_FM_CONVERTTO_COMBOBOX
 
 [
@@ -2525,7 +2525,7 @@ SfxBoolItem ConvertToCombo SID_FM_CONVERTTO_COMBOBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToCurrency SID_FM_CONVERTTO_CURRENCY
 
 [
@@ -2552,7 +2552,7 @@ SfxBoolItem ConvertToCurrency SID_FM_CONVERTTO_CURRENCY
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToDate SID_FM_CONVERTTO_DATE
 
 [
@@ -2579,7 +2579,7 @@ SfxBoolItem ConvertToDate SID_FM_CONVERTTO_DATE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToEdit SID_FM_CONVERTTO_EDIT
 
 [
@@ -2606,7 +2606,7 @@ SfxBoolItem ConvertToEdit SID_FM_CONVERTTO_EDIT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToFileControl SID_FM_CONVERTTO_FILECONTROL
 
 [
@@ -2633,7 +2633,7 @@ SfxBoolItem ConvertToFileControl SID_FM_CONVERTTO_FILECONTROL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToFixed SID_FM_CONVERTTO_FIXEDTEXT
 
 [
@@ -2660,7 +2660,7 @@ SfxBoolItem ConvertToFixed SID_FM_CONVERTTO_FIXEDTEXT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToFormatted SID_FM_CONVERTTO_FORMATTED
 
 [
@@ -2687,7 +2687,7 @@ SfxBoolItem ConvertToFormatted SID_FM_CONVERTTO_FORMATTED
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToScrollBar SID_FM_CONVERTTO_SCROLLBAR
 
 [
@@ -2714,7 +2714,7 @@ SfxBoolItem ConvertToScrollBar SID_FM_CONVERTTO_SCROLLBAR
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToSpinButton SID_FM_CONVERTTO_SPINBUTTON
 
 [
@@ -2741,7 +2741,7 @@ SfxBoolItem ConvertToSpinButton SID_FM_CONVERTTO_SPINBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToGroup SID_FM_CONVERTTO_GROUPBOX
 
 [
@@ -2768,7 +2768,7 @@ SfxBoolItem ConvertToGroup SID_FM_CONVERTTO_GROUPBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToImageBtn SID_FM_CONVERTTO_IMAGEBUTTON
 
 [
@@ -2795,7 +2795,7 @@ SfxBoolItem ConvertToImageBtn SID_FM_CONVERTTO_IMAGEBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToImageControl SID_FM_CONVERTTO_IMAGECONTROL
 
 [
@@ -2822,7 +2822,7 @@ SfxBoolItem ConvertToImageControl SID_FM_CONVERTTO_IMAGECONTROL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToList SID_FM_CONVERTTO_LISTBOX
 
 [
@@ -2849,7 +2849,7 @@ SfxBoolItem ConvertToList SID_FM_CONVERTTO_LISTBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToNumeric SID_FM_CONVERTTO_NUMERIC
 
 [
@@ -2876,7 +2876,7 @@ SfxBoolItem ConvertToNumeric SID_FM_CONVERTTO_NUMERIC
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToPattern SID_FM_CONVERTTO_PATTERN
 
 [
@@ -2903,7 +2903,7 @@ SfxBoolItem ConvertToPattern SID_FM_CONVERTTO_PATTERN
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToRadio SID_FM_CONVERTTO_RADIOBUTTON
 
 [
@@ -2930,7 +2930,7 @@ SfxBoolItem ConvertToRadio SID_FM_CONVERTTO_RADIOBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToTime SID_FM_CONVERTTO_TIME
 
 [
@@ -2957,7 +2957,7 @@ SfxBoolItem ConvertToTime SID_FM_CONVERTTO_TIME
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ConvertToNavigationBar SID_FM_CONVERTTO_NAVIGATIONBAR
 
 [
@@ -2984,7 +2984,7 @@ SfxBoolItem ConvertToNavigationBar SID_FM_CONVERTTO_NAVIGATIONBAR
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CountAll SID_FM_COUNTALL
 ()
 [
@@ -3009,7 +3009,7 @@ SfxVoidItem CountAll SID_FM_COUNTALL
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CreateControl SID_FM_CREATE_CONTROL
 ()
 [
@@ -3037,7 +3037,7 @@ SfxBoolItem CreateControl SID_FM_CREATE_CONTROL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertCurrencyField SID_INSERT_CURRENCYFIELD
 
 [
@@ -3064,7 +3064,7 @@ SfxBoolItem InsertCurrencyField SID_INSERT_CURRENCYFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CurrencyField SID_FM_CURRENCYFIELD
 
 [
@@ -3091,7 +3091,7 @@ SfxBoolItem CurrencyField SID_FM_CURRENCYFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Dash SID_DASH
 (SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Style ID_VAL_STYLE,SfxUInt32Item Dots ID_VAL_DOTS,SfxUInt32Item DotLen ID_VAL_DOTLEN,SfxUInt32Item Dashes ID_VAL_DASHES,SfxUInt32Item DashLen ID_VAL_DASHLEN,SfxUInt32Item Distance ID_VAL_DISTANCE)
 [
@@ -3116,7 +3116,7 @@ SfxVoidItem Dash SID_DASH
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem AddDateField SID_INSERT_DATEFIELD
 
 [
@@ -3143,7 +3143,7 @@ SfxBoolItem AddDateField SID_INSERT_DATEFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DateField SID_FM_DATEFIELD
 
 [
@@ -3170,7 +3170,7 @@ SfxBoolItem DateField SID_FM_DATEFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
 (SfxBoolItem On FN_PARAM_1)
 [
@@ -3200,7 +3200,7 @@ SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DeleteRecord SID_FM_RECORD_DELETE
 ()
 [
@@ -3228,7 +3228,7 @@ SfxBoolItem DeleteRecord SID_FM_RECORD_DELETE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SwitchControlDesignMode SID_FM_DESIGN_MODE
 
 [
@@ -3255,7 +3255,7 @@ SfxBoolItem SwitchControlDesignMode SID_FM_DESIGN_MODE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem DistributeSelection SID_DISTRIBUTE_DLG
 ()
 [
@@ -3280,7 +3280,7 @@ SfxVoidItem DistributeSelection SID_DISTRIBUTE_DLG
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DrawSelect SID_DRAW_SELECT
 
 [
@@ -3307,7 +3307,7 @@ SfxBoolItem DrawSelect SID_DRAW_SELECT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxDrawToolItem InsertDraw SID_INSERT_DRAW
 
 [
@@ -3336,7 +3336,7 @@ SvxDrawToolItem InsertDraw SID_INSERT_DRAW
     PseudoPrefix = SID_DRAW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DSBrowserExplorer SID_DSBROWSER_EXPLORER
 
 [
@@ -3363,7 +3363,7 @@ SfxBoolItem DSBrowserExplorer SID_DSBROWSER_EXPLORER
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Edit SID_FM_EDIT
 
 [
@@ -3390,7 +3390,7 @@ SfxBoolItem Edit SID_FM_EDIT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertEdit SID_INSERT_EDIT
 
 [
@@ -3417,7 +3417,7 @@ SfxBoolItem InsertEdit SID_INSERT_EDIT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Ellipse SID_DRAW_ELLIPSE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y)
 [
@@ -3445,7 +3445,7 @@ SfxVoidItem Ellipse SID_DRAW_ELLIPSE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y)
 [
@@ -3473,7 +3473,7 @@ SfxVoidItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem EllipseCut SID_DRAW_ELLIPSECUT
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -3501,7 +3501,7 @@ SfxVoidItem EllipseCut SID_DRAW_ELLIPSECUT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -3529,7 +3529,7 @@ SfxVoidItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem EnterGroup SID_ENTER_GROUP
 ()
 [
@@ -3554,7 +3554,7 @@ SfxVoidItem EnterGroup SID_ENTER_GROUP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxEscapementItem Escapement SID_ATTR_CHAR_ESCAPEMENT
 
 [
@@ -3581,7 +3581,7 @@ SvxEscapementItem Escapement SID_ATTR_CHAR_ESCAPEMENT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem FieldController SID_FM_FIELDS_CONTROL
 
 [
@@ -3608,7 +3608,7 @@ SfxObjectItem FieldController SID_FM_FIELDS_CONTROL
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FileControl SID_FM_FILECONTROL
 
 [
@@ -3635,7 +3635,7 @@ SfxBoolItem FileControl SID_FM_FILECONTROL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertFileControl SID_INSERT_FILECONTROL
 
 [
@@ -3662,7 +3662,7 @@ SfxBoolItem InsertFileControl SID_INSERT_FILECONTROL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertTreeControl SID_INSERT_TREECONTROL
 
 [
@@ -3690,7 +3690,7 @@ SfxBoolItem InsertTreeControl SID_INSERT_TREECONTROL
 ]
 
 
-//--------------------------------------------------------------------------
+
 XFillBitmapItem FillBitmap SID_ATTR_FILL_BITMAP
 
 [
@@ -3717,7 +3717,7 @@ XFillBitmapItem FillBitmap SID_ATTR_FILL_BITMAP
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFillColorItem FillColor SID_ATTR_FILL_COLOR
 
 [
@@ -3744,7 +3744,7 @@ XFillColorItem FillColor SID_ATTR_FILL_COLOR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
 
 [
@@ -3771,7 +3771,7 @@ XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 XFillHatchItem FillHatch SID_ATTR_FILL_HATCH
 
 [
@@ -3798,7 +3798,7 @@ XFillHatchItem FillHatch SID_ATTR_FILL_HATCH
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFillStyleItem FillStyle SID_ATTR_FILL_STYLE
 
 [
@@ -3825,7 +3825,7 @@ XFillStyleItem FillStyle SID_ATTR_FILL_STYLE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FilterCrit SID_FM_FILTERCRIT
 ()
 [
@@ -3850,7 +3850,7 @@ SfxVoidItem FilterCrit SID_FM_FILTERCRIT
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FirstRecord SID_FM_RECORD_FIRST
 ()
 [
@@ -3878,7 +3878,7 @@ SfxBoolItem FirstRecord SID_FM_RECORD_FIRST
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxBlinkItem Flash SID_ATTR_FLASH
 
 [
@@ -3905,7 +3905,7 @@ SvxBlinkItem Flash SID_ATTR_FLASH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem FmExplorerController SID_FM_FMEXPLORER_CONTROL
 
 [
@@ -3932,7 +3932,7 @@ SfxObjectItem FmExplorerController SID_FM_FMEXPLORER_CONTROL
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem FmFilterNavigatorController SID_FM_FILTER_NAVIGATOR_CONTROL
 
 [
@@ -3959,7 +3959,7 @@ SfxObjectItem FmFilterNavigatorController SID_FM_FILTER_NAVIGATOR_CONTROL
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FontDialog SID_CHAR_DLG
 ()
 [
@@ -4008,7 +4008,7 @@ SfxVoidItem FontEffectsDialog SID_CHAR_DLG_EFFECT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFontHeightItem  FontHeight SID_ATTR_CHAR_FONTHEIGHT
 
 [
@@ -4035,7 +4035,7 @@ SvxFontHeightItem  FontHeight SID_ATTR_CHAR_FONTHEIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFontHeightItem FontHeighLatin SID_ATTR_CHAR_LATIN_FONTHEIGHT
 
 [
@@ -4062,7 +4062,7 @@ SvxFontHeightItem FontHeighLatin SID_ATTR_CHAR_LATIN_FONTHEIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFontHeightItem FontHeightCJK SID_ATTR_CHAR_CJK_FONTHEIGHT
 
 [
@@ -4089,7 +4089,7 @@ SvxFontHeightItem FontHeightCJK SID_ATTR_CHAR_CJK_FONTHEIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFontHeightItem FontHeightCTL SID_ATTR_CHAR_CTL_FONTHEIGHT
 
 [
@@ -4116,7 +4116,7 @@ SvxFontHeightItem FontHeightCTL SID_ATTR_CHAR_CTL_FONTHEIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FontWork SID_FONTWORK
 
 [
@@ -4143,7 +4143,7 @@ SfxBoolItem FontWork SID_FONTWORK
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextAdjustItem FontWorkTextAdjust SID_FORMTEXT_ADJUST
 
 [
@@ -4170,7 +4170,7 @@ XFormTextAdjustItem FontWorkTextAdjust SID_FORMTEXT_ADJUST
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextDistanceItem FontWorkTextDistance SID_FORMTEXT_DISTANCE
 
 [
@@ -4197,7 +4197,7 @@ XFormTextDistanceItem FontWorkTextDistance SID_FORMTEXT_DISTANCE
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextMirrorItem FontWorkTextMirror SID_FORMTEXT_MIRROR
 
 [
@@ -4224,7 +4224,7 @@ XFormTextMirrorItem FontWorkTextMirror SID_FORMTEXT_MIRROR
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextOutlineItem FontWorkTextOutline SID_FORMTEXT_OUTLINE
 
 [
@@ -4251,7 +4251,7 @@ XFormTextOutlineItem FontWorkTextOutline SID_FORMTEXT_OUTLINE
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextShadowItem FontWorkTextShadow SID_FORMTEXT_SHADOW
 
 [
@@ -4278,7 +4278,7 @@ XFormTextShadowItem FontWorkTextShadow SID_FORMTEXT_SHADOW
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextShadowColorItem FontWorkTextShadowColor SID_FORMTEXT_SHDWCOLOR
 
 [
@@ -4305,7 +4305,7 @@ XFormTextShadowColorItem FontWorkTextShadowColor SID_FORMTEXT_SHDWCOLOR
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextShadowXValItem FontWorkTextShadowXVal SID_FORMTEXT_SHDWXVAL
 
 [
@@ -4332,7 +4332,7 @@ XFormTextShadowXValItem FontWorkTextShadowXVal SID_FORMTEXT_SHDWXVAL
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextShadowYValItem FontWorkTextShadowYVal SID_FORMTEXT_SHDWYVAL
 
 [
@@ -4359,7 +4359,7 @@ XFormTextShadowYValItem FontWorkTextShadowYVal SID_FORMTEXT_SHDWYVAL
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextStartItem FontWorkTextStart SID_FORMTEXT_START
 
 [
@@ -4386,7 +4386,7 @@ XFormTextStartItem FontWorkTextStart SID_FORMTEXT_START
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextStyleItem FontWorkTextStyle SID_FORMTEXT_STYLE
 
 [
@@ -4413,7 +4413,7 @@ XFormTextStyleItem FontWorkTextStyle SID_FORMTEXT_STYLE
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FormatArea SID_ATTRIBUTES_AREA
 ()
 [
@@ -4438,7 +4438,7 @@ SfxVoidItem FormatArea SID_ATTRIBUTES_AREA
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 XFormTextHideFormItem FormatFontWorkClose SID_FORMTEXT_HIDEFORM
 
 [
@@ -4465,7 +4465,7 @@ XFormTextHideFormItem FormatFontWorkClose SID_FORMTEXT_HIDEFORM
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FormatGroup SID_GROUP
 ()
 [
@@ -4490,7 +4490,7 @@ SfxVoidItem FormatGroup SID_GROUP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FormatLine SID_ATTRIBUTES_LINE
 ()
 [
@@ -4515,7 +4515,7 @@ SfxVoidItem FormatLine SID_ATTRIBUTES_LINE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FormattedField SID_FM_FORMATTEDFIELD
 
 [
@@ -4542,7 +4542,7 @@ SfxBoolItem FormattedField SID_FM_FORMATTEDFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ScrollBar SID_FM_SCROLLBAR
 
 [
@@ -4569,7 +4569,7 @@ SfxBoolItem ScrollBar SID_FM_SCROLLBAR
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SpinButton SID_FM_SPINBUTTON
 
 [
@@ -4596,7 +4596,7 @@ SfxBoolItem SpinButton SID_FM_SPINBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertFormattedField SID_INSERT_FORMATTEDFIELD
 
 [
@@ -4623,7 +4623,7 @@ SfxBoolItem InsertFormattedField SID_INSERT_FORMATTEDFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FormatUngroup SID_UNGROUP
 ()
 [
@@ -4648,7 +4648,7 @@ SfxVoidItem FormatUngroup SID_UNGROUP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FormFilter SID_FM_FILTER_START
 ()
 [
@@ -4673,7 +4673,7 @@ SfxVoidItem FormFilter SID_FM_FILTER_START
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FormFiltered SID_FM_FORM_FILTERED
 ()
 [
@@ -4701,7 +4701,7 @@ SfxBoolItem FormFiltered SID_FM_FORM_FILTERED
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FormFilterExecute SID_FM_FILTER_EXECUTE
 ()
 [
@@ -4726,7 +4726,7 @@ SfxVoidItem FormFilterExecute SID_FM_FILTER_EXECUTE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FormFilterExit SID_FM_FILTER_EXIT
 ()
 [
@@ -4751,7 +4751,7 @@ SfxVoidItem FormFilterExit SID_FM_FILTER_EXIT
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FormFilterNavigator SID_FM_FILTER_NAVIGATOR
 ()
 [
@@ -4776,7 +4776,7 @@ SfxBoolItem FormFilterNavigator SID_FM_FILTER_NAVIGATOR
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FormProperties SID_FM_PROPERTIES
 
 [
@@ -4803,7 +4803,7 @@ SfxBoolItem FormProperties SID_FM_PROPERTIES
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Freeline SID_DRAW_FREELINE
 
 [
@@ -4830,7 +4830,7 @@ SfxBoolItem Freeline SID_DRAW_FREELINE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
 
 [
@@ -4857,7 +4857,7 @@ SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem AutoColorInvalid SID_ATTR_AUTO_COLOR_INVALID
 
 [
@@ -4884,7 +4884,7 @@ SfxBoolItem AutoColorInvalid SID_ATTR_AUTO_COLOR_INVALID
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Gallery SID_GALLERY
 
 [
@@ -4911,7 +4911,7 @@ SfxBoolItem Gallery SID_GALLERY
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem GalleryEnableAddCopy SID_GALLERY_ENABLE_ADDCOPY
 
 [
@@ -4938,7 +4938,7 @@ SfxBoolItem GalleryEnableAddCopy SID_GALLERY_ENABLE_ADDCOPY
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringListItem GetRedoStrings SID_GETREDOSTRINGS
 
 [
@@ -4965,7 +4965,7 @@ SfxStringListItem GetRedoStrings SID_GETREDOSTRINGS
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringListItem GetUndoStrings SID_GETUNDOSTRINGS
 
 [
@@ -4992,7 +4992,7 @@ SfxStringListItem GetUndoStrings SID_GETUNDOSTRINGS
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GrafAttrCrop SID_ATTR_GRAF_CROP
 ()
 [
@@ -5017,7 +5017,7 @@ SfxVoidItem GrafAttrCrop SID_ATTR_GRAF_CROP
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt16Item GrafBlue SID_ATTR_GRAF_BLUE
 
 [
@@ -5044,7 +5044,7 @@ SfxInt16Item GrafBlue SID_ATTR_GRAF_BLUE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt16Item GrafContrast SID_ATTR_GRAF_CONTRAST
 
 [
@@ -5071,7 +5071,7 @@ SfxInt16Item GrafContrast SID_ATTR_GRAF_CONTRAST
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt32Item GrafGamma SID_ATTR_GRAF_GAMMA
 
 [
@@ -5098,7 +5098,7 @@ SfxUInt32Item GrafGamma SID_ATTR_GRAF_GAMMA
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt16Item GrafGreen SID_ATTR_GRAF_GREEN
 
 [
@@ -5125,7 +5125,7 @@ SfxInt16Item GrafGreen SID_ATTR_GRAF_GREEN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem GrafInvert SID_ATTR_GRAF_INVERT
 
 [
@@ -5152,7 +5152,7 @@ SfxBoolItem GrafInvert SID_ATTR_GRAF_INVERT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt16Item GrafLuminance SID_ATTR_GRAF_LUMINANCE
 
 [
@@ -5179,7 +5179,7 @@ SfxInt16Item GrafLuminance SID_ATTR_GRAF_LUMINANCE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item GrafMode SID_ATTR_GRAF_MODE
 
 [
@@ -5206,7 +5206,7 @@ SfxUInt16Item GrafMode SID_ATTR_GRAF_MODE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt16Item GrafRed SID_ATTR_GRAF_RED
 
 [
@@ -5233,7 +5233,7 @@ SfxInt16Item GrafRed SID_ATTR_GRAF_RED
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item GrafTransparence SID_ATTR_GRAF_TRANSPARENCE
 
 [
@@ -5260,7 +5260,7 @@ SfxUInt16Item GrafTransparence SID_ATTR_GRAF_TRANSPARENCE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterInvert SID_GRFFILTER_INVERT
 ()
 [
@@ -5285,7 +5285,7 @@ SfxVoidItem GraphicFilterInvert SID_GRFFILTER_INVERT
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterMosaic SID_GRFFILTER_MOSAIC
 ()
 [
@@ -5310,7 +5310,7 @@ SfxVoidItem GraphicFilterMosaic SID_GRFFILTER_MOSAIC
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterPopart SID_GRFFILTER_POPART
 ()
 [
@@ -5335,7 +5335,7 @@ SfxVoidItem GraphicFilterPopart SID_GRFFILTER_POPART
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterPoster SID_GRFFILTER_POSTER
 ()
 [
@@ -5360,7 +5360,7 @@ SfxVoidItem GraphicFilterPoster SID_GRFFILTER_POSTER
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterRelief SID_GRFFILTER_EMBOSS
 ()
 [
@@ -5385,7 +5385,7 @@ SfxVoidItem GraphicFilterRelief SID_GRFFILTER_EMBOSS
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterRemoveNoise SID_GRFFILTER_REMOVENOISE
 ()
 [
@@ -5410,7 +5410,7 @@ SfxVoidItem GraphicFilterRemoveNoise SID_GRFFILTER_REMOVENOISE
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterSepia SID_GRFFILTER_SEPIA
 ()
 [
@@ -5435,7 +5435,7 @@ SfxVoidItem GraphicFilterSepia SID_GRFFILTER_SEPIA
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterSharpen SID_GRFFILTER_SHARPEN
 ()
 [
@@ -5460,7 +5460,7 @@ SfxVoidItem GraphicFilterSharpen SID_GRFFILTER_SHARPEN
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterSmooth SID_GRFFILTER_SMOOTH
 ()
 [
@@ -5485,7 +5485,7 @@ SfxVoidItem GraphicFilterSmooth SID_GRFFILTER_SMOOTH
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterSobel SID_GRFFILTER_SOBEL
 ()
 [
@@ -5510,7 +5510,7 @@ SfxVoidItem GraphicFilterSobel SID_GRFFILTER_SOBEL
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GraphicFilterSolarize SID_GRFFILTER_SOLARIZE
 ()
 [
@@ -5535,7 +5535,7 @@ SfxVoidItem GraphicFilterSolarize SID_GRFFILTER_SOLARIZE
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 TbxImageItem GraphicFilterToolbox SID_GRFFILTER
 
 [
@@ -5562,7 +5562,7 @@ TbxImageItem GraphicFilterToolbox SID_GRFFILTER
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Grid SID_FM_DBGRID
 
 [
@@ -5589,7 +5589,7 @@ SfxBoolItem Grid SID_FM_DBGRID
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem GridUse SID_GRID_USE
 
 [
@@ -5616,7 +5616,7 @@ SfxBoolItem GridUse SID_GRID_USE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem GridVisible SID_GRID_VISIBLE
 
 [
@@ -5643,7 +5643,7 @@ SfxBoolItem GridVisible SID_GRID_VISIBLE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem GroupBox SID_FM_GROUPBOX
 
 [
@@ -5670,7 +5670,7 @@ SfxBoolItem GroupBox SID_FM_GROUPBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Groupbox SID_INSERT_GROUPBOX
 
 [
@@ -5697,7 +5697,7 @@ SfxBoolItem Groupbox SID_INSERT_GROUPBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxRectangleItem HeaderFooterBorder SID_RULER_LR_MIN_MAX
 
 [
@@ -5724,7 +5724,7 @@ SfxRectangleItem HeaderFooterBorder SID_RULER_LR_MIN_MAX
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem HelplinesMove SID_HELPLINES_MOVE
 
 [
@@ -5751,7 +5751,7 @@ SfxBoolItem HelplinesMove SID_HELPLINES_MOVE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem HFixedLine SID_INSERT_HFIXEDLINE
 
 [
@@ -5778,7 +5778,7 @@ SfxBoolItem HFixedLine SID_INSERT_HFIXEDLINE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem HScrollbar SID_INSERT_HSCROLLBAR
 
 [
@@ -5805,7 +5805,7 @@ SfxBoolItem HScrollbar SID_INSERT_HSCROLLBAR
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxHyperlinkItem Hyperlink SID_HYPERLINK_GETLINK
 
 [
@@ -5832,7 +5832,7 @@ SvxHyperlinkItem Hyperlink SID_HYPERLINK_GETLINK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Imagebutton SID_FM_IMAGEBUTTON
 
 [
@@ -5859,7 +5859,7 @@ SfxBoolItem Imagebutton SID_FM_IMAGEBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ImageControl SID_FM_IMAGECONTROL
 
 [
@@ -5886,7 +5886,7 @@ SfxBoolItem ImageControl SID_FM_IMAGECONTROL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertImageControl SID_INSERT_IMAGECONTROL
 
 [
@@ -5913,7 +5913,7 @@ SfxBoolItem InsertImageControl SID_INSERT_IMAGECONTROL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ImageMapDialog SID_IMAP
 
 [
@@ -5940,7 +5940,7 @@ SfxBoolItem ImageMapDialog SID_IMAP
     GroupId = GID_GRAPHIC;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ImageMapExecute SID_IMAP_EXEC
 
 [
@@ -6110,7 +6110,7 @@ SfxVoidItem CompressGraphic SID_COMPRESS_GRAPHIC
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Init3D SID_3D_INIT
 
 [
@@ -6137,7 +6137,7 @@ SfxBoolItem Init3D SID_3D_INIT
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InPlaceObjectResize SID_OBJECTRESIZE
 ()
 [
@@ -6162,7 +6162,7 @@ SfxVoidItem InPlaceObjectResize SID_OBJECTRESIZE
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
 (SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
 [
@@ -6187,7 +6187,7 @@ SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
 ()
 [
@@ -6212,7 +6212,7 @@ SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem ReplyToAnnotation SID_REPLYTO_POSTIT
 ()
@@ -6238,7 +6238,7 @@ SfxVoidItem ReplyToAnnotation SID_REPLYTO_POSTIT
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem DeleteAnnotation SID_DELETE_POSTIT
 ()
@@ -6264,7 +6264,7 @@ SfxVoidItem DeleteAnnotation SID_DELETE_POSTIT
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem DeleteAllAnnotation SID_DELETEALL_POSTIT
 ()
@@ -6314,7 +6314,7 @@ SfxVoidItem DeleteAllAnnotationByAuthor SID_DELETEALLBYAUTHOR_POSTIT
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem NextAnnotation SID_NEXT_POSTIT
 ()
@@ -6340,7 +6340,7 @@ SfxVoidItem NextAnnotation SID_NEXT_POSTIT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem PreviousAnnotation SID_PREVIOUS_POSTIT
 ()
@@ -6366,7 +6366,7 @@ SfxVoidItem PreviousAnnotation SID_PREVIOUS_POSTIT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertGalleryPic SID_GALLERY_FORMATS
 (SvxGalleryItem GalleryItem SID_GALLERY_FORMATS)
 [
@@ -6391,7 +6391,7 @@ SfxVoidItem InsertGalleryPic SID_GALLERY_FORMATS
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertGraphic SID_INSERT_GRAPHIC
 (SfxStringItem FileName SID_INSERT_GRAPHIC,SfxStringItem FilterName FN_PARAM_FILTER,SfxBoolItem AsLink FN_PARAM_1,SfxStringItem Style FN_PARAM_2)
 [
@@ -6416,7 +6416,7 @@ SfxBoolItem InsertGraphic SID_INSERT_GRAPHIC
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertImage SID_INSERT_IMAGE
 ()
 [
@@ -6441,7 +6441,7 @@ SfxVoidItem InsertImage SID_INSERT_IMAGE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertMath SID_INSERT_MATH
 ()
 [
@@ -6466,7 +6466,7 @@ SfxVoidItem InsertMath SID_INSERT_MATH
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertMode SID_ATTR_INSERT
 
 [
@@ -6493,7 +6493,7 @@ SfxBoolItem InsertMode SID_ATTR_INSERT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
 (SfxBoolItem On FN_PARAM_1)
 [
@@ -6580,7 +6580,7 @@ SfxBoolItem CurrentNumListType FN_NUM_NUM_RULE_INDEX
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertObject SID_INSERT_OBJECT
 ( SfxGlobalNameItem ClassId SID_INSERT_OBJECT )
 [
@@ -6605,7 +6605,7 @@ SfxVoidItem InsertObject SID_INSERT_OBJECT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
 (SfxBoolItem ColHeaders FN_PARAM_1,SfxBoolItem RowHeaders FN_PARAM_2,SfxBoolItem InNewTable FN_PARAM_4,SfxStringItem RangeList FN_PARAM_5)
 [
@@ -6630,7 +6630,7 @@ SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertObjectChartFromFile SID_INSERT_DIAGRAM_FROM_FILE
 ()
 [
@@ -6655,7 +6655,7 @@ SfxVoidItem InsertObjectChartFromFile SID_INSERT_DIAGRAM_FROM_FILE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertPlugin SID_INSERT_PLUGIN
 (SfxStringItem ClassLocation FN_PARAM_2,
  SfxStringItem Commands FN_PARAM_3)
@@ -6681,7 +6681,7 @@ SfxVoidItem InsertPlugin SID_INSERT_PLUGIN
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertSound SID_INSERT_SOUND
 ()
 [
@@ -6706,7 +6706,7 @@ SfxVoidItem InsertSound SID_INSERT_SOUND
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertSymbol SID_CHARMAP
 (SfxStringItem Symbols SID_CHARMAP, SfxStringItem FontName SID_ATTR_SPECIALCHAR)
 [
@@ -6731,7 +6731,7 @@ SfxVoidItem InsertSymbol SID_CHARMAP
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertSpreadsheet SID_ATTR_TABLE
 ()
 [
@@ -6756,7 +6756,7 @@ SfxVoidItem InsertSpreadsheet SID_ATTR_TABLE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem InsertTable SID_INSERT_TABLE
 (SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN,SfxUInt16Item Rows SID_ATTR_TABLE_ROW )
@@ -6785,7 +6785,7 @@ SfxVoidItem InsertTable SID_INSERT_TABLE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertTextFrame SID_INSERT_FRAME
 ()
 [
@@ -6810,7 +6810,7 @@ SfxVoidItem InsertTextFrame SID_INSERT_FRAME
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertVideo SID_INSERT_VIDEO
 ()
 [
@@ -6835,7 +6835,7 @@ SfxVoidItem InsertVideo SID_INSERT_VIDEO
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InternetDialog SID_INET_DLG
 ()
 [
@@ -6860,7 +6860,7 @@ SfxVoidItem InternetDialog SID_INET_DLG
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Intersect SID_POLY_INTERSECT
 ()
 [
@@ -6885,7 +6885,7 @@ SfxVoidItem Intersect SID_POLY_INTERSECT
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxPostureItem Italic SID_ATTR_CHAR_POSTURE
 
 [
@@ -6912,7 +6912,7 @@ SvxPostureItem Italic SID_ATTR_CHAR_POSTURE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxPostureItem ItalicLatin SID_ATTR_CHAR_LATIN_POSTURE
 
 [
@@ -6939,7 +6939,7 @@ SvxPostureItem ItalicLatin SID_ATTR_CHAR_LATIN_POSTURE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxPostureItem ItalicCJK SID_ATTR_CHAR_CJK_POSTURE
 
 [
@@ -6966,7 +6966,7 @@ SvxPostureItem ItalicCJK SID_ATTR_CHAR_CJK_POSTURE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxPostureItem ItalicCTL SID_ATTR_CHAR_CTL_POSTURE
 
 [
@@ -6993,7 +6993,7 @@ SvxPostureItem ItalicCTL SID_ATTR_CHAR_CTL_POSTURE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
 
 [
@@ -7022,7 +7022,7 @@ SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertFixedText SID_INSERT_FIXEDTEXT
 
 [
@@ -7049,7 +7049,7 @@ SfxBoolItem InsertFixedText SID_INSERT_FIXEDTEXT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Label SID_FM_FIXEDTEXT
 
 [
@@ -7076,7 +7076,7 @@ SfxBoolItem Label SID_FM_FIXEDTEXT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLanguageItem Language SID_ATTR_CHAR_LANGUAGE
 
 [
@@ -7103,7 +7103,7 @@ SvxLanguageItem Language SID_ATTR_CHAR_LANGUAGE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLanguageItem LanguageLatin SID_ATTR_CHAR_LATIN_LANGUAGE
 
 [
@@ -7130,7 +7130,7 @@ SvxLanguageItem LanguageLatin SID_ATTR_CHAR_LATIN_LANGUAGE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem LastRecord SID_FM_RECORD_LAST
 ()
 [
@@ -7158,7 +7158,7 @@ SfxBoolItem LastRecord SID_FM_RECORD_LAST
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LeaveFMCreateMode SID_FM_LEAVE_CREATE
 (SfxBoolItem Leave SID_FM_LEAVE_CREATE)
 [
@@ -7183,7 +7183,7 @@ SfxVoidItem LeaveFMCreateMode SID_FM_LEAVE_CREATE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LeaveGroup SID_LEAVE_GROUP
 ()
 [
@@ -7208,7 +7208,7 @@ SfxVoidItem LeaveGroup SID_LEAVE_GROUP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
 
 [
@@ -7236,7 +7236,7 @@ SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLRSpaceItem LeftRightMargin SID_ATTR_LRSPACE
 
 [
@@ -7263,7 +7263,7 @@ SvxLRSpaceItem LeftRightMargin SID_ATTR_LRSPACE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
 (SvxLRSpaceItem LRSpace SID_ATTR_PARA_LRSPACE)
 [
@@ -7288,7 +7288,7 @@ SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LeftRightParaMargin_Vertical SID_ATTR_PARA_LRSPACE_VERTICAL
 (SvxLRSpaceItem LRSpace SID_ATTR_PARA_LRSPACE_VERTICAL)
 [
@@ -7313,7 +7313,7 @@ SfxVoidItem LeftRightParaMargin_Vertical SID_ATTR_PARA_LRSPACE_VERTICAL
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Line SID_DRAW_LINE
 
 [
@@ -7340,7 +7340,7 @@ SfxBoolItem Line SID_DRAW_LINE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Line_Diagonal SID_DRAW_XLINE
 
 [
@@ -7367,7 +7367,7 @@ SfxBoolItem Line_Diagonal SID_DRAW_XLINE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxColorItem FrameLineColor SID_FRAME_LINECOLOR
 
 [
@@ -7394,7 +7394,7 @@ SvxColorItem FrameLineColor SID_FRAME_LINECOLOR
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
+
 XLineDashItem LineDash SID_ATTR_LINE_DASH
 
 [
@@ -7421,7 +7421,7 @@ XLineDashItem LineDash SID_ATTR_LINE_DASH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem LineEndStyle SID_ATTR_LINEEND_STYLE
 (XLineStartItem LineStart SID_ATTR_LINE_START,XLineEndItem LineEnd SID_ATTR_LINE_END,SfxUInt32Item StartWidth SID_ATTR_LINE_STARTWIDTH,SfxUInt32Item EndWidth SID_ATTR_LINE_ENDWIDTH)
 [
@@ -7449,7 +7449,7 @@ SfxBoolItem LineEndStyle SID_ATTR_LINEEND_STYLE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLineSpacingItem LineSpacing SID_ATTR_PARA_LINESPACE
 
 [
@@ -7502,7 +7502,7 @@ SvxULSpaceItem ULSpacing SID_ATTR_PARA_ULSPACE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLineItem LineStyle SID_FRAME_LINESTYLE
 
 [
@@ -7529,7 +7529,7 @@ SvxLineItem LineStyle SID_FRAME_LINESTYLE
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
+
 XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH
 
 [
@@ -7556,7 +7556,7 @@ XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ListBox SID_FM_LISTBOX
 
 [
@@ -7583,7 +7583,7 @@ SfxBoolItem ListBox SID_FM_LISTBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertListbox SID_INSERT_LISTBOX
 
 [
@@ -7610,7 +7610,7 @@ SfxBoolItem InsertListbox SID_INSERT_LISTBOX
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Merge SID_POLY_MERGE
 ()
 [
@@ -7635,7 +7635,7 @@ SfxVoidItem Merge SID_POLY_MERGE
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem NewJavaModule SID_BASICIDE_NEWJAVAMODULE
 ()
 [
@@ -7660,7 +7660,7 @@ SfxVoidItem NewJavaModule SID_BASICIDE_NEWJAVAMODULE
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem NewRecord SID_FM_RECORD_NEW
 ()
 [
@@ -7688,7 +7688,7 @@ SfxBoolItem NewRecord SID_FM_RECORD_NEW
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem NextRecord SID_FM_RECORD_NEXT
 ()
 [
@@ -7716,7 +7716,7 @@ SfxBoolItem NextRecord SID_FM_RECORD_NEXT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem NumericField SID_FM_NUMERICFIELD
 
 [
@@ -7743,7 +7743,7 @@ SfxBoolItem NumericField SID_FM_NUMERICFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertNumericField SID_INSERT_NUMERICFIELD
 
 [
@@ -7770,7 +7770,7 @@ SfxBoolItem InsertNumericField SID_INSERT_NUMERICFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxDrawAlignItem ObjectAlign SID_OBJECT_ALIGN
 
 [
@@ -7799,7 +7799,7 @@ SvxDrawAlignItem ObjectAlign SID_OBJECT_ALIGN
     PseudoPrefix = SID_OBJECT_ALIGN;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ObjectBackOne SID_FRAME_DOWN
 ()
 [
@@ -7824,7 +7824,7 @@ SfxVoidItem ObjectBackOne SID_FRAME_DOWN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ObjectForwardOne SID_FRAME_UP
 ()
 [
@@ -7849,7 +7849,7 @@ SfxVoidItem ObjectForwardOne SID_FRAME_UP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem OpenReadOnly SID_FM_OPEN_READONLY
 
 [
@@ -7876,7 +7876,7 @@ SfxBoolItem OpenReadOnly SID_FM_OPEN_READONLY
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OrderCrit SID_FM_ORDERCRIT
 ()
 [
@@ -7901,7 +7901,7 @@ SfxVoidItem OrderCrit SID_FM_ORDERCRIT
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxOrphansItem Orphan SID_ATTR_PARA_ORPHANS
 
 [
@@ -7928,7 +7928,7 @@ SvxOrphansItem Orphan SID_ATTR_PARA_ORPHANS
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineBullet SID_OUTLINE_BULLET
 ()
 [
@@ -7980,7 +7980,7 @@ SfxUInt16Item SetNumber FN_SVX_SET_NUMBER
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item SetBullet FN_SVX_SET_BULLET
 [
     /* flags: */
@@ -8006,7 +8006,7 @@ SfxUInt16Item SetBullet FN_SVX_SET_BULLET
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineCollapse SID_OUTLINE_COLLAPSE
 ()
 [
@@ -8031,7 +8031,7 @@ SfxVoidItem OutlineCollapse SID_OUTLINE_COLLAPSE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineCollapseAll SID_OUTLINE_COLLAPSE_ALL
 ()
 [
@@ -8056,7 +8056,7 @@ SfxVoidItem OutlineCollapseAll SID_OUTLINE_COLLAPSE_ALL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineDown SID_OUTLINE_DOWN
 ()
 [
@@ -8081,7 +8081,7 @@ SfxVoidItem OutlineDown SID_OUTLINE_DOWN
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineExpand SID_OUTLINE_EXPAND
 ()
 [
@@ -8106,7 +8106,7 @@ SfxVoidItem OutlineExpand SID_OUTLINE_EXPAND
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineExpandAll SID_OUTLINE_EXPAND_ALL
 ()
 [
@@ -8131,7 +8131,7 @@ SfxVoidItem OutlineExpandAll SID_OUTLINE_EXPAND_ALL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxContourItem OutlineFont SID_ATTR_CHAR_CONTOUR
 
 [
@@ -8158,7 +8158,7 @@ SvxContourItem OutlineFont SID_ATTR_CHAR_CONTOUR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem OutlineFormat SID_OUTLINE_FORMAT
 
 [
@@ -8185,7 +8185,7 @@ SfxBoolItem OutlineFormat SID_OUTLINE_FORMAT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineLeft SID_OUTLINE_LEFT
 ()
 [
@@ -8210,7 +8210,7 @@ SfxVoidItem OutlineLeft SID_OUTLINE_LEFT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineRight SID_OUTLINE_RIGHT
 ()
 [
@@ -8235,7 +8235,7 @@ SfxVoidItem OutlineRight SID_OUTLINE_RIGHT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OutlineUp SID_OUTLINE_UP
 ()
 [
@@ -8260,7 +8260,7 @@ SfxVoidItem OutlineUp SID_OUTLINE_UP
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFmtBreakItem Pagebreak SID_ATTR_PARA_PAGEBREAK
 
 [
@@ -8287,7 +8287,7 @@ SvxFmtBreakItem Pagebreak SID_ATTR_PARA_PAGEBREAK
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxPaperBinItem PagePaperBin SID_ATTR_PAGE_PAPERBIN
 
 [
@@ -8314,7 +8314,7 @@ SvxPaperBinItem PagePaperBin SID_ATTR_PAGE_PAPERBIN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
 
 [
@@ -8341,7 +8341,7 @@ SvxSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxPageModelItem AttributeParaModel SID_ATTR_PARA_MODEL
 
 [
@@ -8368,7 +8368,7 @@ SvxPageModelItem AttributeParaModel SID_ATTR_PARA_MODEL
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxPageItem AttributePage SID_ATTR_PAGE
 
 [
@@ -8395,7 +8395,7 @@ SvxPageItem AttributePage SID_ATTR_PAGE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxAutoKernItem PairKerning SID_ATTR_CHAR_AUTOKERN
 
 [
@@ -8422,7 +8422,7 @@ SvxAutoKernItem PairKerning SID_ATTR_CHAR_AUTOKERN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ParagraphDialog SID_PARA_DLG
 ()
 [
@@ -8447,7 +8447,7 @@ SfxVoidItem ParagraphDialog SID_PARA_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFmtKeepItem ParaKeepTogether SID_ATTR_PARA_KEEP
 
 [
@@ -8474,7 +8474,7 @@ SvxFmtKeepItem ParaKeepTogether SID_ATTR_PARA_KEEP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxFmtSplitItem ParaSplit SID_ATTR_PARA_SPLIT
 
 [
@@ -8501,7 +8501,7 @@ SvxFmtSplitItem ParaSplit SID_ATTR_PARA_SPLIT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertPatternField SID_INSERT_PATTERNFIELD
 
 [
@@ -8528,7 +8528,7 @@ SfxBoolItem InsertPatternField SID_INSERT_PATTERNFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem PatternField SID_FM_PATTERNFIELD
 
 [
@@ -8555,7 +8555,7 @@ SfxBoolItem PatternField SID_FM_PATTERNFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Pie SID_DRAW_PIE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -8583,7 +8583,7 @@ SfxVoidItem Pie SID_DRAW_PIE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Pie_Unfilled SID_DRAW_PIE_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
@@ -8611,7 +8611,7 @@ SfxVoidItem Pie_Unfilled SID_DRAW_PIE_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem PolyFormen SID_POLY_FORMEN
 ()
 [
@@ -8636,7 +8636,7 @@ SfxVoidItem PolyFormen SID_POLY_FORMEN
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
 
 [
@@ -8663,7 +8663,7 @@ SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Polygon_Diagonal_Unfilled SID_DRAW_XPOLYGON_NOFILL
 
 [
@@ -8690,7 +8690,7 @@ SfxBoolItem Polygon_Diagonal_Unfilled SID_DRAW_XPOLYGON_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Polygon_Unfilled SID_DRAW_POLYGON_NOFILL
 
 [
@@ -8717,7 +8717,7 @@ SfxBoolItem Polygon_Unfilled SID_DRAW_POLYGON_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxPointItem Position SID_ATTR_POSITION
 
 [
@@ -8744,7 +8744,7 @@ SfxPointItem Position SID_ATTR_POSITION
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Preview SID_INSERT_PREVIEW
 
 [
@@ -8771,7 +8771,7 @@ SfxBoolItem Preview SID_INSERT_PREVIEW
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem PrevRecord SID_FM_RECORD_PREV
 ()
 [
@@ -8799,7 +8799,7 @@ SfxBoolItem PrevRecord SID_FM_RECORD_PREV
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ProgressBar SID_INSERT_PROGRESSBAR
 
 [
@@ -8826,7 +8826,7 @@ SfxBoolItem ProgressBar SID_INSERT_PROGRESSBAR
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem PropertyController SID_FM_PROPERTY_CONTROL
 
 [
@@ -8853,7 +8853,7 @@ SfxObjectItem PropertyController SID_FM_PROPERTY_CONTROL
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Pushbutton SID_FM_PUSHBUTTON
 
 [
@@ -8880,7 +8880,7 @@ SfxBoolItem Pushbutton SID_FM_PUSHBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertPushbutton SID_INSERT_PUSHBUTTON
 
 [
@@ -8907,7 +8907,7 @@ SfxBoolItem InsertPushbutton SID_INSERT_PUSHBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem InsertFormRadio SID_INSERT_FORM_RADIO
 
@@ -8935,7 +8935,7 @@ SfxBoolItem InsertFormRadio SID_INSERT_FORM_RADIO
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertFormCheck SID_INSERT_FORM_CHECK
 
 [
@@ -8962,7 +8962,7 @@ SfxBoolItem InsertFormCheck SID_INSERT_FORM_CHECK
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertFormList SID_INSERT_FORM_LIST
 
 [
@@ -8989,7 +8989,7 @@ SfxBoolItem InsertFormList SID_INSERT_FORM_LIST
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertFormCombo SID_INSERT_FORM_COMBO
 
 [
@@ -9015,7 +9015,7 @@ SfxBoolItem InsertFormCombo SID_INSERT_FORM_COMBO
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertFormSpin SID_INSERT_FORM_SPIN
 
 [
@@ -9042,7 +9042,7 @@ SfxBoolItem InsertFormSpin SID_INSERT_FORM_SPIN
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertFormVScroll SID_INSERT_FORM_VSCROLL
 
 [
@@ -9069,7 +9069,7 @@ SfxBoolItem InsertFormVScroll SID_INSERT_FORM_VSCROLL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem InsertFormHScroll SID_INSERT_FORM_HSCROLL
 
@@ -9097,7 +9097,7 @@ SfxBoolItem InsertFormHScroll SID_INSERT_FORM_HSCROLL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Radiobutton SID_INSERT_RADIOBUTTON
 
 [
@@ -9124,7 +9124,7 @@ SfxBoolItem Radiobutton SID_INSERT_RADIOBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem RadioButton SID_FM_RADIOBUTTON
 
 [
@@ -9151,7 +9151,7 @@ SfxBoolItem RadioButton SID_FM_RADIOBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ReadOnlyMode SID_READONLY_MODE
 
 [
@@ -9178,7 +9178,7 @@ SfxBoolItem ReadOnlyMode SID_READONLY_MODE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem RecFromText SID_FM_RECORD_FROM_TEXT
 ()
 [
@@ -9206,7 +9206,7 @@ SfxBoolItem RecFromText SID_FM_RECORD_FROM_TEXT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem RecSave SID_FM_RECORD_SAVE
 ()
 [
@@ -9234,7 +9234,7 @@ SfxBoolItem RecSave SID_FM_RECORD_SAVE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RecSearch SID_FM_SEARCH
 ()
 [
@@ -9262,7 +9262,7 @@ SfxVoidItem RecSearch SID_FM_SEARCH
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Rect SID_DRAW_RECT
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -9290,7 +9290,7 @@ SfxVoidItem Rect SID_DRAW_RECT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Rect_Rounded SID_DRAW_RECT_ROUND
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -9318,7 +9318,7 @@ SfxVoidItem Rect_Rounded SID_DRAW_RECT_ROUND
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -9346,7 +9346,7 @@ SfxVoidItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Rect_Unfilled SID_DRAW_RECT_NOFILL
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -9374,7 +9374,7 @@ SfxVoidItem Rect_Unfilled SID_DRAW_RECT_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem RecText SID_FM_RECORD_TEXT
 ()
 [
@@ -9402,7 +9402,7 @@ SfxBoolItem RecText SID_FM_RECORD_TEXT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem RecTotal SID_FM_RECORD_TOTAL
 ()
 [
@@ -9430,7 +9430,7 @@ SfxStringItem RecTotal SID_FM_RECORD_TOTAL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem RecUndo SID_FM_RECORD_UNDO
 ()
 [
@@ -9458,7 +9458,7 @@ SfxBoolItem RecUndo SID_FM_RECORD_UNDO
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Refresh SID_FM_REFRESH
 ()
 [
@@ -9483,7 +9483,7 @@ SfxVoidItem Refresh SID_FM_REFRESH
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RefreshFormControl SID_FM_REFRESH_FORM_CONTROL
 ()
 [
@@ -9508,7 +9508,7 @@ SfxVoidItem RefreshFormControl SID_FM_REFRESH_FORM_CONTROL
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RemoveFilter SID_FM_FILTER_REMOVE
 ()
 [
@@ -9533,7 +9533,7 @@ SfxVoidItem RemoveFilter SID_FM_FILTER_REMOVE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RemoveFilterSort SID_FM_REMOVE_FILTER_SORT
 ()
 [
@@ -9558,7 +9558,7 @@ SfxVoidItem RemoveFilterSort SID_FM_REMOVE_FILTER_SORT
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxSetItem ReplaceSet FID_SEARCH_REPLACESET
 ()
 [
@@ -9583,7 +9583,7 @@ SfxSetItem ReplaceSet FID_SEARCH_REPLACESET
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem RightPara SID_ATTR_PARA_ADJUST_RIGHT
 
 [
@@ -9611,7 +9611,7 @@ SfxBoolItem RightPara SID_ATTR_PARA_ADJUST_RIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLRSpaceItem RulerBorderDistance SID_RULER_BORDER_DISTANCE
 
 [
@@ -9638,7 +9638,7 @@ SvxLRSpaceItem RulerBorderDistance SID_RULER_BORDER_DISTANCE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxColumnItem RulerBorders SID_RULER_BORDERS
 
 [
@@ -9665,7 +9665,7 @@ SvxColumnItem RulerBorders SID_RULER_BORDERS
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxColumnItem RulerBordersVertical SID_RULER_BORDERS_VERTICAL
 
 [
@@ -9692,7 +9692,7 @@ SvxColumnItem RulerBordersVertical SID_RULER_BORDERS_VERTICAL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxPointItem RulerNullOffset SID_RULER_NULL_OFFSET
 
 [
@@ -9719,7 +9719,7 @@ SfxPointItem RulerNullOffset SID_RULER_NULL_OFFSET
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxPagePosSizeItem RulerPagePos SID_RULER_PAGE_POS
 
 [
@@ -9746,7 +9746,7 @@ SvxPagePosSizeItem RulerPagePos SID_RULER_PAGE_POS
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxProtectItem RulerProtect SID_RULER_PROTECT
 
 [
@@ -9773,7 +9773,7 @@ SvxProtectItem RulerProtect SID_RULER_PROTECT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SbaExecuteSql SID_FM_EXECUTE
 ()
 [
@@ -9798,7 +9798,7 @@ SfxVoidItem SbaExecuteSql SID_FM_EXECUTE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SbaNativeSql SID_FM_NATIVESQL
 ()
 [
@@ -9823,7 +9823,7 @@ SfxBoolItem SbaNativeSql SID_FM_NATIVESQL
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Scan SID_SCAN
 ()
 [
@@ -9848,7 +9848,7 @@ SfxVoidItem Scan SID_SCAN
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ScEditOptions SID_SC_EDITOPTIONS
 ()
 [
@@ -9873,7 +9873,7 @@ SfxVoidItem ScEditOptions SID_SC_EDITOPTIONS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SchEditOptions SID_SCH_EDITOPTIONS
 ()
 [
@@ -9898,7 +9898,7 @@ SfxVoidItem SchEditOptions SID_SCH_EDITOPTIONS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SdEditOptions SID_SD_EDITOPTIONS
 ()
 [
@@ -9923,7 +9923,7 @@ SfxVoidItem SdEditOptions SID_SD_EDITOPTIONS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SdGraphicOptions SID_SD_GRAPHIC_OPTIONS
 ()
 [
@@ -9948,7 +9948,7 @@ SfxVoidItem SdGraphicOptions SID_SD_GRAPHIC_OPTIONS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SearchOff FID_SEARCH_OFF
 (SvxSearchItem SearchItem SID_SEARCH_ITEM)
 [
@@ -9973,7 +9973,7 @@ SfxVoidItem SearchOff FID_SEARCH_OFF
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SearchOn FID_SEARCH_ON
 (SvxSearchItem SearchItem SID_SEARCH_ITEM)
 [
@@ -9998,7 +9998,7 @@ SfxVoidItem SearchOn FID_SEARCH_ON
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxSetItem SearchSet FID_SEARCH_SEARCHSET
 ()
 [
@@ -10023,7 +10023,7 @@ SfxSetItem SearchSet FID_SEARCH_SEARCHSET
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Select SID_SELECT
 ()
 [
@@ -10048,7 +10048,7 @@ SfxVoidItem Select SID_SELECT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SendToBack SID_FRAME_TO_BOTTOM
 ()
 [
@@ -10073,7 +10073,7 @@ SfxVoidItem SendToBack SID_FRAME_TO_BOTTOM
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SetDefault SID_SET_DEFAULT
 ()
 [
@@ -10098,7 +10098,7 @@ SfxVoidItem SetDefault SID_SET_DEFAULT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SetHyperlink SID_HYPERLINK_SETLINK
 (SvxHyperlinkItem Hyperlink SID_HYPERLINK_SETLINK)
 [
@@ -10123,7 +10123,7 @@ SfxVoidItem SetHyperlink SID_HYPERLINK_SETLINK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxHyphenZoneItem SetHyphenZone SID_ATTR_PARA_HYPHENZONE
 
 [
@@ -10150,7 +10150,7 @@ SvxHyphenZoneItem SetHyphenZone SID_ATTR_PARA_HYPHENZONE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLongLRSpaceItem SetLongLeftRightMargin SID_ATTR_LONG_LRSPACE
 
 [
@@ -10177,7 +10177,7 @@ SvxLongLRSpaceItem SetLongLeftRightMargin SID_ATTR_LONG_LRSPACE
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLongULSpaceItem SetLongTopBottomMargin SID_ATTR_LONG_ULSPACE
 (SvxLongULSpaceItem Space SID_ATTR_LONG_ULSPACE)
 [
@@ -10205,7 +10205,7 @@ SvxLongULSpaceItem SetLongTopBottomMargin SID_ATTR_LONG_ULSPACE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SetObjectToBackground SID_OBJECT_HELL
 ()
 [
@@ -10230,7 +10230,7 @@ SfxVoidItem SetObjectToBackground SID_OBJECT_HELL
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SetObjectToForeground SID_OBJECT_HEAVEN
 ()
 [
@@ -10255,7 +10255,7 @@ SfxVoidItem SetObjectToForeground SID_OBJECT_HEAVEN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SetPageMaxSize SID_ATTR_PAGE_MAXSIZE
 (SvxSizeItem Size SID_ATTR_PAGE_MAXSIZE)
 [
@@ -10280,7 +10280,7 @@ SfxVoidItem SetPageMaxSize SID_ATTR_PAGE_MAXSIZE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
 
 [
@@ -10307,7 +10307,7 @@ SvxShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SdrShadowItem FillShadow SID_ATTR_FILL_SHADOW
 
 [
@@ -10334,7 +10334,7 @@ SdrShadowItem FillShadow SID_ATTR_FILL_SHADOW
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxShadowedItem Shadowed SID_ATTR_CHAR_SHADOWED
 
 [
@@ -10361,7 +10361,7 @@ SvxShadowedItem Shadowed SID_ATTR_CHAR_SHADOWED
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowFmExplorer SID_FM_SHOW_FMEXPLORER
 
 [
@@ -10389,7 +10389,7 @@ SfxBoolItem ShowFmExplorer SID_FM_SHOW_FMEXPLORER
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowItemBrowser SID_SHOW_ITEMBROWSER
 
 [
@@ -10416,7 +10416,7 @@ SfxBoolItem ShowItemBrowser SID_SHOW_ITEMBROWSER
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowPropBrowser SID_SHOW_PROPERTYBROWSER
 
 [
@@ -10443,7 +10443,7 @@ SfxBoolItem ShowPropBrowser SID_SHOW_PROPERTYBROWSER
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowProperties SID_FM_SHOW_PROPERTIES
 
 [
@@ -10470,7 +10470,7 @@ SfxBoolItem ShowProperties SID_FM_SHOW_PROPERTIES
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowPropertyBrowser SID_FM_SHOW_PROPERTY_BROWSER
 ()
 [
@@ -10498,7 +10498,7 @@ SfxBoolItem ShowPropertyBrowser SID_FM_SHOW_PROPERTY_BROWSER
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowRuler SID_RULER
 
 [
@@ -10525,7 +10525,7 @@ SfxBoolItem ShowRuler SID_RULER
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SimEditOptions SID_SIM_EDITOPTIONS
 ()
 [
@@ -10550,7 +10550,7 @@ SfxVoidItem SimEditOptions SID_SIM_EDITOPTIONS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxSizeItem Size SID_ATTR_SIZE
 
 [
@@ -10577,7 +10577,7 @@ SvxSizeItem Size SID_ATTR_SIZE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SmEditOptions SID_SM_EDITOPTIONS
 ()
 [
@@ -10602,7 +10602,7 @@ SfxVoidItem SmEditOptions SID_SM_EDITOPTIONS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SortDown SID_FM_SORTDOWN
 ()
 [
@@ -10627,7 +10627,7 @@ SfxVoidItem SortDown SID_FM_SORTDOWN
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Sortup SID_FM_SORTUP
 ()
 [
@@ -10652,7 +10652,7 @@ SfxVoidItem Sortup SID_FM_SORTUP
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
 
 [
@@ -10681,7 +10681,7 @@ SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
 
 [
@@ -10710,7 +10710,7 @@ SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SpacePara2 SID_ATTR_PARA_LINESPACE_20
 
 [
@@ -10739,7 +10739,7 @@ SfxBoolItem SpacePara2 SID_ATTR_PARA_LINESPACE_20
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxKerningItem Spacing SID_ATTR_CHAR_KERNING
 
 [
@@ -10766,7 +10766,7 @@ SvxKerningItem Spacing SID_ATTR_CHAR_KERNING
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SpellOnline SID_AUTOSPELL_CHECK
 
 [
@@ -10793,7 +10793,7 @@ SfxBoolItem SpellOnline SID_AUTOSPELL_CHECK
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Spinbutton SID_INSERT_SPINBUTTON
 
 [
@@ -10820,7 +10820,7 @@ SfxBoolItem Spinbutton SID_INSERT_SPINBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Square SID_DRAW_SQUARE
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -10848,7 +10848,7 @@ SfxVoidItem Square SID_DRAW_SQUARE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Square_Rounded SID_DRAW_SQUARE_ROUND
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -10876,7 +10876,7 @@ SfxVoidItem Square_Rounded SID_DRAW_SQUARE_ROUND
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -10904,7 +10904,7 @@ SfxVoidItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Square_Unfilled SID_DRAW_SQUARE_NOFILL
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
@@ -10932,7 +10932,7 @@ SfxVoidItem Square_Unfilled SID_DRAW_SQUARE_NOFILL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt32Item State3D SID_3D_STATE
 
 [
@@ -10959,7 +10959,7 @@ SfxUInt32Item State3D SID_3D_STATE
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxCrossedOutItem Strikeout SID_ATTR_CHAR_STRIKEOUT
 
 [
@@ -10986,7 +10986,7 @@ SvxCrossedOutItem Strikeout SID_ATTR_CHAR_STRIKEOUT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SubScript SID_SET_SUB_SCRIPT
 
 [
@@ -11013,7 +11013,7 @@ SfxBoolItem SubScript SID_SET_SUB_SCRIPT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Substract SID_POLY_SUBSTRACT
 ()
 [
@@ -11038,7 +11038,7 @@ SfxVoidItem Substract SID_POLY_SUBSTRACT
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SuperScript SID_SET_SUPER_SCRIPT
 
 [
@@ -11065,7 +11065,7 @@ SfxBoolItem SuperScript SID_SET_SUPER_SCRIPT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SwEditOptions SID_SW_EDITOPTIONS
 ()
 [
@@ -11090,7 +11090,7 @@ SfxVoidItem SwEditOptions SID_SW_EDITOPTIONS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TabDialog SID_FM_TAB_DIALOG
 
 [
@@ -11120,7 +11120,7 @@ SfxBoolItem TabDialog SID_FM_TAB_DIALOG
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxTabStopItem Tabstops SID_ATTR_TABSTOP
 
 [
@@ -11147,7 +11147,7 @@ SvxTabStopItem Tabstops SID_ATTR_TABSTOP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxTabStopItem TabstopsVertical SID_ATTR_TABSTOP_VERTICAL
 
 [
@@ -11174,7 +11174,7 @@ SvxTabStopItem TabstopsVertical SID_ATTR_TABSTOP_VERTICAL
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TestMode SID_DIALOG_TESTMODE
 ()
 [
@@ -11202,7 +11202,7 @@ SfxBoolItem TestMode SID_DIALOG_TESTMODE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Text SID_ATTR_CHAR
 
 [
@@ -11229,7 +11229,7 @@ SfxBoolItem Text SID_ATTR_CHAR
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DrawText SID_DRAW_TEXT
 
 [
@@ -11259,7 +11259,7 @@ SfxBoolItem DrawText SID_DRAW_TEXT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Text_Marquee SID_DRAW_TEXT_MARQUEE
 
 [
@@ -11286,7 +11286,7 @@ SfxBoolItem Text_Marquee SID_DRAW_TEXT_MARQUEE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TextdirectionLeftToRight SID_TEXTDIRECTION_LEFT_TO_RIGHT
 
 [
@@ -11313,7 +11313,7 @@ SfxBoolItem TextdirectionLeftToRight SID_TEXTDIRECTION_LEFT_TO_RIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TextdirectionTopToBottom SID_TEXTDIRECTION_TOP_TO_BOTTOM
 
 [
@@ -11340,7 +11340,7 @@ SfxBoolItem TextdirectionTopToBottom SID_TEXTDIRECTION_TOP_TO_BOTTOM
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SdrTextFitToSizeTypeItem TextFitToSize SID_ATTR_TEXT_FITTOSIZE
 
 [
@@ -11367,7 +11367,7 @@ SdrTextFitToSizeTypeItem TextFitToSize SID_ATTR_TEXT_FITTOSIZE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ThesaurusDialog SID_THESAURUS
 ()
 [
@@ -11392,7 +11392,7 @@ SfxVoidItem ThesaurusDialog SID_THESAURUS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertTimeField SID_INSERT_TIMEFIELD
 
 [
@@ -11419,7 +11419,7 @@ SfxBoolItem InsertTimeField SID_INSERT_TIMEFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TimeField SID_FM_TIMEFIELD
 
 [
@@ -11446,7 +11446,7 @@ SfxBoolItem TimeField SID_FM_TIMEFIELD
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ToggleObjectBezierMode SID_BEZIER_EDIT
 ()
 [
@@ -11471,7 +11471,7 @@ SfxBoolItem ToggleObjectBezierMode SID_BEZIER_EDIT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ToggleObjectRotateMode SID_OBJECT_ROTATE
 ()
 [
@@ -11496,7 +11496,7 @@ SfxBoolItem ToggleObjectRotateMode SID_OBJECT_ROTATE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ToolEdit SID_TEXTEDIT
 
 [
@@ -11523,7 +11523,7 @@ SfxBoolItem ToolEdit SID_TEXTEDIT
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SelectObject SID_OBJECT_SELECT
 
 [
@@ -11550,7 +11550,7 @@ SfxBoolItem SelectObject SID_OBJECT_SELECT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxULSpaceItem TopBottomMargin SID_ATTR_ULSPACE
 
 [
@@ -11577,7 +11577,7 @@ SvxULSpaceItem TopBottomMargin SID_ATTR_ULSPACE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem TransformDialog SID_ATTR_TRANSFORM
 ()
 [
@@ -11602,7 +11602,7 @@ SfxVoidItem TransformDialog SID_ATTR_TRANSFORM
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TwainSelect SID_TWAIN_SELECT
 ()
 [
@@ -11627,7 +11627,7 @@ SfxBoolItem TwainSelect SID_TWAIN_SELECT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER
 ()
 [
@@ -11652,7 +11652,7 @@ SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxTextLineItem Underline SID_ATTR_CHAR_UNDERLINE
 
 [
@@ -11679,7 +11679,7 @@ SvxTextLineItem Underline SID_ATTR_CHAR_UNDERLINE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxTextLineItem Overline SID_ATTR_CHAR_OVERLINE
 
 [
@@ -11706,7 +11706,7 @@ SvxTextLineItem Overline SID_ATTR_CHAR_OVERLINE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem URLButton SID_INSERT_URLBUTTON
 
 [
@@ -11733,7 +11733,7 @@ SfxBoolItem URLButton SID_INSERT_URLBUTTON
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem UseWizards SID_FM_USE_WIZARDS
 
 [
@@ -11760,7 +11760,7 @@ SfxBoolItem UseWizards SID_FM_USE_WIZARDS
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem VerticalCaption SID_DRAW_CAPTION_VERTICAL
 
 [
@@ -11787,7 +11787,7 @@ SfxBoolItem VerticalCaption SID_DRAW_CAPTION_VERTICAL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem VerticalText SID_DRAW_TEXT_VERTICAL
 
 [
@@ -11814,7 +11814,7 @@ SfxBoolItem VerticalText SID_DRAW_TEXT_VERTICAL
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem VFixedLine SID_INSERT_VFIXEDLINE
 
 [
@@ -11841,7 +11841,7 @@ SfxBoolItem VFixedLine SID_INSERT_VFIXEDLINE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ViewFormAsGrid SID_FM_VIEW_AS_GRID
 ()
 [
@@ -11869,7 +11869,7 @@ SfxVoidItem ViewFormAsGrid SID_FM_VIEW_AS_GRID
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem VScrollbar SID_INSERT_VSCROLLBAR
 
 [
@@ -11896,7 +11896,7 @@ SfxBoolItem VScrollbar SID_INSERT_VSCROLLBAR
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxWidowsItem Widow SID_ATTR_PARA_WIDOWS
 
 [
@@ -11923,7 +11923,7 @@ SvxWidowsItem Widow SID_ATTR_PARA_WIDOWS
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Window3D SID_3D_WIN
 
 [
@@ -11950,7 +11950,7 @@ SfxBoolItem Window3D SID_3D_WIN
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxWordLineModeItem WordMode SID_ATTR_CHAR_WORDLINEMODE
 
 [
@@ -11977,7 +11977,7 @@ SvxWordLineModeItem WordMode SID_ATTR_CHAR_WORDLINEMODE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 XLineColorItem XLineColor SID_ATTR_LINE_COLOR
 
 [
@@ -12004,7 +12004,7 @@ XLineColorItem XLineColor SID_ATTR_LINE_COLOR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 XLineStyleItem XLineStyle SID_ATTR_LINE_STYLE
 
 [
@@ -12031,7 +12031,7 @@ XLineStyleItem XLineStyle SID_ATTR_LINE_STYLE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Zoom100Percent SID_SIZE_REAL
 ()
 [
@@ -12056,7 +12056,7 @@ SfxVoidItem Zoom100Percent SID_SIZE_REAL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomObjects SID_SIZE_OPTIMAL
 ()
 [
@@ -12081,7 +12081,7 @@ SfxVoidItem ZoomObjects SID_SIZE_OPTIMAL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomOptimal SID_SIZE_ALL
 ()
 [
@@ -12106,7 +12106,7 @@ SfxVoidItem ZoomOptimal SID_SIZE_ALL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomPage SID_SIZE_PAGE
 ()
 [
@@ -12131,7 +12131,7 @@ SfxVoidItem ZoomPage SID_SIZE_PAGE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomPageWidth SID_SIZE_PAGE_WIDTH
 ()
 [
@@ -12156,7 +12156,7 @@ SfxVoidItem ZoomPageWidth SID_SIZE_PAGE_WIDTH
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomVisArea SID_SIZE_VISAREA
 ()
 [
@@ -12181,7 +12181,7 @@ SfxVoidItem ZoomVisArea SID_SIZE_VISAREA
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ToggleControlFocus SID_FM_TOGGLECONTROLFOCUS
 ()
 [
@@ -12209,7 +12209,7 @@ SfxVoidItem ToggleControlFocus SID_FM_TOGGLECONTROLFOCUS
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
 ()
 [
@@ -12237,7 +12237,7 @@ SfxVoidItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SelectMode SID_INSERT_SELECT
 
 [
@@ -12264,7 +12264,7 @@ SfxBoolItem SelectMode SID_INSERT_SELECT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxParaVertAlignItem VerticalParagraphAlignment SID_PARA_VERTALIGN
 
 [
@@ -12291,7 +12291,7 @@ SvxParaVertAlignItem VerticalParagraphAlignment SID_PARA_VERTALIGN
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxCharReliefItem CharacterRelief SID_ATTR_CHAR_RELIEF
 
 [
@@ -12318,7 +12318,7 @@ SvxCharReliefItem CharacterRelief SID_ATTR_CHAR_RELIEF
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxBrushItem CharacterBackgroundPattern SID_ATTR_BRUSH_CHAR
 
 [
@@ -12345,7 +12345,7 @@ SvxBrushItem CharacterBackgroundPattern SID_ATTR_BRUSH_CHAR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxCharRotateItem CharacterRotation SID_ATTR_CHAR_ROTATED
 
 [
@@ -12372,7 +12372,7 @@ SvxCharRotateItem CharacterRotation SID_ATTR_CHAR_ROTATED
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxCharScaleWidthItem CharacterWidthScalingFactor SID_ATTR_CHAR_SCALEWIDTH
 
 [
@@ -12399,7 +12399,7 @@ SvxCharScaleWidthItem CharacterWidthScalingFactor SID_ATTR_CHAR_SCALEWIDTH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt32Item NumberFormatValue SID_ATTR_NUMBERFORMAT_VALUE
 
 [
@@ -12426,7 +12426,7 @@ SfxUInt32Item NumberFormatValue SID_ATTR_NUMBERFORMAT_VALUE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxHorJustifyItem HorizontalJustification SID_ATTR_ALIGN_HOR_JUSTIFY
 
 [
@@ -12453,7 +12453,7 @@ SvxHorJustifyItem HorizontalJustification SID_ATTR_ALIGN_HOR_JUSTIFY
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxVerJustifyItem VerticalJustification SID_ATTR_ALIGN_VER_JUSTIFY
 
 [
@@ -12480,7 +12480,7 @@ SvxVerJustifyItem VerticalJustification SID_ATTR_ALIGN_VER_JUSTIFY
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item AlignmentIndent SID_ATTR_ALIGN_INDENT
 
 [
@@ -12507,7 +12507,7 @@ SfxUInt16Item AlignmentIndent SID_ATTR_ALIGN_INDENT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem AlignmentHyphenation SID_ATTR_ALIGN_HYPHENATION
 
 [
@@ -12534,7 +12534,7 @@ SfxBoolItem AlignmentHyphenation SID_ATTR_ALIGN_HYPHENATION
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item AlignmentRotation SID_ATTR_ALIGN_DEGREES
 
 [
@@ -12561,7 +12561,7 @@ SfxInt32Item AlignmentRotation SID_ATTR_ALIGN_DEGREES
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxRotateModeItem AlignmentRotationMode SID_ATTR_ALIGN_LOCKPOS
 
 [
@@ -12588,7 +12588,7 @@ SvxRotateModeItem AlignmentRotationMode SID_ATTR_ALIGN_LOCKPOS
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxMarginItem AlignmentMargin SID_ATTR_ALIGN_MARGIN
 
 [
@@ -12615,7 +12615,7 @@ SvxMarginItem AlignmentMargin SID_ATTR_ALIGN_MARGIN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem AlignmentStacked SID_ATTR_ALIGN_STACKED
 
 [
@@ -12642,7 +12642,7 @@ SfxBoolItem AlignmentStacked SID_ATTR_ALIGN_STACKED
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
 
 [
@@ -12670,7 +12670,7 @@ SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
 
 [
@@ -12698,7 +12698,7 @@ SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TextRTL SID_RULER_TEXT_RIGHT_TO_LEFT
 [
     /* flags: */
@@ -12724,7 +12724,7 @@ SfxBoolItem TextRTL SID_RULER_TEXT_RIGHT_TO_LEFT
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OpenHyperlinkOnCursor SID_OPEN_HYPERLINK
 ()
 [
@@ -12795,7 +12795,7 @@ SfxBoolItem VerticalTextState SID_VERTICALTEXT_STATE
         GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OpenXMLFilterSettings SID_OPEN_XML_FILTERSETTINGS
 ()
 [
@@ -12820,7 +12820,7 @@ SfxVoidItem OpenXMLFilterSettings SID_OPEN_XML_FILTERSETTINGS
         GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HangulHanjaConversion SID_HANGUL_HANJA_CONVERSION
 ()
 [
@@ -12844,7 +12844,7 @@ SfxVoidItem HangulHanjaConversion SID_HANGUL_HANJA_CONVERSION
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ChineseConversion SID_CHINESE_CONVERSION
 ()
 [
@@ -12868,7 +12868,7 @@ SfxVoidItem ChineseConversion SID_CHINESE_CONVERSION
         ToolBoxConfig = TRUE,
         GroupId = GID_OPTIONS;
 ]
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem SpellDialog SID_SPELL_DIALOG
 
@@ -12895,7 +12895,7 @@ SfxBoolItem SpellDialog SID_SPELL_DIALOG
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
-//--------------------------------------------------------------------------
+
 SvxColumnItem RulerRows SID_RULER_ROWS
 [
     /* flags: */
@@ -12920,7 +12920,7 @@ SvxColumnItem RulerRows SID_RULER_ROWS
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
-//--------------------------------------------------------------------------
+
 SvxColumnItem RulerRowsVertical SID_RULER_ROWS_VERTICAL
 [
     /* flags: */
@@ -12947,7 +12947,7 @@ SvxColumnItem RulerRowsVertical SID_RULER_ROWS_VERTICAL
 ]
 
 
-//--------------------------------------------------------------------------
+
 SvxFontListItem FontNameList SID_ATTR_CHAR_FONTLIST
 ()
 [
@@ -12972,7 +12972,7 @@ SvxFontListItem FontNameList SID_ATTR_CHAR_FONTLIST
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ExtrusionToggle SID_EXTRUSION_TOOGLE
 
 [
@@ -12995,7 +12995,7 @@ SfxBoolItem ExtrusionToggle SID_EXTRUSION_TOOGLE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionTiltDown SID_EXTRUSION_TILT_DOWN
 ()
 [
@@ -13017,7 +13017,7 @@ SfxVoidItem ExtrusionTiltDown SID_EXTRUSION_TILT_DOWN
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionTiltUp SID_EXTRUSION_TILT_UP
 ()
 [
@@ -13039,7 +13039,7 @@ SfxVoidItem ExtrusionTiltUp SID_EXTRUSION_TILT_UP
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionTiltLeft SID_EXTRUSION_TILT_LEFT
 ()
 [
@@ -13061,7 +13061,7 @@ SfxVoidItem ExtrusionTiltLeft SID_EXTRUSION_TILT_LEFT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionTiltRight SID_EXTRUSION_TILT_RIGHT
 ()
 [
@@ -13083,7 +13083,7 @@ SfxVoidItem ExtrusionTiltRight SID_EXTRUSION_TILT_RIGHT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionDepthFloater SID_EXTRUSION_DEPTH_FLOATER
 ()
 [
@@ -13108,7 +13108,7 @@ SfxVoidItem ExtrusionDepthFloater SID_EXTRUSION_DEPTH_FLOATER
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionDepthDialog SID_EXTRUSION_DEPTH_DIALOG
 (SvxDoubleItem Depth SID_EXTRUSION_DEPTH,SfxUInt16Item Metric SID_ATTR_METRIC)
 [
@@ -13133,7 +13133,7 @@ SfxVoidItem ExtrusionDepthDialog SID_EXTRUSION_DEPTH_DIALOG
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionDirectionFloater SID_EXTRUSION_DIRECTION_FLOATER
 ()
 [
@@ -13158,7 +13158,7 @@ SfxVoidItem ExtrusionDirectionFloater SID_EXTRUSION_DIRECTION_FLOATER
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionLightingFloater SID_EXTRUSION_LIGHTING_FLOATER
 ()
 [
@@ -13183,7 +13183,7 @@ SfxVoidItem ExtrusionLightingFloater SID_EXTRUSION_LIGHTING_FLOATER
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExtrusionSurfaceFloater SID_EXTRUSION_SURFACE_FLOATER
 ()
 [
@@ -13208,7 +13208,7 @@ SfxVoidItem ExtrusionSurfaceFloater SID_EXTRUSION_SURFACE_FLOATER
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxColorItem Extrusion3DColor SID_EXTRUSION_3D_COLOR
 
 [
@@ -13230,7 +13230,7 @@ SvxColorItem Extrusion3DColor SID_EXTRUSION_3D_COLOR
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxDoubleItem ExtrusionDepth SID_EXTRUSION_DEPTH
 
 [
@@ -13252,7 +13252,7 @@ SvxDoubleItem ExtrusionDepth SID_EXTRUSION_DEPTH
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item ExtrusionDirection SID_EXTRUSION_DIRECTION
 
 [
@@ -13274,7 +13274,7 @@ SfxInt32Item ExtrusionDirection SID_EXTRUSION_DIRECTION
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item ExtrusionProjection SID_EXTRUSION_PROJECTION
 
 [
@@ -13296,7 +13296,7 @@ SfxInt32Item ExtrusionProjection SID_EXTRUSION_PROJECTION
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item ExtrusionLightingDirection SID_EXTRUSION_LIGHTING_DIRECTION
 
 [
@@ -13318,7 +13318,7 @@ SfxInt32Item ExtrusionLightingDirection SID_EXTRUSION_LIGHTING_DIRECTION
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item ExtrusionLightingIntensity SID_EXTRUSION_LIGHTING_INTENSITY
 
 [
@@ -13340,7 +13340,7 @@ SfxInt32Item ExtrusionLightingIntensity SID_EXTRUSION_LIGHTING_INTENSITY
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item ExtrusionSurface SID_EXTRUSION_SURFACE
 
 [
@@ -13362,7 +13362,7 @@ SfxInt32Item ExtrusionSurface SID_EXTRUSION_SURFACE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
 ()
 [
@@ -13387,7 +13387,7 @@ SfxVoidItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
 (SfxStringItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE)
 [
@@ -13415,7 +13415,7 @@ SfxBoolItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FontworkSameLetterHeights SID_FONTWORK_SAME_LETTER_HEIGHTS
 
 [
@@ -13437,7 +13437,7 @@ SfxBoolItem FontworkSameLetterHeights SID_FONTWORK_SAME_LETTER_HEIGHTS
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FontworkAlignmentFloater SID_FONTWORK_ALIGNMENT_FLOATER
 ()
 [
@@ -13462,7 +13462,7 @@ SfxVoidItem FontworkAlignmentFloater SID_FONTWORK_ALIGNMENT_FLOATER
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FontworkCharacterSpacingFloater SID_FONTWORK_CHARACTER_SPACING_FLOATER
 ()
 [
@@ -13487,7 +13487,7 @@ SfxVoidItem FontworkCharacterSpacingFloater SID_FONTWORK_CHARACTER_SPACING_FLOAT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item FontworkShape SID_FONTWORK_SHAPE
 [
     /* flags: */
@@ -13508,7 +13508,7 @@ SfxInt32Item FontworkShape SID_FONTWORK_SHAPE
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item FontworkAlignment SID_FONTWORK_ALIGNMENT
 [
     /* flags: */
@@ -13529,7 +13529,7 @@ SfxInt32Item FontworkAlignment SID_FONTWORK_ALIGNMENT
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item FontworkCharacterSpacing SID_FONTWORK_CHARACTER_SPACING
 [
     /* flags: */
@@ -13550,7 +13550,7 @@ SfxInt32Item FontworkCharacterSpacing SID_FONTWORK_CHARACTER_SPACING
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FontworkCharacterSpacingDialog SID_FONTWORK_CHARACTER_SPACING_DIALOG
 (SfxInt32Item FontworkCharacterSpacing SID_FONTWORK_CHARACTER_SPACING)
 [
@@ -13575,7 +13575,7 @@ SfxVoidItem FontworkCharacterSpacingDialog SID_FONTWORK_CHARACTER_SPACING_DIALOG
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FontworkKernCharacterPairs SID_FONTWORK_KERN_CHARACTER_PAIRS
 [
     /* flags: */
@@ -13596,7 +13596,7 @@ SfxBoolItem FontworkKernCharacterPairs SID_FONTWORK_KERN_CHARACTER_PAIRS
     GroupId = GID_DRAWING;
 ]
 
-//--------------------------------------------------------------------------
+
 OfaRefItem GetColorTable SID_GET_COLORLIST
 ()
 [
@@ -13621,7 +13621,7 @@ OfaRefItem GetColorTable SID_GET_COLORLIST
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SpellCheckerChanged SID_SPELLCHECKER_CHANGED
 ()
 [
@@ -13646,7 +13646,7 @@ SfxVoidItem SpellCheckerChanged SID_SPELLCHECKER_CHANGED
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item Year2000 SID_ATTR_YEAR2000
 ()
 [
@@ -13671,7 +13671,7 @@ SfxUInt16Item Year2000 SID_ATTR_YEAR2000
     GroupId = GID_INTERN;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem IncrementIndent SID_INC_INDENT
 ()
 [
@@ -13699,7 +13699,7 @@ SfxVoidItem IncrementIndent SID_INC_INDENT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem DecrementIndent SID_DEC_INDENT
 ()
 [
@@ -13727,7 +13727,7 @@ SfxVoidItem DecrementIndent SID_DEC_INDENT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem StateTableCell SID_TABLE_CELL
 
 [
@@ -13754,7 +13754,7 @@ SfxStringItem StateTableCell SID_TABLE_CELL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SendOutlineToImpress SID_OUTLINE_TO_IMPRESS
 (SfxLockBytesItem RtfOutline SID_OUTLINE_TO_IMPRESS)
 [
@@ -13779,7 +13779,7 @@ SfxVoidItem SendOutlineToImpress SID_OUTLINE_TO_IMPRESS
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item DefTabStop SID_ATTR_DEFTABSTOP
 
 [
@@ -13806,7 +13806,7 @@ SfxUInt16Item DefTabStop SID_ATTR_DEFTABSTOP
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLanguageItem DocumentLanguage SID_ATTR_LANGUAGE
 
 [
@@ -13833,7 +13833,7 @@ SvxLanguageItem DocumentLanguage SID_ATTR_LANGUAGE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLanguageItem DocumentLanguageCJK SID_ATTR_CHAR_CJK_LANGUAGE
 
 [
@@ -13860,7 +13860,7 @@ SvxLanguageItem DocumentLanguageCJK SID_ATTR_CHAR_CJK_LANGUAGE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLanguageItem DocumentLanguageCTL SID_ATTR_CHAR_CTL_LANGUAGE
 
 [
@@ -13887,7 +13887,7 @@ SvxLanguageItem DocumentLanguageCTL SID_ATTR_CHAR_CTL_LANGUAGE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem OptionsLocaleChanged SID_OPT_LOCALE_CHANGED
 
 [
@@ -13914,7 +13914,7 @@ SfxBoolItem OptionsLocaleChanged SID_OPT_LOCALE_CHANGED
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SbaBrwInsert SID_SBA_BRW_INSERT
 ()
 [
@@ -13939,7 +13939,7 @@ SfxVoidItem SbaBrwInsert SID_SBA_BRW_INSERT
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
 (SfxStringItem BasicShapes SID_DRAWTBX_CS_BASIC)
 [
@@ -13967,7 +13967,7 @@ SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
 (SfxStringItem SymbolShapes SID_DRAWTBX_CS_SYMBOL)
 [
@@ -13995,7 +13995,7 @@ SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
 (SfxStringItem ArrowShapes SID_DRAWTBX_CS_ARROW)
 [
@@ -14023,7 +14023,7 @@ SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
 (SfxStringItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART)
 [
@@ -14051,7 +14051,7 @@ SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
 (SfxStringItem CalloutShapes SID_DRAWTBX_CS_CALLOUT)
 [
@@ -14079,7 +14079,7 @@ SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
 (SfxStringItem StarShapes SID_DRAWTBX_CS_STAR)
 [
@@ -14107,7 +14107,7 @@ SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem CustomShape SID_DRAW_CS_ID
 
 [
@@ -14152,7 +14152,7 @@ SvxDashListItem DashListState SID_DASH_LIST
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxLineEndListItem LineEndListState SID_LINEEND_LIST
 [
     /* flags: */
@@ -14292,7 +14292,7 @@ SvxEmphasisMarkItem EmphasisMark SID_ATTR_CHAR_EMPHASISMARK
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowDataNavigator SID_FM_SHOW_DATANAVIGATOR
 ()
 [
@@ -14320,7 +14320,7 @@ SfxBoolItem ShowDataNavigator SID_FM_SHOW_DATANAVIGATOR
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem FmDataNavigatorController SID_FM_DATANAVIGATOR_CONTROL
 
 [
@@ -14347,7 +14347,7 @@ SfxObjectItem FmDataNavigatorController SID_FM_DATANAVIGATOR_CONTROL
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignLeft SID_ALIGN_ANY_LEFT
 ()
 [
@@ -14372,7 +14372,7 @@ SfxVoidItem CommonAlignLeft SID_ALIGN_ANY_LEFT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignHorizontalCenter SID_ALIGN_ANY_HCENTER
 ()
 [
@@ -14396,7 +14396,7 @@ SfxVoidItem CommonAlignHorizontalCenter SID_ALIGN_ANY_HCENTER
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignRight SID_ALIGN_ANY_RIGHT
 ()
 [
@@ -14420,7 +14420,7 @@ SfxVoidItem CommonAlignRight SID_ALIGN_ANY_RIGHT
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignJustified SID_ALIGN_ANY_JUSTIFIED
 ()
 [
@@ -14444,7 +14444,7 @@ SfxVoidItem CommonAlignJustified SID_ALIGN_ANY_JUSTIFIED
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignTop SID_ALIGN_ANY_TOP
 ()
 [
@@ -14468,7 +14468,7 @@ SfxVoidItem CommonAlignTop SID_ALIGN_ANY_TOP
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignVerticalCenter SID_ALIGN_ANY_VCENTER
 ()
 [
@@ -14492,7 +14492,7 @@ SfxVoidItem CommonAlignVerticalCenter SID_ALIGN_ANY_VCENTER
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignBottom SID_ALIGN_ANY_BOTTOM
 ()
 [
@@ -14516,7 +14516,7 @@ SfxVoidItem CommonAlignBottom SID_ALIGN_ANY_BOTTOM
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignHorizontalDefault SID_ALIGN_ANY_HDEFAULT
 ()
 [
@@ -14540,7 +14540,7 @@ SfxVoidItem CommonAlignHorizontalDefault SID_ALIGN_ANY_HDEFAULT
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem CommonAlignVerticalDefault SID_ALIGN_ANY_VDEFAULT
 ()
 [
@@ -14590,7 +14590,7 @@ SfxVoidItem AVMediaToolBox SID_AVMEDIA_TOOLBOX
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem BorderReducedMode SID_BORDER_REDUCED_MODE
 [
@@ -14617,7 +14617,7 @@ SfxBoolItem BorderReducedMode SID_BORDER_REDUCED_MODE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ColorSettings SID_COLOR_SETTINGS
 
 [
@@ -14646,7 +14646,7 @@ SfxBoolItem ColorSettings SID_COLOR_SETTINGS
         PseudoPrefix = SID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem MailExportFinished SID_MAIL_EXPORT_FINISHED
 ()
 [
@@ -14670,7 +14670,7 @@ SfxVoidItem MailExportFinished SID_MAIL_EXPORT_FINISHED
     ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertZWSP SID_INSERT_ZWSP
 ()
 [
@@ -14694,7 +14694,7 @@ SfxVoidItem InsertZWSP SID_INSERT_ZWSP
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertZWNBSP SID_INSERT_ZWNBSP
 ()
 [
@@ -14718,7 +14718,7 @@ SfxVoidItem InsertZWNBSP SID_INSERT_ZWNBSP
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertLRM SID_INSERT_LRM
 ()
 [
@@ -14742,7 +14742,7 @@ SfxVoidItem InsertLRM SID_INSERT_LRM
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertRLM SID_INSERT_RLM
 ()
 [
@@ -14766,7 +14766,7 @@ SfxVoidItem InsertRLM SID_INSERT_RLM
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertSoftHyphen FN_INSERT_SOFT_HYPHEN
 ()
 [
@@ -14790,7 +14790,7 @@ SfxVoidItem InsertSoftHyphen FN_INSERT_SOFT_HYPHEN
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertHardHyphen FN_INSERT_HARDHYPHEN
 ()
 [
@@ -14814,7 +14814,7 @@ SfxVoidItem InsertHardHyphen FN_INSERT_HARDHYPHEN
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertNonBreakingSpace FN_INSERT_HARD_SPACE
 ()
 [
@@ -14839,7 +14839,7 @@ SfxVoidItem InsertNonBreakingSpace FN_INSERT_HARD_SPACE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ManageLanguage SID_BASICIDE_MANAGE_LANG
 ()
 [
@@ -14864,7 +14864,7 @@ SfxVoidItem ManageLanguage SID_BASICIDE_MANAGE_LANG
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem CurrentLanguage SID_BASICIDE_CURRENT_LANG
 
 [
@@ -14989,7 +14989,7 @@ SfxBoolItem CellVertBottom SID_TABLE_VERT_BOTTOM
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CellVertCenter SID_TABLE_VERT_CENTER
 
 [
@@ -15016,7 +15016,7 @@ SfxBoolItem CellVertCenter SID_TABLE_VERT_CENTER
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CellVertTop SID_TABLE_VERT_NONE
 
 [
@@ -15187,7 +15187,7 @@ SfxVoidItem EntireColumn SID_TABLE_SELECT_COL
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem EntireRow SID_TABLE_SELECT_ROW
 ()
 [
@@ -15285,7 +15285,7 @@ SfxVoidItem TableSort SID_TABLE_SORT_DIALOG
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem OpenSmartTagMenuOnCursor SID_OPEN_SMARTTAGMENU
 ()
 [
@@ -15311,7 +15311,7 @@ SfxVoidItem OpenSmartTagMenuOnCursor SID_OPEN_SMARTTAGMENU
         GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxZoomSliderItem ZoomSlider SID_ATTR_ZOOMSLIDER
 
 [
@@ -15336,7 +15336,7 @@ SvxZoomSliderItem ZoomSlider SID_ATTR_ZOOMSLIDER
         GroupId = GID_VIEW;
 ]
 
- //--------------------------------------------------------------------------
+
  SfxStringListItem FontNameStringList SID_FONTNAMELIST
  [
      // flags:
@@ -15360,7 +15360,7 @@ SvxZoomSliderItem ZoomSlider SID_ATTR_ZOOMSLIDER
      GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LanguageStatus SID_LANGUAGE_STATUS
 (SfxStringItem Language SID_LANGUAGE_STATUS)
 [
@@ -15388,7 +15388,7 @@ SfxVoidItem LanguageStatus SID_LANGUAGE_STATUS
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem FontDialogForParagraph SID_CHAR_DLG_FOR_PARAGRAPH
 ()
@@ -15414,7 +15414,7 @@ SfxVoidItem FontDialogForParagraph SID_CHAR_DLG_FOR_PARAGRAPH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem Grow SID_GROW_FONT_SIZE
 ()
@@ -15440,7 +15440,7 @@ SfxVoidItem Grow SID_GROW_FONT_SIZE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem Shrink SID_SHRINK_FONT_SIZE
 ()
@@ -15465,7 +15465,7 @@ SfxVoidItem Shrink SID_SHRINK_FONT_SIZE
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem RecheckDocument SID_RECHECK_DOCUMENT
 ()
@@ -15491,7 +15491,7 @@ SfxVoidItem RecheckDocument SID_RECHECK_DOCUMENT
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem InsertColumnDialog SID_TABLE_INSERT_COL_DLG
 ()
@@ -15517,7 +15517,7 @@ SfxVoidItem InsertColumnDialog SID_TABLE_INSERT_COL_DLG
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem InsertRowDialog SID_TABLE_INSERT_ROW_DLG
 ()
@@ -15542,7 +15542,7 @@ SfxVoidItem InsertRowDialog SID_TABLE_INSERT_ROW_DLG
     ToolBoxConfig = FALSE,
     GroupId = GID_TABLE;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
 ()
 [
@@ -15570,7 +15570,7 @@ SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt16Item FillTransparence SID_ATTR_FILL_TRANSPARENCE
 [
@@ -15597,7 +15597,7 @@ SfxUInt16Item FillTransparence SID_ATTR_FILL_TRANSPARENCE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 XFillFloatTransparenceItem FillFloatTransparence SID_ATTR_FILL_FLOATTRANSPARENCE
 [
@@ -15624,7 +15624,7 @@ XFillFloatTransparenceItem FillFloatTransparence SID_ATTR_FILL_FLOATTRANSPARENCE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt16Item LineTransparence SID_ATTR_LINE_TRANSPARENCE
 [
@@ -15651,10 +15651,10 @@ SfxUInt16Item LineTransparence SID_ATTR_LINE_TRANSPARENCE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 
 
-//--------------------------------------------------------------------------
+
+
 
 XLineJointItem LineJoint SID_ATTR_LINE_JOINT
 [
@@ -15681,7 +15681,7 @@ XLineJointItem LineJoint SID_ATTR_LINE_JOINT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 XLineCapItem LineCap SID_ATTR_LINE_CAP
 [
@@ -15708,7 +15708,7 @@ XLineCapItem LineCap SID_ATTR_LINE_CAP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 XLineStartItem LineStart SID_ATTR_LINE_START
 [
@@ -15735,7 +15735,7 @@ XLineStartItem LineStart SID_ATTR_LINE_START
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 XLineEndItem LineEnd SID_ATTR_LINE_END
 [
@@ -15762,7 +15762,7 @@ XLineEndItem LineEnd SID_ATTR_LINE_END
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt32Item TransformPosX SID_ATTR_TRANSFORM_POS_X
 [
@@ -15789,7 +15789,7 @@ SfxUInt32Item TransformPosX SID_ATTR_TRANSFORM_POS_X
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt32Item TransformPosY SID_ATTR_TRANSFORM_POS_Y
 [
@@ -15816,7 +15816,7 @@ SfxUInt32Item TransformPosY SID_ATTR_TRANSFORM_POS_Y
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt32Item TransformWidth SID_ATTR_TRANSFORM_WIDTH
 [
@@ -15843,7 +15843,7 @@ SfxUInt32Item TransformWidth SID_ATTR_TRANSFORM_WIDTH
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt32Item TransformHeight SID_ATTR_TRANSFORM_HEIGHT
 [
@@ -15870,7 +15870,7 @@ SfxUInt32Item TransformHeight SID_ATTR_TRANSFORM_HEIGHT
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt32Item TransformRotationAngle SID_ATTR_TRANSFORM_ANGLE
 [
@@ -15895,7 +15895,7 @@ SfxUInt32Item TransformRotationAngle SID_ATTR_TRANSFORM_ANGLE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt32Item TransformRotationX SID_ATTR_TRANSFORM_ROT_X
 [
@@ -15920,7 +15920,7 @@ SfxUInt32Item TransformRotationX SID_ATTR_TRANSFORM_ROT_X
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxUInt32Item TransformRotationY SID_ATTR_TRANSFORM_ROT_Y
 [
@@ -15945,7 +15945,7 @@ SfxUInt32Item TransformRotationY SID_ATTR_TRANSFORM_ROT_Y
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem ProtectPos SID_ATTR_TRANSFORM_PROTECT_POS
 [
@@ -15970,7 +15970,7 @@ SfxBoolItem ProtectPos SID_ATTR_TRANSFORM_PROTECT_POS
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem ProtectSize SID_ATTR_TRANSFORM_PROTECT_SIZE
 [
@@ -15995,7 +15995,7 @@ SfxBoolItem ProtectSize SID_ATTR_TRANSFORM_PROTECT_SIZE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem FlipHorizontal SID_FLIP_HORIZONTAL
 [
@@ -16022,7 +16022,7 @@ SfxVoidItem FlipHorizontal SID_FLIP_HORIZONTAL
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem FlipVertical SID_FLIP_VERTICAL
 [
@@ -16049,7 +16049,7 @@ SfxVoidItem FlipVertical SID_FLIP_VERTICAL
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem AutomaticWidth SID_ATTR_TRANSFORM_AUTOWIDTH
 [
@@ -16076,7 +16076,7 @@ SfxBoolItem AutomaticWidth SID_ATTR_TRANSFORM_AUTOWIDTH
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem AutomaticHeight SID_ATTR_TRANSFORM_AUTOHEIGHT
 [
@@ -16103,7 +16103,7 @@ SfxBoolItem AutomaticHeight SID_ATTR_TRANSFORM_AUTOHEIGHT
     GroupId = GID_SPECIAL;
 ]
 
-//----------------------------------------------------------------------
+
 SvxLineItem BorderTLBR SID_ATTR_BORDER_DIAG_TLBR
 [
     /* flags: */
@@ -16154,7 +16154,7 @@ SvxLineItem BorderBLTR SID_ATTR_BORDER_DIAG_BLTR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxVoidItem FormatCellBorders SID_CELL_FORMAT_BORDER
 ()

@@ -73,10 +73,10 @@ using namespace ::svx;
 #define SUBMISSIONNAME              "$SUBMISSIONNAME"
 #define BINDINGNAME                 "$BINDINGNAME"
 
-//............................................................................
+
 namespace svxform
 {
-//............................................................................
+
 
     // properties of instance
     #define PN_INSTANCE_MODEL       "Instance"
@@ -125,9 +125,9 @@ namespace svxform
         DataGroupType   GetDataGroupType() const;
     };
 
-    //========================================================================
+
     // class DataTreeListBox
-    //========================================================================
+
     DataTreeListBox::DataTreeListBox( XFormsPage* pPage, DataGroupType _eGroup, const ResId& rResId ) :
 
         SvTreeListBox( pPage, rResId ),
@@ -267,9 +267,9 @@ namespace svxform
         Clear();
     }
 
-    //========================================================================
+
     // class XFormsPage
-    //========================================================================
+
     XFormsPage::XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup ) :
 
         TabPage( pParent, SVX_RES( RID_SVX_XFORMS_TABPAGES ) ),
@@ -1316,9 +1316,9 @@ namespace svxform
     }
 
 
-    //========================================================================
+
     // class DataNavigatorWindow
-    //========================================================================
+
     DataNavigatorWindow::DataNavigatorWindow( Window* pParent, SfxBindings* pBindings ) :
 
         Window( pParent, SVX_RES( RID_SVXWIN_DATANAVIGATOR ) ),
@@ -2151,9 +2151,9 @@ namespace svxform
         }
     }
 
-    //========================================================================
+
     // class DataNavigator
-    //========================================================================
+
     DBG_NAME(DataNavigator)
 
     DataNavigator::DataNavigator( SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent ) :
@@ -2256,9 +2256,9 @@ namespace svxform
     }
 
 
-    //========================================================================
+
     // class NavigatorFrameManager
-    //========================================================================
+
 
 
     SFX_IMPL_DOCKINGWINDOW( DataNavigatorManager, SID_FM_SHOW_DATANAVIGATOR )
@@ -2276,9 +2276,9 @@ namespace svxform
         ( (SfxDockingWindow*)pWindow )->Initialize( _pInfo );
     }
 
-    //========================================================================
+
     // class AddDataItemDialog
-    //========================================================================
+
 
     AddDataItemDialog::AddDataItemDialog(Window* pParent, ItemNode* _pNode,
         const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
@@ -2759,9 +2759,9 @@ namespace svxform
         m_pItemFrame->set_label(sText);
     }
 
-    //========================================================================
+
     // class AddConditionDialog
-    //========================================================================
+
 
     AddConditionDialog::AddConditionDialog(Window* pParent,
         const OUString& _rPropertyName,
@@ -2888,9 +2888,9 @@ namespace svxform
         return 0;
     }
 
-    //========================================================================
+
     // class NamespaceItemDialog
-    //========================================================================
+
 
     NamespaceItemDialog::NamespaceItemDialog(
         AddConditionDialog* _pCondDlg,
@@ -3062,9 +3062,9 @@ namespace svxform
         }
     }
 
-    //========================================================================
+
     // class ManageNamespaceDialog
-    //========================================================================
+
 
     ManageNamespaceDialog::ManageNamespaceDialog(Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit)
         : ModalDialog(pParent, "AddNamespaceDialog", "svx/ui/addnamespacedialog.ui")
@@ -3107,9 +3107,9 @@ namespace svxform
         return 0;
     }
 
-    //========================================================================
+
     // class AddSubmissionDialog
-    //========================================================================
+
 
     AddSubmissionDialog::AddSubmissionDialog(
         Window* pParent, ItemNode* _pNode,
@@ -3329,9 +3329,9 @@ namespace svxform
         m_pRefBtn->Enable( m_xTempBinding.is() );
     }
 
-    //========================================================================
+
     // class AddModelDialog
-    //========================================================================
+
 
     AddModelDialog::AddModelDialog(Window* pParent, bool bIsEdit)
         : ModalDialog(pParent, "AddModelDialog", "svx/ui/addmodeldialog.ui")
@@ -3343,9 +3343,9 @@ namespace svxform
             SetText(get<FixedText>("alttitle")->GetText());
     }
 
-    //========================================================================
+
     // class AddInstanceDialog
-    //========================================================================
+
 
     AddInstanceDialog::AddInstanceDialog(Window* pParent, bool _bEdit)
         : ModalDialog(pParent, "AddInstanceDialog" , "svx/ui/addinstancedialog.ui")
@@ -3385,9 +3385,9 @@ namespace svxform
         return 0;
     }
 
-    //========================================================================
+
     // class LinkedInstanceWarningBox
-    //========================================================================
+
 
     LinkedInstanceWarningBox::LinkedInstanceWarningBox( Window* pParent ) :
 
@@ -3400,9 +3400,9 @@ namespace svxform
         AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     }
 
-//............................................................................
+
 }   // namespace svxform
-//............................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

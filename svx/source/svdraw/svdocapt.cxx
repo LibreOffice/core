@@ -56,7 +56,7 @@
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 enum EscDir {LKS,RTS,OBN,UNT};
 
@@ -171,7 +171,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     rDir=eBestDir;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrCaptionObj::CreateObjectSpecificProperties()
@@ -179,7 +179,7 @@ sdr::properties::BaseProperties* SdrCaptionObj::CreateObjectSpecificProperties()
     return new sdr::properties::CaptionProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
@@ -187,7 +187,7 @@ sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrCaptionObj(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrCaptionObj,SdrRectObj);
 
@@ -303,7 +303,7 @@ SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrCaptionObj::hasSpecialDrag() const
 {
@@ -415,7 +415,7 @@ OUString SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrCaptionObj::ImpGetCaptParams(ImpCaptParams& rPara) const
 {

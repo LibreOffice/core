@@ -403,7 +403,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
     return pRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
 {
@@ -693,7 +693,7 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
     return xRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 #define DEFAULT_MINIMUM_SIGNED_COMPARE  ((sal_Int32)0x80000000)
 #define DEFAULT_MAXIMUM_SIGNED_COMPARE  ((sal_Int32)0x7fffffff)
@@ -897,9 +897,9 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
 
     com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
 
-    //////////////////////
-    // AdjustmentValues //
-    //////////////////////
+
+    // AdjustmentValues
+
     const OUString sAdjustmentValues( "AdjustmentValues" );
     const Any* pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
@@ -933,9 +933,9 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     aPropVal.Value <<= seqAdjustmentValues;
     aGeometryItem.SetPropertyValue( aPropVal );
 
-    ///////////////
-    // Coordsize //
-    ///////////////
+
+    // Coordsize
+
     const OUString sViewBox( "ViewBox" );
     const Any* pViewBox = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sViewBox );
     com::sun::star::awt::Rectangle aViewBox;
@@ -955,9 +955,9 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
 
     const OUString sPath( "Path" );
 
-    //////////////////////
-    // Path/Coordinates //
-    //////////////////////
+
+    // Path/Coordinates
+
     const OUString sCoordinates( "Coordinates" );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
@@ -976,7 +976,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         aGeometryItem.SetPropertyValue( sPath, aPropVal );
     }
 
-    // Path/GluePoints //
+    // Path/GluePoints
     const OUString sGluePoints( "GluePoints" );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sGluePoints );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
@@ -994,7 +994,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         aGeometryItem.SetPropertyValue( sPath, aPropVal );
     }
 
-    // Path/Segments //
+    // Path/Segments
     const OUString sSegments( "Segments" );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sSegments );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
@@ -1014,7 +1014,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         aGeometryItem.SetPropertyValue( sPath, aPropVal );
     }
 
-    // Path/StretchX //
+    // Path/StretchX
     const OUString sStretchX( "StretchX" );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sStretchX );
     if ( !pAny && pDefCustomShape )
@@ -1028,7 +1028,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         }
     }
 
-    // Path/StretchY //
+    // Path/StretchY
     const OUString sStretchY( "StretchY" );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sStretchY );
     if ( !pAny && pDefCustomShape )
@@ -1042,7 +1042,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         }
     }
 
-    // Path/TextFrames //
+    // Path/TextFrames
     const OUString sTextFrames( "TextFrames" );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sTextFrames );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
@@ -1064,7 +1064,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         aGeometryItem.SetPropertyValue( sPath, aPropVal );
     }
 
-    // Equations //
+    // Equations
     const OUString sEquations(  "Equations"  );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sEquations );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
@@ -1081,7 +1081,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         aGeometryItem.SetPropertyValue( aPropVal );
     }
 
-    // Handles //
+    // Handles
     const OUString sHandles(  "Handles"  );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sHandles );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
@@ -1191,7 +1191,7 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
 
         case DEFAULT_SEGMENTS :
         {
-            // Path/Segments //
+            // Path/Segments
             const OUString sSegments( "Segments" );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sSegments );
             if ( pAny )
@@ -1425,7 +1425,7 @@ sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
     return sal_uInt16(OBJ_CUSTOMSHAPE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrObjCustomShape::RecalcSnapRect()
 {
@@ -1717,7 +1717,7 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, bool
     InvalidateRenderGeometry();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
@@ -1745,7 +1745,7 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
     return aGP;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // #i38892#
 void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
@@ -1868,7 +1868,7 @@ SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt32 SdrObjCustomShape::GetHdlCount() const
 {
@@ -1909,7 +1909,7 @@ SdrHdl* SdrObjCustomShape::GetHdl( sal_uInt32 nHdlNum ) const
     return pH;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrObjCustomShape::hasSpecialDrag() const
 {
@@ -2130,7 +2130,7 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
     return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
 {
@@ -2225,7 +2225,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*r
     return GetLineGeometry( this, sal_False );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // in context with the SdrObjCustomShape the SdrTextAutoGrowHeightItem == true -> Resize Shape to fit text,
 //                                     the SdrTextAutoGrowWidthItem  == true -> Word wrap text in Shape

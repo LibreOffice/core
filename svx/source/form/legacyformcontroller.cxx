@@ -29,10 +29,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -55,9 +55,9 @@ namespace svxform
 
     using namespace ::com::sun::star;
 
-    //====================================================================
+
     //= LegacyFormController
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   form::XFormController
                                     ,   XServiceInfo
                                     >   LegacyFormController_Base;

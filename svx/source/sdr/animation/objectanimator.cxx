@@ -20,7 +20,7 @@
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/animation/animationstate.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

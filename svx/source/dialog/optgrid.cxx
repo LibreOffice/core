@@ -243,7 +243,7 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
     bAttrModified = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -288,7 +288,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )

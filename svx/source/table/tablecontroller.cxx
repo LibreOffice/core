@@ -500,7 +500,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 
     if( mxTable.is() ) try
     {
-        //
+
         bool bInsertAfter = true;
         sal_uInt16 nCount = 0;
         if( pArgs )

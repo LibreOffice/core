@@ -145,9 +145,9 @@ using namespace ::com::sun::star::form::runtime;
 using namespace ::com::sun::star::frame;
 using namespace ::svxform;
 
-//========================================================================
+
 // class FmDesignModeChangedHint
-//========================================================================
+
 TYPEINIT1( FmDesignModeChangedHint, SfxHint );
 
 
@@ -161,7 +161,7 @@ FmDesignModeChangedHint::~FmDesignModeChangedHint()
 {
 }
 
-//========================================================================
+
 const sal_uInt32 FM_UI_FEATURE_SHOW_DATABASEBAR         = 0x00000001;
 const sal_uInt32 FM_UI_FEATURE_SHOW_FIELD               = 0x00000002;
 const sal_uInt32 FM_UI_FEATURE_SHOW_PROPERTIES          = 0x00000004;
@@ -207,7 +207,7 @@ SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
         FM_UI_FEATURE_TB_FORMDESIGN );
 }
 
-//========================================================================
+
 TYPEINIT1(FmFormShell,SfxShell)
 
 
@@ -374,7 +374,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
 
-    //////////////////////////////////////////////////////////////////////
+
     // MasterSlot setzen
     switch( nSlot )
     {
@@ -404,7 +404,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             break;
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // Identifier und Inventor des Uno-Controls setzen
     sal_uInt16 nIdentifier = 0;
     switch( nSlot )

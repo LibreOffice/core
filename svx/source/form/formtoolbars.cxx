@@ -23,18 +23,18 @@
 
 #include <svx/svxids.hrc>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= FormToolboxes
-    //====================================================================
+
 
     FormToolboxes::FormToolboxes( const Reference< XFrame >& _rxFrame )
     {
@@ -96,8 +96,8 @@ namespace svxform
         return aToolBarResStr;
     }
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -103,9 +103,9 @@ form controls being in redlining or in hidden section are visible in alive-mode
 
 */
 
-//........................................................................
+
 namespace sdr { namespace contact {
-//........................................................................
+
 
     using namespace ::com::sun::star::awt::InvalidateStyle;
     using ::com::sun::star::uno::Reference;
@@ -141,9 +141,9 @@ namespace sdr { namespace contact {
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::uno::Any;
 
-    //====================================================================
+
     //= ControlHolder
-    //====================================================================
+
     class ControlHolder
     {
     private:
@@ -310,9 +310,9 @@ namespace sdr { namespace contact {
         return aZoom;
     }
 
-    //====================================================================
+
     //= UnoControlContactHelper
-    //====================================================================
+
     class UnoControlContactHelper
     {
     public:
@@ -388,9 +388,9 @@ namespace sdr { namespace contact {
         _rControl.clear();
     }
 
-    //====================================================================
+
     //= IPageViewAccess
-    //====================================================================
+
     /** interface encapsulating access to an SdrPageView, stripped down to the methods we really need
      */
     class IPageViewAccess
@@ -413,9 +413,9 @@ namespace sdr { namespace contact {
         ~IPageViewAccess() {}
     };
 
-    //====================================================================
+
     //= SdrPageViewAccess
-    //====================================================================
+
     /** is a ->IPageViewAccess implementation based on a real ->SdrPageView instance
      */
     class SdrPageViewAccess : public IPageViewAccess
@@ -453,9 +453,9 @@ namespace sdr { namespace contact {
         return m_rPageView.GetVisibleLayers().IsSet( _nLayerID );
     }
 
-    //====================================================================
+
     //= InvisibleControlViewAccess
-    //====================================================================
+
     /** is a ->IPageViewAccess implementation which can be used to create an invisble control for
         an arbitrary window
      */
@@ -502,9 +502,9 @@ namespace sdr { namespace contact {
         return false;
     }
 
-    //====================================================================
+
     //= DummyPageViewAccess
-    //====================================================================
+
     /** is a ->IPageViewAccess implementation which can be used to create a control for an arbitrary
         non-Window device
 
@@ -545,9 +545,9 @@ namespace sdr { namespace contact {
         return true;
     }
 
-    //====================================================================
+
     //= ViewObjectContactOfUnoControl_Impl
-    //====================================================================
+
     typedef     ::cppu::WeakImplHelper4 <   XWindowListener
                                         ,   XPropertyChangeListener
                                         ,   XContainerListener
@@ -864,9 +864,9 @@ namespace sdr { namespace contact {
         ViewObjectContactOfUnoControl_Impl& operator=( const ViewObjectContactOfUnoControl_Impl& ); // never implemented
     };
 
-    //====================================================================
+
     //= LazyControlCreationPrimitive2D
-    //====================================================================
+
     class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
     {
     private:
@@ -919,9 +919,9 @@ namespace sdr { namespace contact {
         ::basegfx::B2DHomMatrix                                 m_aTransformation;
     };
 
-    //====================================================================
+
     //= ViewObjectContactOfUnoControl_Impl
-    //====================================================================
+
     DBG_NAME( ViewObjectContactOfUnoControl_Impl )
 
     ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl )
@@ -1122,7 +1122,7 @@ namespace sdr { namespace contact {
             // Creating the control triggered an Window::Update on some of its child windows, which triggered a
             // Paint on parent of the grid control (e.g. the SwEditWin), which triggered a reentrant call to this method,
             // which it is not really prepared for.
-            //
+
             // /me thinks that re-entrance should be caught on a higher level, i.e. the Drawing Layer should not allow
             // reentrant paint requests. For the moment, until /me can discuss this with AW, catch it here.
             // 2009-08-27 / #i104544# frank.schoenheit@sun.com
@@ -1587,9 +1587,9 @@ namespace sdr { namespace contact {
         }
     }
 
-    //====================================================================
+
     //= LazyControlCreationPrimitive2D
-    //====================================================================
+
 
     bool LazyControlCreationPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     {
@@ -1700,9 +1700,9 @@ namespace sdr { namespace contact {
 
     ImplPrimitive2DIDBlock( LazyControlCreationPrimitive2D, PRIMITIVE2D_ID_SDRCONTROLPRIMITIVE2D )
 
-    //====================================================================
+
     //= ViewObjectContactOfUnoControl
-    //====================================================================
+
     DBG_NAME( ViewObjectContactOfUnoControl )
 
     ViewObjectContactOfUnoControl::ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
@@ -1876,9 +1876,9 @@ namespace sdr { namespace contact {
         flushPrimitive2DSequence();
     }
 
-    //====================================================================
+
     //= UnoControlPrintOrPreviewContact
-    //====================================================================
+
     DBG_NAME( UnoControlPrintOrPreviewContact )
 
     UnoControlPrintOrPreviewContact::UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
@@ -1901,8 +1901,8 @@ namespace sdr { namespace contact {
         return ViewObjectContactOfUnoControl::createPrimitive2DSequence( rDisplayInfo );
     }
 
-//........................................................................
+
 } } // namespace sdr::contact
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
