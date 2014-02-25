@@ -3137,7 +3137,9 @@ void SAL_CALL SwXTextDocument::operator delete( void * p) throw()
 uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         ::sal_Int16 nScriptTypes,
         ::sal_Int16 nMaxCount )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
 

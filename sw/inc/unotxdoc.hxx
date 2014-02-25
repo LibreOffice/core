@@ -416,7 +416,10 @@ public:
     virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getXForms(  ) throw (css::uno::RuntimeException);
 
     // css::document::XDocumentLanguages
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getDocumentLanguages( ::sal_Int16 nScriptTypes, ::sal_Int16 nCount ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getDocumentLanguages( ::sal_Int16 nScriptTypes, ::sal_Int16 nCount )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException,
+               std::exception);
 
     // css::text::XFlatParagraphIteratorProvider:
     virtual css::uno::Reference< css::text::XFlatParagraphIterator > SAL_CALL getFlatParagraphIterator(::sal_Int32 nTextMarkupType, sal_Bool bAutomatic ) throw (css::uno::RuntimeException);
