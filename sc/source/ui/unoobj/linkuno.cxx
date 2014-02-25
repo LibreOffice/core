@@ -145,7 +145,8 @@ void SAL_CALL ScSheetLinkObj::setName( const OUString& aName ) throw(uno::Runtim
 
 // XRefreshable
 
-void SAL_CALL ScSheetLinkObj::refresh() throw(uno::RuntimeException)
+void SAL_CALL ScSheetLinkObj::refresh()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTableLink* pLink = GetLink_Impl();
