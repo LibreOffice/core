@@ -170,7 +170,7 @@ public class FactoryHelper {
         }
 
         // XComponentContext impl
-        //______________________________________________________________________________________________
+
         public Object createInstanceWithContext(
             XComponentContext xContext )
             throws com.sun.star.uno.Exception
@@ -236,7 +236,7 @@ public class FactoryHelper {
                 throw new com.sun.star.uno.Exception( instantiationException.toString() );
             }
         }
-        //______________________________________________________________________________________________
+
         public Object createInstanceWithArgumentsAndContext(
             Object rArguments[], XComponentContext xContext )
             throws com.sun.star.uno.Exception

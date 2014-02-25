@@ -23,18 +23,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public final class AnyConverter_Test {
-    Any anyBool; //
-    Any anyChar; //
-    Any anyByte; //
-    Any anyShort; //
-    Any anyInt; //
-    Any anyLong; //
-    Any anyFloat; //
-    Any anyDouble; //
-    Any anyStr; //
-    Any anyType; //
-    Any anyArByte; //
-    Any anyVoid;   //
+    Any anyBool;
+    Any anyChar;
+    Any anyByte;
+    Any anyShort;
+    Any anyInt;
+    Any anyLong;
+    Any anyFloat;
+    Any anyDouble;
+    Any anyStr;
+    Any anyType;
+    Any anyArByte;
+    Any anyVoid;
     Any anyXTypeProvider;
 
     Boolean aBool= new Boolean(true);
