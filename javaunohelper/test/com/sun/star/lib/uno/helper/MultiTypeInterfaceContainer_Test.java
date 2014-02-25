@@ -82,7 +82,7 @@ public class MultiTypeInterfaceContainer_Test
 //        Object retVal= null;
 //        if (obj == null || iface == null || iface.isInstance(obj) == false )
 //            return retVal;
-//
+
 //        Type type= new Type(TypeDescription.getTypeDescription(iface));
 //        Type evtType= new Type(TypeDescription.getTypeDescription(com.sun.star.lang.XEventListener.class));
 //        // find the object identifier
@@ -96,7 +96,7 @@ public class MultiTypeInterfaceContainer_Test
 //            Object aProxyEvt = Proxy.create(eventRequester, sOid, evtType, false, false);
 //            String[] arOid= new String[]{sOid};
 //            retVal= env.registerInterface(aProxyEvt, arOid, evtType);
-//
+
 //            Requester requester = new Requester(false, false, aProxyEvt);
 //            Object aProxy = Proxy.create(requester, sOid, type, false, false);
 //            arOid= new String[] {sOid};

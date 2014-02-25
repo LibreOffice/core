@@ -114,18 +114,18 @@ class Proxy implements IQueryInterface, XEventListener
 //    boolean _virtual;
 //    boolean _forceSynchronous;
 //    boolean _passed = true;
-//
+
 //    Object _xEventListenerProxy;
 //    int nDisposingCalled= 0;
-//
+
 //    Requester(boolean virtual, boolean forceSynchronous, Object evtListener)
 //    {
 //        _virtual = virtual;
 //        _forceSynchronous = forceSynchronous;
 //        _xEventListenerProxy= evtListener;
-//
+
 //    }
-//
+
 //    public Object sendRequest(Object object,
 //    Type type,
 //    String operation,
@@ -133,7 +133,7 @@ class Proxy implements IQueryInterface, XEventListener
 //    Boolean synchron[],
 //    Boolean mustReply[]) throws Throwable
 //    {
-//
+
 //        Object result = null;
 //        if (operation.equals("disposing"))
 //        {

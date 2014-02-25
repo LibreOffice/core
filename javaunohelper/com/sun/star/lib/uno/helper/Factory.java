@@ -115,7 +115,7 @@ public class Factory
         return false;
     }
 
-    //==============================================================================================
+
     private String m_impl_name;
     private String [] m_supported_services;
     private Class<?> m_impl_class;
@@ -163,7 +163,7 @@ public class Factory
         }
     }
 
-    //______________________________________________________________________________________________
+
     private final Object instantiate( XComponentContext xContext )
         throws com.sun.star.uno.Exception
     {
@@ -209,14 +209,14 @@ public class Factory
         }
     }
     // XSingleComponentFactory impl
-    //______________________________________________________________________________________________
+
     public final Object createInstanceWithContext(
         XComponentContext xContext )
         throws com.sun.star.uno.Exception
     {
         return instantiate( xContext );
     }
-    //______________________________________________________________________________________________
+
     public final Object createInstanceWithArgumentsAndContext(
         Object arguments [], XComponentContext xContext )
         throws com.sun.star.uno.Exception
@@ -235,12 +235,12 @@ public class Factory
     }
 
     // XServiceInfo impl
-    //______________________________________________________________________________________________
+
     public final String getImplementationName()
     {
         return m_impl_name;
     }
-    //______________________________________________________________________________________________
+
     public final boolean supportsService( String service_name )
     {
         for ( int nPos = 0; nPos < m_supported_services.length; ++nPos )
@@ -250,7 +250,7 @@ public class Factory
         }
         return false;
     }
-    //______________________________________________________________________________________________
+
     public final String [] getSupportedServiceNames()
     {
         return m_supported_services;
