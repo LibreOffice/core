@@ -17,23 +17,23 @@
  */
 
 //Microsoft Developer Studio generated resource script.
-//
+
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Generated from the TEXTINCLUDE 2 resource.
-//
+
 #include <winresrc.h>
 #define LB_ADDSTRING	(WM_USER+1)
 #define CB_ADDSTRING	(WM_USER+3)
 #define IDC_STATIC		(-1)
 
-/////////////////////////////////////////////////////////////////////////////
+
 #undef APSTUDIO_READONLY_SYMBOLS
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Russian resources
 
 //#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
@@ -42,27 +42,27 @@
 //#pragma code_page(1251)
 //#endif //_WIN32
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Bitmap
-//
+
 
 //IDB_SOACTIVEX         BITMAP  DISCARDABLE     "soacti.bmp"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // REGISTRY
-//
+
 
 IDR_SOACTIVEX         		REGISTRY DISCARDABLE    "SOActiveX.rgs"
 IDR_SOCOMWINDOWPEER         REGISTRY DISCARDABLE    "SOComWindowPeer.rgs"
 IDR_SODISPATCHINTERCEPTOR   REGISTRY DISCARDABLE    "SODispatchInterceptor.rgs"
 //#endif    // Russian resources
-/////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////////////////////////////////////////
+
+
 // English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
@@ -72,10 +72,10 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // TEXTINCLUDE
-//
+
 
 1 TEXTINCLUDE DISCARDABLE 
 BEGIN
@@ -96,10 +96,10 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // String Table
-//
+
 
 STRINGTABLE DISCARDABLE 
 BEGIN
@@ -107,18 +107,18 @@ BEGIN
 END
 
 #endif    // English (U.S.) resources
-/////////////////////////////////////////////////////////////////////////////
+
 
 
 
 #ifndef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Generated from the TEXTINCLUDE 3 resource.
-//
+
 
 1 TYPELIB SO_ACTIVEX_TLB
 
-/////////////////////////////////////////////////////////////////////////////
+
 #endif    // not APSTUDIO_INVOKED
 

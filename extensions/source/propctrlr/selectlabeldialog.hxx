@@ -28,14 +28,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "modulepcr.hxx"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
 
-    //========================================================================
+
+
     // OSelectLabelDialog
-    //========================================================================
+
     class OSelectLabelDialog
             :public ModalDialog
             ,public PcrClient
@@ -71,9 +71,9 @@ namespace pcr
         DECL_LINK(OnNoAssignmentClicked, Button*);
     };
 
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_SELECTLABELDIALOG_HXX_
 

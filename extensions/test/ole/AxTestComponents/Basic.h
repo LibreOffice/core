@@ -24,7 +24,7 @@
 #include "resource.h"
 #import  "AxTestComponents.tlb" no_namespace no_implementation raw_interfaces_only named_guids
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CBasic
 class ATL_NO_VTABLE CBasic :
     public CComObjectRootEx<CComSingleThreadModel>,

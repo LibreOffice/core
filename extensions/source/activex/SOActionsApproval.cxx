@@ -25,8 +25,8 @@
 #include "SOActionsApproval.h"
 #include <sal/macros.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 
 STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(REFIID riid)
 {

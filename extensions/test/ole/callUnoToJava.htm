@@ -40,9 +40,9 @@ function callOleTest(	 id)
 		// return value is the parameter object
 		oletest.testInterface( new XCallback_Impl, 2);
 		break;
-		//##################################################
+
 		// OUT parameter
-		//##################################################
+
 		case 3: // Test out parameter of type interface
 		oletest.testInterface( new XCallback_Impl, 3);
 		break;
@@ -88,9 +88,9 @@ function callOleTest(	 id)
 		case 31: //  outValuesAll
 		oletest.testInterface( new XCallback_Impl, 31);
 		break;
-		//##################################################
+
 		// IN/OUT parameter
-		//##################################################
+
 
 		case 100: // inoutInterface
 		oletest.testInterface( new XCallback_Impl, 100);
@@ -141,9 +141,9 @@ function callOleTest(	 id)
 		// Call a COM object that has not been passed as parameter to a UNO component and
 		// hence no type information are available in the COM wrapper
 //		case 300:
-		//##################################################
+
 		// Attributes
-		//##################################################
+
 		case 400:
 		oletest.testInterface( new XCallback_Impl, 400);
 		break;
@@ -168,7 +168,7 @@ function XCallback_Impl()
 	this.returnInterface= XCallback_Impl_returnInterface;
 	// #################################################
 	// OUT parameter
-	//###################################################
+
 	this.outInterface= XCallback_Impl_outInterface;
 	this.outStruct= XCallback_Impl_outStruct;
 	this.outEnum= XCallback_Impl_outEnum;
@@ -186,7 +186,7 @@ function XCallback_Impl()
 	this.outValuesAll= XCallback_Impl_outValuesAll;
 	// #################################################
 	// IN/ OUT parameter
-	//###################################################
+
 	this.inoutInterface= XCallback_Impl_inoutInterface;
 	this.inoutStruct= XCallback_Impl_inoutStruct;
 	this.inoutEnum= XCallback_Impl_inoutEnum;
@@ -203,12 +203,12 @@ function XCallback_Impl()
 	this.inoutValuesAll= XCallback_Impl_inoutValuesAll;
 	// #################################################
 	// IN parameter
-	//##################################################
+
 	this.inValues= XCallback_Impl_inValues;
 
 	// #################################################
 	// Attributes
-	//##################################################
+
 	this.simple= new XSimple_Impl();
 
 
@@ -382,8 +382,8 @@ function XCallback_Impl_inoutLong(val)
 	alert( "JScript in long: " + val[0]);
 	val[0]= 100000;
 }
-function XCallback_Impl_inoutValuesAll(aXSimple, aStruct, aEnum, aSeq, 
-			aAny, aBool, aChar, aString,  aFloat, aDouble, 
+function XCallback_Impl_inoutValuesAll(aXSimple, aStruct, aEnum, aSeq,
+			aAny, aBool, aChar, aString,  aFloat, aDouble,
 			aByte, aShort,  aLong )
 {
 	this.inoutInterface( aXSimple);
@@ -407,9 +407,9 @@ function XCallback_Impl_inValues( aChar, aLong, aString)
 }
 
 
-//################################################################
+
 // class MultiInterface implements XSimple, XSimple2, XSimple3
-//################################################################
+
 function MultiInterface()
 {
 	this._environment= "JScript";
@@ -420,7 +420,7 @@ function MultiInterface()
 	this.func2= MultiInterface_func2;
 	this.func3= MultiInterface_func3;
 	// XSimple2
-	this.getName2= MultiInterface_getName2;	
+	this.getName2= MultiInterface_getName2;
 	// XSimple3
 	this.getName3= MultiInterface_getName3;
 }
@@ -462,7 +462,7 @@ function MultiInterface_func3( message)
 //XCallback_Impl_outValuesAll( xSimple, aSimpleStruct, aSimpleEnum, seqAny, aAny, aBool,
 //				aChar, aString, aFloat, aDouble, aByte, aShort, aLong, aUShort, aULong)
 //{
-//	
+//
 //}
 
 
@@ -472,7 +472,7 @@ function XSimple_Impl()
 {
 	//XSimple
 	this.func= XSimple_Impl_func;
-}	
+}
 function XSimple_Impl_func( message)
 {
 	alert( "XSimple called." + message);
@@ -498,7 +498,7 @@ verify the correct conversion of the return value( IDispatch JScript object) to 
 <button onclick='callOleTest( 2)'>go</Button>
 <br>
 <h1> out parameter </h1>
-The a JScript object of class XCallback_Impl is passed to the UNO OleTest Control as parameter. 
+The a JScript object of class XCallback_Impl is passed to the UNO OleTest Control as parameter.
 According to the buttons the OleTest object calls a function on XCallback_Impl that has appropriate type
 as out parameter.<br>
 <button onclick='callOleTest( 3)'>interface</Button>

@@ -29,10 +29,10 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::inspection::XObjectInspectorModel;
     using ::com::sun::star::lang::XInitialization;
@@ -50,9 +50,9 @@ namespace pcr
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::makeAny;
 
-    //====================================================================
+
     //= ObjectInspectorModel
-    //====================================================================
+
     class ObjectInspectorModel : public ImplInspectorModel
     {
     private:
@@ -90,9 +90,9 @@ namespace pcr
         void    impl_verifyArgument_throw( bool _bCondition, sal_Int16 _nArgumentPosition );
     };
 
-    //====================================================================
+
     //= ObjectInspectorModel
-    //====================================================================
+
     ObjectInspectorModel::ObjectInspectorModel()
         :ImplInspectorModel()
     {
@@ -217,9 +217,9 @@ namespace pcr
             throw IllegalArgumentException( OUString(), *this, _nArgumentPosition );
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 
 extern "C" void SAL_CALL createRegistryInfo_ObjectInspectorModel()

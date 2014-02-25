@@ -22,18 +22,18 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     void disambiguateName(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
         OUString& _rElementsName);
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 
 #endif // _EXTENSIONS_DBP_DBPTOOLS_HXX_

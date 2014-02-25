@@ -30,26 +30,26 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/listenernotification.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     #define OWN_PROPERTY_ID_INTROSPECTEDOBJECT      0x0010
     #define OWN_PROPERTY_ID_CURRENTPAGE             0x0011
     #define OWN_PROPERTY_ID_CONTROLCONTEXT          0x0012
     #define OWN_PROPERTY_ID_TABBINGMODEL            0x0013
 
-    //========================================================================
+
     //= types
-    //========================================================================
+
     typedef ::comphelper::OSimpleListenerContainer  <   ::com::sun::star::beans::XPropertyChangeListener
                                                     ,   ::com::sun::star::beans::PropertyChangeEvent
                                                     >   PropertyChangeListeners;
 
-    //========================================================================
+
     //= helper
-    //========================================================================
+
     // small helper to make the "swap" call on an STL container a single-line call, which
     // in it's canonic form "aFoo.swap( Container() )" doesn't compile with GCC
     template< class CONTAINER >
@@ -59,9 +59,9 @@ namespace pcr
         _rContainer.swap( aEmpty );
     }
 
-    //========================================================================
+
     //= HelpIdUrl
-    //========================================================================
+
     /// small helper to translate help ids into help urls
     class HelpIdUrl
     {
@@ -70,9 +70,9 @@ namespace pcr
         static OUString getHelpURL( const OString& );
     };
 
-    //====================================================================
+
     //= StlSyntaxSequence
-    //====================================================================
+
     template< class ELEMENT >
     class StlSyntaxSequence : public ::com::sun::star::uno::Sequence< ELEMENT >
     {
@@ -111,9 +111,9 @@ namespace pcr
         }
     };
 
-    //========================================================================
+
     //= UNO helpers
-    //========================================================================
+
 #define DECLARE_XCOMPONENT() \
     virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
@@ -133,9 +133,9 @@ namespace pcr
         baseclass::WeakComponentImplHelperBase::removeEventListener( _Listener ); \
     } \
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 

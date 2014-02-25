@@ -19,7 +19,7 @@
 
 #include "abpresid.hrc"
 
-//........................................................................
+
 ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
 {
     Text [ en-US ] = "Address Book Data Source Wizard" ;
@@ -58,7 +58,7 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     };
 };
 
-//........................................................................
+
 TabPage RID_PAGE_SELECTABTYPE
 {
     HelpID = "extensions:TabPage:RID_PAGE_SELECTABTYPE";
@@ -150,7 +150,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
 };
 
-//........................................................................
+
 TabPage RID_PAGE_ADMININVOKATION
 {
     HelpID = "extensions:TabPage:RID_PAGE_ADMININVOKATION";
@@ -186,7 +186,7 @@ TabPage RID_PAGE_ADMININVOKATION
     };
 };
 
-//........................................................................
+
 TabPage RID_PAGE_TABLESELECTION_AB
 {
     HelpID = "extensions:TabPage:RID_PAGE_TABLESELECTION_AB";
@@ -215,7 +215,7 @@ TabPage RID_PAGE_TABLESELECTION_AB
     };
 };
 
-//........................................................................
+
 TabPage RID_PAGE_FIELDMAPPING
 {
     HelpID = "extensions:TabPage:RID_PAGE_FIELDMAPPING";
@@ -248,7 +248,7 @@ TabPage RID_PAGE_FIELDMAPPING
     };
 };
 
-//........................................................................
+
 TabPage RID_PAGE_FINAL
 {
     HelpID = "extensions:TabPage:RID_PAGE_FINAL";
@@ -334,7 +334,7 @@ TabPage RID_PAGE_FINAL
     };
 };
 
-//........................................................................
+
 ErrorBox RID_ERR_NEEDTYPESELECTION
 {
     Buttons = WB_OK;
@@ -342,7 +342,7 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message [ en-US ] = "Please select a type of address book.";
 };
 
-//........................................................................
+
 QueryBox RID_QRY_NOTABLES
 {
     Buttons = WB_YES_NO;
@@ -351,7 +351,7 @@ QueryBox RID_QRY_NOTABLES
     Message [ en-US ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
 };
 
-//........................................................................
+
 QueryBox RID_QRY_NO_EVO_GW
 {
     Buttons = WB_YES_NO;
@@ -360,7 +360,7 @@ QueryBox RID_QRY_NO_EVO_GW
     Message [ en-US ] = "You don't seem to have any GroupWise account configured in Evolution.\nDo you want to set it up as an address data source, anyway?";
 };
 
-//........................................................................
+
 String RID_STR_DEFAULT_NAME
 {
     Text [ en-US ] = "Addresses";
@@ -391,7 +391,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text [ en-US ] = "There are no fields assigned at this time.\nYou can either assign fields now or do so later by first choosing:\n\"File - Template - Address Book Source...\"";
 };
 
-//........................................................................
+
 Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";

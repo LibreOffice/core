@@ -27,7 +27,7 @@ struct Mapping;
 typedef boost::ptr_vector<Mapping> MappingArray;
 
 
-//-----------------------------------------------------------------------------
+
 #define COLUMN_COUNT                31
 #define IDENTIFIER_POS              0
 #define AUTHORITYTYPE_POS           1
@@ -60,13 +60,13 @@ typedef boost::ptr_vector<Mapping> MappingArray;
 #define CUSTOM3_POS                 28
 #define CUSTOM4_POS                 29
 #define CUSTOM5_POS                 30
-//-----------------------------------------------------------------------------
+
 struct StringPair
 {
     OUString   sRealColumnName;
     OUString   sLogicalColumnName;
 };
-//-----------------------------------------------------------------------------
+
 struct Mapping
 {
     OUString       sTableName;
@@ -77,14 +77,14 @@ struct Mapping
     Mapping() :
         nCommandType(0){}
 };
-//-----------------------------------------------------------------------------
+
 struct BibDBDescriptor
 {
     OUString   sDataSource;
     OUString   sTableOrQuery;
     sal_Int32       nCommandType;
 };
-//-----------------------------------------------------------------------------
+
 
 class BibConfig : public utl::ConfigItem
 {

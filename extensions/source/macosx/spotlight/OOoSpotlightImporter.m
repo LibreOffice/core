@@ -366,10 +366,10 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
         [temp setObject:@"OpenDocument Drawing Template" forKey:@"org.oasis.opendocument.graphics-template"];
         [temp setObject:@"OpenOffice.org 1.0 Database" forKey:@"org.openoffice.database"];
         [temp setObject:@"OpenDocument Chart" forKey:@"org.oasis.opendocument.chart"];
-        
+
         uti2kind = [[NSDictionary dictionaryWithDictionary:temp] retain];
         [temp release];
-        
+
         isInitialized = YES;
     }
 }
@@ -379,21 +379,21 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
 {
     //NSLog(contentTypeUTI);
     //NSLog(pathToFile);
-    
+
     NSString *itemKind = [uti2kind objectForKey:contentTypeUTI];
     if (itemKind != nil) {
         [attributes setObject:itemKind forKey:(NSString*)kMDItemKind];
     }
-    
+
     //first check to see if this is a valid zipped file that contains a file "meta.xml"
     NSFileHandle *unzipFile = [self openZipFileAtPath:pathToFile];
 
-    //
+
     if (unzipFile == nil) {
         //NSLog(@"zip file not open");
         return YES;
     }
-    
+
     //first get the metadata
     NSData *metaData = [self metaDataFileFromZip:unzipFile];
     if (metaData == nil) {
@@ -402,7 +402,7 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     }
 
     [metaData retain];
-    
+
     OOoMetaDataParser *parser = [OOoMetaDataParser new];
     if (parser != nil) {
         //parse and extract the data
@@ -411,16 +411,16 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
 
     [metaData release];
     [parser release];
-    
+
     //and now get the content
     NSData *contentData = [self contentDataFileFromZip:unzipFile];
     if (contentData == nil) {
         [unzipFile closeFile];
         return YES;
     }
-    
+
     [contentData retain];
-    
+
     OOoContentDataParser *parser2 = [OOoContentDataParser new];
     if (parser2 != nil) {
         //parse and extract the data
@@ -431,7 +431,7 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     [parser2 release];
 
     [unzipFile closeFile];
-    
+
     return YES;
 }
 
@@ -439,12 +439,12 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
 - (NSFileHandle*)openZipFileAtPath:(NSString*)pathToFile
 {
     NSFileHandle* unzipFile = nil;
-    
+
     if ([pathToFile length] != 0)
     {
         unzipFile = [NSFileHandle fileHandleForReadingAtPath: pathToFile];
     }
-    
+
     if (unzipFile == nil)
     {
         //NSLog(@"Cannot open %s",zipfilename);
@@ -455,13 +455,13 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     {
         [unzipFile closeFile];
         return nil;
-    }    
+    }
     //NSLog(@"%s opened",zipfilename);
-    
+
     return unzipFile;
 }
 
-/* metaDataFileFromZip extracts the file meta.xml from the zip file and returns it as an NSData* structure 
+/* metaDataFileFromZip extracts the file meta.xml from the zip file and returns it as an NSData* structure
    or nil if the metadata is not present */
 - (NSData*) metaDataFileFromZip:(NSFileHandle*)unzipFile
 {
@@ -470,7 +470,7 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     return getUncompressedData(unzipFile, @"meta.xml");
 }
 
-/* contentDataFileFromZip extracts the file content.xml from the zip file and returns it as an NSData* structure 
+/* contentDataFileFromZip extracts the file content.xml from the zip file and returns it as an NSData* structure
    or nil if the metadata is not present */
 - (NSData*) contentDataFileFromZip:(NSFileHandle*)unzipFile
 {

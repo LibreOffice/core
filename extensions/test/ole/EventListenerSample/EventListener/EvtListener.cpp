@@ -21,7 +21,7 @@
 #include "EventListener.h"
 #include "EvtListener.h"
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CEvtListener
 
 STDMETHODIMP CEvtListener::disposing( IDispatch* source)

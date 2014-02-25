@@ -24,14 +24,14 @@
 
 #include <osl/interlck.h>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= helper
-    //====================================================================
+
     ::com::sun::star::logging::LogRecord createLogRecord(
         const OUString& _rLoggerName,
         const OUString& _rClassName,
@@ -51,9 +51,9 @@ namespace logging
         return createLogRecord( _rLoggerName, OUString(), OUString(), _rMessage, _nLogLevel, _nEventNumber );
     }
 
-//........................................................................
+
 } // namespace logging
-//........................................................................
+
 
 #endif // LOGRECORD_HXX
 

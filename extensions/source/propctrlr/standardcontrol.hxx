@@ -39,14 +39,14 @@
 
 class PushButton;
 class MultiLineEdit;
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
 
-    //========================================================================
+
+
     //= ListLikeControlWithModifyHandler
-    //========================================================================
+
     /** Very small helper class which adds a SetModifyHdl to a ListBox-derived class,
         thus giving this class the same API (as far as the CommonBehaviourControl is concerned)
         as all other windows.
@@ -69,7 +69,7 @@ namespace pcr
         bool    PreNotify( NotifyEvent& _rNEvt );
     };
 
-    //------------------------------------------------------------------------
+
     template< class LISTBOX_WINDOW >
     bool ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::PreNotify( NotifyEvent& _rNEvt )
     {
@@ -93,9 +93,9 @@ namespace pcr
         return ListBoxType::PreNotify( _rNEvt );
     }
 
-    //========================================================================
+
     //= OTimeControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, ControlWindow< TimeField > > OTimeControl_Base;
     class OTimeControl : public OTimeControl_Base
     {
@@ -108,9 +108,9 @@ namespace pcr
         virtual ::com::sun::star::uno::Type SAL_CALL getValueType() throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-    //========================================================================
+
     //= ODateControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, ControlWindow< CalendarField > > ODateControl_Base;
     class ODateControl : public ODateControl_Base
     {
@@ -123,9 +123,9 @@ namespace pcr
         virtual ::com::sun::star::uno::Type SAL_CALL getValueType() throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-    //========================================================================
+
     //= OEditControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, ControlWindow< Edit > > OEditControl_Base;
     class OEditControl : public OEditControl_Base
     {
@@ -144,9 +144,9 @@ namespace pcr
         virtual void modified();
     };
 
-    //========================================================================
+
     //= ODateTimeControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, ControlWindow< FormattedField > > ODateTimeControl_Base;
     class ODateTimeControl : public ODateTimeControl_Base
     {
@@ -159,9 +159,9 @@ namespace pcr
         virtual ::com::sun::star::uno::Type SAL_CALL getValueType() throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-    //========================================================================
+
     //= HyperlinkInput
-    //========================================================================
+
     class HyperlinkInput : public Edit
     {
     private:
@@ -188,9 +188,9 @@ namespace pcr
         bool    impl_textHitTest( const Point& _rWindowPos );
     };
 
-    //========================================================================
+
     //= OHyperlinkControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XHyperlinkControl, ControlWindow< HyperlinkInput > > OHyperlinkControl_Base;
     class OHyperlinkControl : public OHyperlinkControl_Base
     {
@@ -217,9 +217,9 @@ namespace pcr
         DECL_LINK( OnHyperlinkClicked, void* );
     };
 
-    //========================================================================
+
     //= CustomConvertibleNumericField
-    //========================================================================
+
     class CustomConvertibleNumericField : public ControlWindow< MetricField >
     {
         typedef ControlWindow< MetricField > BaseClass;
@@ -233,9 +233,9 @@ namespace pcr
         sal_Int64 GetLastValue() const { return mnLastValue; }
     };
 
-    //========================================================================
+
     //= ONumericControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XNumericControl, CustomConvertibleNumericField > ONumericControl_Base;
     class ONumericControl : public ONumericControl_Base
     {
@@ -277,9 +277,9 @@ namespace pcr
         double  impl_fieldValueToApiValue_nothrow( sal_Int64 _nFieldValue ) const;
     };
 
-    //========================================================================
+
     //= OColorControl
-    //========================================================================
+
     typedef CommonBehaviourControl  <   ::com::sun::star::inspection::XStringListControl
                                     ,   ListLikeControlWithModifyHandler< ColorListBox >
                                     >   OColorControl_Base;
@@ -306,9 +306,9 @@ namespace pcr
         virtual void modified();
     };
 
-    //========================================================================
+
     //= OListboxControl
-    //========================================================================
+
     typedef CommonBehaviourControl  <   ::com::sun::star::inspection::XStringListControl
                                     ,   ListLikeControlWithModifyHandler< ListBox >
                                     >   OListboxControl_Base;
@@ -332,9 +332,9 @@ namespace pcr
         virtual void modified();
     };
 
-    //========================================================================
+
     //= OComboboxControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XStringListControl, ControlWindow< ComboBox > > OComboboxControl_Base;
     class OComboboxControl : public OComboboxControl_Base
     {
@@ -356,17 +356,17 @@ namespace pcr
         DECL_LINK( OnEntrySelected, void* );
     };
 
-    //========================================================================
+
     //= DropDownEditControl
-    //========================================================================
+
     enum MultiLineOperationMode
     {
         eStringList,
         eMultiLineText
     };
-    //========================================================================
+
     //= DropDownEditControl
-    //========================================================================
+
     class OMultilineFloatingEdit;
     typedef ControlWindow< Edit > DropDownEditControl_Base;
     /** an Edit field which can be used as ControlWindow, and has a drop-down button
@@ -412,9 +412,9 @@ namespace pcr
         sal_Bool ShowDropDown( sal_Bool bShow );
     };
 
-    //========================================================================
+
     //= OMultilineEditControl
-    //========================================================================
+
     typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, DropDownEditControl > OMultilineEditControl_Base;
     class OMultilineEditControl : public OMultilineEditControl_Base
     {
@@ -427,9 +427,9 @@ namespace pcr
         virtual ::com::sun::star::uno::Type SAL_CALL getValueType() throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
 

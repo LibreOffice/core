@@ -28,14 +28,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= IServiceInfo
-    //=====================================================================
+
     /** interface for the SERVICEINFO template parameter of the OUnoAutoPilot class
     */
     struct IServiceInfo
@@ -46,9 +46,9 @@ namespace dbp
                             getServiceNames() const;
     };
 
-    //=====================================================================
+
     //= OUnoAutoPilot
-    //=====================================================================
+
     typedef ::svt::OGenericUnoDialog    OUnoAutoPilot_Base;
     template <class TYPE, class SERVICEINFO>
     class OUnoAutoPilot
@@ -91,9 +91,9 @@ namespace dbp
 
 #include "unoautopilot.inl"
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 #endif // _EXTENSIONS_DBP_UNOAUTOPILOT_HXX_
 

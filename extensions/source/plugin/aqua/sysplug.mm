@@ -289,7 +289,7 @@ struct FakeEventRecord : public EventRecord
 
 @end
 
-//--------------------------------------------------------------------------------------------------
+
 MacPluginComm::MacPluginComm( const rtl::OUString& i_rMimetype, const rtl::OUString& i_rBundle, NSView* i_pParent )
     : PluginComm( OUStringToOString( i_rBundle, RTL_TEXTENCODING_UTF8 ) ),
       m_xBundle( NULL ),
@@ -344,7 +344,7 @@ MacPluginComm::MacPluginComm( const rtl::OUString& i_rMimetype, const rtl::OUStr
     execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 MacPluginComm::~MacPluginComm()
 {
     if( m_hPlugLib )
@@ -362,7 +362,7 @@ MacPluginComm::~MacPluginComm()
         CFRelease( m_xBundle );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 sal_Bool MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) const
 {
     if( ! m_hPlugLib || ! o_ppFunc )
@@ -403,7 +403,7 @@ IMPL_LINK_NOARG(MacPluginComm, NullTimerHdl)
     return 0;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 
 long MacPluginComm::doIt()
 {
@@ -588,7 +588,7 @@ long MacPluginComm::doIt()
     return nRet;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_Destroy( XPlugin_Impl* i_pImpl, NPSavedData** save )
 {
     // remove from NullEvent timer
@@ -618,7 +618,7 @@ NPError MacPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason )
 {
     DBG_ASSERT( m_aNPPfuncs.destroystream, "### NPP_DestroyStream(): null pointer in NPP functions table!" );
@@ -629,7 +629,7 @@ NPError MacPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPErro
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc,
                                   char* argn[], char* argv[], NPSavedData *saved )
 {
@@ -659,7 +659,7 @@ NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mo
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
                                         NPBool seekable, uint16_t* stype )
 {
@@ -673,7 +673,7 @@ NPError MacPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void MacPluginComm::NPP_Print( NPP instance, NPPrint* platformPrint )
 {
     DBG_ASSERT( m_aNPPfuncs.print, "### NPP_Print(): null pointer in NPP functions table!" );
@@ -683,7 +683,7 @@ void MacPluginComm::NPP_Print( NPP instance, NPPrint* platformPrint )
     execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_SetWindow( NPP instance, NPWindow* window )
 {
     DBG_ASSERT( m_aNPPfuncs.setwindow, "### NPP_SetWindow(): null pointer in NPP functions table!" );
@@ -693,7 +693,7 @@ NPError MacPluginComm::NPP_SetWindow( NPP instance, NPWindow* window )
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_HandleEvent( NPP instance, void* event )
 {
     DBG_ASSERT( m_aNPPfuncs.event, "### NPP_HandleEvent(): null pointer in NPP functions table!" );
@@ -703,7 +703,7 @@ NPError MacPluginComm::NPP_HandleEvent( NPP instance, void* event )
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void MacPluginComm::NPP_StreamAsFile( NPP instance, NPStream* stream, const char* fname )
 {
     DBG_ASSERT( m_aNPPfuncs.asfile, "### NPP_StreamAsFile(): null pointer in NPP functions table!" );
@@ -714,7 +714,7 @@ void MacPluginComm::NPP_StreamAsFile( NPP instance, NPStream* stream, const char
     execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void MacPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reason, void* notifyData )
 {
     DBG_ASSERT( m_aNPPfuncs.urlnotify, "### NPP_URLNotify(): null pointer in NPP functions table!" );
@@ -726,7 +726,7 @@ void MacPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reaso
     execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 int32_t MacPluginComm::NPP_Write( NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer )
 {
     DBG_ASSERT( m_aNPPfuncs.write, "### NPP_Write(): null pointer in NPP functions table!" );
@@ -739,7 +739,7 @@ int32_t MacPluginComm::NPP_Write( NPP instance, NPStream* stream, int32_t offset
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 int32_t MacPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
 {
     DBG_ASSERT( m_aNPPfuncs.writeready, "### NPP_WriteReady(): null pointer in NPP functions table!" );
@@ -749,7 +749,7 @@ int32_t MacPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
     return execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_GetValue( NPP instance, NPPVariable variable, void *ret_value )
 {
     DBG_ASSERT( m_aNPPfuncs.getvalue, "### NPP_GetValue(): null pointer in NPP functions table!" );
@@ -760,7 +760,7 @@ NPError MacPluginComm::NPP_GetValue( NPP instance, NPPVariable variable, void *r
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void *set_value )
 {
     DBG_ASSERT( m_aNPPfuncs.setvalue, "### NPP_SetValue(): null pointer in NPP functions table!" );
@@ -771,27 +771,27 @@ NPError MacPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void *s
     return (NPError)execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void * MacPluginComm::NPP_GetJavaClass()
 {
     OSL_FAIL( "no java class available!" );
     return 0;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_Initialize()
 {
     return NPERR_NO_ERROR;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void MacPluginComm::NPP_Shutdown()
 {
     m_eCall = eNPP_Shutdown;
     execute();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 NPError MacPluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
 {
     // update window NPWindow from view

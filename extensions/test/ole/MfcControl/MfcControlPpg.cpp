@@ -32,7 +32,7 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CMfcControlPropPage, COlePropertyPage)
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Message map
 
 BEGIN_MESSAGE_MAP(CMfcControlPropPage, COlePropertyPage)
@@ -43,14 +43,14 @@ BEGIN_MESSAGE_MAP(CMfcControlPropPage, COlePropertyPage)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Initialize class factory and guid
 
 IMPLEMENT_OLECREATE_EX(CMfcControlPropPage, "MFCCONTROL.MfcControlPropPage.1",
     0xac221fb7, 0xa0d8, 0x11d4, 0x83, 0x3b, 0, 0x50, 0x4, 0x52, 0x6a, 0xb4)
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlPropPage::CMfcControlPropPageFactory::UpdateRegistry -
 // Adds or removes system registry entries for CMfcControlPropPage
 
@@ -64,7 +64,7 @@ BOOL CMfcControlPropPage::CMfcControlPropPageFactory::UpdateRegistry(BOOL bRegis
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlPropPage::CMfcControlPropPage - Constructor
 
 CMfcControlPropPage::CMfcControlPropPage() :
@@ -77,7 +77,7 @@ CMfcControlPropPage::CMfcControlPropPage() :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlPropPage::DoDataExchange - Moves data between page and properties
 
 void CMfcControlPropPage::DoDataExchange(CDataExchange* pDX)
@@ -90,7 +90,7 @@ void CMfcControlPropPage::DoDataExchange(CDataExchange* pDX)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlPropPage message handlers
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

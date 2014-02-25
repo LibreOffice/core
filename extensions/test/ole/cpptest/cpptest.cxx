@@ -18,7 +18,7 @@
  */
 
 // cpptest.cpp : Defines the entry point for the console application.
-//
+
 
 #ifdef _MSC_VER
 #pragma once

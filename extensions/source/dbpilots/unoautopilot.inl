@@ -19,16 +19,16 @@
 // no include protection
 // this file is included from unoautopilot.hxx directly
 
-//=====================================================================
+
 //= OUnoAutoPilot
-//=====================================================================
+
 template <class TYPE, class SERVICEINFO>
 OUnoAutoPilot<TYPE, SERVICEINFO>::OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB)
     :OUnoAutoPilot_Base(_rxORB)
 {
 }
 
-//---------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -36,42 +36,42 @@ template <class TYPE, class SERVICEINFO>
     return aId.getImplementationId();
 }
 
-//---------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
 {
     return *(new OUnoAutoPilot<TYPE, SERVICEINFO>( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//---------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::rtl::OUString SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
 
-//---------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::rtl::OUString OUnoAutoPilot<TYPE, SERVICEINFO>::getImplementationName_Static() throw(::com::sun::star::uno::RuntimeException)
 {
     return SERVICEINFO().getImplementationName();
 }
 
-//---------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::comphelper::StringSequence SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-//---------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::comphelper::StringSequence OUnoAutoPilot<TYPE, SERVICEINFO>::getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException)
 {
     return SERVICEINFO().getServiceNames();
 }
 
-//---------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -79,14 +79,14 @@ template <class TYPE, class SERVICEINFO>
     return xInfo;
 }
 
-//---------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::cppu::IPropertyArrayHelper& OUnoAutoPilot<TYPE, SERVICEINFO>::getInfoHelper()
 {
     return *const_cast<OUnoAutoPilot*>(this)->getArrayHelper();
 }
 
-//--------------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 ::cppu::IPropertyArrayHelper* OUnoAutoPilot<TYPE, SERVICEINFO>::createArrayHelper( ) const
 {
@@ -95,14 +95,14 @@ template <class TYPE, class SERVICEINFO>
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-//--------------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 Dialog* OUnoAutoPilot<TYPE, SERVICEINFO>::createDialog(Window* _pParent)
 {
     return new TYPE(_pParent, m_xObjectModel, m_aContext);
 }
 
-//--------------------------------------------------------------------------
+
 template <class TYPE, class SERVICEINFO>
 void OUnoAutoPilot<TYPE, SERVICEINFO>::implInitialize(const com::sun::star::uno::Any& _rValue)
 {

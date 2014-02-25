@@ -22,14 +22,14 @@
 
 #include "propertyhandler.hxx"
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ButtonNavigationHandler
-    //====================================================================
+
     class ButtonNavigationHandler;
     typedef HandlerComponentBase< ButtonNavigationHandler > ButtonNavigationHandler_Base;
     /** a property handler for any virtual string properties
@@ -71,9 +71,9 @@ namespace pcr
                                                         SAL_CALL doDescribeSupportedProperties() const;
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_BUTTONNAVIGATIONHANDLER_HXX
 

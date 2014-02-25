@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // AxTestComponents.idl : IDL source for AxTestComponents.dll
-//
+
 
 // This file will be processed by the MIDL tool to
 // produce the type library (AxTestComponents.tlb) and marshalling code.

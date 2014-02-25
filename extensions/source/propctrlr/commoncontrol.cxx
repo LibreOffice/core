@@ -24,10 +24,10 @@
 #include <vcl/combobox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Reference;
@@ -36,9 +36,9 @@ namespace pcr
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::inspection::XPropertyControl;
 
-    //==================================================================
+
     //= ControlHelper
-    //==================================================================
+
 
     ControlHelper::ControlHelper( Window* _pControlWindow, sal_Int16 _nControlType, XPropertyControl& _rAntiImpl, IModifyListener* _pModifyListener )
         :m_pControlWindow( _pControlWindow )
@@ -188,8 +188,8 @@ namespace pcr
         return 0;
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

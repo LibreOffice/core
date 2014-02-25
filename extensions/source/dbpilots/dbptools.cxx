@@ -20,10 +20,10 @@
 #include "dbptools.hxx"
 #include <tools/debug.hxx>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
@@ -54,8 +54,8 @@ namespace dbp
         }
     }
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

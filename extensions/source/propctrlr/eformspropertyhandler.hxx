@@ -24,15 +24,15 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     class EFormsHelper;
-    //====================================================================
+
     //= EFormsPropertyHandler
-    //====================================================================
+
     class EFormsPropertyHandler;
     typedef HandlerComponentBase< EFormsPropertyHandler > EFormsPropertyHandler_Base;
     class EFormsPropertyHandler : public EFormsPropertyHandler_Base
@@ -89,9 +89,9 @@ namespace pcr
         OUString getModelNamePropertyValue() const;
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_EFORMSPROPERTYHANDLER_HXX
 

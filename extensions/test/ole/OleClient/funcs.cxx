@@ -46,7 +46,7 @@ template< class T >
 bool equalSequences(const Sequence<T>& seqIn, const Sequence<Any> & returned);
 
 
-Reference< XMultiServiceFactory > objectFactory;//
+Reference< XMultiServiceFactory > objectFactory;
 
 
 Reference<XMultiServiceFactory> getMultiServiceFactory()

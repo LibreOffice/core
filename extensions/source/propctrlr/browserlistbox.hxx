@@ -37,10 +37,10 @@
 #include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     class IPropertyLineListener;
     class IPropertyControlObserver;
@@ -48,9 +48,9 @@ namespace pcr
     class InspectorHelpWindow;
     class PropertyControlContext_Impl;
 
-    //========================================================================
+
     //= administrative structures for OBrowserListBox
-    //========================================================================
+
     typedef ::boost::shared_ptr< OBrowserLine > BrowserLinePointer;
     struct ListBoxLine
     {
@@ -68,9 +68,9 @@ namespace pcr
     };
     typedef ::std::vector< ListBoxLine > ListBoxLines;
 
-    //========================================================================
+
     //= IControlContext
-    //========================================================================
+
     /** non-UNO version of XPropertyControlContext
     */
     class SAL_NO_VTABLE IControlContext
@@ -84,9 +84,9 @@ namespace pcr
         ~IControlContext() {}
     };
 
-    //========================================================================
+
     //= OBrowserListBox
-    //========================================================================
+
     class OBrowserListBox   :public Control
                             ,public IButtonClickListener
                             ,public IControlContext
@@ -219,9 +219,9 @@ namespace pcr
         using Window::Activate;
     };
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_BROWSERLISTBOX_HXX_
 

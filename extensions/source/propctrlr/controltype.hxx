@@ -21,14 +21,14 @@
 
 #include <sal/types.h>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= control types, analogous to FormComponentType
-    //====================================================================
+
     namespace ControlType
     {
         static const sal_Int16 FIXEDLINE      = (sal_Int16)100;
@@ -38,9 +38,9 @@ namespace pcr
         // need only those which are not already covered as FormComponentType
     }
 
-//........................................................................
+
 } // namespacepcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_CONTROLTYPE_HXX
 

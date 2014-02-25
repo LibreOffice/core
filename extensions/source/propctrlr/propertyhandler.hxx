@@ -53,16 +53,16 @@ namespace com { namespace sun { namespace star {
 } } }
 
 class Window;
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     typedef sal_Int32   PropertyId;
 
-    //====================================================================
+
     //= PropertyHandler
-    //====================================================================
+
     class OPropertyInfoService;
     typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::inspection::XPropertyHandler
                                                 >   PropertyHandler_Base;
@@ -146,7 +146,7 @@ namespace pcr
         */
         PropertyId impl_getPropertyId_throw( const OUString& _rPropertyName ) const;
 
-        //-------------------------------------------------------------------------------
+
         // helper for implementing doDescribeSupportedProperties
         /** adds a description for the given string property to the given property vector
             Most probably to be called from within getSupportedProperties
@@ -213,7 +213,7 @@ namespace pcr
                     sal_Int16 _nAttribs = 0
                 ) const;
 
-        //-------------------------------------------------------------------------------
+
         // helper for accessing and maintaining meta data about our supported properties
 
         /** retrieves a property given by handle
@@ -292,7 +292,7 @@ namespace pcr
         PropertyHandler& operator=( const PropertyHandler& ); // never implemented
     };
 
-    //--------------------------------------------------------------------
+
     inline void PropertyHandler::addStringPropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< OUString* >( NULL ) ), _nAttribs );
@@ -334,9 +334,9 @@ namespace pcr
         return pProp ? pProp->Name : OUString();
     }
 
-    //====================================================================
+
     //= PropertyHandlerComponent
-    //====================================================================
+
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XServiceInfo
                                 >   PropertyHandlerComponent_Base;
     /** PropertyHandler implementation which additionally supports XServiceInfo
@@ -358,9 +358,9 @@ namespace pcr
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) = 0;
     };
 
-    //====================================================================
+
     //= HandlerComponentBase
-    //====================================================================
+
     /** a PropertyHandlerComponent implementation which routes XServiceInfo::getImplementationName and
         XServiceInfo::getSupportedServiceNames to static versions of those methods, which are part of
         the derived class.
@@ -404,21 +404,21 @@ namespace pcr
         static void registerImplementation();
     };
 
-    //--------------------------------------------------------------------
+
     template < class HANDLER >
     OUString SAL_CALL HandlerComponentBase< HANDLER >::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         return HANDLER::getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
+
     template < class HANDLER >
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL HandlerComponentBase< HANDLER >::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         return HANDLER::getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
+
     template < class HANDLER >
     void HandlerComponentBase< HANDLER >::registerImplementation()
     {
@@ -429,16 +429,16 @@ namespace pcr
         );
     }
 
-    //--------------------------------------------------------------------
+
     template < class HANDLER >
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL HandlerComponentBase< HANDLER >::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
     {
         return *( new HANDLER( _rxContext ) );
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
 
