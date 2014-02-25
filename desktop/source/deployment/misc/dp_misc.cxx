@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "dp_misc.h"
 #include "dp_version.hxx"
 #include "dp_interact.h"
@@ -554,7 +556,7 @@ void syncRepositories(
                 Reference<task::XAbortChannel>(), xCmdEnv);
         }
     }
-
+#if !HAVE_FEATURE_MACOSX_SANDBOX
     if (bModified)
     {
         Reference<task::XRestartManager> restarter(task::OfficeRestartManager::get(comphelper::getProcessComponentContext()));
@@ -565,6 +567,7 @@ void syncRepositories(
                                       Reference<task::XInteractionHandler>());
         }
      }
+#endif
 }
 
 void disposeBridges(Reference<css::uno::XComponentContext> const & ctx)
