@@ -52,11 +52,11 @@ using namespace ucbhelper;
 #define FTP_PROXY_NAME_KEY   "ooInetFTPProxyName"
 #define FTP_PROXY_PORT_KEY   "ooInetFTPProxyPort"
 
-//=========================================================================
+
 namespace ucbhelper
 {
 
-//=========================================================================
+
 namespace proxydecider_impl
 {
 
@@ -75,10 +75,10 @@ public:
     bool Matches( const OUString & rStr ) const;
 };
 
-//=========================================================================
+
 typedef std::pair< WildCard, WildCard > NoProxyListEntry;
 
-//=========================================================================
+
 
 class HostnameCache
 {
@@ -119,7 +119,7 @@ public:
     }
 };
 
-//=========================================================================
+
 class InternetProxyDecider_Impl :
     public cppu::WeakImplHelper1< util::XChangesListener >
 {
@@ -160,13 +160,13 @@ private:
     void setNoProxyList( const OUString & rNoProxyList );
 };
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // WildCard Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 bool WildCard::Matches( const OUString& rString ) const
 {
@@ -236,7 +236,7 @@ bool WildCard::Matches( const OUString& rString ) const
     return ( *pStr == '\0' ) && ( *pWild == '\0' );
 }
 
-//=========================================================================
+
 bool getConfigStringValue(
     const uno::Reference< container::XNameAccess > & xNameAccess,
     const char * key,
@@ -263,7 +263,7 @@ bool getConfigStringValue(
     return true;
 }
 
-//=========================================================================
+
 bool getConfigInt32Value(
     const uno::Reference< container::XNameAccess > & xNameAccess,
     const char * key,
@@ -291,13 +291,13 @@ bool getConfigInt32Value(
     return true;
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // InternetProxyDecider_Impl Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     const uno::Reference< uno::XComponentContext >& rxContext )
@@ -306,9 +306,9 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 {
     try
     {
-        //////////////////////////////////////////////////////////////
+
         // Read proxy configuration from config db.
-        //////////////////////////////////////////////////////////////
+
 
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
                 configuration::theDefaultProvider::get( rxContext );
@@ -392,13 +392,13 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     }
 }
 
-//=========================================================================
+
 // virtual
 InternetProxyDecider_Impl::~InternetProxyDecider_Impl()
 {
 }
 
-//=========================================================================
+
 void InternetProxyDecider_Impl::dispose()
 {
     uno::Reference< util::XChangesNotifier > xNotifier;
@@ -419,7 +419,7 @@ void InternetProxyDecider_Impl::dispose()
         xNotifier->removeChangesListener( this );
 }
 
-//=========================================================================
+
 bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
                                                 sal_Int32 nPort,
                                                 bool bUseFullyQualified ) const
@@ -467,7 +467,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     return true;
 }
 
-//=========================================================================
+
 const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
                                             const OUString & rProtocol,
                                             const OUString & rHost,
@@ -483,16 +483,16 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
 
     if ( !rHost.isEmpty() && !m_aNoProxyList.empty() )
     {
-        //////////////////////////////////////////////////////////////////
+
         // First, try direct hostname match - #110515#
-        //////////////////////////////////////////////////////////////////
+
 
         if ( !shouldUseProxy( rHost, nPort, false ) )
             return m_aEmptyProxy;
 
-        //////////////////////////////////////////////////////////////////
+
         // Second, try match against full qualified hostname - #104401#
-        //////////////////////////////////////////////////////////////////
+
 
         OUString aHost;
 
@@ -527,15 +527,15 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
                 return m_aEmptyProxy;
         }
 
-        //////////////////////////////////////////////////////////////////
+
         // Third, try match of fully qualified entries in no-proxy list
         // against full qualified hostname
-        //
+
         // Example:
         // list: staroffice-doc -> full: xyz.germany.sun.com
         // in:   staroffice-doc.germany.sun.com -> full: xyz.germany.sun.com
-        //
-        //////////////////////////////////////////////////////////////////
+
+
 
         if ( !shouldUseProxy( aFullyQualifiedHost, nPort, true ) )
             return m_aEmptyProxy;
@@ -559,7 +559,7 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
     return m_aEmptyProxy;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                                         const util::ChangesEvent& Event )
@@ -656,7 +656,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
     }
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InternetProxyDecider_Impl::disposing(const lang::EventObject&)
     throw( uno::RuntimeException )
@@ -670,7 +670,7 @@ void SAL_CALL InternetProxyDecider_Impl::disposing(const lang::EventObject&)
     }
 }
 
-//=========================================================================
+
 void InternetProxyDecider_Impl::setNoProxyList(
                                         const OUString & rNoProxyList )
 {
@@ -783,13 +783,13 @@ void InternetProxyDecider_Impl::setNoProxyList(
 
 } // namespace proxydecider_impl
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // InternetProxyDecider Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 InternetProxyDecider::InternetProxyDecider(
     const uno::Reference< uno::XComponentContext>& rxContext )
@@ -798,7 +798,7 @@ InternetProxyDecider::InternetProxyDecider(
     m_pImpl->acquire();
 }
 
-//=========================================================================
+
 InternetProxyDecider::~InternetProxyDecider()
 {
     // Break circular reference between config listener and notifier.
@@ -808,7 +808,7 @@ InternetProxyDecider::~InternetProxyDecider()
     m_pImpl->release();
 }
 
-//=========================================================================
+
 bool InternetProxyDecider::shouldUseProxy( const OUString & rProtocol,
                                            const OUString & rHost,
                                            sal_Int32 nPort ) const
@@ -819,7 +819,7 @@ bool InternetProxyDecider::shouldUseProxy( const OUString & rProtocol,
     return !rData.aName.isEmpty();
 }
 
-//=========================================================================
+
 const InternetProxyServer & InternetProxyDecider::getProxy(
                                             const OUString & rProtocol,
                                             const OUString & rHost,

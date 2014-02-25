@@ -24,7 +24,7 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-//=========================================================================
+
 SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rURL,
                                       const OUString & rServerName,
@@ -64,7 +64,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        bAllowUseSystemCredentials );
 }
 
-//=========================================================================
+
 SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rURL,
                                       const OUString & rServerName,
@@ -107,7 +107,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        false );
 }
 
-//=========================================================================
+
 void SimpleAuthenticationRequest::initialize(
       const ucb::URLAuthenticationRequest & rRequest,
       bool bCanSetRealm,

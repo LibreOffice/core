@@ -47,11 +47,11 @@ using namespace com::sun::star::util;
 namespace ucbhelper_impl
 {
 
-//=========================================================================
-//
+
+
 // PropertyValue.
-//
-//=========================================================================
+
+
 
 const sal_uInt32 NO_VALUE_SET               = 0x00000000;
 const sal_uInt32 STRING_VALUE_SET           = 0x00000001;
@@ -121,11 +121,11 @@ using namespace ucbhelper_impl;
 namespace ucbhelper
 {
 
-//=========================================================================
-//
+
+
 // class PropertyValues.
-//
-//=========================================================================
+
+
 
 typedef std::vector< ucbhelper_impl::PropertyValue > PropertyValuesVector;
 
@@ -133,11 +133,11 @@ class PropertyValues : public PropertyValuesVector {};
 
 } // namespace ucbhelper
 
-//=========================================================================
-//
+
+
 // Welcome to the macro hell...
-//
-//=========================================================================
+
+
 
 #define GETVALUE_IMPL_TYPE( _type_, _type_name_, _member_name_, _cppu_type_ ) \
                                                                               \
@@ -242,15 +242,15 @@ class PropertyValues : public PropertyValuesVector {};
 
 namespace ucbhelper {
 
-//=========================================================================
-//=========================================================================
-//
-// PropertyValueSet Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
+
+
+// PropertyValueSet Implementation.
+
+
+
+
+
 PropertyValueSet::PropertyValueSet(
                     const Reference< XComponentContext >& rxContext )
 :  m_xContext( rxContext ),
@@ -261,40 +261,40 @@ PropertyValueSet::PropertyValueSet(
 {
 }
 
-//=========================================================================
+
 // virtual
 PropertyValueSet::~PropertyValueSet()
 {
     delete m_pValues;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_3( PropertyValueSet,
                    XTypeProvider,
                    XRow,
                    XColumnLocate );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_3( PropertyValueSet,
                       XTypeProvider,
                          XRow,
                       XColumnLocate );
 
-//=========================================================================
-//
+
+
 // XRow methods.
-//
-//=========================================================================
+
+
 
 // virtual
 sal_Bool SAL_CALL PropertyValueSet::wasNull()
@@ -306,7 +306,7 @@ sal_Bool SAL_CALL PropertyValueSet::wasNull()
     return m_bWasNull;
 }
 
-//=========================================================================
+
 // virtual
 OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -314,7 +314,7 @@ OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
     GETVALUE_IMPL( OUString, STRING_VALUE_SET, aString );
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -323,7 +323,7 @@ sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
             bool, BOOLEAN_VALUE_SET, bBoolean, getCppuBooleanType() );
 }
 
-//=========================================================================
+
 // virtual
 sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -331,7 +331,7 @@ sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
     GETVALUE_IMPL( sal_Int8, BYTE_VALUE_SET, nByte );
 }
 
-//=========================================================================
+
 // virtual
 sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -339,7 +339,7 @@ sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
     GETVALUE_IMPL( sal_Int16, SHORT_VALUE_SET, nShort );
 }
 
-//=========================================================================
+
 // virtual
 sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -347,7 +347,7 @@ sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
     GETVALUE_IMPL( sal_Int32, INT_VALUE_SET, nInt );
 }
 
-//=========================================================================
+
 // virtual
 sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -355,7 +355,7 @@ sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
     GETVALUE_IMPL( sal_Int64, LONG_VALUE_SET, nLong );
 }
 
-//=========================================================================
+
 // virtual
 float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -363,7 +363,7 @@ float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
     GETVALUE_IMPL( float, FLOAT_VALUE_SET, nFloat );
 }
 
-//=========================================================================
+
 // virtual
 double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -371,7 +371,7 @@ double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
     GETVALUE_IMPL( double, DOUBLE_VALUE_SET, nDouble );
 }
 
-//=========================================================================
+
 // virtual
 Sequence< sal_Int8 > SAL_CALL
 PropertyValueSet::getBytes( sal_Int32 columnIndex )
@@ -380,7 +380,7 @@ PropertyValueSet::getBytes( sal_Int32 columnIndex )
     GETVALUE_IMPL( Sequence< sal_Int8 >, BYTES_VALUE_SET, aBytes );
 }
 
-//=========================================================================
+
 // virtual
 Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -388,7 +388,7 @@ Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
     GETVALUE_IMPL( Date, DATE_VALUE_SET, aDate );
 }
 
-//=========================================================================
+
 // virtual
 Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -396,7 +396,7 @@ Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
     GETVALUE_IMPL( Time, TIME_VALUE_SET, aTime );
 }
 
-//=========================================================================
+
 // virtual
 DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -404,7 +404,7 @@ DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
     GETVALUE_IMPL( DateTime, TIMESTAMP_VALUE_SET, aTimestamp );
 }
 
-//=========================================================================
+
 // virtual
 Reference< XInputStream > SAL_CALL
 PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
@@ -414,7 +414,7 @@ PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
         Reference< XInputStream >, BINARYSTREAM_VALUE_SET, xBinaryStream );
 }
 
-//=========================================================================
+
 // virtual
 Reference< XInputStream > SAL_CALL
 PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
@@ -424,7 +424,7 @@ PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
         Reference< XInputStream >, CHARACTERSTREAM_VALUE_SET, xCharacterStream );
 }
 
-//=========================================================================
+
 // virtual
 Any SAL_CALL PropertyValueSet::getObject(
                                     sal_Int32 columnIndex,
@@ -554,7 +554,7 @@ Any SAL_CALL PropertyValueSet::getObject(
     return aValue;
 }
 
-//=========================================================================
+
 // virtual
 Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -562,7 +562,7 @@ Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
     GETVALUE_IMPL( Reference< XRef >, REF_VALUE_SET, xRef );
 }
 
-//=========================================================================
+
 // virtual
 Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -570,7 +570,7 @@ Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
     GETVALUE_IMPL( Reference< XBlob >, BLOB_VALUE_SET, xBlob );
 }
 
-//=========================================================================
+
 // virtual
 Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -578,7 +578,7 @@ Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
     GETVALUE_IMPL( Reference< XClob >, CLOB_VALUE_SET, xClob );
 }
 
-//=========================================================================
+
 // virtual
 Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -586,11 +586,11 @@ Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
     GETVALUE_IMPL( Reference< XArray >, ARRAY_VALUE_SET, xArray );
 }
 
-//=========================================================================
-//
+
+
 // XColumnLocate methods.
-//
-//=========================================================================
+
+
 
 // virtual
 sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
@@ -610,11 +610,11 @@ sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
     return 0;
 }
 
-//=========================================================================
-//
+
+
 // Non-interface methods.
-//
-//=========================================================================
+
+
 
 const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 {
@@ -632,48 +632,48 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
     return m_xTypeConverter;
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendString( const OUString& rPropName,
                                      const OUString& rValue )
 {
     SETVALUE_IMPL( rPropName, STRING_VALUE_SET, aString, rValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendBoolean( const OUString& rPropName,
                                       bool bValue )
 {
     SETVALUE_IMPL( rPropName, BOOLEAN_VALUE_SET, bBoolean, bValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendLong( const OUString& rPropName,
                                    sal_Int64 nValue )
 {
     SETVALUE_IMPL( rPropName, LONG_VALUE_SET, nLong, nValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendTimestamp( const OUString& rPropName,
                                         const DateTime& rValue )
 {
     SETVALUE_IMPL( rPropName, TIMESTAMP_VALUE_SET, aTimestamp, rValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendObject( const OUString& rPropName,
                                      const Any& rValue )
 {
     SETVALUE_IMPL( rPropName, OBJECT_VALUE_SET, aObject, rValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendVoid( const OUString& rPropName )
 {
     SETVALUE_IMPL( rPropName, NO_VALUE_SET, aObject, Any() );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendPropertySet(
                                 const Reference< XPropertySet >& rxSet )
 {
@@ -743,7 +743,7 @@ void PropertyValueSet::appendPropertySet(
     }
 }
 
-//=========================================================================
+
 bool PropertyValueSet::appendPropertySetValue(
                                 const Reference< XPropertySet >& rxSet,
                                 const Property& rProperty )

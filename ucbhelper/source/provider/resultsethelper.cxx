@@ -38,17 +38,17 @@
 
 using namespace com::sun::star;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ResultSetImplHelper Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 namespace ucbhelper {
 
-//=========================================================================
+
 ResultSetImplHelper::ResultSetImplHelper(
     const uno::Reference< uno::XComponentContext >& rxContext,
     const com::sun::star::ucb::OpenCommandArgument2& rCommand )
@@ -60,18 +60,18 @@ ResultSetImplHelper::ResultSetImplHelper(
 {
 }
 
-//=========================================================================
+
 // virtual
 ResultSetImplHelper::~ResultSetImplHelper()
 {
     delete m_pDisposeEventListeners;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_4( ResultSetImplHelper,
                    lang::XTypeProvider,
@@ -79,22 +79,22 @@ XINTERFACE_IMPL_4( ResultSetImplHelper,
                    lang::XComponent, /* base of XDynamicResultSet */
                    com::sun::star::ucb::XDynamicResultSet );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
                       lang::XTypeProvider,
                          lang::XServiceInfo,
                       com::sun::star::ucb::XDynamicResultSet );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
                                OUString(
@@ -102,11 +102,11 @@ XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
                                OUString(
                                    DYNAMICRESULTSET_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // XComponent methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL ResultSetImplHelper::dispose()
@@ -122,7 +122,7 @@ void SAL_CALL ResultSetImplHelper::dispose()
     }
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL ResultSetImplHelper::addEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
@@ -137,7 +137,7 @@ void SAL_CALL ResultSetImplHelper::addEventListener(
     m_pDisposeEventListeners->addInterface( Listener );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL ResultSetImplHelper::removeEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
@@ -149,11 +149,11 @@ void SAL_CALL ResultSetImplHelper::removeEventListener(
         m_pDisposeEventListeners->removeInterface( Listener );
 }
 
-//=========================================================================
-//
+
+
 // XDynamicResultSet methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< sdbc::XResultSet > SAL_CALL
@@ -170,7 +170,7 @@ ResultSetImplHelper::getStaticResultSet()
     return m_xResultSet1;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL ResultSetImplHelper::setListener(
         const uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >&
@@ -185,9 +185,9 @@ void SAL_CALL ResultSetImplHelper::setListener(
 
     m_xListener = Listener;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Create "welcome event" and send it to listener.
-    //////////////////////////////////////////////////////////////////////
+
 
     // Note: We only have the implementation for a static result set at the
     //       moment (src590). The dynamic result sets passed to the listener
@@ -215,7 +215,7 @@ void SAL_CALL ResultSetImplHelper::setListener(
             static_cast< cppu::OWeakObject * >( this ), aActions ) );
 }
 
-//=========================================================================
+
 // virtual
 sal_Int16 SAL_CALL ResultSetImplHelper::getCapabilities()
     throw( uno::RuntimeException )
@@ -224,7 +224,7 @@ sal_Int16 SAL_CALL ResultSetImplHelper::getCapabilities()
     return 0;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL ResultSetImplHelper::connectToCache(
         const uno::Reference< com::sun::star::ucb::XDynamicResultSet > &
@@ -267,11 +267,11 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
     throw com::sun::star::ucb::ServiceNotFoundException();
 }
 
-//=========================================================================
-//
+
+
 // Non-interface methods.
-//
-//=========================================================================
+
+
 
 void ResultSetImplHelper::init( bool bStatic )
 {
