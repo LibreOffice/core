@@ -152,7 +152,7 @@ using namespace ::rtl;
 
 +(BOOL)convertBoolean:(PropertyValue)property {
     BOOL myBoolean = NO;
-    bool value = sal_False;
+    bool value = false;
     property.Value >>= value;
     if ( value ) {
         myBoolean = YES;

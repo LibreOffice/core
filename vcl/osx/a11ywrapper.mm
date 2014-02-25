@@ -310,7 +310,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     } catch (const Exception&) {
     }
 
-    OSL_ASSERT( 0 );
+    OSL_ASSERT( false );
     return nil;
 }
 
