@@ -141,7 +141,7 @@ SERVICE( Oasis2OOoTransformer );
 // OOo2Oasis transformer
 SERVICE( OOo2OasisTransformer );
 
-//
+
 #ifdef __cplusplus
 extern "C"
 {

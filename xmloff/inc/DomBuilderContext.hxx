@@ -23,9 +23,9 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-//
+
 // forward declarations
-//
+
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace dom {
@@ -62,17 +62,17 @@ public:
     virtual ~DomBuilderContext();
 
 
-    //
+
     // access to the DOM tree
-    //
+
 
     /** access the DOM tree */
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument> getTree();
 
 
-    //
+
     // implement SvXMLImportContext methods:
-    //
+
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,

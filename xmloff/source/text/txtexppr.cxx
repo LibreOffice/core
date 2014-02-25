@@ -225,13 +225,13 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
     //next time pFontFamilyNameState is not passed here at all, which gives an
     //empty sFamilyName resulting in disabling pFontNameState->mnIndex to -1.
     //That doesn't seem right to me.
-    //
+
     //So assuming that the main purpose is just to convert the properties in
     //the main when we can, and to leave them alone when we can't. And with a
     //secondary purpose to filter out empty font properties, then is would
     //appear to make sense to base attempting the conversion if we have
     //both of the major facts of the font description
-    //
+
     //An alternative solution is to *not* fill the FontAutoStylePool with
     //every font in the document, but to partition the fonts into the
     //hard-attribute fonts which go into that pool and the style-attribute

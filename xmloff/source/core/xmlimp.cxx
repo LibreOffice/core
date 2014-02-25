@@ -1009,9 +1009,9 @@ SchXMLImportHelper* SvXMLImport::CreateChartImport()
     return new ::xmloff::OFormLayerXMLImport(*this);
 }
 
-//
+
 // Get or create fill/line/lineend-style-helper
-//
+
 
 const Reference< container::XNameContainer > & SvXMLImport::GetGradientHelper()
 {

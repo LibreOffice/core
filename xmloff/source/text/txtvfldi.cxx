@@ -92,9 +92,9 @@ using namespace ::xmloff::token;
 
 
 
-//
+
 // XMLVarFieldImportContext: superclass for all variable related fields
-//
+
 
 TYPEINIT1( XMLVarFieldImportContext, XMLTextFieldImportContext );
 
@@ -286,9 +286,9 @@ void XMLVarFieldImportContext::PrepareField(
 
 
 
-//
+
 // variable set fields
-//
+
 
 TYPEINIT1( XMLSetVarFieldImportContext, XMLVarFieldImportContext );
 
@@ -374,9 +374,9 @@ sal_Bool XMLSetVarFieldImportContext::FindFieldMaster(
 
 
 
-//
+
 // sequence field
-//
+
 
 TYPEINIT1( XMLSequenceFieldImportContext, XMLSetVarFieldImportContext );
 
@@ -447,9 +447,9 @@ void XMLSequenceFieldImportContext::PrepareField(
 
 
 
-//
+
 // variable set field
-//
+
 
 TYPEINIT1( XMLVariableSetFieldImportContext, XMLSetVarFieldImportContext );
 
@@ -483,9 +483,9 @@ void XMLVariableSetFieldImportContext::PrepareField(
 
 
 
-//
+
 // variable input field
-//
+
 
 TYPEINIT1( XMLVariableInputFieldImportContext, XMLSetVarFieldImportContext );
 
@@ -525,9 +525,9 @@ void XMLVariableInputFieldImportContext::PrepareField(
 
 
 
-//
+
 // user field
-//
+
 
 TYPEINIT1( XMLUserFieldImportContext, XMLSetVarFieldImportContext );
 
@@ -547,9 +547,9 @@ XMLUserFieldImportContext::XMLUserFieldImportContext(
 
 
 
-//
+
 // user input field
-//
+
 
 TYPEINIT1( XMLUserFieldInputImportContext, XMLVarFieldImportContext );
 
@@ -580,9 +580,9 @@ void XMLUserFieldInputImportContext::PrepareField(
 }
 
 
-//
+
 // variable get field
-//
+
 
 TYPEINIT1( XMLVariableGetFieldImportContext, XMLVarFieldImportContext );
 
@@ -615,9 +615,9 @@ void XMLVariableGetFieldImportContext::PrepareField(
 
 
 
-//
+
 // expression field
-//
+
 
 TYPEINIT1( XMLExpressionFieldImportContext, XMLVarFieldImportContext );
 
@@ -652,9 +652,9 @@ void XMLExpressionFieldImportContext::PrepareField(
 
 
 
-//
+
 // text input field
-//
+
 
 TYPEINIT1( XMLTextInputFieldImportContext, XMLVarFieldImportContext );
 
@@ -685,9 +685,9 @@ void XMLTextInputFieldImportContext::PrepareField(
 }
 
 
-//
+
 // table formula field
-//
+
 
 TYPEINIT1( XMLTableFormulaImportContext, XMLTextFieldImportContext );
 
@@ -753,17 +753,17 @@ void XMLTableFormulaImportContext::PrepareField(
 
 
 
-//
+
 // variable declarations
-//
+
 // Should be adapted to XMLVarField-/XMLSetVarFieldImportContext scheme!
-//
 
 
 
-//
+
+
 // declaration containter import (<variable/user-field/sequence-decls>)
-//
+
 
 TYPEINIT1( XMLVariableDeclsImportContext, SvXMLImportContext );
 
@@ -822,9 +822,9 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
 
 
 
-//
+
 // declaration import (<variable/user-field/sequence-decl> elements)
-//
+
 
 TYPEINIT1( XMLVariableDeclImportContext, SvXMLImportContext );
 
@@ -1084,9 +1084,9 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
 }
 
 
-//
+
 // Database Display field import
-//
+
 
 
 TYPEINIT1( XMLDatabaseDisplayImportContext, XMLDatabaseFieldImportContext );
@@ -1219,9 +1219,9 @@ void XMLDatabaseDisplayImportContext::EndElement()
 }
 
 
-//
+
 // value import helper
-//
+
 
 enum ValueType
 {

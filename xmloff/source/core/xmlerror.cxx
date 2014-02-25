@@ -38,9 +38,9 @@ using ::com::sun::star::xml::sax::XLocator;
 using ::com::sun::star::xml::sax::SAXParseException;
 
 
-//
+
 /// ErrorRecord: contains all information for one error
-//
+
 
 class ErrorRecord
 {

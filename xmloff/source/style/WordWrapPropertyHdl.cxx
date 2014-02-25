@@ -28,9 +28,9 @@
 
 using namespace ::com::sun::star::uno;
 
-//
+
 // class XMLWordWrapPropertyHdl
-//
+
 
 XMLWordWrapPropertyHdl::XMLWordWrapPropertyHdl( SvXMLImport* pImport )
 : mpImport( pImport )

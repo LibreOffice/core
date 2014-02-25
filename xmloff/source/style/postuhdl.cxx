@@ -36,9 +36,9 @@ SvXMLEnumMapEntry const aPostureGenericMapping[] =
     { XML_TOKEN_INVALID,        0               }
 };
 
-//
+
 // class XMLPosturePropHdl
-//
+
 
 XMLPosturePropHdl::~XMLPosturePropHdl()
 {

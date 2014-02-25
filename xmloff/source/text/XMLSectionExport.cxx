@@ -1398,18 +1398,18 @@ void XMLSectionExport::ExportIndexTemplateElement(
             {
                 // a few word here: OOo up to 2.4 uses the field chapter info in Alphabetical index
                 // in a way different from the ODF 1.1/1.0 specification:
-                //
+
                 // ODF1.1/1.0         OOo display in chapter info                       ODF1.2
                 //                    (used in alphabetical index only
-                //
+
                 // number             chapter number without pre/postfix                plain-number
                 // number-and-name    chapter number without pre/postfix plus title     plain-number-and-name
-                //
+
                 // with issue i89791 the reading of ODF 1.1 and 1.0 was corrected
                 // this one corrects the writing back from ODF 1.2 to ODF 1.1/1.0
                 // unfortunately if there is another application which interprets correctly ODF1.1/1.0,
                 // the resulting alphabetical index will be rendered wrong by OOo 2.4 version
-                //
+
                 switch( nChapterFormat )
                 {
                 case ChapterFormat::DIGIT:

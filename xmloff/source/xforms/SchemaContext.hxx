@@ -24,9 +24,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-//
+
 // forward declarations
-//
+
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
@@ -50,9 +50,9 @@ public:
     virtual ~SchemaContext();
 
 
-    //
+
     // implement TokenContext methods:
-    //
+
 
 protected:
 

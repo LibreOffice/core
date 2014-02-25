@@ -238,7 +238,7 @@ public:
 };
 
 // office:master-styles context
-//
+
 class SdXMLMasterStylesContext : public SvXMLImportContext
 {
     ImpMasterPageList           maMasterPageList;

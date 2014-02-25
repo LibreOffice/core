@@ -148,9 +148,9 @@ static OUString lcl_getXSDType( SvXMLExport& rExport,
                          const Reference<XPropertySet>& xType );
 
 
-//
+
 // the model
-//
+
 
 static const ExportTable aXFormsModelTable[] =
 {
@@ -209,9 +209,9 @@ void exportXFormsModel( SvXMLExport& rExport,
     exportXFormsSchemas( rExport, xModel );
 }
 
-//
+
 // the instance
-//
+
 
 void exportXFormsInstance( SvXMLExport& rExport,
                            const Sequence<PropertyValue>& xInstance )
@@ -250,9 +250,9 @@ void exportXFormsInstance( SvXMLExport& rExport,
 }
 
 
-//
+
 // the binding
-//
+
 
 static const ExportTable aXFormsBindingTable[] =
 {
@@ -364,9 +364,9 @@ void exportXFormsBinding( SvXMLExport& rExport,
 }
 
 
-//
+
 // the submission
-//
+
 
 static const ExportTable aXFormsSubmissionTable[] =
 {
@@ -398,9 +398,9 @@ void exportXFormsSubmission( SvXMLExport& rExport,
 
 
 
-//
+
 // export data types as XSD schema
-//
+
 
 static const ExportTable aDataTypeFacetTable[] =
 {
@@ -596,9 +596,9 @@ void exportXFormsSchemas( SvXMLExport& rExport,
 
 
 
-//
+
 // helper functions
-//
+
 
 static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  SvXMLExport& rExport,
@@ -622,9 +622,9 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
 
 
 
-//
+
 // any conversion functions
-//
+
 
 template<typename T, void (*FUNC)( OUStringBuffer&, T )>
 OUString xforms_convert( const Any& rAny )

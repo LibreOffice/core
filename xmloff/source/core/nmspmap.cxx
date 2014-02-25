@@ -497,7 +497,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
         return sal_True;
     }
 
-    //
+
     // Check if URN matches
     // :urn:oasis:names:tc:[^:]*:xmlns:[^:]*:1.[^:]*
     //                     |---|       |---| |-----|

@@ -23,9 +23,9 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-//
+
 // forward declarations
-//
+
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
@@ -55,9 +55,9 @@ public:
     virtual ~TokenContext();
 
 
-    //
+
     // implement SvXMLImportContext methods:
-    //
+
 
     /** call HandleAttribute for each attribute in the token map;
      * create a warning for all others. Classes that wish to override

@@ -86,7 +86,7 @@ using namespace ::xmloff::token;
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
     // this entry must be first! this is needed for XMLShapeImportHelper::CreateExternalShapePropMapper
-    //
+
     // ^^^though CreateExternalShapePropMapper is gone now, hmm^^^
     GMAP( "UserDefinedAttributes",          XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 

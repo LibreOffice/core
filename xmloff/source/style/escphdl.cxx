@@ -33,9 +33,9 @@ using namespace ::xmloff::token;
 #define DFLT_ESC_AUTO_SUPER 101
 #define DFLT_ESC_AUTO_SUB  -101
 
-//
+
 // class XMLEscapementPropHdl
-//
+
 
 XMLEscapementPropHdl::~XMLEscapementPropHdl()
 {
@@ -98,9 +98,9 @@ bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     return true;
 }
 
-//
+
 // class XMLEscapementHeightPropHdl
-//
+
 
 XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
 {

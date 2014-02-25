@@ -256,9 +256,9 @@ static int txtparae_bContainsIllegalCharacters = sal_False;
 #endif
 
 // The following map shows which property values are required:
-//
+
 // property                     auto style pass     export
-// -------------------------------------------------------
+
 // ParaStyleName                if style exists     always
 // ParaConditionalStyleName     if style exists     always
 // NumberingRules               if style exists     always
@@ -2501,7 +2501,7 @@ void XMLTextParagraphExport::exportTextMark(
     sal_Bool bAutoStyles)
 {
     // mib said: "Hau wech!"
-    //
+
     // (Originally, I'd export a span element in case the (book|reference)mark
     //  was formatted. This actually makes a difference in case some pervert
     //  sets a point reference mark in the document and, say, formats it bold.

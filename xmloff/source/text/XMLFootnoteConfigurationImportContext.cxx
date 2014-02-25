@@ -50,9 +50,9 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-//
+
 //  XMLFootnoteConfigHelper
-//
+
 
 /// local helper class for import of quo-vadis and ergo-sum elements
 class XMLFootnoteConfigHelper : public SvXMLImportContext
@@ -110,9 +110,9 @@ void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
 }
 
 
-//
+
 // XMLFootnoteConfigurationImportContext
-//
+
 
 
 TYPEINIT1( XMLFootnoteConfigurationImportContext, SvXMLStyleContext );

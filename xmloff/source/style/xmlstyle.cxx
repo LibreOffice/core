@@ -467,9 +467,9 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                     GetImport(), p_nPrefix, rLocalName, xAttrList);
                 break;
 
-            //
+
             // FillStyles
-            //
+
             case XML_TOK_STYLES_GRADIENTSTYLES:
             {
                 pStyle = new XMLGradientStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );

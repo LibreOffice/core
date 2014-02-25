@@ -31,9 +31,9 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-//
+
 // class XMLMeasurePropHdl
-//
+
 
 XMLShadowPropHdl::~XMLShadowPropHdl()
 {

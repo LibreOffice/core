@@ -181,19 +181,19 @@ static OUString const& GetSequenceNumber()
     return s_SequenceNumber;
 }
 
-//
+
 // XMLTextImportHelper
-//
+
 // Code from XMLTextImportHelper using the XMLPropertyBackpatcher is
 // implemented here. The reason is that in the unxsols2 environment,
 // all templates are instatiated as file local (switch
 // -instances=static), and thus are not accessible from the outside.
-//
+
 // The previous solution was to force additional instantiation of
 // XMLPropertyBackpatcher in txtimp.cxx. This solution combines all
 // usage of the XMLPropertyBackpatcher in XMLPropertyBackpatcher.cxx
 // instead.
-//
+
 
 XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetFootnoteBP()
 {
