@@ -2119,8 +2119,8 @@ void SAL_CALL ScTabViewObj::abortRangeSelection() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScTabViewObj::addRangeSelectionListener(
-                                const uno::Reference<sheet::XRangeSelectionListener>& xListener )
-                                    throw(uno::RuntimeException)
+    const uno::Reference<sheet::XRangeSelectionListener>& xListener )
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XRangeSelectionListener>* pObj =

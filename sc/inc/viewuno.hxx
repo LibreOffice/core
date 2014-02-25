@@ -362,7 +362,8 @@ public:
     virtual void SAL_CALL   abortRangeSelection() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   addRangeSelectionListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XRangeSelectionListener >& aListener )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException,
+                                           std::exception);
     virtual void SAL_CALL   removeRangeSelectionListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XRangeSelectionListener >& aListener )
                                     throw(::com::sun::star::uno::RuntimeException);
