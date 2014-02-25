@@ -31,10 +31,10 @@
 #include <svtools/treelistentry.hxx>
 #include <vcl/builder.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -43,9 +43,9 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::datatransfer;
 
-    //========================================================================
+
     //= OSimpleTabModel
-    //========================================================================
+
     class OSimpleTabModel : public ::cppu::WeakImplHelper1< XTabControllerModel>
     {
         Sequence< Reference< XControlModel > > m_aModels;
@@ -67,9 +67,9 @@ namespace pcr
         virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException, std::exception ){};
     };
 
-    //========================================================================
+
     //= TabOrderDialog
-    //========================================================================
+
     DBG_NAME(TabOrderDialog)
 
     TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
@@ -288,9 +288,9 @@ namespace pcr
         return 0;
     }
 
-    //========================================================================
+
     //= TabOrderListBox
-    //========================================================================
+
     DBG_NAME(TabOrderListBox);
 
     TabOrderListBox::TabOrderListBox( Window* pParent, WinBits nBits  )
@@ -336,7 +336,7 @@ namespace pcr
         {
             ((TabOrderDialog*)GetParentDialog())->SetModified();
 
-            //////////////////////////////////////////////////////////////////////
+
             // move entries
             if( nRelPos < 0 )
             {
@@ -402,8 +402,8 @@ namespace pcr
         }
     }
 
-//............................................................................
+
 }  // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,14 +25,14 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ServiceDescriptor
-    //====================================================================
+
     struct ServiceDescriptor
     {
         OUString
@@ -41,9 +41,9 @@ namespace pcr
             ( *GetSupportedServiceNames )( void );
     };
 
-    //====================================================================
+
     //= FormController
-    //====================================================================
+
     class FormController;
     typedef ::cppu::OPropertySetHelper                                  FormController_PropertyBase1;
     typedef ::comphelper::OPropertyArrayUsageHelper< FormController >   FormController_PropertyBase2;
@@ -102,9 +102,9 @@ namespace pcr
         using FormController_PropertyBase1::getFastPropertyValue;
     };
 
-    //====================================================================
+
     //= DialogController
-    //====================================================================
+
     /** Legacy implementation of com.sun.star.awt.PropertyBrowserController
     */
     class DialogController
@@ -121,9 +121,9 @@ namespace pcr
         DialogController( const DialogController& );            // never implemented
         DialogController& operator=( const DialogController& ); // never implemented
     };
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_FORMCONTROLLER_HXX
 

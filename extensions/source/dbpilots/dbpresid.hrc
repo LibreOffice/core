@@ -23,7 +23,7 @@
 #include "dbpilots.hrc"
 #include "extensio.hrc"
 
-//========================================================================
+
 // basics
 
 #define RID_DIALOG_START                RID_DBP_START
@@ -31,7 +31,7 @@
 #define RID_STRING_START                RID_DBP_START
 #define RID_ERRORBOX_START              RID_DBP_START
 
-//========================================================================
+
 // strings
 
 #define RID_STR_GROUPWIZ_DBFIELD        (RID_STRING_START +  1 )
@@ -48,7 +48,7 @@
 // please adjust RID_STRING_END (below) when adding new strings
 #define RID_STRING_END                  RID_STR_TIMEPOSTFIX
 
-//========================================================================
+
 // dialogs
 
 #define RID_DLG_GROUPBOXWIZARD          ( RID_DIALOG_START +  1 )
@@ -58,7 +58,7 @@
 // please adjust RID_DIALOG_END (below) when adding new dialogs
 #define RID_DIALOG_END                  RID_DLG_GRIDWIZARD
 
-//========================================================================
+
 // tab pages
 
 #define RID_PAGE_TABLESELECTION             ( RID_PAGE_START +  1 )
@@ -76,7 +76,7 @@
 // please adjust RID_PAGE_END (below) when adding new tab pages
 #define RID_PAGE_END                        RID_PAGE_GW_FIELDSELECTION
 
-//========================================================================
+
 // ErrorBox
 
 #define RID_ERR_INVALID_FORM_CONNECTION     ( RID_ERRORBOX_START +  1 )
@@ -85,8 +85,8 @@
 #define RID_ERRORBOX_END                    RID_ERR_INVALID_FORM_CONNECTION
 
 
-//========================================================================
-//========================================================================
+
+
 //= range checks
 
 #if RID_STRING_END > RID_DBP_END
@@ -102,10 +102,10 @@
     #error "please adjust the resource id ranges!!"
 #endif
 
-//========================================================================
+
 // local ids
 
-//........................................................................
+
 // FixedLine
 
 #define FL_DATA                     1
@@ -116,7 +116,7 @@
 #define FL_FRAME                    6
 #define FL_FORMSETINGS              7
 
-//........................................................................
+
 // FixedText
 
 #define FT_DATASOURCE                1
@@ -147,7 +147,7 @@
 #define FT_FORMCONTENTTYPELABEL     26
 #define FT_FORMCONTENTTYPE          27
 
-//........................................................................
+
 // ListBox
 
 #define LB_DATASOURCE               1
@@ -160,7 +160,7 @@
 #define LB_EXISTING_FIELDS          7
 #define LB_SELECTED_FIELDS          8
 
-//........................................................................
+
 // Edit
 
 #define ET_RADIOLABELS              1
@@ -168,7 +168,7 @@
 #define ET_NAMEIT                   3
 #define ET_DISPLAYEDFIELD           4
 
-//........................................................................
+
 // PushButton
 
 #define PB_MOVETORIGHT              1
@@ -179,7 +179,7 @@
 #define PB_ALLFIELDSLEFT            6
 #define PB_FORMDATASOURCE           7
 
-//........................................................................
+
 // RadioButton
 
 #define RB_DEFSELECTION_YES         1
@@ -187,19 +187,19 @@
 #define RB_STOREINFIELD_YES         3
 #define RB_STOREINFIELD_NO          4
 
-//........................................................................
+
 // ComboBox
 
 #define CMB_VALUELISTFIELD          1
 #define CMB_TABLEFIELD              2
 
-//........................................................................
+
 // String
 
 #define STR_FIELDINFO_LISTBOX       1
 #define STR_FIELDINFO_COMBOBOX      2
 
-//........................................................................
+
 // Image
 
 #define IMG_TABLE                   1

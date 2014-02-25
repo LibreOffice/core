@@ -19,9 +19,9 @@
 
 #include "jscriptclasses.hxx"
 
-//========================================================================
+
 // JScriptValue
-//========================================================================
+
 JScriptValue::JScriptValue(): m_bOutParam(0), m_bInOutParam(0)
 {
 }
@@ -207,9 +207,9 @@ STDMETHODIMP JScriptValue::GetValue( BSTR* type, VARIANT *value)
     return hr;
 }
 
-//##########################################################################################
+
 // JScriptOutValue
-//##########################################################################################
+
 
 JScriptOutParam::JScriptOutParam()
 {
@@ -285,7 +285,7 @@ STDMETHODIMP JScriptOutParam::Invoke( DISPID dispIdMember,
         else
             ret= E_POINTER;
         break;
-    case 1: //
+    case 1:
         if( wFlags & DISPATCH_PROPERTYGET && pVarResult)
         {
             if( FAILED( VariantCopy( pVarResult, &m_varValue)))

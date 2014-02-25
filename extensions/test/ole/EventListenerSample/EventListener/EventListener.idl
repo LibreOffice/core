@@ -17,7 +17,7 @@
  */
 
 // EventListener.idl : IDL source for EventListener.dll
-//
+
 
 // This file will be processed by the MIDL tool to
 // produce the type library (EventListener.tlb) and marshalling code.

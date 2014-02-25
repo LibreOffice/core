@@ -19,7 +19,7 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by MfcControl.rc
-//
+
 
 #define IDS_MFCCONTROL               1
 #define IDS_MFCCONTROL_PPG           2

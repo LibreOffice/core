@@ -20,17 +20,17 @@
 #ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 #define _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     // properties
     #define PROPERTY_TABBINGMODEL           "TabbingModel"
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 

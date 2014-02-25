@@ -25,7 +25,7 @@
 
 // MfcControlPpg.h : Declaration of the CMfcControlPropPage property page class.
 
-////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlPropPage : See MfcControlPpg.cpp.cpp for implementation.
 
 class CMfcControlPropPage : public COlePropertyPage

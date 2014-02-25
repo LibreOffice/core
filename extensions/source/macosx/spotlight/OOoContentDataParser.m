@@ -29,24 +29,24 @@
         shouldReadCharacters = NO;
         textContent = nil;
         runningTextContent = nil;
-        
+
         return self;
     }
-    
+
     return nil;
 }
 
 - (void)parseXML:(NSData*)data intoDictionary:(NSMutableDictionary*)dict
 {
     mdiValues = dict;
-    
+
     //NSLog(@"data: %@ %d", data, [data length]);
-    
+
     //init parser settings
     shouldReadCharacters = NO;
-    
+
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
-    
+
     // Once again...
     // class 'OOoContentDataParser' does not implement the 'NSXMLParserDelegate' protocol
     // So instead of this:
@@ -56,9 +56,9 @@
 
     [parser setShouldResolveExternalEntities:NO];
     [parser parse];
-    
+
     [parser release];
-    
+
     //NSLog(@"finished");
 }
 
@@ -77,11 +77,11 @@
     } else {
         return;
     }
-    
+
     //NSLog(@"start element %@", elementName);
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName 
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
     (void) parser; // unused
     (void) elementName; // unused
@@ -95,7 +95,7 @@
             [textContent appendString:@" "];
         }
         //NSLog(@"end");
-        
+
         [textContent appendString:[NSString stringWithString:runningTextContent]];
         [runningTextContent release];
     }
@@ -109,20 +109,20 @@
         return;
     }
     //NSLog(string);
-    
+
     [runningTextContent appendString:string];
-    
+
     //NSLog(@"read: %@", string);
-    
+
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     //NSLog(@"parsing finished with error");
-    NSLog(@"An error occurred parsing the document. (Error %li, Description: %@, Line: %li, Column: %li)", (long) [parseError code], 
+    NSLog(@"An error occurred parsing the document. (Error %li, Description: %@, Line: %li, Column: %li)", (long) [parseError code],
           [[parser parserError] localizedDescription], (long) [parser lineNumber],
           (long) [parser columnNumber]);
-    
+
     if (runningTextContent != nil) {
         [runningTextContent release];
     }

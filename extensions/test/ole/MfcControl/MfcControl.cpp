@@ -36,7 +36,7 @@ const WORD _wVerMajor = 1;
 const WORD _wVerMinor = 0;
 
 
-////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlApp::InitInstance - DLL initialization
 
 BOOL CMfcControlApp::InitInstance()
@@ -52,7 +52,7 @@ BOOL CMfcControlApp::InitInstance()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlApp::ExitInstance - DLL termination
 
 int CMfcControlApp::ExitInstance()
@@ -63,7 +63,7 @@ int CMfcControlApp::ExitInstance()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DllRegisterServer - Adds entries to the system registry
 
 STDAPI DllRegisterServer(void)
@@ -80,7 +80,7 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // DllUnregisterServer - Removes entries from the system registry
 
 STDAPI DllUnregisterServer(void)

@@ -25,16 +25,16 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 
-//.........................................................................
+
 namespace bib
 {
-//.........................................................................
+
 
     class OComponentAdapterBase;
 
-    //=====================================================================
+
     //= OComponentListener
-    //=====================================================================
+
     class OComponentListener
     {
         friend class OComponentAdapterBase;
@@ -58,9 +58,9 @@ namespace bib
         void setAdapter( OComponentAdapterBase* _pAdapter );
     };
 
-    //=====================================================================
+
     //= OComponentAdapterBase
-    //=====================================================================
+
     class OComponentAdapterBase
     {
         friend class OComponentListener;
@@ -114,9 +114,9 @@ namespace bib
         virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-    //=====================================================================
+
     //= OLoadListener
-    //=====================================================================
+
     class OLoadListener : public OComponentListener
     {
         friend class OLoadListenerAdapter;
@@ -132,9 +132,9 @@ namespace bib
         virtual void _reloaded( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
     };
 
-    //=====================================================================
+
     //= OLoadListenerAdapter
-    //=====================================================================
+
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::form::XLoadListener >    OLoadListenerAdapter_Base;
     class OLoadListenerAdapter
         :public OLoadListenerAdapter_Base
@@ -169,9 +169,9 @@ namespace bib
         virtual void SAL_CALL reloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//.........................................................................
+
 }   // namespace bib
-//.........................................................................
+
 
 #endif // EXTENSIONS_BIB_LOADLISTENERADAPTER_HXX
 

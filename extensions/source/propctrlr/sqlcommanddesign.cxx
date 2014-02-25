@@ -44,10 +44,10 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiComponentFactory;
@@ -86,17 +86,17 @@ namespace pcr
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    //====================================================================
+
     //= ISQLCommandAdapter
-    //====================================================================
+
 
     ISQLCommandAdapter::~ISQLCommandAdapter()
     {
     }
 
-    //====================================================================
+
     //= SQLCommandDesigner
-    //====================================================================
+
 
     SQLCommandDesigner::SQLCommandDesigner( const Reference< XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
@@ -371,8 +371,8 @@ namespace pcr
         return bAllow;
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

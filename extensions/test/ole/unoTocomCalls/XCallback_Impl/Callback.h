@@ -23,7 +23,7 @@
 
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CCallback
 class ATL_NO_VTABLE CCallback :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -105,7 +105,7 @@ public:
             /* [out] */ short __RPC_FAR *aShort,
             /* [out] */ long __RPC_FAR *aLong);
 //              );
-//
+
 //  STDMETHOD(outValuesAll)(
 //          /*[out]*/ IDispatch** ppdisp,
 //          /*[out]*/ IUnknown** ppSimpleStruct,

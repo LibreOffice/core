@@ -45,10 +45,10 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <tools/urlobj.hxx>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -67,9 +67,9 @@ namespace dbp
     using namespace ::comphelper;
     using namespace ::dbtools;
 
-    //=====================================================================
+
     //= OAccessRegulator
-    //=====================================================================
+
     struct OAccessRegulator
     {
         friend class OControlWizardPage;
@@ -78,9 +78,9 @@ namespace dbp
         OAccessRegulator() { }
     };
 
-    //=====================================================================
+
     //= OControlWizardPage
-    //=====================================================================
+
 
     OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId )
         :OControlWizardPage_Base( _pParent, _rResId )
@@ -268,9 +268,9 @@ namespace dbp
         OControlWizardPage_Base::initializePage();
     }
 
-    //=====================================================================
+
     //= OControlWizard
-    //=====================================================================
+
 
     OControlWizard::OControlWizard( Window* _pParent, const ResId& _rId,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
@@ -733,8 +733,8 @@ namespace dbp
             // if we got fields, the data source is valid ...
     }
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

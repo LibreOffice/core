@@ -36,17 +36,17 @@
 #include <set>
 #include <map>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     typedef ::std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::std::less< OUString > >
             MapStringToPropertySet;
 
-    //====================================================================
+
     //= EFormsHelper
-    //====================================================================
+
     class EFormsHelper
     {
     protected:
@@ -251,9 +251,9 @@ namespace pcr
         EFormsHelper& operator=( const EFormsHelper& ); // never implemented
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_EFORMSHELPER_HXX
 

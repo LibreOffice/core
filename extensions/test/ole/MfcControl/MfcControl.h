@@ -31,7 +31,7 @@
 
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlApp : See MfcControl.cpp for implementation.
 
 class CMfcControlApp : public COleControlModule

@@ -23,22 +23,22 @@
 #include "controlwizard.hxx"
 #include "commonpagesdbp.hxx"
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OGridSettings
-    //=====================================================================
+
     struct OGridSettings : public OControlWizardSettings
     {
         ::com::sun::star::uno::Sequence< OUString >      aSelectedFields;
     };
 
-    //=====================================================================
+
     //= OGridWizard
-    //=====================================================================
+
     class OGridWizard : public OControlWizard
     {
     protected:
@@ -68,9 +68,9 @@ namespace dbp
         void implApplySettings();
     };
 
-    //=====================================================================
+
     //= OGridPage
-    //=====================================================================
+
     class OGridPage : public OControlWizardPage
     {
     public:
@@ -80,9 +80,9 @@ namespace dbp
         OGridSettings& getSettings() { return static_cast<OGridWizard*>(getDialog())->getSettings(); }
     };
 
-    //=====================================================================
+
     //= OGridFieldsSelection
-    //=====================================================================
+
     class OGridFieldsSelection : public OGridPage
     {
     protected:
@@ -120,9 +120,9 @@ namespace dbp
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > implGetColumns(sal_Bool _bShowError = sal_True);
     };
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 #endif // _EXTENSIONS_DBP_GRIDWIZARD_HXX_
 

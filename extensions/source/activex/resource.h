@@ -20,7 +20,7 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
 // Used by so_activex.rc
-//
+
 #define IDS_PROJNAME                    100
 #define IDB_SOACTIVEX                 101
 #define IDR_SOACTIVEX                 102
@@ -33,7 +33,7 @@
 
 
 // Next default values for new objects
-//
+
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

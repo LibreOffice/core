@@ -20,12 +20,12 @@
 #include "modulepcr.hxx"
 #include "propresid.hrc"
 
-//........................................................................
+
 namespace pcr
 {
-    //====================================================================
+
     //= InspectorHelpWindow
-    //====================================================================
+
 
     InspectorHelpWindow::InspectorHelpWindow( Window* _pParent )
         :Window( _pParent, WB_DIALOGCONTROL )
@@ -127,8 +127,8 @@ namespace pcr
         m_aHelpText.SetPosSizePixel( aTextArea.TopLeft(), aTextArea.GetSize() );
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

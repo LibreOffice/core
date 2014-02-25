@@ -31,7 +31,7 @@
 
 using namespace com::sun::star::uno;
 
-//==================================================================================================
+
 Reference< XInterface > SAL_CALL PluginModel_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception )
 {
     Reference< XInterface >  xService = *new PluginModel();

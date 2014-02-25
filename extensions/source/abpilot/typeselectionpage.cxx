@@ -25,18 +25,12 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
 namespace abp
 {
-//.........................................................................
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
 
-    //=====================================================================
-    //= TypeSelectionPage
-    //=====================================================================
-
+    // TypeSelectionPage
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))
         ,m_aHint                (this,  ModuleRes(FT_TYPE_HINTS))
@@ -272,8 +266,8 @@ namespace abp
         return 0L;
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

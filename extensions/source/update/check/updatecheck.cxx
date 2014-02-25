@@ -532,7 +532,7 @@ UpdateCheckThread::run()
             if( ! hasInternetConnection() || ! runCheck( bExtensionsChecked ) )
             {
                 // the extension update check should be independent from the office update check
-                //
+
                 osl_getSystemTime( &systime );
                 if ( nExtCheckTime.Seconds + offset < systime.Seconds )
                     bExtensionsChecked = false;

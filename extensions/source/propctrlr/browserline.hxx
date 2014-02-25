@@ -29,14 +29,14 @@ namespace com { namespace sun { namespace star { namespace inspection { namespac
     const sal_Int16 CompleteLine = 0x4000;
 } } } } }
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     class OBrowserLine;
 
-    //========================================================================
+
     class IButtonClickListener
     {
     public:
@@ -46,7 +46,7 @@ namespace pcr
         ~IButtonClickListener() {}
     };
 
-    //========================================================================
+
     class OBrowserLine
     {
     private:
@@ -126,9 +126,9 @@ namespace pcr
         void        impl_getImagesFromURL_nothrow( const OUString& _rImageURL, Image& _out_rImage );
     };
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
 

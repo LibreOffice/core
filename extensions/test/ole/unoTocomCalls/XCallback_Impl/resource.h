@@ -19,14 +19,14 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
 // Used by XCallback_Impl.rc
-//
+
 #define IDS_PROJNAME                    100
 #define IDR_CALLBACK                    101
 #define IDR_SIMPLE                      102
 #define IDR_SIMPLESTRUCT                103
 
 // Next default values for new objects
-//
+
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

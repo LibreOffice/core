@@ -62,10 +62,10 @@
 
 class Window;
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     class OPropertyEditor;
     struct OLineDescriptor;
@@ -76,9 +76,9 @@ namespace pcr
 #endif
     DBG_NAMEEX( OPropertyBrowserController )
 
-    //========================================================================
+
     //= OPropertyBrowserController
-    //========================================================================
+
     // #95343#------------------------------------------------------------------------------------
     typedef ::cppu::WeakImplHelper7 <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::awt::XFocusListener
@@ -405,9 +405,9 @@ namespace pcr
         void    createWithModel( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >& _rxModel );
     };
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 

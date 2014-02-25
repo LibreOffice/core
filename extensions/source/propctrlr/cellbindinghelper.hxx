@@ -30,14 +30,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
 
-    //========================================================================
+
+
     //= CellBindingHelper
-    //========================================================================
+
     /** encapsulates functionality related to binding a form control to a spreadsheet cell
     */
     class CellBindingHelper
@@ -273,9 +273,9 @@ namespace pcr
                         ) const SAL_THROW(());
     };
 
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 #endif // EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
 

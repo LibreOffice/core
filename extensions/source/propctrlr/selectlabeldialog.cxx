@@ -31,10 +31,10 @@
 #include <comphelper/types.hxx>
 #include "svtools/treelistentry.hxx"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
@@ -43,9 +43,9 @@ namespace pcr
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-    //========================================================================
+
     // OSelectLabelDialog
-    //========================================================================
+
     DBG_NAME(OSelectLabelDialog)
 
     OSelectLabelDialog::OSelectLabelDialog( Window* pParent, Reference< XPropertySet >  _xControlModel )
@@ -298,8 +298,8 @@ namespace pcr
         return 0L;
     }
 
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

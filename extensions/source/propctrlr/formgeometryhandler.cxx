@@ -43,10 +43,10 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -98,9 +98,9 @@ namespace pcr
     #define ANCHOR_TO_SHEET 0
     #define ANCHOR_TO_CELL  1
 
-    //====================================================================
+
     //= BroadcastHelperBase
-    //====================================================================
+
     class BroadcastHelperBase
     {
     protected:
@@ -116,9 +116,9 @@ namespace pcr
         ::cppu::OBroadcastHelper    maBHelper;
     };
 
-    //====================================================================
+
     //= ShapeGeometryChangeNotifier - declaration
-    //====================================================================
+
     /** helper class to work around the ...unfortunate implementation of property change broadcasts
         in the XShape implementation, which broadcasts way too generous and unspecified
     */
@@ -200,9 +200,9 @@ namespace pcr
         Reference< XShape >                 m_xShape;
     };
 
-    //====================================================================
+
     //= FormGeometryHandler - declaration
-    //====================================================================
+
     class FormGeometryHandler;
     typedef HandlerComponentBase< FormGeometryHandler > FormGeometryHandler_Base;
     /** a property handler for any virtual string properties
@@ -250,9 +250,9 @@ namespace pcr
         ::rtl::Reference< ShapeGeometryChangeNotifier > m_xChangeNotifier;
     };
 
-    //====================================================================
+
     //= FormGeometryHandler - implementation
-    //====================================================================
+
     DBG_NAME( FormGeometryHandler )
 
     FormGeometryHandler::FormGeometryHandler( const Reference< XComponentContext >& _rxContext )
@@ -704,9 +704,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
+
     //= ShapeGeometryChangeNotifier - implementation
-    //====================================================================
+
     namespace
     {
         struct EventTranslation
@@ -805,9 +805,9 @@ namespace pcr
         getBroadcastHelper().bDisposed = true;
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 extern "C" void SAL_CALL createRegistryInfo_FormGeometryHandler()
 {

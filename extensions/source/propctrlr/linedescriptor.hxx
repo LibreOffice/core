@@ -22,14 +22,14 @@
 #include <vcl/image.hxx>
 #include <com/sun/star/inspection/LineDescriptor.hpp>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
 
-    //========================================================================
+
+
     //= OLineDescriptor
-    //========================================================================
+
     struct OLineDescriptor : public ::com::sun::star::inspection::LineDescriptor
     {
         OUString             sName;              // the name of the property
@@ -52,9 +52,9 @@ namespace pcr
         }
     };
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
 

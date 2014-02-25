@@ -27,10 +27,10 @@
 #include <boost/mem_fn.hpp>
 #include <map>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     class IPropertyLineListener;
     class IPropertyControlObserver;
@@ -38,9 +38,9 @@ namespace pcr
     struct OLineDescriptor;
     class OBrowserListBox;
 
-    //========================================================================
+
     //= OPropertyEditor
-    //========================================================================
+
     class OPropertyEditor : public Control
     {
     private:
@@ -143,9 +143,9 @@ namespace pcr
         DECL_LINK(OnPageActivate, void *);
     };
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_PROPERTYEDITOR_HXX_
 

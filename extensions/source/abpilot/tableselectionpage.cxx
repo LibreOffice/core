@@ -23,14 +23,14 @@
 #include "abspilot.hxx"
 #include <tools/debug.hxx>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= TableSelectionPage
-    //=====================================================================
+
 
     TableSelectionPage::TableSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION_AB))
@@ -117,8 +117,8 @@ namespace abp
             &&  ( 0 < m_aTableList.GetSelectEntryCount() );
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

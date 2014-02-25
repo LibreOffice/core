@@ -23,7 +23,7 @@
 
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CEvtListener
 class ATL_NO_VTABLE CEvtListener :
     public CComObjectRootEx<CComSingleThreadModel>,

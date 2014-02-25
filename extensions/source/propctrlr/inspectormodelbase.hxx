@@ -33,15 +33,15 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     class InspectorModelProperties;
-    //====================================================================
+
     //= ImplInspectorModel
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::inspection::XObjectInspectorModel
                                     ,   ::com::sun::star::lang::XInitialization
                                     ,   ::com::sun::star::lang::XServiceInfo
@@ -89,9 +89,9 @@ namespace pcr
         using ImplInspectorModel_PBase::getFastPropertyValue;
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // INSPECTORMODELBASE_HXX
 

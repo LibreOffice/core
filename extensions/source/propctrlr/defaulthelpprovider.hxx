@@ -29,14 +29,14 @@
 
 class Window;
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DefaultHelpProvider
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::inspection::XPropertyControlObserver
                                     ,   ::com::sun::star::lang::XInitialization
                                     >   DefaultHelpProvider_Base;
@@ -75,9 +75,9 @@ namespace pcr
         OUString impl_getHelpText_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_DEFAULTHELPPROVIDER_HXX
 

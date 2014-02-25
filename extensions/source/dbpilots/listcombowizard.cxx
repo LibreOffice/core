@@ -30,10 +30,10 @@
 #include "dbpilots.hrc"
 #include <comphelper/extract.hxx>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -45,9 +45,9 @@ namespace dbp
     using namespace ::svt;
     using namespace ::dbtools;
 
-    //=====================================================================
+
     //= OListComboWizard
-    //=====================================================================
+
 
     OListComboWizard::OListComboWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
@@ -219,9 +219,9 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
+
     //= OLCPage
-    //=====================================================================
+
 
     Reference< XNameAccess > OLCPage::getTables(sal_Bool _bNeedIt)
     {
@@ -270,9 +270,9 @@ namespace dbp
         return aColumnNames;
     }
 
-    //=====================================================================
+
     //= OContentTableSelection
-    //=====================================================================
+
 
     OContentTableSelection::OContentTableSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_TABLE))
@@ -357,9 +357,9 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
+
     //= OContentFieldSelection
-    //=====================================================================
+
 
     OContentFieldSelection::OContentFieldSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_FIELD))
@@ -431,9 +431,9 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
+
     //= OLinkFieldsPage
-    //=====================================================================
+
 
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_FIELDLINK))
@@ -510,9 +510,9 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
+
     //= OComboDBFieldPage
-    //=====================================================================
+
 
     OComboDBFieldPage::OComboDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
@@ -540,8 +540,8 @@ namespace dbp
         return false;
     }
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

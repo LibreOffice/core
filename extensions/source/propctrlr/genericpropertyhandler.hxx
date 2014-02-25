@@ -33,10 +33,10 @@
 
 #include <map>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     struct TypeLess : ::std::binary_function< ::com::sun::star::uno::Type, ::com::sun::star::uno::Type, bool >
     {
@@ -47,9 +47,9 @@ namespace pcr
     };
 
     class IPropertyEnumRepresentation;
-    //====================================================================
+
     //= GenericPropertyHandler
-    //====================================================================
+
     typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::inspection::XPropertyHandler
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 >   GenericPropertyHandler_Base;
@@ -141,9 +141,9 @@ namespace pcr
         GenericPropertyHandler& operator=( const GenericPropertyHandler& ); // never implemented
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_GENERICPROPERTYHANDLER_HXX
 

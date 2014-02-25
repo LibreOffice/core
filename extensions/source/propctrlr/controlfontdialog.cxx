@@ -29,18 +29,18 @@ extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog()
     ::pcr::OAutoRegistration< ::pcr::OControlFontDialog > aAutoRegistration;
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= OControlFontDialog
-    //====================================================================
+
 
     OControlFontDialog::OControlFontDialog(const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
@@ -175,8 +175,8 @@ namespace pcr
         }
     }
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

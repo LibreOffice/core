@@ -34,7 +34,7 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CMfcControlCtrl, COleControl)
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Message map
 
 BEGIN_MESSAGE_MAP(CMfcControlCtrl, COleControl)
@@ -46,7 +46,7 @@ BEGIN_MESSAGE_MAP(CMfcControlCtrl, COleControl)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Dispatch map
 
 BEGIN_DISPATCH_MAP(CMfcControlCtrl, COleControl)
@@ -69,7 +69,7 @@ BEGIN_DISPATCH_MAP(CMfcControlCtrl, COleControl)
 END_DISPATCH_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Event map
 
 BEGIN_EVENT_MAP(CMfcControlCtrl, COleControl)
@@ -80,7 +80,7 @@ BEGIN_EVENT_MAP(CMfcControlCtrl, COleControl)
 END_EVENT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Property pages
 
 // TODO: Add more property pages as needed.  Remember to increase the count!
@@ -89,20 +89,20 @@ BEGIN_PROPPAGEIDS(CMfcControlCtrl, 1)
 END_PROPPAGEIDS(CMfcControlCtrl)
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Initialize class factory and guid
 
 IMPLEMENT_OLECREATE_EX(CMfcControlCtrl, "MFCCONTROL.MfcControlCtrl.1",
     0xac221fb6, 0xa0d8, 0x11d4, 0x83, 0x3b, 0, 0x50, 0x4, 0x52, 0x6a, 0xb4)
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Type library ID and version
 
 IMPLEMENT_OLETYPELIB(CMfcControlCtrl, _tlid, _wVerMajor, _wVerMinor)
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Interface IDs
 
 const IID BASED_CODE IID_DMfcControl =
@@ -111,7 +111,7 @@ const IID BASED_CODE IID_DMfcControlEvents =
         { 0xac221fb5, 0xa0d8, 0x11d4, { 0x83, 0x3b, 0, 0x50, 0x4, 0x52, 0x6a, 0xb4 } };
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Control type information
 
 static const DWORD BASED_CODE _dwMfcControlOleMisc =
@@ -124,7 +124,7 @@ static const DWORD BASED_CODE _dwMfcControlOleMisc =
 IMPLEMENT_OLECTLTYPE(CMfcControlCtrl, IDS_MFCCONTROL, _dwMfcControlOleMisc)
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlCtrl::CMfcControlCtrlFactory::UpdateRegistry -
 // Adds or removes system registry entries for CMfcControlCtrl
 
@@ -153,7 +153,7 @@ BOOL CMfcControlCtrl::CMfcControlCtrlFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlCtrl::CMfcControlCtrl - Constructor
 
 CMfcControlCtrl::CMfcControlCtrl()
@@ -164,7 +164,7 @@ CMfcControlCtrl::CMfcControlCtrl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlCtrl::~CMfcControlCtrl - Destructor
 
 CMfcControlCtrl::~CMfcControlCtrl()
@@ -173,7 +173,7 @@ CMfcControlCtrl::~CMfcControlCtrl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlCtrl::OnDraw - Drawing function
 
 void CMfcControlCtrl::OnDraw(
@@ -185,7 +185,7 @@ void CMfcControlCtrl::OnDraw(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlCtrl::DoPropExchange - Persistence support
 
 void CMfcControlCtrl::DoPropExchange(CPropExchange* pPX)
@@ -198,7 +198,7 @@ void CMfcControlCtrl::DoPropExchange(CPropExchange* pPX)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlCtrl::OnResetState - Reset control to default state
 
 void CMfcControlCtrl::OnResetState()
@@ -209,7 +209,7 @@ void CMfcControlCtrl::OnResetState()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlCtrl message handlers
 
 

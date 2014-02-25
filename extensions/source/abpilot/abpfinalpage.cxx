@@ -28,10 +28,10 @@
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
     using namespace ::svt;
     using namespace ::utl;
 
@@ -41,9 +41,9 @@ namespace abp
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         return pFilter;
     }
-    //=====================================================================
+
     //= FinalPage
-    //=====================================================================
+
 
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_FINAL))
@@ -207,8 +207,8 @@ namespace abp
         implCheckName();
         return 0L;
     }
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

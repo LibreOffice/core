@@ -34,10 +34,10 @@
 #include "fieldmappingpage.hxx"
 #include "fieldmappingimpl.hxx"
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
 #define STATE_SELECT_ABTYPE         0
 #define STATE_INVOKE_ADMIN_DIALOG   1
@@ -54,9 +54,9 @@ namespace abp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     //= OAddessBookSourcePilot
-    //=====================================================================
+
 
     OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent, ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ),
@@ -270,7 +270,7 @@ namespace abp
                 break;
             }
 
-            // ........................................................
+
             // now that we connected to the data source, check whether we need the "table selection" page
             const StringBag& aTables = m_aNewDataSource.getTableNames();
 
@@ -490,8 +490,8 @@ namespace abp
         impl_updateRoadmap( _eType );
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

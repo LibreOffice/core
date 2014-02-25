@@ -27,8 +27,8 @@
 #include "com_uno_helper.h"
 #include <sal/macros.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 
 STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorInfo(REFIID riid)
 {

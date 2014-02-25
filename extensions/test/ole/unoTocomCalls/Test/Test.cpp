@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // Test.cpp : Defines the entry point for the console application.
-//
+
 
 #include "stdafx.h"
 #include "../XCallback_Impl/XCallback_Impl.h"
@@ -82,9 +82,9 @@ HRESULT doTest()
     CComQIPtr<IDispatch> paramDisp(spUnk);
 
 
-    //######################################################################
+
     //  out parameters
-    //######################################################################
+
     CComVariant param1( paramDisp);
     CComVariant param2(1);
 
@@ -145,9 +145,9 @@ HRESULT doTest()
     //  param2= 32;
     //  hr= oletest.Invoke2(L"testInterface", &param1, &param2);
 
-    //######################################################################
+
     //  in / out parameters
-    //######################################################################
+
     // XCallback::inoutInterface
     param2= 100;
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
@@ -190,9 +190,9 @@ HRESULT doTest()
     // XCallback::inoutValuesAll
     param2=120;
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
-    //######################################################################
+
     //  in  parameters
-    //######################################################################
+
     // XCallback::inValues
     param2= 200;
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
@@ -203,11 +203,11 @@ HRESULT doTest()
     //XCallback::inSeqXEventListener
     param2= 202;
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
-    //######################################################################
+
     //  The UNO test component OleTest calls on XCallback_Impl.Callback directly
     // that is the COM object has not been past a parameter but rather OleTest
     // creates the COM object itself
-    //######################################################################
+
     // XCallback::outValuesAll
     // does not work currently
     param2= 300;
@@ -222,9 +222,9 @@ HRESULT doTest()
     // XCallback::inValues
     param2= 303;
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
-    //######################################################################
+
     // Test a COM object which implements several interfaces.
-    //######################################################################
+
 
     CComQIPtr<IDispatch> dispSimple;
     hr= dispSimple.CoCreateInstance(L"XCallback_Impl.Simple");

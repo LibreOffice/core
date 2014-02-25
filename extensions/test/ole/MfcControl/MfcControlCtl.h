@@ -25,7 +25,7 @@
 
 // MfcControlCtl.h : Declaration of the CMfcControlCtrl ActiveX Control class.
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CMfcControlCtrl : See MfcControlCtl.cpp for implementation.
 
 class CMfcControlCtrl : public COleControl

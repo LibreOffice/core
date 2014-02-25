@@ -25,16 +25,16 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::util;
 
-    //========================================================================
+
     //= HelpIdUrl
-    //========================================================================
+
 
     OString HelpIdUrl::getHelpId( const OUString& _rHelpURL )
     {
@@ -56,8 +56,8 @@ namespace pcr
         aBuffer.append( aTmp.getStr() );
         return aBuffer.makeStringAndClear();
     }
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

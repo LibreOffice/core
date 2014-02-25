@@ -28,14 +28,14 @@
 #include <set>
 #include <memory>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= some helper types
-    //====================================================================
+
 
     struct MapHandlerToUI;
 
@@ -50,9 +50,9 @@ namespace pcr
         ~IPropertyExistenceCheck() {}
     };
 
-    //====================================================================
+
     //= ComposedPropertyUIUpdate
-    //====================================================================
+
     /** helper class composing requests to a ->XObjectInspectorUI interface, coming
         from multiple sources
 
@@ -197,9 +197,9 @@ namespace pcr
         ComposedPropertyUIUpdate& operator=( const ComposedPropertyUIUpdate& ); // never implemented
     };
 
-    //====================================================================
+
     //= ComposedUIAutoFireGuard
-    //====================================================================
+
     class ComposedUIAutoFireGuard
     {
     private:
@@ -216,9 +216,9 @@ namespace pcr
         }
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_COMPOSEDUIUPDATE_HXX
 

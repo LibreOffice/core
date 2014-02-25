@@ -63,7 +63,7 @@ MRCListenerMultiplexerHelper* PluginControl_Impl::getMultiplexer()
         _pMultiplexer = new MRCListenerMultiplexerHelper( this, _xPeerWindow );
     return _pMultiplexer;
 }
-//==================================================================================================
+
 
 void PluginControl_Impl::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l )
     throw( RuntimeException, std::exception )

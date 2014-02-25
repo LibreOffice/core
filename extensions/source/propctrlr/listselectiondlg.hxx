@@ -27,14 +27,14 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ListSelectionDialog
-    //====================================================================
+
     class ListSelectionDialog : public ModalDialog
     {
     private:
@@ -69,9 +69,9 @@ namespace pcr
         void    collectSelection(       ::com::sun::star::uno::Sequence< sal_Int16 >& /* [out] */ _rSelection );
     };
 
-//........................................................................
+
 } // namespacepcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
 

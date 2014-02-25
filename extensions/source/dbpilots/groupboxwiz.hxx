@@ -23,14 +23,14 @@
 #include "controlwizard.hxx"
 #include "commonpagesdbp.hxx"
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OOptionGroupSettings
-    //=====================================================================
+
     struct OOptionGroupSettings : public OControlWizardSettings
     {
         StringArray     aLabels;
@@ -40,9 +40,9 @@ namespace dbp
         OUString        sName;
     };
 
-    //=====================================================================
+
     //= OGroupBoxWizard
-    //=====================================================================
+
     class OGroupBoxWizard : public OControlWizard
     {
     protected:
@@ -73,9 +73,9 @@ namespace dbp
         void createRadios();
     };
 
-    //=====================================================================
+
     //= OGBWPage
-    //=====================================================================
+
     class OGBWPage : public OControlWizardPage
     {
     public:
@@ -85,9 +85,9 @@ namespace dbp
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
 
-    //=====================================================================
+
     //= ORadioSelectionPage
-    //=====================================================================
+
     class ORadioSelectionPage : public OGBWPage
     {
     protected:
@@ -118,9 +118,9 @@ namespace dbp
         void implCheckMoveButtons();
     };
 
-    //=====================================================================
+
     //= ODefaultFieldSelectionPage
-    //=====================================================================
+
     class ODefaultFieldSelectionPage : public OMaybeListSelectionPage
     {
     protected:
@@ -141,9 +141,9 @@ namespace dbp
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
 
-    //=====================================================================
+
     //= OOptionValuesPage
-    //=====================================================================
+
     class OOptionValuesPage : public OGBWPage
     {
     protected:
@@ -174,9 +174,9 @@ namespace dbp
         DECL_LINK( OnOptionSelected, ListBox* );
     };
 
-    //=====================================================================
+
     //= OOptionDBFieldPage
-    //=====================================================================
+
     class OOptionDBFieldPage : public ODBFieldPage
     {
     public:
@@ -189,9 +189,9 @@ namespace dbp
         virtual OUString& getDBFieldSetting();
     };
 
-    //=====================================================================
+
     //= OFinalizeGBWPage
-    //=====================================================================
+
     class OFinalizeGBWPage : public OGBWPage
     {
     protected:
@@ -213,9 +213,9 @@ namespace dbp
         virtual bool        canAdvance() const;
     };
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 #endif // _EXTENSIONS_DBP_GROUPBOXWIZ_HXX_
 
