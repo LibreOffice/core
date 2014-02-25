@@ -232,7 +232,7 @@ class SVX_DLLPUBLIC FmSearchEngine
 
     sal_Int32   m_nTransliterationFlags;
 
-// -------------
+
 // member access
 private:
     SVX_DLLPRIVATE sal_Bool CancelRequested();      // provides a through m_aCancelAsynchAccess backed interpretation of m_bCancelAsynchRequest

@@ -134,11 +134,11 @@ typedef sal_Int64 WinBits;
 #define WB_PINABLE              ((WinBits)0x00002000)
 #define WB_SYSTEMWINDOW         ((WinBits)SAL_CONST_INT64(0x40000000))
 // warning: do not confuse WB_SYSTEMCHILDWINDOW with the SystemChildWindow class
-//
+
 // the SystemChildWindow class was there first and is a very specialized
 // sytem child window type for plugged applications. The SystemChildWindow class
 // explicitly should never use the WB_SYSTEMCHILDWINDOW WinBit
-//
+
 // WB_SYSTEMCHILDWINDOW on the other hand is to be used on system windows
 // which should be created as system child windows with (more or less)
 // normal event handling

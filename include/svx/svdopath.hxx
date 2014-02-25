@@ -162,7 +162,7 @@ public:
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
     // moment it contains a shearX, rotation and translation, but for setting all linear
     // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
-    //
+
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;

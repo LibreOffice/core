@@ -53,7 +53,7 @@ class SvXMLTokenMap;
 class SvXMLImportContext;
 class SvXMLImport;
 
-// ========================================
+
 
 /** With this class you can import a <chart:chart> element containing
     its data as <table:table> element or without internal table. In

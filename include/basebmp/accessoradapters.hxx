@@ -91,12 +91,12 @@ public:
         maSetterFunctor( setterFunctor )
     {}
 
-    // -------------------------------------------------------
+
 
     WrappedAccessor const& getWrappedAccessor() const { return maAccessor; }
     WrappedAccessor&       getWrappedAccessor() { return maAccessor; }
 
-    // -------------------------------------------------------
+
 
     value_type getter(typename GetterFunctor::argument_type v) const
     {
@@ -107,7 +107,7 @@ public:
         return maSetterFunctor(v);
     }
 
-    // -------------------------------------------------------
+
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -121,7 +121,7 @@ public:
         return maGetterFunctor( maAccessor(i,diff) );
     }
 
-    // -------------------------------------------------------
+
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
@@ -144,7 +144,7 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** Interpose given accessor's set methods with a binary function,
     taking both old and new value.
@@ -201,12 +201,12 @@ public:
         maFunctor( functor )
     {}
 
-    // -------------------------------------------------------
+
 
     WrappedAccessor const& getWrappedAccessor() const { return maAccessor; }
     WrappedAccessor&       getWrappedAccessor() { return maAccessor; }
 
-    // -------------------------------------------------------
+
 
     typename SetterFunctor::result_type setter(
         typename SetterFunctor::first_argument_type v1,
@@ -215,7 +215,7 @@ public:
         return maSetterFunctor(v1,v2);
     }
 
-    // -------------------------------------------------------
+
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -229,7 +229,7 @@ public:
         return maAccessor(i,diff);
     }
 
-    // -------------------------------------------------------
+
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
@@ -252,7 +252,7 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** Write through a CompositeIterator's first wrapped iterator, by
     piping the first wrapped iterator value, the second iterator
@@ -333,7 +333,7 @@ public:
         maFunctor( func )
     {}
 
-    // -------------------------------------------------------
+
 
     WrappedAccessor1 const& get1stWrappedAccessor() const { return ma1stAccessor; }
     WrappedAccessor1&       get1stWrappedAccessor() { return ma1stAccessor; }
@@ -341,7 +341,7 @@ public:
     WrappedAccessor2 const& get2ndWrappedAccessor() const { return ma2ndAccessor; }
     WrappedAccessor2&       get2ndWrappedAccessor() { return ma2ndAccessor; }
 
-    // -------------------------------------------------------
+
 
     typename Functor::result_type setter(
         typename Functor::first_argument_type  v1,
@@ -351,7 +351,7 @@ public:
         return maSetterFunctor(v1,v2,v3);
     }
 
-    // -------------------------------------------------------
+
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -365,7 +365,7 @@ public:
         return ma1stAccessor(i.second(),diff);
     }
 
-    // -------------------------------------------------------
+
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
@@ -390,7 +390,7 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** Access two distinct images simultaneously
 
@@ -457,7 +457,7 @@ public:
         ma2ndAccessor( accessor2 )
     {}
 
-    // -------------------------------------------------------
+
 
     WrappedAccessor1 const& get1stWrappedAccessor() const { return ma1stAccessor; }
     WrappedAccessor1&       get1stWrappedAccessor() { return ma1stAccessor; }
@@ -465,7 +465,7 @@ public:
     WrappedAccessor2 const& get2ndWrappedAccessor() const { return ma2ndAccessor; }
     WrappedAccessor2&       get2ndWrappedAccessor() { return ma2ndAccessor; }
 
-    // -------------------------------------------------------
+
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -481,7 +481,7 @@ public:
                               ma2ndAccessor(i.second(),diff));
     }
 
-    // -------------------------------------------------------
+
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const

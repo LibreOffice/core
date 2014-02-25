@@ -47,7 +47,7 @@ namespace detail {
 
 }
 
-//===================================================================
+
 class OInterfaceContainerHelper;
 /**
   This is the iterator of a InterfaceContainerHelper. Typically
@@ -107,7 +107,7 @@ private:
     OInterfaceIteratorHelper &  operator = ( const OInterfaceIteratorHelper & ) SAL_THROW(());
 };
 
-//===================================================================
+
 /**
   A container of interfaces. To access the elements use an iterator.
   This implementation is thread save.
@@ -289,7 +289,7 @@ inline void OInterfaceContainerHelper::notifyEach( void ( SAL_CALL ListenerT::*N
     forEach< ListenerT, NotifySingleListener< ListenerT, EventT > >( NotifySingleListener< ListenerT, EventT >( NotificationMethod, Event ) );
 }
 
-//===================================================================
+
 /**
   A helper class to store interface references of different types.
 

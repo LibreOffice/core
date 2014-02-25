@@ -38,7 +38,7 @@ class SfxSlot;
 class SfxViewFrame;
 struct SfxRequest_Impl;
 
-//==================================================================
+
 
 class SFX2_DLLPUBLIC SfxRequest: public SfxHint
 {
@@ -48,7 +48,7 @@ friend struct SfxRequest_Impl;
     SfxAllItemSet*      pArgs;
     SfxRequest_Impl*    pImp;
 
-    //---------------------------------------------------------------------
+
 public:
     SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
                                      com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,
@@ -56,7 +56,7 @@ public:
 private:
     SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
 
-    //---------------------------------------------------------------------
+
 
 public:
                         SfxRequest( SfxViewFrame*, sal_uInt16 nSlotId );
@@ -110,7 +110,7 @@ private:
     const SfxRequest&   operator=(const SfxRequest &); // n.i.!!
 };
 
-//------------------------------------------------------------------------
+
 
 #define SFX_REQUEST_ARG(rReq, pItem, ItemType, nSlotId, bDeep) \
         const ItemType *pItem = (const ItemType*) \

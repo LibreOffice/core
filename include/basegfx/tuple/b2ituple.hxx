@@ -122,7 +122,7 @@ namespace basegfx
         }
 
         // operators
-        //////////////////////////////////////////////////////////////////////
+
 
         B2ITuple& operator+=( const B2ITuple& rTup )
         {
@@ -195,7 +195,7 @@ namespace basegfx
     };
 
     // external operators
-    //////////////////////////////////////////////////////////////////////////
+
 
 
     BASEGFX_DLLPUBLIC inline B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB)

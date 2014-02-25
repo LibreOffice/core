@@ -29,14 +29,14 @@
 
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IMacroDocumentAccess
-    //====================================================================
+
     /** provides access to several settings of a document, which are needed by ->DocumentMacroMode
         to properly determine the current macro execution mode of this document
     */
@@ -186,9 +186,9 @@ namespace sfx2
         ~IMacroDocumentAccess() {}
     };
 
-    //====================================================================
+
     //= DocumentMacroMode
-    //====================================================================
+
     struct DocumentMacroMode_Data;
 
     /** encapsulates handling the macro mode of a document
@@ -319,9 +319,9 @@ namespace sfx2
         ::boost::shared_ptr< DocumentMacroMode_Data >   m_pData;
     };
 
-//........................................................................
+
 } // namespace sfx2
-//........................................................................
+
 
 #endif // INCLUDED_SFX2_DOCMACROMODE_HXX
 

@@ -23,7 +23,7 @@
 #include <rtl/math.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // standard PI defines from solar.h, but we do not want to link against tools
 
 #ifndef F_PI
@@ -48,7 +48,7 @@
 #define F_2PI       (2.0*M_PI)
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
+
 // fTools defines
 
 namespace basegfx
@@ -89,7 +89,7 @@ namespace basegfx
         // macro which is the case e.g with windows.h headers. The simplest way to avoid this is to
         // just use the full comparison. I keep the original here, maybe there will be a better
         // solution some day.
-        //
+
         //return fVal < 0.0 ?
         //    (::std::min(fVal,-0.00001)) :
         //    (::std::max(fVal,0.00001));

@@ -22,7 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class Graphic;
@@ -35,7 +35,7 @@ namespace drawinglayer { namespace attribute {
     class ImpFillGraphicAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -78,7 +78,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRAPHICATTRIBUTE_HXX
 

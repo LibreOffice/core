@@ -40,9 +40,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <tools/gen.hxx>
-//  ----------------------------------------------------
+
 //  class ControlModelContainerBase
-//  ----------------------------------------------------
+
 typedef UnoControlModel     ControlModel_Base;
 typedef ::cppu::AggImplInheritanceHelper8   <   ControlModel_Base
                             ,   ::com::sun::star::lang::XMultiServiceFactory

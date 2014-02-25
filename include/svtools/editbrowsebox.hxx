@@ -35,7 +35,7 @@
 #include <svtools/svmedit.hxx>
 #include <vcl/svapp.hxx>
 
-//==================================================================
+
 // EditBrowseBoxFlags (EBBF)
 
 #define EBBF_NONE                       ((sal_Int32)0x0000)
@@ -65,22 +65,22 @@
 /// @deprecated
 #define EBBF_NOROWPICTURE               EBBF_NO_HANDLE_COLUMN_CONTENT
 
-//==================================================================
+
 
 class Edit;
 class SpinField;
 class FormattedField;
 
-// .......................................................................
+
 namespace svt
 {
-// .......................................................................
+
 
     class CellControllerRef;
 
-    //==================================================================
+
     //= CellController
-    //==================================================================
+
     class SVT_DLLPUBLIC CellController : public SvRefBase
     {
         friend class EditBrowseBox;
@@ -118,9 +118,9 @@ namespace svt
 
     SV_DECL_IMPL_REF(CellController);
 
-    //==================================================================
+
     //= IEditImplementation
-    //==================================================================
+
     class SVT_DLLPUBLIC IEditImplementation
     {
     public:
@@ -150,9 +150,9 @@ namespace svt
         virtual void                SetModifyHdl( const Link& _rLink ) = 0;
     };
 
-    //==================================================================
+
     //= GenericEditImplementation
-    //==================================================================
+
     template <class EDIT>
     class GenericEditImplementation : public IEditImplementation
     {
@@ -188,9 +188,9 @@ namespace svt
 
     #include <svtools/editimplementation.hxx>
 
-    //==================================================================
+
     //= MultiLineTextCell
-    //==================================================================
+
     /** a multi line edit which can be used in a cell of a EditBrowseBox
     */
     class SVT_DLLPUBLIC MultiLineTextCell : public MultiLineEdit
@@ -212,9 +212,9 @@ namespace svt
         sal_Bool    dispatchKeyEvent( const KeyEvent& _rEvent );
     };
 
-    //==================================================================
+
     //= concrete edit implementations
-    //==================================================================
+
     typedef GenericEditImplementation< Edit >             EditImplementation;
 
     typedef GenericEditImplementation< MultiLineTextCell >  MultiLineEditImplementation_Base;
@@ -229,9 +229,9 @@ namespace svt
         virtual OUString GetSelected( LineEnd aSeparator ) const;
     };
 
-    //==================================================================
+
     //= EditCellController
-    //==================================================================
+
     class SVT_DLLPUBLIC EditCellController : public CellController
     {
         IEditImplementation*    m_pEditImplementation;
@@ -255,9 +255,9 @@ namespace svt
         virtual void SetModifyHdl(const Link& rLink);
     };
 
-    //==================================================================
+
     //= SpinCellController
-    //==================================================================
+
     class SVT_DLLPUBLIC SpinCellController : public CellController
     {
     public:
@@ -274,9 +274,9 @@ namespace svt
         virtual void SetModifyHdl(const Link& rLink);
     };
 
-    //==================================================================
+
     //= CheckBoxControl
-    //==================================================================
+
     class SVT_DLLPUBLIC CheckBoxControl : public Control
     {
         CheckBox*   pBox;
@@ -307,9 +307,9 @@ namespace svt
         DECL_LINK( OnClick, void* );
     };
 
-    //==================================================================
+
     //= CheckBoxCellController
-    //==================================================================
+
     class SVT_DLLPUBLIC CheckBoxCellController : public CellController
     {
     public:
@@ -326,9 +326,9 @@ namespace svt
         virtual sal_Bool WantMouseEvent() const;
     };
 
-    //==================================================================
+
     //= ComboBoxControl
-    //==================================================================
+
     class SVT_DLLPUBLIC ComboBoxControl : public ComboBox
     {
         friend class ComboBoxCellController;
@@ -340,9 +340,9 @@ namespace svt
         virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
-    //==================================================================
+
     //= ComboBoxCellController
-    //==================================================================
+
     class SVT_DLLPUBLIC ComboBoxCellController : public CellController
     {
     public:
@@ -359,9 +359,9 @@ namespace svt
         virtual void SetModifyHdl(const Link& rLink);
     };
 
-    //==================================================================
+
     //= ListBoxControl
-    //==================================================================
+
     class SVT_DLLPUBLIC ListBoxControl : public ListBox
     {
         friend class ListBoxCellController;
@@ -373,9 +373,9 @@ namespace svt
         virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
-    //==================================================================
+
     //= ListBoxCellController
-    //==================================================================
+
     class SVT_DLLPUBLIC ListBoxCellController : public CellController
     {
     public:
@@ -392,9 +392,9 @@ namespace svt
         virtual void SetModifyHdl(const Link& rLink);
     };
 
-    //==================================================================
+
     //= FormattedFieldCellController
-    //==================================================================
+
     class SVT_DLLPUBLIC FormattedFieldCellController : public EditCellController
     {
     public:
@@ -404,9 +404,9 @@ namespace svt
         virtual void CommitModifications();
     };
 
-    //==================================================================
+
     //= EditBrowserHeader
-    //==================================================================
+
     class SVT_DLLPUBLIC EditBrowserHeader : public BrowserHeader
     {
     public:
@@ -417,9 +417,9 @@ namespace svt
         virtual void DoubleClick();
     };
 
-    //==================================================================
+
     //= EditBrowseBox
-    //==================================================================
+
     class EditBrowseBoxImpl;
     class SVT_DLLPUBLIC EditBrowseBox: public BrowseBox
     {
@@ -675,9 +675,9 @@ namespace svt
         DECL_DLLPRIVATE_LINK(CellModifiedHdl, void* );
     };
 
-// .......................................................................
+
 }   // namespace svt
-// .......................................................................
+
 
 #undef SVTOOLS_IN_EDITBROWSEBOX_HXX
 #endif // INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX

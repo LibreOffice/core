@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
 
 namespace ucbhelper {
 
-//============================================================================
+
 /** Information about a content provider, passed to
     <method>configureUcb</method>.
  */
@@ -65,7 +65,7 @@ struct ContentProviderData
 };
 
 typedef std::vector< ContentProviderData > ContentProviderDataList;
-//============================================================================
+
 /** Register a content provider at a Universal Content Broker.
 
     @param rManager  A content provider manager (normally, this would be a

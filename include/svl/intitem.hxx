@@ -23,7 +23,7 @@
 #include <svl/svldllapi.h>
 #include <svl/cintitem.hxx>
 
-//============================================================================
+
 class SVL_DLLPUBLIC SfxByteItem: public CntByteItem
 {
 public:
@@ -38,7 +38,7 @@ public:
     { return new SfxByteItem(*this); }
 };
 
-//============================================================================
+
 DBG_NAMEEX_VISIBILITY(SfxInt16Item, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC SfxInt16Item: public SfxPoolItem
@@ -100,7 +100,7 @@ inline void SfxInt16Item::SetValue(sal_Int16 nTheValue)
     m_nValue = nTheValue;
 }
 
-//============================================================================
+
 class SVL_DLLPUBLIC SfxUInt16Item: public CntUInt16Item
 {
 public:
@@ -119,7 +119,7 @@ public:
     { return new SfxUInt16Item(*this); }
 };
 
-//============================================================================
+
 class SVL_DLLPUBLIC SfxInt32Item: public CntInt32Item
 {
 public:
@@ -139,7 +139,7 @@ public:
 
 };
 
-//============================================================================
+
 class SVL_DLLPUBLIC SfxUInt32Item: public CntUInt32Item
 {
 public:

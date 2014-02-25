@@ -32,9 +32,9 @@ class SvxLineBox;
 class SvxMetricField;
 class SvxColorBox;
 
-//========================================================================
+
 // SvxLineStyleController:
-//========================================================================
+
 
 class SVX_DLLPUBLIC SvxLineStyleToolBoxControl : public SfxToolBoxControl
 {
@@ -56,9 +56,9 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
-//========================================================================
+
 // SvxLineWidthController:
-//========================================================================
+
 
 class SVX_DLLPUBLIC SvxLineWidthToolBoxControl : public SfxToolBoxControl
 {
@@ -73,9 +73,9 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
-//========================================================================
+
 // SvxLineColorController:
-//========================================================================
+
 
 class SVX_DLLPUBLIC SvxLineColorToolBoxControl : public SfxToolBoxControl
 {
@@ -91,9 +91,9 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
-//========================================================================
+
 // class SvxLineEndWindow
-//========================================================================
+
 class SvxLineEndWindow : public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
@@ -144,9 +144,9 @@ public:
     virtual SfxPopupWindow* Clone() const;
 };
 
-//========================================================================
+
 // class SvxLineEndToolBoxControl
-//========================================================================
+
 
 class SVX_DLLPUBLIC SvxLineEndToolBoxControl : public SfxToolBoxControl
 {

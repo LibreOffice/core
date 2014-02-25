@@ -24,8 +24,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <unotools/saveopt.hxx>
 
-///////////////////////////////////////////////////////////////////////////
-//
+
+
 /** Represents a property with its API-name, its XML-name and the type of
     its value.
 */
@@ -52,8 +52,8 @@ struct XMLPropertyMapEntry
     bool            mbImportOnly;
 };
 
-///////////////////////////////////////////////////////////////////////////
-//
+
+
 /** Smart struct to transport an Any with an index to the appropriate
     property-name
 */

@@ -24,9 +24,9 @@
 #include <comphelper/uno3.hxx>
 #include <svx/svxdllapi.h>
 
-//==================================================================
+
 // SvxFmDrawPage
-//==================================================================
+
 class SVX_DLLPUBLIC SvxFmDrawPage   :public SvxDrawPage
                                     ,public ::com::sun::star::form::XFormsSupplier2
 {

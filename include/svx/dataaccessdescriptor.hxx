@@ -24,16 +24,16 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/svxdllapi.h>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     class ODADescriptorImpl;
 
-    //====================================================================
+
     //= DataAccessDescriptorProperty
-    //====================================================================
+
     enum DataAccessDescriptorProperty
     {
         daDataSource,           /// data source name            (string)
@@ -56,9 +56,9 @@ namespace svx
         daComponent             /// component name              (XContent)
     };
 
-    //====================================================================
+
     //= ODataAccessDescriptor
-    //====================================================================
+
     /** class encapsulating the com::sun::star::sdb::DataAccessDescriptor service.
     */
     class SVX_DLLPUBLIC ODataAccessDescriptor
@@ -126,9 +126,9 @@ namespace svx
         void setDataSource(const OUString& _sDataSourceNameOrLocation);
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_DATAACCESSDESCRIPTOR_HXX
 

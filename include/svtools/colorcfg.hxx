@@ -27,7 +27,7 @@
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 
-//-----------------------------------------------------------------------------
+
 namespace svtools{
 enum ColorConfigEntry
 {

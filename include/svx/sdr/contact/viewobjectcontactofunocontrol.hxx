@@ -36,15 +36,15 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-//........................................................................
+
 namespace sdr { namespace contact {
-//........................................................................
+
 
     class ViewContactOfUnoControl;
     class ObjectContactOfPageView;
-    //====================================================================
+
     //= ViewObjectContactOfUnoControl
-    //====================================================================
+
     class ViewObjectContactOfUnoControl_Impl;
     class SVX_DLLPRIVATE ViewObjectContactOfUnoControl : public ViewObjectContactOfSdrObj
     {
@@ -105,9 +105,9 @@ namespace sdr { namespace contact {
         ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& );   // never implemented
     };
 
-    //====================================================================
+
     //= UnoControlPrintOrPreviewContact
-    //====================================================================
+
     class SVX_DLLPRIVATE UnoControlPrintOrPreviewContact : public ViewObjectContactOfUnoControl
     {
     public:
@@ -122,9 +122,9 @@ namespace sdr { namespace contact {
         virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const;
     };
 
-//........................................................................
+
 } } // namespace sdr::contact
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
 

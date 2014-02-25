@@ -24,9 +24,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//----------------------
+
 // SdrGrafGamma100Item -
-//----------------------
+
 
 class SVX_DLLPUBLIC SdrGrafGamma100Item : public SfxUInt32Item
 {

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVX_XDASH_HXX
 #define INCLUDED_SVX_XDASH_HXX
 
-//-------------
+
 // class XDash
-//-------------
+
 
 #include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>

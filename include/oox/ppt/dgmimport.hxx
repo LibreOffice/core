@@ -31,7 +31,7 @@
 
 namespace oox { namespace ppt {
 
-// ---------------------------------------------------------------------
+
 
 class QuickDiagrammingImport : public oox::core::XmlFilterBase
 {

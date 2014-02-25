@@ -22,7 +22,7 @@
 
 #include <svx/sdr/properties/rectangleproperties.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -60,7 +60,7 @@ namespace sdr
     } // end of namespace properties
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_GRAPHICPROPERTIES_HXX
 

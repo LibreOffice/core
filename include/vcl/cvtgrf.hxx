@@ -24,9 +24,9 @@
 #include <tools/link.hxx>
 #include <vcl/salctype.hxx>
 
-// --------------------
+
 // - GraphicConverter -
-// --------------------
+
 
 struct  ConvertData;
 class   Graphic;

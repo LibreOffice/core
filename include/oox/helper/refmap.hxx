@@ -27,7 +27,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 /** Template for a map of ref-counted objects with additional accessor functions.
 
@@ -176,7 +176,7 @@ private:
     }
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

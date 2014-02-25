@@ -25,7 +25,7 @@
 
 class SvStream;
 
-// -----------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxRangeItem : public SfxPoolItem
 {
@@ -53,7 +53,7 @@ public:
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
 };
 
-// -----------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxUShortRangesItem : public SfxPoolItem
 {

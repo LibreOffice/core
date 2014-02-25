@@ -52,9 +52,9 @@ namespace connectivity
 
         const TInstalledDrivers& getInstalledDrivers(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB) const { Load(_rxORB); return m_aDrivers; }
     };
-    //
+
     // Allows to access all driver which are located in the configuration
-    //
+
     class OOO_DLLPUBLIC_DBTOOLS DriversConfig
     {
         typedef salhelper::SingletonRef<DriversConfigImpl> OSharedConfigNode;

@@ -30,9 +30,9 @@
 //! NF_KEY_LASTKEYWORD must be adjusted accordingly. Otherwise old versions
 //! will fail upon reading these entries. Nevertheless, old versions are NOT
 //! able to display those new keywords => blank display.
-//
+
 // Note: 2005-09-02: the above applies to the binary file format.
-//
+
 // ER 15.12.99: This table is externally only to be used with method
 // OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable&, const LocaleDataWrapper& );
 // and method

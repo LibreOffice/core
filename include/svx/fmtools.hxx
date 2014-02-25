@@ -72,9 +72,9 @@
 
 class Window;
 
-//==================================================================
+
 // common types
-//==================================================================
+
 // displaying a database exception for the user
 // display info about a simple ::com::sun::star::sdbc::SQLException
 void displayException(const ::com::sun::star::sdbc::SQLException&, Window* _pParent = NULL);
@@ -87,10 +87,10 @@ sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star
 
 SVX_DLLPUBLIC OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
 
-// ===================================================================================================
+
 // = class CursorWrapper - a helper class which works in common with a ::com::sun::star::uno::Reference<XDatabaseUpdateCursor>,
 //                          XDatabaseBookmarkCursor and XDatabaseDirectCursor each
-// ===================================================================================================
+
 
 class CursorWrapper
 {
@@ -188,7 +188,7 @@ protected:
     void setAdapter(FmXDisposeMultiplexer* pAdapter);
 };
 
-//==============================================================================
+
 
 class FmXDisposeMultiplexer :public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener>
 {
@@ -206,16 +206,16 @@ public:
     void dispose();
 };
 
-//  ==================================================================
+
 
 sal_Int16       getControlTypeByObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports
 
-//==================================================================
+
 sal_Bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet);
     // checks if the ::com::sun::star::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns
 
-//==================================================================
+
 typedef ::std::set  < ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                     , ::comphelper::OInterfaceCompare< ::com::sun::star::uno::XInterface >
                     > InterfaceBag;

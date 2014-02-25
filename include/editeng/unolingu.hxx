@@ -36,7 +36,7 @@ class LinguMgrExitLstnr;
 
 class Window;
 
-///////////////////////////////////////////////////////////////////////////
+
 
 class EDITENG_DLLPUBLIC LinguMgr
 {
@@ -108,7 +108,7 @@ public:
         ::com::sun::star::linguistic2::XDictionary >    GetChangeAllList();
 };
 
-///////////////////////////////////////////////////////////////////////////
+
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XHyphenatedWord;
@@ -138,7 +138,7 @@ EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
             ::com::sun::star::linguistic2::XHyphenatedWord > & rHyphWord );
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 class EDITENG_DLLPUBLIC SvxDicListChgClamp
 {
@@ -156,7 +156,7 @@ public:
     ~SvxDicListChgClamp();
 };
 
-///////////////////////////////////////////////////////////////////////////
+
 
 //TODO: remove those functions or make them inline
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
@@ -179,9 +179,9 @@ EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionary >    SvxGetChangeAllList();
 
-///////////////////////////////////////////////////////////////////////////
+
 // misc functions
-//
+
 
 EDITENG_DLLPUBLIC short SvxDicError( Window *pParent, sal_Int16 nError );
 

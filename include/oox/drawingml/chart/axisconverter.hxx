@@ -31,7 +31,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct AxisDispUnitsModel;
 
@@ -68,7 +68,7 @@ public:
                             sal_Int32 nAxisIdx );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

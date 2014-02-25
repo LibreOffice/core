@@ -30,7 +30,7 @@ public:
     virtual ~SfxHint();
 };
 
-//--------------------------------------------------------------------
+
 
 #define DECL_PTRHINT(Visibility, Name, Type) \
         class Visibility Name: public SfxHint \

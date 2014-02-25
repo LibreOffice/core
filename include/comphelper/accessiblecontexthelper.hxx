@@ -27,14 +27,14 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= IMutex
-    //=====================================================================
+
 
     // This whole thingie here (own mutex classes and such) is a HACK. I hate the SolarMutex.
     // See below for more explanations ....
@@ -49,9 +49,9 @@ namespace comphelper
         virtual void release() = 0;
     };
 
-    //=====================================================================
+
     //= OMutexGuard
-    //=====================================================================
+
 
     class OMutexGuard
     {
@@ -71,9 +71,9 @@ namespace comphelper
         }
     };
 
-    //=====================================================================
+
     //= OAccessibleContextHelper
-    //=====================================================================
+
 
     class OContextHelper_Impl;
     typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::accessibility::XAccessibleContext,
@@ -239,27 +239,27 @@ namespace comphelper
         IMutex*                         getExternalLock( );
     };
 
-    //---------------------------------------------------------------------
+
     inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) )
     {
         ensureAlive();
     }
 
-    //---------------------------------------------------------------------
+
     inline  IMutex* OAccessibleContextHelper::getExternalLock( const OAccessControl& )
     {
         return getExternalLock();
     }
 
-    //---------------------------------------------------------------------
+
     inline  ::osl::Mutex& OAccessibleContextHelper::GetMutex( const OAccessControl& )
     {
         return GetMutex();
     }
 
-    //=====================================================================
+
     //= OContextEntryGuard
-    //=====================================================================
+
     typedef ::osl::ClearableMutexGuard  OContextEntryGuard_Base;
     /** helper class for guarding the entry into OAccessibleContextHelper methods.
 
@@ -293,21 +293,21 @@ namespace comphelper
         inline ~OContextEntryGuard();
     };
 
-    //.....................................................................
+
     inline OContextEntryGuard::OContextEntryGuard( OAccessibleContextHelper* _pContext  )
         :OContextEntryGuard_Base( _pContext->GetMutex( OAccessibleContextHelper::OAccessControl() ) )
     {
         _pContext->ensureAlive( OAccessibleContextHelper::OAccessControl() );
     }
 
-    //.....................................................................
+
     inline OContextEntryGuard::~OContextEntryGuard()
     {
     }
 
-    //=====================================================================
+
     //= OExternalLockGuard
-    //=====================================================================
+
     class OExternalLockGuard
             :public OMutexGuard
             ,public OContextEntryGuard
@@ -317,7 +317,7 @@ namespace comphelper
         inline ~OExternalLockGuard( );
     };
 
-    //.....................................................................
+
     inline OExternalLockGuard::OExternalLockGuard( OAccessibleContextHelper* _pContext )
         :OMutexGuard( _pContext->getExternalLock( OAccessibleContextHelper::OAccessControl() ) )
         ,OContextEntryGuard( _pContext )
@@ -330,14 +330,14 @@ namespace comphelper
         clear();
     }
 
-    //.....................................................................
+
     inline OExternalLockGuard::~OExternalLockGuard( )
     {
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
 

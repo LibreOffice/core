@@ -35,9 +35,9 @@ class TabBarEdit;
 struct ImplTabBarItem;
 typedef ::std::vector< ImplTabBarItem* > ImplTabBarList;
 
-// -----------------
+
 // - Dokumentation -
-// -----------------
+
 
 /*
 
@@ -288,9 +288,9 @@ Uebergabe der Mausposition kann ermittelt werden, ob der Mausclick
 ueber einem bzw. ueber welchem Item durchgefuehrt wurde.
 */
 
-// -----------
+
 // - WinBits -
-// -----------
+
 
 #define WB_RANGESELECT      ((WinBits)0x00200000)
 #define WB_MULTISELECT      ((WinBits)0x00400000)
@@ -300,29 +300,29 @@ ueber einem bzw. ueber welchem Item durchgefuehrt wurde.
 #define WB_INSERTTAB        ((WinBits)0x40000000)
 #define WB_STDTABBAR        WB_BORDER
 
-// ------------------
+
 // - TabBarPageBits -
-// ------------------
+
 
 typedef sal_uInt16 TabBarPageBits;
 
-// -------------------------
+
 // - Bits fuer TabBarPages -
-// -------------------------
+
 
 #define TPB_SPECIAL         ((TabBarPageBits)0x0001)
 
-// ----------------
+
 // - TabBar-Types -
-// ----------------
+
 
 #define TABBAR_RENAMING_YES    ((long)sal_True)
 #define TABBAR_RENAMING_NO     ((long)sal_False)
 #define TABBAR_RENAMING_CANCEL ((long)2)
 
-// ----------
+
 // - TabBar -
-// ----------
+
 struct TabBar_Impl;
 struct ImplTabBarItem;
 

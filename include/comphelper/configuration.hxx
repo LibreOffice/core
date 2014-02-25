@@ -37,10 +37,10 @@ namespace comphelper {
 namespace detail { class ConfigurationWrapper; }
 
 /// A batch of configuration changes that is committed as a whole.
-///
+/
 /// Client code needs to call commit explicitly; otherwise the changes are lost
 /// when the instance is destroyed.
-///
+/
 /// This is the only class from this header file that client code should use
 /// directly.
 class COMPHELPER_DLLPUBLIC ConfigurationChanges: private boost::noncopyable {
@@ -171,7 +171,7 @@ private:
 }
 
 /// A type-safe wrapper around a (non-localized) configuration property.
-///
+/
 /// Automatically generated headers for the various configuration properties
 /// derive from this template and make available its member functions to access
 /// each given configuration property.
@@ -179,7 +179,7 @@ template< typename T, typename U > struct ConfigurationProperty:
     private boost::noncopyable
 {
     /// Get the value of the given (non-localized) configuration property.
-    ///
+    /
     /// For nillable properties, U is of type boost::optional<U'>.
     static U get(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -195,7 +195,7 @@ template< typename T, typename U > struct ConfigurationProperty:
 
     /// Set the value of the given (non-localized) configuration property, via a
     /// given changes batch.
-    ///
+    /
     /// For nillable properties, U is of type boost::optional<U'>.
     static void set(
         U const & value,
@@ -213,7 +213,7 @@ private:
 };
 
 /// A type-safe wrapper around a localized configuration property.
-///
+/
 /// Automatically generated headers for the various localized configuration
 /// properties derive from this template and make available its member functions
 /// to access each given localized configuration property.
@@ -223,7 +223,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
     /// Get the value of the given localized configuration property, for the
     /// locale currently set at the
     /// com.sun.star.configuration.theDefaultProvider.
-    ///
+    /
     /// For nillable properties, U is of type boost::optional<U'>.
     static U get(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -241,7 +241,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
     /// locale currently set at the
     /// com.sun.star.configuration.theDefaultProvider, via a given changes
     /// batch.
-    ///
+    /
     /// For nillable properties, U is of type boost::optional<U'>.
     static void set(
         U const & value,
@@ -259,7 +259,7 @@ private:
 };
 
 /// A type-safe wrapper around a configuration group.
-///
+/
 /// Automatically generated headers for the various configuration groups derive
 /// from this template and make available its member functions to access each
 /// given configuration group.
@@ -292,7 +292,7 @@ private:
 };
 
 /// A type-safe wrapper around a configuration set.
-///
+/
 /// Automatically generated headers for the various configuration sets derive
 /// from this template and make available its member functions to access each
 /// given configuration set.

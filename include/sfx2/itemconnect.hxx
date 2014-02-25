@@ -29,11 +29,11 @@
 #include <sfx2/itemwrapper.hxx>
 #include <sfx2/controlwrapper.hxx>
 
-// ============================================================================
+
 
 namespace sfx {
 
-// ============================================================================
+
 
 typedef int ItemConnFlags;
 
@@ -55,9 +55,9 @@ const ItemConnFlags ITEMCONN_HIDE_UNKNOWN       = 0x0080;
 /** Default value for constructors. */
 const ItemConnFlags ITEMCONN_DEFAULT            = ITEMCONN_NONE;
 
-// ============================================================================
+
 // Base connection classes
-// ============================================================================
+
 
 /** A helper for SfxTabPages to connect controls to items.
 
@@ -221,7 +221,7 @@ private:
     ItemConnFlags       mnFlags;    /// Flags for additional options.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class template for single item <-> single control connection objects.
 
@@ -271,9 +271,9 @@ protected:
     ControlWrapperRef   mxCtrlWrp;
 };
 
-// ============================================================================
+
 // Standard connections
-// ============================================================================
+
 
 /** This is a helper class to enable/disable/show/hide a control only.
 
@@ -298,12 +298,12 @@ private:
     sal_uInt16              mnSlot;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Connection between an SfxBoolItem and a VCL CheckBox. */
 typedef ItemControlConnection< BoolItemWrapper, CheckBoxWrapper > CheckBoxConnection;
 
-// ============================================================================
+
 
 /** Connection between an item and the VCL NumericField. */
 template< typename ItemWrpT >
@@ -321,14 +321,14 @@ public:
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef NumericConnection< Int16ItemWrapper  > Int16NumericConnection;
 typedef NumericConnection< UInt16ItemWrapper > UInt16NumericConnection;
 typedef NumericConnection< Int32ItemWrapper  > Int32NumericConnection;
 typedef NumericConnection< UInt32ItemWrapper > UInt32NumericConnection;
 
-// ============================================================================
+
 
 /** Connection between an item and the VCL MetricField.
 
@@ -352,14 +352,14 @@ public:
                             FieldUnit eItemUnit = FUNIT_NONE, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef MetricConnection< Int16ItemWrapper  > Int16MetricConnection;
 typedef MetricConnection< UInt16ItemWrapper > UInt16MetricConnection;
 typedef MetricConnection< Int32ItemWrapper  > Int32MetricConnection;
 typedef MetricConnection< UInt32ItemWrapper > UInt32MetricConnection;
 
-// ============================================================================
+
 
 /** Connection between an item and a VCL ListBox.
 
@@ -384,14 +384,14 @@ public:
                             const MapEntryType* pMap = 0, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef ListBoxConnection< Int16ItemWrapper >  Int16ListBoxConnection;
 typedef ListBoxConnection< UInt16ItemWrapper > UInt16ListBoxConnection;
 typedef ListBoxConnection< Int32ItemWrapper >  Int32ListBoxConnection;
 typedef ListBoxConnection< UInt32ItemWrapper > UInt32ListBoxConnection;
 
-// ============================================================================
+
 
 /** Connection between an item and an SVTOOLS ValueSet.
 
@@ -416,16 +416,16 @@ public:
                             const MapEntryType* pMap = 0, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef ValueSetConnection< Int16ItemWrapper >  Int16ValueSetConnection;
 typedef ValueSetConnection< UInt16ItemWrapper > UInt16ValueSetConnection;
 typedef ValueSetConnection< Int32ItemWrapper >  Int32ValueSetConnection;
 typedef ValueSetConnection< UInt32ItemWrapper > UInt32ValueSetConnection;
 
-// ============================================================================
+
 // Array of connections
-// ============================================================================
+
 
 class ItemConnectionArrayImpl;
 
@@ -455,15 +455,15 @@ private:
     std::auto_ptr< ItemConnectionArrayImpl > mxImpl;
 };
 
-// ============================================================================
 
-// ============================================================================
+
+
 //               ***  Implementation of template functions  ***
-// ============================================================================
 
-// ============================================================================
+
+
 // Base connection classes
-// ============================================================================
+
 
 template< typename ItemWrpT, typename ControlWrpT >
 ItemControlConnection< ItemWrpT, ControlWrpT >::ItemControlConnection(
@@ -533,9 +533,9 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
     return bChanged;
 }
 
-// ============================================================================
+
 // Standard connections
-// ============================================================================
+
 
 template< typename ItemWrpT >
 NumericConnection< ItemWrpT >::NumericConnection(
@@ -544,7 +544,7 @@ NumericConnection< ItemWrpT >::NumericConnection(
 {
 }
 
-// ============================================================================
+
 
 template< typename ItemWrpT >
 MetricConnection< ItemWrpT >::MetricConnection(
@@ -553,7 +553,7 @@ MetricConnection< ItemWrpT >::MetricConnection(
 {
 }
 
-// ============================================================================
+
 
 template< typename ItemWrpT >
 ListBoxConnection< ItemWrpT >::ListBoxConnection(
@@ -562,7 +562,7 @@ ListBoxConnection< ItemWrpT >::ListBoxConnection(
 {
 }
 
-// ============================================================================
+
 
 template< typename ItemWrpT >
 ValueSetConnection< ItemWrpT >::ValueSetConnection(
@@ -571,7 +571,7 @@ ValueSetConnection< ItemWrpT >::ValueSetConnection(
 {
 }
 
-// ============================================================================
+
 
 } // namespace sfx
 

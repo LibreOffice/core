@@ -24,7 +24,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 namespace basegfx
@@ -32,7 +32,7 @@ namespace basegfx
     class B2DPolygon;
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {

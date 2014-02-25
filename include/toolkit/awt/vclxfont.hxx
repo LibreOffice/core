@@ -29,9 +29,9 @@
 #include <osl/mutex.hxx>
 #include <vcl/metric.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXFont
-//  ----------------------------------------------------
+
 
 class TOOLKIT_DLLPUBLIC VCLXFont :  public ::com::sun::star::awt::XFont2,
                     public ::com::sun::star::lang::XTypeProvider,

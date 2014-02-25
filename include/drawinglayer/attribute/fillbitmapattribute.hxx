@@ -23,7 +23,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class BitmapEx;
@@ -37,7 +37,7 @@ namespace drawinglayer { namespace attribute {
     class ImpFillBitmapAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -77,7 +77,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 

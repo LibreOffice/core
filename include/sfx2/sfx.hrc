@@ -27,7 +27,7 @@
 #define RID_GROUPS_SFXOFFSET        32700
 #define RID_GROUPS_END              32767
 
-//--------------------------------------------------------------------
+
 
 #define EVENT_SFX_START              5000
 //      EVENT_SFX_END                9999
@@ -84,7 +84,7 @@
 #define SFX_EVENT_MOUSECLICK_OBJECT    ( EVENT_SFX_START + 101 )
 #define SFX_EVENT_MOUSEOUT_OBJECT      ( EVENT_SFX_START + 102 )
 
-//--------------------------------------------------------------------
+
 
 #define RID_SFX_APP_START                   (RID_SFX_START +  256)
 #define RID_SFX_MENU_START                  (RID_SFX_START +  768)
@@ -104,7 +104,7 @@
 //      RID_SFX_TPLCOMPONENT_START          (RID_SFX_START + 6800)
 //      RID_SFX_HELPCOMPONENT_START         (RID_SFX_START + 7000)
 
-//--------------------------------------------------------------------
+
 
 #define SFX_OBJECTBAR_APPLICATION       0
 #define SFX_OBJECTBAR_OBJECT            1
@@ -185,13 +185,13 @@
 #define SFX_FILE_THUMBNAIL_MATH             (RID_SFX_START+167)
 #define SFX_FILE_THUMBNAIL_DEFAULT          (RID_SFX_START+168)
 
-//=========================================================================
+
 
 // group ids
-//=========================================================================
+
 // !! If you add a new group, please change sfxbasecontroller.cxx and
 // !! com.sun.star.frame.CommandGroup accordingly!
-//=========================================================================
+
 
 #define GID_INTERN                          (RID_GROUPS_SFXOFFSET+ 0)
 #define GID_APPLICATION                     (RID_GROUPS_SFXOFFSET+ 1)
@@ -221,7 +221,7 @@
 #define GID_CONTROLS                        (RID_GROUPS_SFXOFFSET+25)
 #define GID_NAVIGATION                      (RID_GROUPS_SFXOFFSET+26)
 
-// =========================================================================
+
 
 #define RID_OPTIONS_START           (SID_LIB_START +    2000)
 //      RID_OPTIONS_END             (RID_OPTIONS_START + 100)

@@ -70,9 +70,9 @@ namespace dbaui
 {
     class ODataView;
 
-    // ====================================================================
+
     // = optional
-    // ====================================================================
+
     /** convenience wrapper around boost::optional, allowing typed assignments
     */
     template < typename T >
@@ -113,9 +113,9 @@ namespace dbaui
         return !!_value;
     }
 
-    // ====================================================================
+
     // = FeatureState
-    // ====================================================================
+
     /** describes the state of a feature
 
         In opposite to the FeatureStateEvent in css.frame, this one allows for multiple states to be specified at once.
@@ -134,33 +134,33 @@ namespace dbaui
         FeatureState() : bEnabled(sal_False) { }
     };
 
-    // ====================================================================
-    // = helper
-    // ====================================================================
 
-    // ....................................................................
+    // = helper
+
+
+
     struct ControllerFeature : public ::com::sun::star::frame::DispatchInformation
     {
         sal_uInt16 nFeatureId;
     };
 
-    // ....................................................................
+
     typedef ::std::map  <   OUString
                         ,   ControllerFeature
                         ,   ::std::less< OUString >
                         >   SupportedFeatures;
 
-    // ....................................................................
+
     struct CompareFeatureById : ::std::binary_function< SupportedFeatures::value_type, sal_Int32, bool >
     {
-        // ................................................................
+
         inline bool operator()( const SupportedFeatures::value_type& _aType, const sal_Int32& _nId ) const
         {
             return !!( _nId == _aType.second.nFeatureId );
         }
     };
 
-    // ....................................................................
+
     struct FeatureListener
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >
@@ -169,20 +169,20 @@ namespace dbaui
         sal_Bool    bForceBroadcast;
     };
 
-    // ....................................................................
+
     typedef ::std::deque< FeatureListener > FeatureListeners;
 
-    // ....................................................................
+
     struct FindFeatureListener : ::std::binary_function< FeatureListener, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >, bool >
     {
-        // ................................................................
+
         inline bool operator()( const FeatureListener& lhs, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& rhs ) const
         {
             return !!( lhs.xListener == rhs );
         }
     };
 
-    // ....................................................................
+
     typedef ::comphelper::SharedMutexBase   OGenericUnoController_MBASE;
 
     typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::frame::XDispatch
@@ -199,7 +199,7 @@ namespace dbaui
                                                 >   OGenericUnoController_Base;
 
     struct OGenericUnoController_Data;
-    // ====================================================================
+
     class DBACCESS_DLLPUBLIC OGenericUnoController
                                 :public OGenericUnoController_MBASE
                                 ,public OGenericUnoController_Base
@@ -219,7 +219,7 @@ namespace dbaui
 #endif
 
     protected:
-        // ----------------------------------------------------------------
+
         // attributes
         struct DispatchTarget
         {
@@ -257,12 +257,12 @@ namespace dbaui
 
 
 
-        // ----------------------------------------------------------------
+
         // attribute access
         ::osl::Mutex&               getMutex() const            { return OGenericUnoController_MBASE::getMutex(); }
         ::cppu::OBroadcastHelper&   getBroadcastHelper()        { return OGenericUnoController_Base::rBHelper; }
 
-        // ----------------------------------------------------------------
+
         // methods
         OGenericUnoController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM );
         const ::comphelper::NamedValueCollection&

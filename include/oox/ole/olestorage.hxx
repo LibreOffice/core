@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 /** Implements stream access for binary OLE storages. */
 class OOX_DLLPUBLIC OleStorage : public StorageBase
@@ -100,7 +100,7 @@ private:
     const OleStorage*   mpParentStorage;    ///< Parent OLE storage that contains this storage.
 };
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

@@ -84,7 +84,7 @@ public:
     void SetFS(::sax_fastparser::FSHelperPtr pSerializer);
 
     /// Export the sdr object as VML.
-    ///
+    /
     /// Call this when you need to export the object as VML.
     sal_uInt32 AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
@@ -93,7 +93,7 @@ public:
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.
-    ///
+    /
     /// This should be called from within StartShape() to ensure that the
     /// added attribute is preserved.
     void                AddShapeAttribute( sal_Int32 nAttribute, const OString& sValue );
@@ -102,12 +102,12 @@ protected:
     using EscherEx::EndShape;
 
     /// Start the shape for which we just collected the information.
-    ///
+    /
     /// Returns the element's tag number, -1 means we wrote nothing.
     virtual sal_Int32   StartShape();
 
     /// End the shape.
-    ///
+    /
     /// The parameter is just what we got from StartShape().
     virtual void        EndShape( sal_Int32 nShapeElement );
     virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );

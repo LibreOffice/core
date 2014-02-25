@@ -26,9 +26,9 @@
 
 class SdrModel;
 
-//------------------------
+
 // class XFillGradientItem
-//------------------------
+
 class SVX_DLLPUBLIC XFillGradientItem : public NameOrIndex
 {
     XGradient   aGradient;

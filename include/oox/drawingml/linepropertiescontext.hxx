@@ -25,7 +25,7 @@
 
 namespace oox { namespace drawingml {
 
-// ---------------------------------------------------------------------
+
 
 struct LineProperties;
 

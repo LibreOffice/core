@@ -81,27 +81,27 @@ private:
     inline bool operator != ( uno_Interface * ); // not impl
 };
 
-//______________________________________________________________________________
+
 inline UnoInterfaceReference::~UnoInterfaceReference()
 {
     if (m_pUnoI != 0)
         (*m_pUnoI->release)( m_pUnoI );
 }
 
-//______________________________________________________________________________
+
 inline UnoInterfaceReference::UnoInterfaceReference()
     : m_pUnoI( 0 )
 {
 }
 
-//______________________________________________________________________________
+
 inline UnoInterfaceReference::UnoInterfaceReference(
     uno_Interface * pUnoI, __sal_NoAcquire )
     : m_pUnoI( pUnoI )
 {
 }
 
-//______________________________________________________________________________
+
 inline UnoInterfaceReference::UnoInterfaceReference( uno_Interface * pUnoI )
     : m_pUnoI( pUnoI )
 {
@@ -109,7 +109,7 @@ inline UnoInterfaceReference::UnoInterfaceReference( uno_Interface * pUnoI )
         (*m_pUnoI->acquire)( m_pUnoI );
 }
 
-//______________________________________________________________________________
+
 inline UnoInterfaceReference::UnoInterfaceReference(
     UnoInterfaceReference const & ref )
     : m_pUnoI( ref.m_pUnoI )
@@ -118,7 +118,7 @@ inline UnoInterfaceReference::UnoInterfaceReference(
         (*m_pUnoI->acquire)( m_pUnoI );
 }
 
-//______________________________________________________________________________
+
 inline UnoInterfaceReference & UnoInterfaceReference::set(
     uno_Interface * pUnoI )
 {
@@ -130,7 +130,7 @@ inline UnoInterfaceReference & UnoInterfaceReference::set(
     return *this;
 }
 
-//______________________________________________________________________________
+
 inline UnoInterfaceReference & UnoInterfaceReference::set(
     uno_Interface * pUnoI, __sal_NoAcquire )
 {
@@ -140,7 +140,7 @@ inline UnoInterfaceReference & UnoInterfaceReference::set(
     return *this;
 }
 
-//______________________________________________________________________________
+
 inline void UnoInterfaceReference::clear()
 {
     if (m_pUnoI != 0)
@@ -150,7 +150,7 @@ inline void UnoInterfaceReference::clear()
     }
 }
 
-//______________________________________________________________________________
+
 inline void UnoInterfaceReference::dispatch(
     struct _typelib_TypeDescription const * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException ) const

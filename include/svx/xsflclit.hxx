@@ -22,9 +22,9 @@
 
 #include <svx/xcolit.hxx>
 
-//------------------------------
+
 // class XSecondaryFillColorItem
-//------------------------------
+
 class SVX_DLLPUBLIC XSecondaryFillColorItem : public XColorItem
 {
 public:

@@ -27,7 +27,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct TextModel
 {
@@ -41,7 +41,7 @@ struct TextModel
                         ~TextModel();
 };
 
-// ============================================================================
+
 
 struct TitleModel
 {
@@ -60,7 +60,7 @@ struct TitleModel
                         ~TitleModel();
 };
 
-// ============================================================================
+
 
 struct LegendModel
 {
@@ -78,7 +78,7 @@ struct LegendModel
                         ~LegendModel();
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

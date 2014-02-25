@@ -27,19 +27,19 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
 // column transfer formats
 #define CTF_FIELD_DESCRIPTOR        0x0001      // the field descriptor format
 #define CTF_CONTROL_EXCHANGE        0x0002      // the control exchange format
 #define CTF_COLUMN_DESCRIPTOR       0x0004      // data access descriptor for a column
 
-    //====================================================================
+
     //= OColumnTransferable
-    //====================================================================
+
     class SVX_DLLPUBLIC OColumnTransferable : public TransferableHelper
     {
     protected:
@@ -161,9 +161,9 @@ namespace svx
         );
     };
 
-    //====================================================================
+
     //= ODataAccessObjectTransferable
-    //====================================================================
+
     /** class for transfering data access objects (tables, queries, statements ...)
     */
     class SVX_DLLPUBLIC ODataAccessObjectTransferable : public TransferableHelper
@@ -249,9 +249,9 @@ namespace svx
                         ,const OUString& _sActiveCommand);
     };
 
-    //====================================================================
+
     //= OMultiColumnTransferable
-    //====================================================================
+
     /** class for transfering multiple columns
     */
     class SVX_DLLPUBLIC OMultiColumnTransferable : public TransferableHelper
@@ -280,9 +280,9 @@ namespace svx
         static sal_uInt32   getDescriptorFormatId();
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_DBAEXCHANGE_HXX
 

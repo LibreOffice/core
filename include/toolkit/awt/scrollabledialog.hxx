@@ -23,7 +23,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/scrbar.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
     class ScrollableInterface
@@ -74,9 +74,9 @@ namespace toolkit
         // Window
         virtual void Resize();
     };
-//........................................................................
+
 } // namespacetoolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_AWT_SCROLLABLEDIALOG_HXX
 

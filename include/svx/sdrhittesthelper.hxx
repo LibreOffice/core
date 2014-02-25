@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/gen.hxx>
 
-/////////////////////////////////////////////////////////////////////
+
 // #i101872# new Object HitTest as View-tooling
 
 class SdrObject;
@@ -33,7 +33,7 @@ class SdrObjList;
 namespace sdr { namespace contact { class ViewObjectContact; }}
 namespace basegfx { class B2DPoint; }
 
-/////////////////////////////////////////////////////////////////////
+
 // Wrappers for classic Sdr* Mode/View classes
 
 SVX_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
@@ -52,7 +52,7 @@ SVX_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
     const SetOfByte* pVisiLayer,
     bool bTextOnly);
 
-/////////////////////////////////////////////////////////////////////
+
 // the pure HitTest based on a VOC
 
 SVX_DLLPUBLIC bool ViewObjectContactPrimitiveHit(
@@ -61,7 +61,7 @@ SVX_DLLPUBLIC bool ViewObjectContactPrimitiveHit(
     double fLogicHitTolerance,
     bool bTextOnly);
 
-/////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDRHITTESTHELPER_HXX
 

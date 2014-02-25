@@ -33,10 +33,10 @@ namespace vcl
     class PDFExtOutDevData;
 }
 
-//........................................................................
+
 namespace toolkitform
 {
-//........................................................................
+
 
     /** creates a PDF compatible control descriptor for the given control
     */
@@ -46,9 +46,9 @@ namespace toolkitform
             ::vcl::PDFExtOutDevData& i_pdfExportData
         ) SAL_THROW(());
 
-//........................................................................
+
 } // namespace toolkitform
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_HELPER_FORMPDFEXPORT_HXX
 

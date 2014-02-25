@@ -80,7 +80,7 @@ class AbstractSvxZoomDialog : public VclAbstractDialog
     virtual const SfxItemSet*   GetOutputItemSet() const = 0 ;
 };
 
-class AbstractSpellDialog : public VclAbstractDialog //
+class AbstractSpellDialog : public VclAbstractDialog
 {
  public:
     virtual void        SetLanguage( sal_uInt16 nLang ) = 0;

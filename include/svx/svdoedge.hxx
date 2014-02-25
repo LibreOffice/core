@@ -24,9 +24,9 @@
 #include <svx/svdglue.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   Vorausdeklarationen
-//************************************************************
+
 
 class SdrDragMethod;
 class SdrPageView;
@@ -35,9 +35,9 @@ namespace sdr { namespace properties {
     class ConnectorProperties;
 }}
 
-//************************************************************
+
 //   Hilfsklasse SdrObjConnection
-//************************************************************
+
 
 class SdrObjConnection
 {
@@ -79,9 +79,9 @@ public:
     inline SdrObject* GetObject() const { return pObj; }
 };
 
-//************************************************************
+
 //   Hilfsklasse SdrEdgeInfoRec
-//************************************************************
+
 
 enum SdrEdgeLineCode {OBJ1LINE2,OBJ1LINE3,OBJ2LINE2,OBJ2LINE3,MIDDLELINE};
 
@@ -123,9 +123,9 @@ public:
     long ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
 };
 
-//************************************************************
+
 //   Hilfsklasse SdrEdgeObjGeoData
-//************************************************************
+
 
 class SdrEdgeObjGeoData : public SdrTextObjGeoData
 {
@@ -142,9 +142,9 @@ public:
     virtual ~SdrEdgeObjGeoData();
 };
 
-//************************************************************
+
 //   Hilfsklasse SdrEdgeObj
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
 {
@@ -317,46 +317,46 @@ public:
     basegfx::B2DPolygon ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Zur Bestimmung der Verlaufslinie werden folgende Item-Parameter des SdrItemPool verwendet:
-//
+
 //  sal_uInt16 EdgeFlowAngle       Default 9000 (=90.00 Deg), min 0, max 9000
 //      Verlauffreiheitswinkel.
 //      Der Winkel, in dem die Verbindungslinie verlaufen darf.
-//
+
 //  sal_uInt16 EdgeEscAngle        Default 9000 (=90.00 Deg), min 0, max 9000
 //      Objektaustrittswinkel.
 //      Der Winkel, in dem die Verbindungslinie aus dem Objekt austreten darf.
-//
+
 //  sal_Bool   EdgeEscAsRay        Default FALSE
 //      sal_True= die Verbindungslinie tritt aus dem Obj Strahlenfoermig aus.
 //      Also Winkelvorgabe durch die Strecke ObjMitte/Konnektor.
-//
+
 //  sal_Bool   EdgeEscUseObjAngle  Default FALSE
 //      Objektdrehwinkelberuecksichtigung.
 //      sal_True= Bei der Bestimmung des Objektaustrittswinkels wird der
 //      Drehwinkel des Objekts als Offset beruecksichtigt.
-//
+
 //  sal_uIntPtr  EdgeFlowDefDist     Default 0, min 0, max ?
 //      Das ist der Default-Mindestabstand der bei der Berechnung der
 //      Verbindungslinie zu den angedockten Objekten in logischen Einheiten.
 //      Dieser Abstand wird innerhalb des Objektes "ueberschrieben", sobald
 //      der User an den Linien draggd. Beim Andocken an ein neues Objekt wird
 //      dann jedoch wieder dieser Default verwendet.
-//
-//
+
+
 // Allgemeines zu Konnektoren:
-//
+
 // Es gibt Knoten und Kantenobjekte. Zwei Knoten koennen durch eine Kante
 // miteinander verbunden werden. Ist eine Kante nur an einem Ende an einen
 // Knoten geklebt, ist das andere Ende auf einer absoluten Position im Doc
 // fixiert. Ebenso ist es natuerlich auch moeglich, dass eine Kante an beiden
 // Enden "frei", also nicht mit einem Knotenobjekt verbunden ist.
-//
+
 // Ein Kantenobjekt kann theoretisch auch gleichzeitig Knotenobjekt sein. In
 // der ersten Version wird das jedoch noch nicht realisiert werden.
-//
+
 // Eine Verbindung zwischen Knoten und Kante kann hergestellt werden durch:
 // - Interaktives erzeugen eines neuen Kantenobjekts an der SdrView wobei
 //   Anfangs- bzw. Endpunkt der Kante auf ein Konnektor (Klebestelle) eines
@@ -369,12 +369,12 @@ public:
 // nicht das direkte Verschieben von Kantenendpunkten am SdrModel...
 // Verbindungen koennen auch hergestellt werden, wenn die Konnektoren an der
 // View nicht sichtbar geschaltet sind.
-//
+
 // Eine vorhandene Verbindung zwischen Knoten und Kante bleibt erhalten bei:
 // - Draggen (Move/Resize/Rotate/...) des Knotenobjekts
 // - Verschieben einer Konnektorposition im Knotemobjekt
 // - gleichzeitiges Draggen (Move/Resize/Rotate/...) von Knoten und Kante
-//
+
 // Eine Verbindung zwischen Knoten und Kante kann geloesst werden durch:
 // - Loeschen eines der Objekte
 // - Draggen des Kantenobjekts ohne gleichzeitiges Draggen des Knotens
@@ -383,7 +383,7 @@ public:
 // Beim Draggen muss die Aufforderung zum loesen der Verbindung von ausserhalb
 // des Models befohlen werden (z.B. von der SdrView). SdrEdgeObj::Move() loesst
 // die Verbindung nicht selbsttaetig.
-//
+
 // Jedes Knotenobjekt kann Konnektoren, sog. Klebestellen besitzen. Das sind die
 // geometrischen Punkte, an denen das verbindende Kantenobjekt bei hergestellter
 // Verbindung endet. Defaultmaessig hat jedes Objekt keine Konnektoren. Trotzdem
@@ -394,7 +394,7 @@ public:
 // liegen diese an den 8 Handlepositionen; Ausnahmen bilden hier Ellipsen,
 // Parallelogramme, ... . Darueberhinaus koennen auch an jedem Knotenobjekt
 // anwenderspeziefische Konnektoren gesetzt werden.
-//
+
 // Dann gibt es noch die Moeglichkeit, ein Kante an einem Objekt mit dem
 // Attribut "bUseBestConnector" anzudocken. Es wird dann aus dem Angebot der
 // Konnektoren des Objekts oder/und der Scheitelpunkte, jeweils die fuer den
@@ -402,7 +402,7 @@ public:
 // Anwender vergibt dieses Attribut, indem er den Knoten in seiner Mitte
 // andockt (siehe z.B. Visio).
 // 09-06-1996: bUseBestConnector verwendet nur Scheitelpunktklebepunkte.
-//
+
 // Und hier noch etwas Begriffsdefinition:
 //   Verbinder : Eben das Verbinderobjekt (Kantenobjekt)
 //   Knoten    : Ein beliebiges Objekt, an dem ein Verbinder drangeklebt
@@ -430,8 +430,8 @@ public:
 //                     das gesamte Objekt umfasst, so versucht der
 //                     Verbinder von den 4 Scheitelpunktklebepunkten (und
 //                     zwar nur von denen) den guenstigsten herauszufinden.
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 #endif // INCLUDED_SVX_SVDOEDGE_HXX
 

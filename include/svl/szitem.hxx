@@ -27,7 +27,7 @@ class SvStream;
 
 DBG_NAMEEX(SfxSizeItem)
 
-// -----------------------------------------------------------------------
+
 
 class SfxSizeItem : public SfxPoolItem
 {

@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 
-//============================================================================
+
 DBG_NAMEEX_VISIBILITY(CntByteItem, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntByteItem: public SfxPoolItem
@@ -83,7 +83,7 @@ inline void CntByteItem::SetValue(sal_uInt8 nTheValue)
     m_nValue = nTheValue;
 }
 
-//============================================================================
+
 DBG_NAMEEX_VISIBILITY(CntUInt16Item, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntUInt16Item: public SfxPoolItem
@@ -145,7 +145,7 @@ inline void CntUInt16Item::SetValue(sal_uInt16 nTheValue)
     m_nValue = nTheValue;
 }
 
-//============================================================================
+
 DBG_NAMEEX_VISIBILITY(CntInt32Item, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntInt32Item: public SfxPoolItem
@@ -207,7 +207,7 @@ inline void CntInt32Item::SetValue(sal_Int32 nTheValue)
     m_nValue = nTheValue;
 }
 
-//============================================================================
+
 DBG_NAMEEX_VISIBILITY(CntUInt32Item, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntUInt32Item: public SfxPoolItem

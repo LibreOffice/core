@@ -181,7 +181,7 @@ namespace basegfx
     };
 
     // external operators
-    //////////////////////////////////////////////////////////////////////////
+
 
     /** Calculate the orientation to another 2D Vector
 

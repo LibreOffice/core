@@ -29,7 +29,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct View3DModel
 {
@@ -44,7 +44,7 @@ struct View3DModel
                         ~View3DModel();
 };
 
-// ============================================================================
+
 
 struct WallFloorModel
 {
@@ -58,7 +58,7 @@ struct WallFloorModel
                         ~WallFloorModel();
 };
 
-// ============================================================================
+
 
 struct DataTableModel
 {
@@ -69,7 +69,7 @@ struct DataTableModel
                         ~DataTableModel();
 };
 
-// ============================================================================
+
 
 struct PlotAreaModel
 {
@@ -89,7 +89,7 @@ struct PlotAreaModel
                         ~PlotAreaModel();
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

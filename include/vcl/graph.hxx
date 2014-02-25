@@ -34,9 +34,9 @@
 
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 
-// -----------
+
 // - Graphic -
-// -----------
+
 
 class   ImpGraphic;
 class   OutputDevice;

@@ -32,7 +32,7 @@ namespace comphelper
     class SharedMutex;
 }
 
-//------------------------------------------------------------------
+
 
 //  SvNumberFormatterServiceObj must be registered as service somewhere
 
@@ -41,7 +41,7 @@ com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
         const com::sun::star::uno::Reference<
             com::sun::star::lang::XMultiServiceFactory>& rSMgr );
 
-//------------------------------------------------------------------
+
 
 //  SvNumberFormatsSupplierObj: aggregate to document,
 //  construct with SvNumberFormatter

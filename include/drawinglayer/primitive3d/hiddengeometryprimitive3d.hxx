@@ -24,7 +24,7 @@
 
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -59,7 +59,7 @@ namespace drawinglayer
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HIDDENGEOMETRYPRIMITIVE3D_HXX
 

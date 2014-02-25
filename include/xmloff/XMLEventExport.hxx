@@ -73,7 +73,7 @@ public:
     ~XMLEventExport();
 
     /// register an EventExportHandler for a particular script type
-    ///
+    /
     /// The handlers will be deleted when the object is destroyed, hence
     /// no pointers to a handler registered with AddHandler() should be
     /// held by anyone.

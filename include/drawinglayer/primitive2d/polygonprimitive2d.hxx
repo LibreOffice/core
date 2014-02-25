@@ -30,7 +30,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolor.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolygonHairlinePrimitive2D class
 
 namespace drawinglayer
@@ -76,7 +76,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolygonMarkerPrimitive2D class
 
 namespace drawinglayer
@@ -141,7 +141,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolygonStrokePrimitive2D class
 
 namespace drawinglayer
@@ -199,7 +199,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolygonWavePrimitive2D class
 
 namespace drawinglayer
@@ -254,7 +254,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolygonStrokeArrowPrimitive2D class
 
 namespace drawinglayer
@@ -310,7 +310,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
 

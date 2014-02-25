@@ -26,14 +26,14 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace geometry {
     class ViewInformation3D;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -130,7 +130,7 @@ namespace drawinglayer
     } // end of namespace overlay
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 

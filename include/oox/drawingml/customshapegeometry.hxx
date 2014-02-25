@@ -28,7 +28,7 @@
 namespace oox { namespace drawingml {
 
 
-// ---------------------------------------------------------------------
+
 // CT_CustomGeometry2D
 class CustomShapeGeometryContext : public ::oox::core::ContextHandler2
 {
@@ -40,7 +40,7 @@ private:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-// ---------------------------------------------------------------------
+
 // CT_PresetGeometry2D
 class PresetShapeGeometryContext : public ::oox::core::ContextHandler2
 {
@@ -52,7 +52,7 @@ private:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-// ---------------------------------------------------------------------
+
 // CT_PresetTextShape
 class PresetTextShapeContext : public ::oox::core::ContextHandler2
 {

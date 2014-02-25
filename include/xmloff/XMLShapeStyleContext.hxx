@@ -27,7 +27,7 @@
 
 class SvXMLImport;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // style:style context
 
 class XMLOFF_DLLPUBLIC XMLShapeStyleContext: public XMLPropStyleContext
