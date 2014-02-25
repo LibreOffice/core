@@ -2987,8 +2987,9 @@ static void lcl_putItemToSet(const SvxSetItem* pSetItem, sal_uInt16 nRes, sal_uI
 void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-            lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+           lang::IllegalArgumentException, lang::WrappedTargetException,
+           uno::RuntimeException, std::exception)
 {
     if(!GetDoc())
         throw uno::RuntimeException();
