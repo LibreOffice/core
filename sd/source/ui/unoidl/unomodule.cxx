@@ -114,7 +114,8 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryD
 }
 
 // XDispatchProvider
-uno::Reference< frame::XDispatch > SAL_CALL SdUnoModule::queryDispatch( const util::URL& aURL, const OUString&, sal_Int32 ) throw( uno::RuntimeException )
+uno::Reference< frame::XDispatch > SAL_CALL SdUnoModule::queryDispatch( const util::URL& aURL, const OUString&, sal_Int32 )
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SdDLL::Init();
