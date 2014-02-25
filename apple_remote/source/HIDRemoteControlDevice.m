@@ -149,23 +149,23 @@
 	if ([self isListeningToRemote]) return;
 
 	// 4th July 2007
-	//
+
 	// A security update in february of 2007 introduced an odd behavior.
 	// Whenever SecureEventInput is activated or deactivated the exclusive access
 	// to the remote control device is lost. This leads to very strange behavior where
 	// a press on the Menu button activates FrontRow while your app still gets the event.
 	// A great number of people have complained about this.
-	//
+
 	// Enabling the SecureEventInput and keeping it enabled does the trick.
-	//
+
 	// I'm pretty sure this is a kind of bug at Apple and I'm in contact with the responsible
 	// Apple Engineer. This solution is not a perfect one - I know.
 	// One of the side effects is that applications that listen for special global keyboard shortcuts (like Quicksilver)
 	// may get into problems as they no longer get the events.
 	// As there is no official Apple Remote API from Apple I also failed to open a technical incident on this.
-	//
+
 	// Note that there is a corresponding DisableSecureEventInput in the stopListening method below.
-	//
+
 	if ([self isOpenInExclusiveMode] && fixSecureEventInputBug) EnableSecureEventInput();
 
 	[self removeNotifcationObserver];
