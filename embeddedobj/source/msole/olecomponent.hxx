@@ -114,7 +114,7 @@ public:
     void CreateLinkFromFile( const OUString& aFileName );
     void InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent );
 
-    // ======================================================================
+
     void RunObject(); // switch OLE object to running state
     void CloseObject(); // switch OLE object to loaded state
 
