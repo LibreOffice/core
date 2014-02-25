@@ -253,7 +253,7 @@ bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;
 }
-// ==========================================================================
+
 // real implementations of virtual functions
 
 
@@ -1338,7 +1338,7 @@ bool FormulaTokenIterator::IsEndOfPath() const
 }
 
 
-// ==========================================================================
+
 // real implementations of virtual functions
 
 

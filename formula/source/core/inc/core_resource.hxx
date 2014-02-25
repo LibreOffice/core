@@ -24,13 +24,13 @@
 #include <osl/mutex.hxx>
 
 class ResMgr;
-//.........................................................................
+
 namespace formula
 {
-    //==================================================================
+
     //= ResourceManager
     //= handling resources within the FORMULA-Core library
-    //==================================================================
+
     class ResourceManager
     {
         friend class OModuleClient;
@@ -54,9 +54,9 @@ namespace formula
         static ResMgr*  getResManager();
     };
 
-    //=========================================================================
+
     //= OModuleClient
-    //=========================================================================
+
     /** base class for objects which uses any global module-specific resources
     */
     class OModuleClient
@@ -67,9 +67,9 @@ namespace formula
     };
 
 
-//.........................................................................
+
 } // formula
-//.........................................................................
+
 
 #endif // _FORMULA_CORE_RESOURCE_HXX_
 

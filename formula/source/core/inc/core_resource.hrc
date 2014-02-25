@@ -22,11 +22,11 @@
 
 #include <svl/solar.hrc>
 
-//------------------------------------------------------------------------------
+
 #define RID_CORE_STRINGS_START                  RID_FORMULA_START
 #define RID_CORE_OTHER_START                    RID_FORMULA_START
 
-//------------------------------------------------------------------------------
+
 //- String-IDs
 #define RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF     (RID_CORE_OTHER_START + 0)
 #define RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML    (RID_CORE_OTHER_START + 1)
