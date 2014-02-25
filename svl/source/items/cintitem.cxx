@@ -21,9 +21,9 @@
 #include <tools/stream.hxx>
 #include <svl/cintitem.hxx>
 
-//
+
 //  class CntByteItem
-//
+
 
 DBG_NAME(CntByteItem)
 
@@ -128,9 +128,9 @@ SfxFieldUnit CntByteItem::GetUnit() const
     return SFX_FUNIT_NONE;
 }
 
-//
+
 //  class CntUInt16Item
-//
+
 
 DBG_NAME(CntUInt16Item);
 
@@ -247,9 +247,9 @@ SfxFieldUnit CntUInt16Item::GetUnit() const
     return SFX_FUNIT_NONE;
 }
 
-//
+
 //  class CntInt32Item
-//
+
 
 DBG_NAME(CntInt32Item);
 
@@ -364,9 +364,9 @@ SfxFieldUnit CntInt32Item::GetUnit() const
     return SFX_FUNIT_NONE;
 }
 
-//
+
 //  class CntUInt32Item
-//
+
 
 DBG_NAME(CntUInt32Item);
 

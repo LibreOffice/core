@@ -24,9 +24,9 @@
 #include <tools/stream.hxx>
 #include <svl/metitem.hxx>
 
-//
+
 //  class SfxByteItem
-//
+
 
 TYPEINIT1_AUTOFACTORY(SfxByteItem, CntByteItem);
 
@@ -38,9 +38,9 @@ SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
     return new SfxByteItem(Which(), sal_uInt8(nValue));
 }
 
-//
+
 //  class SfxInt16Item
-//
+
 
 DBG_NAME(SfxInt16Item);
 
@@ -150,30 +150,30 @@ SfxFieldUnit SfxInt16Item::GetUnit() const
     return SFX_FUNIT_NONE;
 }
 
-//
+
 //  class SfxUInt16Item
-//
+
 
 TYPEINIT1_AUTOFACTORY(SfxUInt16Item, CntUInt16Item);
 
 
-//
+
 //  class SfxInt32Item
-//
+
 
 TYPEINIT1_AUTOFACTORY(SfxInt32Item, CntInt32Item);
 
 
-//
+
 //  class SfxUInt32Item
-//
+
 
 TYPEINIT1_AUTOFACTORY(SfxUInt32Item, CntUInt32Item);
 
 
-//
+
 //  class SfxMetricItem
-//
+
 
 DBG_NAME(SfxMetricItem);
 

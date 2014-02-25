@@ -23,9 +23,9 @@
 #include <tools/stream.hxx>
 #include <svl/custritm.hxx>
 
-//
+
 //  class CntUnencodedStringItem
-//
+
 
 DBG_NAME(CntUnencodedStringItem)
 

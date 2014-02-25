@@ -19,9 +19,9 @@
 
 #include <svl/stritem.hxx>
 
-//
+
 //  class SfxStringItem
-//
+
 
 TYPEINIT1_AUTOFACTORY(SfxStringItem, CntUnencodedStringItem)
 

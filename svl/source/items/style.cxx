@@ -731,7 +731,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
             // existing SdrUndoAttrObj incarnations. Rely on refcounting for disposal,
             // this works well under normal conditions (checked breaking and counting
             // on SfxStyleSheetBase constructors and destructors)
-            //
+
             // com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), com::sun::star::uno::UNO_QUERY );
             // if( xComp.is() ) try
             // {

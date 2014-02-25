@@ -131,9 +131,9 @@ inline sal_uInt32 SvDataPipe_Impl::getReadPosition() const
                                          - m_pReadPage->m_aBuffer);
 }
 
-//
+
 //  SvOutputStreamOpenLockBytes
-//
+
 
 TYPEINIT1(SvOutputStreamOpenLockBytes, SvOpenLockBytes)
 
@@ -241,9 +241,9 @@ void SvOutputStreamOpenLockBytes::Terminate()
     }
 }
 
-//
+
 //  SvLockBytesInputStream
-//
+
 
 // virtual
 uno::Any SAL_CALL SvLockBytesInputStream::queryInterface(uno::Type const &
@@ -419,9 +419,9 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
     return aStat.nSize;
 }
 
-//
+
 //  SvInputStream
-//
+
 
 bool SvInputStream::open()
 {
@@ -667,9 +667,9 @@ void SvInputStream::RemoveMark(sal_uLong nPos)
         m_pPipe->removeMark(nPos);
 }
 
-//
+
 //  SvOutputStream
-//
+
 
 // virtual
 sal_uLong SvOutputStream::GetData(void *, sal_uLong)
@@ -770,9 +770,9 @@ sal_uInt16 SvOutputStream::IsA() const
     return 0;
 }
 
-//
+
 //  SvDataPipe_Impl
-//
+
 
 bool SvDataPipe_Impl::remove(Page * pPage)
 {
