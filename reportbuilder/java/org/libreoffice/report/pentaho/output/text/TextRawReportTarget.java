@@ -724,17 +724,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         // LOGGER.debug("Adding row-Style: " + rowStyle + " " + rowHeight);
         sectionHeight.add(rowHeight);
 
-//    if (expectedTableRowCount > 0)
-//    {
-//      // Some other row. Create a keep-together
-//
-//    }
-//    else
-//    {
-//      // This is the last row before the section will end.
-//      // or (in some weird cases) There is no information when the row will end.
-//      // Anyway, if we are here, we do not create a keep-together style on the table-row ..
-//    }
         // process the styles as usual
         performStyleProcessing(attrs);
 
