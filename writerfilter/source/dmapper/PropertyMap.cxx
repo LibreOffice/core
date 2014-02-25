@@ -1093,7 +1093,7 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mbCT_TblWidth_typeSet( false ),
     mnListId( -1 ),
     mnListLevel( -1 ),
-    mnOutlineLevel( -1 )
+    mnOutlineLevel( 0 )
 {
 }
 /*-- 14.06.2007 13:57:43---------------------------------------------------

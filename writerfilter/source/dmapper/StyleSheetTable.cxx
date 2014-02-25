@@ -866,7 +866,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             aPropValues.realloc( aPropValues.getLength( ) + 1 );
 
                             beans::PropertyValue aLvlVal( rPropNameSupplier.GetName( PROP_OUTLINE_LEVEL ), 0,
-                                    uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
+                                    uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues[ aPropValues.getLength( ) - 1 ] = aLvlVal;
 
