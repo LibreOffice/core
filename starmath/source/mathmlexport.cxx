@@ -714,10 +714,10 @@ void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
     // Unfold the binary tree structure as long as the nodes are SmBinHorNode
     // with the same nGroup. This will reduce the number of nested <mrow>
     // elements e.g. we only need three <mrow> levels to export
-    //
+
     // "a*b*c*d+e*f*g*h+i*j*k*l = a*b*c*d+e*f*g*h+i*j*k*l =
     //  a*b*c*d+e*f*g*h+i*j*k*l = a*b*c*d+e*f*g*h+i*j*k*l"
-    //
+
     // See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=66081
     ::std::stack< const SmNode* > s;
     s.push(pNode);
@@ -1276,10 +1276,10 @@ static bool lcl_HasEffectOnMathvariant( const SmTokenType eType )
 
 void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 {
-    //
+
     // gather the mathvariant attribut relevant data from all
     // successively following SmFontNodes...
-    //
+
     int nBold   = -1;   // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
     int nItalic = -1;   // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
     int nSansSerifFixed   = -1;
@@ -1452,14 +1452,14 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
 {
     // "[body] overbrace [script]"
-    //
+
     // Position body, overbrace and script vertically. First place the overbrace
     // OVER the body and then the script OVER this expression.
-    //
+
     //      [script]
     //   --[overbrace]--
     // XXXXXX[body]XXXXXXX
-    //
+
     // Similarly for the underbrace construction.
 
     XMLTokenEnum which;

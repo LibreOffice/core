@@ -70,10 +70,10 @@ class SmViewShell;
 SmViewShell * SmGetActiveView();
 
 
-////////////////////////////////////////////////////////////
-//
+
+
 // SmFace
-//
+
 
 bool    IsItalic( const Font &rFont );
 bool    IsBold( const Font &rFont );
@@ -112,10 +112,10 @@ public:
 SmFace & operator *= (SmFace &rFace, const Fraction &rFrac);
 
 
-////////////////////////////////////////////////////////////
-//
+
+
 // SmFontPickList
-//
+
 
 class SmFontDialog;
 
@@ -147,10 +147,10 @@ public:
     void            WriteTo(SmFontDialog& rDialog) const;
 };
 
-////////////////////////////////////////////////////////////
-//
+
+
 //  SmFontPickListBox
-//
+
 
 class SmFontPickListBox : public SmFontPickList, public ListBox
 {

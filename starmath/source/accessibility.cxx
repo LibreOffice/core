@@ -60,7 +60,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-//////////////////////////////////////////////////////////////////////
+
 
 static awt::Rectangle lcl_GetBounds( Window *pWin )
 {
@@ -103,7 +103,7 @@ static awt::Point lcl_GetLocationOnScreen( Window *pWin )
     return aPos;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     aAccName            (SM_RESSTR(RID_DOCUMENTSTR)),
@@ -811,7 +811,7 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
     return aNames;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -1962,6 +1962,6 @@ Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
     return aNames;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
