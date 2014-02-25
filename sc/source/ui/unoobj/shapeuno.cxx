@@ -1427,7 +1427,10 @@ public:
     }
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement )
+        throw (lang::IllegalArgumentException, container::NoSuchElementException,
+               lang::WrappedTargetException, uno::RuntimeException,
+               std::exception)
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
