@@ -32,10 +32,10 @@ class salhelper::TimerManager : public osl::Thread
 
 public:
 
-    ///
+
     TimerManager();
 
-    ///
+
     ~TimerManager();
 
     /// register timer
@@ -74,10 +74,10 @@ protected:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Timer class
-//
+
 
 Timer::Timer()
     : m_aTimeOut( 0 ),
@@ -232,10 +232,10 @@ TTimeValue Timer::getRemainingTime() const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Timer manager
-//
+
 namespace
 {
     // Synchronize access to TimerManager
@@ -461,10 +461,10 @@ void TimerManager::run()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Timer manager cleanup
-//
+
 
 // jbu:
 // The timer manager cleanup has been removed (no thread is killed anymore).
