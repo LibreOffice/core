@@ -32,7 +32,7 @@ namespace oox { class AttributeList; }
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC CodecHelper
 {
@@ -45,7 +45,7 @@ private:
                         ~CodecHelper();
 };
 
-// ============================================================================
+
 
 /** Encodes and decodes data from/to protected MS Office documents.
 
@@ -170,7 +170,7 @@ private:
     sal_uInt16          mnHash;             ///< Hash value from password.
 };
 
-// ============================================================================
+
 
 /** Encodes and decodes data from protected MSO 97+ documents.
 
@@ -306,7 +306,7 @@ private:
     sal_uInt8           mpnUnique[16];
 };
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

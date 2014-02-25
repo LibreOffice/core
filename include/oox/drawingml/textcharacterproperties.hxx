@@ -30,7 +30,7 @@ namespace oox { class PropertySet; }
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 struct TextCharacterProperties
 {
@@ -78,7 +78,7 @@ struct TextCharacterProperties
                             bool bUseOptional = false ) const;
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

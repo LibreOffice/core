@@ -30,11 +30,11 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 const sal_Int32 XML_ROOT_CONTEXT    = SAL_MAX_INT32;
 
-// ============================================================================
+
 
 struct ElementInfo;
 
@@ -211,7 +211,7 @@ protected:
     bool                mbEnableTrimSpace;  ///< True = trim whitespace in characters().
 };
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC ContextHandler2 : public ContextHandler, public ContextHandler2Helper
 {
@@ -264,7 +264,7 @@ public:
     virtual void        onEndRecord();
 };
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

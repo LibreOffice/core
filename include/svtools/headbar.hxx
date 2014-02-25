@@ -182,23 +182,23 @@ class ImplHeadItem;
 
 typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 
-// -----------
+
 // - WinBits -
-// -----------
+
 
 #define WB_BOTTOMBORDER         ((WinBits)0x0400)
 #define WB_BUTTONSTYLE          ((WinBits)0x0800)
 #define WB_STDHEADERBAR         (WB_BUTTONSTYLE | WB_BOTTOMBORDER)
 
-// ---------------------
+
 // - HeaderBarItemBits -
-// ---------------------
+
 
 typedef sal_uInt16 HeaderBarItemBits;
 
-// ----------------------------
+
 // - Bits fuer HeaderBarItems -
-// ----------------------------
+
 
 #define HIB_LEFT                ((HeaderBarItemBits)0x0001)
 #define HIB_CENTER              ((HeaderBarItemBits)0x0002)
@@ -217,9 +217,9 @@ typedef sal_uInt16 HeaderBarItemBits;
 #define HIB_USERDRAW            ((HeaderBarItemBits)0x4000)
 #define HIB_STDSTYLE            (HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER | HIB_CLICKABLE)
 
-// -------------------
+
 // - HeaderBar-Types -
-// -------------------
+
 
 #define HEADERBAR_APPEND            ((sal_uInt16)0xFFFF)
 #define HEADERBAR_ITEM_NOTFOUND     ((sal_uInt16)0xFFFF)
@@ -227,9 +227,9 @@ typedef sal_uInt16 HeaderBarItemBits;
 
 #define HEADERBAR_TEXTOFF           2
 
-// -------------
+
 // - HeaderBar -
-// -------------
+
 
 class VCLXHeaderBar;
 

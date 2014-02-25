@@ -23,7 +23,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/dllapi.h>
 
-//-------------------------------------------------------------------------
+
 
 enum SvxZoomType
 {
@@ -34,7 +34,7 @@ enum SvxZoomType
     SVX_ZOOM_PAGEWIDTH_NOBORDER  // GetValue() pagewidth without border
 };
 
-//-------------------------------------------------------------------------
+
 
 class SFX2_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
 {
@@ -66,7 +66,7 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
-//------------------------------------------------------------------------
+
 
 #define SVX_ZOOM_ENABLE_50          0x0001
 #define SVX_ZOOM_ENABLE_75          0x0002

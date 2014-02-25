@@ -29,7 +29,7 @@ namespace oox {
 
 class PropertyMap;
 
-// ============================================================================
+
 
 /** A wrapper for a UNO property set.
 
@@ -119,7 +119,7 @@ public:
     void dump();
 #endif
 
-    // ------------------------------------------------------------------------
+
 private:
     /** Gets the specified property from the property set.
         @return  true, if the any could be filled with the property value. */
@@ -137,7 +137,7 @@ private:
                         mxPropSetInfo;      ///< Property information.
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

@@ -22,9 +22,9 @@
 #include <svx/svxdllapi.h>
 #include <sfx2/tbxctrl.hxx>
 
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+
+
+
 
 class SVX_DLLPUBLIC SvxSubToolBoxControl : public SfxToolBoxControl
 {
@@ -39,8 +39,8 @@ public:
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
-//
-//----------------------------------------------------------------------------
+
+
 
 #endif
 

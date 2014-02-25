@@ -31,7 +31,7 @@ namespace ucbhelper
 
 struct CommandEnvironment_Impl;
 
-//=========================================================================
+
 
 /**
   * This class implements the interface

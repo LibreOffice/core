@@ -43,9 +43,9 @@ class Region;
 #define INITOUTDEV_ALL          0xFFFF
 
 
-//  ----------------------------------------------------
+
 //  class VCLXGraphics
-//  ----------------------------------------------------
+
 
 class VCLXGraphics :    public ::com::sun::star::awt::XGraphics2,
                         public ::com::sun::star::lang::XTypeProvider,

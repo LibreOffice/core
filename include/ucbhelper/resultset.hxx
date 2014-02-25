@@ -40,11 +40,11 @@
 
 namespace ucbhelper {
 
-//=========================================================================
+
 
 #define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.ContentResultSet"
 
-//=========================================================================
+
 
 class ResultSetDataSupplier;
 struct ResultSet_Impl;
@@ -367,9 +367,9 @@ public:
                com::sun::star::lang::WrappedTargetException,
                com::sun::star::uno::RuntimeException, std::exception );
 
-    /////////////////////////////////////////////////////////////////////
+
     // Non-interface methods.
-    /////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method propagates property value changes to all registered
@@ -415,7 +415,7 @@ public:
     getEnvironment();
 };
 
-//=========================================================================
+
 
 /**
  * This is the base class for an object that supplies data to a result set

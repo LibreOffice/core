@@ -29,9 +29,9 @@ enum SdrEdgeKind {SDREDGE_ORTHOLINES,
                   SDREDGE_BEZIER,
                   SDREDGE_ARC};
 
-//------------------------------
+
 // class SdrEdgeKindItem
-//------------------------------
+
 class SVX_DLLPUBLIC SdrEdgeKindItem: public SfxEnumItem {
 public:
     TYPEINFO();

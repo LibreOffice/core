@@ -292,7 +292,7 @@ public:
     // aStr+=" ersetzen";
     // BegUndo(aStr);
     // ReplaceObject(...);
-    // ...
+
     // EndUndo();
     void ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, sal_Bool bMark=sal_True);
 

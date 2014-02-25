@@ -23,9 +23,9 @@
 #include <svx/svdorect.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   Forward Declarations
-//************************************************************
+
 
 class ImpCaptParams;
 
@@ -33,9 +33,9 @@ namespace sdr { namespace properties {
     class CaptionProperties;
 }}
 
-//************************************************************
+
 //   Helper Class SdrCaptObjGeoData
-//************************************************************
+
 
 // #109872#
 class SdrCaptObjGeoData : public SdrTextObjGeoData
@@ -44,9 +44,9 @@ public:
     Polygon                     aTailPoly;
 };
 
-//************************************************************
+
 //   SdrCaptionObj
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
 {
@@ -154,7 +154,7 @@ public:
     ::basegfx::B2DPolygon getTailPolygon() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif //_SVDOCAPT_HXX
 

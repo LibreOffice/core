@@ -22,7 +22,7 @@
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-//.........................................................................
+
 namespace dbtools
 {
     class OOO_DLLPUBLIC_DBTOOLS ISQLStatementHelper
@@ -34,9 +34,9 @@ namespace dbtools
         ~ISQLStatementHelper() {}
     };
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_SQLSTATEMENTHELPER_HXX
 

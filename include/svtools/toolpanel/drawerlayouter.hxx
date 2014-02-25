@@ -27,18 +27,18 @@
 
 #include <boost/shared_ptr.hpp>
 
-//......................................................................................................................
+
 namespace svt
 {
-//......................................................................................................................
+
 
     class ToolPanelViewShell;
     class ToolPanelDrawer;
     typedef ::boost::shared_ptr< ToolPanelDrawer >  PToolPanelDrawer;
 
-    //==================================================================================================================
+
     //= ToolPanelDrawer
-    //==================================================================================================================
+
     /** a class which implements a tool panel selector in the form of the classical drawers
     */
     class SVT_DLLPUBLIC DrawerDeckLayouter  :public RefBase
@@ -88,9 +88,9 @@ private:
         ::boost::optional< size_t >         m_aLastKnownActivePanel;
     };
 
-//......................................................................................................................
+
 } // namespace svt
-//......................................................................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_DRAWERLAYOUTER_HXX
 

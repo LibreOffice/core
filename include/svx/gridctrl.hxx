@@ -57,9 +57,9 @@ enum GridRowStatus
     GRS_INVALID
 };
 
-//==================================================================
+
 // DbGridRow, description of rows
-//==================================================================
+
 
 class DbGridRow : public SvRefBase
 {
@@ -92,13 +92,13 @@ public:
 
 SV_DECL_REF(DbGridRow)
 
-//==================================================================
+
 // DbGridControl
-//==================================================================
+
 class DbGridColumn;
 typedef ::std::vector< DbGridColumn* > DbGridColumns;
 
-//==================================================================
+
 class FmGridListener
 {
 public:
@@ -111,9 +111,9 @@ protected:
 
 #define GRID_COLUMN_NOT_FOUND   SAL_MAX_UINT16
 
-//==================================================================
+
 // InitWindowFacet, describing which aspect of a column's Window to (re-)initialize
-//==================================================================
+
 enum InitWindowFacet
 {
     InitFont        = 0x01,
@@ -123,7 +123,7 @@ enum InitWindowFacet
     InitAll         = 0xFF
 };
 
-//==================================================================
+
 class FmXGridSourcePropListener;
 class DisposeListenerGridBridge;
 typedef ::svt::EditBrowseBox    DbGridControl_Base;
@@ -134,9 +134,9 @@ class SVX_DLLPUBLIC DbGridControl : public DbGridControl_Base
     friend class DisposeListenerGridBridge;
 
 public:
-    //==================================================================
+
     // NavigationBar
-    //==================================================================
+
     class NavigationBar: public Control
     {
         class AbsolutePos : public NumericField

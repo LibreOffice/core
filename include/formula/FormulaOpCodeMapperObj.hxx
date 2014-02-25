@@ -75,9 +75,9 @@ private:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 };
-// =============================================================================
+
 } // formula
-// =============================================================================
+
 
 #endif // INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 

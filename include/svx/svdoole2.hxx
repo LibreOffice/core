@@ -31,9 +31,9 @@
 #include <sot/storage.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   SdrOle2Obj
-//************************************************************
+
 
 class SvxUnoShapeModifyListener;
 class SdrOle2ObjImpl;

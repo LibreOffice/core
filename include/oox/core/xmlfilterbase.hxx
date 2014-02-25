@@ -65,7 +65,7 @@ struct TextField {
 };
 typedef std::vector< TextField > TextFieldStack;
 
-// ============================================================================
+
 
 struct XmlFilterBaseImpl;
 
@@ -95,7 +95,7 @@ public:
     /** Has to be implemented by each filter to return the table style list. */
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
 
-    // ------------------------------------------------------------------------
+
 
     /** Returns the fragment path from the first relation of the passed type,
         used for fragments referred by the root relations. */
@@ -260,7 +260,7 @@ private:
 
 typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

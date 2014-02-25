@@ -26,9 +26,9 @@
 #include <toolkit/helper/servicenames.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class ::com::sun::star::awt::UnoControlContainerModel
-//  ----------------------------------------------------
+
 class UnoControlContainerModel : public UnoControlModel
 {
 protected:

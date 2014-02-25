@@ -23,17 +23,17 @@
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   Vorausdeklarationen
-//************************************************************
+
 
 class SdrObjList;
 class SdrObjListIter;
 class SfxItemSet;
 
-//************************************************************
+
 //   SdrObjGroup
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrObjGroup : public SdrObject
 {

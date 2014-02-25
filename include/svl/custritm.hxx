@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 
-//============================================================================
+
 DBG_NAMEEX_VISIBILITY(CntUnencodedStringItem, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem

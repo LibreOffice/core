@@ -23,9 +23,9 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 
-//---------------------
+
 // class AffineMatrixItem
-//---------------------
+
 
 class SVX_DLLPUBLIC AffineMatrixItem : public SfxPoolItem
 {

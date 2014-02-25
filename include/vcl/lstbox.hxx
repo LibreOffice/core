@@ -30,9 +30,9 @@ class ImplListBoxFloatingWindow;
 class ImplBtn;
 class ImplWin;
 
-// --------------------------------------------------------------------
+
 //  - ListBox -
-// --------------------------------------------------------------------
+
 
 class VCL_DLLPUBLIC ListBox : public Control
 {
@@ -236,9 +236,9 @@ public:
     void EnableQuickSelection( const bool& b );
 };
 
-// ----------------
+
 // - MultiListBox -
-// ----------------
+
 
 class VCL_DLLPUBLIC MultiListBox : public ListBox
 {

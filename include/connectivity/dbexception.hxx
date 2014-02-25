@@ -42,22 +42,22 @@ namespace com
         }
     }
 }
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
 
-//==============================================================================
+
+
 //= Special exception if cancel is pressed in DBA UI
-//==============================================================================
+
 enum OOoBaseErrorCode
 {
     ParameterInteractionCancelled = 1
 };
 
-//==============================================================================
+
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
-//==============================================================================
+
 
 class OOO_DLLPUBLIC_DBTOOLS SQLExceptionInfo
 {
@@ -148,9 +148,9 @@ protected:
     void implDetermineType();
 };
 
-//==============================================================================
+
 //= SQLExceptionIteratorHelper - iterating through an SQLException chain
-//==============================================================================
+
 
 class OOO_DLLPUBLIC_DBTOOLS SQLExceptionIteratorHelper
 {
@@ -210,10 +210,10 @@ public:
     void                                        next( SQLExceptionInfo& _out_rInfo );
 };
 
-//==================================================================================
+
 //= StandardExceptions
-//==================================================================================
-//----------------------------------------------------------------------------------
+
+
 /** returns a standard error string for a given SQLState
 
     @param _eState
@@ -223,7 +223,7 @@ public:
 */
 OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 
-//----------------------------------------------------------------------------------
+
 /** throws an exception with SQL state IM001, saying that a certain function is not supported
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedException(
@@ -233,7 +233,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedException(
     )
     throw ( ::com::sun::star::sdbc::SQLException );
 
-//----------------------------------------------------------------------------------
+
 /** throws a function sequence (HY010) exception
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
@@ -242,7 +242,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
     )
     throw ( ::com::sun::star::sdbc::SQLException );
 
-//----------------------------------------------------------------------------------
+
 /** throw a invalid index sqlexception
 */
 OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
@@ -251,7 +251,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
     )
     throw ( ::com::sun::star::sdbc::SQLException );
 
-//----------------------------------------------------------------------------------
+
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
@@ -260,7 +260,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
     )
     throw (::com::sun::star::sdbc::SQLException);
 
-//----------------------------------------------------------------------------------
+
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
@@ -270,7 +270,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
     )
     throw (::com::sun::star::sdbc::SQLException);
 
-//----------------------------------------------------------------------------------
+
 /** throw a SQLException with SQLState HYC00 (Optional feature not implemented)
     @param _rFeatureName
         a description of the feature which is not implemented. It's recommended that the feature
@@ -287,7 +287,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedException(
     )
     throw (::com::sun::star::sdbc::SQLException);
 
-//----------------------------------------------------------------------------------
+
 /** throw a SQLException with SQLState 42S22 (Column Not Found)
     @param _rColumnNameName
         The column that couldn't be found.
@@ -300,7 +300,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
     )
     throw (::com::sun::star::sdbc::SQLException);
 
-//----------------------------------------------------------------------------------
+
 /** throws an SQLException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
@@ -312,7 +312,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
     )
     throw (::com::sun::star::sdbc::SQLException);
 
-//----------------------------------------------------------------------------------
+
 /** throws an SQLException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
@@ -324,9 +324,9 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
     )
     throw (::com::sun::star::sdbc::SQLException);
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 

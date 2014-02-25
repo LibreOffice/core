@@ -26,11 +26,11 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
-/*-************************************************************************************************************//**
+//  forward declarations
+
+
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -39,7 +39,7 @@
 
 class SvtOptionsDrawinglayer_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about startup features
     @descr          -
 
@@ -51,17 +51,17 @@ class SvtOptionsDrawinglayer_Impl;
 
 class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  constructor / destructor
+
+
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -80,11 +80,11 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
          SvtOptionsDrawinglayer();
         ~SvtOptionsDrawinglayer();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  interface
+
+
+        /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Drawinglayer/..."
             @descr      These options describe internal states to enable/disable features of installed office.
 
@@ -159,13 +159,13 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         void        SetTransparentSelection( sal_Bool bState );
         void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class use his own static mutex to be threadsafe.
                         We create a static mutex only for one ime and use at different times.
@@ -179,9 +179,9 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         *//*-*****************************************************************************************************/
         SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

@@ -43,12 +43,12 @@ class Dialog;
 class Window;
 class VclWindowEvent;
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    //=========================================================================
+
+
 #define     UNODIALOG_PROPERTY_ID_TITLE     1
 #define     UNODIALOG_PROPERTY_ID_PARENT    2
 
@@ -56,7 +56,7 @@ namespace svt
 #define     UNODIALOG_PROPERTY_PARENT       "ParentWindow"
 
 
-    //=========================================================================
+
     typedef ::cppu::WeakImplHelper3 <   com::sun::star::ui::dialogs::XExecutableDialog
                                     ,   com::sun::star::lang::XServiceInfo
                                     ,   com::sun::star::lang::XInitialization
@@ -176,9 +176,9 @@ namespace svt
         ::osl::MutexGuard   m_aGuard;
     };
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_GENERICUNODIALOG_HXX
 

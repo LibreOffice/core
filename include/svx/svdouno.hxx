@@ -27,9 +27,9 @@
 #include <svx/svxdllapi.h>
 #include <svx/svdorect.hxx>
 
-//************************************************************
+
 //   Vorausdeklarationen
-//************************************************************
+
 
 class SdrView;
 class SdrPageWindow;
@@ -39,9 +39,9 @@ namespace sdr { namespace contact {
     class ViewContactOfUnoControl;
 }}
 
-//************************************************************
+
 //   SdrUnoObj
-//************************************************************
+
 
 struct SdrUnoObjDataHolder;
 class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj

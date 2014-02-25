@@ -27,14 +27,14 @@
 
 #include <vector>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     namespace staruno   = ::com::sun::star::uno;
 
-    //-------------------------------------------------------------------------
+
     /** search the given string within the given sequence, return the positions where it was found.
         if _bOnlyFirst is sal_True, only the first occurrence will be returned.
     */
@@ -49,7 +49,7 @@ namespace comphelper
                 *_pDest = *_pSource;
         }
     }
-    //-------------------------------------------------------------------------
+
     /// concat two sequences
     template <class T>
      staruno::Sequence<T> concatSequences(const staruno::Sequence<T>& _rLeft, const staruno::Sequence<T>& _rRight)
@@ -68,7 +68,7 @@ namespace comphelper
         return aReturn;
     }
 
-    //-------------------------------------------------------------------------
+
     /// concat three sequences
     template <class T>
     staruno::Sequence<T> concatSequences(const staruno::Sequence<T>& _rLeft, const staruno::Sequence<T>& _rMiddle, const staruno::Sequence<T>& _rRight)
@@ -89,7 +89,7 @@ namespace comphelper
         return aReturn;
     }
 
-    //-------------------------------------------------------------------------
+
     /// remove a specified element from a sequences
     template<class T>
     void removeElementAt(staruno::Sequence<T>& _rSeq, sal_Int32 _nPos)
@@ -106,9 +106,9 @@ namespace comphelper
         _rSeq.realloc(nLength-1);
     }
 
-    //=====================================================================
+
     //= iterating through sequences
-    //=====================================================================
+
     /** a helper class for iterating through a sequence
     */
     template <class TYPE>
@@ -133,7 +133,7 @@ namespace comphelper
         void construct(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq);
     };
 
-    //---------------------------------------------------------------------
+
     template <class TYPE>
     OSequenceIterator<TYPE>::OSequenceIterator(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq)
         :m_pElements(NULL)
@@ -143,7 +143,7 @@ namespace comphelper
         construct(_rSeq);
     }
 
-    //---------------------------------------------------------------------
+
     template <class TYPE>
     OSequenceIterator<TYPE>::OSequenceIterator(const ::com::sun::star::uno::Any& _rSequenceAny)
         :m_pElements(NULL)
@@ -157,7 +157,7 @@ namespace comphelper
         construct(aContainer);
     }
 
-    //---------------------------------------------------------------------
+
     template <class TYPE>
     void OSequenceIterator<TYPE>::construct(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq)
     {
@@ -166,21 +166,21 @@ namespace comphelper
         m_pCurrent = m_pElements;
     }
 
-    //---------------------------------------------------------------------
+
     template <class TYPE>
     bool OSequenceIterator<TYPE>::hasMoreElements() const
     {
         return m_pCurrent - m_pElements < m_nLen;
     }
 
-    //---------------------------------------------------------------------
+
     template <class TYPE>
     ::com::sun::star::uno::Any OSequenceIterator<TYPE>::nextElement()
     {
         return ::com::sun::star::uno::makeAny(*m_pCurrent++);
     }
 
-    //-------------------------------------------------------------------------
+
     /** Copy from a plain C/C++ array into a Sequence.
 
         @tpl SrcType
@@ -210,7 +210,7 @@ namespace comphelper
         return result;
     }
 
-    //-------------------------------------------------------------------------
+
     /** Copy from a Sequence into a plain C/C++ array
 
         @tpl SrcType
@@ -240,7 +240,7 @@ namespace comphelper
         return io_pArray;
     }
 
-    //-------------------------------------------------------------------------
+
     /** Copy from a container into a Sequence
 
         @tpl SrcType
@@ -279,7 +279,7 @@ namespace comphelper
             v.empty() ? 0 : &v[0], static_cast<sal_Int32>(v.size()) );
     }
 
-    //-------------------------------------------------------------------------
+
     /** Copy from a Sequence into a container
 
         @tpl SrcType
@@ -310,7 +310,7 @@ namespace comphelper
         ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), result.begin() );
         return result;
     }
-    //-------------------------------------------------------------------------
+
     /** Copy from a Sequence into an existing container
 
         This potentially saves a needless extra copy operation over
@@ -349,9 +349,9 @@ namespace comphelper
         return o_Output;
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 
 #endif // INCLUDED_COMPHELPER_SEQUENCE_HXX

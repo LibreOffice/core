@@ -28,14 +28,14 @@
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= AnyEvent
-    //====================================================================
+
     /** the very basic instance to hold a description of an event
     */
     class COMPHELPER_DLLPUBLIC AnyEvent : ::rtl::IReference
@@ -57,14 +57,14 @@ namespace comphelper
         void operator=( AnyEvent& ); // not defined
     };
 
-    //====================================================================
+
     //= typedefs
-    //====================================================================
+
     typedef ::rtl::Reference< AnyEvent >    AnyEventRef;
 
-    //====================================================================
+
     //= IEventProcessor
-    //====================================================================
+
     /** an event processor
 
         @see AsyncEventNotifier
@@ -83,9 +83,9 @@ namespace comphelper
         ~IEventProcessor() {}
     };
 
-    //====================================================================
+
     //= AsyncEventNotifier
-    //====================================================================
+
     struct EventNotifierImpl;
 
     /** a helper class for notifying events asynchronously
@@ -152,9 +152,9 @@ namespace comphelper
         void removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor );
     };
 
-    //====================================================================
+
     //= EventHolder
-    //====================================================================
+
     /** AnyEvent derivee holding an foreign event instance
     */
     template < typename EVENT_OBJECT >
@@ -175,9 +175,9 @@ namespace comphelper
         inline const EventObjectType& getEventObject() const { return m_aEvent; }
     };
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_ASYNCNOTIFICATION_HXX
 

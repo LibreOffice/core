@@ -23,9 +23,9 @@
 #include <svx/svxdllapi.h>
 
 
-//------------------------------------------------------------
+
 // class SdrAngleItem
-//------------------------------------------------------------
+
 class SVX_DLLPUBLIC SdrAngleItem: public SfxInt32Item {
 public:
     TYPEINFO();

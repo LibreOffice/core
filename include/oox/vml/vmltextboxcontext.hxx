@@ -28,7 +28,7 @@ namespace oox {
 
 namespace vml {
 
-// ============================================================================
+
 
 class TextPortionContext : public ::oox::core::ContextHandler2
 {
@@ -54,7 +54,7 @@ private:
     size_t              mnInitialPortions;
 };
 
-// ============================================================================
+
 
 class TextBoxContext : public ::oox::core::ContextHandler2
 {
@@ -75,7 +75,7 @@ private:
     TextParagraphModel  maParagraph;
 };
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

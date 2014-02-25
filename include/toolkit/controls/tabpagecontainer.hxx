@@ -33,9 +33,9 @@
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-//  ------------------------------------------------------------------
+
 //  class ::com::sun::star::awt::tab::UnoControlTabPageContainerModel
-//  ------------------------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                             ,   ::com::sun::star::awt::tab::XTabPageContainerModel
                                             >   UnoControlTabPageContainerModel_Base;
@@ -90,9 +90,9 @@ public:
     void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
-// ===================================================================
+
 // = UnoControlTabPageContainer
-// ===================================================================
+
 typedef ::cppu::AggImplInheritanceHelper1   <   ControlContainerBase
                                             ,   ::com::sun::star::awt::tab::XTabPageContainer
                                             >   UnoControlTabPageContainer_Base;

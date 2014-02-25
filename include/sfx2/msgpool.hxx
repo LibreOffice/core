@@ -66,7 +66,7 @@ public:
     TypeId              GetSlotType( sal_uInt16 nSlotId ) const;
 };
 
-//--------------------------------------------------------------------
+
 
 // seeks to the first func in the current group
 

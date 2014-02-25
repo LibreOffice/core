@@ -19,31 +19,31 @@
 
 // no include protection. This is included from within geometrycontrolmodel.hxx only
 
-//====================================================================
+
 //= OGeometryControlModel
-//====================================================================
-//--------------------------------------------------------------------
+
+
 template <class CONTROLMODEL>
 OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
     :OGeometryControlModel_Base(new CONTROLMODEL( i_factory ) )
 {
 }
 
-//--------------------------------------------------------------------
+
 template <class CONTROLMODEL>
 OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)
     :OGeometryControlModel_Base(_rxAggregateInstance)
 {
 }
 
-//--------------------------------------------------------------------
+
 template <class CONTROLMODEL>
 ::cppu::IPropertyArrayHelper& SAL_CALL OGeometryControlModel<CONTROLMODEL>::getInfoHelper()
 {
     return *this->getArrayHelper();
 }
 
-//--------------------------------------------------------------------
+
 template <class CONTROLMODEL>
 void OGeometryControlModel<CONTROLMODEL>::fillProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _rProps, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _rAggregateProps) const
 {
@@ -54,7 +54,7 @@ void OGeometryControlModel<CONTROLMODEL>::fillProperties(::com::sun::star::uno::
         _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
 }
 
-//--------------------------------------------------------------------
+
 template <class CONTROLMODEL>
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -71,7 +71,7 @@ template <class CONTROLMODEL>
     return pId->getImplementationId();
 }
 
-//--------------------------------------------------------------------
+
 template <class CONTROLMODEL>
 OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Impl(
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)

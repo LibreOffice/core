@@ -31,7 +31,7 @@ class ComPtr
 {
     public:
 
-        //---------------------------------------------------------------------
+
         /** initialize com ptr with null.
          */
         ComPtr()
@@ -39,7 +39,7 @@ class ComPtr
             m_pInterface = NULL;
         }
 
-        //---------------------------------------------------------------------
+
         /** initialize com ptr with given interface.
          */
         ComPtr(T_INTERFACE* pInterface)
@@ -49,7 +49,7 @@ class ComPtr
                 m_pInterface->AddRef();
         }
 
-        //---------------------------------------------------------------------
+
         /** copy ctor.
          */
         ComPtr(const ComPtr< T_INTERFACE, P_IID, P_CLSID >& aCopy)
@@ -59,7 +59,7 @@ class ComPtr
                 m_pInterface->AddRef();
         }
 
-        //---------------------------------------------------------------------
+
         /** initialize object by quering external object for the right interface.
          */
         ComPtr(IUnknown* pIUnknown)
@@ -68,7 +68,7 @@ class ComPtr
                 pIUnknown->QueryInterface(P_IID, (void**)&m_pInterface);
         }
 
-        //---------------------------------------------------------------------
+
         /** deinitialize com object right.
          */
         ~ComPtr()
@@ -78,37 +78,37 @@ class ComPtr
 
     public:
 
-        //---------------------------------------------------------------------
+
         HRESULT create()
         {
             return CoCreateInstance(P_CLSID, NULL, CLSCTX_ALL, P_IID, (void**)&m_pInterface);
         }
 
-        //---------------------------------------------------------------------
+
         operator T_INTERFACE*() const
         {
             return m_pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         T_INTERFACE& operator*() const
         {
             return *m_pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         T_INTERFACE** operator&()
         {
             return &m_pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         T_INTERFACE* operator->() const
         {
             return m_pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         T_INTERFACE* operator=(T_INTERFACE* pInterface)
         {
             if ( equals(pInterface) )
@@ -122,7 +122,7 @@ class ComPtr
             return m_pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         T_INTERFACE* operator=(IUnknown* pIUnknown)
         {
             if (pIUnknown)
@@ -130,7 +130,7 @@ class ComPtr
             return m_pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         T_INTERFACE* operator=(const ComPtr< T_INTERFACE, P_IID, P_CLSID >& aCopy)
         {
             m_pInterface = aCopy.m_pInterface;
@@ -140,13 +140,13 @@ class ComPtr
             return m_pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         T_INTERFACE* get() const
         {
             return m_pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         void attach(T_INTERFACE* pInterface)
         {
             if (pInterface)
@@ -156,7 +156,7 @@ class ComPtr
             }
         }
 
-        //---------------------------------------------------------------------
+
         T_INTERFACE* detach()
         {
             T_INTERFACE* pInterface = m_pInterface;
@@ -164,7 +164,7 @@ class ComPtr
             return pInterface;
         }
 
-        //---------------------------------------------------------------------
+
         void release()
         {
             if (m_pInterface)
@@ -175,7 +175,7 @@ class ComPtr
         }
 
 #ifndef __MINGW32__
-        //---------------------------------------------------------------------
+
         template< class T_QUERYINTERFACE >
         HRESULT query(T_QUERYINTERFACE** pQuery)
         {
@@ -183,20 +183,20 @@ class ComPtr
         }
 #endif
 
-        //---------------------------------------------------------------------
+
         HRESULT query(REFIID rIID  ,
                       void** pQuery)
         {
             return m_pInterface->QueryInterface(rIID, pQuery);
         }
 
-        //---------------------------------------------------------------------
+
         HRESULT unknown(IUnknown** pQuery)
         {
             return m_pInterface->QueryInterface(IID_IUnknown, (void**)pQuery);
         }
 
-        //---------------------------------------------------------------------
+
         ::sal_Bool equals(IUnknown* pCheck)
         {
             if (
@@ -214,7 +214,7 @@ class ComPtr
             return bEquals;
         }
 
-        //---------------------------------------------------------------------
+
         ::sal_Bool is()
         {
             return (m_pInterface != 0);

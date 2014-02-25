@@ -32,8 +32,8 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace dump {
 
-// ============================================================================
-// ============================================================================
+
+
 
 class OleInputObjectBase : public InputObjectBase
 {
@@ -51,8 +51,8 @@ protected:
     sal_uInt32          dumpOleColor( const String& rName );
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class StdFontObject : public OleInputObjectBase
 {
@@ -63,7 +63,7 @@ protected:
     virtual void        implDump();
 };
 
-// ============================================================================
+
 
 class StdPicObject : public OleInputObjectBase
 {
@@ -74,8 +74,8 @@ protected:
     virtual void        implDump();
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class OleStreamObject : public OleInputObjectBase
 {
@@ -83,7 +83,7 @@ public:
     explicit            OleStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
 };
 
-// ============================================================================
+
 
 class OleCompObjObject : public OleStreamObject
 {
@@ -94,8 +94,8 @@ protected:
     virtual void        implDump();
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class OlePropertyStreamObject : public InputObjectBase
 {
@@ -136,7 +136,7 @@ private:
     bool                mbIsUnicode;
 };
 
-// ============================================================================
+
 
 class OleStorageObject : public StorageObjectBase
 {
@@ -156,8 +156,8 @@ protected:
                             const OUString& rSysFileName );
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class ComCtlObjectBase : public OleInputObjectBase
 {
@@ -187,7 +187,7 @@ protected:
     bool                mbComplexPart;
 };
 
-// ============================================================================
+
 
 class ComCtlScrollBarObject : public ComCtlObjectBase
 {
@@ -198,7 +198,7 @@ protected:
     virtual void        implDumpProperties();
 };
 
-// ============================================================================
+
 
 class ComCtlProgressBarObject : public ComCtlObjectBase
 {
@@ -209,7 +209,7 @@ protected:
     virtual void        implDumpProperties();
 };
 
-// ============================================================================
+
 
 class ComCtlSliderObject : public ComCtlObjectBase
 {
@@ -220,7 +220,7 @@ protected:
     virtual void        implDumpProperties();
 };
 
-// ============================================================================
+
 
 class ComCtlUpDownObject : public ComCtlObjectBase
 {
@@ -231,7 +231,7 @@ protected:
     virtual void        implDumpProperties();
 };
 
-// ============================================================================
+
 
 class ComCtlImageListObject : public ComCtlObjectBase
 {
@@ -244,7 +244,7 @@ protected:
     virtual void        implDumpCommonTrailing();
 };
 
-// ============================================================================
+
 
 class ComCtlTabStripObject : public ComCtlObjectBase
 {
@@ -256,7 +256,7 @@ protected:
     virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
 };
 
-// ============================================================================
+
 
 class ComCtlTreeViewObject : public ComCtlObjectBase
 {
@@ -271,7 +271,7 @@ private:
     sal_uInt32          mnStringFlags;
 };
 
-// ============================================================================
+
 
 class ComCtlStatusBarObject : public ComCtlObjectBase
 {
@@ -284,8 +284,8 @@ protected:
     virtual void        implDumpCommonTrailing();
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class AxPropertyObjectBase : public OleInputObjectBase
 {
@@ -395,7 +395,7 @@ private:
     bool                mbValid;
 };
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 void AxPropertyObjectBase::alignInput()
@@ -425,7 +425,7 @@ Type AxPropertyObjectBase::dumpHexProperty( Type nDefault, const NameListWrapper
     return nDefault;
 }
 
-// ============================================================================
+
 
 class AxCFontNewObject : public AxPropertyObjectBase
 {
@@ -436,7 +436,7 @@ protected:
     virtual void        implDumpShortProperties();
 };
 
-// ============================================================================
+
 
 class AxColumnInfoObject : public AxPropertyObjectBase
 {
@@ -447,7 +447,7 @@ protected:
     virtual void        implDumpShortProperties();
 };
 
-// ============================================================================
+
 
 class AxCommandButtonObject : public AxPropertyObjectBase
 {
@@ -459,7 +459,7 @@ protected:
     virtual void        implDumpExtended();
 };
 
-// ============================================================================
+
 
 class AxMorphControlObject : public AxPropertyObjectBase
 {
@@ -478,7 +478,7 @@ private:
     sal_uInt8           mnCtrlType;
 };
 
-// ============================================================================
+
 
 class AxLabelObject : public AxPropertyObjectBase
 {
@@ -490,7 +490,7 @@ protected:
     virtual void        implDumpExtended();
 };
 
-// ============================================================================
+
 
 class AxImageObject : public AxPropertyObjectBase
 {
@@ -501,7 +501,7 @@ protected:
     virtual void        implDumpShortProperties();
 };
 
-// ============================================================================
+
 
 class AxScrollBarObject : public AxPropertyObjectBase
 {
@@ -512,7 +512,7 @@ protected:
     virtual void        implDumpShortProperties();
 };
 
-// ============================================================================
+
 
 class AxSpinButtonObject : public AxPropertyObjectBase
 {
@@ -523,7 +523,7 @@ protected:
     virtual void        implDumpShortProperties();
 };
 
-// ============================================================================
+
 
 class AxTabStripObject : public AxPropertyObjectBase
 {
@@ -538,8 +538,8 @@ private:
     sal_Int32           mnTabFlagCount;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class FormControlStreamObject : public OleInputObjectBase
 {
@@ -565,8 +565,8 @@ private:
     bool                mbReadGuid;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 struct VbaFormSiteInfo
 {
@@ -580,7 +580,7 @@ struct VbaFormSiteInfo
 
 typedef ::std::vector< VbaFormSiteInfo > VbaFormSiteInfoVector;
 
-// ============================================================================
+
 
 struct VbaFormSharedData
 {
@@ -588,7 +588,7 @@ struct VbaFormSharedData
     VbaFormSiteInfoVector maSiteInfos;
 };
 
-// ============================================================================
+
 
 class VbaFormClassInfoObject : public AxPropertyObjectBase
 {
@@ -602,7 +602,7 @@ private:
     VbaFormSharedData&  mrFormData;
 };
 
-// ============================================================================
+
 
 class VbaFormSiteObject : public AxPropertyObjectBase
 {
@@ -616,7 +616,7 @@ private:
     VbaFormSharedData&  mrFormData;
 };
 
-// ============================================================================
+
 
 class VbaFormDesignExtObject : public AxPropertyObjectBase
 {
@@ -627,7 +627,7 @@ protected:
     virtual void        implDumpShortProperties();
 };
 
-// ============================================================================
+
 
 class VbaFStreamObject : public AxPropertyObjectBase
 {
@@ -653,7 +653,7 @@ private:
     sal_uInt32          mnFlags;
 };
 
-// ============================================================================
+
 
 class VbaOStreamObject : public OleInputObjectBase
 {
@@ -671,7 +671,7 @@ private:
     VbaFormSharedData&  mrFormData;
 };
 
-// ============================================================================
+
 
 class VbaPageObject : public AxPropertyObjectBase
 {
@@ -682,7 +682,7 @@ protected:
     virtual void        implDumpShortProperties();
 };
 
-// ============================================================================
+
 
 class VbaMultiPageObject : public AxPropertyObjectBase
 {
@@ -697,7 +697,7 @@ private:
     sal_Int32           mnPageCount;
 };
 
-// ============================================================================
+
 
 class VbaXStreamObject : public InputObjectBase
 {
@@ -715,7 +715,7 @@ private:
     VbaFormSharedData&  mrFormData;
 };
 
-// ============================================================================
+
 
 class VbaContainerStorageObject : public OleStorageObject
 {
@@ -744,8 +744,8 @@ private:
     VbaFormSharedData   maFormData;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 struct VbaSharedData
 {
@@ -760,7 +760,7 @@ struct VbaSharedData
     sal_Int32           getStreamOffset( const OUString& rStrmName ) const;
 };
 
-// ============================================================================
+
 
 class VbaDirStreamObject : public SequenceRecordObjectBase
 {
@@ -789,7 +789,7 @@ private:
     sal_Int32           mnCurrOffset;
 };
 
-// ============================================================================
+
 
 class VbaModuleStreamObject : public InputObjectBase
 {
@@ -809,7 +809,7 @@ private:
     sal_Int32           mnStrmOffset;
 };
 
-// ============================================================================
+
 
 class VbaStorageObject : public OleStorageObject
 {
@@ -831,7 +831,7 @@ private:
     VbaSharedData&      mrVbaData;
 };
 
-// ============================================================================
+
 
 class VbaFormStorageObject : public VbaContainerStorageObject
 {
@@ -853,7 +853,7 @@ private:
     VbaSharedData&      mrVbaData;
 };
 
-// ============================================================================
+
 
 class VbaProjectStorageObject : public OleStorageObject
 {
@@ -876,8 +876,8 @@ private:
     VbaSharedData       maVbaData;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class ActiveXStorageObject : public VbaContainerStorageObject
 {
@@ -893,8 +893,8 @@ protected:
                             const OUString& rSysFileName );
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 } // namespace dump
 } // namespace oox

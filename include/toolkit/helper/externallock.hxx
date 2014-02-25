@@ -22,9 +22,9 @@
 #include <toolkit/dllapi.h>
 #include <comphelper/accessiblecontexthelper.hxx>
 
-// -----------------------------------------------------------------------------
+
 //  class VCLExternalSolarLock
-// -----------------------------------------------------------------------------
+
 
 class TOOLKIT_DLLPUBLIC VCLExternalSolarLock : public ::comphelper::IMutex
 {

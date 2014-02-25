@@ -22,10 +22,10 @@
 
 #include <sal/types.h>
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
+
     /// a value denoting the size of a table
     typedef sal_Int32   TableSize;
 
@@ -55,9 +55,9 @@ namespace svt { namespace table
 #define ROW_INVALID             ((::svt::table::RowPos)-2)
 
 
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLETYPES_HXX
 

@@ -262,8 +262,6 @@ public:
     long GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 // Begriffsdefinition:
 //   - Etwas fangen=Gefangen werden kann z.B. der Mauszeiger oder die z.Zt. im
 //     Drag befindlichen markierten Objekte.
@@ -306,8 +304,6 @@ public:
 //
 // Beim Resize, ... wird immer nur der logisch-umschliessende Rahmen der
 // markierten Objekte gefangen.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // INCLUDED_SVX_SVDSNPV_HXX
 

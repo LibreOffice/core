@@ -26,9 +26,9 @@
 
 class Window;
 
-// ---------------
+
 // - ColorDialog -
-// ---------------
+
 
 namespace svtools
 {

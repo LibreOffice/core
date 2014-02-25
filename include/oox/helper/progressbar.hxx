@@ -58,7 +58,7 @@ public:
 
 typedef ::boost::shared_ptr< IProgressBar > IProgressBarRef;
 
-// ----------------------------------------------------------------------------
+
 
 class ISegmentProgressBar;
 typedef ::boost::shared_ptr< ISegmentProgressBar > ISegmentProgressBarRef;
@@ -78,8 +78,8 @@ public:
     virtual ISegmentProgressBarRef createSegment( double fLength ) = 0;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 /** A simple progress bar.
  */
@@ -103,7 +103,7 @@ private:
     double              mfPosition;
 };
 
-// ============================================================================
+
 
 /** A progress bar containing several independent segments.
  */
@@ -129,7 +129,7 @@ private:
     double              mfFreeStart;
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

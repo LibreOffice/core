@@ -30,27 +30,27 @@
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     namespace starcontainer     = ::com::sun::star::container;
     namespace staruno           = ::com::sun::star::uno;
     namespace starlang          = ::com::sun::star::lang;
 
-//==================================================================
+
 //= OEnumerationLock
-//==================================================================
+
 struct OEnumerationLock
 {
     public:
         ::osl::Mutex m_aLock;
 };
 
-//==================================================================
+
 //= OEnumerationByName
-//==================================================================
+
 /** provides an com.sun.star.container::XEnumeration access based
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
@@ -80,9 +80,9 @@ private:
     COMPHELPER_DLLPRIVATE void impl_stopDisposeListening();
 };
 
-//==================================================================
+
 //= OEnumerationByIndex
-//==================================================================
+
 /** provides an com.sun.star.container::XEnumeration access based
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
@@ -109,9 +109,9 @@ private:
     COMPHELPER_DLLPRIVATE void impl_stopDisposeListening();
 };
 
-//==================================================================
+
 //= OAnyEnumeration
-//==================================================================
+
 /** provides an com.sun.star.container::XEnumeration
     for an outside set vector of Any's.
 
@@ -132,7 +132,7 @@ public:
 
 };
 
-//.........................................................................
+
 }
 //... namespace comphelper .......................................................
 

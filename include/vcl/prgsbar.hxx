@@ -45,15 +45,15 @@
  *
  ************************************************************************/
 
-// -----------
+
 // - WinBits -
-// -----------
+
 
 #define WB_STDPROGRESSBAR       WB_BORDER
 
-// ---------------
+
 // - ProgressBar -
-// ---------------
+
 
 class VCL_DLLPUBLIC ProgressBar : public Window
 {

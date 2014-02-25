@@ -24,14 +24,14 @@
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 namespace basegfx { class B2DPolygon; }
 namespace basegfx { class B2DPolyPolygon; }
 namespace drawinglayer { namespace primitive2d { class ScenePrimitive2D; }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -101,7 +101,7 @@ namespace drawinglayer
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_HITTESTPROCESSOR2D_HXX
 

@@ -25,10 +25,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     #define SFXMODEL_STANDARD                   (sal_uInt64)(0x0000)
     #define SFXMODEL_EMBEDDED_OBJECT            (sal_uInt64)(0x0001)
@@ -40,9 +40,9 @@ namespace sfx2
         const sal_uInt64 _nCreationFlags
     );
 
-    //====================================================================
+
     //= createSfxModelFactory
-    //====================================================================
+
     /** creates a XSingleServiceFactory which can be used to created instances
         of classes derived from SfxBaseModel
 
@@ -58,9 +58,9 @@ namespace sfx2
             const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames
         );
 
-//........................................................................
+
 } // namespace sfx2
-//........................................................................
+
 
 #endif // INCLUDED_SFX2_SFXMODELFACTORY_HXX
 

@@ -33,7 +33,7 @@
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolyPolygonHairlinePrimitive2D class
 
 namespace drawinglayer
@@ -79,7 +79,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolyPolygonMarkerPrimitive2D class
 
 namespace drawinglayer
@@ -135,7 +135,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolyPolygonStrokePrimitive2D class
 
 namespace drawinglayer
@@ -192,7 +192,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolyPolygonColorPrimitive2D class
 
 namespace drawinglayer
@@ -236,7 +236,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolyPolygonGradientPrimitive2D class
 
 namespace drawinglayer
@@ -281,7 +281,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolyPolygonHatchPrimitive2D class
 
 namespace drawinglayer
@@ -331,7 +331,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolyPolygonGraphicPrimitive2D class
 
 namespace drawinglayer
@@ -376,7 +376,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PolyPolygonSelectionPrimitive2D class
 
 namespace drawinglayer
@@ -440,7 +440,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYPOLYGONPRIMITIVE2D_HXX
 

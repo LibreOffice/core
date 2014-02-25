@@ -23,12 +23,12 @@
 #include <vcl/ctrl.hxx>
 #include <rtl/ustring.hxx>
 
-// ============================================================================
+
 
 namespace svt
 {
 
-// ============================================================================
+
 
 /** This abstract class provides methods to implement an extension list box.
     This header is needed for the automatic test tool
@@ -87,11 +87,11 @@ public:
     */
     virtual void select( const OUString & sName ) = 0;
 };
-// ============================================================================
+
 
 } // namespace svt
 
-// ============================================================================
+
 
 #endif // INCLUDED_SVTOOLS_EXTENSIONLISTBOX_HXX
 

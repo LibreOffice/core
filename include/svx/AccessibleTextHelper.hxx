@@ -375,7 +375,7 @@ namespace accessibility
         virtual sal_Bool IsSelected() const;
 
         // XAccessibleContext child handling methods
-        //-----------------------------------------------------------------
+
         /** Implements getAccessibleChildCount
 
             @attention Don't call with locked mutexes. You may hold
@@ -390,7 +390,7 @@ namespace accessibility
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChild( sal_Int32 i ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
 
         // XAccessibleEventBroadcaster child related methods
-        //-----------------------------------------------------------------
+
         /** Implements addEventListener
 
             @attention Don't call with locked mutexes
@@ -403,7 +403,7 @@ namespace accessibility
         virtual void RemoveEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         // XAccessibleComponent child related methods
-        //-----------------------------------------------------------------
+
         /** Implements getAccessibleAt
 
             @attention Don't call with locked mutexes. You may hold

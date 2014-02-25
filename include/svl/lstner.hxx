@@ -31,7 +31,7 @@ typedef std::deque<SfxBroadcaster*> SfxBroadcasterArr_Impl;
 #define SFX_NOTIFY( rBC, rBCT, rHint, rHintT ) \
         Notify( rBC, rHint )
 
-//-------------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxListener
 {

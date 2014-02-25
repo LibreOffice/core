@@ -40,7 +40,7 @@ namespace oox { class AttributeList; }
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 /** Document handler specifically designed for detecting OOXML file formats.
 
@@ -85,7 +85,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
 };
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC FilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
@@ -152,7 +152,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
 };
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

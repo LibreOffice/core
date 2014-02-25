@@ -24,7 +24,7 @@
 #define LISTBOX_ENTRY_NOTFOUND      ((sal_uInt16)0xFFFF)
 #define LISTBOX_ERROR               ((sal_uInt16)0xFFFF)
 
-// --------------------------------------------------------------------
+
 
 // the following defines can be used for the SetEntryFlags()
 // and GetEntryFlags() methods

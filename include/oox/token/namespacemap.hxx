@@ -26,7 +26,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 /** A map that contains all XML namespace URLs used in the filters. */
 struct NamespaceMap
@@ -43,7 +43,7 @@ struct NamespaceMap
 /** Thread-save singleton of a map of all supported XML namespace URLs. */
 struct StaticNamespaceMap : public ::rtl::Static< NamespaceMap, StaticNamespaceMap > {};
 
-// ============================================================================
+
 
 } // namespace oox
 

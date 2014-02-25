@@ -30,9 +30,9 @@
 #include <toolkit/awt/vclxwindow.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class VCLXContainer
-//  ----------------------------------------------------
+
 
 class TOOLKIT_DLLPUBLIC VCLXContainer : public ::com::sun::star::awt::XVclContainer,
                         public ::com::sun::star::awt::XVclContainerPeer,

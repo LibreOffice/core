@@ -25,7 +25,7 @@
 
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace basegfx {
@@ -38,7 +38,7 @@ namespace drawinglayer { namespace attribute {
     class Sdr3DLightAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -80,7 +80,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLIGHTINGATTRIBUTE3D_HXX
 

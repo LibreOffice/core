@@ -30,14 +30,14 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-    //=========================================================================
+
+
     //= OInteractionSelect
-    //=========================================================================
+
     /** base class for concrete XInteractionContinuation implementations.<p/>
         Instances of the classes maintain a flag indicating if the handler was called.
     */
@@ -58,9 +58,9 @@ namespace comphelper
         void    implSelected() { m_bSelected = true; }
     };
 
-    //=========================================================================
+
     //= OInteraction
-    //=========================================================================
+
     /** template for instantiating concret interaction handlers<p/>
         the template argument must eb an interface derived from XInteractionContinuation
     */
@@ -76,36 +76,36 @@ namespace comphelper
         virtual void SAL_CALL select(  ) throw(::com::sun::star::uno::RuntimeException);
     };
 
-    //.........................................................................
+
     template <class INTERACTION>
     void SAL_CALL OInteraction< INTERACTION >::select(  ) throw(::com::sun::star::uno::RuntimeException)
     {
         implSelected();
     }
 
-    //=========================================================================
+
     //= OInteractionApprove
-    //=========================================================================
+
     typedef OInteraction< ::com::sun::star::task::XInteractionApprove > OInteractionApprove;
 
-    //=========================================================================
+
     //= OInteractionDispprove
-    //=========================================================================
+
     typedef OInteraction< ::com::sun::star::task::XInteractionDisapprove >  OInteractionDisapprove;
 
-    //=========================================================================
+
     //= OInteractionAbort
-    //=========================================================================
+
     typedef OInteraction< ::com::sun::star::task::XInteractionAbort >   OInteractionAbort;
 
-    //=========================================================================
+
     //= OInteractionRetry
-    //=========================================================================
+
     typedef OInteraction< ::com::sun::star::task::XInteractionRetry >   OInteractionRetry;
 
-    //=========================================================================
+
     //= OInteractionPassword
-    //=========================================================================
+
     class COMPHELPER_DLLPUBLIC OInteractionPassword : public OInteraction< ::com::sun::star::task::XInteractionPassword >
     {
     public:
@@ -126,9 +126,9 @@ namespace comphelper
         OUString m_sPassword;
     };
 
-    //=========================================================================
+
     //= OInteractionRequest
-    //=========================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionRequest
                                     >   OInteractionRequest_Base;
     /** implements an interaction request (com.sun.star.task::XInteractionRequest)<p/>
@@ -151,9 +151,9 @@ namespace comphelper
         virtual ::com::sun::star::uno::Any SAL_CALL getRequest(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     };
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_INTERACTION_HXX
 
