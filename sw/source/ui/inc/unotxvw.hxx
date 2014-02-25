@@ -235,7 +235,9 @@ public:
     virtual sal_Bool SAL_CALL screenUp(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XViewCursor
-    virtual sal_Bool SAL_CALL goDown(sal_Int16 nCount, sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL goDown(sal_Int16 nCount, sal_Bool bExpand)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual sal_Bool SAL_CALL goUp(sal_Int16 nCount, sal_Bool bExpand)
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
