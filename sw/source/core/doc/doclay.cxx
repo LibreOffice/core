@@ -1320,7 +1320,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 pNewSet->ClearItem();
 
                 pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
-                pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, sal_True ) );
+                pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, true ) );
 
                 sal_Int16 eVert = bBefore ? text::VertOrientation::BOTTOM : text::VertOrientation::TOP;
                 pNewSet->Put( SwFmtVertOrient( 0, eVert ) );

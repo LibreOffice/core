@@ -1162,7 +1162,7 @@ SfxPoolItem* SvxOpaqueItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_Int8 bIsOpaque;
     rStrm.ReadSChar( bIsOpaque );
-    return new SvxOpaqueItem( Which(), sal_Bool( bIsOpaque != 0 ) );
+    return new SvxOpaqueItem( Which(), bIsOpaque != 0 );
 }
 
 

@@ -37,7 +37,7 @@ class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    explicit SvxOpaqueItem( const sal_uInt16 nId , const sal_Bool bOpa = sal_True );
+    explicit SvxOpaqueItem( const sal_uInt16 nId , const bool bOpa = true );
     inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
@@ -51,7 +51,7 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxOpaqueItem::SvxOpaqueItem( const sal_uInt16 nId, const sal_Bool bOpa )
+inline SvxOpaqueItem::SvxOpaqueItem( const sal_uInt16 nId, const bool bOpa )
     : SfxBoolItem( nId, bOpa )
 {}
 
