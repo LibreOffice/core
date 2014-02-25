@@ -26,11 +26,11 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <accessibility/extended/AccessibleGridControlTableCell.hxx>
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 typedef ::cppu::ImplHelper1<
             ::com::sun::star::accessibility::XAccessibleSelection >
         AccessibleGridControlTableImplHelper1;
@@ -216,11 +216,11 @@ protected:
         throw ( ::com::sun::star::uno::RuntimeException );
 };
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLTABLE_HXX
 

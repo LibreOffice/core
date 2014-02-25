@@ -23,9 +23,9 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleToolBox
-//  ----------------------------------------------------
+
 
 typedef ::cppu::ImplHelper1 < ::com::sun::star::accessibility::XAccessibleSelection > VCLXAccessibleToolBox_BASE;
 

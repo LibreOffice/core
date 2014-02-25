@@ -31,9 +31,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleStatusBar
-//  ----------------------------------------------------
+
 
 VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )

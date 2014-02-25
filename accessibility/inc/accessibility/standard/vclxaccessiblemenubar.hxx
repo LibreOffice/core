@@ -27,9 +27,9 @@ class VclWindowEvent;
 class Window;
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleMenuBar
-//  ----------------------------------------------------
+
 
 class VCLXAccessibleMenuBar :   public OAccessibleMenuComponent
 {

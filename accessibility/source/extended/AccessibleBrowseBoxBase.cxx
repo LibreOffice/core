@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -38,12 +38,12 @@ using namespace ::comphelper;
 using namespace ::svt;
 
 
-// ============================================================================
+
 
 namespace accessibility {
 
 using namespace com::sun::star::accessibility::AccessibleStateType;
-// ============================================================================
+
 
 // Ctor/Dtor/disposing --------------------------------------------------------
 
@@ -575,7 +575,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun:
     return nColor;
 }
 
-// ============================================================================
+
 // XInterface -----------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2( BrowseBoxAccessibleElement, AccessibleBrowseBoxBase, BrowseBoxAccessibleElement_Base )
 
@@ -610,10 +610,10 @@ BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
 {
 }
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

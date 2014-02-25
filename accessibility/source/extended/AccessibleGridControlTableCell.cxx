@@ -48,9 +48,9 @@ namespace accessibility
     using namespace ::svt::table;
 
 
-    // =============================================================================
+
     // = AccessibleGridControlCell
-    // =============================================================================
+
 
     AccessibleGridControlCell::AccessibleGridControlCell(
             const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable,
@@ -83,7 +83,7 @@ namespace accessibility
 
         m_aTable.GoToCell( m_nColPos, m_nRowPos );
     }
-    //
+
     // implementation of a table cell
     OUString AccessibleGridControlTableCell::implGetText()
     {

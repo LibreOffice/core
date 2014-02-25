@@ -42,7 +42,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/uno3.hxx>
 
-// ============================================================================
+
 
 class Window;
 
@@ -54,11 +54,11 @@ namespace svt {
     class IAccessibleTableProvider;
 }
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 typedef ::cppu::WeakAggComponentImplHelper5<
             ::com::sun::star::accessibility::XAccessibleContext,
@@ -376,7 +376,7 @@ private:
     ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
 
-// ============================================================================
+
 // a version of AccessibleBrowseBoxBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
@@ -446,7 +446,7 @@ private:
     BrowseBoxAccessibleElement& operator=( const BrowseBoxAccessibleElement& ); // never implemented
 };
 
-// ============================================================================
+
 // a helper class for protecting methods which need to lock the solar mutex in addition to the own mutex
 
 typedef ::osl::MutexGuard OslMutexGuard;
@@ -492,11 +492,11 @@ inline void AccessibleBrowseBoxBase::implSetDescription(
     maDescription = rDescription;
 }
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif
 

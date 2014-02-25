@@ -26,9 +26,9 @@
 #include <cppuhelper/implbase1.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleMenu
-//  ----------------------------------------------------
+
 
 typedef ::cppu::ImplHelper1 <
     ::com::sun::star::accessibility::XAccessibleSelection > VCLXAccessibleMenu_BASE;
