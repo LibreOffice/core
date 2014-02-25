@@ -38,9 +38,9 @@ namespace basctl
 class DlgEdObj;
 class DialogWindow;
 
-//  ----------------------------------------------------
+
 //  class AccessibleDialogControlShape
-//  ----------------------------------------------------
+
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 

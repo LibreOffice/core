@@ -189,10 +189,10 @@ bool bSourceLinesEnabled = false;
 } // namespace
 
 
-//
+
 // ModulWindow
-// ===========
-//
+
+
 
 ModulWindow::ModulWindow (
     ModulWindowLayout* pParent,
@@ -1478,10 +1478,10 @@ void ModulWindow::UpdateModule ()
 }
 
 
-//
+
 // ModulWindowLayout
-// =================
-//
+
+
 
 ModulWindowLayout::ModulWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
@@ -1567,10 +1567,10 @@ void ModulWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
 }
 
 
-//
+
 // SyntaxColors
-// ============
-//
+
+
 
 ModulWindowLayout::SyntaxColors::SyntaxColors () :
     pEditor(0)

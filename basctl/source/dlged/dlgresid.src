@@ -130,7 +130,7 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text [ en-US ] = "Multiselection";
 };
 
-// -----------------------------------------------------------------------
+
 
 String RID_STR_DEF_LANG
 {

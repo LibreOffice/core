@@ -37,10 +37,10 @@ namespace basctl
 class DockingWindow;
 class BaseWindow;
 
-//
+
 // Layout -- the common base of ModulLayout and DialogLayout.
 // Handles the splitting lines and the dockable windows.
-//
+
 class Layout: public Window
 {
 public:
