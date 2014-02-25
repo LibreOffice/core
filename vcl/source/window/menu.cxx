@@ -1594,16 +1594,6 @@ OUString Menu::GetItemAccKeyStrFromPos(sal_uInt16 nPos) const
     return OUString();
 }
 
-bool Menu::IsTemporaryItemFromPos(sal_uInt16 nPos ) const
-{
-    MenuItemData* pData = pItemList->GetDataFromPos( nPos );
-    if (pData)
-    {
-        return pData->bIsTemporary;
-    }
-    return false;
-}
-
 sal_uInt16 Menu::GetCurItemId() const
 {
     return nSelectedId;

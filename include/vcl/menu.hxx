@@ -241,8 +241,6 @@ public:
 
     OUString            GetItemAccKeyStrFromPos(sal_uInt16 nPos) const;
 
-    bool            IsTemporaryItemFromPos(sal_uInt16 nPos) const;
-
     void                SetDefaultItem( sal_uInt16 nItemId )    { nDefaultItem = nItemId; }
     sal_uInt16              GetDefaultItem() const              { return nDefaultItem; }
 
