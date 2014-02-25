@@ -59,7 +59,7 @@ class Job : private ThreadHelpBase
                       , css::frame::XTerminateListener
                       , css::util::XCloseListener >
 {
-    //___________________________________
+
     // structs
 
     private:
@@ -76,7 +76,7 @@ class Job : private ThreadHelpBase
         E_DISPOSED
     };
 
-    //___________________________________
+
     // member
 
     private:
@@ -169,7 +169,7 @@ class Job : private ThreadHelpBase
          */
         ERunState m_eRunState;
 
-    //___________________________________
+
     // native interface
 
     public:
@@ -193,7 +193,7 @@ class Job : private ThreadHelpBase
         void                                         impl_startListening   (                                                                  );
         void                                         impl_stopListening    (                                                                  );
 
-    //___________________________________
+
     // uno interface
 
     public:

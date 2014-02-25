@@ -54,14 +54,14 @@ import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import util.SOfficeFactory;
 import static org.junit.Assert.*;
-// ------------------------------------------
 
-//-----------------------------------------------
+
+
 /** @short  Check some use cases of the AutoSave feature
  */
 public class AutoSave
 {
-    //-------------------------------------------
+
     class AutoSaveListener implements XStatusListener
     {
         private XDispatch m_xAutoSave;
@@ -150,10 +150,10 @@ public class AutoSave
         }
     }
 
-    //-------------------------------------------
+
     // some const
 
-    //-------------------------------------------
+
     // member
 
     private Protocol m_aLog;
@@ -168,10 +168,10 @@ public class AutoSave
 
     private XURLTransformer m_xURLParser = null;
 
-    //-------------------------------------------
+
     // test environment
 
-    //-------------------------------------------
+
     /** @short  A function to tell the framework,
                 which test functions are available.
 
@@ -186,7 +186,7 @@ public class AutoSave
 //        };
 //    }
 
-    //-------------------------------------------
+
     /** @short  Create the environment for following tests.
 
         @descr  create an empty test frame, where we can load
@@ -226,7 +226,7 @@ public class AutoSave
         }
     }
 
-    //-------------------------------------------
+
     /** @short  close the environment.
      */
     @After public void after()
@@ -234,7 +234,7 @@ public class AutoSave
         // ???
     }
 
-    //-------------------------------------------
+
     // create a calc document with content, which needs some time for saving
     private XInterface createBigCalcDoc()
     {
@@ -272,7 +272,7 @@ public class AutoSave
         return null;
     }
 
-    //-------------------------------------------
+
     private void saveDoc(XInterface xDoc,
                          String     sURL)
     {
@@ -310,7 +310,7 @@ public class AutoSave
         m_aLog.log(Protocol.TYPE_SCOPE_CLOSE, "saveDoc('"+sURL+"') finished.");
     }
 
-    //-------------------------------------------
+
     private void closeDoc(XInterface xDoc)
     {
         m_aLog.log(Protocol.TYPE_SCOPE_OPEN, "closeDoc() started ...");
@@ -382,7 +382,7 @@ public class AutoSave
         }
     }
 
-    //-------------------------------------------
+
     /** @short  check concurrent save requests to the same document
      *          at the same time.
      *

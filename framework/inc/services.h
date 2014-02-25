@@ -24,9 +24,9 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 //  used servicenames by framework
-//_________________________________________________________________________________________________________________
+
 
 #define SERVICENAME_FILTERFACTORY                               DECLARE_ASCII("com.sun.star.document.FilterFactory"                 )
 #define SERVICENAME_CFGUPDATEACCESS                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")   // provides read/write access to the configuration
@@ -49,9 +49,9 @@ namespace framework{
 #define SERVICENAME_STRINGABBREVIATION                          DECLARE_ASCII("com.sun.star.util.UriAbbreviation"                   )
 #define SERVICENAME_TABWINDOWSERVICE                            DECLARE_ASCII("com.sun.star.ui.dialogs.TabContainerWindow"          )
 
-//_________________________________________________________________________________________________________________
+
 //  used implementationnames by framework
-//_________________________________________________________________________________________________________________
+
 
 #define IMPLEMENTATIONNAME_DESKTOP                              DECLARE_ASCII("com.sun.star.comp.framework.Desktop"                 )
 #define IMPLEMENTATIONNAME_URLTRANSFORMER                       DECLARE_ASCII("com.sun.star.comp.framework.URLTransformer"          )

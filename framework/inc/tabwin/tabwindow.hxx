@@ -72,21 +72,21 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         using ::cppu::OPropertySetHelper::disposing;
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XInitialization
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XComponent
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XSimpleTabController
-        //---------------------------------------------------------------------------------------------------------
+
         virtual ::sal_Int32 SAL_CALL insertTab() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
@@ -96,14 +96,14 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         virtual void SAL_CALL addTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XEventListener
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XTopWindowListener
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
@@ -112,9 +112,9 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XWindowListener
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
@@ -125,9 +125,9 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         DECL_LINK( Deactivate, TabControl* );
 
     private:
-        //---------------------------------------------------------------------------------------------------------
+
         //  OPropertySetHelper
-        //---------------------------------------------------------------------------------------------------------
+
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any&        aConvertedValue ,
                                                                                                        com::sun::star::uno::Any&        aOldValue       ,
                                                                                                        sal_Int32                        nHandle         ,

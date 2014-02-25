@@ -28,7 +28,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a guard for implementing save thread access
     @descr          These guard has an additional feature to well known one ::osl::Guard.
                     You can lock() and unlock() it very often!
@@ -46,12 +46,12 @@ namespace framework{
 *//*-*************************************************************************************************************/
 class ResetableGuard : private INonCopyable
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      ctors
             @descr      Use these ctor methods to initialize the guard right.
                         Given lock reference must be valid - otherwise crashes could occur!
@@ -71,7 +71,7 @@ class ResetableGuard : private INonCopyable
             lock();
         }
 
-        //*********************************************************************************************************
+
         inline ResetableGuard( IMutex& rLock )
             :   m_pLock    ( &rLock    )
             ,   m_bLocked  ( sal_False )
@@ -79,7 +79,7 @@ class ResetableGuard : private INonCopyable
             lock();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      dtor
             @descr      We must release set mutex if programmer forget it ...
 
@@ -95,7 +95,7 @@ class ResetableGuard : private INonCopyable
             unlock();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      enable/disable the lock
             @descr      Use this methods to lock or unlock the mutex.
                         You can do it so often you wish to do that ...
@@ -122,7 +122,7 @@ class ResetableGuard : private INonCopyable
             }
         }
 
-        //*********************************************************************************************************
+
         inline void unlock()
         {
             if( m_bLocked == sal_True )
@@ -132,12 +132,12 @@ class ResetableGuard : private INonCopyable
             }
         }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      disable using of these functions!
             @descr      It's not allowed to use this methods. Different problem can occur otherwise.
                         Thats why we disable it by make it private.
@@ -151,9 +151,9 @@ class ResetableGuard : private INonCopyable
         *//*-*****************************************************************************************************/
         ResetableGuard();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         IMutex*         m_pLock     ;   /// pointer to safed lock member of user

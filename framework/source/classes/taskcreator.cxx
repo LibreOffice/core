@@ -34,7 +34,7 @@
 
 namespace framework{
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @short      initialize instance with necessary information
     @descr      We need a valid uno service manager to create or instanciate new services.
                 All other information to create frames or tasks come in on right interface methods.
@@ -48,7 +48,7 @@ TaskCreator::TaskCreator( const css::uno::Reference< css::uno::XComponentContext
 {
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @short      deinitialize instance
     @descr      We should release all used resource which are not needed any longer.
 *//*-*****************************************************************************************************/
@@ -57,7 +57,7 @@ TaskCreator::~TaskCreator()
     m_xContext.clear();
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     TODO document me
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName    ,

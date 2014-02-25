@@ -54,12 +54,12 @@ class TargetHelper
             E_HELPTASK
         };
 
-    //___________________________________________
+
     // interface
 
     public:
 
-        //___________________________________________
+
 
         /** @short  it checks the given unknown target name,
                     if it's the expected special one.
@@ -78,7 +78,7 @@ class TargetHelper
         static sal_Bool matchSpecialTarget(const OUString& sCheckTarget  ,
                                                  ESpecialTarget   eSpecialTarget);
 
-        //___________________________________________
+
 
         /** @short  it checks, if the given name can be used
                     to set it at a frame using XFrame.setName() method.

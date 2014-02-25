@@ -123,9 +123,9 @@ namespace
         _rURL.Main       = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
     }
 }
-//*****************************************************************************************************************
+
 //  XURLTransformer
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException )
 {
     // Safe impossible cases.
@@ -176,9 +176,9 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
     return sal_False;
 }
 
-//*****************************************************************************************************************
+
 //  XURLTransformer
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
                                                 const   OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException )
 {
@@ -232,9 +232,9 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
     }
 }
 
-//*****************************************************************************************************************
+
 //  XURLTransformer
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException )
 {
     // Safe impossible cases.
@@ -295,9 +295,9 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
     return sal_False;
 }
 
-//*****************************************************************************************************************
+
 //  XURLTransformer
-//*****************************************************************************************************************
+
 OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
                                                             sal_Bool    bWithPassword   ) throw( css::uno::RuntimeException )
 {

@@ -28,7 +28,7 @@ import com.sun.star.uno.AnyConverter;
  */
 public class InteractionHandler implements XInteractionHandler
 {
-    // ____________________
+
 
     /**
      * @const   RETRY_COUNT it defines the max count of
@@ -36,7 +36,7 @@ public class InteractionHandler implements XInteractionHandler
      */
     private static final int RETRY_COUNT    = 3;
 
-    // ____________________
+
 
     /**
      * @member  m_aRequest      the origianl interaction request

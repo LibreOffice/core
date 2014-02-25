@@ -24,7 +24,7 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 
 #define CMD_UNO_SHOWSTARTMODULE ".uno:ShowStartModule"
 

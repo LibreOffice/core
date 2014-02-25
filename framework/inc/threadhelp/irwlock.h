@@ -22,7 +22,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          A guard (specialy a write guard) support different internal working states.
                     His lock can set for reading or writing/reading! Or he was unlocked by user ...
 *//*-*************************************************************************************************************/
@@ -33,7 +33,7 @@ enum ELockMode
     E_WRITELOCK
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          We implement two guards for using an rw-lock. But if you wish to implement
                     different rw-locks to you will have problems by using with same guard implementation!
                     Thats why we define this "pure virtual base class" ...
@@ -41,12 +41,12 @@ enum ELockMode
 *//*-*************************************************************************************************************/
 class IRWLock
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @descr      These functions must be supported by a derived class!
                             acquireReadAccess()     -try to register thread as reader
                             releaseReadAccess()     -unregister thread as reader

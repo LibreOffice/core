@@ -221,7 +221,7 @@ class AddonsOptions_Impl : public ConfigItem
         //  overloaded methods of baseclass
 
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      called for notify of configmanager
             @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
@@ -237,7 +237,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      write changes to configuration
             @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
@@ -256,7 +256,7 @@ class AddonsOptions_Impl : public ConfigItem
         //  public interface
 
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
@@ -312,7 +312,7 @@ class AddonsOptions_Impl : public ConfigItem
         typedef ::boost::unordered_map< OUString, MergeToolbarInstructionContainer, OUStringHash, ::std::equal_to< OUString > > ToolbarMergingInstructions;
 
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return the current list of key names! We need it to get needed values from our
                         configuration management!
@@ -400,9 +400,9 @@ void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize,
     aURL[(int)eSize] = rURL;
 }
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 AddonsOptions_Impl::AddonsOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_ADDONMENU ),
@@ -471,9 +471,9 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     EnableNotification( aNotifySeq );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 AddonsOptions_Impl::~AddonsOptions_Impl()
 {
     // We must save our current values .. if user forget it!
@@ -509,57 +509,57 @@ void AddonsOptions_Impl::ReadConfigurationData()
     ReadStatusbarMergeInstructions( m_aCachedStatusbarMergingInstructions );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void AddonsOptions_Impl::Notify( const Sequence< OUString >& /*lPropertyNames*/ )
 {
     Application::PostUserEvent( STATIC_LINK( 0, AddonsOptions, Notify ) );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void AddonsOptions_Impl::Commit()
 {
     OSL_FAIL( "AddonsOptions_Impl::Commit()\nNot implemented yet!\n" );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::HasAddonsMenu() const
 {
     return ( m_aCachedMenuProperties.getLength() > 0 );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Int32 AddonsOptions_Impl::GetAddonsToolBarCount() const
 {
     return m_aCachedToolBarPartProperties.size();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenu() const
 {
     return m_aCachedMenuProperties;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenuBarPart() const
 {
     return m_aCachedMenuBarPartProperties;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBarPart( sal_uInt32 nIndex ) const
 {
     if ( /*nIndex >= 0 &&*/ nIndex < m_aCachedToolBarPartProperties.size() )
@@ -568,9 +568,9 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBa
         return m_aEmptyAddonToolBar;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
 {
     if ( nIndex < m_aCachedToolBarPartResourceNames.size() )
@@ -579,25 +579,25 @@ const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nInd
         return OUString();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsHelpMenu  () const
 {
     return m_aCachedHelpMenuProperties;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const MergeMenuInstructionContainer& AddonsOptions_Impl::GetMergeMenuInstructions() const
 {
     return m_aCachedMergeMenuInsContainer;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool AddonsOptions_Impl::GetMergeToolbarInstructions(
     const OUString& rToolbarName,
     MergeToolbarInstructionContainer& rToolbarInstructions ) const
@@ -617,9 +617,9 @@ const MergeStatusbarInstructionContainer& AddonsOptions_Impl::GetMergeStatusbarI
     return m_aCachedStatusbarMergingInstructions;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 static Image ScaleImage( const Image &rImage, bool bBig )
 {
     Size aSize = ToolBox::GetDefaultImageSize(bBig);
@@ -679,9 +679,9 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, sal_Bool bBig, 
     return aImage;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
@@ -718,9 +718,9 @@ sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue
     return ( rAddonMenuSeq.getLength() > 0 );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
@@ -757,9 +757,9 @@ sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValu
     return ( rAddonOfficeHelpMenuSeq.getLength() > 0 );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
 {
     // Read the OfficeMenuBar set and fill property sequences
@@ -813,9 +813,9 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
     return ( rAddonOfficeMenuBarSeq.getLength() > 0 );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
 {
     // Read the OfficeToolBar set and fill property sequences
@@ -837,9 +837,9 @@ sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeTo
 }
 
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
 {
     sal_Bool                    bInsertSeparator        = sal_False;
@@ -881,9 +881,9 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString rToolBarItemSetN
     return ( (sal_uInt32)rAddonOfficeToolBarSeq.getLength() > nToolBarItemCount );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void AddonsOptions_Impl::InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
 {
     Sequence< PropertyValue >   aToolBarItem( PROPERTYCOUNT_TOOLBARITEM );
@@ -906,9 +906,9 @@ void AddonsOptions_Impl::InsertToolBarSeparator( Sequence< Sequence< PropertyVal
 }
 
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 {
     // Read the user-defined Images set and fill image manager
@@ -958,9 +958,9 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
     }
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 
 OUString AddonsOptions_Impl::GeneratePrefixURL()
 {
@@ -974,9 +974,9 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
     return aPopupMenuURL;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 
 sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
@@ -1044,9 +1044,9 @@ sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionCont
     return sal_True;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
 {
     OUString aMergeMenuBaseNode( aMergeAddonInstructionBase+m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS ] );
@@ -1061,9 +1061,9 @@ sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstr
     return ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
     const OUString aToolbarMergeRootName( "AddonUI/OfficeToolbarMerging/" );
@@ -1136,9 +1136,9 @@ sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruc
     return sal_True;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
 {
     OUStringBuffer aBuffer( aMergeAddonInstructionBase );
@@ -1284,9 +1284,9 @@ sal_Bool AddonsOptions_Impl::ReadStatusBarItem(
     return bResult;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu )
 {
     sal_Bool            bResult = sal_False;
@@ -1358,9 +1358,9 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
     return bResult;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
 {
     sal_Bool            bResult = sal_False;
@@ -1399,9 +1399,9 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, 
     return bResult;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
 {
     Sequence< Sequence< PropertyValue > > aTargetSubMenuSeq;
@@ -1420,9 +1420,9 @@ sal_Bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTarget
     return sal_True;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
 {
     sal_Bool            bResult = sal_False;
@@ -1477,9 +1477,9 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
     return bResult;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
 {
     Sequence< PropertyValue > aMenuItem( PROPERTYCOUNT_MENUITEM );
@@ -1507,9 +1507,9 @@ sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSu
     return sal_True;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 {
     // FIXME: potentially this is not so useful in a world of delayed image loading
@@ -1517,9 +1517,9 @@ sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
     return ( pIter != m_aImageManager.end() );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 {
     if ( aURL.startsWith( EXPAND_PROTOCOL ) )
@@ -1534,9 +1534,9 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
     }
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
 {
     Image aImage;
@@ -1568,9 +1568,9 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
     return aImage;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId )
 {
     if ( aImageId.isEmpty() )
@@ -1596,9 +1596,9 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
     m_aImageManager.insert( ImageManager::value_type( aURL, aImageEntry ));
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUString& aImagesNodeName )
 {
     Sequence< OUString > aImageDataNodeNames = GetPropertyNamesImages( aImagesNodeName );
@@ -1645,9 +1645,9 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
     return pEntry;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
 {
     sal_Bool bResult = sal_False;
@@ -1687,9 +1687,9 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
     return lResult;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const
 {
     // The URL is automatically set and not read from the configuration.
@@ -1703,9 +1703,9 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
     return lResult;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_TOOLBARITEM );
@@ -1738,9 +1738,9 @@ Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesStatusbarItem(
     return lResult;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString& aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_IMAGES );
@@ -1758,17 +1758,17 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString&
     return lResult;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 AddonsOptions_Impl*     AddonsOptions::m_pDataContainer = NULL  ;
 sal_Int32               AddonsOptions::m_nRefCount      = 0     ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 AddonsOptions::AddonsOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -1782,9 +1782,9 @@ AddonsOptions::AddonsOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 AddonsOptions::~AddonsOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -1800,18 +1800,18 @@ AddonsOptions::~AddonsOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Bool AddonsOptions::HasAddonsMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->HasAddonsMenu();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 
 sal_Int32 AddonsOptions::GetAddonsToolBarCount() const
 {
@@ -1819,63 +1819,63 @@ sal_Int32 AddonsOptions::GetAddonsToolBarCount() const
     return m_pDataContainer->GetAddonsToolBarCount();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsMenu();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenuBarPart() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsMenuBarPart();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsToolBarPart( sal_uInt32 nIndex ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsToolBarPart( nIndex );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsToolbarResourceName( nIndex );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsHelpMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsHelpMenu();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 const MergeMenuInstructionContainer& AddonsOptions::GetMergeMenuInstructions() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetMergeMenuInstructions();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool AddonsOptions::GetMergeToolbarInstructions(
     const OUString& rToolbarName,
     MergeToolbarInstructionContainer& rToolbarInstructions ) const
@@ -1891,26 +1891,26 @@ const MergeStatusbarInstructionContainer& AddonsOptions::GetMergeStatusbarInstru
     return m_pDataContainer->GetMergeStatusbarInstructions();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Image AddonsOptions::GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetImageFromURL( aURL, bBig, bNoScale );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 Image AddonsOptions::GetImageFromURL( const OUString& aURL, sal_Bool bBig ) const
 {
     return GetImageFromURL( aURL, bBig, sal_False );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Mutex& AddonsOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
@@ -1933,9 +1933,9 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 IMPL_STATIC_LINK_NOINSTANCE( AddonsOptions, Notify, void*, EMPTYARG )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );

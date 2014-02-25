@@ -36,17 +36,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
 
-//-----------------------------------------------
+
+
 /** @short  todo document me
  */
 public class CheckXModuleManager
 {
-    //-------------------------------------------
+
     // some const
 
-    //-------------------------------------------
+
     // member
 
     /** points to the global uno service manager. */
@@ -58,10 +58,10 @@ public class CheckXModuleManager
     /** a special frame used to load documents there. */
     private XComponentLoader m_xLoader = null;
 
-    //-------------------------------------------
+
     // test environment
 
-    //-------------------------------------------
+
     /** @short  A function to tell the framework,
                 which test functions are available.
 
@@ -79,7 +79,7 @@ public class CheckXModuleManager
 //        };
 //    }
 
-    //-------------------------------------------
+
     /** @short  Create the environment for following tests.
 
         @descr  Use either a component loader from desktop or
@@ -100,7 +100,7 @@ public class CheckXModuleManager
         m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop.findFrame("_blank", 0));
     }
 
-    //-------------------------------------------
+
     /** @short  close the environment.
      */
     @After public void after()
@@ -114,7 +114,7 @@ public class CheckXModuleManager
         m_xSmgr   = null;
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     @Test public void checkModuleIdentification()
@@ -132,7 +132,7 @@ public class CheckXModuleManager
         // impl_identifyModulesBasedOnDocs("com.sun.star.chart.ChartDocument"              );
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     @Test public void checkModuleConfigurationReadable()
@@ -140,7 +140,7 @@ public class CheckXModuleManager
     {
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     @Test public void checkModuleConfigurationWriteable()
@@ -169,7 +169,7 @@ public class CheckXModuleManager
         impl_checkReadOnlyPropsOfModule("com.sun.star.frame.StartModule"    );
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     @Test public void checkModuleConfigurationQueries()
@@ -186,7 +186,7 @@ public class CheckXModuleManager
         impl_searchModulesByDocumentService("com.sun.star.chart.ChartDocument"              );
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     private void impl_searchModulesByDocumentService(String sDocumentService)
@@ -234,7 +234,7 @@ public class CheckXModuleManager
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     private void impl_identifyModulesBasedOnDocs(String sModule)
@@ -284,7 +284,7 @@ public class CheckXModuleManager
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     private void impl_checkReadOnlyPropsOfModule(String sModule)
@@ -298,7 +298,7 @@ public class CheckXModuleManager
         impl_checkReadOnlyPropOfModule(xWrite, sModule, "ooSetupFactoryEmptyDocumentURL"    , "test");
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     private void impl_checkReadOnlyPropOfModule(XNameReplace xMM        ,

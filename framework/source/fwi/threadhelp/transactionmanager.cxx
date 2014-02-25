@@ -26,7 +26,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard ctor
     @descr      Initialize instance with right start values for correct working.
 
@@ -44,7 +44,7 @@ TransactionManager::TransactionManager()
     m_aBarrier.open();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard dtor
     @descr      -
 
@@ -59,7 +59,7 @@ TransactionManager::~TransactionManager()
 {
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @interface  ITransactionManager
     @short      set new working mode
     @descr      These implementation knows for states of working: E_INIT, E_WORK, E_CLOSING, E_CLOSE
@@ -119,7 +119,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
     }
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @interface  ITransactionManager
     @short      get current working mode
     @descr      If you stand in your close() or init() method ... but don't know
@@ -165,7 +165,7 @@ EWorkingMode TransactionManager::getWorkingMode() const
     return m_eWorkingMode;
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @interface  ITransactionManager
     @short      start new transaction
     @descr      A guard should use this method to start a new transaction. He should looks for rejected
@@ -207,7 +207,7 @@ void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReas
     }
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @interface  ITransactionManager
     @short      finish transaction
     @descr      A guard should call this method to release current transaction.
@@ -236,7 +236,7 @@ void  TransactionManager::unregisterTransaction() throw( css::uno::RuntimeExcept
     }
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @interface  ITransactionManager
     @short      look for rejected calls
     @descr      Sometimes user need a possibility to get information about rejected calls
@@ -269,7 +269,7 @@ sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
     return( eReason!=E_NOREASON );
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @short      throw any exceptions for rejected calls
     @descr      If a user wishes to use our automatic exception mode we use this impl-method.
                 We check all combinations of eReason and eExceptionMode and throw correct exception with some
