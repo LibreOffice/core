@@ -24,9 +24,9 @@
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace quicktime {
-// ----------------
+
 // - Manager -
-// ----------------
+
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
@@ -34,13 +34,13 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     OSL_TRACE( "avmediaquicktime: Manager::Manager" );
 }
 
-// ------------------------------------------------------------------------------
+
 
 Manager::~Manager()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& rURL )
     throw (uno::RuntimeException)
@@ -57,7 +57,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::rtl::OUString SAL_CALL Manager::getImplementationName(  )
     throw (uno::RuntimeException)
@@ -65,7 +65,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
     return ::rtl::OUString( AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME );
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
@@ -73,7 +73,7 @@ sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
     return ( ServiceName == AVMEDIA_QUICKTIME_MANAGER_SERVICENAME );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException)

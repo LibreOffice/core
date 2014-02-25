@@ -28,9 +28,9 @@ struct IMediaDet;
 
 namespace avmedia { namespace win {
 
-// ----------------
+
 // - FrameGrabber -
-// ----------------
+
 
 class FrameGrabber : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XFrameGrabber,
                                                       ::com::sun::star::lang::XServiceInfo >

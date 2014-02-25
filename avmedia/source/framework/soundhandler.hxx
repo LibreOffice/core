@@ -48,7 +48,7 @@ struct ThreadHelpBase
         mutable ::osl::Mutex m_aLock;
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          handler to detect and play sounds ("wav" and "au" only!)
     @descr          Register this implementation as a content handler to detect and/or play wav- and au-sounds.
                     It doesn't depend from the target platform. But one instance of this class

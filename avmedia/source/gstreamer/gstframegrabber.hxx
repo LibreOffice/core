@@ -26,9 +26,9 @@
 
 namespace avmedia { namespace gstreamer {
 
-// ----------------
+
 // - FrameGrabber -
-// ----------------
+
 
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::media::XFrameGrabber,
                                  ::com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;

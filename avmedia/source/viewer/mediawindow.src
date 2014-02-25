@@ -24,42 +24,42 @@ String AVMEDIA_STR_INSERTMEDIA_DLG
     Text[en-US] = "Insert Movie and Sound";
 };
 
-// ------------------------------------------------------------------------------
+
 
 STRING AVMEDIA_STR_OPENMEDIA_DLG
 {
     Text[en-US] = "Open Movie and Sound";
 };
 
-// ------------------------------------------------------------------------------
+
 
 String AVMEDIA_STR_ALL_MEDIAFILES
 {
     Text[en-US] = "All movie and sound files";
 };
 
-// ------------------------------------------------------------------------------
+
 
 String AVMEDIA_STR_ALL_FILES
 {
     Text[en-US] = "All files";
 };
 
-// ------------------------------------------------------------------------------
+
 
 Bitmap AVMEDIA_BMP_AUDIOLOGO
 {
     file = "avaudiologo.png";
 };
 
-// ------------------------------------------------------------------------------
+
 
 Bitmap AVMEDIA_BMP_EMPTYLOGO
 {
     file = "avemptylogo.png";
 };
 
-// ------------------------------------------------------------------------------
+
 
 ErrorBox AVMEDIA_ERR_URL
 {
