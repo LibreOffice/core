@@ -321,7 +321,9 @@ public:
                std::exception);
 
     // XNumericalDataSequence
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getNumericalData(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getNumericalData()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     // XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);

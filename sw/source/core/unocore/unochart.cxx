@@ -2223,8 +2223,8 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
     return aRes;
 }
 
-uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData(  )
-    throw (uno::RuntimeException)
+uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (bDisposed)
