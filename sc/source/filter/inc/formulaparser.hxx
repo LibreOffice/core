@@ -125,9 +125,6 @@ public:
                             BiffInputStream& rStrm,
                             const sal_uInt16* pnFmlaSize = 0 ) const;
 
-    /** Converts the passed Boolean value to a similar formula. */
-    ApiTokenSequence    convertBoolToFormula( bool bValue ) const;
-
     /** Converts the passed BIFF error code to a similar formula. */
     ApiTokenSequence    convertErrorToFormula( sal_uInt8 nErrorCode ) const;
 

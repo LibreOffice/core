@@ -303,7 +303,6 @@ oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::su
 oox::AttributeConversion::decodeDouble(rtl::OUString const&)
 oox::core::Decrypt::aes128cbc(std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> >&)
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
-oox::xls::FormulaParser::convertBoolToFormula(bool) const
 oox::xls::WorkbookHelper::getDocShell()
 oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
 oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const

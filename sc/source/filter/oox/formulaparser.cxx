@@ -2796,19 +2796,6 @@ ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, 
     return mxImpl->importBiffFormula( rBaseAddress, eType, rStrm, pnFmlaSize );
 }
 
-ApiTokenSequence FormulaParser::convertBoolToFormula( bool bValue ) const
-{
-    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiffFuncId( bValue ? BIFF_FUNC_TRUE : BIFF_FUNC_FALSE ) )
-    {
-        ApiTokenSequence aTokens( 3 );
-        aTokens[ 0 ].OpCode = pFuncInfo->mnApiOpCode;
-        aTokens[ 1 ].OpCode = OPCODE_OPEN;
-        aTokens[ 2 ].OpCode = OPCODE_CLOSE;
-        return aTokens;
-    }
-    return ApiTokenSequence();
-}
-
 ApiTokenSequence FormulaParser::convertErrorToFormula( sal_uInt8 nErrorCode ) const
 {
     ApiTokenSequence aTokens( 3 );
