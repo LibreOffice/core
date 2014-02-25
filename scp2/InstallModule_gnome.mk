@@ -15,9 +15,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/gnome,\
 	ENABLE_GIO \
 	ENABLE_GNOMEVFS \
 	ENABLE_LOCKDOWN \
-        ENABLE_EVOAB2 \
         ENABLE_GTK \
-        ENABLE_GTK3 \
 ))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/gnome,\

@@ -21,16 +21,8 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
-	DISABLE_ATL \
-	DISABLE_NEON \
-	ENABLE_CAIRO_CANVAS \
-	ENABLE_DIRECTX \
-	ENABLE_EVOAB2 \
 	ENABLE_GTK \
-	ENABLE_GTK3 \
-	ENABLE_KAB \
 	ENABLE_KDE \
-	ENABLE_KDE4 \
 	ENABLE_LIBLANGTAG \
 	ENABLE_LPSOLVE \
 	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
@@ -38,9 +30,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_NPAPI_FROM_BROWSER \
 	ENABLE_NPAPI_INTO_BROWSER \
 	ENABLE_ONLINE_UPDATE \
-	ENABLE_OPENGL \
 	ENABLE_TDE \
-	ENABLE_TDEAB \
 	SYSTEM_APACHE_COMMONS \
 	SYSTEM_BOOST \
 	SYSTEM_CAIRO \

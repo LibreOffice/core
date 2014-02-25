@@ -14,7 +14,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/impress,impress))
 $(eval $(call gb_InstallModule_define_if_set,scp2/impress,\
 	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
 	ENABLE_MACOSX_SANDBOX \
-	ENABLE_OPENGL \
 ))
 
 $(eval $(call gb_InstallModule_add_templates,scp2/impress,\
