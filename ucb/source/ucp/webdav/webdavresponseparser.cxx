@@ -28,7 +28,7 @@
 #include <com/sun/star/ucb/LockScope.hpp>
 #include <com/sun/star/ucb/LockType.hpp>
 #include <map>
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 
 
 
@@ -94,7 +94,7 @@ namespace
 
     WebDAVName StrToWebDAVName(const OUString& rStr)
     {
-        typedef std::unordered_map< OUString, WebDAVName, OUStringHash > WebDAVNameMapper;
+        typedef boost::unordered_map< OUString, WebDAVName, OUStringHash > WebDAVNameMapper;
         typedef std::pair< OUString, WebDAVName > WebDAVNameValueType;
         static WebDAVNameMapper aWebDAVNameMapperList;
 
