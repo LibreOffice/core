@@ -1495,13 +1495,6 @@ void LanguageTagImpl::convertLangToBcp47()
 }
 
 
-void LanguageTag::convertLangToBcp47()
-{
-    getImpl()->convertLangToBcp47();
-    syncFromImpl();
-}
-
-
 void LanguageTag::convertFromRtlLocale()
 {
     // The rtl_Locale follows the Open Group Base Specification,

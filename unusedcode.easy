@@ -30,7 +30,6 @@ Json::Json(std::map<std::basic_string<char, std::char_traits<char>, std::allocat
 Json::Json(std::map<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<libcmis::Property>, std::less<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> > const, boost::shared_ptr<libcmis::Property> > > > const&)
 Json::swap(Json&)
 LanguageTag::LanguageTag()
-LanguageTag::convertLangToBcp47()
 LanguageTag::convertLocaleToBcp47()
 LanguageTag::getRegion() const
 LanguageTag::reset(_rtl_Locale const&)

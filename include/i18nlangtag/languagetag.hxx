@@ -526,7 +526,6 @@ private:
     void                convertBcp47ToLocale();
     void                convertBcp47ToLang();
     void                convertLangToLocale();
-    void                convertLangToBcp47();
 
     void                convertFromRtlLocale();
 
