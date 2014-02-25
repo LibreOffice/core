@@ -249,7 +249,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
             {
                 bRet = sal_True;                        // #i18334# SJ: nPageCount == 0,
                 rPDFWriter.NewPage( 10000, 10000 );     // creating dummy page
-                rPDFWriter.SetMapMode( MAP_100TH_MM );  //
+                rPDFWriter.SetMapMode( MAP_100TH_MM );
             }
         }
     }

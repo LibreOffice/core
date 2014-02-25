@@ -919,14 +919,14 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //       0x0008  Line color
     //       0x0002  Line mix
     //  5         Flags
-    //
+
     //       0x0F Set indicated default attributes to initial values. (Data field is not present in this
     //             instance).
     //       0x8F Set indicated default attributes to specified values.
     //  6-n       Data - data values as required, in the following order if present.
     //            No space is reserved for attributes for which the corresponding mask flag was not
     //            set.
-    //
+
     //       (1 byte)  - Line type
     //       (1 byte)  - Line width
     //       (1 byte)  - Line end
@@ -941,7 +941,7 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //  1         Length of following data
     //  2         Set Default Character Attributes 0x02
     //  3-4       Mask - OR of as many of the following bits as are required:
-    //
+
     //       0x8000  Character angle
     //       0x4000  Character box
     //       0x2000  Character direction
@@ -1025,14 +1025,14 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //       0x0002  Pattern mix
     //       0x0001  Pattern background mix
     //       5       Flags
-    //
+
     //            0x0F Set indicated default attributes to initial values.
     //                  (Data field is not present in this instance)
     //            0x8F Set indicated default attributes to specified values.
     //       6-n     Data - data values as required, in this order if present.
     //               No space is reserved for attributes for which the corresponding Mask flag was
     //               not set.
-    //
+
     //            (1 byte)     - Pattern set
     //            (1 byte)     - Pattern symbol
     //            (2*G bytes)  - Pattern reference point

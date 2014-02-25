@@ -562,7 +562,7 @@ const CCIHuffmanTableEntry CCIUncompTableSave[CCIUncompTableSize]={
     { CCIUNCOMP_4White_End   , 0x0001, 11 }
 };
 
-//=========================================================================
+
 
 
 CCIDecompressor::CCIDecompressor( sal_uLong nOpts, sal_uInt32 nImageWidth ) :

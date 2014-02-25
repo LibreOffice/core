@@ -535,7 +535,7 @@ sal_Bool Writer::streamSound( const char * filename )
 // mp3buffer_size (in bytes) = 1.25*num_samples + 7200.
 // num_samples = the number of PCM samples in each channel.  It is
 // not the sum of the number of samples in the L and R channels.
-//
+
 // The return code = number of bytes output in mp3buffer.  This can be 0.
 // If it is <0, an error occurred.
 

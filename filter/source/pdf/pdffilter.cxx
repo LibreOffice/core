@@ -86,11 +86,11 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadInt32( "PageLayout", 0 );
         aCfgItem.ReadBool(  "FirstPageOnLeft", false );
         aCfgItem.ReadBool(  "IsAddStream", false );
-//
+
 // the encryption is not available when exporting directly, since the encryption is off by default and the selection
 // (encrypt or not) is not persistent; it's available through macro though,
 // provided the correct property values are set, see help
-//
+
 // now, the relative link stuff
         aCfgItem.ReadBool( "ExportLinksRelativeFsys", false );
         aCfgItem.ReadInt32("PDFViewSelection", 0 );

@@ -692,7 +692,7 @@ void EscherPropertyContainer::CreateTextProperties(
 
 // i63936 not setting autogrowheight, because otherwise
 // the minframeheight of the text will be ignored
-//
+
 //      if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextAutoGrowHeight", sal_True ) )
 //          aAny >>= bAutoGrowHeight;
     }
@@ -4580,7 +4580,7 @@ sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const Polygon& rPoly, cons
 
 
 // for rectangles          for ellipses     for polygons
-//
+
 // nRule =  0 ->Top         0 ->Top         nRule = Index auf ein (Poly)Polygon Punkt
 //          1 ->Left        2 ->Left
 //          2 ->Bottom      4 ->Bottom
@@ -4853,8 +4853,8 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
     {
         sal_uInt32  nRecHdPos, nCurrentPos, nSize;
         rStrm  .WriteUInt16( (sal_uInt16)( ( nCount << 4 ) | 0xf ) )    // open an ESCHER_SolverContainer
-               .WriteUInt16( (sal_uInt16)ESCHER_SolverContainer )       //
-               .WriteUInt32( (sal_uInt32)0 );                           //
+               .WriteUInt16( (sal_uInt16)ESCHER_SolverContainer )
+               .WriteUInt32( (sal_uInt32)0 );
 
         nRecHdPos = rStrm.Tell() - 4;
 
@@ -4876,7 +4876,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
                     aConnectorRule.ncptiB = pPtr->GetConnectorRule( sal_False );
             }
             rStrm  .WriteUInt32( (sal_uInt32)( ( ESCHER_ConnectorRule << 16 ) | 1 ) )   // atom hd
-                   .WriteUInt32( (sal_uInt32)24 )                                       //
+                   .WriteUInt32( (sal_uInt32)24 )
                    .WriteUInt32( aConnectorRule.nRuleId )
                    .WriteUInt32( aConnectorRule.nShapeA )
                    .WriteUInt32( aConnectorRule.nShapeB )
@@ -4888,10 +4888,10 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
         }
 
         nCurrentPos = rStrm.Tell();             // close the ESCHER_SolverContainer
-        nSize = ( nCurrentPos - nRecHdPos ) - 4;//
-        rStrm.Seek( nRecHdPos );                //
-        rStrm.WriteUInt32( nSize );                         //
-        rStrm.Seek( nCurrentPos );              //
+        nSize = ( nCurrentPos - nRecHdPos ) - 4;
+        rStrm.Seek( nRecHdPos );
+        rStrm.WriteUInt32( nSize );
+        rStrm.Seek( nCurrentPos );
     }
 }
 

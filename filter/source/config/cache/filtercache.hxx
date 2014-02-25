@@ -40,7 +40,7 @@ namespace filter{
 class CacheUpdateListener;
 
 
-//_______________________________________________
+
 
 /** @short      implements a cache, which contains all
                 elements of our filter and type detection
@@ -60,12 +60,12 @@ class CacheUpdateListener;
  */
 class FilterCache : public BaseLock
 {
-    //-------------------------------------------
+
     // public types
 
     public:
 
-        //---------------------------------------
+
 
         /** @short  identify the type of a container item.
 
@@ -81,7 +81,7 @@ class FilterCache : public BaseLock
             E_DETECTSERVICE
         };
 
-        //---------------------------------------
+
 
         /** @short      indicates, which items already exists inside this cache
                         and which not.
@@ -108,12 +108,12 @@ class FilterCache : public BaseLock
             E_CONTAINS_ALL              = 63 // must be a combination of all excepting E_CONTAINS_NOTHING! Please update if items will be added or removed ...
         };
 
-    //-------------------------------------------
+
     // private types
 
     private:
 
-        //---------------------------------------
+
         /** @short      regulate, which properties of a configured item
                         will be readed.
 
@@ -132,7 +132,7 @@ class FilterCache : public BaseLock
             E_READ_ALL      = 3
         };
 
-        //---------------------------------------
+
         /** @short      indicates the state of a configuration set item.
 
             @descr      Inside method flush we check:
@@ -154,7 +154,7 @@ class FilterCache : public BaseLock
             E_ITEM_ADDED = 3
         };
 
-        //---------------------------------------
+
         /** TODO document me */
         enum EConfigProvider
         {
@@ -164,65 +164,65 @@ class FilterCache : public BaseLock
             E_PROVIDER_OLD = 3
         };
 
-    //-------------------------------------------
+
     // member
 
     private:
 
-        //---------------------------------------
+
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of types. */
         mutable css::uno::Reference< css::uno::XInterface > m_xConfigTypes;
 
-        //---------------------------------------
+
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of filters. */
         mutable css::uno::Reference< css::uno::XInterface > m_xConfigFilters;
 
-        //---------------------------------------
+
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of other values needed
                     by our type detection framework. */
         mutable css::uno::Reference< css::uno::XInterface > m_xConfigOthers;
 
-        //---------------------------------------
+
         /** @short  contains all loaded types with its properties. */
         mutable CacheItemList m_lTypes;
 
-        //---------------------------------------
+
         /** @short  contains all well known detect service with its properties. */
         mutable CacheItemList m_lDetectServices;
 
-        //---------------------------------------
+
         /** @short  contains all loaded filters with its properties. */
         mutable CacheItemList m_lFilters;
 
-        //---------------------------------------
+
         /** @short  contains all loaded frame loader with its properties. */
         mutable CacheItemList m_lFrameLoaders;
 
-        //---------------------------------------
+
         /** @short  contains all loaded content handler with its properties. */
         mutable CacheItemList m_lContentHandlers;
 
-        //---------------------------------------
+
         /** @short  optimize mapping of URL extensions to a type representation,
                     by using extensions as key and a list of internal
                     type names as value. */
         mutable CacheItemRegistration m_lExtensions2Types;
 
-        //---------------------------------------
+
         /** @short  optimize mapping of URL pattern to a type representation,
                     by using patterns as key and a list of internal
                     type names as value. */
         mutable CacheItemRegistration m_lURLPattern2Types;
 
-        //---------------------------------------
+
         /** @short  contains the current locale of the office and will be
                     used to work with localized configuration values. */
         OUString m_sActLocale;
 
-        //---------------------------------------
+
         /** @short  contains status, which cache items/properties
                     was already loaded from the underlying configuration.
 
@@ -234,7 +234,7 @@ class FilterCache : public BaseLock
          */
         EFillState m_eFillState;
 
-        //---------------------------------------
+
         /** TODO document me ... */
         OUStringList m_lChangedTypes;
         OUStringList m_lChangedFilters;
@@ -242,19 +242,19 @@ class FilterCache : public BaseLock
         OUStringList m_lChangedFrameLoaders;
         OUStringList m_lChangedContentHandlers;
 
-        //---------------------------------------
+
         /// readonly acccess to the module configuration of OOo
         css::uno::Reference< css::container::XNameAccess > m_xModuleCfg;
 
         rtl::Reference< CacheUpdateListener > m_xTypesChglisteners;
         rtl::Reference< CacheUpdateListener > m_xFiltersChgListener;
 
-    //-------------------------------------------
+
     // interface
 
     public:
 
-        //---------------------------------------
+
         // ctor/dtor
 
         /** @short  standard ctor
@@ -273,13 +273,13 @@ class FilterCache : public BaseLock
          */
         FilterCache();
 
-        //---------------------------------------
+
 
         /** @short  standard dtor.
          */
         virtual ~FilterCache();
 
-        //---------------------------------------
+
 
         /** @short  creates a copy of this container.
 
@@ -304,13 +304,13 @@ class FilterCache : public BaseLock
          */
         virtual FilterCache* clone() const;
 
-        //---------------------------------------
+
 
         /** @short  copy the cache content or rClone back to this instance.
          */
         virtual void takeOver(const FilterCache& rClone);
 
-        //---------------------------------------
+
 
         /** @short      force special fill state of this cache.
 
@@ -349,7 +349,7 @@ class FilterCache : public BaseLock
                           sal_Bool   bByThread = sal_False)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      return the current fill state of this cache.
 
@@ -365,7 +365,7 @@ class FilterCache : public BaseLock
         virtual sal_Bool isFillState(EFillState eRequired) const
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      return a list of key names for items, which match
                         the specified criteria.
@@ -403,7 +403,7 @@ class FilterCache : public BaseLock
                                                      const CacheItem& lEProps = CacheItem()) const
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      indicates if the requested sub container
                         contains some items.
@@ -429,7 +429,7 @@ class FilterCache : public BaseLock
         virtual sal_Bool hasItems(EItemType eType) const
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      return a list of all key names, which represent
                         an item inside the specified sub container.
@@ -454,7 +454,7 @@ class FilterCache : public BaseLock
         virtual OUStringList getItemNames(EItemType eType) const
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      check if the required item exist inside this container.
 
@@ -479,7 +479,7 @@ class FilterCache : public BaseLock
                                  const OUString& sItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      return an item, which match the specified type and name.
 
@@ -509,7 +509,7 @@ class FilterCache : public BaseLock
                                   const OUString& sItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO document me ...
          */
@@ -517,7 +517,7 @@ class FilterCache : public BaseLock
                                 const OUString& sItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO document me ...
          */
@@ -526,7 +526,7 @@ class FilterCache : public BaseLock
                              const CacheItem&       aValue)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO document me ...
          */
@@ -534,7 +534,7 @@ class FilterCache : public BaseLock
                                  const OUString& sItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      add some implicit properties to the given
                         cache item reference.
@@ -576,14 +576,14 @@ class FilterCache : public BaseLock
                                                CacheItem&       rItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO document me
          */
         virtual void removeStatePropsFromItem(CacheItem& aValue)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      force writing of all changes (which was made after
                         last flush was called) back to the configuration.
@@ -597,7 +597,7 @@ class FilterCache : public BaseLock
         virtual void flush()
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      supports a flat type detection for given URL.
 
@@ -629,12 +629,12 @@ class FilterCache : public BaseLock
                                             FlatDetection&  rFlatTypes) const
             throw(css::uno::Exception);
 
-    //-------------------------------------------
+
     // private helper
 
     private:
 
-        //---------------------------------------
+
 
         /** @short      return a reference to one of our internal
                         sub container, which contains items of the
@@ -653,7 +653,7 @@ class FilterCache : public BaseLock
 
         CacheItemList& impl_getItemList(EItemType eType);
 
-        //---------------------------------------
+
 
         /** @short      return a valid configuration update access
                         to the underlying configuration package, which
@@ -675,7 +675,7 @@ class FilterCache : public BaseLock
         css::uno::Reference< css::uno::XInterface > impl_openConfig(EConfigProvider eProvide)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      tries to open the requested configuration root
                         using the specified modi.
@@ -699,7 +699,7 @@ class FilterCache : public BaseLock
                                                                                   sal_Bool         bReadOnly   ,
                                                                                   sal_Bool         bLocalesMode);
 
-        //---------------------------------------
+
 
         /** @short      reads the specified configuration key
                         and return its value.
@@ -722,7 +722,7 @@ class FilterCache : public BaseLock
          */
         css::uno::Any impl_getDirectCFGValue(const OUString& sDirectKey);
 
-        //---------------------------------------
+
 
         /** @short      load the underlying configuration into this cache.
 
@@ -737,7 +737,7 @@ class FilterCache : public BaseLock
         void impl_load(EFillState eRequiredState)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      validate the whole cache and create
                         structures for optimized items access.
@@ -758,7 +758,7 @@ class FilterCache : public BaseLock
         void impl_validateAndOptimize()
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short      register the specified item for the given type.
 
@@ -789,12 +789,12 @@ class FilterCache : public BaseLock
                                                const OUString& sType)
             throw(css::uno::Exception);
 
-    //-------------------------------------------
+
     // static helper
 
     private:
 
-        //---------------------------------------
+
 
         /** @short  read the specified config set into the cache.
 
@@ -827,7 +827,7 @@ class FilterCache : public BaseLock
                                 CacheItemList*                                      pCache )
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short  read the specified container item from the given configuration set.
 
@@ -857,7 +857,7 @@ class FilterCache : public BaseLock
                                       EReadOption                                         eOption)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short  try to load the requested item on demand from the underlying configuration
                     layer.
@@ -888,7 +888,7 @@ class FilterCache : public BaseLock
                                                       const OUString& sItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO */
         void impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xSet  ,
@@ -896,7 +896,7 @@ class FilterCache : public BaseLock
                            const CacheItem&                                           aValue)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO */
         void impl_addItem2FlushList(      EItemType        eType,
@@ -904,7 +904,7 @@ class FilterCache : public BaseLock
             throw(css::uno::Exception);
 
 
-        //---------------------------------------
+
 
         /** TODO */
         void impl_flushByList(const css::uno::Reference< css::container::XNameAccess >& xSet  ,
@@ -913,7 +913,7 @@ class FilterCache : public BaseLock
                               const OUStringList&                                       lItems)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** @short  specify, which save operation is necessary for the specified item.
 
@@ -947,27 +947,27 @@ class FilterCache : public BaseLock
                                                    const OUString&                                    sItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO */
         void impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
                                          CacheItem&                                          rItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO */
         void impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
                                    const CacheItem&                                           rItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO */
         void impl_readOldFormat()
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO */
         CacheItem impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
@@ -975,27 +975,27 @@ class FilterCache : public BaseLock
                                    const OUString&                                    sItem)
             throw(css::uno::Exception);
 
-        //---------------------------------------
+
 
         /** TODO */
         void impl_interpretDataVal4Type(const OUString& sValue,
                                               sal_Int32        nProp ,
                                               CacheItem&       rItem );
 
-        //---------------------------------------
+
 
         /** TODO */
         void impl_interpretDataVal4Filter(const OUString& sValue,
                                                 sal_Int32        nProp ,
                                                 CacheItem&       rItem );
 
-        //---------------------------------------
+
 
         /** TODO */
         OUStringList impl_tokenizeString(const OUString& sData     ,
                                                sal_Unicode      cSeparator);
 
-        //---------------------------------------
+
 
 #if OSL_DEBUG_LEVEL > 0
         /** TODO */
@@ -1003,7 +1003,7 @@ class FilterCache : public BaseLock
         OUString impl_searchContentHandlerForType(const OUString& sType) const;
 #endif
 
-        //---------------------------------------
+
         /** @short check if the specified OOo module is installed.
 
             @param  sModule
@@ -1013,7 +1013,7 @@ class FilterCache : public BaseLock
          */
         sal_Bool impl_isModuleInstalled(const OUString& sModule);
 
-        //---------------------------------------
+
 
         /** @short  convert a list of flag names to its int representation.
 
@@ -1025,7 +1025,7 @@ class FilterCache : public BaseLock
          */
         static sal_Int32 impl_convertFlagNames2FlagField(const css::uno::Sequence< OUString >& lNames);
 
-        //---------------------------------------
+
 
         /** @short  convert a flag field value to its list representation of flag names.
 

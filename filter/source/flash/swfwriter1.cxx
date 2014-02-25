@@ -1849,7 +1849,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+
 
 
 void Writer::Impl_addStraightLine( BitStream& rBits, Point& rLastPoint,
@@ -1911,10 +1911,10 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
         //           (P2y-P4y)(P3x-P4x)-(P2x-P4x)(P3y-P4y)
         //  lambda = -------------------------------------
         //           (P1x-P2x)(P3y-P4y)-(P1y-P2y)(P3x-P4x)
-        //
+
         // Intersection point IP is now
         // IP = P2 + lambda(P1-P2)
-        //
+
         const double nominator( (P2y-P4y)*(P3x-P4x) - (P2x-P4x)*(P3y-P4y) );
         const double denominator( (P1x-P2x)*(P3y-P4y) - (P1y-P2y)*(P3x-P4x) );
         const double lambda( nominator / denominator );
@@ -1933,22 +1933,22 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
 
         // Adapted bezier flatness test (lecture notes from R. Schaback,
         // Mathematics of Computer-Aided Design, Uni Goettingen, 2000)
-        //
+
         // ||C(t) - Q(t)|| <= max     ||c_j - q_j||
         //                    0<=j<=n
-        //
+
         // In this case, we don't need the distance from the cubic bezier
         // to a straight line, but to a quadratic bezier. The c_j's are
         // the cubic bezier's bernstein coefficients, the q_j's the
         // quadratic bezier's. We have the c_j's given, the q_j's can be
         // calculated from QPi like this (sorry, mixed index notation, we
         // use [1,n], formulas use [0,n-1]):
-        //
+
         // q_0 = QP1 = P1
         // q_1 = 1/3 QP1 + 2/3 QP2
         // q_2 = 2/3 QP2 + 1/3 QP3
         // q_3 = QP3 = P4
-        //
+
         // We can drop case 0 and 3, since there the curves coincide
         // (distance is zero)
 
@@ -1985,10 +1985,10 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
 
             // Perform bezier flatness test (lecture notes from R. Schaback,
             // Mathematics of Computer-Aided Design, Uni Goettingen, 2000)
-            //
+
             // ||P(t) - L(t)|| <= max     ||b_j - b_0 - j/n(b_n - b_0)||
             //                    0<=j<=n
-            //
+
             // What is calculated here is an upper bound to the distance from
             // a line through b_0 and b_3 (P1 and P4 in our notation) and the
             // curve. We can drop 0 and n from the running indices, since the

@@ -120,20 +120,20 @@ private:
     double              nBoundingY1;
     double              nBoundingX2;
     double              nBoundingY2;
-                                            //
+
     StackMember*        pGDIStack;
     sal_uLong           mnCursorPos;        // current cursor position in output
     Color               aColor;             // current color which is used for output
     sal_Bool            bLineColor;
     Color               aLineColor;         // current GDIMetafile color settings
-    sal_Bool            bFillColor;         //
-    Color               aFillColor;         //
-    Color               aTextColor;         //
-    sal_Bool            bTextFillColor;     //
-    Color               aTextFillColor;     //
-    Color               aBackgroundColor;   //
+    sal_Bool            bFillColor;
+    Color               aFillColor;
+    Color               aTextColor;
+    sal_Bool            bTextFillColor;
+    Color               aTextFillColor;
+    Color               aBackgroundColor;
     sal_Bool            bRegionChanged;
-    TextAlign           eTextAlign;         //
+    TextAlign           eTextAlign;
 
     double                      fLineWidth;
     double                      fMiterLimit;
@@ -1729,7 +1729,7 @@ void PSWriter::ImplSetClipRegion( Region& rClipRegion )
 
         //Rectangle     aRect;
         //RegionHandle  hRegionHandle = rClipRegion.BeginEnumRects();
-        //
+
         //while ( rClipRegion.GetEnumRects( hRegionHandle, aRect ) )
         //{
         //  double nX1 = aRect.Left();
@@ -1759,13 +1759,13 @@ void PSWriter::ImplSetClipRegion( Region& rClipRegion )
 
 
 // possible gfx formats:
-//
+
 // level 1: grayscale   8 bit
 //          color      24 bit
-//
+
 // level 2: grayscale   8 bit
 //          color       1(pal), 4(pal), 8(pal), 24 Bit
-//
+
 
 void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoint, double nXWidth, double nYHeightOrg )
 {
@@ -1852,7 +1852,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
             }
 
             //RegionHandle  hRegionHandle = aRegion.BeginEnumRects();
-            //
+
             //while ( aRegion.GetEnumRects( hRegionHandle, aRect ) )
             //{
             //  aRect.Move( 0, - ( nHeightOrg - nHeightLeft ) );

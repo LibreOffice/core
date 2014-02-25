@@ -90,9 +90,9 @@ class CGM
                                             //                            the temp input buffer
 
         sal_uInt32              mnMode;         // source description
-        sal_uInt32              mnEscape;       //
-        sal_uInt32              mnElementClass; //
-        sal_uInt32              mnElementID;    //
+        sal_uInt32              mnEscape;
+        sal_uInt32              mnElementClass;
+        sal_uInt32              mnElementID;
         sal_uInt32              mnElementSize;  // full parameter size for the latest action
 
         void                ImplCGMInit();

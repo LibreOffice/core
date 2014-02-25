@@ -62,33 +62,33 @@ private:
     // Data taken from the TIFF tags:
     sal_Bool                bByteSwap;                  // sal_True if bits 0..7 -> 7..0 should get converted ( FILLORDER = 2 );
 
-    sal_uLong               nNewSubFile;                //
-    sal_uLong               nSubFile;                   //
+    sal_uLong               nNewSubFile;
+    sal_uLong               nSubFile;
     sal_uLong               nImageWidth;                // picture width in pixels
     sal_uLong               nImageLength;               // picture height in pixels
     sal_uLong               nBitsPerSample;             // bits per pixel per layer
     sal_uLong               nCompression;               // kind of compression
-    sal_uLong               nPhotometricInterpretation; //
-    sal_uLong               nThresholding;              //
-    sal_uLong               nCellWidth;                 //
-    sal_uLong               nCellLength;                //
-    sal_uLong               nFillOrder;                 //
+    sal_uLong               nPhotometricInterpretation;
+    sal_uLong               nThresholding;
+    sal_uLong               nCellWidth;
+    sal_uLong               nCellLength;
+    sal_uLong               nFillOrder;
     sal_uLong*              pStripOffsets;              // field of offsets to the Bitmap-Data-"Strips"
     sal_uLong               nNumStripOffsets;           // size of the field above
-    sal_uLong               nOrientation;               //
+    sal_uLong               nOrientation;
     sal_uLong               nSamplesPerPixel;           // number of layers
     sal_uLong               nRowsPerStrip;              // if it's not compressed: number of rows per Strip
     sal_uLong*              pStripByteCounts;           // if compressed (in a certain way): size of the strips
     sal_uLong               nNumStripByteCounts;        // number of entries in the field above
-    sal_uLong               nMinSampleValue;            //
-    sal_uLong               nMaxSampleValue;            //
+    sal_uLong               nMinSampleValue;
+    sal_uLong               nMaxSampleValue;
     double                  fXResolution;               // X-resolution or 0.0
     double                  fYResolution;               // Y-resolution or 0.0
-    sal_uLong               nPlanarConfiguration;       //
-    sal_uLong               nGroup3Options;             //
-    sal_uLong               nGroup4Options;             //
+    sal_uLong               nPlanarConfiguration;
+    sal_uLong               nGroup3Options;
+    sal_uLong               nGroup4Options;
     sal_uLong               nResolutionUnit;            // unit of fX/YResolution: 1=unknown, 2(default)=inch, 3=cm
-    sal_uLong               nPredictor;                 //
+    sal_uLong               nPredictor;
     sal_uLong*              pColorMap;                  // color palette
     sal_uLong               nNumColors;                 // number of colors within the color palette
 

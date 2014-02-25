@@ -18,14 +18,14 @@
 
 package com.sun.star.filter.config.tools.split;
 
-//_______________________________________________
+
 
 import java.lang.*;
 import java.util.*;
 import java.io.*;
 import com.sun.star.filter.config.tools.utils.*;
 
-//_______________________________________________
+
 
 /**
  *  Can split one xml file into its different xml fragments.
@@ -34,7 +34,7 @@ import com.sun.star.filter.config.tools.utils.*;
  */
 public class Splitter
 {
-    //___________________________________________
+
     // member
 
     /** contains all real member of this instance.
@@ -42,7 +42,7 @@ public class Splitter
      *  of this class inside a multi-threaded environment. */
     private SplitterData m_aDataSet;
 
-    //___________________________________________
+
     // interface
 
     /** initialize a new instance of this class with all
@@ -57,7 +57,7 @@ public class Splitter
         m_aDataSet = aDataSet;
     }
 
-    //___________________________________________
+
     // interface
 
     /** generate xml fragments for all cache items.
@@ -214,7 +214,7 @@ public class Splitter
         }
     }
 
-    //___________________________________________
+
 
     /** generate a xml fragment file from the specified cache item.
      *
@@ -253,7 +253,7 @@ public class Splitter
         m_aDataSet.m_aDebug.setDetailedInfo("fragment["+eItemType+", \""+sItemName+"\"] => \""+aFile.getPath()+"\" ... OK");
     }
 
-    //___________________________________________
+
 
     /** create all needed directory structures.
      *

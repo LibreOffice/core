@@ -116,7 +116,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     // fdo#70838:
     // when you rotate an object, the top-left corner of its bounding box is moved
     // nXDiff and nYDiff pixels. To get their values we use these equations:
-    //
+
     //   fSin * nHeightHalf + fCos * nWidthHalf  == nXDiff + nWidthHalf
     //   fSin * nWidthHalf  + fCos * nHeightHalf == nYDiff + nHeightHalf
 
@@ -141,7 +141,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     rObj.SetRect( aRect );
 }
 
-//  -----------------------------------------------------------------------
+
 
 #define ADD_SHAPE( nType, nFlags )                              \
 {                                                               \

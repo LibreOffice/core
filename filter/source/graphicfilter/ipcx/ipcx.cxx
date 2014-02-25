@@ -43,7 +43,7 @@ private:
     sal_uLong           nWidth, nHeight;    // dimension in pixel
     sal_uInt16          nResX, nResY;       // resolution in pixel per inch oder 0,0
     sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
-    sal_uInt8*          pPalette;           //
+    sal_uInt8*          pPalette;
     sal_Bool            nStatus;            // from now on do not read status from stream ( SJ )
 
 

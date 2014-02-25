@@ -4564,7 +4564,7 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
                     // when bullet offset is > 0x7fff, the paragraph should look like
                     // *    first line text
                     // second line text
-                    //
+
                     // we add to bullet para indent 0xffff - bullet offset. it looks like
                     // best we can do for now
                     mpImplRuler->nTextOfs[ i ] += 0xffff - mpImplRuler->nBulletOfs[ i ];

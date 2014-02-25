@@ -65,9 +65,9 @@ OUString getImplementationName()
     throw ( ::com::sun::star::uno::Exception );
 
 
-//
+
 // class T602ImportFilter
-//
+
 
 struct inistruct
 {

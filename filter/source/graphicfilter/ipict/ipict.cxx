@@ -590,7 +590,7 @@ sal_uLong PictReader::ReadAndDrawRgn(PictDrawingMethod eMethod)
 
     pPict->ReadUInt16( nSize );
     // read the DATA
-    //
+
     // a region data is a mask and is probably coded as
     // - the first 8 bytes: bdbox ( which can be read by ReadRectangle )
     // - then a list of line modifiers: y_i, a_0, b_0, a_1, b_1, ..., a_{n_i}, b_{n_i}, 0x7fff

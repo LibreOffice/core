@@ -489,12 +489,12 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 // FindNextPara searches the next backslash parameter or the next string
 // until the next blank or "\" or closing quatation mark
 // or the end of the string of pStr.
-//
+
 // Output ppNext (if ppNext != 0) Suchbeginn fuer naechsten Parameter bzw. 0
-//
+
 // Return value: 0 if end of string reached,
 //             ansonsten Anfang des Paramters bzw. der Zeichenkette
-//
+
 sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 {
     const sal_Int32 nLen = aData.getLength();

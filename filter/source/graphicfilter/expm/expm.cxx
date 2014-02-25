@@ -80,7 +80,7 @@ void XPMWriter::ImplCallback( sal_uInt16 nPercent )
     }
 }
 
-//  ------------------------------------------------------------------------
+
 
 sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {

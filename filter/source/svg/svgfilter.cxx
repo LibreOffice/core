@@ -108,10 +108,10 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             uno::Reference<drawing::framework::XConfigurationController> xConfigController(xManager->getConfigurationController());
 
             // which view configuration are we in?
-            //
+
             // * traverse Impress resources to find slide preview pane, grab selection from there
             // * otherwise, fallback to current slide
-            //
+
             uno::Sequence<uno::Reference<drawing::framework::XResourceId> > aResIds(
                 xConfigController->getCurrentConfiguration()->getResources(
                     uno::Reference<drawing::framework::XResourceId>(),
