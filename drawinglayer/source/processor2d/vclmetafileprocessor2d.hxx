@@ -26,12 +26,12 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // vcl::PDFExtOutDevData support
 
 #include <vcl/pdfextoutdevdata.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class GDIMetaFile;
@@ -51,7 +51,7 @@ namespace basegfx {
     class BColor;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -144,7 +144,7 @@ namespace drawinglayer
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLMETAFILEPROCESSOR2D_HXX
 

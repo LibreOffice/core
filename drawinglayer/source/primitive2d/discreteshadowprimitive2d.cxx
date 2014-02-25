@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -157,7 +157,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
