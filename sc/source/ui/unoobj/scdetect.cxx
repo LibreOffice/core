@@ -510,57 +510,47 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
                 pFilter = NULL;
 
-                pStream->Seek( STREAM_SEEK_TO_END);
-                sal_Size nSize = pStream->Tell();
-                pStream->Seek( 0);
-                // Do not attempt to create an SotStorage on a
-                // 0-length stream as that would create the compound
-                // document header on the stream and effectively write to
-                // disk!
-                if (nSize > 0)
+                const char* pSearchFilterName = NULL;
+                if (aTypeName == "calc_Lotus")
                 {
-                    const char* pSearchFilterName = NULL;
-                    if (aTypeName == "calc_Lotus")
-                    {
-                        if (!detectThisFormat(*pStream, pLotus) && !detectThisFormat(*pStream, pLotusNew) && !detectThisFormat(*pStream, pLotus2))
-                            return OUString();
-
-                        pSearchFilterName = pFilterLotus;
-                    }
-                    else if (aTypeName == "calc_QPro")
-                    {
-                        if (!detectThisFormat(*pStream, pQPro))
-                            return OUString();
-
-                        pSearchFilterName = pFilterQPro6;
-                    }
-                    else if (aTypeName == "calc_SYLK")
-                    {
-                        if (!detectThisFormat(*pStream, pSylk))
-                            return OUString();
-
-                        pSearchFilterName = pFilterSylk;
-                    }
-                    else if (aTypeName == "calc_DIF")
-                    {
-                        if (!detectThisFormat(*pStream, pDIF1) && !detectThisFormat(*pStream, pDIF2))
-                            return OUString();
-
-                        pSearchFilterName = pFilterDif;
-                    }
-                    else if (aTypeName == "calc_dBase")
-                    {
-                        if (!lcl_MayBeDBase(*pStream))
-                            return OUString();
-
-                        pSearchFilterName = pFilterDBase;
-                    }
-
-                    if (!pSearchFilterName)
+                    if (!detectThisFormat(*pStream, pLotus) && !detectThisFormat(*pStream, pLotusNew) && !detectThisFormat(*pStream, pLotus2))
                         return OUString();
 
-                    pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
+                    pSearchFilterName = pFilterLotus;
                 }
+                else if (aTypeName == "calc_QPro")
+                {
+                    if (!detectThisFormat(*pStream, pQPro))
+                        return OUString();
+
+                    pSearchFilterName = pFilterQPro6;
+                }
+                else if (aTypeName == "calc_SYLK")
+                {
+                    if (!detectThisFormat(*pStream, pSylk))
+                        return OUString();
+
+                    pSearchFilterName = pFilterSylk;
+                }
+                else if (aTypeName == "calc_DIF")
+                {
+                    if (!detectThisFormat(*pStream, pDIF1) && !detectThisFormat(*pStream, pDIF2))
+                        return OUString();
+
+                    pSearchFilterName = pFilterDif;
+                }
+                else if (aTypeName == "calc_dBase")
+                {
+                    if (!lcl_MayBeDBase(*pStream))
+                        return OUString();
+
+                    pSearchFilterName = pFilterDBase;
+                }
+
+                if (!pSearchFilterName)
+                    return OUString();
+
+                pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
             }
         }
     }

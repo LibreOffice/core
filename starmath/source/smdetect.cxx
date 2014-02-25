@@ -296,7 +296,20 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 //this approach, to be fixed at a better level than here
                 SvStream *pStrm = aMedium.GetInStream();
                 aTypeName = OUString();
-                if (pStrm && !pStrm->GetError())
+
+                sal_Size nSize = 0;
+                if ( pStrm && !pStrm->GetError() )
+                {
+                    pStrm->Seek( STREAM_SEEK_TO_END );
+                    nSize = pStrm->Tell();
+                    pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+                }
+
+                // Do not attempt to create an SotStorage on a
+                // 0-length stream as that would create the compound
+                // document header on the stream and effectively write to
+                // disk!
+                if ( nSize > 0 )
                 {
                     SotStorageRef aStorage = new SotStorage ( pStrm, false );
                     if ( !aStorage->GetError() )
