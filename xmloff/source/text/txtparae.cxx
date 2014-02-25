@@ -2129,7 +2129,7 @@ void XMLTextParagraphExport::exportParagraph(
     if( bHasContentEnum )
     {
         // For the auto styles, the multi property set helper is only used
-        // if hard attributes are existing. Therfor, it seems to be a better
+        // if hard attributes are existing. Therefore, it seems to be a better
         // strategy to have the TextSection property separate, because otherwise
         // we always retrieve the style names even if they are not required.
         if( bAutoStyles )

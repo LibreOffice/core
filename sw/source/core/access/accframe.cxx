@@ -41,7 +41,7 @@
 using namespace sw::access;
 
 // Regarding visibility (or in terms of accessibility: regarding the showing
-// state): A frame is visible and therfor contained in the tree if its frame
+// state): A frame is visible and therefore contained in the tree if its frame
 // size overlaps with the visible area. The bounding box however is the
 // frame's paint area.
 sal_Int32 SwAccessibleFrame::GetChildCount( SwAccessibleMap& rAccMap,

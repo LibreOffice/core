@@ -4447,7 +4447,7 @@ SwCellFrm::~SwCellFrm()
     if( pMod )
     {
         // At this stage the lower frames aren't destroyed already,
-        // therfor we have to do a recursive dispose.
+        // therefore we have to do a recursive dispose.
         SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
             pRootFrm->GetCurrShell() )

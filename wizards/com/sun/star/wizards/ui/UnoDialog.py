@@ -93,7 +93,7 @@ class UnoDialog(object):
     changing the current step of a dialog will automatically make
     all controls visible. The PropertyNames.PROPERTY_STEP property
     always wins against the property "visible".
-    Therfor a control meant to be invisible is placed on a step far far away.
+    Therefore a control meant to be invisible is placed on a step far far away.
     Afterwards the step property of the dialog has to be set with
     "repaintDialogStep". As the performance of that method is very bad it
     should be used only once for all controls

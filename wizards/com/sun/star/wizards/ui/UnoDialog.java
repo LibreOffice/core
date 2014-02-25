@@ -521,7 +521,7 @@ public class UnoDialog implements EventNames
     /**
      * The problem with setting the visibility of controls is that changing the current step
      * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
-     * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
+     * the property "visible". Therefore a control meant to be invisible is placed on a step far far away.
      * @param controlname the name of the control
      * @param iStep  change the step if you want to make the control invisible
      */
