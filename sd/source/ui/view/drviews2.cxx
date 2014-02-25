@@ -830,7 +830,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 ::Outliner* pOutl = mpDrawView->GetTextEditOutliner();
                 if (pOutl)
                 {
-                    pOutl->RemoveFields(sal_True, (TypeId) SvxURLField::StaticType());
+                    pOutl->RemoveFields(true, (TypeId) SvxURLField::StaticType());
                 }
 
                 pSet = new SfxItemSet( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
@@ -1898,10 +1898,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pRectObj->SetMergedItem(SdrTextAutoGrowWidthItem(sal_True));
 
                 pOutl->UpdateFields();
-                pOutl->SetUpdateMode( sal_True );
+                pOutl->SetUpdateMode( true );
                 Size aSize( pOutl->CalcTextSize() );
                 aSize.Width() *= nMul;
-                pOutl->SetUpdateMode( sal_False );
+                pOutl->SetUpdateMode( false );
 
                 Point aPos;
                 Rectangle aRect( aPos, GetActiveWindow()->GetOutputSizePixel() );

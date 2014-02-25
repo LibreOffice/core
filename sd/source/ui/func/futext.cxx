@@ -1059,7 +1059,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag)
                 {
                     OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
                     if( ( pOPO && pOPO->IsVertical() ) || (nSlotId == SID_ATTR_CHAR_VERTICAL) || (nSlotId == SID_TEXT_FITTOSIZE_VERTICAL) )
-                        pOutl->SetVertical( sal_True );
+                        pOutl->SetVertical( true );
 
                     if( pTextObj->getTextCount() > 1 )
                     {
@@ -1147,12 +1147,12 @@ sal_Bool FuText::DeleteDefaultText()
                 SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( 0 );
                 sal_Bool bIsUndoEnabled = pOutliner->IsUndoEnabled();
                 if( bIsUndoEnabled )
-                    pOutliner->EnableUndo(sal_False);
+                    pOutliner->EnableUndo(false);
 
                 pOutliner->SetText( OUString(), pOutliner->GetParagraph( 0 ) );
 
                 if( bIsUndoEnabled )
-                    pOutliner->EnableUndo(sal_True);
+                    pOutliner->EnableUndo(true);
 
                 if (pSheet &&
                     (ePresObjKind == PRESOBJ_NOTES || ePresObjKind == PRESOBJ_TEXT))

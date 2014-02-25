@@ -290,7 +290,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 
         case SID_HANGUL_HANJA_CONVERSION:
             pOLV->StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL,
-                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True, sal_False );
+                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false );
             break;
 
         case SID_CHINESE_CONVERSION:
@@ -352,7 +352,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                                 Font aTargetFont = pOLV->GetWindow()->GetDefaultFont( DEFAULTFONT_CJK_TEXT,
                                             nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
-                                pOLV->StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False, sal_False );
+                                pOLV->StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false );
                             }
                         }
                         Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
@@ -769,7 +769,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         // do not flicker
         pOLV->HideCursor();
         SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
-        pOutliner->SetUpdateMode(sal_False);
+        pOutliner->SetUpdateMode(false);
 
         SfxItemSet aOldSet( pOLV->GetAttribs() );
         SfxItemSet aFontSet( *aOldSet.GetPool(),
@@ -807,7 +807,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         pOLV->SetAttribs( aFontSet );
 
         // From now on show again
-        pOutliner->SetUpdateMode(sal_True);
+        pOutliner->SetUpdateMode(true);
         pOLV->ShowCursor();
 
         rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );

@@ -91,7 +91,7 @@ void SwAnnotationWin::SetPostItText()
 
     // get text from SwPostItField and insert into our textview
     Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( sal_False );
+    Engine()->EnableUndo( false );
     if( mpFld->GetTextObject() )
         Engine()->SetText( *mpFld->GetTextObject() );
     else
@@ -103,7 +103,7 @@ void SwAnnotationWin::SetPostItText()
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( sal_True );
+    Engine()->EnableUndo( true );
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     if (bTextUnchanged)
         GetOutlinerView()->GetEditView().SetSelection(aOrigSelection);

@@ -451,7 +451,7 @@ void Cell::mergeContent( const CellRef& xSourceCell )
     if( xSourceCell->hasText() )
     {
         SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
-        rOutliner.SetUpdateMode(sal_True);
+        rOutliner.SetUpdateMode(true);
 
         if( hasText() )
         {
@@ -699,7 +699,7 @@ sal_Int32 Cell::getMinimumHeight()
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
-        rOutliner.SetUpdateMode(sal_True);
+        rOutliner.SetUpdateMode(true);
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
 
         if( GetOutlinerParaObject() )
@@ -1598,7 +1598,7 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
         if(nParaCount)
         {
             ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
-            rOutliner.RemoveAttribs(aSelection, sal_True, 0);
+            rOutliner.RemoveAttribs(aSelection, true, 0);
 
             OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
             rOutliner.Clear();

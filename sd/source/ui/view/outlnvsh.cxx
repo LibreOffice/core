@@ -155,7 +155,7 @@ void OutlineViewShell::Construct(DrawDocShell* )
     ReadFrameViewData(mpFrameView);
 
     ::Outliner* pOutl = pOlView->GetOutliner();
-    pOutl->SetUpdateMode(sal_True);
+    pOutl->SetUpdateMode(true);
 
     if (!bModified)
     {
@@ -1136,7 +1136,7 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(-nDelta, 0);
-    pOutlinerView->ShowCursor(sal_False);
+    pOutlinerView->ShowCursor(false);
 
     pOlView->InvalidateSlideNumberArea();
     return 0;
@@ -1160,7 +1160,7 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(0, -nDelta);
-    pOutlinerView->ShowCursor(sal_False);
+    pOutlinerView->ShowCursor(false);
 
     pOlView->InvalidateSlideNumberArea();
 

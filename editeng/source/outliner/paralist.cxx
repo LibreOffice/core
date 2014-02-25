@@ -63,7 +63,7 @@ Paragraph::Paragraph( sal_Int16 nDDepth )
 
     nDepth = nDDepth;
     nFlags = 0;
-    bVisible = sal_True;
+    bVisible = true;
 }
 
 Paragraph::Paragraph( const Paragraph& rPara )
@@ -80,7 +80,7 @@ Paragraph::Paragraph( const Paragraph& rPara )
 Paragraph::Paragraph( const ParagraphData& rData )
 : nFlags( 0 )
 , aBulSize( -1, -1)
-, bVisible( sal_True )
+, bVisible( true )
 {
     nDepth = rData.nDepth;
     mnNumberingStartValue = rData.mnNumberingStartValue;
@@ -98,7 +98,7 @@ void Paragraph::SetNumberingStartValue( sal_Int16 nNumberingStartValue )
         mbParaIsNumberingRestart = true;
 }
 
-void Paragraph::SetParaIsNumberingRestart( sal_Bool bParaIsNumberingRestart )
+void Paragraph::SetParaIsNumberingRestart( bool bParaIsNumberingRestart )
 {
     mbParaIsNumberingRestart = bParaIsNumberingRestart;
     if( !mbParaIsNumberingRestart )
@@ -232,7 +232,7 @@ void ParagraphList::Expand( Paragraph* pParent )
         Paragraph* pPara = GetParagraph( nPos+n );
         if ( !( pPara->IsVisible() ) )
         {
-            pPara->bVisible = sal_True;
+            pPara->bVisible = true;
             aVisibleStateChangedHdl.Call( pPara );
         }
     }
@@ -248,7 +248,7 @@ void ParagraphList::Collapse( Paragraph* pParent )
         Paragraph* pPara = GetParagraph( nPos+n );
         if ( pPara->IsVisible() )
         {
-            pPara->bVisible = sal_False;
+            pPara->bVisible = false;
             aVisibleStateChangedHdl.Call( pPara );
         }
     }

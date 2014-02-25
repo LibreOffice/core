@@ -94,7 +94,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( sal_True );
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
     }
     RemoveView( pOutlView );
@@ -104,20 +104,20 @@ SdrHHCWrapper::~SdrHHCWrapper()
 
 void SdrHHCWrapper::StartTextConversion()
 {
-    pOutlView->StartTextConversion( nSourceLang, nTargetLang, pTargetFont, nOptions, static_cast<sal_Bool>(bIsInteractive), sal_True );
+    pOutlView->StartTextConversion( nSourceLang, nTargetLang, pTargetFont, nOptions, bIsInteractive, true );
 }
 
 
-sal_Bool SdrHHCWrapper::ConvertNextDocument()
+bool SdrHHCWrapper::ConvertNextDocument()
 {
-    sal_Bool bNextDoc = sal_False;
+    bool bNextDoc = false;
 
     if ( pTextObj )
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( sal_True );
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
         SetPaperSize( Size(1, 1) );
         Clear();
@@ -146,23 +146,23 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                 //!! work correctly because the document may not be properly
                 //!! formatted when some information is accessed, and thus
                 //!! incorrect results get returned.
-                SetUpdateMode(sal_True);
+                SetUpdateMode(true);
                 if (HasConvertibleTextPortion( nSourceLang ))
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
                     OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
                     SdrPageView* pPV = pSdrView->GetSdrPageView();
                     nDocIndex = n;
-                    bNextDoc = sal_True;
+                    bNextDoc = true;
                     pOutlView->SetOutputArea( Rectangle( Point(), Size(1,1)));
                     SetPaperSize( pTextObj->GetLogicRect().GetSize() );
-                    SetUpdateMode(sal_True);
+                    SetUpdateMode(true);
                     pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
 
                     pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), sal_False, this, pOutlView, sal_True, sal_True);
                 }
                 else
-                    SetUpdateMode(sal_False);
+                    SetUpdateMode(false);
             }
 
             if ( !bNextDoc )

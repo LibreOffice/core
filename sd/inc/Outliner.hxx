@@ -150,7 +150,7 @@ public:
     void EndSpelling (void);
 
     /** callback for textconversion */
-    sal_Bool ConvertNextDocument (void);
+    bool ConvertNextDocument (void);
 
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
@@ -526,7 +526,7 @@ private:
             required.  When all text objects have been processed then
             <FALSE/> is returned.
     */
-    virtual sal_Bool SpellNextDocument (void);
+    virtual bool SpellNextDocument (void);
 
     /** Show the given message box and make it modal.  It is assumed that
         the parent of the given dialog is NULL, i.e. the application

@@ -110,12 +110,12 @@ OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, sal_Int32
 
 void OutlinerUndoChangeDepth::Undo()
 {
-    GetOutliner()->ImplInitDepth( mnPara, mnOldDepth, sal_False );
+    GetOutliner()->ImplInitDepth( mnPara, mnOldDepth, false );
 }
 
 void OutlinerUndoChangeDepth::Redo()
 {
-    GetOutliner()->ImplInitDepth( mnPara, mnNewDepth, sal_False );
+    GetOutliner()->ImplInitDepth( mnPara, mnNewDepth, false );
 }
 
 void OutlinerUndoChangeDepth::Repeat()
@@ -134,14 +134,14 @@ void OutlinerUndoCheckPara::Undo()
 {
     Paragraph* pPara = GetOutliner()->GetParagraph( mnPara );
     pPara->Invalidate();
-    GetOutliner()->ImplCalcBulletText( mnPara, sal_False, sal_False );
+    GetOutliner()->ImplCalcBulletText( mnPara, false, false );
 }
 
 void OutlinerUndoCheckPara::Redo()
 {
     Paragraph* pPara = GetOutliner()->GetParagraph( mnPara );
     pPara->Invalidate();
-    GetOutliner()->ImplCalcBulletText( mnPara, sal_False, sal_False );
+    GetOutliner()->ImplCalcBulletText( mnPara, false, false );
 }
 
 void OutlinerUndoCheckPara::Repeat()

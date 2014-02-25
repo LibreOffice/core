@@ -176,7 +176,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     OutlinerView* pOV   = GetTextEditOutlinerView();
                     ::Outliner* pOutliner = pOV->GetOutliner();
 
-                    pOutliner->SetUpdateMode(sal_False);
+                    pOutliner->SetUpdateMode(false);
                     mpDocSh->SetWaitCursor( sal_True );
 
                     // replace placeholder by template name
@@ -237,7 +237,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     }
 
                     mpDocSh->SetWaitCursor( sal_False );
-                    pOV->GetOutliner()->SetUpdateMode(sal_True);
+                    pOV->GetOutliner()->SetUpdateMode(true);
 
                     mpDocSh->GetUndoManager()->LeaveListAction();
 

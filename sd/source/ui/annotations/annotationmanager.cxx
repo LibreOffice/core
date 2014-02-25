@@ -459,7 +459,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         boost::scoped_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT) );
 
         mpDoc->SetCalcFieldValueHdl( pOutliner.get() );
-        pOutliner->SetUpdateMode( sal_True );
+        pOutliner->SetUpdateMode( true );
 
         OUString aStr(SD_RESSTR(STR_ANNOTATION_REPLY));
         OUString sAuthor( xAnnotation->getAuthor() );

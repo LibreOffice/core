@@ -1142,7 +1142,7 @@ namespace {
 
             pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
             pOutliner->SetPaperSize(aOutRect.GetSize());
-            pOutliner->SetUpdateMode(sal_True);
+            pOutliner->SetUpdateMode(true);
             pOutliner->Clear();
             pOutliner->SetText(*mpParaObject);
 
@@ -1663,7 +1663,7 @@ private:
         const Size aSavedPaperSize (pOutliner->GetPaperSize());
         const MapMode aSavedMapMode (pOutliner->GetRefMapMode());
         pOutliner->SetPaperSize(aOutRect.GetSize());
-        pOutliner->SetUpdateMode(sal_True);
+        pOutliner->SetUpdateMode(true);
 
         long nPageH = aOutRect.GetHeight();
 

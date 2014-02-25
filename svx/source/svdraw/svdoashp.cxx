@@ -2366,7 +2366,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
             {
                 Outliner& rOutliner=ImpGetDrawOutliner();
                 rOutliner.SetPaperSize(aSiz);
-                rOutliner.SetUpdateMode(sal_True);
+                rOutliner.SetUpdateMode(true);
                 // TODO: add the optimization with bPortionInfoChecked again.
                 OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
                 if( pOutlinerParaObject != NULL )
@@ -2725,7 +2725,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
             if( bHitTest )
                 rOutliner.SetTextObj( this );
 
-            rOutliner.SetUpdateMode(sal_True);
+            rOutliner.SetUpdateMode(true);
             rOutliner.SetText(*pPara);
         }
     }
@@ -2736,7 +2736,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     if (pEdtOutl && !bNoEditText && pPara)
         delete pPara;
 
-    rOutliner.SetUpdateMode(sal_True);
+    rOutliner.SetUpdateMode(true);
     rOutliner.SetControlWord(nStat0);
 
     SdrText* pText = getActiveText();

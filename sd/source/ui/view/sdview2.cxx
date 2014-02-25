@@ -317,7 +317,7 @@ void View::DoPaste (::Window* pWindow)
                 {
                     sal_Bool bOldUpdateMode = pOutliner->GetUpdateMode();
 
-                    pOutliner->SetUpdateMode( sal_False );
+                    pOutliner->SetUpdateMode( false );
 
                     const EditEngine& rEdit = pOutliner->GetEditEngine();
                     const sal_Int32 nParaCount = rEdit.GetParagraphCount();

@@ -343,7 +343,7 @@ void Outliner::EndSpelling (void)
             mpImpl->ReleaseOutlinerView();
         }
 
-        SetUpdateMode(sal_True);
+        SetUpdateMode(true);
     }
 
     // Before clearing the modify flag use it as a hint that
@@ -373,7 +373,7 @@ void Outliner::EndSpelling (void)
 
 
 
-sal_Bool Outliner::SpellNextDocument (void)
+bool Outliner::SpellNextDocument (void)
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell->ISA(OutlineViewShell))
@@ -401,7 +401,7 @@ sal_Bool Outliner::SpellNextDocument (void)
         ClearModifyFlag();
     }
 
-    return mbEndOfSearch ? sal_False : sal_True;
+    return mbEndOfSearch;
 
 }
 
@@ -776,7 +776,7 @@ void Outliner::DetectChange (void)
         if (pPageView != NULL)
             mpView->UnmarkAllObj (pPageView);
         mpView->SdrEndTextEdit();
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
         OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != NULL)
             pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -988,7 +988,7 @@ void Outliner::ProvideNextTextObject (void)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView != NULL)
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -1379,7 +1379,7 @@ void Outliner::EnterEditMode (sal_Bool bGrabFocus)
         // Turn on the edit mode for the text object.
         mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this, pOutlinerView, sal_True, sal_True, bGrabFocus);
 
-        SetUpdateMode(sal_True);
+        SetUpdateMode(true);
         mbFoundObject = true;
     }
 }
@@ -1581,10 +1581,10 @@ void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLan
 */
 void Outliner::PrepareConversion (void)
 {
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
     if( HasConvertibleTextPortion( mnConversionLanguage ) )
     {
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
         mbStringFound = true;
         mbMatchMayExist = true;
 
@@ -1596,7 +1596,7 @@ void Outliner::PrepareConversion (void)
     }
     else
     {
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
     }
 }
 
@@ -1643,7 +1643,7 @@ void Outliner::EndConversion()
 
 
 
-sal_Bool Outliner::ConvertNextDocument()
+bool Outliner::ConvertNextDocument()
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell && pViewShell->ISA(OutlineViewShell) )
@@ -1796,7 +1796,7 @@ void Outliner::Implementation::ProvideOutlinerView (
                 mpOutlineView->SetControlWord(nStat);
                 if (bInsert)
                     rOutliner.InsertView( mpOutlineView );
-                rOutliner.SetUpdateMode(sal_False);
+                rOutliner.SetUpdateMode(false);
                 mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
                 rOutliner.SetPaperSize( Size(1, 1) );
                 rOutliner.SetText(OUString(), rOutliner.GetParagraph(0));

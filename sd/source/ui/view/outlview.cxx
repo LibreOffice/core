@@ -122,7 +122,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
     mpOutlinerView[0] = new OutlinerView(&mrOutliner, pWindow);
     Rectangle aNullRect;
     mpOutlinerView[0]->SetOutputArea(aNullRect);
-    mrOutliner.SetUpdateMode(sal_False);
+    mrOutliner.SetUpdateMode(false);
     mrOutliner.InsertView(mpOutlinerView[0], LIST_APPEND);
 
     onUpdateStyleSettings( true );
@@ -197,7 +197,7 @@ OutlineView::~OutlineView()
         // uninitialize Outliner: enable color display
         ResetLinks();
         sal_uLong nCntrl = mrOutliner.GetControlWord();
-        mrOutliner.SetUpdateMode(sal_False); // otherwise there will be drawn on SetControlWord
+        mrOutliner.SetUpdateMode(false); // otherwise there will be drawn on SetControlWord
         mrOutliner.SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);
         SvtAccessibilityOptions aOptions;
         mrOutliner.ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
@@ -1097,7 +1097,7 @@ sal_Bool OutlineView::GetAttributes( SfxItemSet& rTargetSet, sal_Bool ) const
 void OutlineView::FillOutliner()
 {
     mrOutliner.GetUndoManager().Clear();
-    mrOutliner.EnableUndo(sal_False);
+    mrOutliner.EnableUndo(false);
     ResetLinks();
     mrOutliner.SetUpdateMode(false);
 
@@ -1183,16 +1183,16 @@ void OutlineView::FillOutliner()
 
     // place cursor at the start
     Paragraph* pFirstPara = mrOutliner.GetParagraph( 0 );
-    mpOutlinerView[0]->Select( pFirstPara, sal_True, sal_False );
-    mpOutlinerView[0]->Select( pFirstPara, sal_False, sal_False );
+    mpOutlinerView[0]->Select( pFirstPara, true, false );
+    mpOutlinerView[0]->Select( pFirstPara, false, false );
 
     // select title of slide that was selected
     if (pTitleToSelect)
-        mpOutlinerView[0]->Select(pTitleToSelect, sal_True, sal_False);
+        mpOutlinerView[0]->Select(pTitleToSelect, true, false);
 
     SetLinks();
 
-    mrOutliner.EnableUndo(sal_True);
+    mrOutliner.EnableUndo(true);
 
     mrOutliner.SetUpdateMode(true);
 }
@@ -1313,7 +1313,7 @@ void OutlineView::SetActualPage( SdPage* pActual )
         // if we found a paragraph, select its text at the outliner view
         Paragraph* pPara = GetParagraphForPage( mrOutliner, pActual );
         if( pPara )
-            mpOutlinerView[0]->Select( pPara, sal_True, sal_False );
+            mpOutlinerView[0]->Select( pPara, true, false );
     }
 }
 

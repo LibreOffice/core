@@ -92,7 +92,7 @@ namespace
             maFont(rInfo.mrFont),
             maDblDXArray(),
             maLocale(rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale()),
-            mbRTL(rInfo.mrFont.IsVertical() ? false : rInfo.IsRTL())
+            mbRTL(rInfo.mrFont.IsVertical() ? sal_False : rInfo.IsRTL())
         {
             if(mnTextLength && rInfo.mpDXArray)
             {

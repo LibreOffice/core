@@ -89,8 +89,8 @@ void FuExpandPage::DoExecute( SfxRequest& )
     {
         ::sd::Outliner* pOutl =
               new ::sd::Outliner( mpDoc, OUTLINERMODE_OUTLINEOBJECT );
-        pOutl->SetUpdateMode(sal_False);
-        pOutl->EnableUndo(sal_False);
+        pOutl->SetUpdateMode(false);
+        pOutl->EnableUndo(false);
 
         if (mpDocSh)
             pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );

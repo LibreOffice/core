@@ -314,7 +314,7 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
     {
         if ( !mrSidebarWin.IsProtected() &&
              GetTextView() &&
-             GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(),sal_True ))
+             GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {
             Link aLink = LINK(this, SidebarTxtControl, OnlineSpellCallback);
             GetTextView()->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);

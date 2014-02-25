@@ -199,7 +199,7 @@ void SdrObjEditView::ModelHasChanged()
                     pTextEditOutliner->GetMinAutoPaperSize()!=aPaperMin1 || pTextEditOutliner->GetMaxAutoPaperSize()!=aPaperMax1) {
                     aTextEditArea=aEditArea1;
                     aMinTextEditArea=aMinArea1;
-                    pTextEditOutliner->SetUpdateMode(sal_False);
+                    pTextEditOutliner->SetUpdateMode(false);
                     pTextEditOutliner->SetMinAutoPaperSize(aPaperMin1);
                     pTextEditOutliner->SetMaxAutoPaperSize(aPaperMax1);
                     pTextEditOutliner->SetPaperSize(Size(0,0)); // re-format Outliner
@@ -225,7 +225,7 @@ void SdrObjEditView::ModelHasChanged()
                         else nStat&=~EV_CNTRL_AUTOSIZE;
                         if (nStat!=nStat0) pOLV->SetControlWord(nStat);
                     }
-                    pTextEditOutliner->SetUpdateMode(sal_True);
+                    pTextEditOutliner->SetUpdateMode(true);
                     bAreaChg=true;
                 }
             }
@@ -328,7 +328,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     aBlankRect.Union(aMinTextEditArea);
     Rectangle aPixRect(rTargetDevice.LogicToPixel(aBlankRect));
     aBlankRect.Intersection(rRect);
-    rOutlView.GetOutliner()->SetUpdateMode(sal_True); // Bugfix #22596#
+    rOutlView.GetOutliner()->SetUpdateMode(true); // Bugfix #22596#
     rOutlView.Paint(aBlankRect, &rTargetDevice);
 
     if(!bModifyMerk)
@@ -431,8 +431,8 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, bool /*bNoPaint*
     bool bContourFrame=pText!=NULL && pText->IsContourTextFrame();
     // create OutlinerView
     OutlinerView* pOutlView=pGivenView;
-    pTextEditOutliner->SetUpdateMode(sal_False);
-    if (pOutlView==NULL) pOutlView=new OutlinerView(pTextEditOutliner,pWin);
+    pTextEditOutliner->SetUpdateMode(false);
+    if (pOutlView==NULL) pOutlView = new OutlinerView(pTextEditOutliner,pWin);
     else pOutlView->SetWindow(pWin);
     // disallow scrolling
     sal_uIntPtr nStat=pOutlView->GetControlWord();
@@ -452,7 +452,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, bool /*bNoPaint*
         pTextEditOutliner->SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
     // do update before setting output area so that aTextEditArea can be recalculated
-    pTextEditOutliner->SetUpdateMode(sal_True);
+    pTextEditOutliner->SetUpdateMode(true);
     pOutlView->SetOutputArea(aTextEditArea);
     ImpInvalidateOutlinerView(*pOutlView);
     return pOutlView;
@@ -1607,7 +1607,7 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
         {
             // and now the attributes to the EditEngine
             if (bReplaceAll) {
-                pTextEditOutlinerView->RemoveAttribs( sal_True );
+                pTextEditOutlinerView->RemoveAttribs( true );
             }
             pTextEditOutlinerView->SetAttribs(rSet);
 

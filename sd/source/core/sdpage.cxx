@@ -2375,14 +2375,14 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *( (SdDrawDocument*) GetModel() )->GetDocSh() ) );
             pOutl->SetEditTextObjectPool(pPool);
             pOutl->SetStyleSheetPool((SfxStyleSheetPool*)GetModel()->GetStyleSheetPool());
-            pOutl->EnableUndo(sal_False);
-            pOutl->SetUpdateMode( sal_False );
+            pOutl->EnableUndo(false);
+            pOutl->SetUpdateMode( false );
         }
 
         sal_uInt16 nOutlMode = pOutl->GetMode();
         Size aPaperSize = pOutl->GetPaperSize();
         sal_Bool bUpdateMode = pOutl->GetUpdateMode();
-        pOutl->SetUpdateMode(sal_False);
+        pOutl->SetUpdateMode(false);
         pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
 
         // Always set the object's StyleSheet at the Outliner to

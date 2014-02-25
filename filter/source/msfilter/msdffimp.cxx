@@ -3549,7 +3549,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
         rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
 
         sal_Bool bOldUpdateMode = rOutliner.GetUpdateMode();
-        rOutliner.SetUpdateMode( sal_False );
+        rOutliner.SetUpdateMode( false );
         rOutliner.SetVertical( pText->IsVerticalWriting() );
 
         sal_Int32 nParaIndex = 0;
@@ -4338,7 +4338,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             SdrModel* pModel = pRet->GetModel();
                             if ( pModel )
                                 rOutliner.SetStyleSheetPool( (SfxStyleSheetPool*)pModel->GetStyleSheetPool() );
-                            rOutliner.SetUpdateMode( sal_False );
+                            rOutliner.SetUpdateMode( false );
                             rOutliner.SetText( *pParaObj );
                             VirtualDevice aVirDev( 1 );
                             aVirDev.SetMapMode( MAP_100TH_MM );

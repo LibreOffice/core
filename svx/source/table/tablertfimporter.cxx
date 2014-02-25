@@ -138,7 +138,7 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 , mpDefMerge( 0 )
 , mxTable( rTableObj.getTable() )
 {
-    mpOutliner->SetUpdateMode(sal_True);
+    mpOutliner->SetUpdateMode(true);
     mpOutliner->SetStyleSheet( 0, mrTableObj.GetStyleSheet() );
     mpInsDefault = new RTFCellDefault( &mrItemPool );
 }
@@ -276,7 +276,7 @@ void SdrTableRTFParser::FillTable()
                     if( pTextObject )
                     {
                         SdrOutliner& rOutliner=mrTableObj.ImpGetDrawOutliner();
-                        rOutliner.SetUpdateMode(sal_True);
+                        rOutliner.SetUpdateMode(true);
                         rOutliner.SetText( *pTextObject );
                         mrTableObj.NbcSetOutlinerParaObjectForText( rOutliner.CreateParaObject(), xCell.get() );
                         delete pTextObject;

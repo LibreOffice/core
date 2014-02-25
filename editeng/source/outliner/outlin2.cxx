@@ -46,13 +46,13 @@ using namespace ::com::sun::star::linguistic2;
 // ======================   Simple pass-through   =======================
 // ======================================================================
 
-void Outliner::SetUpdateMode( sal_Bool bUpdate )
+void Outliner::SetUpdateMode( bool bUpdate )
 {
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
 
-sal_Bool Outliner::GetUpdateMode() const
+bool Outliner::GetUpdateMode() const
 {
     return pEditEngine->GetUpdateMode();
 }
@@ -62,12 +62,12 @@ const SfxItemSet& Outliner::GetEmptyItemSet() const
     return pEditEngine->GetEmptyItemSet();
 }
 
-void Outliner::EnableUndo( sal_Bool bEnable )
+void Outliner::EnableUndo( bool bEnable )
 {
     pEditEngine->EnableUndo( bEnable );
 }
 
-sal_Bool Outliner::IsUndoEnabled() const
+bool Outliner::IsUndoEnabled() const
 {
     return pEditEngine->IsUndoEnabled();
 }
@@ -98,7 +98,7 @@ void Outliner::ClearModifyFlag()
     pEditEngine->ClearModifyFlag();
 }
 
-sal_Bool Outliner::IsModified() const
+bool Outliner::IsModified() const
 {
     return pEditEngine->IsModified();
 }
@@ -144,17 +144,17 @@ void Outliner::SetDefTab( sal_uInt16 nTab )
     pEditEngine->SetDefTab( nTab );
 }
 
-sal_Bool Outliner::IsFlatMode() const
+bool Outliner::IsFlatMode() const
 {
     return pEditEngine->IsFlatMode();
 }
 
-sal_Bool Outliner::UpdateFields()
+bool Outliner::UpdateFields()
 {
     return pEditEngine->UpdateFields();
 }
 
-void Outliner::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
+void Outliner::RemoveFields( bool bKeepFieldText, TypeId aType )
 {
     pEditEngine->RemoveFields( bKeepFieldText, aType );
 }
@@ -229,7 +229,7 @@ void Outliner::SetMaxAutoPaperSize( const Size& rSz )
     pEditEngine->SetMaxAutoPaperSize( rSz );
 }
 
-sal_Bool Outliner::IsExpanded( Paragraph* pPara ) const
+bool Outliner::IsExpanded( Paragraph* pPara ) const
 {
     return pParaList->HasVisibleChildren( pPara );
 }
@@ -269,7 +269,7 @@ SfxStyleSheet* Outliner::GetStyleSheet( sal_Int32 nPara )
     return pEditEngine->GetStyleSheet( nPara );
 }
 
-sal_Bool Outliner::IsInSelectionMode() const
+bool Outliner::IsInSelectionMode() const
 {
     return pEditEngine->IsInSelectionMode();
 }
@@ -289,12 +289,12 @@ void Outliner::SetAsianCompressionMode( sal_uInt16 n )
     pEditEngine->SetAsianCompressionMode( n );
 }
 
-void Outliner::SetKernAsianPunctuation( sal_Bool b )
+void Outliner::SetKernAsianPunctuation( bool b )
 {
     pEditEngine->SetKernAsianPunctuation( b );
 }
 
-void Outliner::SetAddExtLeading( sal_Bool bExtLeading )
+void Outliner::SetAddExtLeading( bool bExtLeading )
 {
     pEditEngine->SetAddExtLeading( bExtLeading );
 }
@@ -314,7 +314,7 @@ void Outliner::InsertUndo( EditUndo* pUndo )
     pEditEngine->GetUndoManager().AddUndoAction( pUndo, false );
 }
 
-sal_Bool Outliner::IsInUndo()
+bool Outliner::IsInUndo()
 {
     return pEditEngine->IsInUndo();
 }
@@ -344,14 +344,14 @@ EESpellState Outliner::HasSpellErrors()
     return pEditEngine->HasSpellErrors();
 }
 
-sal_Bool Outliner::HasConvertibleTextPortion( LanguageType nLang )
+bool Outliner::HasConvertibleTextPortion( LanguageType nLang )
 {
     return pEditEngine->HasConvertibleTextPortion( nLang );
 }
 
-sal_Bool Outliner::ConvertNextDocument()
+bool Outliner::ConvertNextDocument()
 {
-    return sal_False;
+    return false;
 }
 
 void Outliner::SetDefaultLanguage( LanguageType eLang )
@@ -369,7 +369,7 @@ void Outliner::CompleteOnlineSpelling()
     pEditEngine->CompleteOnlineSpelling();
 }
 
-sal_Bool Outliner::HasText( const SvxSearchItem& rSearchItem )
+bool Outliner::HasText( const SvxSearchItem& rSearchItem )
 {
     return pEditEngine->HasText( rSearchItem );
 }
@@ -384,9 +384,9 @@ SfxItemPool* Outliner::GetEditTextObjectPool() const
     return pEditEngine->GetEditTextObjectPool();
 }
 
-sal_Bool Outliner::SpellNextDocument()
+bool Outliner::SpellNextDocument()
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -429,28 +429,28 @@ Point Outliner::GetDocPosTopLeft( sal_Int32 nParagraph )
     return pEditEngine->GetDocPosTopLeft( nParagraph );
 }
 
-sal_Bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
+bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
 {
     return IsTextPos( rPaperPos, nBorder, NULL );
 }
 
-sal_Bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, sal_Bool* pbBullet )
+bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBullet )
 {
     if ( pbBullet)
-        *pbBullet = sal_False;
-    sal_Bool bTextPos = pEditEngine->IsTextPos( rPaperPos, nBorder );
+        *pbBullet = false;
+    bool bTextPos = pEditEngine->IsTextPos( rPaperPos, nBorder );
     if ( !bTextPos )
     {
         Point aDocPos = GetDocPos( rPaperPos );
         sal_Int32 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
         if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasNumberFormat( nPara ) )
         {
-            Rectangle aBulArea = ImpCalcBulletArea( nPara, sal_True, sal_True );
+            Rectangle aBulArea = ImpCalcBulletArea( nPara, true, true );
             if ( aBulArea.IsInside( rPaperPos ) )
             {
-                bTextPos = sal_True;
+                bTextPos = true;
                 if ( pbBullet)
-                    *pbBullet = sal_True;
+                    *pbBullet = true;
             }
         }
     }
@@ -465,29 +465,29 @@ void Outliner::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 
 void Outliner::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
-    bFirstParaIsEmpty = sal_False;
+    bFirstParaIsEmpty = false;
     pEditEngine->QuickInsertText( rText, rSel );
 }
 
 void Outliner::QuickDelete( const ESelection& rSel )
 {
-    bFirstParaIsEmpty = sal_False;
+    bFirstParaIsEmpty = false;
     pEditEngine->QuickDelete( rSel );
 }
 
 void Outliner::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )
 {
-    bFirstParaIsEmpty = sal_False;
+    bFirstParaIsEmpty = false;
     pEditEngine->QuickInsertField( rFld, rSel );
 }
 
 void Outliner::QuickInsertLineBreak( const ESelection& rSel )
 {
-    bFirstParaIsEmpty = sal_False;
+    bFirstParaIsEmpty = false;
     pEditEngine->QuickInsertLineBreak( rSel );
 }
 
-void Outliner::QuickFormatDoc( sal_Bool bFull )
+void Outliner::QuickFormatDoc( bool bFull )
 {
     pEditEngine->QuickFormatDoc( bFull );
 }
@@ -517,12 +517,12 @@ void Outliner::EraseVirtualDevice()
     pEditEngine->EraseVirtualDevice();
 }
 
-sal_Bool Outliner::ShouldCreateBigTextObject() const
+bool Outliner::ShouldCreateBigTextObject() const
 {
     return pEditEngine->ShouldCreateBigTextObject();
 }
 
-void Outliner::SetVertical( sal_Bool b )
+void Outliner::SetVertical( bool b )
 {
     pEditEngine->SetVertical( b );
 }
@@ -532,7 +532,7 @@ bool Outliner::IsVertical() const
     return pEditEngine->IsVertical();
 }
 
-void Outliner::SetFixedCellHeight( sal_Bool bUseFixedCellHeight )
+void Outliner::SetFixedCellHeight( bool bUseFixedCellHeight )
 {
     pEditEngine->SetFixedCellHeight( bUseFixedCellHeight );
 }
@@ -557,27 +557,27 @@ LanguageType Outliner::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
     return pEditEngine->GetLanguage( nPara, nPos );
 }
 
-void Outliner::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+void Outliner::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
     pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
 
-void Outliner::EnableAutoColor( sal_Bool b )
+void Outliner::EnableAutoColor( bool b )
 {
     pEditEngine->EnableAutoColor( b );
 }
 
-void Outliner::ForceAutoColor( sal_Bool b )
+void Outliner::ForceAutoColor( bool b )
 {
     pEditEngine->ForceAutoColor( b );
 }
 
-sal_Bool Outliner::IsForceAutoColor() const
+bool Outliner::IsForceAutoColor() const
 {
     return pEditEngine->IsForceAutoColor();
 }
 
-void Outliner::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
+void Outliner::StartSpelling(EditView& rEditView, bool bMultipleDoc)
 {
     pEditEngine->StartSpelling(rEditView, bMultipleDoc);
 }

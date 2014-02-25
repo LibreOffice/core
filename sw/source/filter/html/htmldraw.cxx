@@ -832,7 +832,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // Was jetzt kommt ist das Gegenstueck zu SdrTextObjectt::SetText()
     Outliner aOutliner(0, OUTLINERMODE_TEXTOBJECT);
-    aOutliner.SetUpdateMode( sal_False );
+    aOutliner.SetUpdateMode( false );
     aOutliner.SetText( *pOutlinerParaObj );
     OUString aText( aOutliner.GetText( aOutliner.GetParagraph(0),
                                      aOutliner.GetParagraphCount() ) );

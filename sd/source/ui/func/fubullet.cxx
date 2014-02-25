@@ -121,7 +121,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     {
         // prevent flickering
         pOV->HideCursor();
-        pOL->SetUpdateMode(sal_False);
+        pOL->SetUpdateMode(false);
 
         // remove old selected text
         pOV->InsertText( aEmptyStr );
@@ -133,7 +133,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 
         // insert given text
         OUString aStr( cMark );
-        pOV->InsertText( aStr, sal_True);
+        pOV->InsertText( aStr, true);
 
         ESelection aSel = pOV->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
@@ -143,7 +143,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
         rUndoMgr.LeaveListAction();
 
         // restart repainting
-        pOL->SetUpdateMode(sal_True);
+        pOL->SetUpdateMode(true);
         pOV->ShowCursor();
     }
 }
@@ -245,7 +245,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         {
             // prevent flicker
             pOV->HideCursor();
-            pOL->SetUpdateMode(sal_False);
+            pOL->SetUpdateMode(false);
 
             /* remember old attributes:
                To do that, remove selected area before (it has to go anyway).
@@ -260,7 +260,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
             rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
                                      aEmptyStr );
-            pOV->InsertText(aChars, sal_True);
+            pOV->InsertText(aChars, true);
 
             // set attributes (set font)
             SfxItemSet aSet(pOL->GetEmptyItemSet());
@@ -284,7 +284,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             rUndoMgr.LeaveListAction();
 
             // show it again
-            pOL->SetUpdateMode(sal_True);
+            pOL->SetUpdateMode(true);
             pOV->ShowCursor();
         }
     }

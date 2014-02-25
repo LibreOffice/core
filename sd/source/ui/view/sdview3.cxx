@@ -1379,7 +1379,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    pOLV->Read( *xStm, OUString(), EE_FORMAT_BIN, sal_False, mpDocSh->GetHeaderAttributes() );
+                    pOLV->Read( *xStm, OUString(), EE_FORMAT_BIN, false, mpDocSh->GetHeaderAttributes() );
                     bReturn = true;
                 }
             }
@@ -1414,7 +1414,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
-                        pOLV->Read( *xStm, OUString(), EE_FORMAT_RTF, sal_False, mpDocSh->GetHeaderAttributes() );
+                        pOLV->Read( *xStm, OUString(), EE_FORMAT_RTF, false, mpDocSh->GetHeaderAttributes() );
                         bReturn = true;
                     }
                 }

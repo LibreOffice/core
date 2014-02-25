@@ -321,7 +321,7 @@ void AnnotationWindow::InitControls()
 
     mpOutliner = new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT);
     Doc()->SetCalcFieldValueHdl( mpOutliner );
-    mpOutliner->SetUpdateMode( sal_True );
+    mpOutliner->SetUpdateMode( true );
     Rescale();
 
     OutputDevice* pDev = Doc()->GetRefDevice();
@@ -348,11 +348,11 @@ void AnnotationWindow::InitControls()
     mpOutliner->SetControlWord(nCntrl);
 
     Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( sal_False );
+    Engine()->EnableUndo( false );
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( sal_True );
+    Engine()->EnableUndo( true );
     Engine()->SetModifyHdl( LINK( this, AnnotationWindow, ModifyHdl ) );
 
     Invalidate();

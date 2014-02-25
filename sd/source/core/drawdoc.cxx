@@ -800,8 +800,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         // This outliner is only used to create special text objects. As no
         // information about portions is saved in this outliner, the update mode
         // can/should always remain sal_False.
-        mpInternalOutliner->SetUpdateMode( sal_False );
-        mpInternalOutliner->EnableUndo( sal_False );
+        mpInternalOutliner->SetUpdateMode( false );
+        mpInternalOutliner->EnableUndo( false );
 
         if (mpDocSh)
             mpInternalOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -810,8 +810,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         mpInternalOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
     }
 
-    DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->GetUpdateMode() == sal_False ) , "InternalOutliner: UpdateMode = sal_True !" );
-    DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->IsUndoEnabled() == sal_False ), "InternalOutliner: Undo = sal_True !" );
+    DBG_ASSERT( !mpInternalOutliner || ( ! mpInternalOutliner->GetUpdateMode() ) , "InternalOutliner: UpdateMode = sal_True !" );
+    DBG_ASSERT( !mpInternalOutliner || ( ! mpInternalOutliner->IsUndoEnabled() ), "InternalOutliner: Undo = sal_True !" );
 
     // If you add stuff here, always clear it out.
     // Advantages:

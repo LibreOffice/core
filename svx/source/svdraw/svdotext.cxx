@@ -210,7 +210,7 @@ void SdrTextObj::FitFrameToTextSize()
     {
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
         rOutliner.SetPaperSize(Size(aRect.Right()-aRect.Left(),aRect.Bottom()-aRect.Top()));
-        rOutliner.SetUpdateMode(sal_True);
+        rOutliner.SetUpdateMode(true);
         rOutliner.SetText(*pText->GetOutlinerParaObject());
         Size aNewSize(rOutliner.CalcTextSize());
         rOutliner.Clear();
@@ -230,7 +230,7 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
-    rOutliner.SetUpdateMode(sal_True);
+    rOutliner.SetUpdateMode(true);
     rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
     OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
     Size aSiz(rOutliner.CalcTextSize());
@@ -255,7 +255,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.Read(rInput,rBaseURL,eFormat);
     OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
-    rOutliner.SetUpdateMode(sal_True);
+    rOutliner.SetUpdateMode(true);
     Size aSiz(rOutliner.CalcTextSize());
     rOutliner.Clear();
     NbcSetOutlinerParaObject(pNewText);
@@ -282,7 +282,7 @@ const Size& SdrTextObj::GetTextSize() const
         {
             SdrOutliner& rOutliner=ImpGetDrawOutliner();
             rOutliner.SetText(*pText->GetOutlinerParaObject());
-            rOutliner.SetUpdateMode(sal_True);
+            rOutliner.SetUpdateMode(true);
             aSiz=rOutliner.CalcTextSize();
             rOutliner.Clear();
         }
@@ -770,7 +770,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
                 rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
             }
 
-            rOutliner.SetUpdateMode(sal_True);
+            rOutliner.SetUpdateMode(true);
             rOutliner.SetText(*pPara);
         }
     }
@@ -782,7 +782,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
     if (pEdtOutl && !bNoEditText && pPara)
         delete pPara;
 
-    rOutliner.SetUpdateMode(sal_True);
+    rOutliner.SetUpdateMode(true);
     rOutliner.SetControlWord(nStat0);
 
     if( pText )
@@ -1196,7 +1196,7 @@ void SdrTextObj::ImpCheckMasterCachable()
 // Extracted from ImpGetDrawOutliner()
 void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
 {
-    rOutl.SetUpdateMode(sal_False);
+    rOutl.SetUpdateMode(false);
     sal_uInt16 nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
     if ( !IsOutlText() )
         nOutlinerMode = OUTLINERMODE_TEXTOBJECT;

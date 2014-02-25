@@ -49,7 +49,7 @@ public:
 
     virtual ~SdrHHCWrapper();
 
-    virtual sal_Bool ConvertNextDocument();
+    virtual bool ConvertNextDocument();
     void    StartTextConversion();
 };
 

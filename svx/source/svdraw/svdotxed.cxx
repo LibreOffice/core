@@ -315,7 +315,7 @@ void SdrTextObj::ImpSetTextEditParams() const
 {
     if (pEdtOutl!=NULL) {
         bool bUpdMerk=pEdtOutl->GetUpdateMode();
-        if (bUpdMerk) pEdtOutl->SetUpdateMode(sal_False);
+        if (bUpdMerk) pEdtOutl->SetUpdateMode(false);
         Size aPaperMin;
         Size aPaperMax;
         Rectangle aEditArea;
@@ -329,7 +329,7 @@ void SdrTextObj::ImpSetTextEditParams() const
             TakeTextAnchorRect(aAnchorRect);
             ImpSetContourPolygon(*pEdtOutl,aAnchorRect, sal_True);
         }
-        if (bUpdMerk) pEdtOutl->SetUpdateMode(sal_True);
+        if (bUpdMerk) pEdtOutl->SetUpdateMode(true);
     }
 }
 

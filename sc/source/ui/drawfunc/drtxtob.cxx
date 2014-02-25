@@ -654,7 +654,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     if (bUpdate && bChanged)
     {
         pOutliner->GetUndoManager().LeaveListAction();
-        pOutliner->SetUpdateMode( sal_True );
+        pOutliner->SetUpdateMode( true );
     }
 
     if ( aOldSel.IsEqual( aSel ) )          // aSel is adjusted

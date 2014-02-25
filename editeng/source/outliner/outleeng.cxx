@@ -70,7 +70,7 @@ Rectangle OutlinerEditEng::GetBulletArea( sal_Int32 nPara )
     if ( nPara < pOwner->pParaList->GetParagraphCount() )
     {
         if ( pOwner->ImplHasNumberFormat( nPara ) )
-            aBulletArea = pOwner->ImpCalcBulletArea( nPara, sal_False, sal_False );
+            aBulletArea = pOwner->ImpCalcBulletArea( nPara, false, false );
     }
     return aBulletArea;
 }

@@ -2200,7 +2200,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
             rOutliner.Init( OUTLINERMODE_TITLEOBJECT );             // Outliner reset
 
         sal_Bool bOldUpdateMode = rOutliner.GetUpdateMode();
-        rOutliner.SetUpdateMode( sal_False );
+        rOutliner.SetUpdateMode( false );
         if ( pSheet )
         {
             if ( rOutliner.GetStyleSheet( 0 ) != pSheet )

@@ -185,7 +185,7 @@ namespace sdr
                         if(nParaCount)
                         {
                             ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
-                            rOutliner.RemoveAttribs(aSelection, sal_True, 0);
+                            rOutliner.RemoveAttribs(aSelection, true, 0);
 
                             OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
                             rOutliner.Clear();

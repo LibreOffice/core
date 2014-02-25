@@ -1525,9 +1525,9 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         SdrRectObj* pRectObj = new SdrRectObj(OBJ_TEXT);
 
         pOutl->UpdateFields();
-        pOutl->SetUpdateMode( sal_True );
+        pOutl->SetUpdateMode( true );
         Size aSize(pOutl->CalcTextSize());
-        pOutl->SetUpdateMode( sal_False );
+        pOutl->SetUpdateMode( false );
 
         Point aPos;
 

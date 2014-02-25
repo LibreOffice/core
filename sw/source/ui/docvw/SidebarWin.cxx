@@ -329,7 +329,7 @@ void SwSidebarWin::InitControls()
     SwDocShell* aShell = mrView.GetDocShell();
     mpOutliner = new Outliner(&aShell->GetPool(),OUTLINERMODE_TEXTOBJECT);
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner );
-    mpOutliner->SetUpdateMode( sal_True );
+    mpOutliner->SetUpdateMode( true );
     Rescale();
 
     mpSidebarTxtControl->EnableRTL( false );
@@ -1127,8 +1127,8 @@ IMPL_LINK_NOARG(SwSidebarWin, DeleteHdl)
 
 void SwSidebarWin::ResetAttributes()
 {
-    mpOutlinerView->RemoveAttribsKeepLanguages(sal_True);
-    mpOutliner->RemoveFields(sal_True);
+    mpOutlinerView->RemoveAttribsKeepLanguages(true);
+    mpOutliner->RemoveFields(true);
     mpOutlinerView->SetAttribs(DefaultItem());
 }
 
