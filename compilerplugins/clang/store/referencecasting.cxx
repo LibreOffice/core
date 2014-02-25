@@ -32,7 +32,6 @@ I have logged a bug here:
   http://llvm.org/bugs/show_bug.cgi?id=15902
 
 */
-
 ReferenceCasting::ReferenceCasting( CompilerInstance& compiler )
     : Plugin( compiler )
 {
@@ -188,7 +187,6 @@ static const Type* extractTemplateType(Expr* cce)
     QualType templateParamQT = cceTA.getAsType();
     return templateParamQT.getTypePtr();
 }
-
 
 static Plugin::Registration< ReferenceCasting > X( "referencecasting" );
 

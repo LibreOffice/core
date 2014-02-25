@@ -59,7 +59,6 @@ void RtlConstAsciiMacro::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void RtlConstAsciiMacro::MacroExpands( const Token& macro, const MacroInfo*, SourceRange range )
 #else

@@ -66,7 +66,6 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
                 return true;
             }
         }
-
     }
     if (isa<StringLiteral>(sub)) {
         SourceLocation loc { sub->getLocStart() };

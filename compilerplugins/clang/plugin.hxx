@@ -164,8 +164,6 @@ class RegistrationCreate
         template< typename T, bool > static T* create( const Plugin::InstantiationData& data );
     };
 
-/////
-
 inline
 Plugin::~Plugin()
     {
