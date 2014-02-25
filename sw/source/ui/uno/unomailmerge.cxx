@@ -433,7 +433,8 @@ private:
 
 uno::Any SAL_CALL SwXMailMerge::execute(
         const uno::Sequence< beans::NamedValue >& rArguments )
-    throw (IllegalArgumentException, Exception, RuntimeException)
+    throw (IllegalArgumentException, Exception,
+           RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     MailMergeExecuteFinalizer aFinalizer(this);
