@@ -68,9 +68,9 @@
         sMsg.appendAscii("\""                                                           );                          \
     }
 
-//_________________________________________________________________________________________________________________
+
 //  initialization!
-//_________________________________________________________________________________________________________________
+
 
 SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Dialogs    =   NULL    ;
 sal_Int32                    SvtViewOptions::m_nRefCount_Dialogs         =   0       ;
@@ -81,11 +81,11 @@ sal_Int32                    SvtViewOptions::m_nRefCount_TabPages        =   0  
 SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Windows    =   NULL    ;
 sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0       ;
 
-//_________________________________________________________________________________________________________________
-//  private declarations!
-//_________________________________________________________________________________________________________________
 
-/*-************************************************************************************************************//**
+//  private declarations!
+
+
+/*-************************************************************************************************************
     @descr  declare one configuration item
             These struct hold information about one view item. But not all member are used for all entries!
             User must decide which information are useful and which not. We are a container iztem only and doesn't
@@ -239,7 +239,7 @@ typedef ::boost::unordered_map< OUString                    ,
                          IMPL_TStringHashCode               ,
                          ::std::equal_to< OUString > > IMPL_TViewHash;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          Implement base data container for view options elements.
                     Every item support ALL possible configuration information.
                     But not every superclass should use them! Because some view types don't
@@ -295,11 +295,11 @@ class SvtViewOptionsBase_Impl
         #endif
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr  Implement the base data container.
 *//*-*************************************************************************************************************/
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          ctor
     @descr          We use it to open right configuration file and let configuration objects fill her caches.
                     Then we read all existing entries from right list and cached it inside our object too.
@@ -339,7 +339,7 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
         }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          dtor
     @descr          clean up something
 
@@ -368,7 +368,7 @@ SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
     #endif // DEBUG_VIEWOPTIONS
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          checks for already existing entries
     @descr          If user don't know, if an entry already exist - he can get this information by calling this method.
 
@@ -396,7 +396,7 @@ bool SvtViewOptionsBase_Impl::Exists( const OUString& sName )
     return bExists;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          delete entry
     @descr          Use it to delete set entry by given name.
 
@@ -431,7 +431,7 @@ bool SvtViewOptionsBase_Impl::Delete( const OUString& sName )
     return bDeleted;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          read/write access to cache view items and her properties
     @descr          Follow methods support read/write access to all cache view items.
 
@@ -464,7 +464,7 @@ OUString SvtViewOptionsBase_Impl::GetWindowState( const OUString& sName )
     return sWindowState;
 }
 
-//*****************************************************************************************************************
+
 void SvtViewOptionsBase_Impl::SetWindowState( const OUString& sName  ,
                                               const OUString& sState )
 {
@@ -486,7 +486,7 @@ void SvtViewOptionsBase_Impl::SetWindowState( const OUString& sName  ,
         }
 }
 
-//*****************************************************************************************************************
+
 css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserData( const OUString& sName )
 {
     #ifdef DEBUG_VIEWOPTIONS
@@ -526,7 +526,7 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
     return css::uno::Sequence< css::beans::NamedValue >();
 }
 
-//*****************************************************************************************************************
+
 void SvtViewOptionsBase_Impl::SetUserData( const OUString&                              sName  ,
                                            const css::uno::Sequence< css::beans::NamedValue >& lData  )
 {
@@ -562,7 +562,7 @@ void SvtViewOptionsBase_Impl::SetUserData( const OUString&                      
         }
 }
 
-//*****************************************************************************************************************
+
 css::uno::Any SvtViewOptionsBase_Impl::GetUserItem( const OUString& sName ,
                                                     const OUString& sItem )
 {
@@ -593,7 +593,7 @@ css::uno::Any SvtViewOptionsBase_Impl::GetUserItem( const OUString& sName ,
     return aItem;
 }
 
-//*****************************************************************************************************************
+
 void SvtViewOptionsBase_Impl::SetUserItem( const OUString& sName  ,
                                            const OUString& sItem  ,
                                            const css::uno::Any&   aValue )
@@ -624,7 +624,7 @@ void SvtViewOptionsBase_Impl::SetUserItem( const OUString& sName  ,
         }
 }
 
-//*****************************************************************************************************************
+
 sal_Int32 SvtViewOptionsBase_Impl::GetPageID( const OUString& sName )
 {
     #ifdef DEBUG_VIEWOPTIONS
@@ -649,7 +649,7 @@ sal_Int32 SvtViewOptionsBase_Impl::GetPageID( const OUString& sName )
     return nID;
 }
 
-//*****************************************************************************************************************
+
 void SvtViewOptionsBase_Impl::SetPageID( const OUString& sName ,
                                                sal_Int32        nID   )
 {
@@ -671,7 +671,7 @@ void SvtViewOptionsBase_Impl::SetPageID( const OUString& sName ,
         }
 }
 
-//*****************************************************************************************************************
+
 SvtViewOptionsBase_Impl::State SvtViewOptionsBase_Impl::GetVisible( const OUString& sName )
 {
     #ifdef DEBUG_VIEWOPTIONS
@@ -701,7 +701,7 @@ SvtViewOptionsBase_Impl::State SvtViewOptionsBase_Impl::GetVisible( const OUStri
     return eState;
 }
 
-//*****************************************************************************************************************
+
 void SvtViewOptionsBase_Impl::SetVisible( const OUString& sName    ,
                                                 bool         bVisible )
 {
@@ -723,7 +723,7 @@ void SvtViewOptionsBase_Impl::SetVisible( const OUString& sName    ,
         }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          create new set node with default values on disk
     @descr          To create a new UserData item - the super node of these property must already exist!
                     You can call this method to create these new entry with default values and change UserData then.
@@ -759,9 +759,9 @@ css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSet
     return xNode;
 }
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                 const OUString& sViewName )
     :   m_eViewType ( eType     )
@@ -822,9 +822,9 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtViewOptions::~SvtViewOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -880,9 +880,9 @@ SvtViewOptions::~SvtViewOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtViewOptions::Exists() const
 {
     // Ready for multithreading
@@ -911,9 +911,9 @@ bool SvtViewOptions::Exists() const
     return bExists;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtViewOptions::Delete()
 {
     // Ready for multithreading
@@ -942,9 +942,9 @@ bool SvtViewOptions::Delete()
     return bState;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 OUString SvtViewOptions::GetWindowState() const
 {
     // Ready for multithreading
@@ -973,9 +973,9 @@ OUString SvtViewOptions::GetWindowState() const
     return sState;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtViewOptions::SetWindowState( const OUString& sState )
 {
     // Ready for multithreading
@@ -1002,9 +1002,9 @@ void SvtViewOptions::SetWindowState( const OUString& sState )
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 sal_Int32 SvtViewOptions::GetPageID() const
 {
     // Ready for multithreading
@@ -1020,9 +1020,9 @@ sal_Int32 SvtViewOptions::GetPageID() const
     return nID;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtViewOptions::SetPageID( sal_Int32 nID )
 {
     // Ready for multithreading
@@ -1036,9 +1036,9 @@ void SvtViewOptions::SetPageID( sal_Int32 nID )
         m_pDataContainer_TabDialogs->SetPageID( m_sViewName, nID );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtViewOptions::IsVisible() const
 {
     // Ready for multithreading
@@ -1055,9 +1055,9 @@ bool SvtViewOptions::IsVisible() const
     return bState;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtViewOptions::SetVisible( bool bState )
 {
     // Ready for multithreading
@@ -1071,9 +1071,9 @@ void SvtViewOptions::SetVisible( bool bState )
         m_pDataContainer_Windows->SetVisible( m_sViewName, bState );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtViewOptions::HasVisible() const
 {
     // Ready for multithreading
@@ -1090,7 +1090,7 @@ bool SvtViewOptions::HasVisible() const
     return bState;
 }
 
-//*****************************************************************************************************************
+
 css::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
 {
     // Ready for multithreading
@@ -1119,7 +1119,7 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
     return lData;
 }
 
-//*****************************************************************************************************************
+
 void SvtViewOptions::SetUserData( const css::uno::Sequence< css::beans::NamedValue >& lData )
 {
     // Ready for multithreading
@@ -1146,7 +1146,7 @@ void SvtViewOptions::SetUserData( const css::uno::Sequence< css::beans::NamedVal
     }
 }
 
-//*****************************************************************************************************************
+
 css::uno::Any SvtViewOptions::GetUserItem( const OUString& sName ) const
 {
     // Ready for multithreading
@@ -1175,7 +1175,7 @@ css::uno::Any SvtViewOptions::GetUserItem( const OUString& sName ) const
     return aItem;
 }
 
-//*****************************************************************************************************************
+
 void SvtViewOptions::SetUserItem( const OUString& sName  ,
                                   const css::uno::Any&   aValue )
 {
@@ -1208,9 +1208,9 @@ namespace
     class theViewOptionsMutex : public rtl::Static<osl::Mutex, theViewOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 ::osl::Mutex& SvtViewOptions::GetOwnStaticMutex()
 {
     return theViewOptionsMutex::get();

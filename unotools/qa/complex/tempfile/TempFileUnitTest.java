@@ -37,16 +37,6 @@ public class TempFileUnitTest /* extends ComplexTestCase */ {
     private XMultiServiceFactory m_xMSF = null;
     private XSimpleFileAccess m_xSFA = null;
 
-//    public String[] getTestMethodNames() {
-//        return new String[] {
-//            "ExecuteTest01",
-//            "ExecuteTest02"};
-//    }
-//
-//    public String getTestObjectName() {
-//        return "TempFileUnitTest";
-//    }
-
     @Before public void before() {
         m_xMSF = getMSF();
         if ( m_xMSF == null ) {

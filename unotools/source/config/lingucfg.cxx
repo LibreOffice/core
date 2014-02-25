@@ -792,7 +792,7 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
     return bReadOnly;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 static SvtLinguConfigItem *pCfgItem = 0;
 static sal_Int32           nCfgItemRefCount = 0;
@@ -1217,6 +1217,6 @@ bool SvtLinguConfig::HasGrammarChecker() const
     return bRes;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -121,7 +121,7 @@ class SvtCommandOptions_Impl : public ConfigItem
          SvtCommandOptions_Impl();
         ~SvtCommandOptions_Impl();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      called for notify of configmanager
             @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
@@ -137,7 +137,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      write changes to configuration
             @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
@@ -152,7 +152,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         virtual void Commit();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
@@ -171,7 +171,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return the current list of key names! We need it to get needed values from our
                         configuration management and support dynamical menu item lists!
@@ -191,9 +191,9 @@ class SvtCommandOptions_Impl : public ConfigItem
         SvtFrameVector m_lFrames;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     // Init baseclasses first
     :   ConfigItem( ROOTNODE_CMDOPTIONS )
@@ -230,9 +230,9 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     EnableNotification( aNotifySeq, true );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
 {
     // We must save our current values .. if user forget it!
@@ -242,9 +242,9 @@ SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 {
     MutexGuard aGuard( SvtCommandOptions::GetOwnStaticMutex() );
@@ -284,17 +284,17 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCommandOptions_Impl::Commit()
 {
     OSL_FAIL( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) const
 {
     if ( eOption == SvtCommandOptions::CMDOPTION_DISABLED )
@@ -303,9 +303,9 @@ bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) 
         return false;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, const OUString& aCommand ) const
 {
     switch( eCmdOption )
@@ -321,9 +321,9 @@ bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, co
     return false;
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCommandOptions_Impl::EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
 {
     // check if frame already exists inside list
@@ -335,9 +335,9 @@ void SvtCommandOptions_Impl::EstablisFrameCallback(const ::com::sun::star::uno::
         m_lFrames.push_back(xWeak);
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 {
     // First get ALL names of current existing list items in configuration!
@@ -363,17 +363,17 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
     return lDisabledItems;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = NULL  ;
 sal_Int32                   SvtCommandOptions::m_nRefCount      = 0     ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtCommandOptions::SvtCommandOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -388,9 +388,9 @@ SvtCommandOptions::SvtCommandOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtCommandOptions::~SvtCommandOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -406,27 +406,27 @@ SvtCommandOptions::~SvtCommandOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->HasEntries( eOption );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandURL ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->Lookup( eCmdOption, aCommandURL );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtCommandOptions::EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -438,9 +438,9 @@ namespace
     class theCommandOptionsMutex : public rtl::Static<osl::Mutex, theCommandOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Mutex& SvtCommandOptions::GetOwnStaticMutex()
 {
     return theCommandOptionsMutex::get();
