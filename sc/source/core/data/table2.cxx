@@ -1492,14 +1492,6 @@ void ScTable::GetFormula( SCCOL nCol, SCROW nRow, OUString& rFormula ) const
         rFormula = OUString();
 }
 
-const ScTokenArray* ScTable::GetFormulaTokens( SCCOL nCol, SCROW nRow ) const
-{
-    if (!ValidColRow(nCol, nRow))
-        return NULL;
-
-    return aCol[nCol].GetFormulaTokens(nRow);
-}
-
 const ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))

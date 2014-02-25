@@ -2397,15 +2397,6 @@ void ScColumn::GetFormula( SCROW nRow, OUString& rFormula ) const
         rFormula = EMPTY_OUSTRING;
 }
 
-const ScTokenArray* ScColumn::GetFormulaTokens( SCROW nRow ) const
-{
-    const ScFormulaCell* pCell = FetchFormulaCell(nRow);
-    if (!pCell)
-        return NULL;
-
-    return pCell->GetCode();
-}
-
 const ScFormulaCell* ScColumn::GetFormulaCell( SCROW nRow ) const
 {
     return FetchFormulaCell(nRow);

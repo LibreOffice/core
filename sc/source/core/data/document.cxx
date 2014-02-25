@@ -3502,14 +3502,6 @@ void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rForm
 }
 
 
-const ScTokenArray* ScDocument::GetFormulaTokens( const ScAddress& rPos ) const
-{
-    if (!TableExists(rPos.Tab()))
-        return NULL;
-
-    return maTabs[rPos.Tab()]->GetFormulaTokens(rPos.Col(), rPos.Row());
-}
-
 const ScFormulaCell* ScDocument::GetFormulaCell( const ScAddress& rPos ) const
 {
     if (!TableExists(rPos.Tab()))

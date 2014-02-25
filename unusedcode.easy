@@ -78,7 +78,6 @@ ScDPFilteredCache::SingleFilter::getMatchValue() const
 ScDocument::CountNotes() const
 ScDocument::CreateFormatTable() const
 ScDocument::GetCellCount(short, short) const
-ScDocument::GetFormulaTokens(ScAddress const&) const
 ScDocument::IsEmptyData(short, short) const
 ScExtIButton::GetSelected() const
 ScFlatBoolRowSegments::getValue(int)

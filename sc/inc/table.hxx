@@ -370,7 +370,6 @@ public:
     const EditTextObject* GetEditText( SCCOL nCol, SCROW nRow ) const;
     void RemoveEditTextCharAttribs( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void GetFormula( SCCOL nCol, SCROW nRow, OUString& rFormula ) const;
-    const ScTokenArray* GetFormulaTokens( SCCOL nCol, SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow ) const;
     ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow );
 
