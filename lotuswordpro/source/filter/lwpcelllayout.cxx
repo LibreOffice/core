@@ -524,16 +524,16 @@ void LwpCellLayout::RegisterDefaultCell()
             switch(eLoop)
             {
             case enumNoBottomBorder:
-                // _
+
                 //| |
-                //
+
                 // remove bottom line
                 pBorders->SetWidth(enumXFBorderBottom, 0);
                 break;
             case enumNoLeftNoBottomBorder:
-                // _
+
                 //  |
-                //
+
                 // remove left and bottom
                 pBorders->SetWidth(enumXFBorderLeft, 0);
                 pBorders->SetWidth(enumXFBorderBottom, 0);
@@ -545,7 +545,7 @@ void LwpCellLayout::RegisterDefaultCell()
                 // nothing to remove
                 break;
             case enumNoLeftBorder:
-                //
+
                 //| |
 
                 // remove left line

@@ -229,10 +229,10 @@ OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence
         {
             uno::Reference< XInputStream> rInputStream;
             aDescriptor[i].Value >>= rInputStream;
-            //
+
             // TODO TRANSFORM IMPLEMENTATION HERE!!!!!!
             // and call m_DocumentHandler's SAX mDochods
-            //
+
             if( IsWordproFile(rInputStream) )
             {
                 if ( aTypeName == "wordpro_template" )

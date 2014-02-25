@@ -289,7 +289,7 @@ void    XFListStyle::SetListBullet(sal_Int32 level,
     pLevel->SetSuffix(suffix);
     pLevel->SetBulletChar(bullet);
     pLevel->SetFontName(fontname);
-    //
+
     pLevel->SetListlevelType(enumXFListLevelBullet);
     pLevel->SetMinLabelWidth(0.499);
     pLevel->SetIndent(0.501*level);
@@ -307,7 +307,7 @@ void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt& fmt, sal_Int16 sta
     XFListlevelNumber *pLevel = new XFListlevelNumber();
     pLevel->SetNumFmt(fmt);
     pLevel->SetStartValue(start);
-    //
+
     pLevel->SetListlevelType(enumXFListLevelNumber);
     pLevel->SetMinLabelWidth(0.499);
     pLevel->SetIndent(0.501*level);

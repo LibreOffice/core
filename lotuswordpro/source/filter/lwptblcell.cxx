@@ -67,7 +67,7 @@
 #include "lwptblcell.hxx"
 #include "lwppara.hxx"
 
-//////////////////////////////////////////////////////////////////
+
  LwpCellList::LwpCellList(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
 
@@ -113,7 +113,7 @@ void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* /*pCellsMap*/)
     }
 }
 
-//////////////////////////////////////////////////////////////////
+
  LwpNumericValue::LwpNumericValue(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
 {}
 
@@ -129,7 +129,7 @@ void LwpNumericValue::Read()
  void  LwpNumericValue::Parse(IXFStream* /*pOutputStream*/)
 {
 }
-//////////////////////////////////////////////////////////////////
+
  LwpRowList::LwpRowList(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
 
@@ -155,7 +155,7 @@ void LwpRowList::Read()
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
 LwpTableRange::LwpTableRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     :LwpDLVList(objHdr, pStrm)
 {}
@@ -176,7 +176,7 @@ void  LwpTableRange::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
  LwpCellRange::LwpCellRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
 {}
 
@@ -193,7 +193,7 @@ void  LwpCellRange::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
 
  LwpFolder::LwpFolder(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
@@ -220,7 +220,7 @@ void  LwpFolder::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
 
 LwpDependent::LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
@@ -242,7 +242,7 @@ void LwpDependent::Read()
 void  LwpDependent::Parse(IXFStream* /*pOutputStream*/)
 {
 }
-//////////////////////////////////////////////////////////////////
+
 
 void LwpRowSpecifier::QuickRead(LwpObjectStream *pStrm)
 {

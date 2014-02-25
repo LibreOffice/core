@@ -319,7 +319,7 @@ inline void XFFont::SetFontNameComplex(OUString name)
     m_nFlag |= XFFONT_FLAG_NAME_COMPLEX;
 }
 
-//
+
 inline void XFFont::SetFontSize(sal_Int16 size)
 {
     m_nFontSize = size;

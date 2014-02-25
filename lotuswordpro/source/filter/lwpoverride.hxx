@@ -106,7 +106,7 @@ protected:
     sal_uInt16  m_nApply;
 };
 
-/////////////////////////////////////////////////////////////////
+
 class LwpTextLanguageOverride : public LwpOverride
 {
 public:
@@ -126,7 +126,7 @@ private:
     sal_uInt16  m_nLanguage;
 };
 
-/////////////////////////////////////////////////////////////////
+
 class LwpTextAttributeOverride : public LwpOverride
 {
 public:
@@ -158,7 +158,7 @@ inline sal_uInt16 LwpTextAttributeOverride::GetHideLevels() const
 {
     return m_nHideLevels;
 }
-/////////////////////////////////////////////////////////////////
+
 class LwpKinsokuOptsOverride : public LwpOverride
 {
 public:
@@ -178,7 +178,7 @@ private:
     sal_uInt16  m_nLevels;
 };
 
-/////////////////////////////////////////////////////////////////
+
 class LwpBulletOverride : public LwpOverride
 {
 public:
@@ -280,7 +280,7 @@ inline void LwpBulletOverride::RevertRightAligned()
     LwpOverride::Override(BO_RIGHTALIGN, STATE_STYLE);
 }
 
-/////////////////////////////////////////////////////////////////
+
 class LwpAlignmentOverride : public LwpOverride
 {
 public:
@@ -325,7 +325,7 @@ private:
     sal_uInt16  m_nAlignChar;
 };
 
-/////////////////////////////////////////////////////////////////
+
 class LwpSpacingCommonOverride : public LwpOverride
 {
 public:
@@ -370,7 +370,7 @@ protected:
     sal_Int32   m_nMultiple;
 };
 
-/////////////////////////////////////////////////////////////////
+
 class LwpSpacingOverride : public LwpOverride
 {
 public:
@@ -401,7 +401,7 @@ private:
     LwpSpacingCommonOverride*   m_pParaSpacingBelow;
 };
 
-/////////////////////////////////////////////////////////////////
+
 class LwpIndentOverride : public LwpOverride
 {
 public:
@@ -480,7 +480,7 @@ inline double LwpIndentOverride::GetRight() const
     return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nRight));
 }
 
-/////////////////////////////////////////////////////////////////
+
 class LwpBackgroundStuff;
 class LwpAmikakeOverride : public LwpOverride
 {
