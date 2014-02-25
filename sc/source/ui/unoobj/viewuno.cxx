@@ -2011,10 +2011,11 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
 }
 
 void SAL_CALL ScTabViewObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
-                                    const uno::Reference<beans::XPropertyChangeListener >& xListener )
-                                throw(beans::UnknownPropertyException,
-                                    lang::WrappedTargetException,
-                                    uno::RuntimeException)
+    const uno::Reference<beans::XPropertyChangeListener >& xListener )
+        throw (beans::UnknownPropertyException,
+               lang::WrappedTargetException,
+               uno::RuntimeException,
+               std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<beans::XPropertyChangeListener>* pObj =
