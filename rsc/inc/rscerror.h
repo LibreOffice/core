@@ -28,9 +28,9 @@
 #define ERR_OPENFILE        0x0102  // Return
 #define ERR_NOCHAR          0x0103  // Return
 #define ERR_NORSCINST       0x0104  // Return
-#define ERR_USAGE           0x0105  //
+#define ERR_USAGE           0x0105
 #define ERR_NOINPUT         0x0106  // Return
-#define ERR_UNKNOWNSW       0x0107  //
+#define ERR_UNKNOWNSW       0x0107
 #define ERR_REFTODEEP       0x0108  // Return
 #define ERR_FILEFORMAT      0x0109  // Return
 #define ERR_FILESIZE        0x010A  // Return
@@ -52,22 +52,22 @@
 #define ERR_RSCINST_RESERVEDNAME (ERR_RSCINST +2 ) // Return
 
 #define ERR_LEX             0x0270
-#define ERR_YACC            0x0280  //
-#define ERR_DOUBLEID            (ERR_YACC    +1 ) //
-#define ERR_FALSETYPE           (ERR_YACC    +2 ) //
-#define ERR_NOVARIABLENAME      (ERR_YACC    +3 ) //
-#define ERR_USHORTRANGE         (ERR_YACC    +4 ) //
-#define ERR_IDRANGE             (ERR_YACC    +5 ) //
-#define ERR_NOCOPYOBJ           (ERR_YACC    +6 ) //
+#define ERR_YACC            0x0280
+#define ERR_DOUBLEID            (ERR_YACC    +1 )
+#define ERR_FALSETYPE           (ERR_YACC    +2 )
+#define ERR_NOVARIABLENAME      (ERR_YACC    +3 )
+#define ERR_USHORTRANGE         (ERR_YACC    +4 )
+#define ERR_IDRANGE             (ERR_YACC    +5 )
+#define ERR_NOCOPYOBJ           (ERR_YACC    +6 )
 #define ERR_REFNOTALLOWED       (ERR_YACC    +7 ) // Return
-#define ERR_DOUBLEDEFINE        (ERR_YACC    +8 ) //
-#define ERR_COPYNOTALLOWED      (ERR_YACC    +9 ) //
-#define ERR_IDEXPECTED          (ERR_YACC    +10) //
-#define ERR_ZERODIVISION        (ERR_YACC    +11) //
-#define ERR_PRAGMA              (ERR_YACC    +12) //
-#define ERR_DECLAREDEFINE       (ERR_YACC    +13) //
-#define ERR_NOTUPELNAME         (ERR_YACC    +14) //
-#define ERR_NOTYPE              (ERR_YACC    +15) //
+#define ERR_DOUBLEDEFINE        (ERR_YACC    +8 )
+#define ERR_COPYNOTALLOWED      (ERR_YACC    +9 )
+#define ERR_IDEXPECTED          (ERR_YACC    +10)
+#define ERR_ZERODIVISION        (ERR_YACC    +11)
+#define ERR_PRAGMA              (ERR_YACC    +12)
+#define ERR_DECLAREDEFINE       (ERR_YACC    +13)
+#define ERR_NOTUPELNAME         (ERR_YACC    +14)
+#define ERR_NOTYPE              (ERR_YACC    +15)
 
 #define ERR_RSCARRAY         0x02A0  // Return
 #define ERR_ARRAY_INVALIDINDEX  (ERR_RSCARRAY +1 ) // Return
