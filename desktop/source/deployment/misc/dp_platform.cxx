@@ -187,7 +187,7 @@ namespace
     }
 
 } // anon namespace
-//=============================================================================
+
 
 OUString const & getPlatformString()
 {

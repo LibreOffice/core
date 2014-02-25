@@ -54,9 +54,9 @@ static OUString sSubDirName( "cache" );
 static OUString sDescriptionXmlFile( "/description.xml" );
 static OUString sExtensionRootSubDirName( "/uno_packages" );
 
-// =============================================================================
+
 // component operations
-// =============================================================================
+
 
 OUString OO3ExtensionMigration_getImplementationName()
 {
@@ -91,9 +91,9 @@ Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
     return *pNames;
 }
 
-// =============================================================================
+
 // ExtensionMigration
-// =============================================================================
+
 
 OO3ExtensionMigration::OO3ExtensionMigration(Reference< XComponentContext > const & ctx) :
 m_ctx(ctx)
@@ -479,9 +479,9 @@ void TmpRepositoryCommandEnv::pop() throw (uno::RuntimeException, std::exception
 {
 }
 
-// =============================================================================
+
 // component operations
-// =============================================================================
+
 
 Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
     Reference< XComponentContext > const & ctx )

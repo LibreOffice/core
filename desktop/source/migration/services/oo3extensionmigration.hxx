@@ -54,9 +54,9 @@ namespace migration
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
-    // =============================================================================
+
     // class ExtensionMigration
-    // =============================================================================
+
 
     typedef ::cppu::WeakImplHelper3<
         ::com::sun::star::lang::XServiceInfo,
@@ -141,9 +141,9 @@ namespace migration
         virtual void SAL_CALL pop() throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//.........................................................................
+
 }   // namespace migration
-//.........................................................................
+
 
 #endif // INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_OO3EXTENSIONMIGRATION_HXX
 

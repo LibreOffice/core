@@ -38,7 +38,7 @@ namespace dp_manager {
 typedef ::cppu::WeakComponentImplHelper1<
     css::deployment::XPackageManager > t_pm_helper;
 
-//==============================================================================
+
 class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
@@ -262,7 +262,7 @@ public:
                css::uno::RuntimeException, std::exception);
         };
 
-//______________________________________________________________________________
+
 inline void PackageManagerImpl::check()
 {
     ::osl::MutexGuard guard( getMutex() );
@@ -272,7 +272,7 @@ inline void PackageManagerImpl::check()
             static_cast< ::cppu::OWeakObject * >(this) );
 }
 
-//______________________________________________________________________________
+
 inline void PackageManagerImpl::logIntern( css::uno::Any const & status )
 {
     if (m_xLogFile.is())

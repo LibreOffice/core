@@ -36,7 +36,7 @@ namespace factory {
 typedef ::cppu::WeakComponentImplHelper1<
     deployment::XPackageManagerFactory > t_pmfac_helper;
 
-//==============================================================================
+
 class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
 {
     Reference<XComponentContext> m_xComponentContext;
@@ -65,7 +65,7 @@ public:
         OUString const & context ) throw (RuntimeException, std::exception);
 };
 
-//==============================================================================
+
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<PackageManagerFactoryImpl> servicePMFI;
 extern sdecl::ServiceDecl const serviceDecl(

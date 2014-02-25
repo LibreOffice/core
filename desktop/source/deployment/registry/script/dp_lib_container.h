@@ -36,7 +36,7 @@ namespace dp_registry {
 namespace backend {
 namespace script {
 
-//==============================================================================
+
 class LibraryContainer
 {
 public:

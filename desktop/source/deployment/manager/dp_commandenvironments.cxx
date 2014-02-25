@@ -131,7 +131,7 @@ throw (uno::RuntimeException, std::exception)
 void BaseCommandEnv::pop() throw (uno::RuntimeException, std::exception)
 {
 }
-//==============================================================================
+
 
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
 {
@@ -166,7 +166,7 @@ void TmpRepositoryCommandEnv::handle(
 
     handle_(approve, abort, xRequest);
 }
-//================================================================================
+
 
 LicenseCommandEnv::LicenseCommandEnv(
     css::uno::Reference< css::task::XInteractionHandler> const & handler,
@@ -206,7 +206,7 @@ void LicenseCommandEnv::handle(
     handle_(approve, abort, xRequest);
 }
 
-//================================================================================
+
 
 NoLicenseCommandEnv::NoLicenseCommandEnv(
     css::uno::Reference< css::task::XInteractionHandler> const & handler):

@@ -39,7 +39,7 @@ namespace dp_misc {
 const sal_Char CR = 0x0d;
 const sal_Char LF = 0x0a;
 
-//==============================================================================
+
 class MutexHolder
 {
     mutable ::osl::Mutex m_mutex;
@@ -47,7 +47,7 @@ protected:
     inline ::osl::Mutex & getMutex() const { return m_mutex; }
 };
 
-//==============================================================================
+
 inline void try_dispose( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> const & x )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComp( x, ::com::sun::star::uno::UNO_QUERY );
@@ -55,20 +55,20 @@ inline void try_dispose( ::com::sun::star::uno::Reference< ::com::sun::star::uno
         xComp->dispose();
 }
 
-//##############################################################################
 
-//==============================================================================
+
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 OUString expandUnoRcTerm( OUString const & term );
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 OUString makeRcTerm( OUString const & url );
 
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 OUString expandUnoRcUrl( OUString const & url );
 
-//==============================================================================
+
 
 /** appends a relative path to a url.
 
@@ -88,26 +88,26 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURL(
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURLAppendSysPathSegment(
     OUString const & baseURL, OUString const & relPath );
 
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateRandomPipeId();
 
 class AbortChannel;
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> resolveUnoURL(
     OUString const & connectString,
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xLocalContext,
     AbortChannel * abortChannel = 0 );
 
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool office_is_running();
 
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 oslProcess raiseProcess( OUString const & appURL,
                          ::com::sun::star::uno::Sequence< OUString > const & args );
 
-//==============================================================================
+
 
 /** writes the argument string to the console.
     On Linux/Unix/etc. it converts the UTF16 string to an ANSI string using

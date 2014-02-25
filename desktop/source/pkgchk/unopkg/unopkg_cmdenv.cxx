@@ -50,7 +50,7 @@ using namespace ::unopkg;
 
 namespace {
 
-//==============================================================================
+
 class CommandEnvironmentImpl
     : public ::cppu::WeakImplHelper3< XCommandEnvironment,
                                       task::XInteractionHandler,
@@ -397,7 +397,7 @@ void CommandEnvironmentImpl::pop() throw (RuntimeException, std::exception)
 
 namespace unopkg {
 
-//==============================================================================
+
 Reference< XCommandEnvironment > createCmdEnv(
     Reference< XComponentContext > const & xContext,
     OUString const & logFile,

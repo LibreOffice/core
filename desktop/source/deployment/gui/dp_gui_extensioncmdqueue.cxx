@@ -111,7 +111,7 @@ OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
 
 namespace dp_gui {
 
-//==============================================================================
+
 
 class ProgressCmdEnv
     : public ::cppu::WeakImplHelper3< ucb::XCommandEnvironment,

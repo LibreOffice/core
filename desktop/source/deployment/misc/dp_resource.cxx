@@ -58,14 +58,14 @@ class theResourceMutex : public rtl::Static<osl::Mutex, theResourceMutex> {};
 
 } // anon namespace
 
-//==============================================================================
+
 ResId getResId( sal_uInt16 id )
 {
     const osl::MutexGuard guard( theResourceMutex::get() );
     return ResId( id, *DeploymentResMgr::get() );
 }
 
-//==============================================================================
+
 OUString getResourceString( sal_uInt16 id )
 {
     const osl::MutexGuard guard(theResourceMutex::get());
@@ -73,7 +73,7 @@ OUString getResourceString( sal_uInt16 id )
     return ret.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName());
 }
 
-//==============================================================================
+
 const LanguageTag & getOfficeLanguageTag()
 {
     return OfficeLocale::get();

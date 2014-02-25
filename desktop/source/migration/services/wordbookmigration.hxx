@@ -33,10 +33,10 @@
 class INetURLObject;
 
 
-//.........................................................................
+
 namespace migration
 {
-//.........................................................................
+
 
     OUString SAL_CALL WordbookMigration_getImplementationName();
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL WordbookMigration_getSupportedServiceNames();
@@ -45,9 +45,9 @@ namespace migration
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
-    // =============================================================================
+
     // class WordbookMigration
-    // =============================================================================
+
 
     typedef ::cppu::WeakImplHelper3<
         ::com::sun::star::lang::XServiceInfo,
@@ -87,9 +87,9 @@ namespace migration
                 ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//.........................................................................
+
 }   // namespace migration
-//.........................................................................
+
 
 #endif // _DESKTOP_AUTOCORRMIGRATION_HXX_
 
