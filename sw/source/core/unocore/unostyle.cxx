@@ -2056,8 +2056,9 @@ put_itemset:
 void SAL_CALL SwXStyle::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-            lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+           lang::IllegalArgumentException, lang::WrappedTargetException,
+           uno::RuntimeException, std::exception)
 {
     if ( !m_pDoc )
         throw uno::RuntimeException();

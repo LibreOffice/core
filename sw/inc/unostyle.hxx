@@ -188,7 +188,13 @@ protected:
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
     com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
 
-    void SAL_CALL SetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    void SAL_CALL SetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+        throw (::com::sun::star::beans::UnknownPropertyException,
+               ::com::sun::star::beans::PropertyVetoException,
+               ::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::lang::WrappedTargetException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
