@@ -137,7 +137,7 @@ namespace DOM
             //                       so a new CNode is created and inserted
             // T1 calls removeCNode: i->second->second now points to a
             //                       different CNode instance!
-            //
+
             // check that the CNode is the right one
             CNode *const pCurrent = i->second.second;
             if (pCurrent == pCNode) {
