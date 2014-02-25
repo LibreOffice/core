@@ -19,9 +19,7 @@
 
 #include "css1kywd.hxx"
 
-
 sal_Char CSS1_CONSTASCII_DEF( sCSS_mimetype, "text/css" );
-
 
 // ein par allgemeine Strings
 
@@ -56,7 +54,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_UNIT_px, "px" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_UNIT_em, "em" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_UNIT_ex, "ex" );
 
-
 // Strings fuer Font-Properties
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font_family, "font-family" );
@@ -67,19 +64,16 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_cursive, "cursive" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_fantasy, "fantasy" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_monospace, "monospace" );
 
-
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font_style, "font-style" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_normal, "normal" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_italic, "italic" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_oblique, "oblique" );
 
-
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font_variant, "font-variant" );
 
 //sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_normal, "normal" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_small_caps, "small-caps" );
-
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font_weight, "font-weight" );
 
@@ -112,16 +106,11 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_xx_large, "xx-large" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_larger, "larger" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_smaller, "smaller" );
 
-
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font, "font" );
-
-
-
 
 // Strings fuer Farb- und Hintergrund-Properties
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_color, "color" );
-
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_background, "background" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_background_color, "background-color" );
@@ -139,12 +128,9 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_bottom, "bottom" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_scroll, "scroll" );
 
-
-
 // Strings fuer Text-Properties
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_letter_spacing, "letter-spacing" );
-
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_text_decoration, "text-decoration" );
 
@@ -154,7 +140,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_overline, "overline" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_line_through, "line-through" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_blink, "blink" );
 
-
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_text_align, "text-align" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_left, "left" );
@@ -162,13 +147,9 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_center, "center" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_right, "right" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_justify, "justify" );
 
-
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_text_indent, "text-indent" );
 
-
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_line_height, "line-height" );
-
-
 
 // Strings fuer Box-Properties
 
@@ -232,7 +213,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_static, "static" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_left, "left" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_top, "top" );
-
 
 // Feature: PrintExt
 

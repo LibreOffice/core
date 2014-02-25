@@ -25,7 +25,6 @@
 
 #include <node.hxx>
 
-
 class SwNode;
 class SwNodes;
 
@@ -110,9 +109,6 @@ public:
     SwNodeRange( const SwNode& rS, long nSttDiff,
                  const SwNode& rE, long nEndDiff = 0 );
 };
-
-
-
 
 // For inlines node.hxx is needed which in turn needs this one.
 // Therefore all inlines accessing pNd are implemented here.

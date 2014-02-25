@@ -420,7 +420,6 @@ SfxItemInfo aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE }                            // RES_UNKNOWNATR_CONTAINER
 };
 
-
 sal_uInt16* SwAttrPool::pVersionMap1 = 0;
 sal_uInt16* SwAttrPool::pVersionMap2 = 0;
 sal_uInt16* SwAttrPool::pVersionMap3 = 0;
@@ -506,7 +505,6 @@ void _InitCore()
 // CharakterAttr - MSWord weak char direction/script override emulation
     aAttrTab[ RES_CHRATR_BIDIRTL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_BIDIRTL, sal_Int16(-1) );
     aAttrTab[ RES_CHRATR_IDCTHINT - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_IDCTHINT, sal_Int16(-1) );
-
 
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFmtRefMark( OUString() );
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] =       new SwTOXMark;

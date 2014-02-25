@@ -40,7 +40,6 @@ public:
     const Link& GetActionHdl() const                { return aActionLink; }
 };
 
-
 /* --------------------------------------------------
  * Edit that doesn't accept spaces
  * --------------------------------------------------*/

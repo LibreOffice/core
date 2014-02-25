@@ -537,7 +537,6 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     }
     pObj->SetLayer( nLayerIdForClone );
 
-
     return pObj;
 }
 
@@ -853,7 +852,6 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
 
     return pFmt;
 }
-
 
 // Insert drawing object, which has to be already inserted in the DrawModel
 SwDrawFrmFmt* SwDoc::InsertDrawObj(
@@ -1235,7 +1233,6 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 /* #i6447#: Only the selected items are copied from the old
                    format. */
                 SfxItemSet* pNewSet = pNewFmt->GetAttrSet().Clone( sal_True );
-
 
                 // Copy only the set attributes.
                 // The others should apply from the Templates.
@@ -2273,7 +2270,6 @@ SwViewShell *SwDoc::GetCurrentViewShell()
 {
     return mpCurrentView;
 }
-
 
 // It must be able to communicate to a SwViewShell. This is going to be removed later.
 const SwRootFrm *SwDoc::GetCurrentLayout() const

@@ -52,7 +52,6 @@ namespace nsTransferBufferType
     const sal_uInt16 TRNSFR_DRAWING         = 0x0081;   // drawing is internal too!
 }
 
-
 class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
@@ -208,7 +207,6 @@ public:
 
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception );
 };
-
 
 #endif
 

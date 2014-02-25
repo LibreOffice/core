@@ -30,7 +30,6 @@ public:
     Ww1Shell(SwDoc&, SwPaM&, const OUString& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags);
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

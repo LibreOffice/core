@@ -50,7 +50,6 @@
 //                                  1 -user
 // Offset:                          within the group */
 
-
 /** Attention: New IDs can only be added to the ends of the groups.
    These IDs are read and written by the Reader/Writer.
    They are only aware of the Offset to Start. */
@@ -89,8 +88,6 @@ inline sal_Bool IsPoolUserFmt( sal_uInt16 nId )
                 (nId & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID))
         ? sal_True : sal_False;
 }
-
-
 
 /// IDs for the ranges.
 enum RES_POOLFMT
@@ -149,7 +146,6 @@ RES_POOLCHR_HTML_END,
 
 RES_POOLCHR_END = RES_POOLCHR_HTML_END
 };
-
 
 /// IDs for frame styles.
 enum RES_POOL_FRMFMT_TYPE
@@ -234,7 +230,6 @@ RES_POOLCOLL_HEADLINE10,                                ///< Heading 10.
 
 RES_POOLCOLL_TEXT_END,
 
-
 /// Group lists.
 RES_POOLCOLL_LISTS_BEGIN = COLL_LISTS_BITS,
 
@@ -262,7 +257,6 @@ RES_POOLCOLL_NUM_LEVEL5,                                ///< 5th level.
 RES_POOLCOLL_NUM_LEVEL5E,                               ///< End 5th level.
 RES_POOLCOLL_NUM_NONUM5,                                ///< No numbering.
 
-
 ///Subgroup bullets.
 RES_POOLCOLL_BUL_LEVEL1S,                               ///< Start 1st level.
 RES_POOLCOLL_BUL_LEVEL1,                                ///< 1st level.
@@ -287,7 +281,6 @@ RES_POOLCOLL_BUL_NONUM5,                                ///< No numbering.
 
 RES_POOLCOLL_LISTS_END,
 
-
 /// Special ranges.
 RES_POOLCOLL_EXTRA_BEGIN = COLL_EXTRA_BITS,
 
@@ -305,7 +298,6 @@ RES_POOLCOLL_FOOTERR,                                   ///< Footer Right.
 RES_POOLCOLL_TABLE,                                     ///< Table of Contents.
 RES_POOLCOLL_TABLE_HDLN,                                ///< Table of Contents - heading.
 
-
 /// Subgroup labels.
 RES_POOLCOLL_LABEL,                                     ///< Base labels.
 RES_POOLCOLL_LABEL_ABB,                                 ///< Label illustration.
@@ -321,7 +313,6 @@ RES_POOLCOLL_ENDNOTE,                                   ///< Endnotes.
 
 RES_POOLCOLL_LABEL_DRAWING,                             ///< Label drawing objects.
 RES_POOLCOLL_EXTRA_END,
-
 
 /// Group indices.
 RES_POOLCOLL_REGISTER_BEGIN = COLL_REGISTER_BITS,
@@ -343,7 +334,6 @@ RES_POOLCOLL_TOX_CNTNT3,                                ///< Content 3rd level.
 RES_POOLCOLL_TOX_CNTNT4,                                ///< Content 4th level.
 RES_POOLCOLL_TOX_CNTNT5,                                ///< Content 5th level.
 
-
 /// Subgroup user indices.
 RES_POOLCOLL_TOX_USERH,                                 ///< Header.
 RES_POOLCOLL_TOX_USER1,                                 ///< 1st level.
@@ -351,7 +341,6 @@ RES_POOLCOLL_TOX_USER2,                                 ///< 2nd level.
 RES_POOLCOLL_TOX_USER3,                                 ///< 3rd level.
 RES_POOLCOLL_TOX_USER4,                                 ///< 4th level.
 RES_POOLCOLL_TOX_USER5,                                 ///< 5th level.
-
 
 RES_POOLCOLL_TOX_CNTNT6,                                ///< Content  6th level.
 RES_POOLCOLL_TOX_CNTNT7,                                ///< Content  7th level.
@@ -384,7 +373,6 @@ RES_POOLCOLL_TOX_USER10,                                ///< 10th level.
 
 RES_POOLCOLL_REGISTER_END,
 
-
 /// Group chapter / document.
 RES_POOLCOLL_DOC_BEGIN = COLL_DOC_BITS,
 
@@ -406,7 +394,6 @@ RES_POOLCOLL_HTML_END
 
 /// End of text styles collection.
 };
-
 
 /** Query defined parent of a POOL-ID
    Returns  0 if standard

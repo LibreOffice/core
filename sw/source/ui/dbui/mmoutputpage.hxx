@@ -110,7 +110,6 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     OUString        m_sCC;
     OUString        m_sBCC;
 
-
     DECL_LINK(OutputTypeHdl_Impl, RadioButton*);
     DECL_LINK(CopyToHdl_Impl, PushButton*);
     DECL_LINK(SaveStartHdl_Impl, PushButton* );
@@ -141,7 +140,6 @@ struct SwMailDescriptor
     OUString                             sSubject;
     OUString                             sBodyMimeType;
     OUString                             sBodyContent;
-
 
     OUString                             sCC;
     OUString                             sBCC;
@@ -220,6 +218,5 @@ public:
 
 };
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

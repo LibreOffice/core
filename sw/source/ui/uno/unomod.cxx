@@ -799,11 +799,9 @@ void SwXViewSettings::_postSetValues ()
             SW_MOD()->ApplyRulerMetric( (FieldUnit)eVRulerUnit, sal_False, bWeb );
     }
 
-
     SW_MOD()->ApplyUsrPref( *mpViewOption, pView, pView ? VIEWOPT_DEST_VIEW_ONLY
                                                   : bWeb ? VIEWOPT_DEST_WEB
                                                           : VIEWOPT_DEST_TEXT );
-
 
     delete mpViewOption;
     mpViewOption = NULL;

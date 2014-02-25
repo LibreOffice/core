@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 
-
 #include <svx/svdview.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svdobj.hxx>
@@ -57,7 +56,6 @@ void SwEditWin::StartDDTimer()
     m_aTimer.Start();
     bDDTimerStarted = true;
 }
-
 
 void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 {
@@ -154,7 +152,6 @@ void SwEditWin::DragFinished()
     m_bIsInDrag = sal_False;
 }
 
-
 void SwEditWin::DropCleanup()
 {
     SwWrtShell &rSh =  m_rView.GetWrtShell();
@@ -182,7 +179,6 @@ void SwEditWin::CleanupDropUserMarker()
         m_pUserMarkerObj = 0;
     }
 }
-
 
 //exhibition hack (MA,MBA)
 void SwView::SelectShellForDrop()
@@ -234,7 +230,6 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                 nUserOpt, m_nDropFormat, nEventAction, 0,
                                 &rEvt.maDropEvent.Transferable );
 
-
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     nRet = rEvt.mnAction;
     if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, m_nDropFormat,
@@ -246,7 +241,6 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     return nRet;
 }
-
 
 sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
 {
@@ -480,7 +474,6 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     rSh.UnSetVisCrsr();
     return DND_ACTION_NONE;
 }
-
 
 IMPL_LINK_NOARG(SwEditWin, DDHandler)
 {

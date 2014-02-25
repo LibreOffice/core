@@ -365,7 +365,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             pUnderLineFnt->SetPos( aTmpPoint );
         }
 
-
         // in extended input mode we do not want a common underline font.
         SwUnderlineFont* pOldUnderLineFnt = 0;
         if ( GetRedln() && GetRedln()->ExtOn() )

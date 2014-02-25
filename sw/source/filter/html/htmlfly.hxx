@@ -73,7 +73,6 @@ enum SwHTMLFrmType
 #define HTML_CNTNR_DIV      0x80
 #define HTML_CNTNR_MASK     0xc0
 
-
 const sal_uInt16 MAX_FRMTYPES = HTML_FRMTYPE_END;
 const sal_uInt16 MAX_BROWSERS = 4;
 

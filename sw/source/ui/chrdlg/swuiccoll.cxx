@@ -126,14 +126,12 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 Page: Dtor
 ****************************************************************************/
 
-
 SwCondCollPage::~SwCondCollPage()
 {
     for(sal_uInt16 i = 0; i < m_pFilterLB->GetEntryCount(); ++i)
         delete (sal_uInt16*)m_pFilterLB->GetEntryData(i);
 
 }
-
 
 int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 {
@@ -147,7 +145,6 @@ int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 Page: Factory
 ****************************************************************************/
 
-
 SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwCondCollPage(pParent, rSet);
@@ -156,7 +153,6 @@ SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
 /****************************************************************************
 Page: FillItemSet-Overload
 ****************************************************************************/
-
 
 sal_Bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
 {
@@ -174,7 +170,6 @@ sal_Bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
 /****************************************************************************
 Page: Reset-Overload
 ****************************************************************************/
-
 
 void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 {

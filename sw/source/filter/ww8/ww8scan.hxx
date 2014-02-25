@@ -1251,7 +1251,6 @@ public:
     sal_uInt32 lcbDop;       // 0x154 count of bytes of document properties.
         // cbDOP is 84 when nFib < 103
 
-
     WW8_FC fcSttbfAssoc;    // 0x158 offset to STTBF of associated strings. See STTBFASSOC.
     sal_Int32 lcbSttbfAssoc; // 0x15C
 
@@ -1319,7 +1318,6 @@ public:
 
     WW8_FC  fcPlcfpgdEdn;   // 0x1EA offset to PLCF of page boundaries in the endnote subdoc.
     sal_Int32 lcbPlcfpgdEdn;        // 0x1EE
-
 
     WW8_FC fcDggInfo;           // offset in table stream of the office art object table data.
                                                 // The format of office art object table data is found in a separate document.
@@ -1488,7 +1486,7 @@ public:
     */
     // Initialisier-Dummy:
     sal_uInt8    nDataStart;
-    //-------------------------
+
     bool        fFacingPages : 1;   // 1 when facing pages should be printed
 
     bool        fWidowControl : 1;  //a: orig 97 docs say
@@ -1500,9 +1498,9 @@ public:
     sal_uInt16  grfSuppression : 2; // 0 Default line suppression storage; 0= form letter line suppression; 1= no line suppression; default=0
     sal_uInt16  fpc : 2;            // 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
     sal_uInt16  : 1;                // 0 unused
-    //-------------------------
+
     sal_uInt16  grpfIhdt : 8;           // 0 specification of document headers and footers. See explanation under Headers and Footers topic.
-    //-------------------------
+
     sal_uInt16  rncFtn : 2;         // 0 restart index for footnotes, 0 don't restart note numbering, 1 section, 2 page
     sal_uInt16  nFtn : 14;          // 1 initial footnote number for document
     bool        fOutlineDirtySave : 1; // when 1, indicates that information in the hPLCFpad should be refreshed since outline has been dirtied
@@ -1517,7 +1515,7 @@ public:
     bool        fRevMarking : 1;    //   when 1, Word will mark revisions as the document is edited
     bool        fBackup : 1;        //   always make backup when document saved when 1.
     bool        fExactCWords : 1;
-    bool        fPagHidden : 1;     //
+    bool        fPagHidden : 1;
     bool        fPagResults : 1;
     bool        fLockAtn : 1;       //   when 1, annotations are locked for editing
     bool        fMirrorMargins : 1; //   swap margins on left/right pages when 1.
@@ -1547,7 +1545,7 @@ public:
     bool       copts_fExpShRtn : 1;             //    when 1, expand character spaces on the line ending SHIFT+RETURN  // #i56856#
 
     sal_Int16  dxaTab;              //      720 twips - default tab width
-    sal_uInt16 wSpare;              //
+    sal_uInt16 wSpare;
     sal_uInt16 dxaHotZ;             //      width of hyphenation hot zone measured in twips
     sal_uInt16 cConsecHypLim;       //      number of lines allowed to have consecutive hyphens
     sal_uInt16 wSpare2;             //      reserved

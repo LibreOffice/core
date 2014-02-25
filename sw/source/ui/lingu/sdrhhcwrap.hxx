@@ -25,8 +25,6 @@ class SwView;
 class SdrTextObj;
 class OutlinerView;
 
-//////////////////////////////////////////////////////////////////////
-
 class SdrHHCWrapper : public SdrOutliner
 {
     // modified version of SdrSpeller
@@ -52,8 +50,6 @@ public:
     virtual bool ConvertNextDocument();
     void    StartTextConversion();
 };
-
-//////////////////////////////////////////////////////////////////////
 
 #endif
 

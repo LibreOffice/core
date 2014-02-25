@@ -94,8 +94,6 @@ public:
     bool   HasCharFormat() const { return GetRegisteredIn() != 0; }
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

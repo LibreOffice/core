@@ -95,7 +95,6 @@ enum SwLabelType
     LTYPE_DRAW      // Caption for a draw object.
 };
 
-
 const sal_uInt8 MAXLEVEL = 10;
 
 const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
@@ -149,7 +148,6 @@ enum RndStdIds
     RND_DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
 };
 
-
 extern ResMgr* pSwResMgr;           // Is in swapp0.cxx.
 #define SW_RES(i)       ResId(i,*pSwResMgr)
 #define SW_RESSTR(i)    SW_RES(i).toString()
@@ -166,7 +164,6 @@ extern ResMgr* pSwResMgr;           // Is in swapp0.cxx.
 // Returns the twip size of this graphic.
 SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 
-
 // Separator for jumps to different content types in document.
 const sal_Unicode cMarkSeparator = '|';
 // Sequences names for jumps are <name of sequence>!<no>
@@ -175,7 +172,6 @@ const sal_Unicode cSequenceMarkSeparator = '!';
 #ifndef DB_DELIM                            // This is defined in OFA!
 #define DB_DELIM ((sal_Unicode)0xff)        // Database <-> table separator.
 #endif
-
 
 typedef sal_uInt16 SetAttrMode;
 
@@ -217,7 +213,6 @@ namespace nsSetAttrMode
 #define SW_CONSTASCII_DEF( n, s ) n[sizeof(s)] = s
 #endif
 
-
 #define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
 #define CHAR_HARDHYPHEN     ((sal_Unicode)0x2011)
 #define CHAR_SOFTHYPHEN     ((sal_Unicode)0x00AD)
@@ -226,12 +221,10 @@ namespace nsSetAttrMode
 #define CHAR_ZWSP           ((sal_Unicode)0x200B)
 #define CHAR_ZWNBSP         ((sal_Unicode)0x2060)
 
-
 // Returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
 SW_DLLPUBLIC LanguageType GetAppLanguage();
 SW_DLLPUBLIC const LanguageTag& GetAppLanguageTag();
-
 
 #if 0
 // I18N doesn't get this right, can't specify more than one to ignore

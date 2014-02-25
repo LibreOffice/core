@@ -208,7 +208,6 @@ inline sal_uInt16 SwSetExpFieldType::GetType() const
 inline OUString SwSetExpFieldType::GetSetRefName() const
     { return sName; }
 
-
 class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
 {
     OUString        sExpand;
@@ -278,7 +277,6 @@ inline sal_Bool SwSetExpField::GetInputFlag() const
 inline sal_Bool SwSetExpField::IsSequenceFld() const
     { return 0 != (nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)GetTyp())->GetType()); }
 
-
 class SwInputFieldType : public SwFieldType
 {
     SwDoc* pDoc;
@@ -289,7 +287,6 @@ public:
 
     SwDoc* GetDoc() const { return pDoc; }
 };
-
 
 class SW_DLLPUBLIC SwInputField : public SwField
 {
@@ -389,7 +386,6 @@ public:
     virtual SwFieldType* Copy() const;
 };
 
-
 class SwTblField : public SwValueField, public SwTableFormula
 {
     OUString      sExpand;
@@ -424,7 +420,6 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
-
 
 #endif // INCLUDED_SW_INC_EXPFLD_HXX
 

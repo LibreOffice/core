@@ -545,7 +545,7 @@ static void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
                 // The line completely fits into the master table.
                 // Nevertheless, we build a follow (otherwise painting problems
                 // with empty cell).
-                //
+
                 // 2. Case:
                 // The line has to be split, the minimum height still fits into
                 // the master table, and the table structure is not to complex.
@@ -682,7 +682,7 @@ static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     lcl_PostprocessRowsInCells( rTab, rLastLine );
 
     // Do a couple of checks on the current situation.
-    //
+
     // If we are not happy with the current situation we return false.
     // This will start a new try to split the table, this time we do not
     // try to split the table rows.
@@ -695,7 +695,7 @@ static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
         bRet = false;
 
     // 2. Check if each cell in the last line has at least one content frame.
-    //
+
     // Note: a FollowFlowRow may contains empty cells!
     if ( bRet )
     {
@@ -1987,7 +1987,7 @@ void SwTabFrm::MakeAll()
                     bLowersFormatted = sal_True;
                     if ( bKeep && KEEPTAB )
                     {
-                        //
+
                         // Consider case that table is inside another table,
                         // because it has to be avoided, that superior table
                         // is formatted.
@@ -2150,7 +2150,6 @@ void SwTabFrm::MakeAll()
                 {
                     delete pAccess;
 
-                    //
                     // Consider case that table is inside another table, because
                     // it has to be avoided, that superior table is formatted.
                     // Thus, find next content, table or section and, if a section
@@ -3216,10 +3215,9 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
                 return pRet->FindSctFrm()->FindLastCntnt();
             }
 
-            //
             // pRet may be a cell frame without a lower (cell has been split).
             // We have to find the last content the hard way:
-            //
+
             OSL_ENSURE( pRet->IsCellFrm(), "SwTabFrm::FindLastCntnt failed" );
             const SwFrm* pRow = pRet->GetUpper();
             while ( pRow && !pRow->GetUpper()->IsTabFrm() )
@@ -5127,7 +5125,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
     // 1. Case: rSourceLine is a follow flow line.
     // In this case we have to return the minimum of the heights
     // of the first lines in rSourceLine.
-    //
+
     // 2. Case: rSourceLine is not a follow flow line.
     // In this case we have to return the maximum of the heights
     // of the first lines in rSourceLine.

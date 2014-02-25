@@ -24,7 +24,6 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <unotools/configitem.hxx>
 
-
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -57,9 +56,6 @@ namespace com { namespace sun { namespace star {
 
 }}}
 
-
-///////////////////////////////////////////////////////////////////////////
-
 // uses templates from <cppuhelper/interfacecontainer.h>
 // and <unotools/configitem.hxx>
 
@@ -74,8 +70,6 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar
         sal_Int32,
         PropHashType_Impl
     > OPropertyListenerContainerHelper;
-
-////////////////////////////////////////////////////////////
 
 class SwNewDBMgr;
 class MailMergeExecuteFinalizer;
@@ -152,7 +146,6 @@ protected:
 public:
     SwXMailMerge();
 
-
     void LaunchMailMergeEvent( const com::sun::star::text::MailMergeEvent &rData ) const;
 
     // XJob
@@ -189,14 +182,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-
 extern com::sun::star::uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
 extern com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( com::sun::star::uno::Exception );
 
-////////////////////////////////////////////////////////////
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

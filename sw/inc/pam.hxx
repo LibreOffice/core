@@ -74,7 +74,6 @@ struct SW_DLLPUBLIC SwPosition
     bool operator !=(const SwPosition &) const;
 };
 
-
 // Result of comparing positions.
 enum SwComparePosition {
     POS_BEFORE,             ///< Pos1 before Pos2.
@@ -302,10 +301,8 @@ public:
     void InvalidatePaM();
 };
 
-
 bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, bool bChkSection );
 bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
-
 
 #endif // INCLUDED_SW_INC_PAM_HXX
 

@@ -65,7 +65,6 @@
 #define ListInTable
 #include <swslots.hxx>
 
-
 SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
@@ -274,7 +273,6 @@ void SwWebView::SelectShell()
             GetFormShell()->SetView( PTR_CAST( FmFormView,
                                                 GetWrtShell().GetDrawView()));
 
-
     }
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 
@@ -286,8 +284,5 @@ void SwWebView::SelectShell()
     if(bUpdateTable)
         GetWrtShell().UpdateTable();
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,13 +20,10 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 
-
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
 #include "node.hxx"
 #include "format.hxx"
-
-
 
 Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 {
@@ -85,8 +82,6 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
     }
     return rWrt;
 }
-
-
 
 Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
 {

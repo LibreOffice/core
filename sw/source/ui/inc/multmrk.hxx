@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_MULTMRK_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_MULTMRK_HXX
 
-
 #include <svx/stddlg.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/stdctrl.hxx>
@@ -48,7 +47,6 @@ public:
     SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr &rTOXMgr );
     ~SwMultiTOXMarkDlg();
 };
-
 
 #endif // INCLUDED_SW_SOURCE_UI_INC_MULTMRK_HXX
 

@@ -368,7 +368,6 @@ public:
     virtual sal_uInt16          GetRestartPage() const;
 };
 
-//------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 {

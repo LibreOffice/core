@@ -78,7 +78,6 @@ class SwIndexMarkPane
     CheckBox*       m_pSearchCaseSensitiveCB;
     CheckBox*       m_pSearchCaseWordOnlyCB;
 
-
     PushButton*     m_pOKBT;
     CloseButton*    m_pCloseBT;
     PushButton*     m_pDelBT;
@@ -142,7 +141,6 @@ public:
                     SwWrtShell& rWrtShell);
 
     Dialog &GetDialog() { return m_rDialog; }
-
 
     ~SwIndexMarkPane();
 

@@ -21,7 +21,6 @@
 #include <swcrsr.hxx>
 #include <calbck.hxx>
 
-
 class SwUnoCrsr : public virtual SwCursor, public SwModify
 {
     sal_Bool bRemainInSection : 1;
@@ -68,8 +67,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 };
 
-
-
 class SwUnoTableCrsr : public virtual SwUnoCrsr, public virtual SwTableCursor
 {
     // The selection has the same order as the table boxes, i.e.
@@ -97,8 +94,6 @@ public:
           SwCursor& GetSelRing()            { return aTblSel; }
     const SwCursor& GetSelRing() const      { return aTblSel; }
 };
-
-
 
 #endif
 

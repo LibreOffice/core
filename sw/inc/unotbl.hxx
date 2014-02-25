@@ -45,7 +45,6 @@
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
 
-
 class SwUnoCrsr;
 class SwTable;
 class SwTableBox;
@@ -54,7 +53,6 @@ class SwTableCursor;
 class SwTableBoxFmt;
 class SwChartDataProvider;
 class SwFrmFmt;
-
 
 typedef
 cppu::WeakImplHelper4
@@ -73,7 +71,6 @@ class SwXCell : public SwXCellBaseClass,
                                  sal_Bool bKeepNumberFmt );
     friend double sw_getValue( SwXCell &rCell );
     friend void   sw_setValue( SwXCell &rCell, double nVal );
-
 
     const SfxItemPropertySet*   m_pPropSet;
     SwTableBox*                 pBox;       // only set in non-XML import
@@ -101,7 +98,6 @@ protected:
 public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, size_t nPos = NOTFOUND);
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
-
 
     TYPEINFO();
 
@@ -178,7 +174,6 @@ protected:
 public:
     SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLine);
 
-
     TYPEINFO();
 
     //XPropertySet
@@ -223,7 +218,6 @@ public:
     SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox);
     SwXTextTableCursor(SwFrmFmt& rTableFmt,
                         const SwTableCursor* pTableSelection);
-
 
     DECLARE_XINTERFACE()
 
@@ -322,7 +316,6 @@ private:
     unsigned short              nRows;
     unsigned short              nColumns;
 
-
     sal_Bool                        bFirstRowAsLabel    :1;
     sal_Bool                        bFirstColumnAsLabel :1;
 protected:
@@ -330,7 +323,6 @@ protected:
 public:
     SwXTextTable();
     SwXTextTable(SwFrmFmt& rFrmFmt);
-
 
     SW_DLLPUBLIC static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -475,7 +467,6 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-
     //XCellRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
@@ -564,7 +555,6 @@ protected:
 public:
     SwXTableRows(SwFrmFmt& rFrmFmt);
 
-
     TYPEINFO();
 
     //XIndexAccess
@@ -606,7 +596,6 @@ protected:
 public:
     SwXTableColumns(SwFrmFmt& rFrmFmt);
 
-
     TYPEINFO();
 
     //XIndexAccess
@@ -635,8 +624,5 @@ public:
 };
 
 #endif
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

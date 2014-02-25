@@ -119,7 +119,6 @@ const sal_uLong HTML_FRMOPTS_OLE_CSS1       =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
                                sal_Bool bPrcWidth, sal_Bool bPrcHeight,
@@ -291,7 +290,6 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         }
     }
 }
-
 
 void SwHTMLParser::InsertEmbed()
 {
@@ -484,7 +482,6 @@ void SwHTMLParser::InsertEmbed()
         RegisterFlyFrm( pFlyFmt );
     }
 }
-
 
 #if HAVE_FEATURE_JAVA
 void SwHTMLParser::NewObject()
@@ -818,8 +815,6 @@ void SwHTMLParser::InsertParam()
 #endif
 }
 
-
-
 void SwHTMLParser::InsertFloatingFrame()
 {
     OUString aAlt, aId, aStyle, aClass;
@@ -953,7 +948,6 @@ void SwHTMLParser::InsertFloatingFrame()
 
     bInFloatingFrame = true;
 }
-
 
 sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 {
@@ -1274,6 +1268,5 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     return rWrt;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

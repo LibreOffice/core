@@ -113,9 +113,7 @@ void CheckRange( SwCursor* pCurCrsr )
     }
 }
 
-
 // SwCrsrShell
-
 
 SwPaM * SwCrsrShell::CreateCrsr()
 {
@@ -454,7 +452,6 @@ void SwCrsrShell::FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewCo
     (void)nNewColumn;
 #endif
 }
-
 
 void SwCrsrShell::FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection)
 {

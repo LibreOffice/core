@@ -43,7 +43,6 @@ struct AutoTextGroup
     }
 };
 
-
 typedef std::vector<AutoTextGroup*> AutoTextGroups;
 
 class SwGlossaryList : public AutoTimer
@@ -79,10 +78,5 @@ public:
 };
 
 #endif
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

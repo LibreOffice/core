@@ -78,7 +78,6 @@ const struct SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
 };
 // mapping tables to map external xml input to internal box line widths
 
-
 const sal_uInt16 aBorderWidths[] =
 {
         DEF_LINE_WIDTH_0,
@@ -175,7 +174,6 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     // We now do know that there will be a line
     if( !rpLine )
         rpLine = new SvxBorderLine;
-
 
     if( ( bHasWidth &&
           (USHRT_MAX != nNamedWidth || (nWidth != rpLine->GetWidth() ) ) ) ||
@@ -313,7 +311,6 @@ void sw_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
         ;
     }
 }
-
 
 const struct SvXMLEnumMapEntry psXML_BreakType[] =
 {

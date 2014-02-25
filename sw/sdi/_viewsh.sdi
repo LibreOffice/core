@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 interface BaseTextEditView
 [
     Automation = FALSE;
@@ -41,7 +40,7 @@ interface BaseTextEditView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    SID_FORMATPAINTBRUSH //
+    SID_FORMATPAINTBRUSH
     [
         ExecMethod = ExecFormatPaintbrush ;
         StateMethod = StateFormatPaintbrush ;
@@ -321,7 +320,7 @@ interface BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-     //---------------------------------------------------------------------
+
      //From here the statusbar
     FN_STAT_PAGE // status()
     [
@@ -391,9 +390,9 @@ interface BaseTextEditView
     [
         StateMethod = StateStatusLine ;
     ]
-     //----------------------------------------------
+
      //End of the statusbar
-     //----------------------------------------------
+
     SID_ATTR_BORDER_SHADOW // status()
     [
         ExecMethod = Execute ;
@@ -470,7 +469,6 @@ interface BaseTextEditView
     /*
     search and replace
 */
-
 
     SID_SEARCH_ITEM // status()
     [
@@ -557,7 +555,6 @@ interface BaseTextEditView
         Export = FALSE;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
 
     SID_JUMPTOMARK
     [

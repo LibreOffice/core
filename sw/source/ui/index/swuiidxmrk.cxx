@@ -62,7 +62,6 @@
 
 #include <unomid.h>
 
-
 #define POS_CONTENT 0
 #define POS_INDEX   1
 
@@ -453,7 +452,6 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool 
     rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
                         (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), sal_False );
 }
-
 
 void SwIndexMarkPane::InsertMark()
 {
@@ -1518,7 +1516,6 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
 
             pIdentifierBox->SetSelectHdl(LINK(this,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
-
 
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                         rSh.GetFldType(RES_AUTHORITY, OUString());

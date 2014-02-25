@@ -436,7 +436,6 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
         ::FillCharStyleListBox( *m_pCharStyleLB, pSh->GetView().GetDocShell(), true, true );
     }
 
-
     nCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
     for ( i = 0; i < nCount; ++i )
     {

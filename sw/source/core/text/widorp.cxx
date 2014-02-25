@@ -40,7 +40,6 @@
 
 #undef WIDOWTWIPS
 
-
 namespace
 {
 
@@ -480,7 +479,6 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     // ein Shrink() erfolgen, der Follow mit dem Widows rutscht dann auf
     // die Seite des Masters, haelt sich aber zusammen, so dass er (endlich)
     // auf die naechste Seite rutscht. - So die Theorie!
-
 
     // Wir fordern nur noch ein Zeile zur Zeit an, weil eine Zeile des Masters
     // bei uns durchaus mehrere Zeilen ergeben koennten.

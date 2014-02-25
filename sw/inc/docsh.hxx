@@ -52,7 +52,6 @@ class IDocumentSettingAccess;
 class IDocumentTimerAccess;
 class IDocumentChartDataProviderAccess;
 
-
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
     SwDoc*                  pDoc;                           ///< Document.
@@ -136,7 +135,6 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE void                  Init_Impl();
     SAL_DLLPRIVATE DECL_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
 
-
     using SfxObjectShell::GetVisArea;
 
 protected:
@@ -191,7 +189,6 @@ public:
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();
 
-
     void                    UpdateFontList();
     void                    UpdateChildWindows();
 
@@ -214,7 +211,6 @@ public:
           SwFEShell *GetFEShell();
     const SwFEShell *GetFEShell() const
                 { return ((SwDocShell*)this)->GetFEShell(); }
-
 
     /// For inserting document.
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
@@ -273,7 +269,6 @@ public:
 
     /// #i20883# Digital Signatures and Encryption
     virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );
-
 
     /** #i42634# Overwrites SfxObjectShell::UpdateLinks
      This new function is necessary to trigger update of links in docs

@@ -64,7 +64,6 @@ static OUString lcl_BoxNmToRel( const SwTable& rTbl,
                                 OUString sGetStr,
                                 bool bExtrnlNm);
 
-
 /** Get value of this box.
  *
  * The value is comes from the first TextNode. If it starts with a number/
@@ -464,7 +463,6 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTbl, OUString& rNewStr,
     // get label for the box
     rNewStr += OUString(rFirstBox[ rFirstBox.getLength()-1 ]);
 }
-
 
 void SwTableFormula::PtrToBoxNms( const SwTable& rTbl, OUString& rNewStr,
                         OUString& rFirstBox, OUString* pLastBox, void* ) const

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unoport.hxx>
 #include <IMark.hxx>
 // #i81002#
@@ -62,7 +61,6 @@
 #include <boost/shared_ptr.hpp>
 #include <algorithm>
 #include <stack>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

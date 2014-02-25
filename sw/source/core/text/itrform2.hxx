@@ -31,7 +31,6 @@ class SwExpandPortion;
 class SwMultiPortion;
 class SwFtnPortion;
 
-
 class SwTxtFormatter : public SwTxtPainter
 {
     const SwFmtDrop *pDropFmt;
@@ -244,8 +243,6 @@ public:
     **/
     void MergeCharacterBorder( SwLinePortion& rPortion, SwTxtFormatInfo& rInf );
 };
-
-
 
 #endif
 

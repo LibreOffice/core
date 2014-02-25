@@ -391,7 +391,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
-
 // an automatic style
 class SwXAutoStyle : public cppu::WeakImplHelper3
 <

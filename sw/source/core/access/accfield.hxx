@@ -163,11 +163,9 @@ public:
     virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-
     virtual ::com::sun::star::awt::Rectangle SAL_CALL
         getBoundsImpl(sal_Bool bRelative)
         throw (::com::sun::star::uno::RuntimeException) ;
-
 
 };
 

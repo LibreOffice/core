@@ -622,9 +622,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             throw IllegalArgumentException("Either the ResultSet or DataSourceName and DataCommand must be set.", static_cast < cppu::OWeakObject * > ( this ), 0 );
         }
 
-        //
         // build ResultSet from DataSourceName, DataCommand and DataCommandType
-        //
+
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         if (xMgr.is())
         {
@@ -858,7 +857,6 @@ void SwXMailMerge::launchEvent( const PropertyChangeEvent &rEvt ) const
         }
     }
 }
-
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXMailMerge::getPropertySetInfo(  )
     throw (RuntimeException, std::exception)
@@ -1125,7 +1123,6 @@ void SAL_CALL SwXMailMerge::removeVetoableChangeListener(
     // no vetoable property, thus no support for vetoable change listeners
     OSL_FAIL("not implemented");
 }
-
 
 void SAL_CALL SwXMailMerge::dispose()
     throw(RuntimeException, std::exception)

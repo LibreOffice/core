@@ -35,7 +35,6 @@
 #include <toxe.hxx>
 #include <unobaseclass.hxx>
 
-
 class SwDoc;
 class SwTOXBaseSection;
 class SwTOXMark;
@@ -184,7 +183,6 @@ public:
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > SAL_CALL getAnchor()
         throw (::com::sun::star::uno::RuntimeException, std::exception);
-
 
     // XDocumentIndex
     virtual OUString SAL_CALL getServiceName()

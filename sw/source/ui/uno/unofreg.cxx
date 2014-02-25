@@ -28,7 +28,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 
-
 // module
 extern uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwUnoModule_getImplementationName() throw();

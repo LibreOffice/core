@@ -476,7 +476,6 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     This sort of mindbending inconsistency is surely why frames are deprecated
     in word 97 onwards and hidden away from the user
 
-
     #i1532# & #i5379#
     If we are already a table in a frame then we must grab the para properties
     to see if we are still in that frame.
@@ -555,9 +554,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     return aRet;
 }
 
-
 // helper methods for outline, numbering and bullets
-
 
 static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
 {
@@ -701,7 +698,6 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, sal_uInt8 nSwLeve
     pNumR->Set(nSwLevel, aNF);
 }
 
-
 // chapter numbering and bullets
 
 // Chapter numbering happens in the style definition.
@@ -808,9 +804,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
     }
 }
 
-
 // Numbering / Bullets
-
 
 // SetNumOlst() carries the Numrules for this cell to SwNumFmt.
 // For this the info is fetched from OLST and not from ANLD ( see later )
@@ -2516,9 +2510,9 @@ void WW8TabDesc::MergeCells()
                 for( short i = 0; i < pActBand->nWwCols; i++ )
                 {
                     WW8SelBoxInfo* pActMGroup = 0;
-                    //
+
                     // start a new merge group if appropriate
-                    //
+
                     OSL_ENSURE(nRow < (sal_uInt16)pTabLines->size(),
                         "Too few lines, table ended early");
                     if (nRow >= (sal_uInt16)pTabLines->size())
@@ -2568,7 +2562,6 @@ void WW8TabDesc::MergeCells()
                                     break;
                         }
                     }
-
 
                     if (bMerge)
                     {
@@ -2709,14 +2702,13 @@ void WW8TabDesc::FinishSwTable()
     }
 }
 
-
 // browse aMergeGroups, detect the index of the first fitting group or -1 otherwise
-//
+
 // Parameter: nXcenter  = center position of asking box
 //            nWidth    = width of asking box
 //            bExact    = flag, if box has to fit into group
 //                              or only has to touch
-//
+
 WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 {
     if( !aMergeGroups.empty() )
@@ -2740,16 +2732,16 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
                 nGrX1 = rActGroup.nGroupXStart - nToleranz;
                 nGrX2 = rActGroup.nGroupXStart
                              +rActGroup.nGroupWidth  + nToleranz;
-                //
+
                 // If box fits report success
-                //
+
                 if( ( nX1 > nGrX1 ) && ( nX2 < nGrX2 ) )
                 {
                     return &rActGroup;
                 }
-                //
+
                 // does the box share areas with the group?
-                //
+
                 if( !bExact )
                 {
                     // successful if nX1 *or* nX2 are inside the group
@@ -2931,7 +2923,6 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
 {
     if( nWwIdx < 0 || nWwIdx >= pActBand->nWwCols )
         return;                 // faked cells -> no border
-
 
     SvxBoxItem aFmtBox( RES_BOX );
     if (pActBand->pTCs)     // neither Cell Border nor Default Border defined ?
@@ -3547,9 +3538,7 @@ const SwFmt* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
     return pRet;
 }
 
-
 //          class WW8RStyle
-
 
 const sal_uInt8* WW8RStyle::HasParaSprm( sal_uInt16 nId ) const
 {
@@ -3834,7 +3823,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
         return;
 
     rSI.bImported = true;                      // set flag now to avoid endless loops
-                                                //
+
     // valid and not NUL and not yet imported
 
     if( rSI.nBase < cstd && !pIo->vColl[rSI.nBase].bImported )
@@ -4427,7 +4416,7 @@ void WW8RStyle::Import()
     // via WW-UI so this does not matter.
     // This could be done by:
     //  if( bNew ) rDoc.SetDefault( pDefCharFmt->GetAttrSet() );
-    //
+
     // for e.g. tables an always valid Std-Style is necessary
 
     if( pIo->StyleExists(0) && !pIo->vColl.empty() &&

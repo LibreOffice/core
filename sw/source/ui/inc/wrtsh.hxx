@@ -51,7 +51,6 @@ namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
 } } } }
 
-
 typedef sal_Int32 SelectionType;
 namespace nsSelectionType
 {
@@ -448,7 +447,6 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     // link for inserting ranges via Drag&Drop/Clipboard
     DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData* );
 
-
     // ctor, the first one is a kind of a controlled copy ctor for more views of a document
     SwWrtShell( SwWrtShell&, Window *pWin, SwView &rShell);
     SwWrtShell( SwDoc& rDoc, Window *pWin, SwView &rShell,
@@ -522,7 +520,6 @@ private:
             bIsFrmSel( bFrmSel ),
             lOffset(lOff)
         {
-
 
         }
 

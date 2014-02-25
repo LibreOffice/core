@@ -37,7 +37,6 @@
 using namespace objectpositioning;
 using namespace ::com::sun::star;
 
-
 SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition( _rDrawObj ),
       maRelPos( Point() ),
@@ -86,7 +85,6 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                 _GetVertRelPos( GetAnchorFrm(), GetAnchorFrm(), eVertOrient,
                                 aVert.GetRelationOrient(), aVert.GetPos(),
                                 rLR, rUL, nVertOffsetToFrmAnchorPos );
-
 
         // keep the calculated relative vertical position - needed for filters
         // (including the xml-filter)

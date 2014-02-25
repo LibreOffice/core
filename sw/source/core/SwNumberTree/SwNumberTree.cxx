@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <algorithm>
 #include <functional>
 #include <SwNumberTree.hxx>
@@ -25,7 +24,6 @@
 
 using std::vector;
 using std::find;
-
 
 SwNumberTreeNode::SwNumberTreeNode()
     : mChildren(),
@@ -490,7 +488,6 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
         OSL_ENSURE(! (aInsertDeepIt != mChildren.end() &&
                   (*aInsertDeepIt)->IsPhantom()), " unexspected phantom");
 
-
         if (aInsertDeepIt == mChildren.begin())
         {
             SwNumberTreeNode * pNew = CreatePhantom();
@@ -709,7 +706,6 @@ bool SwNumberTreeNode::IsContinueingPreviousSubTree() const
 {
     return mbContinueingPreviousSubTree;
 }
-
 
 vector<SwNumberTree::tSwNumTreeNumber> SwNumberTreeNode::GetNumberVector() const
 {

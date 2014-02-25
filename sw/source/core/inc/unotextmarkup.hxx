@@ -37,7 +37,6 @@ namespace com { namespace sun { namespace star { namespace text {
     class XTextRange;
 } } } }
 
-
 class SwTxtNode;
 class SfxPoolItem;
 
@@ -79,7 +78,6 @@ protected:
     const ModelToViewHelper maConversionMap;
 };
 
-
 /** Implementation of the ::com::sun::star::container::XStringKeyMap interface
  */
 class SwXStringKeyMap:
@@ -107,6 +105,5 @@ private:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

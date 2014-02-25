@@ -811,7 +811,6 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, sal_Int32& rPos,
             else
                 cNumTyp = '0' + SVX_NUM_CHARS_LOWER_LETTER, eTmpScan = LOWER_ALPHA;
 
-
             // Switch to roman numbers (only for c/d!)
             if( 1 == nDigitCnt && ( eScan & (UPPER_ALPHA|LOWER_ALPHA) ) &&
                 ( 3 == nStart || 4 == nStart) && 256 > cLow &&
@@ -1713,7 +1712,6 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             bInsTab = false;
         }
 
-
         m_aDelPam.DeleteMark();
         m_aDelPam.GetPoint()->nNode = m_aNdIdx;
         m_aDelPam.GetPoint()->nContent.Assign( m_pCurTxtNd, nSpacePos );
@@ -1813,7 +1811,6 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                         m_aFlags.bChgToEnEmDash || m_aFlags.bSetINetAttr ||
                         m_aFlags.bCptlSttWrd || m_aFlags.bCptlSttSntnc ||
                         m_aFlags.bAddNonBrkSpace;
-
 
     m_aDelPam.DeleteMark();
     m_aDelPam.GetPoint()->nNode = m_aNdIdx;
@@ -2008,7 +2005,6 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
         }
         else
             bCallACorr = true;
-
 
         if( bCallACorr )
         {

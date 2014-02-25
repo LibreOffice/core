@@ -60,7 +60,6 @@
 
 using namespace ::com::sun::star;
 
-
 const short RET_EDIT = 100;
 
 // PUBLIC METHODS -------------------------------------------------------
@@ -72,7 +71,6 @@ struct TextBlockInfo_Impl
 };
 typedef boost::ptr_vector<TextBlockInfo_Impl> TextBlockInfoArr;
 SV_IMPL_REF( SwDocShell )
-
 
 // Dialog for edit templates
 void SwGlossaryHdl::GlossaryDlg()
@@ -255,7 +253,6 @@ sal_Bool SwGlossaryHdl::DelGroup(const OUString &rGrpName)
     }
     return sal_False;
 }
-
 
 // ask for number of autotexts
 sal_uInt16 SwGlossaryHdl::GetGlossaryCnt()
@@ -674,7 +671,6 @@ sal_Bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewSh
     return bRet;
 }
 
-
 sal_Bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
 {
     SwTextBlocks *pGlossary = 0;
@@ -691,7 +687,6 @@ sal_Bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
         delete pGlossary;
     return bRet;
 }
-
 
 sal_Bool SwGlossaryHdl::IsOld() const
 {

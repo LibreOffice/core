@@ -169,7 +169,6 @@ class SwTextFlowPage : public SfxTabPage
     sal_Bool            bPageBreak;
     sal_Bool            bHtmlMode;
 
-
     DECL_LINK(PageBreakHdl_Impl, void *);
     DECL_LINK(ApplyCollClickHdl_Impl, void *);
     DECL_LINK( PageBreakPosHdl_Impl, RadioButton* );
@@ -177,7 +176,6 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK( SplitHdl_Impl, CheckBox* );
     DECL_LINK( SplitRowHdl_Impl, TriStateBox* );
     DECL_LINK( HeadLineCBClickHdl, void* p = 0 );
-
 
     SwTextFlowPage( Window* pParent, const SfxItemSet& rSet );
     ~SwTextFlowPage();

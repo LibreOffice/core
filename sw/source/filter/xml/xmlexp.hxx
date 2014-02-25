@@ -75,7 +75,6 @@ class SwXMLExport : public SvXMLExport
                                  SwXMLTableInfo_Impl& rTblInfo,
                                  sal_Bool bTop=sal_False );
 
-
     void ExportFmt( const SwFmt& rFmt,  enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
     void ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth );
 

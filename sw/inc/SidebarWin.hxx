@@ -57,7 +57,6 @@ typedef sal_Int64 SwPostItBits;
 
 #define PB_Preview ((SwPostItBits)0x00000001)
 
-
 class SwSidebarWin : public Window
 {
     public:

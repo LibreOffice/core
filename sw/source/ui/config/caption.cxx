@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <osl/diagnose.h>
 
 #include "numrule.hxx"
@@ -72,8 +71,6 @@ bool InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
             aOleId == rOpt.aOleId); // So that identical Ole-IDs can't be added multiple
                                     // times, don't compare against anything else.
 
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

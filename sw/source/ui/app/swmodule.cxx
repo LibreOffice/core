@@ -143,7 +143,6 @@ bool     bNoInterrupt     = false;
 
 using namespace com::sun::star;
 
-
 TYPEINIT1( SwModule, SfxModule );
 
 using namespace ::com::sun::star;
@@ -267,7 +266,6 @@ void SwDLL::RegisterInterfaces()
     SwWebView::RegisterInterface( pMod );
     SwPagePreview::RegisterInterface( pMod );
     SwSrcView::RegisterInterface( pMod );
-
 
     SwBaseShell::RegisterInterface(pMod);
     SwTextShell::RegisterInterface(pMod);
@@ -406,8 +404,6 @@ void SwDLL::RegisterControls()
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(0, pMod);
     ::sfx2::TaskPaneWrapper::RegisterChildWindow(0, pMod);
 }
-
-
 
 /*************************************************************************
 |*

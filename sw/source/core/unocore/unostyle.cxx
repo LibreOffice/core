@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svxids.hrc>
 #include <hintids.hxx>
 #include <osl/mutex.hxx>
@@ -1887,9 +1886,8 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     SwStyleNameMapper::FillUIName(aTmp, aStyleName,
                             lcl_GetSwEnumFromSfxEnum(eFamily), true);
 
-                    //
                     // check for correct context and style name
-                    //
+
                     sal_Int16 nIdx = GetCommandContextIndex( pSeq[i].Name );
 
                     pBasePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <boost/scoped_ptr.hpp>
 
 #include <hintids.hxx>
@@ -68,7 +67,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
-
 
 static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, SwViewShell* pSh )
 {

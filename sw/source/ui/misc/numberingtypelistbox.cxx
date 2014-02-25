@@ -30,7 +30,6 @@
 
 using namespace com::sun::star;
 
-
 struct SwNumberingTypeListBox_Impl
 {
     uno::Reference<text::XNumberingTypeInfo> xInfo;

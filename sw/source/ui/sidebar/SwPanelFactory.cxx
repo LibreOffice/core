@@ -68,11 +68,9 @@ SwPanelFactory::SwPanelFactory (void)
 {
 }
 
-
 SwPanelFactory::~SwPanelFactory (void)
 {
 }
-
 
 Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,

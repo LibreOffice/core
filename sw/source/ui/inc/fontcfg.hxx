@@ -53,7 +53,6 @@
 #define FONTSIZE_CJK_DEFAULT        210
 #define FONTSIZE_OUTLINE            280
 
-
 class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
 {
     OUString    sDefaultFonts[DEF_FONT_COUNT];
@@ -109,6 +108,5 @@ public:
     static sal_Int32 GetDefaultHeightFor(sal_uInt16 nFontType, LanguageType eLang);
 };
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

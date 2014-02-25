@@ -46,7 +46,6 @@
 using namespace objectpositioning;
 using namespace ::com::sun::star;
 
-
 SwToCntntAnchoredObjectPosition::SwToCntntAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition ( _rDrawObj ),
       mpVertPosOrientFrm( 0 ),

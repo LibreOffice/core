@@ -390,7 +390,6 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
             return static_cast<bool>(rpPam);
         }
 
-        //
         _FindItem aPara( bCaseSensitive ? sItem : rCC.lowercase( sItem ) );
 
         if( !mpSectionFmtTbl->empty() )

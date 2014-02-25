@@ -534,7 +534,6 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
             }
             writer.endElement( );    // swposition_start
 
-
             const SwPosition* pEnd;
             bool bEndIsMark = false;
             if ( pStart == pRedline->GetPoint() )

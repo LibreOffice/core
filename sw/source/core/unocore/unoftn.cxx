@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
@@ -39,7 +38,6 @@
 #include <ndtxt.hxx>
 #include <unocrsr.hxx>
 #include <hints.hxx>
-
 
 using namespace ::com::sun::star;
 

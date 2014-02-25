@@ -125,7 +125,6 @@ struct SwSendMailDialog_Impl
     uno::Reference< mail::XMailService >        xConnectedInMailService;
     Timer                                       aRemoveTimer;
 
-
     SwSendMailDialog_Impl() :
         nCurrentDescriptor(0),
         nDocumentCount(0)
@@ -306,7 +305,6 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_aDetailsPB.SetClickHdl(LINK( this, SwSendMailDialog, DetailsHdl_Impl));
     m_aStopPB.SetClickHdl(LINK( this, SwSendMailDialog, StopHdl_Impl));
     m_aClosePB.SetClickHdl(LINK( this, SwSendMailDialog, CloseHdl_Impl));
-
 
     Size aLBSize(m_aStatusLB.GetSizePixel());
     m_aStatusHB.SetSizePixel(aLBSize);
@@ -664,6 +662,5 @@ void SwSendMailDialog::AllMailsSent()
 {
     m_aStopPB.Enable(false);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

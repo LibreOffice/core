@@ -35,7 +35,6 @@ SW_DLLPUBLIC Writer& Out( const SwAttrFnTab, const SfxPoolItem&, Writer& );
 SW_DLLPUBLIC Writer& Out_SfxItemSet( const SwAttrFnTab, Writer&, const SfxItemSet&,
                          sal_Bool bDeep, sal_Bool bTstForDefault = sal_True );
 
-
 /* Funktionspointer auf die Node-Write-Funktionen */
 
 enum RES_NODE
@@ -51,9 +50,6 @@ typedef Writer& (*FnNodeOut)( Writer&, SwCntntNode& );
 typedef FnNodeOut SwNodeFnTab[ RES_NODE_END - RES_NODE_BEGIN ];
 
 SW_DLLPUBLIC Writer& Out( const SwNodeFnTab, SwNode&, Writer & rWrt );
-
-
-
 
 #endif // INCLUDED_SW_SOURCE_FILTER_INC_WRT_FN_HXX
 

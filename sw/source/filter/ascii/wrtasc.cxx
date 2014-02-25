@@ -31,8 +31,6 @@
 
 #include <statstr.hrc>
 
-
-
 SwASCWriter::SwASCWriter( const OUString& rFltNm )
 {
     SwAsciiOptions aNewOpts;
@@ -193,11 +191,9 @@ sal_uLong SwASCWriter::WriteStream()
     return 0;
 }
 
-
 void GetASCWriter( const OUString& rFltNm, const OUString& /*rBaseURL*/, WriterRef& xRet )
 {
   xRet = new SwASCWriter( rFltNm );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

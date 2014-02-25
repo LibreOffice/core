@@ -1134,7 +1134,6 @@ void SwCntntFrm::MakeAll()
         }
     }
 
-    //
     if ( GetUpper()->IsSctFrm() &&
          HasFollow() &&
          GetFollow()->GetFrm() == GetNext() )
@@ -1475,7 +1474,7 @@ void SwCntntFrm::MakeAll()
                 // This way, we keep control until (almost) everything is stable,
                 // allowing us to avoid endless loops caused by ever repeating
                 // retries.
-                //
+
                 // bMoveFwdInvalid is required for #38407#. This was originally solved
                 // in flowfrm.cxx rev 1.38, but broke the above schema and
                 // preferred to play towers of hanoi (#43669#).
@@ -1537,7 +1536,7 @@ void SwCntntFrm::MakeAll()
         // This situation arises with freshly created Follows that had been moved
         // to the next page but is still too big for it - ie. needs to be split
         // as well.
-        //
+
         // If I'm unable to split (WouldFit()) and can't be fitted, I'm going
         // to tell my TxtFrm part that, if possible, we still need to split despite
         // the "don't split" attribute.
@@ -1674,7 +1673,6 @@ void SwCntntFrm::MakeAll()
 
                             ),
                          static_cast<SwTxtFrm&>(*this) );
-
 
     delete pSaveFtn;
 
@@ -1938,7 +1936,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                   pNxt->FindFtnFrm()->GetAttr() == pFtnFrm->GetAttr() ) ) )
             {
                 // TestFormat(?) does not like paragraph- or character anchored objects.
-                //
+
                 // current solution for the test formatting doesn't work, if
                 // objects are present in the remaining area of the new upper
                 if ( bTstMove &&

@@ -141,12 +141,10 @@ PageSizeControl::PageSizeControl(
     FreeResource();
 }
 
-
 PageSizeControl::~PageSizeControl(void)
 {
     delete mpSizeValueSet;
 }
-
 
 IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)
 {
@@ -173,7 +171,6 @@ IMPL_LINK(PageSizeControl, MoreButtonClickHdl_Impl, void *, EMPTYARG)
     mrPagePropPanel.ClosePageSizePopup();
     return 0;
 }
-
 
 } } // end of namespace sw::sidebar
 

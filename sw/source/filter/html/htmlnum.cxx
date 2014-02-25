@@ -49,7 +49,6 @@ using namespace ::com::sun::star;
 #define HTML_BULLETCHAR_CIRCLE  (0xe009)
 #define HTML_BULLETCHAR_SQUARE  (0xe00b)
 
-
 // <UL TYPE=...>
 static HTMLOptionEnum aHTMLULTypeTable[] =
 {
@@ -58,7 +57,6 @@ static HTMLOptionEnum aHTMLULTypeTable[] =
     { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,    HTML_BULLETCHAR_SQUARE      },
     { 0,                    0                           }
 };
-
 
 void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
 {
@@ -83,7 +81,6 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         bNumbered = bRestart = sal_False;
     }
 }
-
 
 void SwHTMLParser::NewNumBulList( int nToken )
 {
@@ -460,7 +457,6 @@ void SwHTMLParser::EndNumBulList( int nToken )
 
 }
 
-
 void SwHTMLParser::NewNumBulListItem( int nToken )
 {
     sal_uInt8 nLevel = GetNumInfo().GetLevel();
@@ -632,7 +628,6 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
         SetTxtCollAttrs();
 }
 
-
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 {
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
@@ -649,8 +644,6 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
     // auf valid geschaltet worden sein kann.
     GetNumInfo().GetNumRule()->SetInvalidRule( sal_False );
 }
-
-
 
 void SwHTMLWriter::FillNextNumInfo()
 {
@@ -778,7 +771,6 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             rWrt.aNumRuleNames.insert( aName );
         }
     }
-
 
     OSL_ENSURE( rWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor <OL> beendet." );

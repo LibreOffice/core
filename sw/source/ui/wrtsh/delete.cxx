@@ -102,8 +102,6 @@ long SwWrtShell::DelLine()
     return nRet;
 }
 
-
-
 long SwWrtShell::DelToStartOfLine()
 {
     OpenMark();
@@ -112,8 +110,6 @@ long SwWrtShell::DelToStartOfLine()
     CloseMark( 0 != nRet );
     return nRet;
 }
-
-
 
 long SwWrtShell::DelToEndOfLine()
 {
@@ -543,8 +539,5 @@ long SwWrtShell::DelPrvWord()
     ClearMark();
     return nRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

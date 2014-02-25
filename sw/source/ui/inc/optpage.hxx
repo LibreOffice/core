@@ -118,7 +118,6 @@ class SwAddPrinterTabPage : public SfxTabPage
                 DECL_LINK(AutoClickHdl, void *);
                 DECL_LINK(SelectHdl, void *);
 
-
                 SwAddPrinterTabPage( Window* pParent,
                                            const SfxItemSet& rSet );
 public:
@@ -231,7 +230,6 @@ class SwTableOptionsTabPage : public SfxTabPage
 
     DECL_LINK(CheckBoxHdl, void *);
 
-
                 SwTableOptionsTabPage( Window* pParent,
                                            const SfxItemSet& rSet );
                 ~SwTableOptionsTabPage();
@@ -279,7 +277,6 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     CheckBox* m_pMathBaselineAlignmentCB;
 
     SwWrtShell *    m_pWrtShell;
-
 
     SwShdwCrsrOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SwShdwCrsrOptionsTabPage();

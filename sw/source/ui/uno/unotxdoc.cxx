@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
@@ -2613,9 +2612,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
         const sal_Int32 nPageCount = pViewShell->GetPageCount();
 
-        //
         // get number of pages to be rendered
-        //
+
         const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
         if (bPrintProspect)
         {
@@ -2883,7 +2881,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
 {
     // #130810# SfxViewShell::Current() / SfxViewShell::GetObjectShell()
     // must not be used (see comment from MBA)
-    //
+
     SfxViewShell    *pView = 0;
     SwView          *pSwView = 0;
     SwPagePreview   *pSwPagePreview = 0;
@@ -3008,11 +3006,11 @@ void SAL_CALL SwXTextDocument::render(
                     pVwSh->SetPDFExportOption( sal_True );
 
                     // #i12836# enhanced pdf export
-                    //
+
                     // First, we have to export hyperlinks, notes, and outline to pdf.
                     // During this process, additional information required for tagging
                     // the pdf file are collected, which are evaulated during painting.
-                    //
+
                     SwWrtShell* pWrtShell = pView->IsA(aSwViewTypeId) ?
                                             ((SwView*)pView)->GetWrtShellPtr() :
                                             0;
@@ -3030,11 +3028,11 @@ void SAL_CALL SwXTextDocument::render(
                         pVwSh->PrintOrPDFExport( pOut, rSwPrtOptions, nRenderer );
 
                     // #i35176#
-                    //
+
                     // After printing the last page, we take care for the links coming
                     // from the EditEngine. The links are generated during the painting
                     // process, but the destinations are still missing.
-                    //
+
                     if (bIsPDFExport && bLastPage && pWrtShell)
                     {
                         SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  true );
@@ -3142,7 +3140,6 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
            std::exception)
 {
     SolarMutexGuard aGuard;
-
 
     // possible canonical values for nScriptTypes
     // any bit wise combination is allowed

@@ -45,12 +45,10 @@ static OUString lcl_CheckGroupName( const OUString& rGroupName )
     return comphelper::string::strip(sRet, ' ');
 }
 
-
 SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel, const OUString& rFullUrl )
     : SwVbaTemplate_BASE( rParent, rContext ), mxModel( rModel ), msFullUrl( rFullUrl )
 {
 }
-
 
 SwVbaTemplate::~SwVbaTemplate()
 {

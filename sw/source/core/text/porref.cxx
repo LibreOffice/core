@@ -97,6 +97,4 @@ void SwIsoRefPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

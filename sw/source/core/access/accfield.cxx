@@ -169,7 +169,6 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleField::getAccessibleAtPoint(
     return xAcc;
 }
 
-
 /**
    Get bounding box.
 
@@ -210,7 +209,6 @@ awt::Point SAL_CALL SwAccessibleField::getLocation()
     return aPoint;
 }
 
-
 awt::Point SAL_CALL SwAccessibleField::getLocationOnScreen()
         throw (RuntimeException, std::exception)
 {
@@ -218,7 +216,6 @@ awt::Point SAL_CALL SwAccessibleField::getLocationOnScreen()
     //Point aPixPos = m_xPara->getLocationOnScreen();
     return awt::Point( aRect.X,aRect.Y);//aPixPos.X() + aRect.nLeft , aPixPos.Y() + + aRect.nRight );
 }
-
 
 awt::Size SAL_CALL SwAccessibleField::getSize()
         throw (RuntimeException, std::exception)
@@ -235,7 +232,6 @@ void SAL_CALL SwAccessibleField::grabFocus()
     SolarMutexGuard aGuard;
     return;
 }
-
 
 sal_Int32 SAL_CALL SwAccessibleField::getForeground()
         throw (::com::sun::star::uno::RuntimeException, std::exception)

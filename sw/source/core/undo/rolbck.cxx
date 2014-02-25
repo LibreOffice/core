@@ -876,7 +876,6 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
 {
 }
 
-
 void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
@@ -967,7 +966,6 @@ void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
     }
 }
 // <- #i27615#
-
 
 SwHistory::SwHistory( sal_uInt16 nInitSz )
     : m_SwpHstry()

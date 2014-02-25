@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_TBLENUM_HXX
 #define INCLUDED_SW_INC_TBLENUM_HXX
 
-
 // For changing table columns/rows widths/heights.
 typedef sal_uInt16 TblChgWidthHeightType;
 
@@ -33,7 +32,6 @@ namespace nsTblChgWidthHeightType
     const TblChgWidthHeightType WH_CELL_RIGHT = 5;
     const TblChgWidthHeightType WH_CELL_TOP = 6;
     const TblChgWidthHeightType WH_CELL_BOTTOM = 7;
-
 
     // The following can "or"ed into.
     const TblChgWidthHeightType WH_FLAG_INSDEL  = 0x4000;           // Insert/Del-mode: the Bigger-Flag
@@ -50,7 +48,6 @@ enum TblChgMode
     TBLVAR_CHGABS           // Table variable, change all neighbours.
 };
 
-
 enum SplitTbl_HeadlineOption
 {
     HEADLINE_NONE = 0,          // Leave everything in place.
@@ -66,7 +63,6 @@ enum TableMergeErr
     TBLMERGE_NOSELECTION,
     TBLMERGE_TOOCOMPLEX
 };
-
 
 #endif
 

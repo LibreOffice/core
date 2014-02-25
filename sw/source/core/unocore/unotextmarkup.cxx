@@ -38,7 +38,6 @@
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 
-
 using namespace ::com::sun::star;
 
 /*
@@ -108,7 +107,6 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const ::rt
     }
 }
 
-
 void SAL_CALL SwXTextMarkup::commitStringMarkup(
     ::sal_Int32 nType,
     const OUString & rIdentifier,
@@ -174,7 +172,6 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
         OSL_FAIL( "Unknown mark-up type" );
         return;
     }
-
 
     const ModelToViewHelper::ModelPosition aStartPos =
             maConversionMap.ConvertToModelPosition( nStart );
@@ -266,7 +263,6 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     if( bRepaint )
         finishGrammarCheck( *mpTxtNode );
 }
-
 
 static void lcl_commitGrammarMarkUp(
     const ModelToViewHelper& rConversionMap,
@@ -361,7 +357,6 @@ static void lcl_commitGrammarMarkUp(
     }
 }
 
-
 void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     const uno::Sequence< text::TextMarkupDescriptor > &rMarkups )
 throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
@@ -454,7 +449,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     return;
 }
-
 
 void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
 {

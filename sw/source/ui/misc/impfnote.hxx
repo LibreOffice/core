@@ -66,7 +66,6 @@ class SwEndNoteOptionPage : public SfxTabPage
     DECL_LINK(PosChapterHdl, void *);
     DECL_LINK(NumCountHdl, void *);
 
-
 public:
     SwEndNoteOptionPage( Window *pParent, bool bEndNote,
                          const SfxItemSet &rSet );
@@ -87,8 +86,6 @@ class SwFootNoteOptionPage : public SwEndNoteOptionPage
 public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 };
-
-
 
 #endif
 

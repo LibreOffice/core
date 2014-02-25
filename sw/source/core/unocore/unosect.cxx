@@ -60,7 +60,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 
-
 using namespace ::com::sun::star;
 
 struct SwTextSectionProperties_Impl

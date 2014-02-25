@@ -251,7 +251,6 @@ OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
     return sRet.replaceFirst( "$(ARG1)", OUString::number( nNo ));
 }
 
-
 SwGlossaries* GetGlossaries()
 {
     if (!pGlossaries)

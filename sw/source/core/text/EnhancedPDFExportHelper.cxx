@@ -77,9 +77,8 @@
 
 using namespace ::com::sun::star;
 
-//
 // Some static data structures
-//
+
 TableColumnsMap SwEnhancedPDFExportHelper::aTableColumnsMap;
 LinkIdMap SwEnhancedPDFExportHelper::aLinkIdMap;
 NumListIdMap SwEnhancedPDFExportHelper::aNumListIdMap;
@@ -519,9 +518,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         bool bBox = false;
         bool bRowSpan = false;
 
-        //
         // Check which attributes to set:
-        //
+
         switch ( eType )
         {
             case vcl::PDFWriter::Document :
@@ -587,9 +585,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 break;
         }
 
-        //
         // Set the attributes:
-        //
+
         if ( bPlacement )
         {
             eVal = vcl::PDFWriter::TableHeader == eType ||
@@ -752,9 +749,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         bool bLinkAttribute = false;
         bool bLanguage = false;
 
-        //
         // Check which attributes to set:
-        //
+
         switch ( eType )
         {
             case vcl::PDFWriter::Span :
@@ -862,9 +858,8 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     OSL_ENSURE( rFrm.IsTxtFrm(), "numbered only for text frames" );
     const SwTxtFrm& rTxtFrm = static_cast<const SwTxtFrm&>(rFrm);
 
-    //
     // Lowers of NonStructureElements should not be considered:
-    //
+
     if ( lcl_IsInNonStructEnv( rTxtFrm ) || rTxtFrm.IsFollow() )
         return;
 
@@ -997,9 +992,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 {
     const SwFrm* pFrm = &mpFrmInfo->mrFrm;
 
-    //
     // Lowers of NonStructureElements should not be considered:
-    //
+
     if ( lcl_IsInNonStructEnv( *pFrm ) )
         return;
 
@@ -1018,33 +1012,33 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
          */
 
         case FRM_PAGE :
-            //
+
             // Document: Document
-            //
+
             nPDFType = vcl::PDFWriter::Document;
             aPDFType = OUString(aDocumentString);
             break;
 
         case FRM_HEADER :
         case FRM_FOOTER :
-            //
+
             // Header, Footer: NonStructElement
-            //
+
             nPDFType = vcl::PDFWriter::NonStructElement;
             break;
 
         case FRM_FTNCONT :
-            //
+
             // Footnote container: Division
-            //
+
             nPDFType = vcl::PDFWriter::Division;
             aPDFType = OUString(aDivString);
             break;
 
         case FRM_FTN :
-            //
+
             // Footnote frame: Note
-            //
+
             // Note: vcl::PDFWriter::Note is actually a ILSE. Nevertheless
             // we treat it like a grouping element!
             nPDFType = vcl::PDFWriter::Note;
@@ -1052,9 +1046,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             break;
 
         case FRM_SECTION :
-            //
+
             // Section: TOX, Index, or Sect
-            //
+
             {
                 const SwSection* pSection =
                         static_cast<const SwSectionFrm*>(pFrm)->GetSection();
@@ -1109,45 +1103,40 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Paragraph);
                 aPDFType = sStyleName;
 
-                //
                 // Quotations: BlockQuote
-                //
+
                 if (sStyleName.equalsAscii(aQuotations))
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::BlockQuote);
                     aPDFType = OUString(aBlockQuoteString);
                 }
 
-                //
                 // Caption: Caption
-                //
+
                 else if (sStyleName.equalsAscii(aCaption))
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
                     aPDFType = OUString(aCaptionString);
                 }
 
-                //
                 // Caption: Caption
-                //
+
                 else if (sParentStyleName.equalsAscii(aCaption))
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
                     aPDFType = sStyleName + aCaptionString;
                 }
 
-                //
                 // Heading: H
-                //
+
                 else if (sStyleName.equalsAscii(aHeading))
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Heading);
                     aPDFType = OUString(aHString);
                 }
 
-                //
                 // Heading: H1 - H6
-                //
+
                 if ( pTxtNd->IsOutline() )
                 {
                     int nRealLevel = pTxtNd->GetAttrOutlineLevel()-1;
@@ -1177,9 +1166,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     }
                 }
 
-                //
                 // Section: TOCI
-                //
+
                 else if ( pFrm->IsInSct() )
                 {
                     const SwSectionFrm* pSctFrm = pFrm->FindSctFrm();
@@ -1200,9 +1188,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             break;
 
         case FRM_TAB :
-            //
+
             // TabFrm: Table
-            //
+
             nPDFType = vcl::PDFWriter::Table;
             aPDFType = OUString(aTableString);
 
@@ -1252,9 +1240,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
          */
 
         case FRM_ROW :
-            //
+
             // RowFrm: TR
-            //
+
             if ( !static_cast<const SwRowFrm*>(pFrm)->IsRepeatedHeadline() )
             {
                 nPDFType = vcl::PDFWriter::TableRow;
@@ -1267,9 +1255,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             break;
 
         case FRM_CELL :
-            //
+
             // CellFrm: TH, TD
-            //
+
             {
                 const SwTabFrm* pTable = static_cast<const SwCellFrm*>(pFrm)->FindTabFrm();
                 if ( pTable->IsInHeadline( *pFrm ) || lcl_IsHeadlineCell( *static_cast<const SwCellFrm*>(pFrm) ) )
@@ -1290,7 +1278,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
          */
 
         case FRM_FLY :
-            //
+
             // FlyFrm: Figure, Formula, Control
             // fly in content or fly at page
             {
@@ -1358,9 +1346,8 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
     const SwTxtPaintInfo& rInf = mpPorInfo->mrTxtPainter.GetInfo();
     const SwTxtFrm* pFrm = rInf.GetTxtFrm();
 
-    //
     // Lowers of NonStructureElements should not be considered:
-    //
+
     if ( lcl_IsInNonStructEnv( *pFrm ) )
         return;
 
@@ -1566,23 +1553,20 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
     if ( !pPDFExtOutDevData )
         return;
 
-    //
     // set the document locale
-    //
+
     com::sun::star::lang::Locale aDocLocale( LanguageTag( SwEnhancedPDFExportHelper::GetDefaultLanguage() ).getLocale() );
     pPDFExtOutDevData->SetDocumentLocale( aDocLocale );
 
-    //
     // Prepare the output device:
-    //
+
     mrOut.Push( PUSH_MAPMODE );
     MapMode aMapMode( mrOut.GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     mrOut.SetMapMode( aMapMode );
 
-    //
     // Create new cursor and lock the view:
-    //
+
     SwDoc* pDoc = mrSh.GetDoc();
     mrSh.SwCrsrShell::Push();
     mrSh.SwCrsrShell::ClearMark();
@@ -1591,9 +1575,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     if ( !mbEditEngineOnly )
     {
-        //
+
         // POSTITS
-        //
+
         if ( pPDFExtOutDevData->GetIsExportNotes() )
         {
             SwFieldType* pType = mrSh.GetFldType( RES_POSTITFLD, OUString() );
@@ -1648,9 +1632,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             }
         }
 
-        //
         // HYPERLINKS
-        //
+
         SwGetINetAttrs aArr;
         const sal_uInt16 nHyperLinkCount = mrSh.GetINetAttrs( aArr );
         for( sal_uInt16 n = 0; n < nHyperLinkCount; ++n )
@@ -1754,9 +1737,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             mrSh.SwCrsrShell::ClearMark();
         }
 
-        //
         // HYPERLINKS (Graphics, Frames, OLEs )
-        //
+
         const SwFrmFmts* pTbl = pDoc->GetSpzFrmFmts();
         const sal_uInt16 nSpzFrmFmtsCount = pTbl->size();
         for( sal_uInt16 n = 0; n < nSpzFrmFmtsCount; ++n )
@@ -1826,9 +1808,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             mrSh.SwCrsrShell::ClearMark();
         }
 
-        //
         // REFERENCES
-        //
+
         SwFieldType* pType = mrSh.GetFldType( RES_GETREFFLD, OUString() );
         SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
         for( SwFmtFld* pFirst = aIter.First(); pFirst; )
@@ -1913,9 +1894,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             mrSh.SwCrsrShell::ClearMark();
         }
 
-        //
         // FOOTNOTES
-        //
+
         const sal_uInt16 nFtnCount = pDoc->GetFtnIdxs().size();
         for ( sal_uInt16 nIdx = 0; nIdx < nFtnCount; ++nIdx )
         {
@@ -1981,9 +1961,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             }
         }
 
-        //
         // OUTLINE
-        //
+
         if( pPDFExtOutDevData->GetIsExportBookmarks() )
         {
             typedef std::pair< sal_Int8, sal_Int32 > StackEntry;
@@ -2076,9 +2055,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
     }
     else
     {
-        //
+
         // LINKS FROM EDITENGINE
-        //
+
         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
         std::vector< vcl::PDFExtOutDevBookmarkEntry >::const_iterator aIBeg = rBookmarks.begin();
         const std::vector< vcl::PDFExtOutDevBookmarkEntry >::const_iterator aIEnd = rBookmarks.end();

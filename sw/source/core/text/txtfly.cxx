@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
@@ -60,7 +59,6 @@
 #include "viewopt.hxx"
 #include "doc.hxx"
 #endif
-
 
 using namespace ::com::sun::star;
 
@@ -312,7 +310,6 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
     return aRet;
 }
 
-
 SwTxtFly::SwTxtFly() :
     pPage(0),
     mpCurrAnchoredObj(0),
@@ -385,7 +382,6 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
     nIndex = ULONG_MAX;
 }
 
-
 SwRect SwTxtFly::_GetFrm( const SwRect &rRect, bool bTop ) const
 {
     SwRect aRet;
@@ -404,7 +400,6 @@ SwRect SwTxtFly::_GetFrm( const SwRect &rRect, bool bTop ) const
     }
     return aRet;
 }
-
 
 bool SwTxtFly::IsAnyFrm() const
 {
@@ -457,7 +452,6 @@ const SwCntntFrm* SwTxtFly::_GetMaster()
         pMaster = (SwCntntFrm*)pMaster->FindMaster();
     return pMaster;
 }
-
 
 bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
 {
@@ -581,7 +575,6 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     rInf.SetPos(aOldPos);
     return true;
 }
-
 
 void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         const SwTxtPaintInfo &rInf, bool bNoGraphic )
@@ -1019,7 +1012,6 @@ SwTwips SwTxtFly::CalcMinBottom() const
     return nRet;
 }
 
-
 bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 {
     SWAP_IF_SWAPPED( pCurrFrm )
@@ -1104,7 +1096,6 @@ bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 
     return bRet;
 }
-
 
 // #i68520#
 SwAnchoredObjList::size_type SwTxtFly::GetPos( const SwAnchoredObject* pAnchoredObj ) const

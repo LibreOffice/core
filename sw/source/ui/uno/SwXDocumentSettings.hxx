@@ -27,7 +27,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-
 class SwXTextDocument;
 class SwDocShell;
 class SwDoc;
@@ -68,7 +67,6 @@ protected:
         throw();
 public:
     SwXDocumentSettings( SwXTextDocument* pModel );
-
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )

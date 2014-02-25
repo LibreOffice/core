@@ -570,7 +570,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         pTxtNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
     }
 
-
     if( RES_DRAWFRMFMT != pFrmFmt->Which() )
         pFrmFmt->MakeFrms();
 
@@ -733,7 +732,6 @@ void SwUndoResetAttr::RepeatImpl(::sw::RepeatContext & rContext)
         break;
     }
 }
-
 
 void SwUndoResetAttr::SetAttrs( const std::set<sal_uInt16> &rAttrs )
 {

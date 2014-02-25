@@ -65,8 +65,6 @@ public:
     sal_Bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
 };
 
-
-
 // SwOLENode
 
 class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
@@ -141,7 +139,6 @@ public:
     OUString GetChartTblName() const { return sChartTblName; }
     void SetChartTblName( const OUString& rNm ) { sChartTblName = rNm; }
 };
-
 
 /// Inline methods from Node.hxx
 inline SwOLENode *SwNode::GetOLENode()

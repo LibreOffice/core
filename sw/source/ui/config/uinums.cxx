@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
 #include <osl/thread.h>
@@ -40,7 +39,6 @@
 
 using namespace ::com::sun::star;
 
-
 #define VERSION_30B     ((sal_uInt16)250)
 #define VERSION_31B     ((sal_uInt16)326)
 #define VERSION_40A     ((sal_uInt16)364)
@@ -48,7 +46,6 @@ using namespace ::com::sun::star;
 #define ACT_NUM_VERSION VERSION_53A
 
 #define CHAPTER_FILENAME "chapter.cfg"
-
 
 // SwNumRulesWithName ----------------------------------------------------
 // PUBLIC METHODES -------------------------------------------------------

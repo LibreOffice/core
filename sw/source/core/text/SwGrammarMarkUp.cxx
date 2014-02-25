@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SwGrammarMarkUp.hxx"
 
 SwGrammarMarkUp::~SwGrammarMarkUp()
@@ -36,7 +35,6 @@ void SwGrammarMarkUp::CopyFrom( const SwWrongList& rCopy )
     maSentence = ((const SwGrammarMarkUp&)rCopy).maSentence;
     SwWrongList::CopyFrom( rCopy );
 }
-
 
 void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
 {

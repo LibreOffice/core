@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <poolfmt.hxx>
 #include "unomid.h"
@@ -51,7 +50,6 @@
 #include <boost/bind.hpp>
 #include <algorithm>
 
-
 using namespace ::com::sun::star;
 
 TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
@@ -70,8 +68,6 @@ SwFmtCharFmt::SwFmtCharFmt( SwCharFmt *pFmt )
 {
 }
 
-
-
 SwFmtCharFmt::SwFmtCharFmt( const SwFmtCharFmt& rAttr )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient( rAttr.GetCharFmt() ),
@@ -79,11 +75,7 @@ SwFmtCharFmt::SwFmtCharFmt( const SwFmtCharFmt& rAttr )
 {
 }
 
-
-
 SwFmtCharFmt::~SwFmtCharFmt() {}
-
-
 
 bool SwFmtCharFmt::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -91,14 +83,10 @@ bool SwFmtCharFmt::operator==( const SfxPoolItem& rAttr ) const
     return GetCharFmt() == ((SwFmtCharFmt&)rAttr).GetCharFmt();
 }
 
-
-
 SfxPoolItem* SwFmtCharFmt::Clone( SfxItemPool* ) const
 {
     return new SwFmtCharFmt( *this );
 }
-
-
 
 // weiterleiten an das TextAttribut
 void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
@@ -106,8 +94,6 @@ void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( pTxtAttr )
         pTxtAttr->ModifyNotification( pOld, pNew );
 }
-
-
 
 // weiterleiten an das TextAttribut
 bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
@@ -228,8 +214,6 @@ SwFmtINetFmt::~SwFmtINetFmt()
     delete mpMacroTbl;
 }
 
-
-
 bool SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
@@ -257,14 +241,10 @@ bool SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
     return rOwn == rOther;
 }
 
-
-
 SfxPoolItem* SwFmtINetFmt::Clone( SfxItemPool* ) const
 {
     return new SwFmtINetFmt( *this );
 }
-
-
 
 void SwFmtINetFmt::SetMacroTbl( const SvxMacroTableDtor* pNewTbl )
 {
@@ -279,8 +259,6 @@ void SwFmtINetFmt::SetMacroTbl( const SvxMacroTableDtor* pNewTbl )
         delete mpMacroTbl, mpMacroTbl = 0;
 }
 
-
-
 void SwFmtINetFmt::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     if( !mpMacroTbl )
@@ -289,8 +267,6 @@ void SwFmtINetFmt::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
     mpMacroTbl->Insert( nEvent, rMacro );
 }
 
-
-
 const SvxMacro* SwFmtINetFmt::GetMacro( sal_uInt16 nEvent ) const
 {
     const SvxMacro* pRet = 0;
@@ -298,8 +274,6 @@ const SvxMacro* SwFmtINetFmt::GetMacro( sal_uInt16 nEvent ) const
         pRet = mpMacroTbl->Get( nEvent );
     return pRet;
 }
-
-
 
 bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -426,7 +400,6 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
     }
     return bRet;
 }
-
 
 /*************************************************************************
 |*    class SwFmtRuby
@@ -558,7 +531,6 @@ bool SwFmtRuby::PutValue( const uno::Any& rVal,
     return bRet;
 }
 
-
 /*************************************************************************
  class SwFmtMeta
  ************************************************************************/
@@ -672,7 +644,6 @@ void SwFmtMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
         m_pMeta->RegisterAsCopyOf(*pOriginal);
     }
 }
-
 
 namespace sw {
 
@@ -832,11 +803,9 @@ void MetaField::SetNumberFormat(sal_uInt32 nNumberFormat)
     m_nNumberFormat = nNumberFormat;
 }
 
-
 /*************************************************************************
  class sw::MetaFieldManager
  ************************************************************************/
-
 
 MetaFieldManager::MetaFieldManager()
 {
@@ -890,6 +859,5 @@ MetaFieldManager::getMetaFields()
 }
 
 } // namespace sw
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

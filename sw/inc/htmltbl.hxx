@@ -20,13 +20,11 @@
 #ifndef INCLUDED_SW_INC_HTMLTBL_HXX
 #define INCLUDED_SW_INC_HTMLTBL_HXX
 
-
 #include <vcl/timer.hxx>
 #include <editeng/svxenum.hxx>
 
 #include "swtypes.hxx"
 #include "node.hxx"
-
 
 class SwTableBox;
 class SwTable;
@@ -271,7 +269,6 @@ public:
 
     inline void SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight );
 
-
     void GetAvail( sal_uInt16 nCol, sal_uInt16 nColSpan, sal_uInt16& rAbsAvail,
                    sal_uInt16& rRelAvail ) const;
 
@@ -459,7 +456,6 @@ void SwHTMLTableLayout::SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight 
     nInhLeftBorderWidth = nLeft;
     nInhRightBorderWidth = nRight;
 }
-
 
 #endif
 

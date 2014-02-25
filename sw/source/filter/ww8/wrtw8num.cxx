@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <vcl/font.hxx>
 #include <editeng/fontitem.hxx>
@@ -553,7 +552,6 @@ void WW8Export::OutListNamesTab()
     pFib->lcbSttbListNames = pTableStrm->Tell() - pFib->fcSttbListNames;
 }
 
-
 // old WW95-Code
 
 void WW8Export::OutputOlst( const SwNumRule& rRule )
@@ -587,7 +585,6 @@ void WW8Export::OutputOlst( const SwNumRule& rRule )
 
     pO->insert( pO->end(), (sal_uInt8*)&aOlst, (sal_uInt8*)&aOlst+sizeof( aOlst ) );
 }
-
 
 void WW8Export::Out_WwNumLvl( sal_uInt8 nWwLevel )
 {
@@ -823,7 +820,6 @@ void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
     // ... spit it out
     OutSprmBytes( (sal_uInt8*)&aSprmAnld, sizeof( aSprmAnld ) );
 }
-
 
 // Return: is it an outline?
 bool WW8Export::Out_SwNum(const SwTxtNode* pNd)

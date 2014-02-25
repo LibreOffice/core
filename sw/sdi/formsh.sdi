@@ -28,4 +28,3 @@ shell SwDrawFormShell : SwDrawBaseShell
     import TextDrawForm[Automation];
 }
 
-

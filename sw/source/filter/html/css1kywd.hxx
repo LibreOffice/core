@@ -29,9 +29,7 @@
 #define CSS1_CONSTASCII_DEF( n, s ) n[sizeof(s)] = s
 #endif
 
-
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS_mimetype, "text/css" );
-
 
 // ein par allgemeine Strings
 
@@ -66,7 +64,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_px, "px" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_em, "em" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_ex, "ex" );
 
-
 // Strings fuer Font-Properties
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_family, "font-family" );
@@ -77,13 +74,11 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_cursive, "cursive" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_fantasy, "fantasy" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_monospace, "monospace" );
 
-
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_style, "font-style" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_normal, "normal" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_italic, "italic" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_oblique, "oblique" );
-
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_variant, "font-variant" );
 
@@ -108,7 +103,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_extra_bold, "extra-bold" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_lighter, "lighter" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_bolder, "bolder" );
 
-
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_size, "font-size" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_xx_small, "xx-small" );
@@ -122,16 +116,11 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_xx_large, "xx-large" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_larger, "larger" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_smaller, "smaller" );
 
-
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font, "font" );
-
-
-
 
 // Strings fuer Farb- und Hintergrund-Properties
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_color, "color" );
-
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_background, "background" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_background_color, "background-color" );
@@ -149,12 +138,9 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_bottom, "bottom" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_scroll, "scroll" );
 
-
-
 // Strings fuer Text-Properties
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_letter_spacing, "letter-spacing" );
-
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_text_decoration, "text-decoration" );
 
@@ -164,7 +150,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_overline, "overline" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_line_through, "line-through" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_blink, "blink" );
 
-
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_text_align, "text-align" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_left, "left" );
@@ -172,13 +157,9 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_center, "center" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_right, "right" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_justify, "justify" );
 
-
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_text_indent, "text-indent" );
 
-
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_line_height, "line-height" );
-
-
 
 // Strings fuer Box-Properties
 
@@ -243,7 +224,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_left, "left" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_top, "top" );
 
-
 // Feature: PrintExt
 
 // Strings fuer Printing Extensions
@@ -269,7 +249,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_landscape, "landscape" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_class_abs_pos, "sd-abs-pos" );
 
-
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_so_language, "so-language" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_direction, "direction" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_ltr, "ltr" );
@@ -279,6 +258,5 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_inherit, "inherit" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_display, "display" );
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

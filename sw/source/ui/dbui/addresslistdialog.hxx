@@ -27,7 +27,6 @@
 #include <swdbdata.hxx>
 #include "sharedconnection.hxx"
 
-
 namespace com{namespace sun{namespace star{
     namespace container{
         class XNameAccess;

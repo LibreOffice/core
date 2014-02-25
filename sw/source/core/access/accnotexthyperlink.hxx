@@ -18,7 +18,6 @@
 #ifndef _ACCNOTEXTHYPERLINK_HXX
 #define _ACCNOTEXTHYPERLINK_HXX
 
-
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase1.hxx>

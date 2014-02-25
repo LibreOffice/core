@@ -211,7 +211,6 @@ SwBidiPortion::SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv )
         SetDirection( DIR_LEFT2RIGHT );
 }
 
-
 long SwBidiPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo& rInf ) const
 {
     return HasTabulator() ? 0 : GetSpaceCnt(rInf) * nSpaceAdd / SPACING_PRECISION_FACTOR;
@@ -349,7 +348,6 @@ SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int3
     else
         SetDirection( DIR_LEFT2RIGHT );
 }
-
 
 /*--------------------------------------------------
  * SwMultiPortion::PaintBracket paints the wished bracket,
@@ -591,7 +589,6 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
  * constructs a ruby portion, i.e. an additional text is displayed
  * beside the main text, e.g. phonetic characters.
  * --------------------------------------------------*/
-
 
 SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
     SwMultiPortion( nEnd ),
@@ -2333,8 +2330,6 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
     delete (pCreate);
     return pRest;
 }
-
-
 
 /*--------------------------------------------------
  * SwTxtCursorSave notes the start and current line of a SwTxtCursor,

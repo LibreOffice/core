@@ -153,7 +153,6 @@ bool SwTxtFrm::CalcPrepFtnAdjust()
     return true;
 }
 
-
 /*************************************************************************
  *                      lcl_GetFtnLower()
  *
@@ -179,7 +178,7 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         // If pFrm is inside a table, we have to check if
         // a) The table is not allowed to split or
         // b) The table row is not allowed to split
-        //
+
         // Inside a table, there are no footnotes,
         // see SwFrm::FindFtnBossFrm. So we don't have to check
         // the case that pFrm is inside a (footnote collecting) section

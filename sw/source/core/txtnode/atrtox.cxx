@@ -72,14 +72,14 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
         }
     }
     // kein entsprechender Typ vorhanden -> neu erzeugen
-    //
+
     if(!pType)
     {
         pDoc->InsertTOXType( SwTOXType( eType, rNm ) );
         pType = pDoc->GetTOXType(eType, 0);
     }
     // Verzeichnistyp umhaengen
-    //
+
     ((SwTOXType*)pType)->Add( &rTOX );
 }
 

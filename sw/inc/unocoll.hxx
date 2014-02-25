@@ -66,7 +66,6 @@ class SwUnoCollection
     virtual void                Invalidate();
     sal_Bool                        IsValid() const {return bObjectValid;}
 
-
     SwDoc*          GetDoc() const {return pDoc;}
 };
 
@@ -189,9 +188,8 @@ class SwUnoCollection
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
-//
 // case-corrected versions of service-names (see #i67811)
-//
+
 #define CSS_TEXT_TEXTFIELD_DATE_TIME                    "com.sun.star.text.textfield.DateTime"
 #define CSS_TEXT_TEXTFIELD_USER                         "com.sun.star.text.textfield.User"
 #define CSS_TEXT_TEXTFIELD_SET_EXPRESSION               "com.sun.star.text.textfield.SetExpression"
@@ -250,7 +248,6 @@ class SwUnoCollection
 #define CSS_TEXT_FIELDMASTER_DATABASE                   "com.sun.star.text.fieldmaster.Database"
 #define CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY               "com.sun.star.text.fieldmaster.Bibliography"
 
-
 class SwXServiceProvider
 {
 public:
@@ -276,7 +273,6 @@ protected:
     virtual ~SwXTextTables();
 public:
     SwXTextTables(SwDoc* pDoc);
-
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
@@ -350,7 +346,6 @@ protected:
 public:
     SwXTextFrames(SwDoc* pDoc);
 
-
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception );
@@ -379,7 +374,6 @@ protected:
 public:
     SwXTextEmbeddedObjects(SwDoc* pDoc);
 
-
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception );
@@ -394,7 +388,6 @@ protected:
     virtual ~SwXTextSections();
 public:
     SwXTextSections(SwDoc* pDoc);
-
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
@@ -424,7 +417,6 @@ class SwXBookmarks : public SwCollectionBaseClass,
         virtual ~SwXBookmarks();
     public:
         SwXBookmarks(SwDoc* pDoc);
-
 
         //XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
@@ -509,7 +501,6 @@ protected:
 public:
     SwXReferenceMarks(SwDoc* pDoc);
 
-
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception );
@@ -532,10 +523,5 @@ public:
 };
 
 #endif
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

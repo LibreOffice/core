@@ -32,7 +32,6 @@
 
 #include <unobaseclass.hxx>
 
-
 class SwFieldType;
 class SwDoc;
 class SwFmtFld;
@@ -150,7 +149,6 @@ public:
                 ::com::sun::star::uno::RuntimeException, std::exception);
 
 };
-
 
 typedef ::cppu::WeakImplHelper5
 <   ::com::sun::star::text::XDependentTextField

@@ -40,7 +40,6 @@ SwFieldType* SwMacroFieldType::Copy() const
     return pType;
 }
 
-
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
                            const OUString& rLibAndName, const OUString& rTxt) :
     SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(sal_False)

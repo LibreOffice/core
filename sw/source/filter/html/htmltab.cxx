@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -32,7 +31,6 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svl/urihelper.hxx>
-
 
 #include <fmtornt.hxx>
 #include <frmfmt.hxx>
@@ -62,7 +60,6 @@
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
-
 
 static HTMLOptionEnum aHTMLTblVAlignTable[] =
 {
@@ -155,7 +152,6 @@ public:
     sal_uInt16 GetContextStAttrMin() const { return nContextStAttrMin; }
 };
 
-
 // Cell content is a linked list with SwStartNodes and
 // HTMLTables.
 
@@ -198,7 +194,6 @@ public:
 
     SwHTMLTableLayoutCnts *CreateLayoutInfo();
 };
-
 
 // Cell of a HTML table
 class HTMLTableCell
@@ -269,7 +264,6 @@ public:
     sal_Bool IsCovered() const { return mbCovered; }
 };
 
-
 // Row of a HTML table
 typedef boost::ptr_vector<HTMLTableCell> HTMLTableCells;
 
@@ -326,7 +320,6 @@ public:
     sal_Bool IsSplitable() const { return bSplitable; }
 };
 
-
 // Column of a HTML table
 class HTMLTableColumn
 {
@@ -367,7 +360,6 @@ public:
 
     SwHTMLTableLayoutColumn *CreateLayoutInfo();
 };
-
 
 // HTML table
 typedef boost::ptr_vector<HTMLTableRow> HTMLTableRows;
@@ -454,7 +446,6 @@ class HTMLTable
 
     SwHTMLTableLayout *pLayoutInfo;
 
-
     // die folgenden Parameter stammen aus der dem <TABLE>-Tag
     sal_uInt16 nWidth;                  // die Breite der Tabelle
     sal_uInt16 nHeight;                 // absolute Hoehe der Tabelle
@@ -521,7 +512,6 @@ class HTMLTable
     // Linke und rechte Umrandung der umgebenen Tabelle erben
     void InheritVertBorders( const HTMLTable *pParent,
                              sal_uInt16 nCol, sal_uInt16 nColSpan );
-
 
     // Setzen der Umrandung anhand der Benutzervorgaben
     void SetBorders();
@@ -651,8 +641,6 @@ public:
     sal_Bool IsOverflowing() const { return nBoxes > 64000; }
 };
 
-
-
 void HTMLTableCnts::InitCtor()
 {
     pNext = 0;
@@ -709,7 +697,6 @@ SwHTMLTableLayoutCnts *HTMLTableCnts::CreateLayoutInfo()
 
     return pLayoutInfo;
 }
-
 
 HTMLTableCell::HTMLTableCell():
     pContents(0),
@@ -804,7 +791,6 @@ SwHTMLTableLayoutCell *HTMLTableCell::CreateLayoutInfo()
     return new SwHTMLTableLayoutCell( pCntInfo, nRowSpan, nColSpan, nWidth,
                                       bRelWidth, bNoWrap );
 }
-
 
 HTMLTableRow::HTMLTableRow( sal_uInt16 nCells ):
     pCells(new HTMLTableCells),
@@ -905,7 +891,6 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
     pCells->erase( pCells->begin() + nCells, pCells->end() );
 }
 
-
 HTMLTableColumn::HTMLTableColumn():
     bIsEndOfGroup(sal_False),
     nWidth(0), bRelWidth(sal_False),
@@ -959,8 +944,6 @@ inline SwFrmFmt *HTMLTableColumn::GetFrmFmt( sal_Bool bBorderLine,
 {
     return aFrmFmts[GetFrmFmtIdx(bBorderLine,eVertOrient)];
 }
-
-
 
 void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
 {
@@ -1123,7 +1106,6 @@ HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
         pColumns->push_back( new HTMLTableColumn );
 }
 
-
 HTMLTable::~HTMLTable()
 {
     delete pResizeDrawObjs;
@@ -1224,7 +1206,6 @@ void HTMLTable::ProtectRowSpan( sal_uInt16 nRow, sal_uInt16 nCol, sal_uInt16 nRo
     }
 }
 
-
 // Suchen des SwStartNodes der letzten belegten Vorgaengerbox
 const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 nCol ) const
 {
@@ -1283,7 +1264,6 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
     return ( pPrevCnts->GetStartNode() ? pPrevCnts->GetStartNode()
                : pPrevCnts->GetTable()->GetPrevBoxStartNode( USHRT_MAX, USHRT_MAX ) );
 }
-
 
 static sal_Bool IsBoxEmpty( const SwTableBox *pBox )
 {
@@ -1659,7 +1639,6 @@ SwTableBox *HTMLTable::NewTableBox( const SwStartNode *pStNd,
     return pBox;
 }
 
-
 static void ResetLineFrmFmtAttrs( SwFrmFmt *pFrmFmt )
 {
     pFrmFmt->ResetFmtAttr( RES_FRM_SIZE );
@@ -1733,7 +1712,6 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
 
         ResetLineFrmFmtAttrs( pLineFrmFmtNoHeight );
     }
-
 
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
 
@@ -1922,7 +1900,7 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
     // ob eine Umrandung der Tabelle noetig/moeglich ist, weil das davon
     // abhaengt, ob "Filler"-Zellen eingefuegt werden. Hier werden deshalb
     // erstmal nur Informationen gesammelt
-    //
+
     if( 0==nRow && pParent->bTopBorder && bFirstPara )
     {
         bTopBorder = true;
@@ -1937,7 +1915,6 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
             nRow+nRowSpan==pParent->nRows ? pParent->aBottomBorderLine
                                           : pParent->aBorderLine;
     }
-
 
     // Die Child Tabelle darf keinen oberen oder linken Rahmen bekommen,
     // wenn der bereits durch die umgebende Tabelle gesetzt ist.
@@ -2081,7 +2058,6 @@ inline HTMLTableCell *HTMLTable::GetCell( sal_uInt16 nRow,
     OSL_ENSURE(nRow < pRows->size(), "invalid row index in HTML table");
     return (*pRows)[nRow].GetCell( nCell );
 }
-
 
 SvxAdjust HTMLTable::GetInheritedAdjust() const
 {
@@ -2297,7 +2273,6 @@ void HTMLTable::CloseRow( sal_Bool bEmpty )
             break;
     }
 
-
     nCurRow++;
 }
 
@@ -2354,7 +2329,6 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidt
 
     nCurCol = nColsReq;
 }
-
 
 void HTMLTable::CloseTable()
 {
@@ -2644,7 +2618,6 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         pFrmFmt->ResetFmtAttr( RES_VERT_ORIENT );
         pFrmFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
 
-
         _MakeTable( pNewBox );
 
         // und noch ggf. rechts eine Zelle einfuegen
@@ -2834,7 +2807,6 @@ void _HTMLTableContext::RestorePREListingXMP( SwHTMLParser& rParser )
         rParser.StartListing();
 }
 
-
 const SwStartNode *SwHTMLParser::InsertTableSection
     ( const SwStartNode *pPrevStNd )
 {
@@ -2937,7 +2909,6 @@ SwStartNode *SwHTMLParser::InsertTempTableCaptionSection()
     return pStNd;
 }
 
-
 sal_Int32 SwHTMLParser::StripTrailingLF()
 {
     sal_Int32 nStripped = 0;
@@ -3037,7 +3008,6 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
     return pBrushItem;
 }
 
-
 class _SectionSaveStruct : public SwPendingStackData
 {
     sal_uInt16 nBaseFontStMinSave, nFontStMinSave, nFontStHeadStartSave;
@@ -3091,7 +3061,6 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
                 rParser.aBaseFontStack.end() );
     rParser.nBaseFontStMin = nBaseFontStMinSave;
 
-
     nMin = rParser.nFontStMin;
     if( rParser.aFontStack.size() > nMin )
         rParser.aFontStack.erase( rParser.aFontStack.begin() + nMin,
@@ -3115,7 +3084,6 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
     if( !rParser.aParaAttrs.empty() )
         rParser.aParaAttrs.clear();
 }
-
 
 class _CellSaveStruct : public _SectionSaveStruct
 {
@@ -3168,7 +3136,6 @@ public:
     void EndNoBreak( const SwPosition& rPos );
     void CheckNoBreak( const SwPosition& rPos, SwDoc *pDoc );
 };
-
 
 _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                                   sal_Bool bHd, sal_Bool bReadOpt ) :
@@ -3439,8 +3406,6 @@ void _CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
         }
     }
 }
-
-
 
 HTMLTableCnts *SwHTMLParser::InsertTableContents(
                                         sal_Bool bHead )
@@ -4009,7 +3974,6 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                                 pSubTable->GetTableAdjust(sal_False)!= SVX_ADJUST_RIGHT,
                                 "links oder rechts ausgerichtete Tabellen gehoehren in Rahmen" );
 
-
                         HTMLTableCnts *pParentContents =
                             pSubTable->GetParentContents();
                         if( pParentContents )
@@ -4205,7 +4169,6 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
     delete pSaveStruct;
 }
 
-
 class _RowSaveStruct : public SwPendingStackData
 {
 public:
@@ -4217,7 +4180,6 @@ public:
         eAdjust( SVX_ADJUST_END ), eVertOri( text::VertOrientation::TOP ), bHasCells( sal_False )
     {}
 };
-
 
 void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, sal_Bool bReadOptions,
                                   SvxAdjust eGrpAdjust,
@@ -4595,7 +4557,6 @@ struct _TblColGrpSaveStruct : public SwPendingStackData
 
     inline _TblColGrpSaveStruct();
 
-
     inline void CloseColGroup( HTMLTable *pTable );
 };
 
@@ -4604,7 +4565,6 @@ inline _TblColGrpSaveStruct::_TblColGrpSaveStruct() :
     bRelColGrpWidth( sal_False ), eColGrpAdjust( SVX_ADJUST_END ),
     eColGrpVertOri( text::VertOrientation::TOP )
 {}
-
 
 inline void _TblColGrpSaveStruct::CloseColGroup( HTMLTable *pTable )
 {
@@ -5049,7 +5009,6 @@ public:
 _TblSaveStruct::~_TblSaveStruct()
 {}
 
-
 void _TblSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc )
 {
     pCurTable->MakeTable( 0, nWidth );
@@ -5083,7 +5042,6 @@ void _TblSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc
 
     rPos = *pTCntxt->GetPos();
 }
-
 
 HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
                                     SvxAdjust eParentAdjust ) :
@@ -5219,7 +5177,6 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
         eRules = HTML_TR_NONE;
     }
 }
-
 
 HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                                      sal_Bool bIsParentHead,
@@ -5508,6 +5465,5 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
 
     return pRetTbl;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

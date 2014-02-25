@@ -26,7 +26,6 @@
 #include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 
-
 class SwLabDlg;
 class SwLabItem;
 
@@ -70,6 +69,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

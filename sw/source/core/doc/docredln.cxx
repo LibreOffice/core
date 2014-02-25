@@ -3981,7 +3981,6 @@ void SwExtraRedlineTbl::DeleteAndDestroyAll()
     DeleteAndDestroy(0, m_aExtraRedlines.size());
 }
 
-
 SwExtraRedline::SwExtraRedline( )
 {
 }
@@ -4028,9 +4027,7 @@ bool SwDoc::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool bCallDelete
         pNewRedl->InvalidateRange();
         */
 
-        // ===========================================================
         // Make equivelant of 'AppendRedline' checks inside here too
-        // ===========================================================
 
         mpExtraRedlineTbl->Insert( pNewRedl );
     }
@@ -4091,9 +4088,7 @@ bool SwDoc::AppendTableCellRedline( SwTableCellRedline* pNewRedl, bool bCallDele
         pNewRedl->InvalidateRange();
         */
 
-        // ===========================================================
         // Make equivelant of 'AppendRedline' checks inside here too
-        // ===========================================================
 
         mpExtraRedlineTbl->Insert( pNewRedl );
     }

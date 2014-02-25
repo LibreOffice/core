@@ -34,9 +34,7 @@
 #include <unobaseclass.hxx>
 #include <IDocumentMarkAccess.hxx>
 
-
 class SwDoc;
-
 
 typedef ::cppu::ImplInheritanceHelper5
 <   ::sfx2::MetadatableMixin

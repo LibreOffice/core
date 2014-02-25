@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -30,9 +29,7 @@
 #include "wrtsh.hxx"
 #include "dbmgr.hxx"
 
-
 using namespace ::com::sun::star;
-
 
 static const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
 static const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields
@@ -293,7 +290,6 @@ void SwXDispatch::addStatusListener(
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
         aEvent.IsEnabled = !rData.sDataSource.isEmpty();
     }
-
 
     xControl->statusChanged( aEvent );
 

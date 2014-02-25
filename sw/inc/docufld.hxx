@@ -19,10 +19,8 @@
 #ifndef INCLUDED_SW_INC_DOCUFLD_HXX
 #define INCLUDED_SW_INC_DOCUFLD_HXX
 
-
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
-
 
 #include <svl/macitem.hxx>
 
@@ -82,14 +80,12 @@ namespace nsSwDocInfoSubType
     const SwDocInfoSubType DI_CUSTOM        =  9;
     const SwDocInfoSubType DI_SUBTYPE_END   = 10;
 
-
     const SwDocInfoSubType DI_SUB_AUTHOR    = 0x0100;
     const SwDocInfoSubType DI_SUB_TIME      = 0x0200;
     const SwDocInfoSubType DI_SUB_DATE      = 0x0300;
     const SwDocInfoSubType DI_SUB_FIXED     = 0x1000;
     const SwDocInfoSubType DI_SUB_MASK      = 0xff00;
 }
-
 
 enum RegInfoFormat  ///< Only for loading of old documents!!!
 {
@@ -289,7 +285,6 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
-
 /*--------------------------------------------------------------------
     Document statistics
  --------------------------------------------------------------------*/
@@ -396,7 +391,6 @@ public:
     virtual void        SetPar2(const OUString& rStr);
     virtual OUString GetPar2() const;
 
-
     virtual sal_uInt16      GetSubType() const;
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
@@ -495,7 +489,6 @@ public:
 
     static sal_Bool isScriptURL( const OUString& str );
 };
-
 
 /*--------------------------------------------------------------------
     PostIts
@@ -612,7 +605,6 @@ public:
     Extended User settings.
  --------------------------------------------------------------------*/
 
-
 class SwExtUserFieldType : public SwFieldType
 {
     OUString aData;
@@ -644,7 +636,6 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
-
 
 /*--------------------------------------------------------------------
     Relative page numbers - field.
@@ -851,7 +842,6 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
-
 
 #endif // INCLUDED_SW_INC_DOCUFLD_HXX
 

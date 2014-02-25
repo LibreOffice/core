@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -308,7 +307,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
       pDoc->SetRedlineMode( (RedlineMode_t)(nRedlineMode ));
     }
 
-
     if( pGraphicResolver )
         SvXMLGraphicHelper::Destroy( pGraphicResolver );
     if( pEmbeddedResolver )
@@ -342,7 +340,6 @@ SwXMLExport::~SwXMLExport()
     DeleteTableLines();
     _FinitItemExport();
 }
-
 
 void SwXMLExport::_ExportFontDecls()
 {
@@ -451,7 +448,6 @@ void SwXMLExport::SetBodyAttributes()
     }
 }
 
-
 void SwXMLExport::_ExportContent()
 {
     // export forms
@@ -507,12 +503,8 @@ void SwXMLExport::_ExportContent()
     GetTextParagraphExport()->exportText( xText, bShowProgress );
 }
 
-
-
-//
 // uno component registration
 // helper functions for export service(s)
-//
 
 // OOo
 OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw()

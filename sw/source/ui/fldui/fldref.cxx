@@ -152,7 +152,6 @@ sal_uInt16 SwFldRefPage::GetSavedSelectedPos() const
     return mnSavedSelectedPos;
 }
 
-
 void SwFldRefPage::Reset(const SfxItemSet& )
 {
     if (!IsFldEdit())

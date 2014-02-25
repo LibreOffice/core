@@ -43,8 +43,6 @@ public:
     virtual void    Deactivate();
 };
 
-
-
 #endif // INCLUDED_SW_SOURCE_UI_INC_CONARC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -93,7 +93,6 @@ class SwXMLImport: public SvXMLImport
     void         setBlockMode();
     void         setOrganizerMode();
 
-
 protected:
 
     // This method is called after the namespace map has been updated, but

@@ -513,7 +513,6 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
     return eDT;
 }
 
-
 extern void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
                                 sal_uInt16& rSubType, sal_uLong &rFmt,
                                 sal_uInt16 nVersion );
@@ -658,7 +657,6 @@ oncemore:
             }
 
             aSubType = rOut.ConvertUStr(aSubType);
-
 
             // huge pile of shit: the type 'info' can represent one of
             // types 15 to 31. it contains as formula the actual field
@@ -990,7 +988,7 @@ oncemore:
         case 42: // nextif command
         case 43: // skipif command
         case 44: // number of record
-        //
+
         case 45: // dde ref
         case 46: // dde auto ref
         case 47: // glossary entry

@@ -2333,7 +2333,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
                     // !bFrame && !bHidden: aller Wahrscheinlichkeit handelt es
                     // sich um ein Feld in einem unbenutzten Seitenstyle
-                    //
+
                     // bHidden: Feld ist versteckt
                     // FME: Problem: Verstecktes Feld in unbenutzter Seitenvorlage =>
                     // bIsFieldUsed = true
@@ -2966,7 +2966,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     m_pImpl->m_Items.realloc( nSize );
     uno::Reference< text::XTextField > *pItems = m_pImpl->m_Items.getArray();
     sal_Int32 nFillPos = 0;
-    //
+
     const SwFldTypes* pFldTypes = m_pImpl->m_pDoc->GetFldTypes();
     sal_uInt16 nCount = pFldTypes->size();
     for(sal_uInt16 nType = 0;  nType < nCount;  ++nType)
@@ -3056,6 +3056,5 @@ void SwXFieldEnumeration::Impl::Modify(
     if(!GetRegisteredIn())
         m_pDoc = 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

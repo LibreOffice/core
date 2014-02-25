@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WW8FFData.hxx"
 #include <tools/stream.hxx>
 #include <doc.hxx>

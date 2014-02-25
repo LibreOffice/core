@@ -87,7 +87,6 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
         else
             pNd = 0;
 
-
         if( nLRSavePos )
         {
             // Update immediately so that potential "old" LRSpaces will be valid again.

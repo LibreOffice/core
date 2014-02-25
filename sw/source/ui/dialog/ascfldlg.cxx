@@ -41,7 +41,6 @@
 
 #include "vcl/metric.hxx"
 
-
 using namespace ::com::sun::star;
 
 const sal_Unicode cDialogExtraDataClose = '}';
@@ -209,7 +208,6 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 delete pPrt;
         }
 
-
     }
     else
     {
@@ -236,11 +234,9 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     m_pCR_RB->SaveValue();
 }
 
-
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
 {
 }
-
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {
@@ -387,6 +383,5 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
         pBtn->SaveValue();
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-
 struct SwPosition;
 class IntlWrapper;
 

@@ -91,10 +91,10 @@
 
 // ACC ---------------------------------------------------------------
 
-#define FN_CHAR_LEFT_SEL            (RC_GLOBALS_BEGIN + 1)   //
-#define FN_CHAR_RIGHT_SEL           (RC_GLOBALS_BEGIN + 2)   //
-#define FN_LINE_UP_SEL              (RC_GLOBALS_BEGIN + 3)   //
-#define FN_LINE_DOWN_SEL            (RC_GLOBALS_BEGIN + 4)   //
+#define FN_CHAR_LEFT_SEL            (RC_GLOBALS_BEGIN + 1)
+#define FN_CHAR_RIGHT_SEL           (RC_GLOBALS_BEGIN + 2)
+#define FN_LINE_UP_SEL              (RC_GLOBALS_BEGIN + 3)
+#define FN_LINE_DOWN_SEL            (RC_GLOBALS_BEGIN + 4)
 #define FN_START_OF_LINE_SEL        (RC_GLOBALS_BEGIN + 5)   // StartOfLine
 #define FN_END_OF_LINE_SEL          (RC_GLOBALS_BEGIN + 6)   // EndOfLine
 #define FN_START_OF_DOCUMENT_SEL    (RC_GLOBALS_BEGIN + 7)   // StartOfDocument

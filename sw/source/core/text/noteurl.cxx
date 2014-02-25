@@ -28,7 +28,6 @@
 // Global variable
 SwNoteURL *pNoteURL = NULL;
 
-
 void SwNoteURL::InsertURLNote( const OUString& rURL, const OUString& rTarget,
     const SwRect& rRect )
 {
@@ -43,7 +42,6 @@ void SwNoteURL::InsertURLNote( const OUString& rURL, const OUString& rTarget,
         aList.push_back( pNew );
     }
 }
-
 
 void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
     const MapMode& rMap )

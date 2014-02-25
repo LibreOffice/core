@@ -47,7 +47,6 @@ interface TextSelection : BaseTextSelection
 
 }  // end interface Base
 
-
 shell SwBaseShell
 {
         import TextSelection[Automation];

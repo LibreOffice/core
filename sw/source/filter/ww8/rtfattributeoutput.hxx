@@ -96,7 +96,7 @@ public:
     virtual void FieldVanish( const OUString& rTxt, ww::eField eType );
 
     /// Output redlining.
-    ///
+    /
     /// The common attribute that can be among the run properties.
     virtual void Redline( const SwRedlineData* pRedline );
 
@@ -178,7 +178,7 @@ public:
     virtual void SectionBiDi( bool bBiDi );
 
     /// The style of the page numbers.
-    ///
+    /
     virtual void SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber );
 
     /// The type of breaking.

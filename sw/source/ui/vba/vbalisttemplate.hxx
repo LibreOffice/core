@@ -25,7 +25,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include "vbalisthelper.hxx"
 
-
 typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XListTemplate > SwVbaListTemplate_BASE;
 
 class SwVbaListTemplate : public SwVbaListTemplate_BASE

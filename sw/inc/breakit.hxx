@@ -33,7 +33,6 @@
  *                      class SwBreakIt
  *************************************************************************/
 
-
 class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
 {
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;

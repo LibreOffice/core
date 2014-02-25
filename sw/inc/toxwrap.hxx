@@ -34,7 +34,6 @@ namespace lang {
 }
 }}}
 
-
 class SW_DLLPUBLIC IndexEntrySupplierWrapper
 {
     ::com::sun::star::lang::Locale aLcl;

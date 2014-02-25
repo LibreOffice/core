@@ -193,6 +193,3 @@ shell SwSrcView
         import WebSourceView [Automation];
 }
 
-
-
-

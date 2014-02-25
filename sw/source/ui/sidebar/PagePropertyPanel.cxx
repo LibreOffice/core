@@ -77,7 +77,6 @@ namespace {
     }
 }
 
-
 namespace sw { namespace sidebar {
 
 PagePropertyPanel* PagePropertyPanel::Create (
@@ -263,12 +262,10 @@ void PagePropertyPanel::Initialize()
     mpBindings->Update( SID_ATTR_PAGE_SIZE );
 }
 
-
 ::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageOrientationControl( ::svx::sidebar::PopupContainer* pParent )
 {
     return new PageOrientationControl( pParent, *this , mpPageItem->IsLandscape() );
 }
-
 
 IMPL_LINK( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox )
 {
@@ -276,7 +273,6 @@ IMPL_LINK( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox )
 
     return 0L;
 }
-
 
 void PagePropertyPanel::ExecuteOrientationChange( const sal_Bool bLandscape )
 {
@@ -336,14 +332,10 @@ void PagePropertyPanel::ExecuteOrientationChange( const sal_Bool bLandscape )
     EndUndo();
 }
 
-
 void PagePropertyPanel::ClosePageOrientationPopup()
 {
     maOrientationPopup.Hide();
 }
-
-
-
 
 ::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageMarginControl( ::svx::sidebar::PopupContainer* pParent )
 {
@@ -358,7 +350,6 @@ void PagePropertyPanel::ClosePageOrientationPopup()
         meFUnit,
         meUnit );
 }
-
 
 void PagePropertyPanel::ExecuteMarginLRChange(
     const long nPageLeftMargin,
@@ -378,13 +369,11 @@ void PagePropertyPanel::ExecuteMarginULChange(
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_ULSPACE, SFX_CALLMODE_RECORD, mpPageULMarginItem.get(),  0L );
 }
 
-
 void PagePropertyPanel::ExecutePageLayoutChange( const bool bMirrored )
 {
     mpPageItem->SetPageUsage( bMirrored ? SVX_PAGE_MIRROR : SVX_PAGE_ALL );
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE, SFX_CALLMODE_RECORD, mpPageItem.get(),  0L );
 }
-
 
 IMPL_LINK( PagePropertyPanel, ClickMarginHdl, ToolBox*, pToolBox )
 {
@@ -393,14 +382,10 @@ IMPL_LINK( PagePropertyPanel, ClickMarginHdl, ToolBox*, pToolBox )
     return 0L;
 }
 
-
 void PagePropertyPanel::ClosePageMarginPopup()
 {
     maMarginPopup.Hide();
 }
-
-
-
 
 ::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageSizeControl( ::svx::sidebar::PopupContainer* pParent )
 {
@@ -411,7 +396,6 @@ void PagePropertyPanel::ClosePageMarginPopup()
         mpPageItem->IsLandscape(),
         meFUnit );
 }
-
 
 void PagePropertyPanel::ExecuteSizeChange( const Paper ePaper )
 {
@@ -425,7 +409,6 @@ void PagePropertyPanel::ExecuteSizeChange( const Paper ePaper )
     mpBindings->GetDispatcher()->Execute(SID_ATTR_PAGE_SIZE, SFX_CALLMODE_RECORD, mpPageSizeItem.get(),  0L );
 }
 
-
 IMPL_LINK( PagePropertyPanel, ClickSizeHdl, ToolBox*, pToolBox )
 {
     maSizePopup.Show( *pToolBox );
@@ -433,14 +416,10 @@ IMPL_LINK( PagePropertyPanel, ClickSizeHdl, ToolBox*, pToolBox )
     return 0L;
 }
 
-
 void PagePropertyPanel::ClosePageSizePopup()
 {
     maSizePopup.Hide();
 }
-
-
-
 
 ::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageColumnControl( ::svx::sidebar::PopupContainer* pParent )
 {
@@ -451,13 +430,11 @@ void PagePropertyPanel::ClosePageSizePopup()
         mpPageItem->IsLandscape() );
 }
 
-
 void PagePropertyPanel::ExecuteColumnChange( const sal_uInt16 nColumnType )
 {
     mpPageColumnTypeItem->SetValue( nColumnType );
     mpBindings->GetDispatcher()->Execute(SID_ATTR_PAGE_COLUMN, SFX_CALLMODE_RECORD, mpPageColumnTypeItem.get(),  0L );
 }
-
 
 IMPL_LINK( PagePropertyPanel, ClickColumnHdl, ToolBox*, pToolBox )
 {
@@ -466,14 +443,10 @@ IMPL_LINK( PagePropertyPanel, ClickColumnHdl, ToolBox*, pToolBox )
     return 0L;
 }
 
-
 void PagePropertyPanel::ClosePageColumnPopup()
 {
     maColumnPopup.Hide();
 }
-
-
-
 
 void PagePropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
@@ -551,7 +524,6 @@ void PagePropertyPanel::NotifyItemUpdate(
     }
 }
 
-
 void PagePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )
 {
     meFUnit = FUNIT_NONE;
@@ -581,9 +553,6 @@ void PagePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pSt
         }
     }
 }
-
-
-
 
 void PagePropertyPanel::ChangeMarginImage()
 {
@@ -628,7 +597,6 @@ void PagePropertyPanel::ChangeMarginImage()
     else
         mpToolBoxMargin->SetItemImage( nIdMargin, mpPageItem->IsLandscape() ? mImgMarginCustom_L : mImgMarginCustom );
 }
-
 
 void PagePropertyPanel::ChangeSizeImage()
 {
@@ -693,7 +661,6 @@ void PagePropertyPanel::ChangeSizeImage()
     }
 }
 
-
 void PagePropertyPanel::ChangeColumnImage( const sal_uInt16 nColumnType )
 {
     if ( mpPageItem.get() == 0 )
@@ -750,7 +717,6 @@ void PagePropertyPanel::ChangeColumnImage( const sal_uInt16 nColumnType )
     }
 }
 
-
 void PagePropertyPanel::StartUndo()
 {
     if ( mxUndoManager.is() )
@@ -758,7 +724,6 @@ void PagePropertyPanel::StartUndo()
         mxUndoManager->enterUndoContext( OUString("") );
     }
 }
-
 
 void PagePropertyPanel::EndUndo()
 {

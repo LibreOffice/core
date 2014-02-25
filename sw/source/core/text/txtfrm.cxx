@@ -73,7 +73,6 @@
 #include <IGrammarContact.hxx>
 #include <switerator.hxx>
 
-
 TYPEINIT1( SwTxtFrm, SwCntntFrm );
 
 // Switches width and height of the text frame
@@ -1188,7 +1187,6 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 SetCompletePaint();
             }
 
-
             if( nCount )
             {
                 if( getRootFrm()->GetCurrShell() )
@@ -2066,7 +2064,6 @@ SwTwips SwTxtFrm::CalcFitToContent()
     if ( IsRightToLeft() )
         Frm().Pos() = aOldFrmPos;
 
-
     SetPara( pOldPara );
 
     return nMax;
@@ -2428,7 +2425,6 @@ void SwTxtFrm::ChgThisLines()
             nThisLines = nNew;
     }
 }
-
 
 void SwTxtFrm::RecalcAllLines()
 {

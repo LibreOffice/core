@@ -133,7 +133,6 @@ class SwFrmPage: public SfxTabPage
     virtual void    ActivatePage(const SfxItemSet& rSet);
     virtual int     DeactivatePage(SfxItemSet *pSet);
 
-
     DECL_LINK(RangeModifyHdl, void *);
     DECL_LINK(AnchorTypeHdl, void *);
     DECL_LINK( PosHdl, ListBox * );
@@ -255,7 +254,6 @@ class SwFrmURLPage : public SfxTabPage
     CheckBox*        pClientCB;
 
     DECL_LINK(InsertFileHdl, void *);
-
 
     SwFrmURLPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmURLPage();

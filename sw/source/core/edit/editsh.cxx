@@ -726,7 +726,6 @@ sal_Bool SwEditShell::DelINetAttrWithText()
     return bRet;
 }
 
-
 /// Set the DontExpand flag at the text character attributes
 bool SwEditShell::DontExpandFmt()
 {

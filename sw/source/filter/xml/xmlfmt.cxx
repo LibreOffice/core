@@ -50,7 +50,6 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -826,7 +825,6 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
 
     return pStyle;
 }
-
 
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

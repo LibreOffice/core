@@ -621,7 +621,6 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
     SwMarginPortion *pLeft = pCurrent->CalcLeftMargin();
     SwGluePortion *pGlue = pLeft; // the last GluePortion
 
-
     // 2) We attach a right margin:
     // CalcRightMargin also calculates a possible overlap with FlyFrms.
     CalcRightMargin( pCurrent );
@@ -879,6 +878,5 @@ void SwTxtAdjuster::CalcDropRepaint()
     if( rRepaint.Bottom() < nBottom )
         rRepaint.Bottom( nBottom );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

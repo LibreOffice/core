@@ -22,8 +22,6 @@
 
 #include <vbahelper/vbaeventshelperbase.hxx>
 
-// ============================================================================
-
 class SwVbaEventsHelper : public VbaEventsHelperBase
 {
 public:
@@ -38,8 +36,6 @@ protected:
     virtual void implPostProcessEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, bool bCancel ) throw (css::uno::RuntimeException);
     virtual OUString implGetDocumentModuleName( const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) const throw (css::lang::IllegalArgumentException);
 };
-
-// ============================================================================
 
 #endif
 

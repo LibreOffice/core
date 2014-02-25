@@ -22,7 +22,6 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 
-
 #include "view.hxx"
 #include "basesh.hxx"
 #include "wrtsh.hxx"
@@ -57,7 +56,6 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
             sWarning += sMsg;
             InfoBox(this, sWarning).Execute();
         }
-
 
     }
 

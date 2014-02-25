@@ -23,8 +23,6 @@ interface WebList : BaseTextList
     import TextSelection;
 }
 
- //=========================================================================
-
 shell SwWebListShell : SwBaseShell
 {
         import WebList[Automation];

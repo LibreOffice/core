@@ -188,8 +188,6 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
     return *this;
 }
 
-
-
 /******************************************************************************
  *  Implementation of paragraph-attributes methods of SwAttrSet
  ******************************************************************************/

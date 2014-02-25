@@ -22,7 +22,6 @@
 #include <swtypes.hxx>
 #include <swlbox.hxx>
 
-
 //     Description: ListboxElement
 SwBoxEntry::SwBoxEntry() :
     bModified(sal_False),

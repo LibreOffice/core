@@ -26,4 +26,3 @@ shell SwBezierShell: SwBaseShell
     import Bezier[Automation];
 }
 
-

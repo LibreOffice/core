@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-
 class SwXMLWriter : public StgWriter
 {
     sal_uInt32 _Write( const com::sun::star::uno::Reference < com::sun::star::task::XStatusIndicator>&, const OUString&  );
@@ -90,7 +89,6 @@ private:
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rMediaDesc );
 };
-
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_WRTXML_HXX
 

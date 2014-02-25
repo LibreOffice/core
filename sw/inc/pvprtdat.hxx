@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_PVPRTDAT_HXX
 #define INCLUDED_SW_INC_PVPRTDAT_HXX
 
-
 #include <tools/solar.h>
 
 class SwPagePreviewPrtData
@@ -64,8 +63,6 @@ public:
     void SetLandscape( sal_Bool b )         { bLandscape = b; }
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

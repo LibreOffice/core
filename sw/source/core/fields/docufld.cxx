@@ -1720,7 +1720,6 @@ OUString SwPostItField::Expand() const
     return OUString();
 }
 
-
 OUString SwPostItField::GetDescription() const
 {
     return SW_RES(STR_NOTE);

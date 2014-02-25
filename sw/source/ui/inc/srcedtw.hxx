@@ -58,7 +58,6 @@ public:
 
 };
 
-//------------------------------------------------------------
 typedef std::set<sal_uInt16> SyntaxLineSet;
 
 class SwSrcEditWindow : public Window, public SfxListener

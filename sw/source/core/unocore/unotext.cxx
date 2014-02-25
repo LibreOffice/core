@@ -67,9 +67,7 @@
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
 
-
 using namespace ::com::sun::star;
-
 
 const sal_Char cInvalidObject[] = "this object is invalid";
 
@@ -2324,7 +2322,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     return xRet;
 }
 
-
 void SAL_CALL
 SwXText::copyText(
     const uno::Reference< text::XTextCopy >& xSource )
@@ -2351,7 +2348,6 @@ throw (uno::RuntimeException, std::exception)
     SwPosition rPos( rNdIndex );
     m_pImpl->m_pDoc->CopyRange( *pCursor->GetPaM(), rPos, false );
 }
-
 
 /******************************************************************
  * SwXBodyText

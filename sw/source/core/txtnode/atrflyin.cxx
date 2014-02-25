@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include "cntfrm.hxx"
 #include "doc.hxx"
@@ -61,8 +60,6 @@ SwTxtFlyCnt::SwTxtFlyCnt( SwFmtFlyCnt& rAttr, sal_Int32 nStartPos )
     rAttr.pTxtAttr = this;
     SetHasDummyChar(true);
 }
-
-
 
 /*************************************************************************
  *                  SwTxtFlyCnt::MakeTxtHint()
@@ -269,6 +266,5 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
 
     return pFly;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

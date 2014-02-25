@@ -31,7 +31,6 @@
 #include <map>
 #include <vector>
 
-
 class SwWrtShell;
 
 class SW_DLLPUBLIC SwSpellPopup : public PopupMenu

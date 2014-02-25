@@ -16,15 +16,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 interface TextMedia : BaseTextMedia
 [
     uuid = "54268616-9970-4ad9-8798-280206fc160a"
 ]
 {
 }
-
- //=========================================================================
 
 shell SwMediaShell : SwBaseShell
 

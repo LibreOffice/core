@@ -31,7 +31,6 @@
 
 #include <unotext.hxx>
 
-
 class SwDoc;
 class SwModify;
 class SwFmtFtn;
@@ -55,7 +54,6 @@ private:
 
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
-
 
 protected:
 

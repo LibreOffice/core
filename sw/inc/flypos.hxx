@@ -26,7 +26,6 @@
 class SwFrmFmt;
 class SwNodeIndex;
 
-
 /// For querying current flys in document.
 class SW_DLLPUBLIC SwPosFlyFrm
 {

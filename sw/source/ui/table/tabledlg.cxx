@@ -567,7 +567,6 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
 }
 
-
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
     OSL_ENSURE(pTblData, "table data not available?");
@@ -614,7 +613,6 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
         {
             SwTwips lLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FUNIT_TWIP )));
             SwTwips lRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
-
 
             if( m_aLeftMF.GetText() != m_aLeftMF.GetSavedValue() ||
                                     m_aRightMF.GetText() != m_aRightMF.GetSavedValue() )
@@ -755,13 +753,11 @@ SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
 {
 };
 
-
 SfxTabPage*   SwTableColumnPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTableColumnPage( pParent, rAttrSet );
 };
-
 
 void  SwTableColumnPage::Reset( const SfxItemSet& )
 {
@@ -910,7 +906,6 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
     }
     return 0;
 };
-
 
 sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
 {
@@ -1350,10 +1345,8 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     if(TriState(m_pSplitRowCB->IsChecked()) != m_pSplitRowCB->GetSavedValue())
         bModified |= 0 != rSet.Put( SwFmtRowSplit( m_pSplitRowCB->IsChecked()));
 
-
     const SvxFmtBreakItem* pBreak = (const SvxFmtBreakItem*)GetOldItem( rSet, RES_BREAK );
     const SwFmtPageDesc* pDesc = (const SwFmtPageDesc*) GetOldItem( rSet, RES_PAGEDESC );
-
 
     sal_Bool bState = m_pPageCollCB->IsChecked();
 

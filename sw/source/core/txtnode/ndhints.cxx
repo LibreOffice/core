@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "txatbase.hxx"
 #include "ndhints.hxx"
 #include <txtatr.hxx>
@@ -27,7 +26,6 @@
 #include <fmtautofmt.hxx>
 #include <set>
 #endif
-
 
 inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
 
@@ -162,7 +160,6 @@ sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
 /*************************************************************************
  *                      SwpHintsArray::Check()
  *************************************************************************/
-
 
 #define CHECK_ERR(cond, text) \
         if(!(cond)) \
@@ -407,6 +404,5 @@ void SwpHintsArray::Resort()
     m_HintStarts.Resort();
     m_HintEnds.Resort();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

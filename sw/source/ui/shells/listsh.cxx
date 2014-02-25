@@ -57,7 +57,6 @@ SFX_IMPL_INTERFACE(SwListShell, SwBaseShell, SW_RES(STR_SHELLNAME_LIST))
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_NUM_TOOLBOX));
 }
 
-
 TYPEINIT1(SwListShell,SwBaseShell)
 
 // #i35572# Functionality of Numbering/Bullet toolbar

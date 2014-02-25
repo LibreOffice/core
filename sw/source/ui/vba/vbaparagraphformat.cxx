@@ -28,7 +28,6 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include "vbatabstops.hxx"
 
-
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 

@@ -1450,7 +1450,6 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
         nOfst = pLastFont->GetFontAscent( rInf.GetShell(), rInf.GetOut() ) -
                 nOrgAscent;
 
-
         switch ( nDir )
         {
         case 0 :
