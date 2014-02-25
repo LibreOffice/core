@@ -73,6 +73,8 @@ protected:
 
     SdXMLImExTransform2D        mnTransform;
     com::sun::star::awt::Size   maSize;
+    sal_Int16                   mnRelWidth;
+    sal_Int16                   mnRelHeight;
     com::sun::star::awt::Point  maPosition;
     basegfx::B2DHomMatrix       maUsedTransformation;
 

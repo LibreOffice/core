@@ -151,6 +151,8 @@ SdXMLShapeContext::SdXMLShapeContext(
     , mbIsUserTransformed(sal_False)
     , mnZOrder(-1)
     , maSize(1, 1)
+    , mnRelWidth(0)
+    , mnRelHeight(0)
     , maPosition(0, 0)
     , maUsedTransformation()
     , mbVisible(true)
@@ -452,6 +454,16 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             || !GetImport().GetTextImport()->IsInsideDeleteContext()))
         {
             xImp->shapeWithZIndexAdded( xShape, mnZOrder );
+        }
+
+        if (mnRelWidth || mnRelHeight)
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+            if (mnRelWidth && xPropertySetInfo->hasPropertyByName("RelativeWidth"))
+                xPropertySet->setPropertyValue("RelativeWidth", uno::makeAny(mnRelWidth));
+            if (mnRelHeight && xPropertySetInfo->hasPropertyByName("RelativeHeight"))
+                xPropertySet->setPropertyValue("RelativeHeight", uno::makeAny(mnRelHeight));
         }
 
         if( !maShapeId.isEmpty() )
@@ -886,6 +898,20 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
         else if( IsXMLToken( rLocalName, XML_DESC ) )
         {
             maShapeDescription = rValue;
+        }
+    }
+    else if (nPrefix == XML_NAMESPACE_STYLE)
+    {
+        sal_Int32 nTmp;
+        if (IsXMLToken(rLocalName, XML_REL_WIDTH))
+        {
+            if (sax::Converter::convertPercent(nTmp, rValue))
+                mnRelWidth = static_cast<sal_Int16>(nTmp);
+        }
+        else if (IsXMLToken(rLocalName, XML_REL_HEIGHT))
+        {
+            if (sax::Converter::convertPercent(nTmp, rValue))
+                mnRelHeight = static_cast<sal_Int16>(nTmp);
         }
     }
     else if( (XML_NAMESPACE_NONE == nPrefix) || (XML_NAMESPACE_XML == nPrefix) )

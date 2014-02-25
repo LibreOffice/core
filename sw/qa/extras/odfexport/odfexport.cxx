@@ -350,6 +350,14 @@ DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
     xFrame.set(getTextFrameByName("Rectangle 3"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
 }
+
+DECLARE_ODFEXPORT_TEST(testShapeRelsize, "shape-relsize.odt")
+{
+    // These were all 0, as style:rel-width/height was ignored on import for shapes.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(40), getProperty<sal_Int16>(getShape(1), "RelativeWidth"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(getShape(1), "RelativeHeight"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
