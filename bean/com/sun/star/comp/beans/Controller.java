@@ -40,9 +40,9 @@ public class Controller
             xController );
     }
 
-    //==============================================================
+
     // com.sun.star.frame.XController
-    //--------------------------------------------------------------
+
 
     public void attachFrame( /*IN*/ com.sun.star.frame.XFrame xFrame )
     {
@@ -79,9 +79,9 @@ public class Controller
         return xController.getFrame();
     }
 
-    //==============================================================
+
     // com.sun.star.frame.XDispatchProvider
-    //--------------------------------------------------------------
+
 
     public com.sun.star.frame.XDispatch queryDispatch(
             /*IN*/ com.sun.star.util.URL aURL,

@@ -330,7 +330,7 @@ public class LocalOfficeConnection
                 aExec = OFFICE_APP_NAME + ".exe";
 
             // add other non-UNIX operating systems here
-            // ...
+
 
             // find soffice executable relative to this class's class loader:
             File path = NativeLibraryLoader.getResource(

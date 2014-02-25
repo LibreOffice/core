@@ -20,7 +20,7 @@ package com.sun.star.comp.beans;
 
 import com.sun.star.uno.UnoRuntime;
 
-//==========================================================================
+
 /** Wrapper class for service OfficeDocument which emulates the upcoming
      mode of automatic runtime Java classes to get rid of the need for
     queryInterface.
@@ -55,9 +55,9 @@ public class OfficeDocument extends Wrapper
             com.sun.star.frame.XStorable.class, xModel );
     }
 
-    //==========================================================
+
     // com.sun.star.frame.XModel
-    //----------------------------------------------------------
+
 
     public boolean attachResource( /*IN*/String aURL,
             /*IN*/com.sun.star.beans.PropertyValue[] aArguments )
@@ -119,9 +119,9 @@ public class OfficeDocument extends Wrapper
         return xModel.getCurrentSelection();
     }
 
-    //==========================================================
+
     // com.sun.star.util.XModifyBroadcaster
-    //----------------------------------------------------------
+
 
     public void addModifyListener(
         /*IN*/ com.sun.star.util.XModifyListener xListener )
@@ -135,9 +135,9 @@ public class OfficeDocument extends Wrapper
         xModifiable.removeModifyListener( xListener );
     }
 
-    //==========================================================
+
     // com.sun.star.util.XModifiable
-    //----------------------------------------------------------
+
 
     public boolean isModified(  )
     {
@@ -150,9 +150,9 @@ public class OfficeDocument extends Wrapper
         xModifiable.setModified( bModified );
     }
 
-    //==========================================================
+
     // com.sun.star.view.XPrintable
-    //----------------------------------------------------------
+
 
     public com.sun.star.beans.PropertyValue[] getPrinter(  )
     {
@@ -171,9 +171,9 @@ public class OfficeDocument extends Wrapper
         xPrintable.print( xOptions );
     }
 
-    //==========================================================
+
     // com.sun.star.frame.XStorable
-    //----------------------------------------------------------
+
 
     public boolean hasLocation(  )
     {

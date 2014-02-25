@@ -45,9 +45,9 @@ public class Frame
             xFrame );
     }
 
-    //==============================================================
+
     // com.sun.star.frame.XFrame
-    //--------------------------------------------------------------
+
 
     public void initialize( /*IN*/ com.sun.star.awt.XWindow xWindow )
     {
@@ -134,9 +134,9 @@ public class Frame
         xFrame.removeFrameActionListener( xListener );
     }
 
-    //==============================================================
+
     // com.sun.star.frame.XDispatchProvider
-    //--------------------------------------------------------------
+
 
     public com.sun.star.frame.XDispatch queryDispatch(
             /*IN*/ com.sun.star.util.URL aURL,
@@ -152,9 +152,9 @@ public class Frame
         return xDispatchProvider.queryDispatches( aRequests );
     }
 
-    //==============================================================
+
     // com.sun.star.frame.XDispatchProviderInterception
-    //--------------------------------------------------------------
+
 
     public void registerDispatchProviderInterceptor(
             /*IN*/ com.sun.star.frame.XDispatchProviderInterceptor xInterceptor )
