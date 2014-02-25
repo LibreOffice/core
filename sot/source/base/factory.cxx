@@ -102,7 +102,7 @@ SotFactory::SotFactory( const SvGlobalName & rName,
 }
 
 
-//=========================================================================
+
 SotFactory::~SotFactory()
 {
     delete [] pSuperClasses;

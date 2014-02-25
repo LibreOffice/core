@@ -24,7 +24,7 @@
 #ifdef _MSC_VER
 #pragma warning(disable: 4342)
 #endif
-///////////////////////// class StgInternalStream ////////////////////////
+///////////////////////// class StgInternalStream
 
 StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, bool bWr )
 {
@@ -88,7 +88,7 @@ void StgInternalStream::Commit()
     pStrm->Commit();
 }
 
-///////////////////////// class StgCompObjStream /////////////////////////
+///////////////////////// class StgCompObjStream
 
 StgCompObjStream::StgCompObjStream( BaseStorage& rStg, bool bWr )
     : StgInternalStream( rStg, OUString("\1CompObj"), bWr )
@@ -158,7 +158,7 @@ bool StgCompObjStream::Store()
     return GetError() == SVSTREAM_OK;
 }
 
-/////////////////////////// class StgOleStream ///////////////////////////
+/////////////////////////// class StgOleStream
 
 StgOleStream::StgOleStream( BaseStorage& rStg, bool bWr )
     : StgInternalStream( rStg, OUString("\1Ole"), bWr )

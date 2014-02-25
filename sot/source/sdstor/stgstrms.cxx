@@ -32,7 +32,7 @@
 #include "stgdir.hxx"
 #include "stgio.hxx"
 
-///////////////////////////// class StgFAT ///////////////////////////////
+///////////////////////////// class StgFAT
 
 // The FAT class performs FAT operations on an underlying storage stream.
 // This stream is either the master FAT stream (m == true ) or a normal
@@ -298,7 +298,7 @@ bool StgFAT::FreePages( sal_Int32 nStart, bool bAll )
     return true;
 }
 
-///////////////////////////// class StgStrm ////////////////////////////////
+///////////////////////////// class StgStrm
 
 // The base stream class provides basic functionality for seeking
 // and accessing the data on a physical basis. It uses the built-in
@@ -393,7 +393,7 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
 
     // See fdo#47644 for a .doc with a vast amount of pages where seeking around the
     // document takes a colossal amount of time
-    //
+
     // Please Note: we build the pagescache incrementally as we go if necessary,
     // so that a corrupted FAT doesn't poison the stream state for earlier reads
     size_t nIdx = nNew / nPageSize;
@@ -537,7 +537,7 @@ sal_Int32 StgStrm::GetPages() const
     return ( nSize + nPageSize - 1 ) / nPageSize;
 }
 
-//////////////////////////// class StgFATStrm //////////////////////////////
+//////////////////////////// class StgFATStrm
 
 // The FAT stream class provides physical access to the master FAT.
 // Since this access is implemented as a StgStrm, we can use the
@@ -796,7 +796,7 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
     return true;
 }
 
-/////////////////////////// class StgDataStrm //////////////////////////////
+/////////////////////////// class StgDataStrm
 
 // This class is a normal physical stream which can be initialized
 // either with an existing dir entry or an existing FAT chain.
@@ -1002,7 +1002,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
     return nDone;
 }
 
-//////////////////////////// class StgSmallStream ///////////////////////////
+//////////////////////////// class StgSmallStream
 
 // The small stream class provides access to streams with a size < 4096 bytes.
 // This stream is a StgStream containing small pages. The FAT for this stream
@@ -1114,7 +1114,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
     return nDone;
 }
 
-/////////////////////////// class StgTmpStrm /////////////////////////////
+/////////////////////////// class StgTmpStrm
 
 // The temporary stream uses a memory stream if < 32K, otherwise a
 // temporary file.

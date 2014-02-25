@@ -72,7 +72,7 @@ IUnknown * SotObject::GetInterface( const SvGlobalName & )
     return NULL;
 }
 
-//=========================================================================
+
 void SotObject::OwnerLock
 (
     bool bLock      /* true, lock. false, unlock. */
@@ -98,7 +98,7 @@ void SotObject::OwnerLock
     }
 }
 
-//=========================================================================
+
 bool SotObject::DoClose()
 {
     bool bRet = false;
@@ -112,7 +112,7 @@ bool SotObject::DoClose()
     return bRet;
 }
 
-//=========================================================================
+
 bool SotObject::Close()
 {
     return true;
