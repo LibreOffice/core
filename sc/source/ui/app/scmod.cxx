@@ -371,9 +371,9 @@ void ScModule::DeleteCfg()
 }
 
 
-//
+
 //      von der Applikation verschoben:
-//
+
 
 
 void ScModule::Execute( SfxRequest& rReq )
@@ -973,15 +973,15 @@ sal_uInt16 ScModule::GetOptDigitLanguage()
 }
 
 
-//
+
 //                          Optionen
-//
 
 
-//
+
+
 //      ModifyOptions - Items aus Calc-Options-Dialog
 //                      und SID_AUTOSPELL_CHECK
-//
+
 
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
@@ -1052,9 +1052,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-    //============================================
+
     // DefaultsOptions
-    //============================================
+
 
     if (rOptSet.HasItem(SID_SCDEFAULTSOPTIONS, &pItem))
     {
@@ -1062,9 +1062,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SetDefaultsOptions( rOpt );
     }
 
-    //============================================
+
     // FormulaOptions
-    //============================================
+
 
     if (rOptSet.HasItem(SID_SCFORMULAOPTIONS, &pItem))
     {
@@ -1090,9 +1090,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-    //============================================
+
     // ViewOptions
-    //============================================
+
 
     if (rOptSet.HasItem(SID_SCVIEWOPTIONS, &pItem))
     {
@@ -1124,10 +1124,10 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-    //============================================
+
     // GridOptions, Auswertung nach ViewOptions,
     // da GridOptions Member der ViewOptions ist!
-    //============================================
+
 
     if ( rOptSet.HasItem(SID_ATTR_GRID_OPTIONS,&pItem) )
     {
@@ -1159,9 +1159,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
 
-    //============================================
+
     // DocOptions
-    //============================================
+
 
     if ( rOptSet.HasItem(SID_SCDOCOPTIONS,&pItem) )
     {
@@ -1245,9 +1245,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             pBindings->Invalidate( SID_AUTOSPELL_CHECK );
     }
 
-    //============================================
+
     // InputOptions
-    //============================================
+
 
     if ( rOptSet.HasItem(SID_SC_INPUT_SELECTIONPOS,&pItem) )
     {
@@ -1307,9 +1307,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         bSaveInputOptions = true;
     }
 
-    //============================================
+
     // PrintOptions
-    //============================================
+
 
     if ( rOptSet.HasItem(SID_SCPRINTOPTIONS,&pItem) )
     {
@@ -1417,9 +1417,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 }
 
 
-//
+
 //                      Input-Handler
-//
+
 
 
 ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, bool bUseRef )
@@ -1602,9 +1602,9 @@ void ScModule::ActivateInputWindow( const OUString* pStrFormula, bool bMatrix )
 }
 
 
-//
+
 //                  Referenz - Dialoge
-//
+
 
 
 void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
@@ -1910,9 +1910,9 @@ void ScModule::EndReference()
 }
 
 
-//
+
 //                  Idle / Online-Spelling
-//
+
 
 
 void ScModule::AnythingChanged()
@@ -2049,7 +2049,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             SID_SCPRINTOPTIONS, SID_SCPRINTOPTIONS,
                             // TP_GRID:
                             SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
-                            //
+
                             SID_ATTR_METRIC,        SID_ATTR_METRIC,
                             SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
                             // TP_COMPATIBILITY

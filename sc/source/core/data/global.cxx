@@ -142,11 +142,11 @@ sal_uInt16 nScFillModeMouseModifier = 0;                //! dito
 
 void global_InitAppOptions();
 
-//========================================================================
-//
+
+
 //      statische Funktionen
-//
-//========================================================================
+
+
 
 bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const SfxItemSet&  rOldAttrs,

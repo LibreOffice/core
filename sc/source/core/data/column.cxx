@@ -259,7 +259,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                 if (bFound)
                 {
                     // Check if the matrix is inside the selection in its entirety.
-                    //
+
                     // TODO: It's more efficient to skip the matrix range if
                     // it's within selection, to avoid checking it again and
                     // again.

@@ -115,9 +115,9 @@ public:
     bool IsDateDimension() const;
 };
 
-//
+
 //  proxy implementation of ScDPTableData to add grouped items
-//
+
 
 class ScDPGroupTableData : public ScDPTableData
 {

@@ -170,7 +170,7 @@ private:
     XclImpChRootDataRef mxChData;           /// Reference to the root data object.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for chart record groups. Provides helper functions to read sub records.
 
@@ -215,7 +215,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChFramePos > XclImpChFramePosRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHLINEFORMAT record containing line formatting data. */
 class XclImpChLineFormat
@@ -249,7 +249,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChLineFormat > XclImpChLineFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHAREAFORMAT record containing simple area formatting data (solid or patterns). */
 class XclImpChAreaFormat
@@ -279,7 +279,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChAreaFormat > XclImpChAreaFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHESCHERFORMAT record containing complex area formatting data (bitmaps, hatches). */
 class XclImpChEscherFormat : public XclImpChGroupBase
@@ -304,7 +304,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChEscherFormat > XclImpChEscherFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for record groups containing frame formatting.
 
@@ -355,7 +355,7 @@ protected:
     XclImpChEscherFormatRef mxEscherFmt;    /// Complex area format (CHESCHERFORMAT record).
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHFRAME record group containing object frame properties.
 
@@ -458,7 +458,7 @@ public:
     void                ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, bool bSupportsStacked ) const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHFONT record containing a font index for text objects. */
 class XclImpChFont
@@ -477,7 +477,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChFont > XclImpChFontRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHTEXT record group containing text object properties.
 
@@ -581,7 +581,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChMarkerFormat > XclImpChMarkerFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHPIEFORMAT record containing data point formatting data for pie segments. */
 class XclImpChPieFormat
@@ -599,7 +599,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChPieFormat > XclImpChPieFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHSERIESFORMAT record containing additional settings for a data series. */
 class XclImpChSeriesFormat
@@ -617,7 +617,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChSeriesFormat > XclImpChSeriesFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CH3DDATAFORMAT record containing the bar type in 3D bar charts. */
 class XclImpCh3dDataFormat
@@ -634,7 +634,7 @@ private:
 
 typedef boost::shared_ptr< XclImpCh3dDataFormat > XclImpCh3dDataFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHATTACHEDLABEL record that contains the type of a data point label. */
 class XclImpChAttachedLabel : protected XclImpChRoot
@@ -652,7 +652,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChAttachedLabel > XclImpChAttLabelRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHDATAFORMAT record group containing data point properties.
 
@@ -720,7 +720,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChDataFormat > XclImpChDataFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHSERTRENDLINE record containing settings for a trend line. */
 class XclImpChSerTrendLine : protected XclImpChRoot
@@ -749,7 +749,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChSerTrendLine > XclImpChSerTrendLineRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHSERERRORBAR record containing settings for error bars. */
 class XclImpChSerErrorBar : protected XclImpChRoot
@@ -786,7 +786,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChSerErrorBar > XclImpChSerErrorBarRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHSERIES record group describing a data series in a chart.
 
@@ -927,7 +927,7 @@ private:
     XclChTypeInfo       maTypeInfo;         /// Chart type info for the contained type.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHCHART3D record that contains 3D view settings. */
 class XclImpChChart3d
@@ -946,7 +946,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChChart3d > XclImpChChart3dRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHLEGEND record group describing the chart legend.
 
@@ -980,7 +980,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChLegend > XclImpChLegendRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHDROPBAR record group describing pos/neg bars in line charts.
 
@@ -1005,7 +1005,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChDropBar > XclImpChDropBarRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHTYPEGROUP record group describing a group of series.
 
@@ -1147,7 +1147,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChLabelRange > XclImpChLabelRangeRef;
 
-// ----------------------------------------------------------------------------
+
 
 class XclImpChValueRange : protected XclImpChRoot
 {
@@ -1169,7 +1169,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChValueRange > XclImpChValueRangeRef;
 
-// ----------------------------------------------------------------------------
+
 
 class XclImpChTick : protected XclImpChRoot
 {
@@ -1194,7 +1194,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChTick > XclImpChTickRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHAXIS record group describing an entire chart axis.
 
@@ -1265,7 +1265,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChAxis > XclImpChAxisRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHAXESSET record group describing an axes set (X/Y/Z axes).
 
@@ -1438,7 +1438,7 @@ private:
 
 typedef boost::shared_ptr< XclImpChChart > XclImpChChartRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Drawing container of a chart. */
 class XclImpChartDrawing : public XclImpDrawing
@@ -1463,7 +1463,7 @@ private:
     bool                mbOwnTab;           /// True = own sheet, false = embedded object.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the entire chart substream (all records in BOF/EOF block). */
 class XclImpChart : protected XclImpRoot
@@ -1509,7 +1509,7 @@ private:
     bool                mbIsPivotChart;     /// true = chart is based on a pivot table.
 };
 
-// ============================================================================
+
 
 #endif
 

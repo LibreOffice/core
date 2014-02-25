@@ -30,7 +30,7 @@
 
 #include "anyrefdg.hxx"
 
-// ============================================================================
+
 
 struct  ScRefHandlerCaller{
     virtual ~ScRefHandlerCaller(){}
@@ -176,7 +176,7 @@ public:
 };
 
 
-// ============================================================================
+
 
 /** The tab page "Criteria" from the Validation dialog. */
 class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
@@ -259,7 +259,7 @@ public:
 };
 
 
-//==================================================================
+
 
 class ScTPValidationHelp : public SfxTabPage
 {
@@ -283,7 +283,7 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
-//==================================================================
+
 
 class ScTPValidationError : public SfxTabPage
 {

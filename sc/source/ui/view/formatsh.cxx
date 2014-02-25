@@ -2422,19 +2422,19 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
             case SID_NUMBER_FORMAT:
                 //{
                 //  String aFormatCode;         // bleibt leer, wenn dont-care
-                //
+
                 //  const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
                 //  if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) != SFX_ITEM_DONTCARE )
                 //  {
                 //      sal_uLong nNumberFormat = ((const SfxUInt32Item&)rAttrSet.Get(
                 //                                  ATTR_VALUE_FORMAT )).GetValue();
-                //
+
                 //      SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 //      const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
                 //      if ( pFormatEntry )
                 //          aFormatCode = pFormatEntry->GetFormatstring();
                 //  }
-                //
+
                 //  rSet.Put( SfxStringItem( nWhich, aFormatCode ) );
                 //}
 

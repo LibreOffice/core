@@ -34,7 +34,7 @@ namespace sfx2 { class FileDialogHelper; }
 
 class ScDocShell;
 
-//------------------------------------------------------------------------
+
 
 class ScLinkedAreaDlg : public ModalDialog
 {

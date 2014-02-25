@@ -37,7 +37,7 @@
 #include <editeng/flstitem.hxx>
 #include <sfx2/app.hxx>
 
-//==================================================================
+
 
 ScAttrDlg::ScAttrDlg(SfxViewFrame* pFrameP, Window* pParent, const SfxItemSet* pCellAttrs)
     : SfxTabDialog(pFrameP, pParent, "FormatCellsDialog", "modules/scalc/ui/formatcellsdialog.ui", pCellAttrs)

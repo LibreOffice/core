@@ -87,7 +87,7 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 
-// ============================================================================
+
 
 namespace {
 
@@ -171,7 +171,7 @@ bool lclCheckMinMaxStep( const DataPilotFieldGroupInfo& rInfo )
 
 } // namespace
 
-// ============================================================================
+
 
 SC_SIMPLE_SERVICE_INFO( ScDataPilotDescriptor, "ScDataPilotDescriptor", "stardiv::one::sheet::DataPilotDescriptor" )
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldObj, "ScDataPilotFieldObj", "com.sun.star.sheet.DataPilotField" )
@@ -1407,7 +1407,7 @@ void ScDataPilotTableObj::Refreshed_Impl()
         pDoc->AddUnoListenerCall( aModifyListeners[n], aEvent );
 }
 
-// ============================================================================
+
 
 ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     ScDataPilotDescriptorBase( pDocSh ),
@@ -1473,7 +1473,7 @@ void SAL_CALL ScDataPilotDescriptor::setTag( const OUString& aNewTag )
     mpDPObject->SetTag( aNewTag );
 }
 
-// ============================================================================
+
 
 ScDataPilotChildObjBase::ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent ) :
     mrParent( rParent )
@@ -1560,7 +1560,7 @@ ScDocShell* ScDataPilotChildObjBase::GetDocShell() const
     return mrParent.GetDocShell();
 }
 
-// ============================================================================
+
 
 ScDataPilotFieldsObj::ScDataPilotFieldsObj( ScDataPilotDescriptorBase& rParent ) :
     ScDataPilotChildObjBase( rParent )
@@ -2830,7 +2830,7 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
     return xRet;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -3049,7 +3049,7 @@ ScFieldGroups::iterator ScDataPilotFieldGroupsObj::implFindByName( const OUStrin
     return maGroups.end();
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -3223,7 +3223,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::setName( const OUString& rName ) throw(R
     maGroupName = rName;
 }
 
-// ============================================================================
+
 
 ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, const OUString& rName ) :
     mrParent( rParent ),
@@ -3253,7 +3253,7 @@ void SAL_CALL ScDataPilotFieldGroupItemObj::setName( const OUString& rName ) thr
     maName = rName;
 }
 
-// ============================================================================
+
 
 ScDataPilotItemsObj::ScDataPilotItemsObj( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId ) :
     ScDataPilotChildObjBase( rParent, rFieldId )

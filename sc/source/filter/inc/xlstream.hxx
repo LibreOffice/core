@@ -39,7 +39,7 @@ const sal_uInt16 EXC_ENCR_BLOCKSIZE         = 1024;
 const sal_uInt16 EXC_ID_UNKNOWN             = SAL_MAX_UINT16;
 const sal_uInt16 EXC_ID_CONT                = 0x003C;
 
-// ============================================================================
+
 
 #endif
 

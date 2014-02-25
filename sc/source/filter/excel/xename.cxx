@@ -37,9 +37,9 @@
 using namespace ::oox;
 
 
-// ============================================================================
+
 // *** Helper classes ***
-// ============================================================================
+
 
 /** Represents an internal defined name, supports writing it to a NAME record. */
 class XclExpName : public XclExpRecord, protected XclExpRoot
@@ -196,9 +196,9 @@ private:
     size_t              mnFirstUserIdx;     /// List index of first user-defined NAME record.
 };
 
-// ============================================================================
+
 // *** Implementation ***
-// ============================================================================
+
 
 XclExpName::XclExpName( const XclExpRoot& rRoot, const OUString& rName ) :
     XclExpRecord( EXC_ID_NAME ),
@@ -758,6 +758,6 @@ void XclExpNameManager::SaveXml( XclExpXmlStream& rStrm )
     mxImpl->SaveXml( rStrm );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

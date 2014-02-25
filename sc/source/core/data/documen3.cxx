@@ -877,13 +877,13 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
         {
             //  Broadcasts from ScDocument::BroadcastUno are the only way that
             //  uno object methods are called without holding a reference.
-            //
+
             //  If RemoveUnoObject is called from an object dtor in the finalizer thread
             //  while the main thread is calling BroadcastUno, the dtor thread must wait
             //  (or the object's Notify might try to access a deleted object).
             //  The SolarMutex can't be locked here because if a component is called from
             //  a VCL event, the main thread has the SolarMutex locked all the time.
-            //
+
             //  This check is done after calling EndListening, so a later BroadcastUno call
             //  won't touch this object.
 
@@ -1439,9 +1439,9 @@ bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
     return ValidTab(nTab) && maTabs[nTab] && maTabs[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
-//
+
 //  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
-//
+
 
 bool ScDocument::GetFilterEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
@@ -1497,9 +1497,9 @@ bool ScDocument::GetFilterEntries(
     return false;
 }
 
-//
+
 //  GetFilterEntriesArea - Eintraege fuer Filter-Dialog
-//
+
 
 bool ScDocument::GetFilterEntriesArea(
     SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
@@ -1515,9 +1515,9 @@ bool ScDocument::GetFilterEntriesArea(
     return false;
 }
 
-//
+
 //  GetDataEntries - Eintraege fuer Auswahlliste-Listbox (keine Zahlen / Formeln)
-//
+
 
 bool ScDocument::GetDataEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
@@ -1556,15 +1556,15 @@ bool ScDocument::GetDataEntries(
     return bRet;
 }
 
-//
+
 //  GetFormulaEntries - Eintraege fuer Formel-AutoEingabe
-//
+
 
 bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 {
-    //
+
     //  Bereichsnamen
-    //
+
 
     if ( pRangeName )
     {
@@ -1573,9 +1573,9 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
             rStrings.insert(ScTypedStrData(itr->second->GetName(), 0.0, ScTypedStrData::Name));
     }
 
-    //
+
     //  Datenbank-Bereiche
-    //
+
 
     if ( pDBCollection )
     {
@@ -1585,9 +1585,9 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
             rStrings.insert(ScTypedStrData(itr->GetName(), 0.0, ScTypedStrData::DbName));
     }
 
-    //
+
     //  Inhalte von Beschriftungsbereichen
-    //
+
 
     ScRangePairList* pLists[2];
     pLists[0] = GetColNameRanges();

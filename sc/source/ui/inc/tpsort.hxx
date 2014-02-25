@@ -35,7 +35,7 @@
 #include "address.hxx"
 #include "sortparam.hxx"
 
-//------------------------------------------------------------------------
+
 
 // +1 because one field is reserved for the "- undefined -" entry
 #define SC_MAXFIELDS    MAXCOLCOUNT+1
@@ -44,7 +44,7 @@ class ScViewData;
 class ScSortDlg;
 struct ScSortParam;
 
-//========================================================================
+
 // Sort Criteria
 
 class ScTabPageSortFields : public SfxTabPage
@@ -100,7 +100,7 @@ private:
     DECL_LINK( SelectHdl, ListBox * );
 };
 
-//========================================================================
+
 // Sort Options
 
 class ScDocument;

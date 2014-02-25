@@ -56,7 +56,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//========================================================================
+
 
 // We don't want to end up with 2GB read in one line just because of malformed
 // multiline fields, so chop it _somewhere_, which is twice supported columns
@@ -206,7 +206,7 @@ bool ScImportExport::IsFormatSupported( sal_uLong nFormat )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 // Vorbereitung fuer Undo: Undo-Dokument erzeugen
 
@@ -264,7 +264,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 
 bool ScImportExport::ImportData( const OUString& /* rMimeType */,
                      const ::com::sun::star::uno::Any & /* rValue */ )
@@ -862,7 +862,7 @@ static inline void lcl_WriteSimpleString( SvStream& rStrm, const OUString& rStri
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 
 bool ScImportExport::Text2Doc( SvStream& rStrm )
@@ -957,9 +957,9 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     return bOk;
 }
 
-        //
+
         //  erweiterter Ascii-Import
-        //
+
 
 
 static bool lcl_PutString(

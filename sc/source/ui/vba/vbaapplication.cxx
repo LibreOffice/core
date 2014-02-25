@@ -100,7 +100,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_QUERY;
 
-// ============================================================================
+
 
 /** Global application settings shared by all open workbooks. */
 struct ScVbaAppSettings
@@ -128,7 +128,7 @@ ScVbaAppSettings::ScVbaAppSettings() :
 
 struct ScVbaStaticAppSettings : public ::rtl::Static< ScVbaAppSettings, ScVbaStaticAppSettings > {};
 
-// ============================================================================
+
 
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),

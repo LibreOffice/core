@@ -57,9 +57,9 @@ using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
 
 
-// ============================================================================
+
 // Pivot cache
-// ============================================================================
+
 
 namespace {
 
@@ -72,7 +72,7 @@ const sal_uInt16 EXC_PCITEM_DATA_DATE       = 0x0008;   /// Date, time, date/tim
 /** Maps a bitfield consisting of EXC_PCITEM_DATA_* flags above to SXFIELD data type bitfield. */
 static const sal_uInt16 spnPCItemFlags[] =
 {                               // STR DBL INT DAT
-    EXC_SXFIELD_DATA_NONE,      //
+    EXC_SXFIELD_DATA_NONE,
     EXC_SXFIELD_DATA_STR,       //  x
     EXC_SXFIELD_DATA_INT,       //      x
     EXC_SXFIELD_DATA_STR_INT,   //  x   x
@@ -193,7 +193,7 @@ void XclExpPCItem::WriteBody( XclExpStream& rStrm )
     }
 }
 
-// ============================================================================
+
 
 XclExpPCField::XclExpPCField(
         const XclExpRoot& rRoot, const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
@@ -624,7 +624,7 @@ void XclExpPCField::WriteBody( XclExpStream& rStrm )
     rStrm << maFieldInfo;
 }
 
-// ============================================================================
+
 
 XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& rDPObj, sal_uInt16 nListIdx ) :
     XclExpRoot( rRoot ),
@@ -911,9 +911,9 @@ void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
     }
 }
 
-// ============================================================================
+
 // Pivot table
-// ============================================================================
+
 
 namespace {
 
@@ -951,7 +951,7 @@ OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFu
 
 } // namespace
 
-// ============================================================================
+
 
 XclExpPTItem::XclExpPTItem( const XclExpPCField& rCacheField, sal_uInt16 nCacheIdx ) :
     XclExpRecord( EXC_ID_SXVI, 8 ),
@@ -994,7 +994,7 @@ void XclExpPTItem::WriteBody( XclExpStream& rStrm )
     rStrm << maItemInfo;
 }
 
-// ============================================================================
+
 
 XclExpPTField::XclExpPTField( const XclExpPivotTable& rPTable, sal_uInt16 nCacheIdx ) :
     mrPTable( rPTable ),
@@ -1241,7 +1241,7 @@ void XclExpPTField::WriteSxvdex( XclExpStream& rStrm ) const
     rStrm.EndRecord();
 }
 
-// ============================================================================
+
 
 XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t nId ) :
     XclExpRoot( rRoot ),
@@ -1798,7 +1798,7 @@ void XclExpPivotTable::WriteSxViewEx9( XclExpStream& rStrm ) const
     }
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1950,6 +1950,6 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
     return 0;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

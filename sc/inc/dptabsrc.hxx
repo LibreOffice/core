@@ -71,9 +71,9 @@ class ScDPResultData;
 class ScDPItemData;
 class ScDPTableData;
 
-//
+
 //  implementation of DataPilotSource using ScDPTableData
-//
+
 
 
 class ScDPDimensions;

@@ -25,12 +25,12 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -68,7 +68,7 @@ const sal_uInt8 BIFF12_WEBPR_HAS_URL                    = 0x04;
 
 } // namespace
 
-// ============================================================================
+
 
 WebPrModel::WebPrModel() :
     mnHtmlFormat( XML_none ),
@@ -277,7 +277,7 @@ void Connection::importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId 
     }
 }
 
-// ============================================================================
+
 
 ConnectionsBuffer::ConnectionsBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -314,7 +314,7 @@ void ConnectionsBuffer::insertConnectionToMap( const ConnectionRef& rxConnection
     }
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

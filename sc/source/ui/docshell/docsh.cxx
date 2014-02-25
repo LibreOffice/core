@@ -2557,7 +2557,7 @@ void ScDocShell::PrepareReload()
     //  If the DDE Links are not deleted before the Document dtor,
     //  the DDE Link Update for this Document can be triggered ofrom this Reschedule on Reload.
     //  This causes a hang.
-    //
+
     //  Thus: Disconnect the DDE Links of the old Document before Reload
     aDocument.GetDocLinkManager().disconnectDdeLinks();
 }

@@ -43,7 +43,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -1795,7 +1795,7 @@ static const BuiltinFormatTable spBuiltinFormatTables[] =
 
 } // namespace
 
-// ============================================================================
+
 
 NumFmtModel::NumFmtModel() :
     mnPredefId( -1 )
@@ -1949,7 +1949,7 @@ void NumberFormat::writeToPropertyMap( PropertyMap& rPropMap ) const
     rPropMap[ PROP_NumberFormat ] <<= maApiData.mnIndex;
 }
 
-// ============================================================================
+
 
 NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper )
     : WorkbookHelper(rHelper)
@@ -2077,7 +2077,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     }
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

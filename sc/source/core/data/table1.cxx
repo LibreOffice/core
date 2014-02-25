@@ -799,7 +799,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     // return the smallest area containing at least all contiguous cells having data. This area
     // is a square containing also empty cells. It may shrink or extend the area given as input
     // Flags as modifiers:
-    //
+
     //     bIncludeOld = true ensure that the returned area contains at least the initial area,
     //                   independently of the emptniess of rows / columns (i.e. does not allow shrinking)
     //     bOnlyDown = true means extend / shrink the inputed area only down, i.e modifiy only rEndRow

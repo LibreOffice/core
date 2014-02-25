@@ -1,13 +1,13 @@
 #ifndef CLCC_CLEW_HPP_INCLUDED
 #define CLCC_CLEW_HPP_INCLUDED
 
-//////////////////////////////////////////////////////////////////////////
+
 //  Copyright (c) 2009-2011 Organic Vectory B.V.
 //  Written by George van Venrooij
-//
+
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file license.txt)
-//////////////////////////////////////////////////////////////////////////
+
 
 //! \file clew.h
 //! \brief OpenCL run-time loader header
@@ -1133,12 +1133,12 @@ typedef CL_API_ENTRY cl_int (CL_API_CALL *
 PFNCLENQUEUEBARRIER)(cl_command_queue /* command_queue */) CL_API_SUFFIX__VERSION_1_0;
 
 // Extension function access
-//
+
 // Returns the extension function address for the given function name,
 // or NULL if a valid function can not be found.  The client must
 // check to make sure the address is not NULL, before using or
 // calling the returned function address.
-//
+
 typedef CL_API_ENTRY void * (CL_API_CALL * PFNCLGETEXTENSIONFUNCTIONADDRESS)(const char * /* func_name */) CL_API_SUFFIX__VERSION_1_0;
 
 

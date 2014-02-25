@@ -33,11 +33,11 @@ extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
 
 // STATIC DATA -----------------------------------------------------------
 
-//==================================================================
 
-//
+
+
 // ---  Referenz-Eingabe / Fill-Cursor
-//
+
 
 void ScTabView::HideTip()
 {
@@ -461,7 +461,7 @@ void ScTabView::InvertVertical( ScHSplitPos eWhich, long nDragPos )
         }
 }
 
-//==================================================================
+
 
 void ScTabView::InterpretVisible()
 {

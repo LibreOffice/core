@@ -85,7 +85,7 @@ const sal_Char pFilterSylk[]     = "SYLK";
 // 0x0100: ein Byte ueberlesen (don't care)
 // 0x02nn: ein Byte aus 0xnn Alternativen folgt
 // 0x8000: Erkennung abgeschlossen
-//
+
 
 #define M_DC        0x0100
 #define M_ALT(ANZ)  (0x0200+(ANZ))

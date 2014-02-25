@@ -413,10 +413,10 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
         }
     }
 
-    //
+
     //  loop through entries several times to avoid changing the line color too often
     //  and to allow merging of lines
-    //
+
 
     ScGridMerger aGrid( this, 1, 1 );
 

@@ -22,7 +22,7 @@
 #include "pagepar.hxx"
 
 
-//========================================================================
+
 // struct ScPageTableParam:
 
 ScPageTableParam::ScPageTableParam()
@@ -57,7 +57,7 @@ bool ScPageTableParam::operator==( const ScPageTableParam& r ) const
     return ( memcmp( this, &r, sizeof(ScPageTableParam) ) == 0 );
 }
 
-//========================================================================
+
 // struct ScPageAreaParam:
 
 ScPageAreaParam::ScPageAreaParam()

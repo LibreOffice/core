@@ -3456,7 +3456,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                     // it can also just be a single Insert (because Delete has
                     // a single column/is a single row).
                     // There can be a lot of cut-off Moves.
-                    //
+
                     // ! A Delete is always a single column/a single row, therefore
                     // ! 1 without calculating the intersection.
                     switch ( p->GetType() )

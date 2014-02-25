@@ -763,7 +763,7 @@ static void lcl_HideAllReferences()
     }
 }
 
-//============================================================================
+
 //The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
 //  class ScRefHandler
 
@@ -947,10 +947,10 @@ bool ScRefHandler::IsTableLocked() const
 }
 
 
-//
+
 //  RefInputStart/Done: Zoom-In (AutoHide) auf einzelnes Feld
 //  (per Button oder Bewegung)
-//
+
 
 
 void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )

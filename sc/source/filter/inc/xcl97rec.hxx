@@ -24,7 +24,7 @@
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
 
-// ============================================================================
+
 
 class XclObj;
 class XclExpMsoDrawing;
@@ -433,7 +433,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-// ============================================================================
+
 
 /** Represents a SHEETPROTECTION record that stores sheet protection
     options.  Note that a sheet still needs to save its sheet protection
@@ -450,7 +450,7 @@ private:
     sal_uInt16      mnOptions;      /// Encoded sheet protection options.
 };
 
-// ============================================================================
+
 
 class XclCalccount : public ExcRecord
 {
@@ -514,7 +514,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-// ============================================================================
+
 
 class XclExpFileEncryption : public XclExpRecord
 {
@@ -529,7 +529,7 @@ private:
     const XclExpRoot& mrRoot;
 };
 
-// ============================================================================
+
 
 /** Beginning of User Interface Records */
 class XclExpInterfaceHdr : public XclExpUInt16Record
@@ -541,7 +541,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 };
 
-// ============================================================================
+
 
 /** End of User Interface Records */
 class XclExpInterfaceEnd : public XclExpRecord
@@ -554,7 +554,7 @@ private:
     virtual void WriteBody( XclExpStream& rStrm );
 };
 
-// ============================================================================
+
 
 /** Write Access User Name - This record contains the user name, which is
     the name you type when you install Excel. */
@@ -568,7 +568,7 @@ private:
     virtual void WriteBody( XclExpStream& rStrm );
 };
 
-// ============================================================================
+
 
 class XclExpFileSharing : public XclExpRecord
 {
@@ -586,7 +586,7 @@ private:
     bool                mbRecommendReadOnly;
 };
 
-// ============================================================================
+
 
 class XclExpProt4Rev : public XclExpRecord
 {
@@ -598,7 +598,7 @@ private:
     virtual void WriteBody( XclExpStream& rStrm );
 };
 
-// ============================================================================
+
 
 class XclExpProt4RevPass : public XclExpRecord
 {
@@ -610,7 +610,7 @@ private:
     virtual void WriteBody( XclExpStream& rStrm );
 };
 
-// ============================================================================
+
 
 class XclExpRecalcId : public XclExpDummyRecord
 {
@@ -618,7 +618,7 @@ public:
     explicit XclExpRecalcId();
 };
 
-// ============================================================================
+
 
 class XclExpBookExt : public XclExpDummyRecord
 {

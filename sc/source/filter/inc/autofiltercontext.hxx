@@ -29,7 +29,7 @@ class AutoFilter;
 class FilterColumn;
 class FilterSettingsBase;
 
-// ============================================================================
+
 
 class FilterSettingsContext : public WorksheetContextBase
 {
@@ -47,7 +47,7 @@ private:
     FilterSettingsBase& mrFilterSettings;
 };
 
-// ============================================================================
+
 
 class FilterColumnContext : public WorksheetContextBase
 {
@@ -65,7 +65,7 @@ private:
     FilterColumn&       mrFilterColumn;
 };
 
-// ============================================================================
+
 
 class AutoFilterContext : public WorksheetContextBase
 {
@@ -83,7 +83,7 @@ private:
     AutoFilter&         mrAutoFilter;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -220,7 +220,7 @@ private:
     const Color& mrColor;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ScConditionalFormat;
 
@@ -296,7 +296,7 @@ private:
     sal_Int32 mnPriority;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all conditional formats of a specific sheet. */
 class XclExpCondFormatBuffer : public XclExpRecordBase, protected XclExpRoot
@@ -357,7 +357,7 @@ private:
     sal_uLong               mnScHandle;     /// The core handle for quick list search.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** This class contains the DV record list following the DVAL record. */
 class XclExpDval : public XclExpRecord, protected XclExpRoot
@@ -416,7 +416,7 @@ private:
     bool                mbEntireDoc;    /// true = entire document.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all web query records for this document. */
 class XclExpWebQueryBuffer : public XclExpRecordList< XclExpWebQuery >
@@ -425,7 +425,7 @@ public:
     explicit            XclExpWebQueryBuffer( const XclExpRoot& rRoot );
 };
 
-// ============================================================================
+
 
 #endif
 

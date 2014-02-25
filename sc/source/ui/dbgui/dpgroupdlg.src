@@ -19,7 +19,7 @@
 
 #include "dpgroupdlg.hrc"
 
-// ----------------------------------------------------------------------------
+
 
 ModalDialog RID_SCDLG_DPNUMGROUP
 {
@@ -126,7 +126,7 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     Text [ en-US ] = "Grouping" ;
 } ;
 
-// ----------------------------------------------------------------------------
+
 
 ModalDialog RID_SCDLG_DPDATEGROUP
 {
@@ -261,6 +261,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     Text [ en-US ] = "Grouping" ;
 } ;
 
-// ----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

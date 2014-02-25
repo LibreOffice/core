@@ -1179,7 +1179,7 @@ public:
 
                                 // This comment was already really strange in German.
                                 // Tried to structure it a little. Hope no information got lost...
-                                //
+
                                 // Insert dependents into table.
                                 // ScChangeAction is
                                 // - "Insert": really dependents
@@ -1189,11 +1189,11 @@ public:
                                 // - "Delete": a list of deleted (what?)
                                 //      OR     for content, different contents at the same position
                                 //      OR     MatrixReferences belonging to MatrixOrigin
-                                //
+
                                 // With bListMasterDelete (==TRUE ?) all Deletes of a row belonging
                                 // to a MasterDelete are listed (possibly it is
                                 // "all Deletes belonging...are listed in a row?)
-                                //
+
                                 // With bAllFlat (==TRUE ?) all dependents of dependents
                                 // will be inserted flatly.
 

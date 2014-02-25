@@ -1804,7 +1804,7 @@ void Test::testPivotTableNumStability()
     ScRange aOutRange = refresh(pDPObj);
 
     // Manually check the total value for each name.
-    //
+
     // +--------------+----------------+
     // | Name         |                |
     // +--------------+----------------+

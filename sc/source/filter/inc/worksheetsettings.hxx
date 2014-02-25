@@ -26,7 +26,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Sheet and outline settings. */
 struct SheetSettingsModel
@@ -41,7 +41,7 @@ struct SheetSettingsModel
     explicit            SheetSettingsModel();
 };
 
-// ============================================================================
+
 
 /** Sheet protection settings. */
 struct SheetProtectionModel
@@ -67,7 +67,7 @@ struct SheetProtectionModel
     explicit            SheetProtectionModel();
 };
 
-// ============================================================================
+
 
 class WorksheetSettings : public WorksheetHelper
 {
@@ -109,7 +109,7 @@ private:
     SheetProtectionModel maSheetProt;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -131,9 +131,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
     switch ( nSlot )
     {
-        //
+
         //  insert / delete cells / rows / columns
-        //
+
 
         case FID_INS_ROW:
             pTabViewShell->InsertCells(INS_INSROWS);
@@ -309,9 +309,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-        //
+
         //  delete contents from cells
-        //
+
 
         case SID_DELETE_CONTENTS:
             pTabViewShell->DeleteContents( IDF_CONTENTS );
@@ -405,9 +405,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-        //
+
         //  fill...
-        //
+
 
         case FID_FILL_TO_BOTTOM:
             pTabViewShell->FillSimple( FILL_TO_BOTTOM );
@@ -640,7 +640,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                     }
 
-                    //
+
                     OUString aStartStr;
 
                     //  suggest default Startvalue only, when just 1 row or column
@@ -985,10 +985,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-        //
+
         //  disposal (Outlines)
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)
-        //
+
 
         case SID_OUTLINE_HIDE:
             if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
@@ -1195,9 +1195,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-        //
+
         //  Clipboard
-        //
+
 
 
         case SID_COPY:              // for graphs in DrawShell
@@ -1580,9 +1580,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
             break;
 
-        //
+
         //  other
-        //
+
 
         case FID_INS_ROWBRK:
             pTabViewShell->InsertPageBreak( false );
@@ -2415,9 +2415,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-        //
-        //
-        //
+
+
+
 
         default:
             OSL_FAIL("incorrect slot in ExecuteEdit");

@@ -147,9 +147,9 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     SCSIZE nCol;
     SCSIZE nRow;
 
-        //
+
         //  real size (without hidden rows/columns)
-        //
+
 
     SCCOL nColAdd = HasRowHeaders() ? 1 : 0;
     SCROW nRowAdd = HasColHeaders() ? 1 : 0;
@@ -238,9 +238,9 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         aRows.push_back(nStrRow);
     }
 
-        //
+
         //  Data
-        //
+
 
     ScMemChart* pMemChart = new ScMemChart(
             static_cast<short>(nColCount), static_cast<short>(nRowCount) );
@@ -268,9 +268,9 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
                     pMemChart->SetData( static_cast<short>(nCol), static_cast<short>(nRow), DBL_MIN );
         }
 
-        //
+
         //  Column Header
-        //
+
         for (nCol=0; nCol<nColCount; nCol++)
         {
             OUString aString;
@@ -290,9 +290,9 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             pMemChart->SetColText( static_cast<short>(nCol), aString);
         }
 
-        //
+
         //  Row Header
-        //
+
         for (nRow=0; nRow<nRowCount; nRow++)
         {
             OUString aString;
@@ -340,9 +340,9 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         nRowCount = 1;
     }
 
-    //
+
     //  Data
-    //
+
 
     ScMemChart* pMemChart = new ScMemChart(
             static_cast<short>(nColCount), static_cast<short>(nRowCount) );
@@ -384,9 +384,9 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 
         //TODO: Label when gaps
 
-        //
+
         //  Column header
-        //
+
 
         SCCOL nPosCol = 0;
         for ( nCol = 0; nCol < nColCount; nCol++ )
@@ -411,9 +411,9 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             pMemChart->SetColText( static_cast<short>(nCol), aString);
         }
 
-        //
+
         //  Row header
-        //
+
 
         SCROW nPosRow = 0;
         for ( nRow = 0; nRow < nRowCount; nRow++ )

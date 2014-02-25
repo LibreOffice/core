@@ -281,9 +281,9 @@ private:
     mutable boost::scoped_ptr<ScConditionEntryCache> mpCache;
 };
 
-//
+
 //  single entry for conditional formatting
-//
+
 
 class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
@@ -376,9 +376,9 @@ private:
     OUString maStyleName;
 };
 
-//
+
 //  complete conditional formatting
-//
+
 
 class SC_DLLPUBLIC ScConditionalFormat: private boost::noncopyable
 {
@@ -446,9 +446,9 @@ public:
     void endRendering();
 };
 
-//
+
 //  List of areas and formats:
-//
+
 
 class SC_DLLPUBLIC ScConditionalFormatList
 {

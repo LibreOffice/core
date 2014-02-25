@@ -29,7 +29,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 namespace prv {
 
@@ -102,7 +102,7 @@ private:
 
 } // namespace prv
 
-// ============================================================================
+
 
 /** This class is used to read BIFF record streams.
 
@@ -285,7 +285,7 @@ public:
      */
     OUString     readUniString( bool bAllowNulChars = false );
 
-    // ------------------------------------------------------------------------
+
 private:
     /** Initializes all members after base stream has been seeked to new record. */
     void                setupRecord();
@@ -335,7 +335,7 @@ private:
     bool                mbCont;             /// True = automatic CONTINUE lookup enabled.
 };
 
-// ============================================================================
+
 
 class BiffInputStreamPos
 {
@@ -352,7 +352,7 @@ private:
     sal_Int64           mnRecPos;
 };
 
-// ============================================================================
+
 
 /** Stores the current position of the passed stream on construction and
     restores it automatically on destruction. */
@@ -363,7 +363,7 @@ public:
                         ~BiffInputStreamPosGuard();
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

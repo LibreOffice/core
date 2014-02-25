@@ -263,7 +263,7 @@ private:
     com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
 };
 
-// ============================================================================
+
 
 /**
  * Base class for field control with a horizontal scroll bar at the bottom.
@@ -308,7 +308,7 @@ private:
     size_t                  mnFieldBtnColCount;
 };
 
-// ============================================================================
+
 
 class ScDPPageFieldControl : public ScDPHorFieldControl
 {
@@ -320,7 +320,7 @@ public:
     virtual OUString GetDescription() const;
 };
 
-// ============================================================================
+
 
 class ScDPColFieldControl : public ScDPHorFieldControl
 {
@@ -332,7 +332,7 @@ public:
     virtual OUString GetDescription() const;
 };
 
-// ============================================================================
+
 
 /**
  * Row field control with a vertical scroll bar.
@@ -375,7 +375,7 @@ private:
     size_t                  mnColumnBtnCount;
 };
 
-// ============================================================================
+
 
 class ScDPSelectFieldControl : public ScDPHorFieldControl
 {
@@ -387,7 +387,7 @@ public:
     virtual OUString GetDescription() const;
 };
 
-// ============================================================================
+
 
 class ScDPDataFieldControl : public ScDPHorFieldControl
 {

@@ -27,7 +27,7 @@
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-//------------------------------------------------------------------------
+
 
 class ScDataPilotSourceTypeDlg : public ModalDialog
 {

@@ -1174,7 +1174,7 @@ void ScDocument::KeyInput( const KeyEvent& )
         apTemporaryChartLock->StartOrContinueLocking();
 }
 
-//  ----------------------------------------------------------------------------
+
 
 bool ScDocument::CheckMacroWarn()
 {

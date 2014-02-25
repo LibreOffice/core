@@ -38,7 +38,7 @@ ModulePrefix( "Sc" )
     item double ScDoubleItem;
     item INT32 SfxIntegerListItem;
 
-    //----------------------------------------------------------
+
     // bei Problemen ggF. "von Hand" includen (=Copy/Paste)
     include "sfxitems.sdi"
     include "sfx.sdi"

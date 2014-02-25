@@ -48,7 +48,7 @@ namespace oox { class PropertySet; }
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 const sal_Int32 OOX_COLOR_WINDOWTEXT3       = 24;       /// System window text color (BIFF3-BIFF4).
 const sal_Int32 OOX_COLOR_WINDOWBACK3       = 25;       /// System window background color (BIFF3-BIFF4).
@@ -62,7 +62,7 @@ const sal_Int32 OOX_COLOR_NOTEBACK          = 80;       /// Note background colo
 const sal_Int32 OOX_COLOR_NOTETEXT          = 81;       /// Note text color.
 const sal_Int32 OOX_COLOR_FONTAUTO          = 0x7FFF;   /// Font auto color (system window text color).
 
-// ----------------------------------------------------------------------------
+
 
 const sal_Int16 API_LINE_NONE               = 0;
 const sal_Int16 API_LINE_HAIR               = 1;
@@ -77,7 +77,7 @@ const sal_Int16 API_ESCAPE_SUBSCRIPT        = -101;     /// Subscript: lower cha
 const sal_Int8 API_ESCAPEHEIGHT_NONE        = 100;      /// Relative character height if not escaped.
 const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       /// Relative character height if escaped.
 
-// ============================================================================
+
 
 /** Special implementation of the GraphicHelper for Excel palette and scheme
     colors.
@@ -93,7 +93,7 @@ public:
     virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
 };
 
-// ============================================================================
+
 
 class Color : public ::oox::drawingml::Color
 {
@@ -119,11 +119,11 @@ public:
     inline bool         isAuto() const { return isPlaceHolder(); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor );
 
-// ============================================================================
+
 
 /** Stores all colors of the color palette. */
 class ColorPalette : public WorkbookHelper
@@ -149,7 +149,7 @@ private:
     size_t              mnAppendIndex;      /// Index to append a new color.
 };
 
-// ============================================================================
+
 
 /** Contains all XML font attributes, e.g. from a font or rPr element. */
 struct FontModel
@@ -177,7 +177,7 @@ struct FontModel
     void                setBiffEscapement( sal_uInt16 nEscapement );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Enumerates different types of API font property sets. */
 enum FontPropertyType
@@ -186,7 +186,7 @@ enum FontPropertyType
     FONT_PROPTYPE_TEXT              /// Font properties in a text object (text::Text service).
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains used flags for all API font attributes. */
 struct ApiFontUsedFlags
@@ -206,7 +206,7 @@ struct ApiFontUsedFlags
     explicit            ApiFontUsedFlags( bool bAllUsed );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains API font name, family, and charset for a script type. */
 struct ApiScriptFontName
@@ -218,7 +218,7 @@ struct ApiScriptFontName
     explicit            ApiScriptFontName();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all API font attributes. */
 struct ApiFontData
@@ -238,7 +238,7 @@ struct ApiFontData
     explicit            ApiFontData();
 };
 
-// ============================================================================
+
 
 class Font : public WorkbookHelper
 {
@@ -301,7 +301,7 @@ private:
 
 typedef ::boost::shared_ptr< Font > FontRef;
 
-// ============================================================================
+
 
 /** Contains all XML cell alignment attributes, e.g. from an alignment element. */
 struct AlignmentModel
@@ -323,7 +323,7 @@ struct AlignmentModel
     void                setBiffVerAlign( sal_uInt8 nVerAlign );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all API cell alignment attributes. */
 struct ApiAlignmentData
@@ -347,7 +347,7 @@ struct ApiAlignmentData
 
 bool operator==( const ApiAlignmentData& rLeft, const ApiAlignmentData& rRight );
 
-// ============================================================================
+
 
 class Alignment : public WorkbookHelper
 {
@@ -382,7 +382,7 @@ private:
 
 typedef ::boost::shared_ptr< Alignment > AlignmentRef;
 
-// ============================================================================
+
 
 /** Contains all XML cell protection attributes, e.g. from a protection element. */
 struct ProtectionModel
@@ -393,7 +393,7 @@ struct ProtectionModel
     explicit            ProtectionModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all API cell protection attributes. */
 struct ApiProtectionData
@@ -407,7 +407,7 @@ struct ApiProtectionData
 
 bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight );
 
-// ============================================================================
+
 
 class Protection : public WorkbookHelper
 {
@@ -438,7 +438,7 @@ private:
 
 typedef ::boost::shared_ptr< Protection > ProtectionRef;
 
-// ============================================================================
+
 
 /** Contains XML attributes of a single border line. */
 struct BorderLineModel
@@ -453,7 +453,7 @@ struct BorderLineModel
     void                setBiffStyle( sal_Int32 nLineStyle );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains XML attributes of a complete cell border. */
 struct BorderModel
@@ -469,7 +469,7 @@ struct BorderModel
     explicit            BorderModel( bool bDxf );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains API attributes of a complete cell border. */
 struct ApiBorderData
@@ -493,7 +493,7 @@ struct ApiBorderData
 
 bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight );
 
-// ============================================================================
+
 
 class Border : public WorkbookHelper
 {
@@ -544,7 +544,7 @@ private:
 
 typedef ::boost::shared_ptr< Border > BorderRef;
 
-// ============================================================================
+
 
 /** Contains XML pattern fill attributes from the patternFill element. */
 struct PatternFillModel
@@ -562,7 +562,7 @@ struct PatternFillModel
     void                setBiffPattern( sal_Int32 nPattern );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains XML gradient fill attributes from the gradientFill element. */
 struct GradientFillModel
@@ -585,7 +585,7 @@ struct GradientFillModel
     void                readGradientStop( SequenceInputStream& rStrm, bool bDxf );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains API fill attributes. */
 struct ApiSolidFillData
@@ -599,7 +599,7 @@ struct ApiSolidFillData
 
 bool operator==( const ApiSolidFillData& rLeft, const ApiSolidFillData& rRight );
 
-// ============================================================================
+
 
 /** Contains cell fill attributes, either a pattern fill or a gradient fill. */
 class Fill : public WorkbookHelper
@@ -657,7 +657,7 @@ private:
 
 typedef ::boost::shared_ptr< Fill > FillRef;
 
-// ============================================================================
+
 
 /** Contains all data for a cell format or cell style. */
 struct XfModel
@@ -680,7 +680,7 @@ struct XfModel
 
 bool operator==( const XfModel& rXfModel1,  const XfModel& rXfModel2 );
 
-// ============================================================================
+
 
 /** Represents a cell format or a cell style (called XF, extended format).
 
@@ -743,7 +743,7 @@ bool operator==( const Xf& rXf1,  const Xf& rXf2 );
 
 typedef ::boost::shared_ptr< Xf > XfRef;
 
-// ============================================================================
+
 
 class Dxf : public WorkbookHelper
 {
@@ -779,7 +779,7 @@ private:
 
 typedef ::boost::shared_ptr< Dxf > DxfRef;
 
-// ============================================================================
+
 
 /** Contains attributes of a cell style, e.g. from the cellStyle element. */
 struct CellStyleModel
@@ -800,7 +800,7 @@ struct CellStyleModel
     bool                isDefaultStyle() const;
 };
 
-// ============================================================================
+
 
 class CellStyle : public WorkbookHelper
 {
@@ -833,7 +833,7 @@ private:
 
 typedef ::boost::shared_ptr< CellStyle > CellStyleRef;
 
-// ============================================================================
+
 
 class CellStyleBuffer : public WorkbookHelper
 {
@@ -873,7 +873,7 @@ private:
     CellStyleRef        mxDefStyle;         /// Default cell style.
 };
 
-// ============================================================================
+
 
 struct AutoFormatModel
 {
@@ -888,7 +888,7 @@ struct AutoFormatModel
     explicit            AutoFormatModel();
 };
 
-// ============================================================================
+
 
 class StylesBuffer : public WorkbookHelper
 {
@@ -1002,7 +1002,7 @@ private:
     mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

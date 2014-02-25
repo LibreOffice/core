@@ -46,7 +46,7 @@ ScMessagePool::ScMessagePool()
     :   SfxItemPool         ( OUString("ScMessagePool"),
                               MSGPOOL_START, MSGPOOL_END,
                               aMsgItemInfos, NULL ),
-    //
+
     aGlobalStringItem       ( SfxStringItem         ( SCITEM_STRING, OUString() ) ),
     aGlobalSearchItem       ( SvxSearchItem         ( SCITEM_SEARCHDATA ) ),
     aGlobalSortItem         ( ScSortItem            ( SCITEM_SORTDATA, NULL ) ),
@@ -56,7 +56,7 @@ ScMessagePool::ScMessagePool()
     aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, NULL, NULL, false ) ),
     aGlobalSolveItem        ( ScSolveItem           ( SCITEM_SOLVEDATA, NULL ) ),
     aGlobalUserListItem     ( ScUserListItem        ( SCITEM_USERLIST ) ),
-    //
+
     aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, false ) )
 {
     ppPoolDefaults = new SfxPoolItem*[MSGPOOL_END - MSGPOOL_START + 1];

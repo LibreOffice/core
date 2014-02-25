@@ -43,7 +43,7 @@ namespace ooo {
 namespace vba {
 namespace excel {
 
-// ============================================================================
+
 
 uno::Reference< sheet::XUnnamedDatabaseRanges >
 GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
@@ -383,7 +383,7 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
     return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : 0;
 }
 
-// ============================================================================
+
 
 } // namespace excel
 } // namespace vba

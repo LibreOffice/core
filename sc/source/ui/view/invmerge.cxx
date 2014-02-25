@@ -43,9 +43,9 @@ void ScInvertMerger::Flush()
 
     if ( pRects )
     {
-        //
+
         // also join vertically if there are non-adjacent columns involved
-        //
+
 
         size_t nComparePos = 0;
         while ( nComparePos < pRects->size() )

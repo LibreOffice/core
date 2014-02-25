@@ -28,7 +28,7 @@
 #include "sc.hrc"
 
 
-//========================================================================
+
 
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )
 {

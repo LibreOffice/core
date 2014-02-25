@@ -34,7 +34,7 @@ const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty 
 const XclStrFlags EXC_STR_SEPARATEFORMATS   = 0x0008;   /// Import: Keep old formats when reading unformatted string (default: clear formats); Export: Write unformatted string.
 const XclStrFlags EXC_STR_NOHEADER          = 0x0010;   /// Export: Don't write the length and flag fields.
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt16 EXC_STR_MAXLEN_8BIT        = 0x00FF;
 const sal_uInt16 EXC_STR_MAXLEN             = 0x7FFF;
@@ -78,12 +78,12 @@ inline bool operator<( const XclFormatRun& rLeft, const XclFormatRun& rRight )
     return (rLeft.mnChar < rRight.mnChar) || ((rLeft.mnChar == rRight.mnChar) && (rLeft.mnFontIdx < rRight.mnFontIdx));
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** A vector with all formatting runs for a rich-string. */
 typedef ::std::vector< XclFormatRun > XclFormatRunVec;
 
-// ============================================================================
+
 
 #endif
 

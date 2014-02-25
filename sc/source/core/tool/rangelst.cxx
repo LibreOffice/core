@@ -629,7 +629,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
         {
             // row deleted:     |------|
             // row original: |------|
-            //
+
             // +-------+
             // |   1   |
             // +---+---+---+
@@ -648,7 +648,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
         {
             // row deleted:  |------|
             // row original:    |------|
-            //
+
             //     +-------+
             //     |xxxxxxx|
             // +---+xxxxxxx|
@@ -672,7 +672,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
         {
             // row deleted:     |------|
             // row original: |------|
-            //
+
             //     +-------+
             //     |   1   |
             // +-------+---+
@@ -692,7 +692,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
         {
             // row deleted:  |-------|
             // row original:     |--------|
-            //
+
             // +-------+
             // |xxxxxxx|
             // |xxxxxxx+---+

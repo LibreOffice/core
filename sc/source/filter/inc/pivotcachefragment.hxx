@@ -28,7 +28,7 @@ namespace xls {
 class PivotCache;
 class PivotCacheField;
 
-// ============================================================================
+
 
 class PivotCacheFieldContext : public WorkbookContextBase
 {
@@ -47,7 +47,7 @@ private:
     PivotCacheField&    mrCacheField;
 };
 
-// ============================================================================
+
 
 class PivotCacheDefinitionFragment : public WorkbookFragmentBase
 {
@@ -67,7 +67,7 @@ private:
     PivotCache&         mrPivotCache;
 };
 
-// ============================================================================
+
 
 class PivotCacheRecordsFragment : public WorksheetFragmentBase
 {
@@ -94,8 +94,8 @@ private:
     bool                mbInRecord;
 };
 
-// ============================================================================
-// ============================================================================
+
+
 
 class BiffPivotCacheFragment : public BiffWorkbookFragmentBase
 {
@@ -112,7 +112,7 @@ private:
     PivotCache&         mrPivotCache;
 };
 
-// ============================================================================
+
 
 class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
 {
@@ -139,7 +139,7 @@ private:
     bool                mbInRow;        /// True = a data row has been started.
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -29,7 +29,7 @@
 #include "dbnamdlg.hxx"
 
 
-//============================================================================
+
 
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
@@ -45,7 +45,7 @@ static DBSaveData* pSaveObj = NULL;
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
 
-//============================================================================
+
 //  class DBSaveData
 
 class DBSaveData
@@ -109,7 +109,7 @@ void DBSaveData::Restore()
 }
 
 
-//============================================================================
+
 //  class ScDbNameDlg
 
 
@@ -389,7 +389,7 @@ bool ScDbNameDlg::IsRefInputMode() const
 
 
 // Handler:
-// ========
+
 
 IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
 {

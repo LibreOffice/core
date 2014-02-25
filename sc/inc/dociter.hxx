@@ -482,9 +482,9 @@ public:
 };
 
 
-//
+
 //  returns all areas with non-default formatting (horizontal)
-//
+
 
 class ScHorizontalAttrIterator
 {
@@ -511,9 +511,9 @@ public:
     const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow );
 };
 
-//
+
 //  returns non-empty cells and areas with formatting (horizontal)
-//
+
 
 class SC_DLLPUBLIC ScUsedAreaIterator
 {

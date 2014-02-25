@@ -47,7 +47,7 @@ interface TableDrawText
     SID_STYLE_HIDE              [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_SHOW              [ StateMethod = StateDisableItems; Export = FALSE; ]
 
-     //----------------------------------------------------------------------------
+
     SID_CUT             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_COPY            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PASTE           [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
@@ -148,7 +148,7 @@ interface TableDrawText
 
 
 
- // ===========================================================================
+
 shell ScDrawTextObjectBar
 {
     import TableDrawText;

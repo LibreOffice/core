@@ -241,9 +241,9 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 }
 
 
-//
+
 //  Data Pilot interaction
-//
+
 
 void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 {
@@ -278,7 +278,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
         bTimer = sal_True;
     }
 
-    //  ---
+
 
     SCsCOL  nPosX;
     SCsROW  nPosY;

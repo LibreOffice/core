@@ -44,14 +44,14 @@
 #include <svl/zforlist.hxx>
 #include "svl/sharedstringpool.hxx"
 
-//==================================================================
+
 
 ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
                                     const SfxItemSet&   rArgSet,
                                     SCTAB               nSourceTab )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_PIVOTFILTER ) ),
-        //
+
         aFlCriteria     ( this, ScResId( FL_CRITERIA ) ),
         aLbField1       ( this, ScResId( LB_FIELD1 ) ),
         aLbCond1        ( this, ScResId( LB_COND1 ) ),
@@ -83,7 +83,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         aStrEmpty       ( SC_RESSTR(SCSTR_FILTER_EMPTY) ),
         aStrNotEmpty    ( SC_RESSTR(SCSTR_FILTER_NOTEMPTY) ),
         aStrColumn      ( SC_RESSTR(SCSTR_COLUMN) ),
-        //
+
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( ((const ScQueryItem&)
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),

@@ -104,7 +104,7 @@ private:
     XclPageData         maData;         /// Page settings data.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all page (print) settings records for a chart object. */
 class XclExpChartPageSettings : public XclExpRecordBase, protected XclExpRoot
@@ -123,7 +123,7 @@ private:
     XclPageData         maData;         /// Page settings data.
 };
 
-// ============================================================================
+
 
 #endif
 

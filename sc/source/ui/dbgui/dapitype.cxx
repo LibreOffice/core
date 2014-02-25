@@ -106,7 +106,7 @@ IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
 ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
                                 const uno::Sequence<OUString>& rServices ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPISERVICE ) ),
-    //
+
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aFtService      ( this, ScResId( FT_SERVICE ) ),
     aLbService      ( this, ScResId( LB_SERVICE ) ),

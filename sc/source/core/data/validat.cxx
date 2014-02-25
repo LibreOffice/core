@@ -52,9 +52,9 @@
 
 using namespace formula;
 
-//
+
 //  Eintrag fuer Gueltigkeit (es gibt nur eine Bedingung)
-//
+
 
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                     const OUString& rExpr1, const OUString& rExpr2,
@@ -902,8 +902,8 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
     return bIsValid;
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
 {

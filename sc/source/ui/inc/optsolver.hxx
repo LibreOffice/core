@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-//============================================================================
+
 
 class ScCursorRefEdit : public formula::RefEdit
 {

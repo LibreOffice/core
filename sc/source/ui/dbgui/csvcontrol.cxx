@@ -23,7 +23,7 @@
 #include "AccessibleCsvControl.hxx"
 
 
-// ============================================================================
+
 
 ScCsvLayoutData::ScCsvLayoutData() :
     mnPosCount( 1 ),
@@ -60,7 +60,7 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
 }
 
 
-// ============================================================================
+
 
 ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
     Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
@@ -312,6 +312,6 @@ ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

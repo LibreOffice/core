@@ -291,7 +291,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         Add( new XclExpBoolRecord(0x00DA, false) ); // BOOKBOOL
         // OOXTODO: The following /workbook/workbookPr attributes are mapped
         //          to various BIFF records that are not currently supported:
-        //
+
         //          XML_allowRefreshQuery:          QSISTAG 802h: fEnableRefresh
         //          XML_autoCompressPictures:       COMPRESSPICTURES 89Bh: fAutoCompressPictures
         //          XML_checkCompatibility:         COMPAT12 88Ch: fNoCompatChk

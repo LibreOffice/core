@@ -25,10 +25,10 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
 
 
-// ============================================================================
+
+
 
 namespace prv {
 
@@ -154,7 +154,7 @@ void BiffInputRecordBuffer::updateDecoded()
 
 } // namespace prv
 
-// ============================================================================
+
 
 BiffInputStream::BiffInputStream( BinaryInputStream& rInStream, bool bContLookup ) :
     BinaryStreamBase( true ),
@@ -489,7 +489,7 @@ void BiffInputStream::readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAd
     ornAddSize = 4 * nFontCount + ::std::max< sal_Int32 >( 0, nPhoneticSize );
 }
 
-// ============================================================================
+
 
 BiffInputStreamPos::BiffInputStreamPos( BiffInputStream& rStrm ) :
     mrStrm( rStrm ),
@@ -506,7 +506,7 @@ bool BiffInputStreamPos::restorePosition()
     return bValidRec && !mrStrm.isEof();
 }
 
-// ============================================================================
+
 
 BiffInputStreamPosGuard::BiffInputStreamPosGuard( BiffInputStream& rStrm ) :
     BiffInputStreamPos( rStrm )
@@ -518,7 +518,7 @@ BiffInputStreamPosGuard::~BiffInputStreamPosGuard()
     restorePosition();
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -727,82 +727,82 @@ ScVbaChart::setLocation( ::sal_Int32 /*where*/, const css::uno::Any& /*Name*/ ) 
     // Helper api just stubs out the code <shrug>
     // #TODO come back and make sense out of this
 //        String sheetName = null;
-//
+
 //        if ((name != null) && name instanceof String) {
 //            sheetName = (String) name;
 //        }
 //        XSpreadsheetDocument xShDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface( XSpreadsheetDocument.class,getXModel() );
 //        com.sun.star.sheet.XSpreadsheets xSheets = xShDoc.Sheets();
-//
+
 //        switch (where) {
 //        case ClLocationType.clLocationAsObject_value: //{
-//
+
 //            if (sheetName == null) {
 //                DebugHelper.writeInfo("Can't embed in Chart without knowing SheetName");
 //                return;
 //            }
-//
+
 //            try {
 //                Any any = (Any) xSheets.getByName(sheetName);
 //                chartSheet = (XSpreadsheet) any.getObject();
-//
+
 //                // chartSheet = (XSpreadsheet) xSheets.getByName( sheetName );
 //            } catch (NoSuchElementException e) {
 //                // TODO Auto-generated catch block
 //                e.printStackTrace();
-//
+
 //                return;
 //            } catch (WrappedTargetException e) {
 //                // TODO Auto-generated catch block
 //                e.printStackTrace();
-//
+
 //                return;
 //            } catch (java.lang.Exception e) {
 //                e.printStackTrace();
 //            }
-//
+
 //            XTableChartsSupplier xTCS = (XTableChartsSupplier) UnoRuntime.queryInterface( XTableChartsSupplier.class, chartSheet);
 //            XTableCharts xTableCharts = xTCS.getCharts();
 //            XIndexAccess xIA = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, xTableCharts);
 //            int numCharts = xIA.getCount();
 //            chartName = "Chart " + (numCharts + 1);
-//
+
 //            //}
 //            break;
-//
+
 //        case ClLocationType.clLocationAsNewSheet_value:
 //        case ClLocationType.clLocationAutomatic_value:default: //{
 //            chartName = "Chart 1"; // Since it's a new sheet, it's the first on it...
-//
+
 //            XIndexAccess xSheetIA = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, xSheets);
-//
+
 //            short newSheetNum = (short) (xSheetIA.getCount() + 1);
-//
+
 //            if (sheetName == null){
 //                sheetName = "ChartSheet " + newSheetNum; // Why not?
 //            }
 //            // DPK TODO : Probably should use Sheets to create this!
 //            xSheets.insertNewByName(sheetName, newSheetNum);
-//
+
 //            try {
 //                chartSheet =
 //                    (XSpreadsheet) xSheets.getByName(sheetName);
 //            } catch (NoSuchElementException e) {
 //                // TODO Auto-generated catch block
 //                e.printStackTrace();
-//
+
 //                return;
 //            } catch (WrappedTargetException e) {
 //                // TODO Auto-generated catch block
 //                e.printStackTrace();
-//
+
 //                return;
 //            }
-//
+
 //            //}
 //            break;
 //        }
-//
+
 //        // Last thing should be a call to createChartForReal(), one of them
 //        // should succeed.
 //        createChartForReal();

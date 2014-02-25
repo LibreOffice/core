@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// ============================================================================
+
 
 #ifndef _SC_CSVCONTROL_HXX
 #define _SC_CSVCONTROL_HXX
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 } } } }
 
 
-// ============================================================================
+
 
 /** Minimum character count for a column in separators mode. */
 const sal_Int32 CSV_MINCOLWIDTH         = 8;
@@ -69,7 +69,7 @@ const sal_uInt8 SC_COL_SKIP             = 9;
 const sal_uInt8 SC_COL_ENGLISH          = 10;
 
 
-// ============================================================================
+
 
 /** Exported data of a column (data used in the dialog). */
 struct ScCsvExpData
@@ -85,7 +85,7 @@ struct ScCsvExpData
 typedef ::std::vector< ScCsvExpData > ScCsvExpDataVec;
 
 
-// ============================================================================
+
 
 /** Specifies which element should be used to perform an action. */
 enum ScMoveMode
@@ -100,7 +100,7 @@ enum ScMoveMode
 };
 
 
-// ============================================================================
+
 
 /** Flags for comparison of old and new control layout data. */
 typedef sal_uInt32 ScCsvDiff;
@@ -122,7 +122,7 @@ const ScCsvDiff CSV_DIFF_VERTICAL       = CSV_DIFF_LINECOUNT | CSV_DIFF_LINEOFFS
 const ScCsvDiff CSV_DIFF_CURSOR         = CSV_DIFF_RULERCURSOR | CSV_DIFF_GRIDCURSOR;
 
 
-// ----------------------------------------------------------------------------
+
 
 /** A structure containing all layout data valid for both ruler and data grid
     (i.e. scroll position or column width). */
@@ -169,7 +169,7 @@ inline bool operator!=( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rD
 }
 
 
-// ============================================================================
+
 
 /** Enumeration of possible commands to change any settings of the CSV controls.
     @descr  Controls have to send commands instead of changing their settings directly.
@@ -215,7 +215,7 @@ enum ScCsvCmdType
 };
 
 
-// ----------------------------------------------------------------------------
+
 
 /** Data for a CSV control command. The stored position data is aways character based,
     it's never a column index (required for internal consistency). */
@@ -243,7 +243,7 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 }
 
 
-// ============================================================================
+
 
 /** Base class for the CSV ruler and the data grid control. Implements command handling. */
 class SC_DLLPUBLIC ScCsvControl : public Control
@@ -264,7 +264,7 @@ private:
     ScAccessibleCsvControl*     mpAccessible;       /// Pointer to the accessible implementation object.
     bool                        mbValidGfx;         /// Content of virtual devices valid?
 
-    // ------------------------------------------------------------------------
+
 public:
     explicit                    ScCsvControl( ScCsvControl& rParent );
     explicit                    ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
@@ -417,7 +417,7 @@ protected:
 };
 
 
-// ============================================================================
+
 
 #endif
 

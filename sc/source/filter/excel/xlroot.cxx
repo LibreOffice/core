@@ -408,6 +408,6 @@ XclTracer& XclRoot::GetTracer() const
     return *mrData.mxTracer;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -246,7 +246,7 @@ public:
 };
 
 
-//
+
 struct ProvNamesId_Type
 {
     const char *    pName;
@@ -318,10 +318,10 @@ static const ProvNamesId_Type aProvNamesId[] =
     { "ooo.vba.VBAGlobals",          SC_SERVICE_VBAGLOBALS },
 };
 
-//
+
 //  old service names that were in 567 still work in createInstance,
 //  in case some macro is still using them
-//
+
 
 static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
     {

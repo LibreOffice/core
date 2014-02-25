@@ -45,7 +45,7 @@
 using namespace ::formula;
 using namespace ::com::sun::star;
 
-// ============================================================================
+
 
 static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 {
@@ -63,7 +63,7 @@ static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 
 SC_SIMPLE_SERVICE_INFO( ScFormulaParserObj, "ScFormulaParserObj", SC_SERVICENAME_FORMULAPARS )
 
-// ============================================================================
+
 
 ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
     mpDocShell( pDocSh ),
@@ -284,7 +284,7 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropert
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFormulaParserObj )
 
-// ============================================================================
+
 
 static void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
@@ -496,7 +496,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
     return !bError;
 }
 
-// ============================================================================
+
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler)
@@ -505,6 +505,6 @@ ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::Form
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

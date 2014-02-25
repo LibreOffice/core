@@ -75,7 +75,7 @@ private:
 
 
 
-//___________________________________________________________________
+
 // classes AutoFilterData, AutoFilterBuffer
 
 class XclImpAutoFilterData : private ExcRoot

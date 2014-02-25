@@ -35,9 +35,9 @@ TYPEINIT1(ScUndoModifyStyle, ScSimpleUndo);
 TYPEINIT1(ScUndoApplyPageStyle, ScSimpleUndo);
 
 
-//
+
 //      modify style (cell or page style)
-//
+
 
 ScStyleSaveData::ScStyleSaveData() :
     pItems( NULL )
@@ -231,9 +231,9 @@ bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 
-//
+
 //      apply page style
-//
+
 ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, const OUString& rOldStyle ) :
     mnTab( nTab ),
     maOldStyle( rOldStyle )

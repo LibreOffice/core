@@ -943,6 +943,6 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
     return eState == stClose;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

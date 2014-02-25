@@ -49,7 +49,7 @@ struct XclDebugObjCounter
 };
 #endif
 
-// ----------------------------------------------------------------------------
+
 
 class SfxMedium;
 class ScEditEngineDefaulter;
@@ -118,7 +118,7 @@ struct XclRootData
     virtual             ~XclRootData();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class SfxObjectShell;
 class ScModelObj;
@@ -275,7 +275,7 @@ private:
     XclRootData& mrData;        /// Reference to the global data struct.
 };
 
-// ============================================================================
+
 
 #endif
 

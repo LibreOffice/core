@@ -146,9 +146,9 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-//
+
 //condition
-//
+
 namespace {
 
 void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )

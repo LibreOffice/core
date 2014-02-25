@@ -268,7 +268,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     }
 }
 
-// ============================================================================
+
 
 ScSpellingEngine::ScSpellingEngine(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,
@@ -335,7 +335,7 @@ Window* ScSpellingEngine::GetDialogParent()
     return mrDocShell.GetActiveDialogParent();
 }
 
-// ============================================================================
+
 
 ScConversionParam::ScConversionParam( ScConversionType eConvType ) :
     meConvType( eConvType ),
@@ -408,6 +408,6 @@ bool ScTextConversionEngine::NeedsConversion()
     return HasConvertibleTextPortion( maConvParam.GetSourceLang() );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

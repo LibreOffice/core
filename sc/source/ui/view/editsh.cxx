@@ -1034,9 +1034,9 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             break;
     }
 
-    //
+
     //  anwenden
-    //
+
 
     EditEngine* pEngine = pEditView->GetEditEngine();
     sal_Bool bOld = pEngine->GetUpdateMode();

@@ -1060,7 +1060,7 @@ struct ConventionXL
         // URL, and all characetrs are allowed.  Check if it makes sense to do
         // it the way Gnumeric does it.  Gnumeric doesn't use the URL form
         // and allows relative file path.
-        //
+
         //   ['file:///path/to/source/filename.xls']
 
         rBuffer.append('[');

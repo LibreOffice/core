@@ -107,7 +107,7 @@ private:
     size_t              mnFormatsEnd;   /// Formatting run index for next portion.
 };
 
-// ============================================================================
+
 
 #endif
 

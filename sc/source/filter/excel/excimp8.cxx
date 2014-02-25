@@ -681,7 +681,7 @@ void XclImpAutoFilterData::ReadAutoFilter(
         // Import only when both conditions are for simple equality, else
         // import only the 1st condition due to conflict with the ordering of
         // conditions. #i39464#.
-        //
+
         // Example: Let A1 be a condition of column A, and B1 and B2
         // conditions of column B, connected with OR. Excel performs 'A1 AND
         // (B1 OR B2)' in this case, but Calc would do '(A1 AND B1) OR B2'
