@@ -186,7 +186,7 @@ namespace
 
             // iteratively fill dash array, first with dashs, then
             // with dots.
-            // ===================================================
+
 
             sal_Int32 nCurrEntry=0;
 
@@ -2789,12 +2789,12 @@ namespace cppcanvas
                         aRangeEnd->mnOrigIndex > nEndIndex )
                     {
                         // aRangeEnd denotes end of action vector,
-                        //
+
                         // or
-                        //
+
                         // nEndIndex references something _after_
                         // aRangeBegin, but _before_ aRangeEnd
-                        //
+
                         // either way: no partial action left
                         return rFunctor.result();
                     }
@@ -2861,7 +2861,7 @@ namespace cppcanvas
 
 
         // Public methods
-        // ====================================================================
+
 
         ImplRenderer::ImplRenderer( const CanvasSharedPtr&  rCanvas,
                                     const GDIMetaFile&      rMtf,
