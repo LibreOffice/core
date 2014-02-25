@@ -419,9 +419,9 @@ MediaTypeEntry const aStaticExtensionMap[]
 
 }
 
-//
+
 //  Registration
-//
+
 
 Registration::~Registration()
 {
@@ -523,9 +523,9 @@ INetContentType Registration::GetContentType4Extension(OUString const & rExtensi
         : CONTENT_TYPE_UNKNOWN;
 }
 
-//
+
 //  seekEntry
-//
+
 
 namespace
 {

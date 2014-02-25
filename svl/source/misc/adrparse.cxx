@@ -161,9 +161,9 @@ inline void SvAddressParser_Impl::addTokenToRealName()
     }
 }
 
-//
+
 //  SvAddressParser_Impl
-//
+
 
 bool SvAddressParser_Impl::readToken()
 {
@@ -718,9 +718,9 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
     }
 }
 
-//
+
 //  SvAddressParser
-//
+
 
 SvAddressParser::SvAddressParser(const OUString& rInput)
     : m_bHasFirst(false)

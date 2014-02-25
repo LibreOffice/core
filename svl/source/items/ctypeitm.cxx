@@ -27,9 +27,9 @@
 #define CNTSTRINGITEM_STREAM_MAGIC   ( (sal_uInt32)0xfefefefe )
 #define CNTSTRINGITEM_STREAM_SEEKREL (-( (long)( sizeof( sal_uInt32 ) ) ) )
 
-//
+
 // class CntContentTypeItem Implementation.
-//
+
 
 TYPEINIT1_AUTOFACTORY( CntContentTypeItem, CntUnencodedStringItem );
 

@@ -21,9 +21,9 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
 
-//
+
 //  class SfxVisibilityItem
-//
+
 
 DBG_NAME(SfxVisibilityItem)
 

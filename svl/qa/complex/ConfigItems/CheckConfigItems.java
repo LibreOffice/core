@@ -32,16 +32,16 @@ import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 // import static org.junit.Assert.*;
 
-//-----------------------------------------------
+
 /** @short  todo document me
  * @deprecated this tests seems no longer work as expected.
  */
 public class CheckConfigItems
 {
-    //-------------------------------------------
+
     // some const
 
-    //-------------------------------------------
+
     // member
 
     /** points to the global uno service manager. */
@@ -50,10 +50,10 @@ public class CheckConfigItems
     /** implements real config item tests in C++. */
     private XJob m_xTest = null;
 
-    //-------------------------------------------
+
     // test environment
 
-    //-------------------------------------------
+
     /** @short  A function to tell the framework,
                 which test functions are available.
 
@@ -73,7 +73,7 @@ public class CheckConfigItems
 //        };
 //    }
 
-    //-------------------------------------------
+
     /** @short  Create the environment for following tests.
 
      * @throws java.lang.Exception
@@ -92,7 +92,7 @@ public class CheckConfigItems
         m_xTest = UnoRuntime.queryInterface(XJob.class, m_xSmgr.createInstance("com.sun.star.comp.svl.ConfigItemTest"));
     }
 
-    //-------------------------------------------
+
     /**
      * @throws java.lang.Exception
      * @short  close the environment.
@@ -106,7 +106,7 @@ public class CheckConfigItems
         m_xSmgr = null;
     }
 
-    //-------------------------------------------
+
     /**
      * @throws java.lang.Exception
      * @todo document me
@@ -117,7 +117,7 @@ public class CheckConfigItems
         impl_triggerTest("checkPicklist");
     }
 
-    //-------------------------------------------
+
     /**
      * @throws java.lang.Exception
      * @todo document me
@@ -128,7 +128,7 @@ public class CheckConfigItems
         impl_triggerTest("checkURLHistory");
     }
 
-    //-------------------------------------------
+
     /**
      * @throws java.lang.Exception
      * @todo document me
@@ -139,7 +139,7 @@ public class CheckConfigItems
         impl_triggerTest("checkHelpBookmarks");
     }
 
-    //-------------------------------------------
+
     /**
      * @throws java.lang.Exception
      * @todo document me
@@ -150,7 +150,7 @@ public class CheckConfigItems
 //         impl_triggerTest("checkPrintOptions");
 //     }
 
-    //-------------------------------------------
+
     /**
      * @throws java.lang.Exception
      * @todo document me
@@ -161,7 +161,7 @@ public class CheckConfigItems
         impl_triggerTest("checkAccessibilityOptions");
     }
 
-    //-------------------------------------------
+
     /**
      * @throws java.lang.Exception
      * @todo document me
@@ -172,7 +172,7 @@ public class CheckConfigItems
         impl_triggerTest("checkUserOptions");
     }
 
-    //-------------------------------------------
+
     /** @todo document me
      */
     private void impl_triggerTest(String sTest)

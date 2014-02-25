@@ -46,9 +46,9 @@
 
 using namespace com::sun::star;
 
-//
+
 //  SmartRel2Abs
-//
+
 
 OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  OUString const & rTheRelURIRef,
@@ -104,9 +104,9 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
     return aAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
 }
 
-//
+
 //  SetMaybeFileHdl
-//
+
 
 namespace { struct MaybeFileHdl : public rtl::Static< Link, MaybeFileHdl > {}; }
 
@@ -115,9 +115,9 @@ void URIHelper::SetMaybeFileHdl(Link const & rTheMaybeFileHdl)
     MaybeFileHdl::get() = rTheMaybeFileHdl;
 }
 
-//
+
 //  GetMaybeFileHdl
-//
+
 
 Link URIHelper::GetMaybeFileHdl()
 {
@@ -284,9 +284,9 @@ OUString URIHelper::simpleNormalizedMakeRelative(
     return rel.is() ? rel->getUriReference() : uriReference;
 }
 
-//
+
 //  FindFirstURLInText
-//
+
 
 namespace {
 
@@ -447,34 +447,34 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     // Search for the first substring of [rBegin..rEnd[ that matches any of the
     // following productions (for which the appropriate style bit is set in
     // eStyle, if applicable).
-    //
+
     // 1st Production (known scheme):
     //    \B1 <one of the known schemes, except file> ":" 1*wchar ["#" 1*wchar]
     //        \B1
-    //
+
     // 2nd Production (file):
     //    \B1 "FILE:" 1*(wchar / "\" / "|") ["#" 1*wchar] \B1
-    //
+
     // 3rd Production (ftp):
     //    \B1 "FTP" 2*("." label) ["/" *wchar] ["#" 1*wchar] \B1
-    //
+
     // 4th Production (http):
     //    \B1 "WWW" 2*("." label) ["/" *wchar] ["#" 1*wchar] \B1
-    //
+
     // 5th Production (mailto):
     //    \B2 local-part "@" domain \B1
-    //
+
     // 6th Production (UNC file):
     //    \B1 "\\" domain "\" *(wchar / "\") \B1
-    //
+
     // 7th Production (DOS file):
     //    \B1 ALPHA ":\" *(wchar / "\") \B1
-    //
+
     // 8th Production (Unix-like DOS file):
     //    \B1 ALPHA ":/" *(wchar / "\") \B1
-    //
+
     // The productions use the following auxiliary rules.
-    //
+
     //    local-part = atom *("." atom)
     //    atom = 1*(alphanum / "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+"
     //              / "-" / "/" / "=" / "?" / "^" / "_" / "`" / "{" / "|" / "}"
@@ -484,27 +484,27 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     //    alphanum = ALPHA / DIGIT
     //    wchar = <any uric character (ignoring the escaped rule), or "%", or
     //             a letter or digit (according to rCharClass)>
-    //
+
     // "\B1" (boundary 1) stands for the beginning or end of the block of text,
     // or a character that is neither (a) a letter or digit (according to
     // rCharClass), nor (b) any of "$", "%", "&", "-", "/", "@", or "\".
     // (FIXME:  What was the rationale for this set of punctuation characters?)
-    //
+
     // "\B2" (boundary 2) stands for the beginning or end of the block of text,
     // or a character that is neither (a) a letter or digit (according to
     // rCharClass), nor (b) any of "!", "#", "$", "%", "&", "'", "*", "+", "-",
     // "/", "=", "?", "@", "^", "_", "`", "{", "|", "}", or "~" (i.e., an RFC
     // 822 <atom> character, or "@" from \B1's set above).
-    //
+
     // Productions 1--4, and 6--8 try to find a maximum-length match, but they
     // stop at the first <wchar> character that is a "\B1" character which is
     // only followed by "\B1" characters (taking "\" and "|" characters into
     // account appropriately).  Production 5 simply tries to find a maximum-
     // length match.
-    //
+
     // Productions 1--4 use the given eMechanism and eCharset.  Productions 5--9
     // use ENCODE_ALL.
-    //
+
     // Productions 6--9 are only applicable if the FSYS_DOS bit is set in
     // eStyle.
 
@@ -727,9 +727,9 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     return OUString();
 }
 
-//
+
 //  removePassword
-//
+
 
 OUString URIHelper::removePassword(OUString const & rURI,
                                    INetURLObject::EncodeMechanism eEncodeMechanism,

@@ -25,9 +25,9 @@
 
 #include <comphelper/extract.hxx>
 
-//
+
 //  class SfxEnumItemInterface
-//
+
 
 DBG_NAME(SfxEnumItemInterface)
 
@@ -118,9 +118,9 @@ bool SfxEnumItemInterface::GetBoolValue() const
 void SfxEnumItemInterface::SetBoolValue(sal_Bool)
 {}
 
-//
+
 //  class SfxEnumItem
-//
+
 
 DBG_NAME(SfxEnumItem)
 
@@ -158,9 +158,9 @@ void SfxEnumItem::SetValue(sal_uInt16 const nTheValue)
     m_nValue = nTheValue;
 }
 
-//
+
 //  class SfxBoolItem
-//
+
 
 DBG_NAME(SfxBoolItem)
 
