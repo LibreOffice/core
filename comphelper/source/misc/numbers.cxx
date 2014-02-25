@@ -24,10 +24,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 namespace starbeans = ::com::sun::star::beans;
 namespace starlang  = ::com::sun::star::lang;
@@ -134,8 +134,8 @@ Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, 
     return aReturn;
 }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

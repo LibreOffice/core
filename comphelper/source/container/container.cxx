@@ -23,12 +23,12 @@
 #include <comphelper/container.hxx>
 #include <osl/diagnose.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-//==============================================================================
+
+
 IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint)
     :m_xStartingPoint(xStartingPoint)
     ,m_xCurrentObject(NULL)
@@ -133,9 +133,9 @@ IndexAccessIterator::~IndexAccessIterator() {}
     return m_xCurrentObject;
 }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -141,9 +141,9 @@ private:
     ::std::deque<AttacherIndex_Impl>::iterator implCheckIndex( sal_Int32 _nIndex ) SAL_THROW ( ( IllegalArgumentException ) );
 };
 
-//========================================================================
-//========================================================================
-//========================================================================
+
+
+
 
 
 // Implementation of an EventAttacher-subclass 'AllListeners', which
@@ -169,7 +169,7 @@ public:
     virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException, std::exception );
 };
 
-//========================================================================
+
 AttacherAllListener_Impl::AttacherAllListener_Impl
 (
     ImplEventAttacherManager*   pManager_,
@@ -184,7 +184,7 @@ AttacherAllListener_Impl::AttacherAllListener_Impl
 }
 
 
-//========================================================================
+
 // Methods of XAllListener
 void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     throw( RuntimeException, std::exception )
@@ -204,7 +204,7 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
         ((XScriptListener *)aIt.next())->firing( aScriptEvent );
 }
 
-//========================================================================
+
 // Convert to the standard event return
 void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rRetType )
     throw( CannotConvertException )
@@ -250,7 +250,7 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
     }
 }
 
-//========================================================================
+
 // Methods of XAllListener
 Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Event )
     throw( InvocationTargetException, RuntimeException, std::exception )
@@ -338,7 +338,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
     return aRet;
 }
 
-//========================================================================
+
 // Methods of XEventListener
 void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
     throw( RuntimeException, std::exception )

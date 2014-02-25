@@ -193,7 +193,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         Type intType = new Type( Integer.class );
         Type longType = new Type( Long.class );
         Type msfType = new Type ( XMultiServiceFactory.class );
-        // ....................................................................
+
         // css.uno.Type should be a valid key type
         impl_checkMappings(
             new Type[] { intType, longType, msfType },
@@ -201,7 +201,7 @@ public class Map /* extends complexlib.ComplexTestCase */
             "type->string"
         );
 
-        // ....................................................................
+
         // any UNO interface type should be a valid key type.
         // Try with some form components (just because I like form components :), and the very first application
         // for the newly implemented map will be to map XFormComponents to drawing shapes
@@ -216,7 +216,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         components[0] = UnoRuntime.queryInterface( formComponentType.getZClass(), components[0] );
         impl_checkMappings( components, serviceNames, "XFormComponent->string" );
 
-        // ....................................................................
+
         // any UNO enum type should be a valid key type
         impl_checkMappings(
             new TypeClass[] { intType.getTypeClass(), longType.getTypeClass(), msfType.getTypeClass() },

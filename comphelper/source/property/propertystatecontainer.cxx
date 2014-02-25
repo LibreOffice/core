@@ -20,10 +20,10 @@
 #include "comphelper/propertystatecontainer.hxx"
 #include <rtl/ustrbuf.hxx>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -45,9 +45,9 @@ namespace comphelper
         }
     }
 
-    //=====================================================================
+
     //= OPropertyStateContainer
-    //=====================================================================
+
 
     OPropertyStateContainer::OPropertyStateContainer( ::cppu::OBroadcastHelper& _rBHelper )
         :OPropertyContainer( _rBHelper )
@@ -179,8 +179,8 @@ namespace comphelper
         setFastPropertyValue( _nHandle, aDefault );
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

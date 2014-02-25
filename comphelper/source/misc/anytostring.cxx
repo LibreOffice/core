@@ -308,7 +308,7 @@ void appendValue( OUStringBuffer & buf,
 
 } // anon namespace
 
-//==============================================================================
+
 OUString anyToString( uno::Any const & value )
 {
     OUStringBuffer buf;

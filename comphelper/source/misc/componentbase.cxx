@@ -23,19 +23,19 @@
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::lang::NotInitializedException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
 
-    //====================================================================
+
     //= ComponentBase
-    //====================================================================
+
 
     void ComponentBase::impl_checkDisposed_throw() const
     {
@@ -56,8 +56,8 @@ namespace comphelper
         return NULL;
     }
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

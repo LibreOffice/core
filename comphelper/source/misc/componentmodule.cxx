@@ -24,10 +24,10 @@
 
 #include <vector>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using namespace ::cppu;
     using ::com::sun::star::uno::Sequence;
@@ -40,9 +40,9 @@ namespace comphelper
 
     typedef ::std::vector< ComponentDescription >   ComponentDescriptions;
 
-    //=========================================================================
+
     //= OModuleImpl
-    //=========================================================================
+
     /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
     */
     class OModuleImpl
@@ -64,9 +64,9 @@ namespace comphelper
     {
     }
 
-    //=========================================================================
+
     //= OModule
-    //=========================================================================
+
 
     OModule::OModule()
         : m_nClients(0)
@@ -160,8 +160,8 @@ namespace comphelper
         return NULL;
     }
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

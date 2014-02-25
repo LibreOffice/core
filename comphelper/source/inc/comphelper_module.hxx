@@ -22,10 +22,10 @@
 
 #include "comphelper/componentmodule.hxx"
 
-//........................................................................
+
 namespace comphelper { namespace module
 {
-//........................................................................
+
 
     class ComphelperModule : public ::comphelper::OModule
     {
@@ -77,9 +77,9 @@ namespace comphelper { namespace module
         }
     };
 
-//........................................................................
+
 } } // namespace comphelper::module
-//........................................................................
+
 
 #endif // COMPHELPER_COMPHELPER_MODULE_HXX
 

@@ -28,18 +28,18 @@
 
 #include <algorithm>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-//==========================================================================
+
 //= OPropertyContainer
-//==========================================================================
+
 
 OPropertyContainer::OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper)
     :OPropertySetHelper(_rBHelper)
@@ -89,9 +89,9 @@ void OPropertyContainer::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) 
     OPropertyContainerHelper::getFastPropertyValue( _rValue, _nHandle );
 }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

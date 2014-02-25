@@ -31,10 +31,10 @@
 #include <memory.h>
 
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -469,8 +469,8 @@ Type getSequenceElementType(const Type& _rSequenceType)
 
     return Type();
 }
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
