@@ -248,7 +248,7 @@ public class GenericModelTest extends TestCase {
                 if (myForm == null){
                     log.println("ERROR: could not get 'Standard' from drawpage!");
                 }
-                log.println("the draw page contains folowing elemtens:");
+                log.println("the draw page contains following elements:");
                 String[] elements = FormTools.getForms(WriterTools.getDrawPage(m_xTextDoc)).getElementNames();
                 for (int i = 0; i< elements.length; i++){
                     log.println("Element[" + i + "] :" + elements[i]);

@@ -245,7 +245,7 @@ public class SwXTextView extends TestCase {
             if (xForms == null)
                 log.println("ERROR: could not get Forms");
 
-                log.println("the draw page contains folowing elemtens:");
+                log.println("the draw page contains following elements:");
                 String[] elements = FormTools.getForms(WriterTools.getDrawPage(xTextDoc)).getElementNames();
                 for (int i = 0; i< elements.length; i++){
                     log.println("Element[" + i + "] :" + elements[i]);
@@ -255,7 +255,7 @@ public class SwXTextView extends TestCase {
                 if (myForm == null){
                     log.println("ERROR: could not get 'Standard' from drawpage!");
             if (debug){
-                log.println("the draw page contains folowing elemtens:");
+                log.println("the draw page contains following elements:");
 //                String[] elements = FormTools.getForms(WriterTools.getDrawPage(xTextDoc)).getElementNames();
 //                for (int i = 0; i< elements.length; i++){
 //                    log.println("Element[" + i + "] :" + elements[i]);
