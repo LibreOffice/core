@@ -27,7 +27,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdmodel.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

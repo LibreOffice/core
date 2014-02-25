@@ -49,7 +49,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrObjGroup::CreateObjectSpecificProperties()
@@ -57,7 +57,7 @@ sdr::properties::BaseProperties* SdrObjGroup::CreateObjectSpecificProperties()
     return new sdr::properties::GroupProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrObjGroup::CreateObjectSpecificViewContact()
@@ -65,7 +65,7 @@ sdr::contact::ViewContact* SdrObjGroup::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfGroup(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrObjGroup,SdrObject);
 

@@ -25,14 +25,14 @@
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
 #include <osl/diagnose.h>
 
-//..............................................................................
+
 namespace svxform
 {
-//..............................................................................
 
-    //==========================================================================
+
+
     //= DataColumn - a class wrapping an object implementing a sdb::DataColumn service
-    //==========================================================================
+
     class DataColumn
     {
         // interfaces needed for sddb::Column
@@ -127,8 +127,8 @@ namespace svxform
 
 #endif // INCLUDED_SVX_SOURCE_INC_SDBDATACOLUMN_HXX
 
-//..............................................................................
+
 }   // namespace svxform
-//..............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

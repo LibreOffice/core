@@ -381,43 +381,43 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
         SetItemText(nId, aItemTextTitle);
 
         //SgaObject* pObj = mpTheme->AcquireObject( nId - 1 );
-        //
+
         //if( pObj )
         //{
         //    const Rectangle& rRect = rUDEvt.GetRect();
         //    const Size aSize(rRect.GetWidth(), rRect.GetHeight());
         //    const BitmapEx aBitmapEx(pObj->createPreviewBitmapEx(aSize));
         //    const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
-        //
+
         //    if(!aBitmapEx.IsEmpty())
         //    {
         //        const Point aPos(
         //            ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1) + rRect.Left(),
         //            ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
         //        OutputDevice* pDev = rUDEvt.GetDevice();
-        //
+
         //        if(aBitmapEx.IsTransparent())
         //        {
         //            // draw checkered background
         //            drawTransparenceBackground(*pDev, aPos, aBitmapExSizePixel);
         //        }
-        //
+
         //        pDev->DrawBitmapEx(aPos, aBitmapEx);
         //    }
-        //
+
         //  //const Rectangle&  rRect = rUDEvt.GetRect();
         //  //OutputDevice*     pDev = rUDEvt.GetDevice();
         //  //Graphic           aGraphic;
         //    //bool bTransparent(false);
-        //    //
+
         //  //if( pObj->IsThumbBitmap() )
         //  //{
         //  //  BitmapEx aBitmapEx;
-        //    //
+
         //  //  if( pObj->GetObjKind() == SGA_OBJ_SOUND )
         //    //    {
         //    //        Bitmap aTemp = pObj->GetThumbBmp().GetBitmap();
-        //    //
+
         //    //        aTemp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
         //    //        aBitmapEx = BitmapEx(aTemp);
         //    //    }
@@ -426,12 +426,12 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
         //    //        aBitmapEx = pObj->GetThumbBmp();
         //    //        bTransparent = aBitmapEx.IsTransparent();
         //    //    }
-        //    //
+
         //  //  if( ( pDev->GetBitCount() <= 8 ) && ( aBitmapEx.GetBitCount() >= 8 ) )
         //    //    {
         //  //      aBitmapEx.Dither( BMP_DITHER_FLOYD );
         //    //    }
-        //    //
+
         //  //  aGraphic = aBitmapEx;
         //  //}
         //  //else
@@ -439,9 +439,9 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
         //  //  aGraphic = pObj->GetThumbMtf();
         //    //    bTransparent = true;
         //    //}
-        //    //
+
         //  //Size aSize( aGraphic.GetSizePixel( pDev ) );
-        //    //
+
         //  //if ( aSize.Width() && aSize.Height() )
         //  //{
         //  //  if( ( aSize.Width() > rRect.GetWidth() ) || ( aSize.Height() > rRect.GetHeight() ) )
@@ -449,7 +449,7 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
         //  //      Point           aNewPos;
         //  //      const double    fBmpWH  = (double) aSize.Width() / aSize.Height();
         //  //      const double    fThmpWH = (double) rRect.GetWidth() / rRect.GetHeight();
-        //    //
+
         //  //      // Bitmap an Thumbgroesse anpassen
         //  //      if ( fBmpWH < fThmpWH )
         //  //      {
@@ -462,19 +462,19 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
         //  //          aSize.Height()= (long) ( rRect.GetWidth() / fBmpWH );
         //  //      }
         //  //  }
-        //    //
+
         //  //  const Point aPos( ( ( rRect.GetWidth() - aSize.Width() ) >> 1 ) + rRect.Left(),
         //  //                    ( ( rRect.GetHeight() - aSize.Height() ) >> 1 ) + rRect.Top() );
-        //    //
+
         //    //    if(bTransparent)
         //    //    {
         //    //        // draw checkered background
         //    //        drawTransparenceBackground(*pDev, aPos, aSize);
         //    //    }
-        //    //
+
         //  //  aGraphic.Draw( pDev, aPos, aSize );
         //  //}
-        //
+
         //  SetItemText( nId, GalleryBrowser2::GetItemText( *mpTheme, *pObj, GALLERY_ITEM_TITLE) );
         //  mpTheme->ReleaseObject( pObj );
         //}
@@ -696,37 +696,37 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
 
 
         //SgaObject* pObj = mpTheme->AcquireObject( mnCurRow );
-        //
+
         //if( pObj )
         //{
         //    const long nTextPosY = rRect.Top() + ( ( rRect.GetHeight() - rDev.GetTextHeight() ) >> 1 );
-        //
+
         //    if( GALLERY_BRWBOX_TITLE == nColumnId )
         //    {
         //        const Size aSize(rRect.GetHeight(), rRect.GetHeight());
         //        const BitmapEx aBitmapEx(pObj->createPreviewBitmapEx(aSize));
         //        const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
-        //
+
         //        if(!aBitmapEx.IsEmpty())
         //        {
         //            const Point aPos(
         //                ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1) + rRect.Left(),
         //                ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
-        //
+
         //            if(aBitmapEx.IsTransparent())
         //            {
         //                // draw checkered background
         //                drawTransparenceBackground(rDev, aPos, aBitmapExSizePixel);
         //            }
-        //
+
         //            rDev.DrawBitmapEx(aPos, aBitmapEx);
         //        }
-        //
-        //
+
+
         //        //Rectangle       aOutputRect( rRect.TopLeft(), Size( rRect.GetHeight(), rRect.GetHeight() ) );
         //      //GraphicObject   aGrfObj;
         //        //bool bTransparent(false);
-        //        //
+
         //        //if( pObj->GetObjKind() == SGA_OBJ_SOUND )
         //        //{
         //        //    aGrfObj = Graphic( BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) ) );
@@ -734,7 +734,7 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
         //        //else if( pObj->IsThumbBitmap() )
         //        //{
         //        //    const BitmapEx aBitmapEx(pObj->GetThumbBmp());
-        //        //
+
         //        //    bTransparent = aBitmapEx.IsTransparent();
         //      //    aGrfObj = Graphic(aBitmapEx);
         //        //}
@@ -743,9 +743,9 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
         //      //    aGrfObj = Graphic( pObj->GetThumbMtf() );
         //        //    bTransparent = true;
         //        //}
-        //        //
+
         //      //Size aSize( rDev.LogicToPixel( aGrfObj.GetPrefSize(), aGrfObj.GetPrefMapMode() ) );
-        //        //
+
         //      //if( aSize.Width() && aSize.Height() )
         //      //{
         //      //    if( ( aSize.Width() > aOutputRect.GetWidth() ) || ( aSize.Height() > aOutputRect.GetHeight() ) )
@@ -753,7 +753,7 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
         //      //      Point           aNewPos;
         //      //      const double    fBmpWH  = (double) aSize.Width() / aSize.Height();
         //      //      const double    fThmpWH = (double) aOutputRect.GetWidth() / aOutputRect.GetHeight();
-        //        //
+
         //      //      // Bitmap an Thumbgroesse anpassen
         //      //      if ( fBmpWH < fThmpWH )
         //      //      {
@@ -766,22 +766,22 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
         //      //          aSize.Height()= (long) ( aOutputRect.GetWidth() / fBmpWH );
         //      //      }
         //      //    }
-        //        //
+
         //        //    aSize.Width() = Max( aSize.Width(), 4L );
         //        //    aSize.Height() = Max( aSize.Height(), 4L );
-        //        //
+
         //      //    const Point aPos( ( ( aOutputRect.GetWidth() - aSize.Width() ) >> 1 ) + aOutputRect.Left(),
         //      //                    ( ( aOutputRect.GetHeight() - aSize.Height() ) >> 1 ) + aOutputRect.Top() );
-        //        //
+
         //        //    if(bTransparent)
         //        //    {
         //        //        // draw checkered background
         //        //        drawTransparenceBackground(rDev, aPos, aSize);
         //        //    }
-        //        //
+
         //        //    aGrfObj.Draw( &rDev, aPos, aSize );
         //      //}
-        //
+
         //        // aOutputRect.Right() is here rRect.Left() + rRect.GetHeight()
         //      rDev.DrawText( Point( rRect.Left() + rRect.GetHeight() + 6, nTextPosY ), GalleryBrowser2::GetItemText( *mpTheme, *pObj, GALLERY_ITEM_TITLE ) );
         //    }
@@ -789,7 +789,7 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
         //    {
         //        rDev.DrawText( Point( rRect.Left(), nTextPosY ), GalleryBrowser2::GetItemText( *mpTheme, *pObj, GALLERY_ITEM_PATH ) );
         //    }
-        //
+
         //    mpTheme->ReleaseObject( pObj );
         //}
     }

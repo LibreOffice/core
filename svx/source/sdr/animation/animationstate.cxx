@@ -25,7 +25,7 @@
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

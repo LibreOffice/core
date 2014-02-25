@@ -8283,7 +8283,7 @@ static const mso_CustomShape msoCurvedConnector5 =
     (SvxMSDffHandle*)mso_sptCurvedConnector5Handle, SAL_N_ELEMENTS( mso_sptCurvedConnector5Handle )
 };
 
-/////////////////////////////teardrop////////////////////////////////////////////
+/////////////////////////////teardrop
 static const SvxMSDffVertPair mso_sptTearDropVert[] =
 {
     { 10800, 0 },

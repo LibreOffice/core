@@ -35,7 +35,7 @@ namespace sdr { namespace properties {
 
 class OutlinerParaObject;
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
@@ -80,7 +80,7 @@ private:
     bool mbUndo;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class InsertRowUndo : public SdrUndoAction
 {
@@ -98,7 +98,7 @@ private:
     bool mbUndo;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class RemoveRowUndo : public SdrUndoAction
 {
@@ -116,7 +116,7 @@ private:
     bool mbUndo;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class InsertColUndo : public SdrUndoAction
 {
@@ -135,7 +135,7 @@ private:
     bool mbUndo;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class RemoveColUndo : public SdrUndoAction
 {
@@ -154,7 +154,7 @@ private:
     bool mbUndo;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class TableColumnUndo : public SdrUndoAction
 {
@@ -186,7 +186,7 @@ private:
     bool mbHasRedoData;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class TableRowUndo : public SdrUndoAction
 {
@@ -219,7 +219,7 @@ private:
     bool mbHasRedoData;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class TableStyleUndo : public SdrUndoAction
 {

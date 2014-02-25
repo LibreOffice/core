@@ -52,10 +52,10 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "svtools/treelistentry.hxx"
-//............................................................................
+
 namespace svxform
 {
-//............................................................................
+
 
     #define DROP_ACTION_TIMER_INITIAL_TICKS     10
         // solange dauert es, bis das Scrollen anspringt
@@ -78,9 +78,9 @@ namespace svxform
     using namespace ::com::sun::star::datatransfer::clipboard;
     using namespace ::com::sun::star::sdb;
 
-    //========================================================================
+
     // helper
-    //========================================================================
+
 
     typedef ::std::map< Reference< XInterface >, SdrObject*, ::comphelper::OInterfaceCompare< XInterface > >
             MapModelToShape;
@@ -113,9 +113,9 @@ namespace svxform
         }
     }
 
-    //========================================================================
+
     // class NavigatorTree
-    //========================================================================
+
 
 
     NavigatorTree::NavigatorTree( Window* pParent )
@@ -427,7 +427,7 @@ namespace svxform
 
                     // jetzt alles, was disabled wurde, wech
                     aContextMenu.RemoveDisabledEntries(true, true);
-                    //////////////////////////////////////////////////////////
+
                     // OpenReadOnly setzen
 
                     aContextMenu.CheckItem( SID_FM_OPEN_READONLY, pFormModel->GetOpenInDesignMode() );
@@ -592,7 +592,7 @@ namespace svxform
         {
             SvTreeListBox::Clear();
 
-            //////////////////////////////////////////////////////////////////////
+
             // Default-Eintrag "Formulare"
             Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
             m_pRootEntry = InsertEntry( SVX_RESSTR(RID_STR_FORMS), aRootImage, aRootImage,
@@ -615,7 +615,7 @@ namespace svxform
 
     SvTreeListEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uIntPtr nRelPos )
     {
-        //////////////////////////////////////////////////////////////////////
+
         // Aktuellen Eintrag einfuegen
         SvTreeListEntry* pParentEntry = FindEntry( pEntryData->GetParent() );
         SvTreeListEntry* pNewEntry;
@@ -630,12 +630,12 @@ namespace svxform
                 pEntryData->GetNormalImage(), pEntryData->GetNormalImage(),
                 pParentEntry, sal_False, nRelPos, pEntryData );
 
-        //////////////////////////////////////////////////////////////////////
+
         // Wenn Root-Eintrag Root expandieren
         if( !pParentEntry )
             Expand( m_pRootEntry );
 
-        //////////////////////////////////////////////////////////////////////
+
         // Children einfuegen
         FmEntryDataList* pChildList = pEntryData->GetChildList();
         size_t nChildCount = pChildList->size();
@@ -1324,14 +1324,14 @@ namespace svxform
 
     void NavigatorTree::NewForm( SvTreeListEntry* pParentEntry )
     {
-        //////////////////////////////////////////////////////////////////////
+
         // ParentFormData holen
         if( !IsFormEntry(pParentEntry) )
             return;
 
         FmFormData* pParentFormData = (FmFormData*)pParentEntry->GetUserData();
 
-        //////////////////////////////////////////////////////////////////////
+
         // Neue Form erzeugen
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
         Reference< XForm >  xNewForm(xContext->getServiceManager()->createInstanceWithContext(FM_SUN_COMPONENT_FORM, xContext), UNO_QUERY);
@@ -1340,7 +1340,7 @@ namespace svxform
 
         FmFormData* pNewFormData = new FmFormData( xNewForm, m_aNavigatorImages, pParentFormData );
 
-        //////////////////////////////////////////////////////////////////////
+
         // Namen setzen
         OUString aName = GenerateName(pNewFormData);
         pNewFormData->SetText(aName);
@@ -1360,11 +1360,11 @@ namespace svxform
         }
 
 
-        //////////////////////////////////////////////////////////////////////
+
         // Form einfuegen
         GetNavModel()->Insert( pNewFormData, LIST_APPEND, sal_True );
 
-        //////////////////////////////////////////////////////////////////////
+
         // Neue Form als aktive Form setzen
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if( pFormShell )
@@ -1377,7 +1377,7 @@ namespace svxform
         }
         GetNavModel()->SetModified();
 
-        //////////////////////////////////////////////////////////////////////
+
         // In EditMode schalten
         SvTreeListEntry* pNewEntry = FindEntry( pNewFormData );
         EditEntry( pNewEntry );
@@ -1386,7 +1386,7 @@ namespace svxform
 
     FmControlData* NavigatorTree::NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName )
     {
-        //////////////////////////////////////////////////////////////////////
+
         // ParentForm holen
         if (!GetNavModel()->GetFormShell())
             return NULL;
@@ -1396,7 +1396,7 @@ namespace svxform
         FmFormData* pParentFormData = (FmFormData*)pParentEntry->GetUserData();;
         Reference< XForm >  xParentForm( pParentFormData->GetFormIface());
 
-        //////////////////////////////////////////////////////////////////////
+
         // Neue Component erzeugen
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
         Reference<XFormComponent> xNewComponent( xContext->getServiceManager()->createInstanceWithContext(rServiceName, xContext), UNO_QUERY);
@@ -1405,7 +1405,7 @@ namespace svxform
 
         FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_aNavigatorImages, pParentFormData );
 
-        //////////////////////////////////////////////////////////////////////
+
         // Namen setzen
         FmFormView*     pFormView       = GetNavModel()->GetFormShell()->GetFormView();
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
@@ -1415,14 +1415,14 @@ namespace svxform
 
         pNewFormControlData->SetText( sName );
 
-        //////////////////////////////////////////////////////////////////////
+
         // FormComponent einfuegen
         GetNavModel()->Insert( pNewFormControlData, LIST_APPEND, sal_True );
         GetNavModel()->SetModified();
 
         if (bEditName)
         {
-            //////////////////////////////////////////////////////////////////////
+
             // In EditMode schalten
             SvTreeListEntry* pNewEntry = FindEntry( pNewFormControlData );
             Select( pNewEntry, sal_True );
@@ -1438,7 +1438,7 @@ namespace svxform
         const sal_uInt16 nMaxCount = 99;
         OUString aNewName;
 
-        //////////////////////////////////////////////////////////////////////
+
         // BasisNamen erzeugen
         OUString aBaseName;
         if( pEntryData->ISA(FmFormData) )
@@ -1446,7 +1446,7 @@ namespace svxform
         else if( pEntryData->ISA(FmControlData) )
             aBaseName = SVX_RESSTR( RID_STR_CONTROL );
 
-        //////////////////////////////////////////////////////////////////////
+
         // Neuen Namen erstellen
         FmFormData* pFormParentData = (FmFormData*)pEntryData->GetParent();
 
@@ -1992,7 +1992,7 @@ namespace svxform
                 FmControlData* pControlData = (FmControlData*)pSelectionLoop->GetUserData();
                 if (pControlData)
                 {
-                    /////////////////////////////////////////////////////////////////
+
                     // Beim HiddenControl kann kein Object selektiert werden
                     Reference< XFormComponent >  xFormComponent( pControlData->GetFormComponent());
                     if (!xFormComponent.is())
@@ -2076,7 +2076,7 @@ namespace svxform
         ::std::set< Reference< XFormComponent > > aObjects;
         CollectObjects(pFormData,bDeep,aObjects);
 
-        //////////////////////////////////////////////////////////////////////
+
         // In der Page das entsprechende SdrObj finden und selektieren
         FmFormView*     pFormView       = pFormShell->GetFormView();
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
@@ -2140,7 +2140,7 @@ namespace svxform
         if( !pFormShell )
             return;
 
-        //////////////////////////////////////////////////////////////////////
+
         // In der Page das entsprechende SdrObj finden und selektieren
         FmFormView*     pFormView       = pFormShell->GetFormView();
         Reference< XFormComponent >  xFormComponent( pControlData->GetFormComponent());
@@ -2187,9 +2187,9 @@ namespace svxform
         }
     }
 
-//............................................................................
+
 }   // namespace svxform
-//............................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

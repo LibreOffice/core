@@ -25,10 +25,10 @@
 #include "datanavi.hxx"
 #include <vcl/msgbox.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
 #define PROPERTY_ID_BINDING             5724
 #define PROPERTY_ID_FORM_MODEL          5725
@@ -40,9 +40,9 @@ namespace svxform
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xforms;
 
-    //====================================================================
+
     //= OAddConditionDialog
-    //====================================================================
+
 
     Reference< XInterface > SAL_CALL OAddConditionDialog_Create( const Reference< XMultiServiceFactory > & _rxORB )
     {
@@ -63,9 +63,9 @@ namespace svxform
         return OUString("org.openoffice.comp.svx.OAddConditionDialog");
     }
 
-    //====================================================================
+
     //= OAddConditionDialog
-    //====================================================================
+
 
     OAddConditionDialog::OAddConditionDialog( const Reference< XComponentContext >& _rxORB )
         :OAddConditionDialogBase( _rxORB )
@@ -174,8 +174,8 @@ namespace svxform
             m_sConditionValue = static_cast< AddConditionDialog* >( m_pDialog )->GetCondition();
     }
 
-//........................................................................
+
 } // namespace svxformv
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -77,7 +77,7 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId
     addStatusListener( OUString( ".uno:BitmapListState" ));
 }
 
-//========================================================================
+
 
 SvxFillToolBoxControl::~SvxFillToolBoxControl()
 {
@@ -88,7 +88,7 @@ SvxFillToolBoxControl::~SvxFillToolBoxControl()
     delete pBitmapItem;
 }
 
-//========================================================================
+
 
 void SvxFillToolBoxControl::StateChanged(
 
@@ -214,7 +214,7 @@ void SvxFillToolBoxControl::StateChanged(
     }
 }
 
-//========================================================================
+
 
 void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
 {
@@ -461,7 +461,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
     }
 }
 
-//========================================================================
+
 
 Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
 {

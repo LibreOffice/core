@@ -30,7 +30,7 @@ namespace svx {
 
 namespace a11y { class AccFrameSelector; }
 
-// ============================================================================
+
 
 class FrameBorder
 {
@@ -85,7 +85,7 @@ private:
     bool                mbSelected;     /// true = Border selected in control.
 };
 
-// ============================================================================
+
 
 typedef std::vector< FrameBorder* >     FrameBorderPtrVec;
 
@@ -227,7 +227,7 @@ struct FrameSelectorImpl : public Resource
     bool                SelectedBordersEqual() const;
 };
 
-// ============================================================================
+
 
 /** Dummy predicate for frame border iterators to use all borders in a container. */
 struct FrameBorderDummy_Pred
@@ -293,7 +293,7 @@ typedef FrameBorderIterBase< const FrameBorderPtrVec, FrameBorderPtrVec::const_i
 typedef FrameBorderIterBase< FrameBorderPtrVec, FrameBorderPtrVec::iterator, FrameBorderSelected_Pred >
     SelFrameBorderIter;
 
-// ============================================================================
+
 
 } // namespace svx
 

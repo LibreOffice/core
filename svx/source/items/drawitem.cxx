@@ -30,11 +30,11 @@ TYPEINIT1_FACTORY( SvxBitmapListItem, SfxPoolItem , new  SvxBitmapListItem );
 TYPEINIT1_FACTORY( SvxDashListItem, SfxPoolItem , new  SvxDashListItem );
 TYPEINIT1_FACTORY( SvxLineEndListItem, SfxPoolItem , new  SvxLineEndListItem );
 
-//==================================================================
-//
+
+
 //  SvxColorListItem
-//
-//==================================================================
+
+
 
 SvxColorListItem::SvxColorListItem()
 {
@@ -98,11 +98,11 @@ bool svtype::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 ) \
 
 QUERY_PUT_IMPL( SvxColorListItem, ColorList )
 
-//==================================================================
-//
+
+
 //  SvxGradientListItem
-//
-//==================================================================
+
+
 
 SvxGradientListItem::SvxGradientListItem()
 {
@@ -151,11 +151,11 @@ SfxPoolItem* SvxGradientListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxGradientListItem, GradientList )
 
-//==================================================================
-//
+
+
 //  SvxHatchListItem
-//
-//==================================================================
+
+
 
 SvxHatchListItem::SvxHatchListItem()
 {
@@ -205,11 +205,11 @@ SfxPoolItem* SvxHatchListItem::Clone( SfxItemPool * ) const
 QUERY_PUT_IMPL( SvxHatchListItem, HatchList )
 
 
-//==================================================================
-//
+
+
 //  SvxBitmapListItem
-//
-//==================================================================
+
+
 
 SvxBitmapListItem::SvxBitmapListItem()
 {
@@ -252,11 +252,11 @@ SfxPoolItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxBitmapListItem, BitmapList )
 
-//==================================================================
-//
+
+
 //  SvxDashListItem
-//
-//==================================================================
+
+
 
 SvxDashListItem::SvxDashListItem() :
     pDashList( 0 )
@@ -300,11 +300,11 @@ SfxPoolItem* SvxDashListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxDashListItem, DashList )
 
-//==================================================================
-//
+
+
 //  SvxLineEndListItem
-//
-//==================================================================
+
+
 
 SvxLineEndListItem::SvxLineEndListItem()
 {

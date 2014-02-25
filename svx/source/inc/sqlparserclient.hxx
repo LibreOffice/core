@@ -24,14 +24,14 @@
 #include "svx/ParseContext.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OSQLParserClient
-    //====================================================================
+
     class SVX_DLLPUBLIC OSQLParserClient : public ODbtoolsClient
                             ,public ::svxform::OParseContextClient
     {
@@ -62,9 +62,9 @@ namespace svxform
         }
     };
 
-//........................................................................
+
 }   // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 

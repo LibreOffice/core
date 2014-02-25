@@ -60,7 +60,7 @@
 #include <svx/sdr/overlay/overlaytools.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrObjEditView::ImpClearVars()
 {
@@ -98,7 +98,7 @@ SdrObjEditView::~SdrObjEditView()
     delete mpOldTextEditUndoManager;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrObjEditView::IsAction() const
 {
@@ -152,7 +152,7 @@ void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             pTextEditOutliner->SetDefTab(pMod->GetDefaultTabulator());
         }
         if (eKind==HINT_DEFFONTHGTCHG) {
-            // ...
+
         }
         if (eKind==HINT_MODELSAVED) {
             pTextEditOutliner->ClearModifyFlag();
@@ -283,9 +283,9 @@ void SdrObjEditView::ModelHasChanged()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // TextEdit
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 {
@@ -1078,7 +1078,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
     return eRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // info about TextEdit. Default is sal_False.
 bool SdrObjEditView::IsTextEdit() const
 {
@@ -1091,7 +1091,7 @@ SdrPageView* SdrObjEditView::GetTextEditPageView() const
     return pTextEditPV;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 OutlinerView* SdrObjEditView::ImpFindOutlinerView(Window* pWin) const
 {
@@ -1191,7 +1191,7 @@ sal_Bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
     return bOk;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
@@ -1356,7 +1356,7 @@ sal_Bool SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
     return SdrGlueEditView::Command(rCEvt,pWin);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrObjEditView::ImpIsTextEditAllSelected() const
 {
@@ -1668,7 +1668,7 @@ sal_Bool SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDon
     return SdrGlueEditView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin)
 {
@@ -1702,9 +1702,9 @@ sal_Bool SdrObjEditView::IsTextEditInSelectionMode() const
     return pTextEditOutliner!=NULL && pTextEditOutliner->IsInSelectionMode();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // MacroMode
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, Window* pWin)
 {

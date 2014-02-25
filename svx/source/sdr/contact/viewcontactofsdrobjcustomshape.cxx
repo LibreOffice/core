@@ -29,7 +29,7 @@
 #include <svx/obj3d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

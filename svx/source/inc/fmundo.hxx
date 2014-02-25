@@ -45,9 +45,9 @@ class FmFormModel;
 class FmFormObj;
 class SdrObject;
 
-//==================================================================
+
 // FmUndoPropertyAction
-//==================================================================
+
 class FmUndoPropertyAction: public SdrUndoAction
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xObj;
@@ -65,9 +65,9 @@ public:
 
 };
 
-//==================================================================
+
 // FmUndoContainerAction
-//==================================================================
+
 class FmUndoContainerAction: public SdrUndoAction
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
@@ -108,9 +108,9 @@ protected:
     void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
 };
 
-//==================================================================
+
 // FmUndoModelReplaceAction
-//==================================================================
+
 class FmUndoModelReplaceAction : public SdrUndoAction
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> m_xReplaced;
@@ -128,7 +128,7 @@ public:
     static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced );
 };
 
-//========================================================================
+
 class SVX_DLLPRIVATE FmXUndoEnvironment
     : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
                                     ,   ::com::sun::star::container::XContainerListener

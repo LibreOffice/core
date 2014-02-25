@@ -41,7 +41,7 @@
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -68,7 +68,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -106,7 +106,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -188,7 +188,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -269,7 +269,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -312,7 +312,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -381,7 +381,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -435,7 +435,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -490,7 +490,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -523,7 +523,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -556,7 +556,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -700,12 +700,12 @@ namespace sdr
             // Only add front versions of grid and helplines since no visibility test is done,
             // so adding the back incarnations is not necessary. This makes the Front
             // visualisation the default when no visibility tests are done.
-            //
+
             // Since we have no view here, no grid and helpline definitions are available currently. The used
             // methods at ViewContactOfHelplines and ViewContactOfGrid return only empty sequences and
             // do not need to be called ATM. This may change later if grid or helpline info gets
             // model data (it should not). Keeping the lines commented to hold this hint.
-            //
+
             // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfGridFront.getViewIndependentPrimitive2DSequence());
             // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfHelplinesFront.getViewIndependentPrimitive2DSequence());
 

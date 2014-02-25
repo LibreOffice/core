@@ -558,17 +558,17 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     if ( pDefCustomShape )
         pDefData = pDefCustomShape->pDefData;
 
-    //////////////////////
-    // AdjustmentValues //
-    //////////////////////
+
+    // AdjustmentValues
+
     const OUString sAdjustmentValues( "AdjustmentValues" );
     const Any* pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= seqAdjustmentValues;
 
-    ///////////////
-    // Coordsize //
-    ///////////////
+
+    // Coordsize
+
     const OUString sViewBox( "ViewBox" );
     const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sViewBox );
     com::sun::star::awt::Rectangle aViewBox;
@@ -581,41 +581,41 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     }
     const OUString sPath( "Path" );
 
-    //////////////////////
-    // Path/Coordinates //
-    //////////////////////
+
+    // Path/Coordinates
+
     const OUString sCoordinates( "Coordinates" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
     if ( pAny )
         *pAny >>= seqCoordinates;
 
-    /////////////////////
-    // Path/GluePoints //
-    /////////////////////
+
+    // Path/GluePoints
+
     const OUString sGluePoints( "GluePoints" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sGluePoints );
     if ( pAny )
         *pAny >>= seqGluePoints;
 
-    ///////////////////
-    // Path/Segments //
-    ///////////////////
+
+    // Path/Segments
+
     const OUString sSegments( "Segments" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sSegments );
     if ( pAny )
         *pAny >>= seqSegments;
 
-    //////////////////////
-    // Path/SubViewSize //
-    //////////////////////
+
+    // Path/SubViewSize
+
     const OUString sSubViewSize( "SubViewSize" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sSubViewSize );
     if ( pAny )
         *pAny >>= seqSubViewSize;
 
-    ///////////////////
-    // Path/StretchX //
-    ///////////////////
+
+    // Path/StretchX
+
     const OUString sStretchX( "StretchX" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchX );
     if ( pAny )
@@ -625,9 +625,9 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
             nXRef = nStretchX;
     }
 
-    ///////////////////
-    // Path/StretchY //
-    ///////////////////
+
+    // Path/StretchY
+
     const OUString sStretchY( "StretchY" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchY );
     if ( pAny )
@@ -637,25 +637,25 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
             nYRef = nStretchY;
     }
 
-    /////////////////////
-    // Path/TextFrames //
-    /////////////////////
+
+    // Path/TextFrames
+
     const OUString sTextFrames( "TextFrames" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sTextFrames );
     if ( pAny )
         *pAny >>= seqTextFrames;
 
-    ///////////////
-    // Equations //
-    ///////////////
+
+    // Equations
+
     const OUString sEquations( "Equations" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sEquations );
     if ( pAny )
         *pAny >>= seqEquations;
 
-    /////////////
-    // Handles //
-    /////////////
+
+    // Handles
+
     const OUString sHandles( "Handles" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sHandles );
     if ( pAny )

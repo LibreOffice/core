@@ -18,7 +18,7 @@
  */
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #include <svx/svdmark.hxx>
 #include <svx/svdetc.hxx>
@@ -32,14 +32,14 @@
 #include "svx/svdstr.hrc"
 #include "svx/svdglob.hxx"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svl/brdcst.hxx>
 #include <svx/svdoedge.hxx>
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
 :   mpSelectedSdrObject(pNewObj),
@@ -218,7 +218,7 @@ sal_Bool SdrMark::operator==(const SdrMark& rMark) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
 {
@@ -243,7 +243,7 @@ static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrMarkList::ForceSort() const
 {
@@ -357,7 +357,7 @@ sal_uLong SdrMarkList::FindObject(const SdrObject* pObj) const
     // Since relying on OrdNums is not allowed for the selection because objects in the
     // selection may not be inserted in a list if they are e.g. modified ATM, i changed
     // this loop to just look if the object pointer is in the selection.
-    //
+
     // Problem is that GetOrdNum() which is const, internally casts to non-const and
     // hardly sets the OrdNum member of the object (nOrdNum) to 0 (ZERO) if the object
     // is not inserted in a object list.
@@ -774,7 +774,7 @@ sal_Bool SdrMarkList::TakeSnapRect(SdrPageView* pPV, Rectangle& rRect) const
     return bFnd;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

@@ -52,7 +52,7 @@
 #include "svx/svdstr.hrc"
 #include <vcl/wmf.hxx>
 
-///////////////////////////////////////////////////////////////////////
+
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -63,7 +63,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-///////////////////////////////////////////////////////////////////////
+
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
 : SvxShapeText( pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2),
                 getSvxMapProvider().GetPropertySet(SVXMAP_OLE2,SdrObject::GetGlobalDrawObjectItemPool()) )
@@ -566,7 +566,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
     return aClassName;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
@@ -639,7 +639,7 @@ bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
@@ -712,7 +712,7 @@ bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )

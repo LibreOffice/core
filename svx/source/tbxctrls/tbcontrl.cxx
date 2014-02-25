@@ -121,9 +121,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
 
-//========================================================================
+
 // class SvxStyleBox_Impl -----------------------------------------------------
-//========================================================================
+
 
 
 class SvxStyleBox_Impl : public ComboBox
@@ -171,9 +171,9 @@ private:
     void            ReleaseFocus();
 };
 
-//========================================================================
+
 // class SvxFontNameBox --------------------------------------------------
-//========================================================================
+
 
 class SvxFontNameBox_Impl : public FontNameBox
 {
@@ -230,9 +230,9 @@ public:
     SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
-//========================================================================
+
 // class SvxFrameWindow_Impl --------------------------------------------------
-//========================================================================
+
 
 // SelectHdl needs the Modifiers, get them in MouseButtonUp
 
@@ -281,9 +281,9 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-//========================================================================
+
 // class SvxLineWindow_Impl ---------------------------------------------------
-//========================================================================
+
 class SvxLineWindow_Impl : public SfxPopupWindow
 {
 private:
@@ -304,11 +304,11 @@ public:
     virtual SfxPopupWindow* Clone() const;
 };
 
-//########################################################################
+
 // Helper classes:
-//========================================================================
+
 // class SfxStyleControllerItem ------------------------------------------
-//========================================================================
+
 class SvxStyleToolBoxControl;
 
 class SfxStyleControllerItem_Impl : public SfxStatusListener
@@ -326,9 +326,9 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
         SvxStyleToolBoxControl& rControl;
 };
 
-//========================================================================
+
 // class SvxStyleBox_Impl -----------------------------------------------------
-//========================================================================
+
 
 SvxStyleBox_Impl::SvxStyleBox_Impl(Window* pParent,
                                    const OUString& rCommand,
@@ -791,9 +791,9 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
     return bChanged;
 }
 
-//========================================================================
+
 // class SvxFontNameBox_Impl --------------------------------------------------
-//========================================================================
+
 
 SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame, WinBits nStyle ) :
 
@@ -1069,9 +1069,9 @@ void SvxFontNameBox_Impl::Select()
     }
 }
 
-//========================================================================
+
 // class SvxColorWindow_Impl --------------------------------------------------
-//========================================================================
+
 #ifndef WB_NO_DIRECTSELECT
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #endif
@@ -1261,9 +1261,9 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     }
 }
 
-//========================================================================
+
 // class SvxFrameWindow_Impl --------------------------------------------------
-//========================================================================
+
 
 SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
 
@@ -1542,9 +1542,9 @@ bool SvxFrameWindow_Impl::Close()
     return SfxPopupWindow::Close();
 }
 
-//========================================================================
+
 // class SvxLineWindow_Impl --------------------------------------------------
-//========================================================================
+
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 {
     return SvxBorderLine::threeDMediumColor( aMain );
@@ -1685,12 +1685,12 @@ void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
 
 
-//########################################################################
+
 // Helper classes
 
-//========================================================================
+
 // class SfxStyleControllerItem_Impl ------------------------------------------
-//========================================================================
+
 
 SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
     const Reference< XDispatchProvider >& rDispatchProvider,
@@ -1731,11 +1731,11 @@ void SfxStyleControllerItem_Impl::StateChanged(
     }
 }
 
-//########################################################################
 
-//========================================================================
+
+
 // class SvxStyleToolBoxControl ------------------------------------------
-//========================================================================
+
 
 struct SvxStyleToolBoxControl::Impl
 {
@@ -2240,9 +2240,9 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
     return pBox;
 }
 
-//========================================================================
+
 // class SvxFontNameToolBoxControl ---------------------------------------
-//========================================================================
+
 
 SvxFontNameToolBoxControl::SvxFontNameToolBoxControl(
                                             sal_uInt16          nSlotId,
@@ -2301,9 +2301,9 @@ Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
     return pBox;
 }
 
-//========================================================================
+
 // class SvxFontColorToolBoxControl --------------------------------------
-//========================================================================
+
 
 SvxFontColorToolBoxControl::SvxFontColorToolBoxControl(
     sal_uInt16          nSlotId,
@@ -2376,9 +2376,9 @@ void SvxFontColorToolBoxControl::StateChanged(
     rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
-//========================================================================
+
 // class SvxColorToolBoxControl --------------------------------
-//========================================================================
+
 
 SvxColorToolBoxControl::SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
@@ -2448,9 +2448,9 @@ void SvxColorToolBoxControl::StateChanged(
     rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
-//========================================================================
+
 // class SvxColorExtToolBoxControl ----------------------------------------
-//========================================================================
+
 /* Note:
    The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
    (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
@@ -2629,9 +2629,9 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
     Dispatch( aCommand, aArgs );
 }
 
-//========================================================================
+
 // class SvxFrameToolBoxControl ------------------------------------------
-//========================================================================
+
 
 SvxFrameToolBoxControl::SvxFrameToolBoxControl(
     sal_uInt16      nSlotId,
@@ -2683,9 +2683,9 @@ void SvxFrameToolBoxControl::StateChanged(
                             : TRISTATE_FALSE );
 }
 
-//========================================================================
+
 // class SvxFrameLineStyleToolBoxControl ---------------------------------
-//========================================================================
+
 
 SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
     sal_uInt16          nSlotId,
@@ -2733,9 +2733,9 @@ void SvxFrameLineStyleToolBoxControl::StateChanged(
                                 : TRISTATE_FALSE );
 }
 
-//========================================================================
+
 // class SvxFrameLineColorToolBoxControl ---------------------------------
-//========================================================================
+
 
 SvxFrameLineColorToolBoxControl::SvxFrameLineColorToolBoxControl(
     sal_uInt16      nSlotId,
@@ -2805,9 +2805,9 @@ void SvxFrameLineColorToolBoxControl::StateChanged(
     }
 }
 
-//========================================================================
+
 // class SvxSimpleUndoRedoController -------------------------------------
-//========================================================================
+
 
 SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx  )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
@@ -2837,7 +2837,7 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
     rBox.EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
 }
 
-//========================================================================
+
 
 static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )
 {

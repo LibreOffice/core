@@ -32,9 +32,9 @@
 
 using namespace svxform;
 using namespace ::connectivity;
-//==========================================================================
+
 //= OSystemParseContext
-//==========================================================================
+
 DBG_NAME(OSystemParseContext)
 
 OSystemParseContext::OSystemParseContext() : IParseContext()
@@ -151,8 +151,8 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OS
 }
 
 
-// =============================================================================
-// =============================================================================
+
+
 namespace
 {
 

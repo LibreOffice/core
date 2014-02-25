@@ -26,7 +26,7 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <svx/sdr/contact/viewcontactofe3dcube.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* E3dCubeObj::CreateObjectSpecificViewContact()

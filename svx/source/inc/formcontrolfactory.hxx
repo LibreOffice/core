@@ -39,14 +39,14 @@ namespace comphelper {
     class ComponentContext;
 }
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= FormControlFactory
-    //====================================================================
+
     struct FormControlFactory_Data;
 
     class FormControlFactory
@@ -105,9 +105,9 @@ namespace svxform
         ::std::auto_ptr< FormControlFactory_Data >  m_pData;
     };
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_FORMCONTROLFACTORY_HXX
 

@@ -153,7 +153,7 @@ void SvxXMeasurePreview::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxXMeasurePreview::DataChanged( const DataChangedEvent& rDCEvt )
 {

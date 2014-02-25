@@ -35,7 +35,7 @@
 
 using namespace sdr;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPolyEditView::ImpResetPolyPossibilityFlags()
 {
@@ -576,7 +576,7 @@ void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
 {
@@ -651,7 +651,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)
 {
@@ -672,7 +672,7 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, bool bCopy)
     AdjustMarkHdl();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
@@ -693,7 +693,7 @@ void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFac
     AdjustMarkHdl();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)
 {

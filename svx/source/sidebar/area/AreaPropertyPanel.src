@@ -170,7 +170,7 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
     };
     FixedText FT_TRGR_BORDER
     {
-        Size = MAP_APPFONT (  CONTROL_WIDTH * 2 + POPUPPANEL_MARGIN_HORIZONTAL + CONTROL_SPACING_HORIZONTAL, FIXED_TEXT_HEIGHT ) ; //
+        Size = MAP_APPFONT (  CONTROL_WIDTH * 2 + POPUPPANEL_MARGIN_HORIZONTAL + CONTROL_SPACING_HORIZONTAL, FIXED_TEXT_HEIGHT ) ;
         Text [ en-US ] = "~Border:";
     };
     MetricField MTR_TRGR_BORDER
@@ -188,7 +188,7 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
         Last = 100 ;
         SpinSize = 5 ;
     };
-    //=====================================================================================================================================
+
 
     ToolBox BTN_LEFT_SECOND
     {

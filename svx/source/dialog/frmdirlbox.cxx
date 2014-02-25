@@ -22,7 +22,7 @@
 
 namespace svx {
 
-// ============================================================================
+
 
 namespace {
 
@@ -85,7 +85,7 @@ SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
     return lclVoidToEnum( GetEntryData( nPos ) );
 }
 
-// ============================================================================
+
 
 FrameDirListBoxWrapper::FrameDirListBoxWrapper( FrameDirListBox& rListBox ) :
     SingleControlWrapperType( rListBox )
@@ -113,7 +113,7 @@ void FrameDirListBoxWrapper::SetControlValue( SvxFrameDirection eValue )
     GetControl().SelectEntryValue( eValue );
 }
 
-// ============================================================================
+
 
 } // namespace svx
 

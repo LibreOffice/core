@@ -55,7 +55,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
     SdrObjEditView(pModel1,pOut)
@@ -523,7 +523,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
     return aBmp;
 }
 
-// -----------------------------------------------------------------------------
+
 
 GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) const
 {
@@ -585,7 +585,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
     return aMtf;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Graphic SdrExchangeView::GetAllMarkedGraphic() const
 {
@@ -602,7 +602,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject* pObj )
 {
@@ -670,7 +670,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
      return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::std::vector< SdrObject* > SdrExchangeView::GetMarkedObjects() const
 {
@@ -709,7 +709,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
     return aRetval;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
 {
@@ -725,7 +725,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrModel* SdrExchangeView::GetMarkedObjModel() const
 {
@@ -778,7 +778,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     return pNeuMod;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
 {
@@ -786,7 +786,7 @@ sal_Bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
 {
@@ -794,7 +794,7 @@ sal_Bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdrExchangeView::Paste(Window* /*pWin*/, sal_uIntPtr /*nFormat*/)
 {

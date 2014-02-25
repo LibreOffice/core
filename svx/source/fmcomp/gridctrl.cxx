@@ -1677,10 +1677,10 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     // All cols k with m<k<=n have been shifted left on pos, the former col m now has pos n.
     // In the model this affects a range of cols x to y, where x<=m and y<=n. And the number of hidden cols
     // within this range is constant, so we may calculate the view pos from the model pos in the above way.
-    //
+
     // for instance, let's look at a grid with six columns where the third one is hidden. this will
     // initially look like this :
-    //
+
     //              +---+---+---+---+---+---+
     // model pos    | 0 | 1 |*2*| 3 | 4 | 5 |
     //              +---+---+---+---+---+---+
@@ -1688,9 +1688,9 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     //              +---+---+---+---+---+---+
     // view pos     | 0 | 1 | - | 2 | 3 | 4 |
     //              +---+---+---+---+---+---+
-    //
+
     // if we move the column at (view) pos 1 to (view) pos 3 we have :
-    //
+
     //              +---+---+---+---+---+---+
     // model pos    | 0 | 3 |*2*| 4 | 1 | 5 |   // not reflecting the changes, yet
     //              +---+---+---+---+---+---+
@@ -1698,9 +1698,9 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     //              +---+---+---+---+---+---+
     // view pos     | 0 | 1 | - | 2 | 3 | 4 |
     //              +---+---+---+---+---+---+
-    //
+
     // or, sorted by the out-of-date model positions :
-    //
+
     //              +---+---+---+---+---+---+
     // model pos    | 0 | 1 |*2*| 3 | 4 | 5 |
     //              +---+---+---+---+---+---+
@@ -1708,11 +1708,11 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     //              +---+---+---+---+---+---+
     // view pos     | 0 | 3 | - | 1 | 2 | 4 |
     //              +---+---+---+---+---+---+
-    //
+
     // We know the new view pos (3) of the moved column because our base class tells us. So we look at our
     // model for the 4th (the pos is zero-based) visible column, it is at (model) position 4. And this is
     // exactly the pos where we have to re-insert our column's model, so it looks ike this :
-    //
+
     //              +---+---+---+---+---+---+
     // model pos    | 0 |*1*| 2 | 3 | 4 | 5 |
     //              +---+---+---+---+---+---+
@@ -1720,11 +1720,11 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     //              +---+---+---+---+---+---+
     // view pos     | 0 | - | 1 | 2 | 3 | 4 |
     //              +---+---+---+---+---+---+
-    //
+
     // Now, all is consistent again.
     // (except of the hidden column : The cycling of the cols occurred on the model, not on the view. maybe
     // the user expected the latter but there really is no good argument against our method ;) ...)
-    //
+
     // And no, this large explanation isn't just because I wanted to play a board game or something like
     // that. It's because it took me a while to see it myself, and the whole theme (hidden cols, model col
     // positions, view col positions)  is really painful (at least for me) so the above pictures helped me a lot ;)

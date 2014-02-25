@@ -45,7 +45,7 @@
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helper to get line, stroke and transparence attributes from SfxItemSet
 
 namespace
@@ -140,7 +140,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

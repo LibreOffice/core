@@ -21,10 +21,10 @@
 
 #include <tools/debug.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -46,9 +46,9 @@ namespace svxform
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::lang::EventObject;
 
-    //========================================================================
+
     //= DispatchInterceptionMultiplexer
-    //========================================================================
+
 
     DBG_NAME(DispatchInterceptionMultiplexer)
 
@@ -194,8 +194,8 @@ namespace svxform
         }
     }
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

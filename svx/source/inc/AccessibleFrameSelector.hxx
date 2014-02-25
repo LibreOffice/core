@@ -44,7 +44,7 @@ class FrameSelector;
 
 namespace a11y {
 
-// ============================================================================
+
 
 class AccFrameSelector :
     public ::cppu::WeakImplHelper5<
@@ -132,7 +132,7 @@ private:
     ::comphelper::AccessibleEventNotifier::TClientId    mnClientId;
 };
 
-// ============================================================================
+
 
 } // namespace a11y
 } // namespace svx

@@ -32,7 +32,7 @@
 #include "editeng/unotext.hxx"
 #include "svx/svdtext.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 class SfxItemSet;
 class OutlinerParaObject;
@@ -42,11 +42,11 @@ namespace sdr { namespace properties {
     class TextProperties;
 } }
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC Cell :  public SdrText,
                 public SvxUnoTextBase,
@@ -234,7 +234,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XTable > mxTable;
 };
 
-// -----------------------------------------------------------------------------
+
 
 } }
 

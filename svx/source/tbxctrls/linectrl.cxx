@@ -69,7 +69,7 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
     addStatusListener( OUString( ".uno:DashListState" ));
 }
 
-//========================================================================
+
 
 SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 {
@@ -77,7 +77,7 @@ SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
     delete pDashItem;
 }
 
-//========================================================================
+
 
 void SvxLineStyleToolBoxControl::StateChanged (
 
@@ -120,7 +120,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
     }
 }
 
-//========================================================================
+
 
 void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 {
@@ -188,7 +188,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
     }
 }
 
-//========================================================================
+
 
 Window* SvxLineStyleToolBoxControl::CreateItemWindow( Window *pParent )
 {
@@ -208,13 +208,13 @@ SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
     addStatusListener( OUString( ".uno:MetricUnit" ));
 }
 
-//========================================================================
+
 
 SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 {
 }
 
-//========================================================================
+
 
 void SvxLineWidthToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
@@ -255,7 +255,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
     }
 }
 
-//========================================================================
+
 
 Window* SvxLineWidthToolBoxControl::CreateItemWindow( Window *pParent )
 {
@@ -275,13 +275,13 @@ SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
     addStatusListener( OUString( ".uno:ColorTableState" ));
 }
 
-//========================================================================
+
 
 SvxLineColorToolBoxControl::~SvxLineColorToolBoxControl()
 {
 }
 
-//========================================================================
+
 
 void SvxLineColorToolBoxControl::StateChanged(
 
@@ -315,7 +315,7 @@ void SvxLineColorToolBoxControl::StateChanged(
         Update( pState );
 }
 
-//========================================================================
+
 
 void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
 {
@@ -333,7 +333,7 @@ void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
     }
 }
 
-//========================================================================
+
 
 Window* SvxLineColorToolBoxControl::CreateItemWindow( Window *pParent )
 {
@@ -572,8 +572,8 @@ void SvxLineEndWindow::Resize()
 void SvxLineEndWindow::Resizing( Size& rNewSize )
 {
     Size aBitmapSize = aBmpSize; // -> Member
-    aBitmapSize.Width()  += 6; //
-    aBitmapSize.Height() += 6; //
+    aBitmapSize.Width()  += 6;
+    aBitmapSize.Height() += 6;
 
     Size aItemSize = aLineEndSet.CalcItemSizePixel( aBitmapSize );  // -> Member
     //Size aOldSize = GetOutputSizePixel(); // for width

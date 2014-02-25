@@ -487,7 +487,7 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
                     if( nIndex == (nCount-1) )
                         n = nDistributed; // for last entitie, use up rest
                     else
-                        n  = (nDistribute * rLayout.mnSize) / nCurrentWidth; //
+                        n  = (nDistribute * rLayout.mnSize) / nCurrentWidth;
 
                     nDistributed -= n;
                     rLayout.mnSize += n;

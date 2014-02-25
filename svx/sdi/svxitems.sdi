@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//-------------------------------------------------------------------------
+
 enum SvxCellHorJustifyEnum
 {
     SVX_HOR_JUSTIFY_STANDARD,
@@ -37,7 +37,7 @@ enum SvxCellVerJustifyEnum
 };
 item SvxCellVerJustifyEnum SvxCellVerJustifyEnumItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxCellOrientationEnum
 {
@@ -79,12 +79,12 @@ enum SvxChooseControlEnum
 }
 item SvxChooseControlEnum SvxChooseControlItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxDrawToolEnum
 {
     SVX_SNAP_DRAW_SELECT,
-    //
+
     SVX_SNAP_DRAW_LINE,
     SVX_SNAP_DRAW_RECT,
     SVX_SNAP_DRAW_ELLIPSE,
@@ -102,7 +102,7 @@ enum SvxDrawToolEnum
 }
 item SvxDrawToolEnum SvxDrawToolEnumItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxDrawAlignEnum
 {
@@ -115,7 +115,7 @@ enum SvxDrawAlignEnum
 }
 item SvxDrawAlignEnum SvxDrawAlignEnumItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxDrawBezierEnum
 {
@@ -150,7 +150,7 @@ struct SvxAdjustStruct
 };
 item SvxAdjustStruct SvxAdjustItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxCaseMap
 {
@@ -163,7 +163,7 @@ enum SvxCaseMap
 };
 item SvxCaseMap SvxCaseMapItem;
 
-//-------------------------------------------------------------------------
+
 
 enum CharSet
 {
@@ -180,7 +180,7 @@ enum CharSet
     CHARSET_SYMBOL
 };
 
-//-------------------------------------------------------------------------
+
 
 enum FontFamily
 {
@@ -193,7 +193,7 @@ enum FontFamily
     FAMILY_SYSTEM
 };
 
-//-------------------------------------------------------------------------
+
 
 enum FontPitch
 {
@@ -202,7 +202,7 @@ enum FontPitch
     PITCH_VARIABLE
 };
 
-//-------------------------------------------------------------------------
+
 
 struct SvxFont
 {
@@ -214,7 +214,7 @@ struct SvxFont
 };
 item SvxFont SvxFontItem;
 
-//-------------------------------------------------------------------------
+
 
 enum FontWeight
 {
@@ -232,7 +232,7 @@ enum FontWeight
 };
 item FontWeight SvxWeightItem;
 
-//-------------------------------------------------------------------------
+
 
 enum FontUnderline
 {
@@ -242,7 +242,7 @@ enum FontUnderline
     UNDERLINE_DOTTED
 };
 
-//-------------------------------------------------------------------------
+
 
 enum FontStrikeout
 {
@@ -251,7 +251,7 @@ enum FontStrikeout
     STRIKEOUT_DOUBLE
 };
 
-//-------------------------------------------------------------------------
+
 
 enum FontItalic
 {
@@ -261,7 +261,7 @@ enum FontItalic
 };
 item FontItalic SvxPostureItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxDbType
 {
@@ -271,7 +271,7 @@ enum SvxDbType
 };
 item SvxDbType SvxDbTypeItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxLineSpace
 {
@@ -282,7 +282,7 @@ enum SvxLineSpace
 };
 item SvxLineSpace SvxLineSpaceItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxInterLineSpace
 {
@@ -293,7 +293,7 @@ enum SvxInterLineSpace
 };
 item SvxInterLineSpace SvxInterLineSpaceItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxBreak
 {
@@ -308,7 +308,7 @@ enum SvxBreak
 };
 item SvxBreak SvxBreakItem;
 
-//-------------------------------------------------------------------------
+
 
 enum BrushStyle
 {
@@ -327,7 +327,7 @@ enum BrushStyle
 };
 item BrushStyle BrushStyleItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxNumType
 {
@@ -342,7 +342,7 @@ enum SvxNumType
 };
 item SvxNumType SvxNumTypeItem;
 
-//-------------------------------------------------------------------------
+
 
 enum SvxShadowLocation
 {
@@ -355,7 +355,7 @@ enum SvxShadowLocation
 };
 item SvxShadowLocation      SvxShadowLocationItem;
 
-//-------------------------------------------------------------------------
+
 
 item INT16                  SvxCharScaleWidthItem;
 item INT16                  SvxParaVertAlignItem;
@@ -407,7 +407,7 @@ item String                 avmedia_MediaItem;
 
 item BYTE                   SfxGlobalNameItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxCrossedOut
 {
@@ -433,7 +433,7 @@ struct SvxBrush
 };
 item SvxBrush SvxBrushItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxEscapement
 {
@@ -443,7 +443,7 @@ struct SvxEscapement
 };
 item SvxEscapement SvxEscapementItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxFontHeight
 {
@@ -453,7 +453,7 @@ struct SvxFontHeight
 };
 item SvxFontHeight SvxFontHeightItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxHyphenZone
 {
@@ -464,7 +464,7 @@ struct SvxHyphenZone
 };
 item SvxHyphenZone SvxHyphenZoneItem;
 
-//-------------------------------------------------------------------------
+
 struct SvxLine
 {
     INT32      LineFGColor     MID_FG_COLOR;
@@ -474,7 +474,7 @@ struct SvxLine
 };
 item SvxLine SvxLineItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxLRSpace
 {
@@ -489,7 +489,7 @@ struct SvxLRSpace
 };
 item SvxLRSpace SvxLRSpaceItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxLineSpacing
 {
@@ -498,7 +498,7 @@ struct SvxLineSpacing
 };
 item SvxLineSpacing SvxLineSpacingItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxPage
 {
@@ -508,7 +508,7 @@ struct SvxPage
 };
 item SvxPage SvxPageItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxPagePosSize
 {
@@ -520,7 +520,7 @@ struct SvxPagePosSize
 item SvxPagePosSize SvxPagePosSizeItem;
 
 
-//-------------------------------------------------------------------------
+
 struct SvxShadow
 {
     SvxShadowLocation   Location        MID_LOCATION;
@@ -531,7 +531,7 @@ struct SvxShadow
 item SvxShadow SvxShadowItem;
 
 
-//-------------------------------------------------------------------------
+
 
 struct SvxULSpace
 {
@@ -543,7 +543,7 @@ struct SvxULSpace
 };
 item SvxULSpace SvxULSpaceItem
 
-//-------------------------------------------------------------------------
+
 
 struct SvxLongLRSpace
 {
@@ -552,7 +552,7 @@ struct SvxLongLRSpace
 };
 item SvxLongLRSpace SvxLongLRSpaceItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxLongULSpace
 {
@@ -561,7 +561,7 @@ struct SvxLongULSpace
 };
 item SvxLongULSpace SvxLongULSpaceItem;
 
-//-------------------------------------------------------------------------
+
 
 struct SvxHyperlink
 {
@@ -573,7 +573,7 @@ struct SvxHyperlink
 };
 item SvxHyperlink SvxHyperlinkItem;
 
-//-------------------------------------------------------------------------
+
 
 struct PageModel
 {

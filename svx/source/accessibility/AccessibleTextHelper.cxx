@@ -19,9 +19,9 @@
 
 
 
-//
+
 // Global header
-//
+
 
 
 #include <limits.h>
@@ -49,9 +49,9 @@
 #include <sfx2/viewsh.hxx>
 
 
-//
+
 // Project-local header
-//
+
 
 #include "AccessibleTextEventQueue.hxx"
 #include <svx/AccessibleTextHelper.hxx>
@@ -78,9 +78,9 @@ namespace accessibility
 {
 
 
-//
+
 // AccessibleTextHelper_Impl declaration
-//
+
 
 
     DBG_NAME( AccessibleTextHelper_Impl )
@@ -255,9 +255,9 @@ namespace accessibility
     };
 
 
-    //
+
     // AccessibleTextHelper_Impl implementation
-    //
+
 
 
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
@@ -1733,9 +1733,9 @@ namespace accessibility
     }
 
 
-    //
+
     // AccessibleTextHelper implementation (simply forwards to impl)
-    //
+
 
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
