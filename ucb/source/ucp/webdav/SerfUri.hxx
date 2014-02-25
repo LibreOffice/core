@@ -31,10 +31,10 @@ namespace http_dav_ucp
 #define DEFAULT_HTTP_PORT       80
 #define DEFAULT_HTTPS_PORT      443
 
-// -------------------------------------------------------------------
+
 // SerfUri
 // A URI implementation for use with the neon/expat library
-// -------------------------------------------------------------------
+
 class SerfUri
 {
     private:

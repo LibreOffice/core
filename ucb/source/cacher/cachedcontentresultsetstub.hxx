@@ -30,7 +30,7 @@
 #define CACHED_CRS_STUB_SERVICE_NAME "com.sun.star.ucb.CachedContentResultSetStub"
 #define CACHED_CRS_STUB_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetStubFactory"
 
-//=========================================================================
+
 
 class CachedContentResultSetStub
                 : public ContentResultSetWrapper
@@ -95,13 +95,13 @@ public:
     virtual ~CachedContentResultSetStub();
 
 
-    //-----------------------------------------------------------------
+
     // XInterface inherited
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
-    //-----------------------------------------------------------------
+
     // own inherited
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     impl_propertyChange( const com::sun::star::beans::PropertyChangeEvent& evt )
         throw( com::sun::star::uno::RuntimeException );
@@ -110,27 +110,27 @@ public:
     impl_vetoableChange( const com::sun::star::beans::PropertyChangeEvent& aEvent )
         throw( com::sun::star::beans::PropertyVetoException,
                com::sun::star::uno::RuntimeException );
-    //-----------------------------------------------------------------
+
     // XTypeProvider
-    //-----------------------------------------------------------------
+
     XTYPEPROVIDER_DECL()
-    //-----------------------------------------------------------------
+
     // XServiceInfo
-    //-----------------------------------------------------------------
+
     XSERVICEINFO_NOFACTORY_DECL()
 
-    //-----------------------------------------------------------------
+
     // XFetchProvider
-    //-----------------------------------------------------------------
+
 
     virtual com::sun::star::ucb::FetchResult SAL_CALL
     fetch( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XFetchProviderForContentAccess
-    //-----------------------------------------------------------------
+
     virtual com::sun::star::ucb::FetchResult SAL_CALL
          fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
@@ -147,7 +147,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 };
 
-//=========================================================================
+
 
 class CachedContentResultSetStubFactory
                 : public cppu::OWeakObject
@@ -167,19 +167,19 @@ public:
 
     virtual ~CachedContentResultSetStubFactory();
 
-    //-----------------------------------------------------------------
+
     // XInterface
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     // XTypeProvider
     XTYPEPROVIDER_DECL()
 
-    //-----------------------------------------------------------------
+
     // XServiceInfo
     XSERVICEINFO_DECL()
 
-    //-----------------------------------------------------------------
+
     // XCachedContentResultSetStubFactory
 
     virtual com::sun::star::uno::Reference<

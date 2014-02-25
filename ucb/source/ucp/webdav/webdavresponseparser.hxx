@@ -25,7 +25,7 @@
 #include "DAVResource.hxx"
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace http_dav_ucp
 {
@@ -33,11 +33,11 @@ namespace http_dav_ucp
     std::vector< DAVResourceInfo > parseWebDAVPropNameResponse(const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream);
 } // namespace http_dav_ucp
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // _WEBDAVRESPONSEPARSER_HXX_
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

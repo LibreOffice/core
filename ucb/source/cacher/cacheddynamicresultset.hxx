@@ -27,7 +27,7 @@
 #define CACHED_DRS_SERVICE_NAME "com.sun.star.ucb.CachedDynamicResultSet"
 #define CACHED_DRS_FACTORY_NAME "com.sun.star.ucb.CachedDynamicResultSetFactory"
 
-//=========================================================================
+
 
 class CachedDynamicResultSet
                 : public DynamicResultSetWrapper
@@ -56,28 +56,28 @@ public:
     virtual ~CachedDynamicResultSet();
 
 
-    //-----------------------------------------------------------------
+
     // XInterface inherited
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
-    //-----------------------------------------------------------------
+
     // XTypeProvider
-    //-----------------------------------------------------------------
+
     XTYPEPROVIDER_DECL()
-    //-----------------------------------------------------------------
+
     // XServiceInfo
-    //-----------------------------------------------------------------
+
     XSERVICEINFO_NOFACTORY_DECL()
 
-    //-----------------------------------------------------------------
+
     // own methods ( inherited )
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     impl_disposing( const com::sun::star::lang::EventObject& Source )
         throw( com::sun::star::uno::RuntimeException );
 };
 
-//=========================================================================
+
 
 class CachedDynamicResultSetFactory
                 : public cppu::OWeakObject
@@ -97,19 +97,19 @@ public:
 
     virtual ~CachedDynamicResultSetFactory();
 
-    //-----------------------------------------------------------------
+
     // XInterface
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     // XTypeProvider
     XTYPEPROVIDER_DECL()
 
-    //-----------------------------------------------------------------
+
     // XServiceInfo
     XSERVICEINFO_DECL()
 
-    //-----------------------------------------------------------------
+
     // XCachedDynamicResultSetFactory
 
     virtual com::sun::star::uno::Reference<

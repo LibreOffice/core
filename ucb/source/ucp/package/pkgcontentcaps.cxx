@@ -62,11 +62,11 @@
 using namespace com::sun::star;
 using namespace package_ucp;
 
-//=========================================================================
-//
+
+
 // Content implementation.
-//
-//=========================================================================
+
+
 
 #define MAKEPROPSEQUENCE( a ) \
     uno::Sequence< beans::Property >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
@@ -74,12 +74,12 @@ using namespace package_ucp;
 #define MAKECMDSEQUENCE( a ) \
     uno::Sequence< ucb::CommandInfo >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
 
-//=========================================================================
-//
+
+
 // IMPORTANT: If any property data ( name / type / ... ) are changed, then
 //            Content::getPropertyValues(...) must be adapted too!
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
@@ -91,17 +91,17 @@ uno::Sequence< beans::Property > Content::getProperties(
     {
         if ( m_aUri.isRootFolder() )
         {
-            //=================================================================
-            //
+
+
             // Root Folder: Supported properties
-            //
-            //=================================================================
+
+
 
             static const beans::Property aRootFolderPropertyInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////////
+
                 // Required properties
-                ///////////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
@@ -130,9 +130,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
-                ///////////////////////////////////////////////////////////////
+
                 // Optional standard properties
-                ///////////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "MediaType" ),
                     -1,
@@ -148,9 +148,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
-                ///////////////////////////////////////////////////////////////
+
                 // New properties
-                ///////////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "HasEncryptedEntries" ),
                     -1,
@@ -163,17 +163,17 @@ uno::Sequence< beans::Property > Content::getProperties(
         }
         else
         {
-            //=================================================================
-            //
+
+
             // Folder: Supported properties
-            //
-            //=================================================================
+
+
 
             static const beans::Property aFolderPropertyInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////////
+
                 // Required properties
-                ///////////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
@@ -201,9 +201,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                     getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                 ),
-                ///////////////////////////////////////////////////////////////
+
                 // Optional standard properties
-                ///////////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "MediaType" ),
                     -1,
@@ -219,26 +219,26 @@ uno::Sequence< beans::Property > Content::getProperties(
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 )
-                ///////////////////////////////////////////////////////////////
+
                 // New properties
-                ///////////////////////////////////////////////////////////////
+
             };
             return MAKEPROPSEQUENCE( aFolderPropertyInfoTable );
         }
     }
     else
     {
-        //=================================================================
-        //
+
+
         // Stream: Supported properties
-        //
-        //=================================================================
+
+
 
         static const beans::Property aStreamPropertyInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////////
+
             // Required properties
-            ///////////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "ContentType" ),
                 -1,
@@ -266,9 +266,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                 getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
             ),
-            ///////////////////////////////////////////////////////////////
+
             // Optional standard properties
-            ///////////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "MediaType" ),
                 -1,
@@ -291,9 +291,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY
             ),
-            ///////////////////////////////////////////////////////////////
+
             // New properties
-            ///////////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "Compressed" ),
                 -1,
@@ -311,7 +311,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     }
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< ucb::CommandInfo > Content::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
@@ -322,17 +322,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     {
         if ( m_aUri.isRootFolder() )
         {
-            //=================================================================
-            //
+
+
             // Root Folder: Supported commands
-            //
-            //=================================================================
+
+
 
             static const ucb::CommandInfo aRootFolderCommandInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -357,9 +357,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
@@ -377,9 +377,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     -1,
                     getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "flush" ),
                     -1,
@@ -391,17 +391,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         }
         else
         {
-            //=================================================================
-            //
+
+
             // Folder: Supported commands
-            //
-            //=================================================================
+
+
 
             static const ucb::CommandInfo aFolderCommandInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -426,9 +426,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "delete" ),
                     -1,
@@ -456,9 +456,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     -1,
                     getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "flush" ),
                     -1,
@@ -471,17 +471,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     }
     else
     {
-        //=================================================================
-        //
+
+
         // Stream: Supported commands
-        //
-        //=================================================================
+
+
 
         static const ucb::CommandInfo aStreamCommandInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////////
+
             // Required commands
-            ///////////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "getCommandInfo" ),
                 -1,
@@ -505,9 +505,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     static_cast<
                         uno::Sequence< beans::PropertyValue > * >( 0 ) )
             ),
-            ///////////////////////////////////////////////////////////////
+
             // Optional standard commands
-            ///////////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "delete" ),
                 -1,
@@ -524,9 +524,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 getCppuType(
                     static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
             )
-            ///////////////////////////////////////////////////////////////
+
             // New commands
-            ///////////////////////////////////////////////////////////////
+
         };
 
         return MAKECMDSEQUENCE( aStreamCommandInfoTable );

@@ -37,10 +37,10 @@ namespace http_dav_ucp
 
 class SerfRequestProcessor;
 
-// -------------------------------------------------------------------
+
 // SerfSession
 // A DAVSession implementation using the neon/expat library
-// -------------------------------------------------------------------
+
 
 class SerfSession : public DAVSession
 {

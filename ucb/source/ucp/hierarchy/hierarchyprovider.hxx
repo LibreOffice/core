@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
 
 namespace hierarchy_ucp {
 
-//=========================================================================
+
 
 #define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.HierarchyContentProvider"
@@ -50,7 +50,7 @@ namespace hierarchy_ucp {
 #define HIERARCHY_LINK_CONTENT_TYPE \
                 "application/" HIERARCHY_URL_SCHEME "-link"
 
-//=========================================================================
+
 
 struct ConfigProviderMapEntry
 {
@@ -89,7 +89,7 @@ typedef boost::unordered_map
 >
 ConfigProviderMap;
 
-//=========================================================================
+
 
 class HierarchyContentProvider : public ::ucbhelper::ContentProviderImplHelper,
                                  public com::sun::star::lang::XInitialization

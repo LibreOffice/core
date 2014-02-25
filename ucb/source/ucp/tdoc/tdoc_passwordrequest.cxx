@@ -72,19 +72,19 @@ namespace tdoc_ucp
     };
 } // namespace tdoc_ucp
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionSupplyPassword Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// InteractionSupplyPassword Implementation.
+
+
+
+
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionSupplyPassword::acquire()
@@ -93,7 +93,7 @@ void SAL_CALL InteractionSupplyPassword::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionSupplyPassword::release()
     throw()
@@ -101,7 +101,7 @@ void SAL_CALL InteractionSupplyPassword::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionSupplyPassword::queryInterface( const uno::Type & rType )
@@ -116,11 +116,11 @@ InteractionSupplyPassword::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL
@@ -140,7 +140,7 @@ InteractionSupplyPassword::getImplementationId()
     return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
     throw( uno::RuntimeException )
@@ -162,11 +162,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionContinuation methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionSupplyPassword::select()
@@ -175,11 +175,11 @@ void SAL_CALL InteractionSupplyPassword::select()
     recordSelection();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionPassword methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL
@@ -198,13 +198,13 @@ OUString SAL_CALL InteractionSupplyPassword::getPassword()
     return m_aPassword;
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // DocumentPasswordRequest Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 DocumentPasswordRequest::DocumentPasswordRequest(
     task::PasswordRequestMode eMode,

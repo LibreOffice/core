@@ -34,13 +34,13 @@ using namespace com::sun::star;
 
 using namespace package_ucp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // DynamicResultSet Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 DynamicResultSet::DynamicResultSet(
               const uno::Reference< uno::XComponentContext >& rxContext,
@@ -53,11 +53,11 @@ DynamicResultSet::DynamicResultSet(
 {
 }
 
-//=========================================================================
-//
+
+
 // Non-interface methods.
-//
-//=========================================================================
+
+
 
 void DynamicResultSet::initStatic()
 {
@@ -70,7 +70,7 @@ void DynamicResultSet::initStatic()
                                       m_xEnv );
 }
 
-//=========================================================================
+
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1

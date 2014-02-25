@@ -31,11 +31,11 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 
 
-//=========================================================================
-//
+
+
 // ContentIdentifier Implementation.
-//
-//=========================================================================
+
+
 
 ContentIdentifier::ContentIdentifier(
                         const OUString& ContentId )
@@ -43,37 +43,37 @@ ContentIdentifier::ContentIdentifier(
 {
 }
 
-//=========================================================================
+
 // virtual
 ContentIdentifier::~ContentIdentifier()
 {
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_2( ContentIdentifier,
                    XTypeProvider,
                    XContentIdentifier );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_2( ContentIdentifier,
                       XTypeProvider,
                       XContentIdentifier );
 
-//=========================================================================
-//
+
+
 // XContentIdentifier methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentIdentifier()
@@ -82,7 +82,7 @@ OUString SAL_CALL ContentIdentifier::getContentIdentifier()
     return m_aContentId;
 }
 
-//=========================================================================
+
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
     throw( RuntimeException )

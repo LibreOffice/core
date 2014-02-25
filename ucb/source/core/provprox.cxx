@@ -28,13 +28,13 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // UcbContentProviderProxyFactory Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 UcbContentProviderProxyFactory::UcbContentProviderProxyFactory(
                         const Reference< XMultiServiceFactory >& rxSMgr )
@@ -42,57 +42,57 @@ UcbContentProviderProxyFactory::UcbContentProviderProxyFactory(
 {
 }
 
-//=========================================================================
+
 // virtual
 UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 {
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_3( UcbContentProviderProxyFactory,
                    XTypeProvider,
                    XServiceInfo,
                    XContentProviderFactory );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_3( UcbContentProviderProxyFactory,
                           XTypeProvider,
                       XServiceInfo,
                           XContentProviderFactory );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_IMPL_1( UcbContentProviderProxyFactory,
                      OUString( "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ),
                      OUString( PROVIDER_FACTORY_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbContentProviderProxyFactory );
 
-//=========================================================================
-//
+
+
 // XContentProviderFactory methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XContentProvider > SAL_CALL
@@ -104,13 +104,13 @@ UcbContentProviderProxyFactory::createContentProvider(
                         new UcbContentProviderProxy( m_xSMgr, Service ) );
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // UcbContentProviderProxy Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 UcbContentProviderProxy::UcbContentProviderProxy(
                         const Reference< XMultiServiceFactory >& rxSMgr,
@@ -122,21 +122,21 @@ UcbContentProviderProxy::UcbContentProviderProxy(
 {
 }
 
-//=========================================================================
+
 // virtual
 UcbContentProviderProxy::~UcbContentProviderProxy()
 {
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_COMMON_IMPL( UcbContentProviderProxy );
 
-//============================================================================
+
 // virtual
 Any SAL_CALL
 UcbContentProviderProxy::queryInterface( const Type & rType )
@@ -164,15 +164,15 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
     return aRet;
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_COMMON_IMPL( UcbContentProviderProxy );
 
-//=========================================================================
+
 
 Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                                                           \
     throw( RuntimeException )
@@ -196,21 +196,21 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                   
     }
 }
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
                             OUString( "com.sun.star.comp.ucb.UcbContentProviderProxy" ),
                             OUString( PROVIDER_PROXY_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // XContentProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XContent > SAL_CALL UcbContentProviderProxy::queryContent(
@@ -229,7 +229,7 @@ Reference< XContent > SAL_CALL UcbContentProviderProxy::queryContent(
     return Reference< XContent >();
 }
 
-//=========================================================================
+
 // virtual
 sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
                        const Reference< XContentIdentifier >& Id1,
@@ -249,11 +249,11 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
     return 0;
 }
 
-//=========================================================================
-//
+
+
 // XParameterizedContentProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XContentProvider > SAL_CALL
@@ -279,7 +279,7 @@ UcbContentProviderProxy::registerInstance( const OUString& Template,
     return this;
 }
 
-//=========================================================================
+
 // virtual
 Reference< XContentProvider > SAL_CALL
 UcbContentProviderProxy::deregisterInstance( const OUString& Template,
@@ -314,11 +314,11 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
     return this;
 }
 
-//=========================================================================
-//
+
+
 // XContentProviderSupplier methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XContentProvider > SAL_CALL

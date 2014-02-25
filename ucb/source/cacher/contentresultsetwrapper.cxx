@@ -124,7 +124,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init_xPropertySetOrigin()
 void SAL_CALL ContentResultSetWrapper::impl_init()
 {
     //call this at the end of constructor of derived class
-    //
+
 
     //listen to disposing from Origin:
     Reference< XComponent > xComponentOrigin( m_xResultSetOrigin, UNO_QUERY );
@@ -144,7 +144,7 @@ ContentResultSetWrapper::~ContentResultSetWrapper()
 void SAL_CALL ContentResultSetWrapper::impl_deinit()
 {
     //call this at start of destructor of derived class
-    //
+
     m_pMyListenerImpl->impl_OwnerDies();
 }
 

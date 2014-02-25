@@ -54,12 +54,12 @@ namespace com { namespace sun { namespace star { namespace ucb {
 namespace http_dav_ucp
 {
 
-//=========================================================================
+
 
 // UNO service name for the content.
 #define WEBDAV_CONTENT_SERVICE_NAME "com.sun.star.ucb.WebDAVContent"
 
-//=========================================================================
+
 
 class ContentProvider;
 class ContentProperties;
@@ -273,9 +273,9 @@ public:
                com::sun::star::beans::NotRemoveableException,
                com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Additional interfaces
-    //////////////////////////////////////////////////////////////////////
+
 
     // XContentCreator
     virtual com::sun::star::uno::Sequence<
@@ -287,9 +287,9 @@ public:
     createNewContent( const com::sun::star::ucb::ContentInfo& Info )
         throw( com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Non-interface methods.
-    //////////////////////////////////////////////////////////////////////
+
 
     DAVResourceAccess & getResourceAccess() { return *m_xResAccess; }
 

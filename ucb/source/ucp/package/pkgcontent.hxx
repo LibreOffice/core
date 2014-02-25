@@ -57,7 +57,7 @@ namespace com { namespace sun { namespace star {
 namespace package_ucp
 {
 
-//=========================================================================
+
 
 // UNO service name for the content.
 #define PACKAGE_FOLDER_CONTENT_SERVICE_NAME \
@@ -65,7 +65,7 @@ namespace package_ucp
 #define PACKAGE_STREAM_CONTENT_SERVICE_NAME \
                             "com.sun.star.ucb.PackageStreamContent"
 
-//=========================================================================
+
 
 struct ContentProperties
 {
@@ -92,7 +92,7 @@ struct ContentProperties
     getCreatableContentsInfo( PackageUri const & rUri ) const;
 };
 
-//=========================================================================
+
 
 class ContentProvider;
 
@@ -286,9 +286,9 @@ public:
     abort( sal_Int32 CommandId )
         throw( com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Additional interfaces
-    //////////////////////////////////////////////////////////////////////
+
 
     // XContentCreator
     virtual com::sun::star::uno::Sequence<
@@ -300,9 +300,9 @@ public:
     createNewContent( const com::sun::star::ucb::ContentInfo& Info )
         throw( com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Non-interface methods.
-    //////////////////////////////////////////////////////////////////////
+
 
     // Called from resultset data supplier.
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >

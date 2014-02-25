@@ -63,7 +63,7 @@ void DynamicResultSet::initDynamic()
     m_xResultSet2 = m_xResultSet1;
 }
 
-//=========================================================================
+
 
 
 // DataSupplier Implementation.
@@ -89,19 +89,19 @@ struct ResultListEntry
     }
 };
 
-//=========================================================================
-//
+
+
 // ResultList.
-//
-//=========================================================================
+
+
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-//=========================================================================
-//
+
+
 // struct DataSupplier_Impl.
-//
-//=========================================================================
+
+
 
 struct gvfs::DataSupplier_Impl
 {
@@ -136,7 +136,7 @@ DataSupplier::DataSupplier(
 {
 }
 
-//=========================================================================
+
 // virtual
 DataSupplier::~DataSupplier()
 {

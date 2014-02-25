@@ -64,13 +64,13 @@ Important: HTTP headers will not be mapped to DAV properties; only to UCB
            properties. (Content-Length,Content-Type,Last-Modified)
 */
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ContentProperties Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 // static member!
 uno::Any ContentProperties::m_aEmptyAny;
@@ -116,7 +116,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
         m_bTrailingSlash = sal_True;
 }
 
-//=========================================================================
+
 ContentProperties::ContentProperties(
                         const OUString & rTitle, sal_Bool bFolder )
 : m_xProps( new PropertyValueMap ),
@@ -130,7 +130,7 @@ ContentProperties::ContentProperties(
         = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
 }
 
-//=========================================================================
+
 ContentProperties::ContentProperties( const OUString & rTitle )
 : m_xProps( new PropertyValueMap ),
   m_bTrailingSlash( sal_False )
@@ -139,14 +139,14 @@ ContentProperties::ContentProperties( const OUString & rTitle )
         = PropertyValue( uno::makeAny( rTitle ), true );
 }
 
-//=========================================================================
+
 ContentProperties::ContentProperties()
 : m_xProps( new PropertyValueMap ),
   m_bTrailingSlash( sal_False )
 {
 }
 
-//=========================================================================
+
 ContentProperties::ContentProperties( const ContentProperties & rOther )
 : m_aEscapedTitle( rOther.m_aEscapedTitle ),
   m_xProps( rOther.m_xProps.get()
@@ -156,7 +156,7 @@ ContentProperties::ContentProperties( const ContentProperties & rOther )
 {
 }
 
-//=========================================================================
+
 bool ContentProperties::contains( const OUString & rName ) const
 {
     if ( get( rName ) )
@@ -165,7 +165,7 @@ bool ContentProperties::contains( const OUString & rName ) const
         return false;
 }
 
-//=========================================================================
+
 const uno::Any & ContentProperties::getValue(
                                     const OUString & rName ) const
 {
@@ -176,7 +176,7 @@ const uno::Any & ContentProperties::getValue(
         return m_aEmptyAny;
 }
 
-//=========================================================================
+
 const PropertyValue * ContentProperties::get(
                                     const OUString & rName ) const
 {
@@ -199,17 +199,17 @@ const PropertyValue * ContentProperties::get(
         return &(*it).second;
 }
 
-//=========================================================================
+
 // static
 void ContentProperties::UCBNamesToDAVNames(
                             const uno::Sequence< beans::Property > & rProps,
                             std::vector< OUString > & propertyNames,
                             bool bIncludeUnmatched /* = true */ )
 {
-    //////////////////////////////////////////////////////////////
+
     // Assemble list of DAV properties to obtain from server.
     // Append DAV properties needed to obtain requested UCB props.
-    //////////////////////////////////////////////////////////////
+
 
     //       DAV              UCB
     // creationdate     <- DateCreated
@@ -293,17 +293,17 @@ void ContentProperties::UCBNamesToDAVNames(
     }
 }
 
-//=========================================================================
+
 // static
 void ContentProperties::UCBNamesToHTTPNames(
                             const uno::Sequence< beans::Property > & rProps,
                             std::vector< OUString > & propertyNames,
                             bool bIncludeUnmatched /* = true */ )
 {
-    //////////////////////////////////////////////////////////////
+
     // Assemble list of HTTP header names to obtain from server.
     // Append HTTP headers needed to obtain requested UCB props.
-    //////////////////////////////////////////////////////////////
+
 
     //       HTTP              UCB
     // Last-Modified  <- DateModified
@@ -335,7 +335,7 @@ void ContentProperties::UCBNamesToHTTPNames(
     }
 }
 
-//=========================================================================
+
 bool ContentProperties::containsAllNames(
                     const uno::Sequence< beans::Property >& rProps,
                     std::vector< OUString > & rNamesNotContained ) const
@@ -356,7 +356,7 @@ bool ContentProperties::containsAllNames(
     return ( rNamesNotContained.size() == 0 );
 }
 
-//=========================================================================
+
 void ContentProperties::addProperties(
                                 const std::vector< OUString > & rProps,
                                 const ContentProperties & rContentProps )
@@ -385,7 +385,7 @@ void ContentProperties::addProperties(
     }
 }
 
-//=========================================================================
+
 void ContentProperties::addProperties( const ContentProperties & rProps )
 {
     PropertyValueMap::const_iterator it = rProps.m_xProps->begin();
@@ -399,7 +399,7 @@ void ContentProperties::addProperties( const ContentProperties & rProps )
     }
 }
 
-//=========================================================================
+
 void ContentProperties::addProperties(
     const std::vector< DAVPropertyValue > & rProps )
 {
@@ -413,13 +413,13 @@ void ContentProperties::addProperties(
     }
 }
 
-//=========================================================================
+
 void ContentProperties::addProperty( const DAVPropertyValue & rProp )
 {
     addProperty( rProp.Name, rProp.Value, rProp.IsCaseSensitive );
 }
 
-//=========================================================================
+
 void ContentProperties::addProperty( const OUString & rName,
                                      const com::sun::star::uno::Any & rValue,
                                      bool bIsCaseSensitive )
@@ -534,13 +534,13 @@ void ContentProperties::addProperty( const OUString & rName,
     (*m_xProps)[ rName ] = PropertyValue( rValue, bIsCaseSensitive );
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // CachableContentProperties Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 namespace
 {
@@ -584,14 +584,14 @@ namespace
 
 } // namespace
 
-//=========================================================================
+
 CachableContentProperties::CachableContentProperties(
     const ContentProperties & rProps )
 {
     addProperties( rProps );
 }
 
-//=========================================================================
+
 void CachableContentProperties::addProperties(
     const ContentProperties & rProps )
 {
@@ -611,7 +611,7 @@ void CachableContentProperties::addProperties(
     }
 }
 
-//=========================================================================
+
 void CachableContentProperties::addProperties(
     const std::vector< DAVPropertyValue > & rProps )
 {

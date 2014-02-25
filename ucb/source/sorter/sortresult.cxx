@@ -41,7 +41,7 @@ using namespace com::sun::star::util;
 using namespace cppu;
 
 
-//=========================================================================
+
 
 //  The mutex to synchronize access to containers.
 static osl::Mutex& getContainerMutex()
@@ -60,7 +60,7 @@ static osl::Mutex& getContainerMutex()
     return *pMutex;
 }
 
-//==========================================================================
+
 
 struct SortInfo
 {
@@ -84,11 +84,11 @@ struct SortListData
     SortListData( sal_IntPtr nPos, sal_Bool bModified = sal_False );
 };
 
-//============================================================================
-//
+
+
 // class SRSPropertySetInfo.
-//
-//============================================================================
+
+
 
 class SRSPropertySetInfo :
                 public OWeakObject,
@@ -118,11 +118,11 @@ public:
         throw( RuntimeException );
 };
 
-//=========================================================================
-//
+
+
 // PropertyChangeListenerContainer_Impl.
-//
-//=========================================================================
+
+
 
 struct equalStr_Impl
 {
@@ -147,11 +147,11 @@ typedef OMultiTypeInterfaceContainerHelperVar
     equalStr_Impl
 > PropertyChangeListenerContainer_Impl;
 
-//=========================================================================
-//
+
+
 // class PropertyChangeListeners_Impl
-//
-//=========================================================================
+
+
 
 class PropertyChangeListeners_Impl : public PropertyChangeListenerContainer_Impl
 {
@@ -160,7 +160,7 @@ public:
     : PropertyChangeListenerContainer_Impl( getContainerMutex() ) {}
 };
 
-//==========================================================================
+
 SortedResultSet::SortedResultSet( Reference< XResultSet > aResult )
 {
     mpDisposeEventListeners = NULL;
@@ -1848,9 +1848,9 @@ void SortedResultSet::ResortNew( EventList* pList )
 }
 
 
-//
+
 // SortListData
-//
+
 
 SortListData::SortListData( sal_IntPtr nPos, sal_Bool bModified )
 {
@@ -1860,7 +1860,7 @@ SortListData::SortListData( sal_IntPtr nPos, sal_Bool bModified )
 };
 
 
-//=========================================================================
+
 void SortedEntryList::Clear()
 {
     for ( std::deque< ListAction* >::size_type i = 0;
@@ -1991,9 +1991,9 @@ void SimpleList::Replace( void* pData, sal_uInt32 nPos )
 }
 
 
-//
+
 // class SRSPropertySetInfo.
-//
+
 
 
 SRSPropertySetInfo::SRSPropertySetInfo()

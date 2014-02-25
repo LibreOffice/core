@@ -71,11 +71,11 @@ namespace com { namespace sun { namespace star { namespace embed {
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 
-//=========================================================================
-//
+
+
 // Content implementation.
-//
-//=========================================================================
+
+
 
 #define MAKEPROPSEQUENCE( a ) \
     uno::Sequence< beans::Property >( a, (sizeof (a) / sizeof (a[0])) )
@@ -83,12 +83,12 @@ using namespace tdoc_ucp;
 #define MAKECMDSEQUENCE( a ) \
     uno::Sequence< ucb::CommandInfo >( a, (sizeof (a) / sizeof (a[0])) )
 
-//=========================================================================
-//
+
+
 // IMPORTANT: If any property data ( name / type / ... ) are changed, then
 //            Content::getPropertyValues(...) must be adapted too!
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
@@ -98,17 +98,17 @@ uno::Sequence< beans::Property > Content::getProperties(
 
     if ( m_aProps.getType() == STREAM )
     {
-        //=================================================================
-        //
+
+
         // Stream: Supported properties
-        //
-        //=================================================================
+
+
 
         static const beans::Property aStreamPropertyInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////
+
             // Mandatory properties
-            ///////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "ContentType" ),
                 -1,
@@ -136,9 +136,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                 getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
             ),
-            ///////////////////////////////////////////////////////////
+
             // Optional standard properties
-            ///////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString(
                     "CreatableContentsInfo" ),
@@ -148,25 +148,25 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             )
-            ///////////////////////////////////////////////////////////
+
             // New properties
-            ///////////////////////////////////////////////////////////
+
         };
         return MAKEPROPSEQUENCE( aStreamPropertyInfoTable );
     }
     else if ( m_aProps.getType() == FOLDER )
     {
-        //=================================================================
-        //
+
+
         // Folder: Supported properties
-        //
-        //=================================================================
+
+
 
         static const beans::Property aFolderPropertyInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////
+
             // Mandatory properties
-            ///////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "ContentType" ),
                 -1,
@@ -194,9 +194,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                 getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
             ),
-            ///////////////////////////////////////////////////////////
+
             // Optional standard properties
-            ///////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString(
                     "CreatableContentsInfo" ),
@@ -206,9 +206,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
-            ///////////////////////////////////////////////////////////
+
             // New properties
-            ///////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "Storage" ),
                 -1,
@@ -222,17 +222,17 @@ uno::Sequence< beans::Property > Content::getProperties(
     }
     else if ( m_aProps.getType() == DOCUMENT )
     {
-        //=================================================================
-        //
+
+
         // Document: Supported properties
-        //
-        //=================================================================
+
+
 
         static const beans::Property aDocPropertyInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////
+
             // Mandatory properties
-            ///////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "ContentType" ),
                 -1,
@@ -261,9 +261,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
-            ///////////////////////////////////////////////////////////
+
             // Optional standard properties
-            ///////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString(
                     "CreatableContentsInfo" ),
@@ -273,9 +273,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
-            ///////////////////////////////////////////////////////////
+
             // New properties
-            ///////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "DocumentModel" ),
                 -1,
@@ -289,19 +289,19 @@ uno::Sequence< beans::Property > Content::getProperties(
     }
     else
     {
-        //=================================================================
-        //
+
+
         // Root: Supported properties
-        //
-        //=================================================================
+
+
 
         OSL_ENSURE( m_aProps.getType() == ROOT, "Wrong content type!" );
 
         static const beans::Property aRootPropertyInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////////
+
             // Mandatory properties
-            ///////////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "ContentType" ),
                 -1,
@@ -330,9 +330,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
-            ///////////////////////////////////////////////////////////////
+
             // Optional standard properties
-            ///////////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString(
                     "CreatableContentsInfo" ),
@@ -342,15 +342,15 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             )
-            ///////////////////////////////////////////////////////////////
+
             // New properties
-            ///////////////////////////////////////////////////////////////
+
         };
         return MAKEPROPSEQUENCE( aRootPropertyInfoTable );
     }
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< ucb::CommandInfo > Content::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
@@ -365,17 +365,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
         if ( aParentUri.isDocument() )
         {
-            //=================================================================
-            //
+
+
             // Stream, that is a child of a document: Supported commands
-            //
-            //=================================================================
+
+
 
             static const ucb::CommandInfo aStreamCommandInfoTable1[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Mandatory commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -399,9 +399,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "delete" ),
                     -1,
@@ -413,24 +413,24 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     getCppuType(
                         static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 )
-                ///////////////////////////////////////////////////////////
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKECMDSEQUENCE( aStreamCommandInfoTable1 );
         }
 #endif
-        //=================================================================
-        //
+
+
         // Stream: Supported commands
-        //
-        //=================================================================
+
+
 
         static const ucb::CommandInfo aStreamCommandInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////
+
             // Mandatory commands
-            ///////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "getCommandInfo" ),
                 -1,
@@ -454,9 +454,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     static_cast<
                         uno::Sequence< beans::PropertyValue > * >( 0 ) )
             ),
-            ///////////////////////////////////////////////////////////
+
             // Optional standard commands
-            ///////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "delete" ),
                 -1,
@@ -473,25 +473,25 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 getCppuType(
                     static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
             )
-            ///////////////////////////////////////////////////////////
+
             // New commands
-            ///////////////////////////////////////////////////////////
+
         };
         return MAKECMDSEQUENCE( aStreamCommandInfoTable );
     }
     else if ( m_aProps.getType() == FOLDER )
     {
-        //=================================================================
-        //
+
+
         // Folder: Supported commands
-        //
-        //=================================================================
+
+
 
         static const ucb::CommandInfo aFolderCommandInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////
+
             // Mandatory commands
-            ///////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "getCommandInfo" ),
                 -1,
@@ -515,9 +515,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     static_cast<
                         uno::Sequence< beans::PropertyValue > * >( 0 ) )
             ),
-            ///////////////////////////////////////////////////////////
+
             // Optional standard commands
-            ///////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "delete" ),
                 -1,
@@ -544,25 +544,25 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 -1,
                 getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
             )
-            ///////////////////////////////////////////////////////////
+
             // New commands
-            ///////////////////////////////////////////////////////////
+
         };
         return MAKECMDSEQUENCE( aFolderCommandInfoTable );
     }
     else if ( m_aProps.getType() == DOCUMENT )
     {
-        //=================================================================
-        //
+
+
         // Document: Supported commands
-        //
-        //=================================================================
+
+
 
         static const ucb::CommandInfo aDocCommandInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////
+
             // Mandatory commands
-            ///////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "getCommandInfo" ),
                 -1,
@@ -586,9 +586,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     static_cast<
                         uno::Sequence< beans::PropertyValue > * >( 0 ) )
             ),
-            ///////////////////////////////////////////////////////////
+
             // Optional standard commands
-            ///////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "open" ),
                 -1,
@@ -605,27 +605,27 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 -1,
                 getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
             )
-            ///////////////////////////////////////////////////////////
+
             // New commands
-            ///////////////////////////////////////////////////////////
+
         };
         return MAKECMDSEQUENCE( aDocCommandInfoTable );
     }
     else
     {
-        //=================================================================
-        //
+
+
         // Root: Supported commands
-        //
-        //=================================================================
+
+
 
         OSL_ENSURE( m_aProps.getType() == ROOT, "Wrong content type!" );
 
         static const ucb::CommandInfo aRootCommandInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////
+
             // Mandatory commands
-            ///////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "getCommandInfo" ),
                 -1,
@@ -649,18 +649,18 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     static_cast<
                         uno::Sequence< beans::PropertyValue > * >( 0 ) )
             ),
-            ///////////////////////////////////////////////////////////
+
             // Optional standard commands
-            ///////////////////////////////////////////////////////////
+
             ucb::CommandInfo(
                 OUString( "open" ),
                 -1,
                 getCppuType(
                     static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
             )
-            ///////////////////////////////////////////////////////////
+
             // New commands
-            ///////////////////////////////////////////////////////////
+
         };
         return MAKECMDSEQUENCE( aRootCommandInfoTable );
     }

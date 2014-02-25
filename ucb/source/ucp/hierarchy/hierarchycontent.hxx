@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
 namespace hierarchy_ucp
 {
 
-//=========================================================================
+
 
 #define HIERARCHY_ROOT_FOLDER_CONTENT_SERVICE_NAME \
                             "com.sun.star.ucb.HierarchyRootFolderContent"
@@ -52,7 +52,7 @@ namespace hierarchy_ucp
 #define HIERARCHY_LINK_CONTENT_SERVICE_NAME \
                             "com.sun.star.ucb.HierarchyLinkContent"
 
-//=========================================================================
+
 
 class HierarchyContentProperties
 {
@@ -100,7 +100,7 @@ private:
     OUString m_aContentType;
 };
 
-//=========================================================================
+
 
 class HierarchyContentProvider;
 
@@ -270,9 +270,9 @@ public:
     abort( sal_Int32 CommandId )
         throw( com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Additional interfaces
-    //////////////////////////////////////////////////////////////////////
+
 
     // XContentCreator
     virtual com::sun::star::uno::Sequence<
@@ -284,9 +284,9 @@ public:
     createNewContent( const com::sun::star::ucb::ContentInfo& Info )
         throw( com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Non-interface methods.
-    //////////////////////////////////////////////////////////////////////
+
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Reference<

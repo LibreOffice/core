@@ -66,7 +66,7 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
 void SAL_CALL DynamicResultSetWrapper::impl_init()
 {
     //call this at the end of constructor of derived class
-    //
+
 
     Reference< XDynamicResultSet > xSource = NULL;
     {
@@ -88,7 +88,7 @@ DynamicResultSetWrapper::~DynamicResultSetWrapper()
 void SAL_CALL DynamicResultSetWrapper::impl_deinit()
 {
     //call this at start of destructor of derived class
-    //
+
     m_pMyListenerImpl->impl_OwnerDies();
 }
 

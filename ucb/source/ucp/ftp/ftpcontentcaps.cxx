@@ -103,26 +103,26 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
     return uno::Sequence< beans::Property >( aPropsInfoTable, PROPS_COUNT );
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
 // osl::MutexGuard aGuard( m_aMutex );
 
-    //=================================================================
-    //
+
+
     // Supported commands
-    //
-    //=================================================================
+
+
 
     #define COMMAND_COUNT 8
 
     static const ucb::CommandInfo aCommandInfoTable[] =
     {
-        ///////////////////////////////////////////////////////////////
+
         // Required commands
-        ///////////////////////////////////////////////////////////////
+
         ucb::CommandInfo(
             OUString( "getCommandInfo" ),
             -1,

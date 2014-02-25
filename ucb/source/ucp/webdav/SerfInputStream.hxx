@@ -31,11 +31,11 @@
 namespace http_dav_ucp
 {
 
-// -------------------------------------------------------------------
+
 // SerfInputStream
 // A simple XInputStream implementation provided specifically for use
 // by the DAVSession::GET method.
-// -------------------------------------------------------------------
+
 class SerfInputStream : public ::com::sun::star::io::XInputStream,
                         public ::com::sun::star::io::XSeekable,
                         public ::cppu::OWeakObject

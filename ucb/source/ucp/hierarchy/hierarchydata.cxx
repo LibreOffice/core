@@ -45,7 +45,7 @@ using namespace com::sun::star;
 namespace hierarchy_ucp
 {
 
-//=========================================================================
+
 struct HierarchyEntry::iterator_Impl
 {
     HierarchyEntryData                                     entry;
@@ -57,7 +57,7 @@ struct HierarchyEntry::iterator_Impl
     : officeDirs( 0 ), pos( -1 /* before first */ ) {};
 };
 
-//=========================================================================
+
 void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
 {
     sal_Int32 nCount = rIn.getLength();
@@ -93,13 +93,13 @@ void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
     }
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // HierarchyEntry Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 #define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
 #define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
@@ -107,7 +107,7 @@ void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
 // describe path of cfg entry
 #define CFGPROPERTY_NODEPATH    "nodepath"
 
-//=========================================================================
+
 HierarchyEntry::HierarchyEntry(
                 const uno::Reference< uno::XComponentContext >& rxContext,
                 HierarchyContentProvider* pProvider,
@@ -136,7 +136,7 @@ HierarchyEntry::HierarchyEntry(
         OSL_FAIL( "HierarchyEntry - Invalid URL!" );
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::hasData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -151,7 +151,7 @@ sal_Bool HierarchyEntry::hasData()
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 {
     try
@@ -256,7 +256,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::setData(
                     const HierarchyEntryData& rData, sal_Bool bCreate )
 {
@@ -488,7 +488,7 @@ sal_Bool HierarchyEntry::setData(
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::move(
     const OUString& rNewURL, const HierarchyEntryData& rData )
 {
@@ -609,9 +609,9 @@ sal_Bool HierarchyEntry::move(
         return sal_False;
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // (1) Get entry...
-    //////////////////////////////////////////////////////////////////////
+
 
     uno::Any aEntry;
     uno::Reference< container::XNameAccess >    xOldParentNameAccess;
@@ -658,9 +658,9 @@ sal_Bool HierarchyEntry::move(
         return sal_False;
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // (2) Remove entry... Note: Insert BEFORE remove does not work!
-    //////////////////////////////////////////////////////////////////////
+
 
     try
     {
@@ -675,9 +675,9 @@ sal_Bool HierarchyEntry::move(
         return sal_False;
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // (3) Insert entry at new parent...
-    //////////////////////////////////////////////////////////////////////
+
 
     try
     {
@@ -782,7 +782,7 @@ sal_Bool HierarchyEntry::move(
     return sal_True;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::remove()
 {
     try
@@ -897,7 +897,7 @@ sal_Bool HierarchyEntry::remove()
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::first( iterator& it )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -969,7 +969,7 @@ sal_Bool HierarchyEntry::first( iterator& it )
     return sal_True;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::next( iterator& it )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -982,7 +982,7 @@ sal_Bool HierarchyEntry::next( iterator& it )
     return ( it.m_pImpl->pos < it.m_pImpl->names.getLength() );
 }
 
-//=========================================================================
+
 OUString HierarchyEntry::createPathFromHierarchyURL(
     const HierarchyUri& rURI )
 {
@@ -1026,7 +1026,7 @@ OUString HierarchyEntry::createPathFromHierarchyURL(
     return aPath;
 }
 
-//=========================================================================
+
 uno::Reference< container::XHierarchicalNameAccess >
 HierarchyEntry::getRootReadAccess()
 {
@@ -1087,26 +1087,26 @@ HierarchyEntry::getRootReadAccess()
     return m_xRootReadAccess;
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // HierarchyEntry::iterator Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 HierarchyEntry::iterator::iterator()
 {
     m_pImpl = new iterator_Impl;
 }
 
-//=========================================================================
+
 HierarchyEntry::iterator::~iterator()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
+
 const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 {
     if ( ( m_pImpl->pos != -1 )

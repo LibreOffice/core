@@ -89,7 +89,7 @@ public:
     { return m_xSessionFactory; }
 
     // DAV methods
-    //
+
 
 #if 0 // currently not used, but please don't remove code
     void

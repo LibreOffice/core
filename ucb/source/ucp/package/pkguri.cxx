@@ -35,13 +35,13 @@
 using namespace package_ucp;
 
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // PackageUri Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 static void normalize( OUString& rURL )
 {
@@ -62,7 +62,7 @@ static void normalize( OUString& rURL )
     while ( nPos != -1 );
 }
 
-//=========================================================================
+
 void PackageUri::init() const
 {
     // Already inited?
@@ -134,7 +134,7 @@ void PackageUri::init() const
             {
                 if ( aPureUri[ aPureUri.getLength() - 2 ] == '/' )
                 {
-                    // Only <scheme>://// or <scheme>://<something>//
+                    // Only <scheme>://// or <scheme>://<something>
 
                     // error, but remember that we did a init().
                     m_aPath = "/";

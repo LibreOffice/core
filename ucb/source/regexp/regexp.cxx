@@ -33,11 +33,11 @@ namespace unnamed_ucb_regexp {} using namespace unnamed_ucb_regexp;
 using namespace com::sun::star;
 using namespace ucb_impl;
 
-//============================================================================
-//
+
+
 //  Regexp
-//
-//============================================================================
+
+
 
 inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,
                       bool bTheEmptyDomain, OUString const & rTheInfix,
@@ -55,7 +55,7 @@ inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,
     OSL_ASSERT(m_bTranslation || m_aReversePrefix.isEmpty());
 }
 
-//============================================================================
+
 namespace unnamed_ucb_regexp {
 
 bool matchStringIgnoreCase(sal_Unicode const ** pBegin,
@@ -173,7 +173,7 @@ bool Regexp::matches(OUString const & rString,
     return bMatches;
 }
 
-//============================================================================
+
 namespace unnamed_ucb_regexp {
 
 bool isScheme(OUString const & rString, bool bColon)
@@ -293,7 +293,7 @@ OUString Regexp::getRegexp(bool bReverse) const
     }
 }
 
-//============================================================================
+
 namespace unnamed_ucb_regexp {
 
 bool matchString(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,

@@ -36,7 +36,7 @@ using namespace com::sun::star::uno;
 using namespace cppu;
 
 
-//=========================================================================
+
 
 //  The mutex to synchronize access to containers.
 static osl::Mutex& getContainerMutex()
@@ -55,11 +55,11 @@ static osl::Mutex& getContainerMutex()
     return *pMutex;
 }
 
-//=========================================================================
-//
+
+
 // SortedDynamicResultSet
-//
-//=========================================================================
+
+
 
 SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XDynamicResultSet > &xOriginal,
@@ -459,11 +459,11 @@ void SortedDynamicResultSet::SendNotify()
     maActions.Clear();
 }
 
-//=========================================================================
-//
+
+
 // SortedDynamicResultSetFactory
-//
-//=========================================================================
+
+
 SortedDynamicResultSetFactory::SortedDynamicResultSetFactory(
                         const Reference< XComponentContext > & rxContext )
 {
@@ -522,11 +522,11 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
     return xRet;
 }
 
-//=========================================================================
-//
+
+
 // EventList
-//
-//=========================================================================
+
+
 
 void EventList::Clear()
 {
@@ -550,11 +550,11 @@ void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos, sal_IntPtr nCount )
     Insert( pAction );
 }
 
-//=================================================================
-//
+
+
 // SortedDynamicResultSetListener
-//
-//=================================================================
+
+
 
 SortedDynamicResultSetListener::SortedDynamicResultSetListener(
                                 SortedDynamicResultSet *mOwner )

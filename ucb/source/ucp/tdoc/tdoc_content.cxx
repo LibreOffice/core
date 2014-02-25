@@ -70,7 +70,7 @@
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 
-//=========================================================================
+
 static ContentType lcl_getContentType( const OUString & rType )
 {
     if ( rType == TDOC_ROOT_CONTENT_TYPE )
@@ -88,13 +88,13 @@ static ContentType lcl_getContentType( const OUString & rType )
     }
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // Content Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 // static ( "virtual" ctor )
 Content* Content::create(
@@ -112,7 +112,7 @@ Content* Content::create(
     return new Content( rxContext, pProvider, Identifier, aProps );
 }
 
-//=========================================================================
+
 // static ( "virtual" ctor )
 Content* Content::create(
             const uno::Reference< uno::XComponentContext >& rxContext,
@@ -132,7 +132,7 @@ Content* Content::create(
     return new Content( rxContext, pProvider, Identifier, Info );
 }
 
-//=========================================================================
+
 Content::Content(
             const uno::Reference< uno::XComponentContext > & rxContext,
             ContentProvider * pProvider,
@@ -145,7 +145,7 @@ Content::Content(
 {
 }
 
-//=========================================================================
+
 // ctor for a content just created via XContentCreator::createNewContent()
 Content::Content(
             const uno::Reference< uno::XComponentContext >& rxContext,
@@ -159,17 +159,17 @@ Content::Content(
 {
 }
 
-//=========================================================================
+
 // virtual
 Content::~Content()
 {
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL Content::acquire()
@@ -178,7 +178,7 @@ void SAL_CALL Content::acquire()
     ContentImplHelper::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Content::release()
     throw( )
@@ -186,7 +186,7 @@ void SAL_CALL Content::release()
     ContentImplHelper::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException )
@@ -207,15 +207,15 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     return aRet;
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException )
@@ -291,11 +291,11 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL Content::getImplementationName()
@@ -304,7 +304,7 @@ OUString SAL_CALL Content::getImplementationName()
     return OUString( "com.sun.star.comp.ucb.TransientDocumentsContent" );
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
@@ -325,11 +325,11 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     return aSNS;
 }
 
-//=========================================================================
-//
+
+
 // XContent methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL Content::getContentType()
@@ -339,7 +339,7 @@ OUString SAL_CALL Content::getContentType()
     return m_aProps.getContentType();
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContentIdentifier > SAL_CALL
 Content::getIdentifier()
@@ -358,11 +358,11 @@ Content::getIdentifier()
     return ContentImplHelper::getIdentifier();
 }
 
-//=========================================================================
-//
+
+
 // XCommandProcessor methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Any SAL_CALL Content::execute(
@@ -377,9 +377,9 @@ uno::Any SAL_CALL Content::execute(
 
     if ( aCommand.Name == "getPropertyValues" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // getPropertyValues
-        //////////////////////////////////////////////////////////////////
+
 
         uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
@@ -397,9 +397,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "setPropertyValues" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // setPropertyValues
-        //////////////////////////////////////////////////////////////////
+
 
         uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
@@ -428,25 +428,25 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "getPropertySetInfo" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // getPropertySetInfo
-        //////////////////////////////////////////////////////////////////
+
 
         aRet <<= getPropertySetInfo( Environment );
     }
     else if ( aCommand.Name == "getCommandInfo" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // getCommandInfo
-        //////////////////////////////////////////////////////////////////
+
 
         aRet <<= getCommandInfo( Environment );
     }
     else if ( aCommand.Name == "open" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // open
-        //////////////////////////////////////////////////////////////////
+
 
         ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
@@ -464,9 +464,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "insert" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // insert ( Supported by folders and streams only )
-        //////////////////////////////////////////////////////////////////
+
 
         ContentType eType = m_aProps.getType();
         if ( ( eType != FOLDER ) && ( eType != STREAM ) )
@@ -518,9 +518,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "delete" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // delete ( Supported by folders and streams only )
-        //////////////////////////////////////////////////////////////////
+
 
         {
             osl::MutexGuard aGuard( m_aMutex );
@@ -568,9 +568,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "transfer" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // transfer ( Supported by document and folders only )
-        //////////////////////////////////////////////////////////////////
+
 
         {
             osl::MutexGuard aGuard( m_aMutex );
@@ -606,9 +606,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "createNewContent" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // createNewContent ( Supported by document and folders only )
-        //////////////////////////////////////////////////////////////////
+
 
         {
             osl::MutexGuard aGuard( m_aMutex );
@@ -645,9 +645,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else
     {
-        //////////////////////////////////////////////////////////////////
+
         // Unsupported command
-        //////////////////////////////////////////////////////////////////
+
 
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
@@ -660,18 +660,18 @@ uno::Any SAL_CALL Content::execute(
     return aRet;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
 }
 
-//=========================================================================
-//
+
+
 // XContentCreator methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< ucb::ContentInfo > SAL_CALL
@@ -681,7 +681,7 @@ Content::queryCreatableContentsInfo()
     return m_aProps.getCreatableContentsInfo();
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
 Content::createNewContent( const ucb::ContentInfo& Info )
@@ -736,7 +736,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     }
 }
 
-//=========================================================================
+
 // virtual
 OUString Content::getParentURL()
 {
@@ -745,7 +745,7 @@ OUString Content::getParentURL()
     return aUri.getParentUri();
 }
 
-//=========================================================================
+
 uno::Reference< ucb::XContentIdentifier >
 Content::makeNewIdentifier( const OUString& rTitle )
 {
@@ -761,7 +761,7 @@ Content::makeNewIdentifier( const OUString& rTitle )
             new ::ucbhelper::ContentIdentifier( aNewURL.makeStringAndClear() ) );
 }
 
-//=========================================================================
+
 void Content::queryChildren( ContentRefList& rChildren )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -817,7 +817,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     }
 }
 
-//=========================================================================
+
 sal_Bool Content::exchangeIdentity(
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
@@ -896,7 +896,7 @@ sal_Bool Content::exchangeIdentity(
     return sal_False;
 }
 
-//=========================================================================
+
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Reference< uno::XComponentContext >& rxContext,
@@ -927,7 +927,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     }
 }
 
-//=========================================================================
+
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Reference< uno::XComponentContext >& rxContext,
@@ -1114,7 +1114,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     return uno::Reference< sdbc::XRow >( xRow.get() );
 }
 
-//=========================================================================
+
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         const uno::Sequence< beans::Property >& rProperties )
 {
@@ -1126,7 +1126,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                               m_xIdentifier->getContentIdentifier() );
 }
 
-//=========================================================================
+
 uno::Sequence< uno::Any > Content::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -1403,7 +1403,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     return aRet;
 }
 
-//=========================================================================
+
 uno::Any Content::open(
                 const ucb::OpenCommandArgument2& rArg,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -1413,9 +1413,9 @@ uno::Any Content::open(
          rArg.Mode == ucb::OpenMode::FOLDERS ||
          rArg.Mode == ucb::OpenMode::DOCUMENTS )
     {
-        //////////////////////////////////////////////////////////////////
+
         // open command for a folder content
-        //////////////////////////////////////////////////////////////////
+
 
         uno::Reference< ucb::XDynamicResultSet > xSet
             = new DynamicResultSet( m_xContext, this, rArg );
@@ -1423,9 +1423,9 @@ uno::Any Content::open(
     }
     else
     {
-        //////////////////////////////////////////////////////////////////
+
         // open command for a document content
-        //////////////////////////////////////////////////////////////////
+
 
         if ( ( rArg.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
              ( rArg.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
@@ -1586,7 +1586,7 @@ uno::Any Content::open(
     return uno::Any();
 }
 
-//=========================================================================
+
 void Content::insert( const uno::Reference< io::XInputStream >& xData,
                       sal_Int32 nNameClashResolve,
                       const uno::Reference<
@@ -1759,7 +1759,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
     }
 }
 
-//=========================================================================
+
 void Content::destroy( sal_Bool bDeletePhysical,
                        const uno::Reference<
                            ucb::XCommandEnvironment > & xEnv )
@@ -1810,7 +1810,7 @@ void Content::destroy( sal_Bool bDeletePhysical,
     }
 }
 
-//=========================================================================
+
 void Content::notifyDocumentClosed()
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1827,7 +1827,7 @@ void Content::notifyDocumentClosed()
     deleted();
 }
 
-//=========================================================================
+
 uno::Reference< ucb::XContent >
 Content::queryChildContent( const OUString & rRelativeChildUri )
 {
@@ -1860,7 +1860,7 @@ Content::queryChildContent( const OUString & rRelativeChildUri )
     return xChild;
 }
 
-//=========================================================================
+
 void Content::notifyChildRemoved( const OUString & rRelativeChildUri )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1884,7 +1884,7 @@ void Content::notifyChildRemoved( const OUString & rRelativeChildUri )
     }
 }
 
-//=========================================================================
+
 void Content::notifyChildInserted( const OUString & rRelativeChildUri )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1908,7 +1908,7 @@ void Content::notifyChildInserted( const OUString & rRelativeChildUri )
     }
 }
 
-//=========================================================================
+
 void Content::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -2064,9 +2064,9 @@ void Content::transfer(
     }
 #endif
 
-    /////////////////////////////////////////////////////////////////////////
+
     // Copy data.
-    /////////////////////////////////////////////////////////////////////////
+
 
     OUString aNewName( !rInfo.NewTitle.isEmpty()
                                 ? rInfo.NewTitle
@@ -2090,9 +2090,9 @@ void Content::transfer(
         // Unreachable
     }
 
-    /////////////////////////////////////////////////////////////////////////
+
     // Copy own and all children's Additional Core Properties.
-    /////////////////////////////////////////////////////////////////////////
+
 
     OUString aTargetUri = m_xIdentifier->getContentIdentifier();
     if ( ( aTargetUri.lastIndexOf( '/' ) + 1 ) != aTargetUri.getLength() )
@@ -2122,9 +2122,9 @@ void Content::transfer(
         // Unreachable
     }
 
-    /////////////////////////////////////////////////////////////////////////
+
     // Propagate new content.
-    /////////////////////////////////////////////////////////////////////////
+
 
     rtl::Reference< Content > xTarget;
     try
@@ -2163,9 +2163,9 @@ void Content::transfer(
     // Announce transferred content in its new folder.
     xTarget->inserted();
 
-    /////////////////////////////////////////////////////////////////////////
+
     // Remove source, if requested
-    /////////////////////////////////////////////////////////////////////////
+
 
     if ( rInfo.MoveData )
     {
@@ -2246,7 +2246,7 @@ void Content::transfer(
     } // rInfo.MoveData
 }
 
-//=========================================================================
+
 //static
 bool Content::hasData( ContentProvider* pProvider, const Uri & rUri )
 {
@@ -2282,7 +2282,7 @@ bool Content::hasData( ContentProvider* pProvider, const Uri & rUri )
     }
 }
 
-//=========================================================================
+
 //static
 bool Content::loadData( ContentProvider* pProvider,
                         const Uri & rUri,
@@ -2350,7 +2350,7 @@ bool Content::loadData( ContentProvider* pProvider,
     return true;
 }
 
-//=========================================================================
+
 bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
                          const uno::Reference<
                             ucb::XCommandEnvironment >& xEnv )
@@ -2493,7 +2493,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
     return true;
 }
 
-//=========================================================================
+
 bool Content::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
@@ -2561,7 +2561,7 @@ bool Content::renameData(
     return commitStorage( xStorage );
 }
 
-//=========================================================================
+
 bool Content::removeData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2619,7 +2619,7 @@ bool Content::removeData()
     return commitStorage( xStorage );
 }
 
-//=========================================================================
+
 bool Content::copyData( const Uri & rSourceUri, const OUString & rNewName )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2690,7 +2690,7 @@ bool Content::copyData( const Uri & rSourceUri, const OUString & rNewName )
     return commitStorage( xDestStorage );
 }
 
-//=========================================================================
+
 // static
 bool Content::commitStorage( const uno::Reference< embed::XStorage > & xStorage )
 {
@@ -2717,7 +2717,7 @@ bool Content::commitStorage( const uno::Reference< embed::XStorage > & xStorage 
     return true;
 }
 
-//=========================================================================
+
 // static
 bool Content::closeOutputStream(
     const uno::Reference< io::XOutputStream > & xOut )
@@ -2745,7 +2745,7 @@ bool Content::closeOutputStream(
     return false;
 }
 
-//=========================================================================
+
 static OUString obtainPassword(
         const OUString & rName,
         task::PasswordRequestMode eMode,
@@ -2802,7 +2802,7 @@ static OUString obtainPassword(
     throw aRequest;
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > Content::getInputStream(
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw ( ucb::CommandFailedException,
@@ -2843,7 +2843,7 @@ uno::Reference< io::XInputStream > Content::getInputStream(
     }
 }
 
-//=========================================================================
+
 static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
                 const OUString & rUri,
                 ContentProvider * pProvider,
@@ -2875,7 +2875,7 @@ static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
     }
 }
 
-//=========================================================================
+
 uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw ( ucb::CommandFailedException,
@@ -2890,7 +2890,7 @@ uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
             xEnv );
 }
 
-//=========================================================================
+
 uno::Reference< io::XStream > Content::getStream(
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw ( ucb::CommandFailedException,
@@ -2926,13 +2926,13 @@ uno::Reference< io::XStream > Content::getStream(
     }
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ContentProperties Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 uno::Sequence< ucb::ContentInfo >
 ContentProperties::getCreatableContentsInfo() const
@@ -2991,7 +2991,7 @@ ContentProperties::getCreatableContentsInfo() const
     }
 }
 
-//=========================================================================
+
 bool ContentProperties::isContentCreator() const
 {
     return ( getType() == FOLDER ) || ( getType() == DOCUMENT );

@@ -35,10 +35,10 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-//......................................................................................................................
+
 namespace ucb { namespace ucp { namespace ext
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -64,9 +64,9 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::sdbc::XResultSet;
     using ::com::sun::star::ucb::XCommandEnvironment;
 
-    //==================================================================================================================
+
     //= ResultListEntry
-    //==================================================================================================================
+
     struct ResultListEntry
     {
         OUString                 sId;
@@ -77,9 +77,9 @@ namespace ucb { namespace ucp { namespace ext
 
     typedef ::std::vector< ResultListEntry >    ResultList;
 
-    //==================================================================================================================
+
     //= DataSupplier_Impl
-    //==================================================================================================================
+
     struct DataSupplier_Impl
     {
         ::osl::Mutex                                m_aMutex;
@@ -103,9 +103,9 @@ namespace ucb { namespace ucp { namespace ext
     {
     }
 
-    //==================================================================================================================
+
     //= helper
-    //==================================================================================================================
+
     namespace
     {
         OUString lcl_compose( const OUString& i_rBaseURL, const OUString& i_rRelativeURL )
@@ -121,9 +121,9 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    //==================================================================================================================
+
     //= DataSupplier
-    //==================================================================================================================
+
 
     DataSupplier::DataSupplier( const Reference< XComponentContext >& rxContext,
                                 const ::rtl::Reference< Content >& i_rContent,
@@ -362,8 +362,8 @@ namespace ucb { namespace ucp { namespace ext
     {
     }
 
-//......................................................................................................................
+
 } } }   // namespace ucp::ext
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

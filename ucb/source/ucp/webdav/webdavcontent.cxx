@@ -187,15 +187,15 @@ static void lcl_sendPartialGETRequest( bool &bError,
 }
 }
 
-//=========================================================================
-//=========================================================================
-//
-// Content Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
+
+
+// Content Implementation.
+
+
+
+
+
 // ctr for content on an existing webdav resource
 Content::Content(
           const uno::Reference< uno::XComponentContext >& rxContext,
@@ -226,7 +226,7 @@ Content::Content(
     }
 }
 
-//=========================================================================
+
 // ctr for content on an non-existing webdav resource
 Content::Content(
             const uno::Reference< uno::XComponentContext >& rxContext,
@@ -255,17 +255,17 @@ Content::Content(
     // Do not set m_aEscapedTitle here! Content::insert relays on this!!!
 }
 
-//=========================================================================
+
 // virtual
 Content::~Content()
 {
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL Content::acquire()
@@ -274,7 +274,7 @@ void SAL_CALL Content::acquire()
     ContentImplHelper::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Content::release()
     throw( )
@@ -282,7 +282,7 @@ void SAL_CALL Content::release()
     ContentImplHelper::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException )
@@ -330,15 +330,15 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException )
@@ -428,11 +428,11 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL Content::getImplementationName()
@@ -441,7 +441,7 @@ OUString SAL_CALL Content::getImplementationName()
     return OUString( "com.sun.star.comp.ucb.WebDAVContent" );
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
@@ -451,11 +451,11 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     return aSNS;
 }
 
-//=========================================================================
-//
+
+
 // XContent methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL Content::getContentType()
@@ -481,11 +481,11 @@ OUString SAL_CALL Content::getContentType()
     return OUString( WEBDAV_CONTENT_TYPE );
 }
 
-//=========================================================================
-//
+
+
 // XCommandProcessor methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Any SAL_CALL Content::execute(
@@ -505,9 +505,9 @@ uno::Any SAL_CALL Content::execute(
 
     if ( aCommand.Name == "getPropertyValues" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // getPropertyValues
-        //////////////////////////////////////////////////////////////////
+
 
         uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
@@ -525,9 +525,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "setPropertyValues" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // setPropertyValues
-        //////////////////////////////////////////////////////////////////
+
 
         uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
@@ -556,9 +556,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "getPropertySetInfo" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // getPropertySetInfo
-        //////////////////////////////////////////////////////////////////
+
 
         // Note: Implemented by base class.
         aRet <<= getPropertySetInfo( Environment,
@@ -566,18 +566,18 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "getCommandInfo" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // getCommandInfo
-        //////////////////////////////////////////////////////////////////
+
 
         // Note: Implemented by base class.
         aRet <<= getCommandInfo( Environment, sal_False );
     }
     else if ( aCommand.Name == "open" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // open
-        //////////////////////////////////////////////////////////////////
+
 
         ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
@@ -595,9 +595,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "insert" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // insert
-        //////////////////////////////////////////////////////////////////
+
 
         ucb::InsertCommandArgument arg;
         if ( !( aCommand.Argument >>= arg ) )
@@ -615,9 +615,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "delete" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // delete
-        //////////////////////////////////////////////////////////////////
+
 
         sal_Bool bDeletePhysical = sal_False;
         aCommand.Argument >>= bDeletePhysical;
@@ -655,10 +655,10 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "transfer" && isFolder( Environment ) )
     {
-        //////////////////////////////////////////////////////////////////
+
         // transfer
         //  ( Not available at documents )
-        //////////////////////////////////////////////////////////////////
+
 
         ucb::TransferInfo transferArgs;
         if ( !( aCommand.Argument >>= transferArgs ) )
@@ -676,9 +676,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "post" )
     {
-        //////////////////////////////////////////////////////////////////
+
         // post
-        //////////////////////////////////////////////////////////////////
+
 
         ucb::PostCommandArgument2 aArg;
         if ( !( aCommand.Argument >>= aArg ) )
@@ -697,27 +697,27 @@ uno::Any SAL_CALL Content::execute(
     else if ( aCommand.Name == "lock" &&
               supportsExclusiveWriteLock( Environment ) )
     {
-        //////////////////////////////////////////////////////////////////
+
         // lock
-        //////////////////////////////////////////////////////////////////
+
 
         lock( Environment );
     }
     else if ( aCommand.Name == "unlock" &&
               supportsExclusiveWriteLock( Environment ) )
     {
-        //////////////////////////////////////////////////////////////////
+
         // unlock
-        //////////////////////////////////////////////////////////////////
+
 
         unlock( Environment );
     }
     else if ( aCommand.Name == "createNewContent" &&
               isFolder( Environment ) )
     {
-        //////////////////////////////////////////////////////////////////
+
         // createNewContent
-        //////////////////////////////////////////////////////////////////
+
 
         ucb::ContentInfo aArg;
         if ( !( aCommand.Argument >>= aArg ) )
@@ -795,9 +795,9 @@ uno::Any SAL_CALL Content::execute(
     }
     else
     {
-        //////////////////////////////////////////////////////////////////
+
         // Unsupported command
-        //////////////////////////////////////////////////////////////////
+
 
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
@@ -814,7 +814,7 @@ uno::Any SAL_CALL Content::execute(
     return aRet;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
@@ -838,11 +838,11 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     }
 }
 
-//=========================================================================
-//
+
+
 // XPropertyContainer methods.
-//
-//=========================================================================
+
+
 
 void Content::addProperty( const com::sun::star::ucb::PropertyCommandArgument &aCmdArg,
                            const uno::Reference< ucb::XCommandEnvironment >& xEnv  )
@@ -875,10 +875,10 @@ throw( beans::PropertyExistException,
             OUString( "\"addProperty\" DefaultValue does not match Property.Type"),
             static_cast< ::cppu::OWeakObject * >( this ) );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Make sure a property with the requested name does not already
     // exist in dynamic and static(!) properties.
-    //////////////////////////////////////////////////////////////////////
+
 
     // Take into account special properties with custom namespace
     // using <prop:the_propname xmlns:prop="the_namespace">
@@ -893,9 +893,9 @@ throw( beans::PropertyExistException,
         throw beans::PropertyExistException();
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // Add a new dynamic property.
-    //////////////////////////////////////////////////////////////////////
+
 
     ProppatchValue aValue( PROPSET, aProperty.Name, aDefaultValue );
 
@@ -1006,9 +1006,9 @@ throw( beans::UnknownPropertyException,
     }
 #endif
 
-    //////////////////////////////////////////////////////////////////////
+
     // Try to remove property from server.
-    //////////////////////////////////////////////////////////////////////
+
 
     try
     {
@@ -1117,11 +1117,11 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
                     uno::Reference< ucb::XCommandEnvironment >() );
 }
 
-//=========================================================================
-//
+
+
 // XContentCreator methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< ucb::ContentInfo > SAL_CALL
@@ -1157,7 +1157,7 @@ Content::queryCreatableContentsInfo()
     return aSeq;
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
 Content::createNewContent( const ucb::ContentInfo& Info )
@@ -1211,7 +1211,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     }
 }
 
-//=========================================================================
+
 // virtual
 OUString Content::getParentURL()
 {
@@ -1241,11 +1241,11 @@ OUString Content::getParentURL()
     return OUString( aURL.copy( 0, nPos + 1 ) );
 }
 
-//=========================================================================
-//
+
+
 // Non-interface methods.
-//
-//=========================================================================
+
+
 
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
@@ -1331,7 +1331,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     return uno::Reference< sdbc::XRow >( xRow.get() );
 }
 
-//=========================================================================
+
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Sequence< beans::Property >& rProperties,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -1374,9 +1374,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
     if ( !m_bTransient && !bHasAll )
     {
-        /////////////////////////////////////////////////////////////////////
+
         // Obtain values from server...
-        /////////////////////////////////////////////////////////////////////
+
 
         // First, identify whether resource is DAV or not
         const ResourceType & rType = getResourceType( xEnv, xResAccess );
@@ -1675,7 +1675,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     return xResultRow;
 }
 
-//=========================================================================
+
 uno::Sequence< uno::Any > Content::setPropertyValues(
                 const uno::Sequence< beans::PropertyValue >& rValues,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -1739,9 +1739,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             continue;
         }
 
-        //////////////////////////////////////////////////////////////////
+
         // Mandatory props.
-        //////////////////////////////////////////////////////////////////
+
 
         if ( rName == "ContentType" )
         {
@@ -1816,9 +1816,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else
         {
-            //////////////////////////////////////////////////////////////
+
             // Optional props.
-            //////////////////////////////////////////////////////////////
+
 
             rtl::OUString aSpecialName;
             bool bIsSpecial = DAVProperties::isUCBSpecialProperty( rName, aSpecialName );
@@ -2085,7 +2085,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     return aRet;
 }
 
-//=========================================================================
+
 uno::Any Content::open(
                 const ucb::OpenCommandArgument2 & rArg,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -2255,7 +2255,7 @@ uno::Any Content::open(
     return aRet;
 }
 
-//=========================================================================
+
 void Content::post(
                 const ucb::PostCommandArgument2 & rArg,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -2339,7 +2339,7 @@ void Content::post(
     }
 }
 
-//=========================================================================
+
 void Content::queryChildren( ContentRefList& rChildren )
 {
     // Obtain a list with a snapshot of all currently instanciated contents
@@ -2390,7 +2390,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     }
 }
 
-//=========================================================================
+
 void Content::insert(
         const uno::Reference< io::XInputStream > & xInputStream,
         sal_Bool bReplaceExisting,
@@ -2635,7 +2635,7 @@ void Content::insert(
     }
 }
 
-//=========================================================================
+
 void Content::transfer(
         const ucb::TransferInfo & rArgs,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
@@ -2663,7 +2663,7 @@ void Content::transfer(
         aTargetURI = targetURI.GetPathBaseNameUnescaped();
 
         // Check source's and target's URL scheme
-        //
+
         const OUString aScheme = sourceURI.GetScheme().toAsciiLowerCase();
         if ( aScheme == WEBDAV_URL_SCHEME )
         {
@@ -2706,7 +2706,7 @@ void Content::transfer(
         //     (Neon does not support cross-server copy/move)
 
         // Check for same host
-        //
+
         if ( sourceURI.GetHost().getLength() &&
              ( sourceURI.GetHost() != targetURI.GetHost() ) )
         {
@@ -2871,7 +2871,7 @@ void Content::transfer(
     }
 }
 
-//=========================================================================
+
 void Content::destroy( sal_Bool bDeletePhysical )
     throw( uno::Exception )
 {
@@ -2899,7 +2899,7 @@ void Content::destroy( sal_Bool bDeletePhysical )
     }
 }
 
-//=========================================================================
+
 bool Content::supportsExclusiveWriteLock(
   const uno::Reference< ucb::XCommandEnvironment >& Environment )
 {
@@ -2925,7 +2925,7 @@ bool Content::supportsExclusiveWriteLock(
     return false;
 }
 
-//=========================================================================
+
 void Content::lock(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception )
@@ -2964,7 +2964,7 @@ void Content::lock(
     }
 }
 
-//=========================================================================
+
 void Content::unlock(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception )
@@ -2991,7 +2991,7 @@ void Content::unlock(
     }
 }
 
-//=========================================================================
+
 sal_Bool Content::exchangeIdentity(
     const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
@@ -3059,7 +3059,7 @@ sal_Bool Content::exchangeIdentity(
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool Content::isFolder(
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
@@ -3089,7 +3089,7 @@ sal_Bool Content::isFolder(
     return sal_False;
 }
 
-//=========================================================================
+
 uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
 {
     // Map DAVException...
@@ -3267,7 +3267,7 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
     return aException;
 }
 
-//=========================================================================
+
 // static
 bool Content::shouldAccessNetworkAfterException( const DAVException & e )
 {
@@ -3281,7 +3281,7 @@ bool Content::shouldAccessNetworkAfterException( const DAVException & e )
     return true;
 }
 
-//=========================================================================
+
 void Content::cancelCommandExecution(
                 const DAVException & e,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv,
@@ -3292,7 +3292,7 @@ void Content::cancelCommandExecution(
     // Unreachable
 }
 
-//=========================================================================
+
 const OUString
 Content::getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess )
 {
@@ -3323,7 +3323,7 @@ Content::getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess )
     return OUString( rResAccess->getURL() );
 }
 
-//=========================================================================
+
 const Content::ResourceType & Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv,
                     const std::auto_ptr< DAVResourceAccess > & rResAccess )
@@ -3392,7 +3392,7 @@ const Content::ResourceType & Content::getResourceType(
     return m_eResourceType;
 }
 
-//=========================================================================
+
 const Content::ResourceType & Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )

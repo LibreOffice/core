@@ -228,7 +228,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
         // non-hierachical URL
 
         // #i29648#
-        //
+
 
         if ( aDestObj.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
         {

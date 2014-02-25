@@ -32,13 +32,13 @@
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // DocumentContentFactory Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 DocumentContentFactory::DocumentContentFactory(
             const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
@@ -46,17 +46,17 @@ DocumentContentFactory::DocumentContentFactory(
 {
 }
 
-//=========================================================================
+
 // virtual
 DocumentContentFactory::~DocumentContentFactory()
 {
 }
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL DocumentContentFactory::getImplementationName()
@@ -81,7 +81,7 @@ DocumentContentFactory::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-//=========================================================================
+
 // static
 OUString DocumentContentFactory::getImplementationName_Static()
 {
@@ -89,7 +89,7 @@ OUString DocumentContentFactory::getImplementationName_Static()
         "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory" );
 }
 
-//=========================================================================
+
 // static
 uno::Sequence< OUString >
 DocumentContentFactory::getSupportedServiceNames_Static()
@@ -101,11 +101,11 @@ DocumentContentFactory::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-//=========================================================================
-//
+
+
 // XTransientDocumentsDocumentContentFactory methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
@@ -138,11 +138,11 @@ DocumentContentFactory::createDocumentContent(
         static_cast< cppu::OWeakObject * >( this ) );
 }
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 static uno::Reference< uno::XInterface > SAL_CALL
 DocumentContentFactory_CreateInstance(
@@ -154,7 +154,7 @@ DocumentContentFactory_CreateInstance(
     return uno::Reference< uno::XInterface >::query( pX );
 }
 
-//=========================================================================
+
 // static
 uno::Reference< lang::XSingleServiceFactory >
 DocumentContentFactory::createServiceFactory(

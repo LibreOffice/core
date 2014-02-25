@@ -29,13 +29,13 @@ using namespace com::sun::star::uno;
 
 using namespace ftp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // DynamicResultSet Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 DynamicResultSet::DynamicResultSet(
     const Reference< XComponentContext >& rxContext,
@@ -55,18 +55,18 @@ DynamicResultSet::~DynamicResultSet()
     delete m_pFactory;
 }
 
-//=========================================================================
-//
+
+
 // Non-interface methods.
-//
-//=========================================================================
+
+
 
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1 = Reference< XResultSet >( m_pFactory->createResultSet() );
 }
 
-//=========================================================================
+
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1 = Reference< XResultSet >( m_pFactory->createResultSet() );

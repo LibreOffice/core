@@ -36,7 +36,7 @@
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//=========================================================================
+
 
 class DynamicResultSetWrapperListener;
 class DynamicResultSetWrapper
@@ -74,12 +74,12 @@ protected:
     //com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
     //                      m_xSourceResultCurrent;
     //sal_Bool              m_bUseOne;
-    //
+
     com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
                             m_xMyResultOne;
     com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
                             m_xMyResultTwo;
-    //
+
     com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >
                             m_xListener;
 
@@ -111,13 +111,13 @@ public:
 
     virtual ~DynamicResultSetWrapper();
 
-    //-----------------------------------------------------------------
+
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XDynamicResultSet
     virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet > SAL_CALL
     getStaticResultSet()
@@ -141,7 +141,7 @@ public:
     virtual sal_Int16 SAL_CALL
     getCapabilities() throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XComponent ( base of XDynamicResultSet )
     virtual void SAL_CALL
     dispose() throw( com::sun::star::uno::RuntimeException );
@@ -156,7 +156,7 @@ public:
         com::sun::star::lang::XEventListener >& Listener )
             throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XSourceInitialization
 
     virtual void SAL_CALL
@@ -165,7 +165,7 @@ public:
          throw( com::sun::star::ucb::AlreadyInitializedException
                 , com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // own methods:
     virtual void SAL_CALL
     impl_disposing( const com::sun::star::lang::EventObject& Source )
@@ -176,7 +176,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 };
 
-//=========================================================================
+
 
 class DynamicResultSetWrapperListener
                 : public cppu::OWeakObject
@@ -191,24 +191,24 @@ public:
 
     virtual ~DynamicResultSetWrapperListener();
 
-    //-----------------------------------------------------------------
+
     // XInterface
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     // XEventListener ( base of XDynamicResultSetListener )
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     disposing( const com::sun::star::lang::EventObject& Source )
         throw( com::sun::star::uno::RuntimeException );
-    //-----------------------------------------------------------------
+
     // XDynamicResultSetListener
     virtual void SAL_CALL
     notify( const ::com::sun::star::ucb::ListEvent& Changes )
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // own methods:
     void SAL_CALL impl_OwnerDies();
 };
