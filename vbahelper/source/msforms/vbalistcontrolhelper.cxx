@@ -128,7 +128,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
             std::vector< OUString >::iterator it = sVec.begin();
             for ( ; pString != pEndString; ++pString, ++it)
                 *pString = *it;
-            //
+
         }
 
         m_xProps->setPropertyValue( ITEMS, uno::makeAny( sList ) );
