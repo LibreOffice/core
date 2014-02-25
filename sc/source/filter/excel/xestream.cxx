@@ -757,6 +757,9 @@ OString XclXmlUtils::ToOString( const ScAddress& rAddress )
 
 OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
 {
+    if(rBuffer.empty())
+        return OString();
+
     const sal_uInt16* pBuffer = &rBuffer [0];
     return OString( pBuffer, rBuffer.size(), RTL_TEXTENCODING_UTF8 );
 }
