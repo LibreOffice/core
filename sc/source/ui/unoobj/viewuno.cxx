@@ -1731,8 +1731,8 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
 }
 
 void SAL_CALL ScTabViewObj::addSelectionChangeListener(
-                const uno::Reference<view::XSelectionChangeListener>& xListener )
-                                                    throw(uno::RuntimeException)
+    const uno::Reference<view::XSelectionChangeListener>& xListener )
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<view::XSelectionChangeListener>* pObj =
