@@ -46,21 +46,21 @@ public class HsqlDatabase
     // the default connection
     XConnection             m_connection;
 
-    // --------------------------------------------------------------------------------------------------------
+
     public HsqlDatabase( XComponentContext _context ) throws Exception
     {
         m_context = _context;
         createDBDocument();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public HsqlDatabase( XComponentContext _context, String _existingDocumentURL ) throws Exception
     {
         m_context = _context;
         createDBDocument( _existingDocumentURL );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void createDBDocument( String _docURL ) throws Exception
     {
         m_databaseDocumentFile = _docURL;

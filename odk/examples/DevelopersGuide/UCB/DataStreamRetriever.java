@@ -159,9 +159,9 @@ public class DataStreamRetriever {
     public void printStream( XInputStream data )
         throws com.sun.star.uno.Exception {
 
-        /////////////////////////////////////////////////////////////////////
+
         // Read data from input stream...65536
-        /////////////////////////////////////////////////////////////////////
+
 
         // Data buffer. Will be allocated by input stream implementation!
         byte[][] buffer = new byte[ 1 ][ 65536 ];

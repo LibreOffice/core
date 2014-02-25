@@ -39,7 +39,7 @@ public class SpreadsheetDocHelper : System.IDisposable
     private unoidl.com.sun.star.lang.XMultiServiceFactory  mxMSFactory;
     private unoidl.com.sun.star.sheet.XSpreadsheetDocument mxDocument;
 
-// ________________________________________________________________
+
 
     public SpreadsheetDocHelper( String[] args )
     {
@@ -103,7 +103,7 @@ public class SpreadsheetDocHelper : System.IDisposable
         return xSheet;
     }
 
-// ________________________________________________________________
+
 // Methods to fill values into cells.
 
     /** Writes a double value into a spreadsheet.
@@ -223,7 +223,7 @@ public class SpreadsheetDocHelper : System.IDisposable
             new uno.Any( (Single) unoidl.com.sun.star.awt.FontWeight.BOLD ) );
     }
 
-// ________________________________________________________________
+
 // Methods to create cell addresses and range addresses.
 
     /** Creates a unoidl.com.sun.star.table.CellAddress and initializes it
@@ -253,7 +253,7 @@ public class SpreadsheetDocHelper : System.IDisposable
         return xAddr.getRangeAddress();
     }
 
-// ________________________________________________________________
+
 // Methods to convert cell addresses and range addresses to strings.
 
     /** Returns the text address of the cell.
@@ -326,7 +326,7 @@ public class SpreadsheetDocHelper : System.IDisposable
         return aStr;
     }
 
-// ________________________________________________________________
+
 
     /** Connect to a running office that is accepting connections.
         @return  The ServiceManager to instantiate office components. */
@@ -357,5 +357,5 @@ public class SpreadsheetDocHelper : System.IDisposable
         return (unoidl.com.sun.star.sheet.XSpreadsheetDocument) xComponent;
     }
 
-// ________________________________________________________________
+
 }

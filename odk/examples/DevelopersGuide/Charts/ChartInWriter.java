@@ -66,7 +66,7 @@ import com.sun.star.beans.UnknownPropertyException;
  */
 public class ChartInWriter
 {
-    // ____________________
+
 
     public static void main( String args[] )
     {
@@ -113,7 +113,7 @@ public class ChartInWriter
     }
 
 
-    // ________________________________________
+
 
     public ChartInWriter( XChartDocument aChartDoc )
     {
@@ -121,7 +121,7 @@ public class ChartInWriter
         maDiagram       = maChartDocument.getDiagram();
     }
 
-    // ____________________
+
 
     public void lockControllers()
         throws RuntimeException
@@ -129,7 +129,7 @@ public class ChartInWriter
         UnoRuntime.queryInterface( XModel.class, maChartDocument ).lockControllers();
     }
 
-    // ____________________
+
 
     public void unlockControllers()
         throws RuntimeException
@@ -137,7 +137,7 @@ public class ChartInWriter
         UnoRuntime.queryInterface( XModel.class, maChartDocument ).unlockControllers();
     }
 
-    // ____________________
+
 
     public void testWall()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -151,10 +151,10 @@ public class ChartInWriter
         aWall.setPropertyValue( "FillStyle",  FillStyle.SOLID );
     }
 
-    // ______________________________
-    //
+
+
     // private members
-    // ______________________________
+
 
     private XChartDocument maChartDocument;
     private XDiagram       maDiagram;

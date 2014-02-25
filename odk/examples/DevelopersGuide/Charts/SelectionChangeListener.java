@@ -107,7 +107,7 @@ public class SelectionChangeListener implements XSelectionChangeListener {
             "com.sun.star.chart.XYDiagram" );
     }
 
-    // ____________________
+
 
     public void run() {
         boolean bTrying = true;
@@ -138,7 +138,7 @@ public class SelectionChangeListener implements XSelectionChangeListener {
         }
     }
 
-    // ____________________
+
 
     // XEventListener (base of XSelectionChangeListener)
     public void disposing( EventObject aSourceObj ) {
@@ -159,7 +159,7 @@ public class SelectionChangeListener implements XSelectionChangeListener {
         System.exit( 0 );
     }
 
-    // ____________________
+
 
     // XSelectionChangeListener
     public void selectionChanged( EventObject aEvent ) {

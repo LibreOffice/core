@@ -148,9 +148,9 @@ Reference< XInterface > SAL_CALL MyCounterImpl_create(
 }
 
 
-//#########################################################################
+
 //#### EXPORTED ###########################################################
-//#########################################################################
+
 
 /**
  * This function is called to get service factories for an implementation.

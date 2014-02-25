@@ -85,9 +85,9 @@ public class Test03 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempSubStorage ) )
                 return false;
 
-            // ================================================
+
             // check storage hyerarchy tree
-            // ================================================
+
 
             // check that isStorageElement() and isStreamElement reacts to nonexisting object correctly
             try {

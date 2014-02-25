@@ -52,7 +52,7 @@ import java.lang.String;
  */
 public class OfficeConnect
 {
-    // ____________________
+
 
     /**
      * At first call we create static connection object and open connection to an
@@ -65,7 +65,7 @@ public class OfficeConnect
             maConnection = new OfficeConnect();
     }
 
-    // ____________________
+
 
     /**
      * close connection to remote office if it exist
@@ -80,7 +80,7 @@ public class OfficeConnect
         }
     }
 
-    // ____________________
+
 
     /**
      * ctor
@@ -110,7 +110,7 @@ public class OfficeConnect
         }
     }
 
-    // ____________________
+
 
     /**
      * create uno components inside remote office process
@@ -145,7 +145,7 @@ public class OfficeConnect
         return aResult;
     }
 
-    // ____________________
+
 
     /**
      * same as "createRemoteInstance()" but supports additional parameter for
@@ -176,7 +176,7 @@ public class OfficeConnect
         return aResult;
     }
 
-    // ____________________
+
 
     /**
      * returns remote component context of the connected office
@@ -186,7 +186,7 @@ public class OfficeConnect
         return mxOfficeContext;
     }
 
-    // ____________________
+
 
     /**
      * member

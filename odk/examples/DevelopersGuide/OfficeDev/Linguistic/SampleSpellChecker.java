@@ -253,9 +253,9 @@ public class SampleSpellChecker extends ComponentBase implements
     // __________ interface methods __________
 
 
-    //*****************
+
     //XSupportedLocales
-    //*****************
+
     public Locale[] getLocales()
         throws com.sun.star.uno.RuntimeException
     {
@@ -279,9 +279,9 @@ public class SampleSpellChecker extends ComponentBase implements
     }
 
 
-    //*************
+
     //XSpellChecker
-    //*************
+
     public boolean isValid(
             String aWord, Locale aLocale,
             PropertyValue[] aProperties )
@@ -344,9 +344,9 @@ public class SampleSpellChecker extends ComponentBase implements
     }
 
 
-    //*****************************
+
     //XLinguServiceEventBroadcaster
-    //*****************************
+
     public boolean addLinguServiceEventListener (
             XLinguServiceEventListener xLstnr )
         throws com.sun.star.uno.RuntimeException
@@ -367,18 +367,18 @@ public class SampleSpellChecker extends ComponentBase implements
         return bRes;
     }
 
-    //********************
+
     // XServiceDisplayName
-    //********************
+
     public String getServiceDisplayName( Locale aLocale )
         throws com.sun.star.uno.RuntimeException
     {
         return "Java Samples";
     }
 
-    //****************
+
     // XInitialization
-    //****************
+
     public void initialize( Object[] aArguments )
         throws com.sun.star.uno.Exception,
                com.sun.star.uno.RuntimeException
@@ -393,9 +393,9 @@ public class SampleSpellChecker extends ComponentBase implements
         }
     }
 
-    //*************
+
     // XServiceInfo
-    //*************
+
     public boolean supportsService( String aServiceName )
         throws com.sun.star.uno.RuntimeException
     {

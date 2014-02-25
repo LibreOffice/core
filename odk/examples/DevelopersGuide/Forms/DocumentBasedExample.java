@@ -87,7 +87,7 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
             // grab the focus to the first control
             m_document.getCurrentView().grabControlFocus();
 
-            // ----------------------------------------------
+
             // wait for the user to confirm that we can exit
             if ( waitForUserInput() )
             {

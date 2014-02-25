@@ -99,7 +99,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
         maChartDocument.attachData( maChartData );
     }
 
-    // ____________________
+
 
     public void run()
     {
@@ -131,7 +131,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
         chartDataChanged( aEvent );
     }
 
-    // ____________________
+
 
     // XEventListener (base of XChartDataChangeEventListener)
     public void disposing( EventObject aSourceObj )
@@ -154,7 +154,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
         System.exit( 0 );
     }
 
-    // ____________________
+
 
     // XChartDataChangeEventListener
     public void chartDataChanged( ChartDataChangeEvent aEvent )

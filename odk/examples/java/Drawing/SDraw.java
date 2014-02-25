@@ -32,11 +32,11 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: bootstrap UNO and get the remote component context
 //          Step 2: open an empty text document
 //          Step 3: get the drawpage an insert some shapes
-//***************************************************************************
+
 
 
 import java.lang.Math;
@@ -51,7 +51,7 @@ public class SDraw  {
         //oooooooooooooooooooooooooooStep 1oooooooooooooooooooooooooooooooooooooooo
         // bootstrap UNO and get the remote component context. The context can
         // be used to get the service manager
-        //*************************************************************************
+
         com.sun.star.uno.XComponentContext xContext = null;
 
         try {
@@ -72,7 +72,7 @@ public class SDraw  {
         // For this purpose an instance of com.sun.star.frame.Desktop
         // is created. It's interface XDesktop provides the XComponentLoader,
         // which is used to open the document via loadComponentFromURL
-        //*************************************************************************
+
 
         //Open document
         //Draw
@@ -85,7 +85,7 @@ public class SDraw  {
         // To add a shape get the MultiServiceFaktory of the document, create an
         // instance of the ShapeType and add it to the Shapes-container
         // provided by the drawpage
-        //*************************************************************************
+
 
 
         // get the drawpage of drawing here
@@ -115,7 +115,7 @@ public class SDraw  {
         xShapes.add(createShape(xDrawDoc,3000,4500,15000,1000,"Ellipse",16711680));
         xShapes.add(createShape(xDrawDoc,5000,3500,7500,5000,"Rectangle",6710932));
 
-        //*************************************************************************
+
         System.out.println("done");
         System.exit(0);
     }

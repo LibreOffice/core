@@ -70,7 +70,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         m_nPreviousFilterIndex = -1;
         initFilterDates();
 
-        // -------------------------------------------------------------
+
         // remember the components
         m_aDocument = aDocument;
         m_xSalesForm = xSalesForm;
@@ -81,7 +81,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
 
         try
         {
-            // ----------------------------------------------------------
+
             // init control models
             m_xFilterList.setPropertyValue( "Dropdown", new Boolean( true ) );
             m_xFilterList.setPropertyValue( "LineCount", new Short( (short)11 ) );
@@ -93,7 +93,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
             updateFilterControl();
             updateApplyButton();
 
-            // ----------------------------------------------------------
+
             // add as listener to the events which require action
 
             // want to know about changed selection

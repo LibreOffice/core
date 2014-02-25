@@ -46,9 +46,9 @@ public class PropChgHelper_Hyph extends PropChgHelper
         super( xEvtSource, aPropNames );
     }
 
-    //************************
+
     // XPropertyChangeListener
-    //************************
+
     public void propertyChange( PropertyChangeEvent aEvt )
             throws com.sun.star.uno.RuntimeException
     {

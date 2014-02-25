@@ -32,12 +32,12 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
 //          Step 3: enter a example text
 //          Step 4: replace some english spelled words with US spelled
-//***************************************************************************
+
 
 
 import com.sun.star.uno.UnoRuntime;

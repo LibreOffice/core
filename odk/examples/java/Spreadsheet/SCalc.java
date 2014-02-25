@@ -32,14 +32,14 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: get the remote component context from the office
 //          Step 2: open an empty calc document
 //          Step 3: create cell styles
 //          Step 4: get the sheet an insert some data
 //          Step 5: apply the created cell syles
 //          Step 6: insert a 3D Chart
-//***************************************************************************
+
 
 import com.sun.star.awt.Rectangle;
 
@@ -87,7 +87,7 @@ public class SCalc  {
         //oooooooooooooooooooooooooooStep 1oooooooooooooooooooooooooooooooooooooooooo
         // call UNO bootstrap method and get the remote component context form
         // the a running office (office will be started if necessary)
-        //***************************************************************************
+
         XComponentContext xContext = null;
 
         // get the remote office component context
@@ -104,7 +104,7 @@ public class SCalc  {
         // For this purpose an instance of com.sun.star.frame.Desktop
         // is created. The desktop provides the XComponentLoader interface,
         // which is used to open the document via loadComponentFromURL
-        //***************************************************************************
+
 
         //Open document
 
@@ -115,7 +115,7 @@ public class SCalc  {
         System.out.println("Opening an empty Calc document");
         myDoc = openCalc(xContext);
 
-        //***************************************************************************
+
 
 
         //oooooooooooooooooooooooooooStep 3oooooooooooooooooooooooooooooooooooooooooo
@@ -123,7 +123,7 @@ public class SCalc  {
         // For this purpose get the StyleFamiliesSupplier and the familiy
         // CellStyle. Create an instance of com.sun.star.style.CellStyle and
         // add it to the family. Now change some properties
-        //***************************************************************************
+
 
         try {
             XStyleFamiliesSupplier xSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, myDoc);
@@ -152,7 +152,7 @@ public class SCalc  {
             e.printStackTrace(System.err);
         }
 
-        //***************************************************************************
+
 
         //oooooooooooooooooooooooooooStep 4oooooooooooooooooooooooooooooooooooooooooo
         // get the sheet an insert some data.
@@ -160,7 +160,7 @@ public class SCalc  {
         // Now some data can be inserted. For this purpose get a Cell via
         // getCellByPosition and insert into this cell via setValue() (for floats)
         // or setFormula() for formulas and Strings
-        //***************************************************************************
+
 
 
         XSpreadsheet xSheet=null;
@@ -245,20 +245,20 @@ public class SCalc  {
         insertIntoCell(12,3,"38.5",xSheet,"V");
         insertIntoCell(13,3,"=SUM(A4:L4)",xSheet,"");
 
-        //***************************************************************************
+
 
         //oooooooooooooooooooooooooooStep 5oooooooooooooooooooooooooooooooooooooooooo
         // apply the created cell style.
         // For this purpose get the PropertySet of the Cell and change the
         // property CellStyle to the appropriate value.
-        //***************************************************************************
+
 
         // change backcolor
         chgbColor( 1 , 0, 13, 0, "My Style", xSheet );
         chgbColor( 0 , 1, 0, 3, "My Style", xSheet );
         chgbColor( 1 , 1, 13, 3, "My Style2", xSheet );
 
-        //***************************************************************************
+
 
         //oooooooooooooooooooooooooooStep 6oooooooooooooooooooooooooooooooooooooooooo
         // insert a 3D chart.
@@ -267,7 +267,7 @@ public class SCalc  {
         // add a new chart based on the data to the TableCharts.
         // get the ChartDocument, which provide the Diagramm. Change the properties
         // Dim3D (3 dimension) and String (the title) of the diagramm.
-        //***************************************************************************
+
 
         // insert a chart
 

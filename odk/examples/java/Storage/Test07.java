@@ -92,9 +92,9 @@ public class Test07 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) || !m_aTestHelper.disposeStorage( xTempFileStorage ) )
                 return false;
 
-            // ================================================
+
             // now check all the written and copied information
-            // ================================================
+
 
             // the temporary file must not be locked any more after storage disposing
             pArgs[1] = new Integer( ElementModes.READWRITE );

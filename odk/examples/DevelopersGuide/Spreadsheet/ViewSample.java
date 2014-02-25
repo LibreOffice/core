@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 public class ViewSample extends SpreadsheetDocHelper
 {
 
-// ________________________________________________________________
+
 
     public static void main( String args[] )
     {
@@ -59,14 +59,14 @@ public class ViewSample extends SpreadsheetDocHelper
         System.exit( 0 );
     }
 
-// ________________________________________________________________
+
 
     public ViewSample( String[] args )
     {
         super( args );
     }
 
-// ________________________________________________________________
+
 
     /** This sample function performs all changes on the view. */
     public void doSampleFunction() throws Exception
@@ -126,7 +126,7 @@ public class ViewSample extends SpreadsheetDocHelper
         }
     }
 
-// ________________________________________________________________
+
 
     //  listener to react on finished selection
 
@@ -156,6 +156,6 @@ public class ViewSample extends SpreadsheetDocHelper
         }
     }
 
-// ________________________________________________________________
+
 
 }

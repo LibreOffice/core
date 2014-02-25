@@ -48,7 +48,7 @@ import java.util.ArrayList;
  */
 public interface IOnewayLink
 {
-    // _______________________________
+
 
     /**
      * @param nRequest

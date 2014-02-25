@@ -70,7 +70,7 @@ import com.sun.star.util.MalformedNumberFormatException;
 
 public class ChartInCalc
 {
-    // ____________________
+
 
     public static void main( String args[] )
     {
@@ -137,7 +137,7 @@ public class ChartInCalc
     }
 
 
-    // ________________________________________
+
 
     public ChartInCalc( XChartDocument aChartDoc )
     {
@@ -145,7 +145,7 @@ public class ChartInCalc
         maDiagram       = maChartDocument.getDiagram();
     }
 
-    // ____________________
+
 
     public void lockControllers()
         throws RuntimeException
@@ -153,7 +153,7 @@ public class ChartInCalc
         UnoRuntime.queryInterface( XModel.class, maChartDocument ).lockControllers();
     }
 
-    // ____________________
+
 
     public void unlockControllers()
         throws RuntimeException
@@ -161,7 +161,7 @@ public class ChartInCalc
         UnoRuntime.queryInterface( XModel.class, maChartDocument ).unlockControllers();
     }
 
-    // ____________________
+
 
     public void testDiagram()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -180,7 +180,7 @@ public class ChartInCalc
         }
     }
 
-    // ____________________
+
 
     public void testDataRowProperties()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -225,7 +225,7 @@ public class ChartInCalc
         }
     }
 
-    // ____________________
+
 
     public void testDataPointProperties()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -271,7 +271,7 @@ public class ChartInCalc
         }
     }
 
-    // ____________________
+
 
     public void testArea()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -287,7 +287,7 @@ public class ChartInCalc
         }
     }
 
-    // ____________________
+
 
     public void testWall()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -301,7 +301,7 @@ public class ChartInCalc
         aWall.setPropertyValue( "FillColor", new Integer( 0xcccccc ));
     }
 
-    // ____________________
+
 
     public void testTitle()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -336,7 +336,7 @@ public class ChartInCalc
         }
     }
 
-    // ____________________
+
 
     public void testAxis()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -376,7 +376,7 @@ public class ChartInCalc
         }
     }
 
-    // ____________________
+
 
     public void testGrid()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -406,10 +406,10 @@ public class ChartInCalc
     }
 
 
-    // ______________________________
-    //
+
+
     // private members
-    // ______________________________
+
 
     private XChartDocument maChartDocument;
     private XDiagram       maDiagram;

@@ -32,12 +32,12 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: bootstrap UNO and get the remote component context
 //          Step 2: open an empty text document
 //          Step 3: create an enumeration of all paragraphs
 //          Step 4: create an enumeration of all text portions
-//***************************************************************************
+
 
 import com.sun.star.uno.UnoRuntime;
 

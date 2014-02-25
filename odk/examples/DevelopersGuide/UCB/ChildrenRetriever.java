@@ -141,9 +141,9 @@ public class ChildrenRetriever {
 
             result = new ArrayList<ArrayList<Object>>();
 
-            /////////////////////////////////////////////////////////////////////
+
             // Iterate over children, access children and property values...
-            /////////////////////////////////////////////////////////////////////
+
 
                 // Move to begin.
             if ( resultSet.first() ) {

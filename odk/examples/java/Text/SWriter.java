@@ -32,14 +32,14 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: bootstrap UNO and get the remote component context
 //          Step 2: open an empty text document
 //          Step 3: enter some text
 //          Step 4: insert a text table
 //          Step 5: insert colored text
 //          Step 6: insert a text frame
-//***************************************************************************
+
 
 import com.sun.star.uno.UnoRuntime;
 
@@ -51,7 +51,7 @@ public class SWriter  {
         //oooooooooooooooooooooooooooStep 1oooooooooooooooooooooooooooooooooooooooo
         // bootstrap UNO and get the remote component context. The context can
         // be used to get the service manager
-        //*************************************************************************
+
         com.sun.star.uno.XComponentContext xContext = null;
 
         try {
@@ -70,14 +70,14 @@ public class SWriter  {
         // For this purpose an instance of com.sun.star.frame.Desktop
         // is created. It's interface XDesktop provides the XComponentLoader,
         // which is used to open the document via loadComponentFromURL
-        //*************************************************************************
+
 
         //Open Writer document
 
         System.out.println("Opening an empty Writer document");
         com.sun.star.text.XTextDocument myDoc = openWriter(xContext);
 
-        //*************************************************************************
+
 
 
         //oooooooooooooooooooooooooooStep 3oooooooooooooooooooooooooooooooooooooooo
@@ -85,7 +85,7 @@ public class SWriter  {
         // For this purpose get the Text-Object of the document an create the
         // cursor. Now it is possible to insert a text at the cursor-position
         // via insertString
-        //*************************************************************************
+
 
 
         //getting the text object
@@ -100,7 +100,7 @@ public class SWriter  {
         //inserting a second line
         xText.insertString( xTCursor, "Now we're in the second line\n", false );
 
-        //*************************************************************************
+
 
 
         //oooooooooooooooooooooooooooStep 4oooooooooooooooooooooooooooooooooooooooo
@@ -109,7 +109,7 @@ public class SWriter  {
         // instance of com.sun.star.text.TextTable and initialize it. Now it can
         // be inserted at the cursor position via insertTextContent.
         // After that some properties are changed and some data is inserted.
-        //*************************************************************************
+
 
         //inserting a text table
         System.out.println("Inserting a text table");
@@ -197,7 +197,7 @@ public class SWriter  {
         // insert a colored text.
         // Get the propertySet of the cursor, change the CharColor and add a
         // shadow. Then insert the Text via InsertString at the cursor position.
-        //*************************************************************************
+
 
         // get the property set of the cursor
         com.sun.star.beans.XPropertySet xTCPS = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
@@ -246,7 +246,7 @@ public class SWriter  {
         // document. Change some properties an insert it.
         // Now get the text-Object of the frame an the corresponding cursor.
         // Insert some text via insertString.
-        //*************************************************************************
+
 
         // Create a TextFrame
         com.sun.star.text.XTextFrame xTF = null;

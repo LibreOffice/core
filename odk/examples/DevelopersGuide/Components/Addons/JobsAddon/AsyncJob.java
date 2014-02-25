@@ -60,7 +60,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      */
     public static final java.lang.String IMPLEMENTATIONNAME = "com.sun.star.comp.framework.java.services.AsyncJob";
 
-    //___________________________________________
+
     // interface
 
     /** initialize a new instance of this class with default values. */
@@ -69,7 +69,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         m_xCmpCtx = xCompContext;
     }
 
-    //___________________________________________
+
 
     /** starts execution of this job.
      *
@@ -222,7 +222,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         xListener.jobFinished(this, lReturn);
     }
 
-    //___________________________________________
+
 
     /** show an info box with the UNO based toolkit.
      *
@@ -292,7 +292,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         }
     }
 
-    //___________________________________________
+
 
     private void showInfoNonModal( java.lang.String sTitle   ,
                                    java.lang.String sMessage )
@@ -319,7 +319,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      }.start();
     }
 
-    //___________________________________________
+
 
     /** helper to print out the given argument list.
      *
@@ -407,7 +407,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     }
 
 
-    //___________________________________________
+
 
     public synchronized static com.sun.star.lang.XSingleComponentFactory __getComponentFactory(java.lang.String sImplName)
     {
@@ -418,7 +418,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         return xFactory;
     }
 
-    //___________________________________________
+
     // This method not longer necessary since OOo 3.4 where the component registration
     // was changed to passive component registration. For more details see
     // http://wiki.openoffice.org/wiki/Passive_Component_Registration

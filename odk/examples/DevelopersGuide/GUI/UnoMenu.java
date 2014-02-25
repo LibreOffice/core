@@ -171,7 +171,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
             case 8:
                 closeDialog();
             default:
-                //..
+
         }
     }
 

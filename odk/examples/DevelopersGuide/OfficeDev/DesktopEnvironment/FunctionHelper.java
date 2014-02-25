@@ -61,7 +61,7 @@ import java.net.*;
  */
 public class FunctionHelper
 {
-    // ____________________
+
 
     /**
      * This convert an URL (formated as a string) to a struct com.sun.star.util.URL.
@@ -124,7 +124,7 @@ public class FunctionHelper
         return aURL;
     }
 
-    // ____________________
+
 
     /**
      * create a new empty target frame
@@ -165,7 +165,7 @@ public class FunctionHelper
         return xFrame;
     }
 
-    // ____________________
+
 
     /**
      * create a new window which can be used as container window of an office frame
@@ -323,7 +323,7 @@ public class FunctionHelper
         return xWindow;
     }
 
-    // ____________________
+
 
     /**
      * This method create a new empty child frame on desktop instance of remote office.
@@ -423,7 +423,7 @@ public class FunctionHelper
         return xFrame;
     }
 
-    // ____________________
+
 
     /**
      * Dispatch an URL to given frame.
@@ -488,7 +488,7 @@ public class FunctionHelper
         return xDispatcher;
     }
 
-    // ____________________
+
 
     /**
      * Dispatch an URL to given frame.
@@ -535,7 +535,7 @@ public class FunctionHelper
         }
     }
 
-    // ____________________
+
 
     /**
      * Load document specified by an URL into given frame synchronously.
@@ -627,7 +627,7 @@ public class FunctionHelper
         return xDocument;
     }
 
-    // ____________________
+
 
     /**
      * Save currently loaded document of given frame.
@@ -675,7 +675,7 @@ public class FunctionHelper
         }
     }
 
-    // ____________________
+
 
     /**
      * It try to export given document in HTML format.
@@ -780,7 +780,7 @@ public class FunctionHelper
         }
     }
 
-    // ____________________
+
 
     /**
      * Try to close the document without any saving of modifications.
@@ -855,7 +855,7 @@ public class FunctionHelper
         }
     }
 
-    // ____________________
+
 
     /**
      * Try to close the frame instead of the document.
@@ -918,7 +918,7 @@ public class FunctionHelper
         return bClosed;
     }
 
-    // ____________________
+
 
     /**
      * Try to find an unique frame name, which isn't currently used inside
@@ -979,7 +979,7 @@ public class FunctionHelper
         return sName;
     }
 
-    // ____________________
+
 
     /**
      * helper to get a file URL selected by user
@@ -1042,7 +1042,7 @@ public class FunctionHelper
         return sFileURL;
     }
 
-    // ____________________
+
 
     /**
      * @member  maLastDir   save the last visited directory of used file open/save dialog

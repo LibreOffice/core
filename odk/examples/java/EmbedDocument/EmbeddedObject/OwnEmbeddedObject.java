@@ -65,7 +65,7 @@ public final class OwnEmbeddedObject extends WeakBase
 
     Dimension m_aObjSize;
 
-    // -------------------------------------------------------------
+
     protected ArrayList<Object> GetListeners()
     {
         if ( m_aListeners == null )
@@ -74,7 +74,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return m_aListeners;
     }
 
-    // -------------------------------------------------------------
+
     protected Dimension UpdateSizeAndGetFromActive()
     {
         if ( m_nObjectState == com.sun.star.embed.EmbedStates.ACTIVE )
@@ -86,7 +86,7 @@ public final class OwnEmbeddedObject extends WeakBase
             return new Dimension();
     }
 
-    // -------------------------------------------------------------
+
     protected void SwitchOwnPersistence( XStorage xParentStorage, XStorage xOwnStorage, String aEntryName )
     {
         if ( xOwnStorage != m_xOwnStorage )
@@ -99,7 +99,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
     }
 
-    // -------------------------------------------------------------
+
     protected void SwitchOwnPersistence( XStorage xParentStorage, String aEntryName ) throws com.sun.star.io.IOException
     {
         if ( xParentStorage != m_xParentStorage || !aEntryName.equals( m_aEntryName ) )
@@ -124,7 +124,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
     }
 
-    // -------------------------------------------------------------
+
     protected static void SaveDataToStorage( XStorage xStorage, String aString, Dimension aDimension ) throws com.sun.star.io.IOException
     {
         try
@@ -184,7 +184,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
     }
 
-    // -------------------------------------------------------------
+
     protected void PostEvent( String aEvEntryName )
     {
         if ( m_aListeners != null )
@@ -207,7 +207,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
     }
 
-    // -------------------------------------------------------------
+
     protected void StateChangeNotification( boolean bBeforeChange, int nOldState, int nNewState )
     {
         if ( m_aListeners != null )
@@ -235,7 +235,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
     }
 
-    // -------------------------------------------------------------
+
     protected String ReadStringFromStream( XStorage xStorage, String aStreamName ) throws com.sun.star.io.IOException
     {
         if ( xStorage == null )
@@ -280,7 +280,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
     }
 
-    // -------------------------------------------------------------
+
     protected void ReadSizeFromOwnStorage() throws com.sun.star.io.IOException
     {
         String aSize = ReadStringFromStream( m_xOwnStorage, "properties.txt" );
@@ -294,14 +294,14 @@ public final class OwnEmbeddedObject extends WeakBase
         }
     }
 
-    // -------------------------------------------------------------
+
     public OwnEmbeddedObject( XComponentContext context, byte[] aClassID )
     {
         m_xContext = context;
         m_aClassID = aClassID;
     };
 
-    // -------------------------------------------------------------
+
     public void CloseFrameRequest()
     {
         com.sun.star.embed.XEmbeddedClient xClient = m_xClient;
@@ -326,7 +326,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.embed.XCommonEmbedPersist:
-    // -------------------------------------------------------------
+
     public void storeOwn() throws com.sun.star.embed.WrongStateException, com.sun.star.io.IOException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -352,13 +352,13 @@ public final class OwnEmbeddedObject extends WeakBase
         PostEvent( "OnSaveDone" );
     }
 
-    // -------------------------------------------------------------
+
     public boolean isReadonly() throws com.sun.star.embed.WrongStateException
     {
         return false;
     }
 
-    // -------------------------------------------------------------
+
     public void reload(com.sun.star.beans.PropertyValue[] aMediaArgs, com.sun.star.beans.PropertyValue[] aObjectArgs) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.io.IOException, com.sun.star.uno.Exception
     {
         // not implemented currently
@@ -366,7 +366,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.embed.XEmbedPersist:
-    // -------------------------------------------------------------
+
     public void setPersistentEntry(com.sun.star.embed.XStorage xStorage, String aEntryName, int nEntryConnectionMode, com.sun.star.beans.PropertyValue[] aMediaArgs, com.sun.star.beans.PropertyValue[] aObjectArgs) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.io.IOException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -439,7 +439,7 @@ public final class OwnEmbeddedObject extends WeakBase
             throw new com.sun.star.lang.IllegalArgumentException();
     }
 
-    // -------------------------------------------------------------
+
     public void storeToEntry(com.sun.star.embed.XStorage xStorage, String aEntryName, com.sun.star.beans.PropertyValue[] aMediaArgs, com.sun.star.beans.PropertyValue[] aObjectArgs) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.io.IOException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -464,7 +464,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
     }
 
-    // -------------------------------------------------------------
+
     public void storeAsEntry(com.sun.star.embed.XStorage xStorage, String aEntryName, com.sun.star.beans.PropertyValue[] aMediaArgs, com.sun.star.beans.PropertyValue[] aObjectArgs) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.io.IOException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -499,7 +499,7 @@ public final class OwnEmbeddedObject extends WeakBase
 
     }
 
-    // -------------------------------------------------------------
+
     public void saveCompleted(boolean bUseNew) throws com.sun.star.embed.WrongStateException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -536,7 +536,7 @@ public final class OwnEmbeddedObject extends WeakBase
         m_bWaitSaveCompleted = false;
     }
 
-    // -------------------------------------------------------------
+
     public boolean hasEntry() throws com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -551,7 +551,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return false;
     }
 
-    // -------------------------------------------------------------
+
     public String getEntryName() throws com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -564,7 +564,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.embed.XVisualObject:
-    // -------------------------------------------------------------
+
     public void setVisualAreaSize(long nAspect, com.sun.star.awt.Size aSize) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -587,7 +587,7 @@ public final class OwnEmbeddedObject extends WeakBase
         m_aEditorFrame.setAppSize( m_aObjSize );
     }
 
-    // -------------------------------------------------------------
+
     public com.sun.star.awt.Size getVisualAreaSize(long nAspect) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -608,7 +608,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return new com.sun.star.awt.Size( (int)m_aObjSize.getWidth(), (int)m_aObjSize.getHeight() );
     }
 
-    // -------------------------------------------------------------
+
     public VisualRepresentation getPreferredVisualRepresentation(long nAspect) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -631,7 +631,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return aVisRep;
     }
 
-    // -------------------------------------------------------------
+
     public int getMapUnit(long nAspect) throws com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -648,7 +648,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.embed.XClassifiedObject:
-    // -------------------------------------------------------------
+
     public byte[] getClassID()
     {
         if ( m_bDisposed )
@@ -657,7 +657,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return m_aClassID;
     }
 
-    // -------------------------------------------------------------
+
     public String getClassName()
     {
         if ( m_bDisposed )
@@ -666,14 +666,14 @@ public final class OwnEmbeddedObject extends WeakBase
         return new String();
     }
 
-    // -------------------------------------------------------------
+
     public void setClassInfo(byte[] aClassID, String sClassName) throws com.sun.star.lang.NoSupportException
     {
         throw new com.sun.star.lang.NoSupportException();
     }
 
     // com.sun.star.embed.XComponentSupplier:
-    // -------------------------------------------------------------
+
     public com.sun.star.util.XCloseable getComponent()
     {
         if ( m_bDisposed )
@@ -684,7 +684,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.embed.XStateChangeBroadcaster:
-    // -------------------------------------------------------------
+
     public void addStateChangeListener(com.sun.star.embed.XStateChangeListener xListener)
     {
         if ( m_bDisposed )
@@ -693,7 +693,7 @@ public final class OwnEmbeddedObject extends WeakBase
         GetListeners().add( xListener );
     }
 
-    // -------------------------------------------------------------
+
     public void removeStateChangeListener(com.sun.star.embed.XStateChangeListener xListener)
     {
         if ( m_bDisposed )
@@ -704,7 +704,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.document.XEventBroadcaster:
-    // -------------------------------------------------------------
+
     public void addEventListener(com.sun.star.document.XEventListener xListener)
     {
         if ( m_bDisposed )
@@ -713,7 +713,7 @@ public final class OwnEmbeddedObject extends WeakBase
         GetListeners().add( xListener );
     }
 
-    // -------------------------------------------------------------
+
     public void removeEventListener(com.sun.star.document.XEventListener xListener)
     {
         if ( m_bDisposed )
@@ -724,7 +724,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.util.XCloseBroadcaster:
-    // -------------------------------------------------------------
+
     public void addCloseListener(com.sun.star.util.XCloseListener xListener)
     {
         if ( m_bDisposed )
@@ -733,7 +733,7 @@ public final class OwnEmbeddedObject extends WeakBase
         GetListeners().add( xListener );
     }
 
-    // -------------------------------------------------------------
+
     public void removeCloseListener(com.sun.star.util.XCloseListener xListener)
     {
         if ( m_bDisposed )
@@ -744,7 +744,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.util.XCloseable:
-    // -------------------------------------------------------------
+
     public void close(boolean bDeliverOwnership) throws com.sun.star.util.CloseVetoException
     {
         if ( m_bDisposed )
@@ -813,7 +813,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
     // com.sun.star.embed.XEmbeddedObject:
-    // -------------------------------------------------------------
+
     public void changeState(int nNewState) throws com.sun.star.embed.UnreachableStateException, com.sun.star.embed.WrongStateException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -928,7 +928,7 @@ public final class OwnEmbeddedObject extends WeakBase
         StateChangeNotification( true, nOldState, nNewState );
     }
 
-    // -------------------------------------------------------------
+
     public int[] getReachableStates() throws com.sun.star.embed.NeedsRunningStateException, com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -945,7 +945,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return pStates;
     }
 
-    // -------------------------------------------------------------
+
     public int getCurrentState() throws com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -957,7 +957,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return m_nObjectState;
     }
 
-    // -------------------------------------------------------------
+
     public void doVerb(int nVerbID) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.embed.UnreachableStateException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -974,7 +974,7 @@ public final class OwnEmbeddedObject extends WeakBase
             changeState( com.sun.star.embed.EmbedStates.RUNNING );
     }
 
-    // -------------------------------------------------------------
+
     public com.sun.star.embed.VerbDescriptor[] getSupportedVerbs() throws com.sun.star.embed.NeedsRunningStateException, com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -1058,7 +1058,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return new com.sun.star.embed.VerbDescriptor[0];
     }
 
-    // -------------------------------------------------------------
+
     public void setClientSite(com.sun.star.embed.XEmbeddedClient xClient) throws com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -1070,7 +1070,7 @@ public final class OwnEmbeddedObject extends WeakBase
         m_xClient = xClient;
     }
 
-    // -------------------------------------------------------------
+
     public com.sun.star.embed.XEmbeddedClient getClientSite() throws com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -1082,7 +1082,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return m_xClient;
     }
 
-    // -------------------------------------------------------------
+
     public void update() throws com.sun.star.embed.WrongStateException, com.sun.star.uno.Exception
     {
         if ( m_bDisposed )
@@ -1094,7 +1094,7 @@ public final class OwnEmbeddedObject extends WeakBase
         // not implemented
     }
 
-    // -------------------------------------------------------------
+
     public void setUpdateMode(int nMode) throws com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -1106,7 +1106,7 @@ public final class OwnEmbeddedObject extends WeakBase
         // not implemented
     }
 
-    // -------------------------------------------------------------
+
     public long getStatus(long nAspect) throws com.sun.star.embed.WrongStateException
     {
         if ( m_bDisposed )
@@ -1118,7 +1118,7 @@ public final class OwnEmbeddedObject extends WeakBase
         return 0;
     }
 
-    // -------------------------------------------------------------
+
     public void setContainerName(String sName)
     {
         if ( m_bDisposed )

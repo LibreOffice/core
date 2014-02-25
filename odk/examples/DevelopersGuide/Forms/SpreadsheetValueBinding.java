@@ -46,7 +46,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
         final short exchangeRow = (short)1;     // 2
         final Integer backColor = new Integer( 0x00E0E0E0 );
 
-        // ----------------------------------------------------------------------
+
         // a numeric control
         XPropertySet numericControl = m_formLayer.insertControlLine( "NumericField",
             "enter a value", "", 30 );
@@ -59,7 +59,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
         // bind the control model to cell B2
         implBind( numericControl, document.createCellBinding( sheet, exchangeColumn, exchangeRow ) );
 
-        // ----------------------------------------------------------------------
+
         // insert a list box
         XPropertySet listBox = m_formLayer.insertControlLine( "ListBox",
             "select  an entry", "", 2, 40, 20 );
@@ -81,7 +81,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
         // and also put the list selection index into cell B2
         implBind( listBox, document.createListIndexBinding( sheet, exchangeColumn, exchangeRow ) );
 
-        // ----------------------------------------------------------------------
+
         // fill the cells which we just bound the listbox to
         XCellRange exchangeSheet = document.getSheet( listSourceSheet );
         String[] listContent = new String[] { "first", "second", "third", "forth", "fivth" };

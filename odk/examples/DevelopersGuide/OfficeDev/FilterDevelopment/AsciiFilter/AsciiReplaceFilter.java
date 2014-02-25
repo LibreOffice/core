@@ -85,7 +85,7 @@ public class AsciiReplaceFilter
         public static final int    FILTERPROC_BREAK         = 1;
         public static final int    FILTERPROC_STOPPED       = 2;
 
-        //______________________________
+
         // member
 
 
@@ -102,7 +102,7 @@ public class AsciiReplaceFilter
         // we need a flag to cancel any running filter operation
         private int m_nFilterProcState;
 
-        //______________________________
+
         // native interface
        /**
         * special debug helper to get an idea how expensive
@@ -122,7 +122,7 @@ public class AsciiReplaceFilter
             m_nLast = nNow;
         }
 
-        //______________________________
+
         // native interface
         /**
         * The constructor to initialize every instance
@@ -154,7 +154,7 @@ public class AsciiReplaceFilter
             m_nStart = m_nLast;
         }
 
-        //______________________________
+
         // interface XInitialization
         /**
         * used for initializing after creation
@@ -210,7 +210,7 @@ public class AsciiReplaceFilter
             measure("} initialize");
         }
 
-        //______________________________
+
         // interface XNamed
         /**
         * For external user of us we must provide our internal filter name
@@ -238,7 +238,7 @@ public class AsciiReplaceFilter
         {
         }
 
-        //______________________________
+
         // interface XImporter
         /**
         * This interface is used to tell us: "you will be used for importing a document".
@@ -274,7 +274,7 @@ public class AsciiReplaceFilter
             measure("} setTargetDocument");
         }
 
-        //______________________________
+
         // interface XExporter
         /**
         * This interface is used to tell us: "you will be used for exporting a document".
@@ -311,7 +311,7 @@ public class AsciiReplaceFilter
         }
 
 
-        //______________________________
+
         // interface XFilter
         /**
         * Implements the real filter method. We detect if it must be an import or an export.
@@ -387,7 +387,7 @@ public class AsciiReplaceFilter
             measure("} cancel");
         }
 
-        //______________________________
+
         // private helper
         /**
          * This helper function imports a simple ascii text file into
@@ -630,7 +630,7 @@ public class AsciiReplaceFilter
         }
 
 
-        //______________________________
+
         // interface XServiceInfo
         /**
          * This method returns an array of all supported service names.

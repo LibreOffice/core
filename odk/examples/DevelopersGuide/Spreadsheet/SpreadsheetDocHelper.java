@@ -56,7 +56,7 @@ public class SpreadsheetDocHelper
 //    private com.sun.star.lang.XMultiServiceFactory  mxMSFactory;
     private com.sun.star.sheet.XSpreadsheetDocument mxDocument;
 
-// ________________________________________________________________
+
 
     public SpreadsheetDocHelper( String[] args )
     {
@@ -151,7 +151,7 @@ public class SpreadsheetDocHelper
         return xSheet;
     }
 
-// ________________________________________________________________
+
 // Methods to fill values into cells.
 
     /** Writes a double value into a spreadsheet.
@@ -249,7 +249,7 @@ public class SpreadsheetDocHelper
         xPropSet.setPropertyValue( "CharWeight", new Float( com.sun.star.awt.FontWeight.BOLD ) );
     }
 
-// ________________________________________________________________
+
 // Methods to create cell addresses and range addresses.
 
     /** Creates a com.sun.star.table.CellAddress and initializes it
@@ -277,7 +277,7 @@ public class SpreadsheetDocHelper
         return xAddr.getRangeAddress();
     }
 
-// ________________________________________________________________
+
 // Methods to convert cell addresses and range addresses to strings.
 
     /** Returns the text address of the cell.
@@ -345,7 +345,7 @@ public class SpreadsheetDocHelper
         return aStr;
     }
 
-// ________________________________________________________________
+
 
     // Connect to a running office that is accepting connections.
     private void connect()
@@ -384,5 +384,5 @@ public class SpreadsheetDocHelper
             com.sun.star.sheet.XSpreadsheetDocument.class, xComponent );
     }
 
-// ________________________________________________________________
+
 }

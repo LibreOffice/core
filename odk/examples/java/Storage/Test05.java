@@ -210,9 +210,9 @@ public class Test05 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // now check all the written and copied information
-            // ================================================
+
 
             pArgs[1] = new Integer( ElementModes.READ );
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
