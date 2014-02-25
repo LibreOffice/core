@@ -34,9 +34,9 @@
 
 #include "itemholder1.hxx"
 
-//_________________________________________________________________________________________________________________
+
 //  namespaces
-//_________________________________________________________________________________________________________________
+
 
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
@@ -100,9 +100,9 @@ using namespace ::com::sun::star::uno   ;
 
 #define CFG_READONLY_DEFAULT                        false
 
-//_________________________________________________________________________________________________________________
+
 //  private declarations!
-//_________________________________________________________________________________________________________________
+
 
 class SvtSecurityOptions_Impl : public ConfigItem
 {
@@ -123,7 +123,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         //  overloaded methods of baseclass
 
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      called for notify of configmanager
             @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
@@ -139,7 +139,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      write changes to configuration
             @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
@@ -174,7 +174,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         bool                SetOption       ( SvtSecurityOptions::EOption eOption, bool bValue  )       ;
         bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const ;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return list of key names of ouer configuration management which represent our module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
@@ -242,9 +242,9 @@ class SvtSecurityOptions_Impl : public ConfigItem
         void                    SetBasicMode    (           EBasicSecurityMode      eMode       )       ;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     :ConfigItem             ( ROOTNODE_SECURITY         )
     ,m_seqSecureURLs        ( DEFAULT_SECUREURL         )
@@ -306,9 +306,9 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     EnableNotification( seqNames );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtSecurityOptions_Impl::~SvtSecurityOptions_Impl()
 {
     if( IsModified() )
@@ -992,11 +992,11 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtSecurityOptions_Impl*    SvtSecurityOptions::m_pDataContainer    = NULL  ;
 sal_Int32                   SvtSecurityOptions::m_nRefCount         = 0     ;
 

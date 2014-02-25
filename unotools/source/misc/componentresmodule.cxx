@@ -23,14 +23,14 @@
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OComponentResModuleImpl
-    //====================================================================
+
     /** PIMPL-class for OComponentResourceModule
 
         not threadsafe!
@@ -95,9 +95,9 @@ namespace utl
         return m_pResources;
     }
 
-    //====================================================================
+
     //= OComponentResourceModule
-    //====================================================================
+
 
     OComponentResourceModule::OComponentResourceModule( const OString& _rResFilePrefix )
         :BaseClass()
@@ -130,8 +130,8 @@ namespace utl
         BaseClass::onLastClient();
     }
 
-//........................................................................
+
 } // namespace utl
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -65,7 +65,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
          SvtExtendedSecurityOptions_Impl();
         ~SvtExtendedSecurityOptions_Impl();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      called for notify of configmanager
             @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
@@ -81,7 +81,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      write changes to configuration
             @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
@@ -99,7 +99,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
         SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode();
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return list of key names of ouer configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
@@ -114,7 +114,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         static Sequence< OUString > GetPropertyNames();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Fills the hash map with all extensions known to be secure
             @descr      These methods fills the given hash map object with all extensions known to be secure.
 
@@ -136,9 +136,9 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
         ExtensionHashMap                                m_aExtensionHashMap;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_SECURITY         )
@@ -186,9 +186,9 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     EnableNotification( seqNotifyNames );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
 {
     // We must save our current values .. if user forget it!
@@ -198,17 +198,17 @@ SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtExtendedSecurityOptions_Impl::Notify( const Sequence< OUString >& )
 {
     // Not implemented
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtExtendedSecurityOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
@@ -230,17 +230,17 @@ void SvtExtendedSecurityOptions_Impl::Commit()
     PutProperties( seqNames, seqValues );
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::GetOpenHyperlinkMode()
 {
     return m_eOpenHyperlinkMode;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aHashMap )
 {
     // Get sequence with secure extensions from configuration
@@ -273,9 +273,9 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
     }
 }
 
-//*****************************************************************************************************************
+
 //  private method (currently not used)
-//*****************************************************************************************************************
+
 Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
 {
     // Build list of configuration key names.
@@ -289,17 +289,17 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtExtendedSecurityOptions_Impl*    SvtExtendedSecurityOptions::m_pDataContainer    = NULL  ;
 sal_Int32                           SvtExtendedSecurityOptions::m_nRefCount         = 0     ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -315,9 +315,9 @@ SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -333,9 +333,9 @@ SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpenHyperlinkMode()
 {
     MutexGuard aGuard( GetInitMutex() );
@@ -347,9 +347,9 @@ namespace
     class theExtendedSecurityOptionsMutex : public rtl::Static<osl::Mutex, theExtendedSecurityOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Mutex& SvtExtendedSecurityOptions::GetInitMutex()
 {
     return theExtendedSecurityOptionsMutex::get();

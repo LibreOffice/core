@@ -69,10 +69,10 @@ namespace {
     const char s_sThumbnail[] = "Thumbnail";
 }
 
-//*****************************************************************************************************************
+
 //  class SvtHistoryOptions_Impl
 //  redesigned
-//*****************************************************************************************************************
+
 class SvtHistoryOptions_Impl
 {
 public:
@@ -94,9 +94,9 @@ private:
     css::uno::Reference< css::container::XNameAccess > m_xCommonXCU;
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
 {
     try
@@ -124,17 +124,17 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
 {
 }
 
-//*****************************************************************************************************************
+
 //  public method
 //  Attention: We return the max. size of our internal lists - That is the capacity not the size!
-//*****************************************************************************************************************
+
 sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
 {
     css::uno::Reference< css::beans::XPropertySet >  xListAccess(m_xCommonXCU, css::uno::UNO_QUERY);
@@ -172,7 +172,7 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
     return nSize;
 }
 
-//*****************************************************************************************************************
+
 void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt32 nSize )
 {
     css::uno::Reference< css::container::XNameAccess >    xList;
@@ -230,10 +230,10 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
     }
 }
 
-//*****************************************************************************************************************
+
 //  public method
 //  Clear specified history list
-//*****************************************************************************************************************
+
 void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
 {
     css::uno::Reference< css::container::XNameAccess >    xListAccess;
@@ -302,10 +302,10 @@ static bool lcl_fileOpenable(const OUString &rURL)
         return false;
 }
 
-//*****************************************************************************************************************
+
 //  public method
 //  get a sequence list from the items
-//*****************************************************************************************************************
+
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryType eHistory )
 {
     impl_truncateList (eHistory, GetSize (eHistory));
@@ -403,10 +403,10 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
     return seqReturn;
 }
 
-//*****************************************************************************************************************
+
 //  public method
 //  implements a deque in XML
-//*****************************************************************************************************************
+
 void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail)
@@ -562,17 +562,17 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
     }
 }
 
-//*****************************************************************************************************************
+
 // initialize static member
 // DON'T DO IT IN YOUR HEADER!
 // see definition for further information
-//*****************************************************************************************************************
+
 SvtHistoryOptions_Impl*  SvtHistoryOptions::m_pDataContainer = NULL ;
 sal_Int32     SvtHistoryOptions::m_nRefCount  = 0  ;
 
-//*****************************************************************************************************************
+
 // constructor
-//*****************************************************************************************************************
+
 SvtHistoryOptions::SvtHistoryOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -588,9 +588,9 @@ SvtHistoryOptions::SvtHistoryOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 // destructor
-//*****************************************************************************************************************
+
 SvtHistoryOptions::~SvtHistoryOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -606,36 +606,36 @@ SvtHistoryOptions::~SvtHistoryOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 // public method
-//*****************************************************************************************************************
+
 sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetSize( eHistory );
 }
 
-//*****************************************************************************************************************
+
 // public method
-//*****************************************************************************************************************
+
 void SvtHistoryOptions::Clear( EHistoryType eHistory )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->Clear( eHistory );
 }
 
-//*****************************************************************************************************************
+
 // public method
-//*****************************************************************************************************************
+
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType eHistory ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetList( eHistory );
 }
 
-//*****************************************************************************************************************
+
 // public method
-//*****************************************************************************************************************
+
 void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail)
@@ -649,9 +649,9 @@ namespace
     class theHistoryOptionsMutex : public rtl::Static<osl::Mutex, theHistoryOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
+
 // private method
-//*****************************************************************************************************************
+
 Mutex& SvtHistoryOptions::GetOwnStaticMutex()
 {
     return theHistoryOptionsMutex::get();
