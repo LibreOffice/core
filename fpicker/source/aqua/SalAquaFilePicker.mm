@@ -396,7 +396,7 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
 
     ensureFilterHelper();
     m_pFilterHelper->appendFilter( aTitle, aFilter );
-    m_pControlHelper->setFilterControlNeeded(YES);
+    m_pControlHelper->setFilterControlNeeded(true);
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
@@ -443,7 +443,7 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
 
     ensureFilterHelper();
     m_pFilterHelper->appendFilterGroup(sGroupTitle, aFilters);
-    m_pControlHelper->setFilterControlNeeded(YES);
+    m_pControlHelper->setFilterControlNeeded(true);
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
