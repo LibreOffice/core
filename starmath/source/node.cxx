@@ -622,6 +622,8 @@ void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, 
         case NRECTANGLE:       out<<"SmRectangleNode"; break;
         case NVERTICAL_BRACE:  out<<"SmVerticalBraceNode"; break;
         case NMATHIDENT:       out<<"SmMathIdentifierNode"; break;
+        case NINTDYNSYMBOL:            out<<"SmDynIntegralSymbolNode"; break;
+        case NINTDYN:            out<<"SmDynIntegralNode"; break;
         default:
             out<<"Unknown Node";
     }
@@ -1114,6 +1116,53 @@ void SmRootNode::CreateTextFromNode(OUString &rText)
     if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
         rText += "} ";
 }
+
+/**************************************************************************/
+
+
+void SmDynIntegralNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
+{
+    SmNode  *pDynIntegralSym = Symbol(),
+           *pBody    = Body();
+    OSL_ENSURE(pDynIntegralSym, "Sm: NULL pointer");
+    OSL_ENSURE(pBody,    "Sm: NULL pointer");
+
+    pBody->Arrange(rDev, rFormat);
+
+    long  nHeight = pBody->GetHeight();
+    pDynIntegralSym->AdaptToY(rDev, nHeight);
+
+    pDynIntegralSym->Arrange(rDev, rFormat);
+
+    Point  aPos = pDynIntegralSym->AlignTo(*pBody, RP_LEFT, RHA_CENTER, RVA_BASELINE);
+    //! override calculated vertical position
+    aPos.Y()  = pDynIntegralSym->GetTop() + pBody->GetBottom() - pDynIntegralSym->GetBottom();
+    pDynIntegralSym->MoveTo(aPos);
+
+
+    // override its own rectangle with pBody's
+    SmRect::operator = (*pBody);
+    // extends this rectangle with the symbol's one
+    ExtendBy(*pDynIntegralSym, RCP_THIS);
+
+}
+
+
+void SmDynIntegralNode::CreateTextFromNode(OUString &rText)
+{
+
+    rText += "intd ";
+    SmNode *pBody = GetSubNode(1);
+
+    if (pBody->GetNumSubNodes() > 1)
+        rText += "{ ";
+
+    pBody->CreateTextFromNode(rText);
+
+    if (pBody->GetNumSubNodes() > 1)
+        rText += "} ";
+}
+
 
 
 /**************************************************************************/
@@ -2297,6 +2346,23 @@ void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 /**************************************************************************/
 
 
+void SmDynIntegralSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
+{
+    long nFactor = 12L;
+
+    // The new height equals (1 + nFactor) * oldHeight
+    // nFactor was chosen for keeping the integral sign from becoming too "fat".
+    SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / nFactor);
+
+    // keep the ratio
+    long nCurWidth = GetSize().Width();
+    SmMathSymbolNode::AdaptToX(rDev, nCurWidth + nCurWidth / nFactor);
+}
+
+
+/**************************************************************************/
+
+
 void SmRectangleNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong nWidth)
 {
     aToSize.Width() = nWidth;
@@ -3193,6 +3259,15 @@ void SmRootNode::Accept(SmVisitor* pVisitor) {
 }
 
 void SmRootSymbolNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmDynIntegralNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+
+void SmDynIntegralSymbolNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
 

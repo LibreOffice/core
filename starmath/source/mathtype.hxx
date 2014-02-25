@@ -197,7 +197,7 @@ private:
         tmANGLE,tmPAREN,tmBRACE,tmBRACK,tmBAR,tmDBAR,tmFLOOR,tmCEILING,
         tmLBLB,tmRBRB,tmRBLB,tmLBRP,tmLPRB,tmROOT,tmFRACT,tmSCRIPT,tmUBAR,
         tmOBAR,tmLARROW,tmRARROW,tmBARROW,tmSINT,tmDINT,tmTINT,tmSSINT,
-        tmDSINT,tmTSINT,tmUHBRACE,tmLHBRACE,tmSUM
+        tmDSINT,tmTSINT,tmUHBRACE,tmLHBRACE,tmSUM,tmTINTD
     };
 public:
     static sal_Bool LookupChar(sal_Unicode nChar,OUString &rRet,
