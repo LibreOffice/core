@@ -281,7 +281,11 @@ public:
                ::com::sun::star::uno::RuntimeException,
                std::exception);
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName )
+        throw (::com::sun::star::beans::UnknownPropertyException,
+               ::com::sun::star::lang::WrappedTargetException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
