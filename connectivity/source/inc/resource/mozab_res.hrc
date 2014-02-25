@@ -22,9 +22,9 @@
 
 #include "resource/conn_shared_res.hrc"
 
-// ============================================================================
+
 // = the mozab driver's resource strings
-// ============================================================================
+
 
 #define STR_MOZILLA_ADDRESSBOOKS            ( STR_MOZAB_BASE +    0 )
 #define STR_THUNDERBIRD_ADDRESSBOOKS        ( STR_MOZAB_BASE +    1 )

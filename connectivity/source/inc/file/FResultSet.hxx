@@ -306,7 +306,7 @@ namespace connectivity
             virtual sal_Bool deletedVisible() const;
             virtual sal_Bool isRowDeleted() const;
         };
-        // -------------------------------------------------------------------------
+
         inline sal_Int32 OResultSet::mapColumn(sal_Int32 column)
         {
             sal_Int32   map = column;

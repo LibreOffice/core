@@ -27,9 +27,9 @@
 #include "resource/kab_res.hrc"
 #include "resource/hsqldb_res.hrc"
 
-// ============================================================================
+
 // = the mozab driver's resource strings
-// ============================================================================
+
 
 String STR_MOZILLA_ADDRESSBOOKS
 {
@@ -195,9 +195,9 @@ String STR_COULD_NOT_CONNECT_LDAP
     Text [ en-US ] = "The connection to the LDAP server could not be established.";
 };
 
-// ============================================================================
+
 // = common strings
-// ============================================================================
+
 String STR_NO_CONNECTION_GIVEN
 {
     Text [ en-US ] = "It doesn't exist a connection to the database.";
@@ -321,9 +321,9 @@ String STR_LOAD_FILE_ERROR_MESSAGE
     Text [ en-US ] = "The attempt to load the file resulted in the following error message ($exception_type$):\n\n$error_message$";
 };
 
-// ============================================================================
+
 // = the ado driver's resource strings
-// ============================================================================
+
 String STR_TYPE_NOT_CONVERT
 {
     Text [ en-US ] = "The type could not be converted.";

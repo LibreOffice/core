@@ -41,10 +41,10 @@
 #include "connectivity/ParameterCont.hxx"
 #include <rtl/ustrbuf.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
@@ -59,9 +59,9 @@ namespace dbtools
     using namespace ::comphelper;
     using namespace ::connectivity;
 
-    //====================================================================
+
     //= ParameterManager
-    //====================================================================
+
 
     ParameterManager::ParameterManager( ::osl::Mutex& _rMutex, const Reference< XComponentContext >& _rxContext )
         :m_rMutex             ( _rMutex )
@@ -1092,17 +1092,17 @@ namespace dbtools
             m_xInnerParamUpdate->clearParameters( );
     }
 
-    //====================================================================
+
     //= OParameterContinuation
-    //====================================================================
+
 
     void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw( RuntimeException, std::exception )
     {
         m_aValues = _rValues;
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

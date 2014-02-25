@@ -32,10 +32,10 @@
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/CommonTools.hxx"
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     class OMetaConnection;
 
@@ -107,9 +107,9 @@ namespace connectivity
         };
     }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 #endif // CONNECTIVITY_MYSQL_DRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

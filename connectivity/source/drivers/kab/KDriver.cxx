@@ -42,9 +42,9 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::frame;
 using namespace connectivity::kab;
 
-// =======================================================================
+
 // = KabImplModule
-// =======================================================================
+
 
 KabImplModule::KabImplModule( const Reference< XComponentContext >& _rxContext )
     :m_xContext(_rxContext)
@@ -91,7 +91,7 @@ namespace
         _rFunction = NULL;
         if ( _rModule )
         {
-            //
+
             const OUString sSymbolName = OUString::createFromAscii( _pAsciiSymbolName );
             _rFunction = (FUNCTION)( osl_getSymbol( _rModule, sSymbolName.pData ) );
 
@@ -299,9 +299,9 @@ void KabImplModule::shutdown()
     impl_unloadModule();
 }
 
-// =======================================================================
+
 // = KabDriver
-// =======================================================================
+
 KabDriver::KabDriver(
     const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : KDriver_BASE(m_aMutex),

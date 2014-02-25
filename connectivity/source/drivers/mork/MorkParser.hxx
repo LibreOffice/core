@@ -83,32 +83,26 @@ public:
 
     MorkParser( int defaultScope = 0x80 );
 
-    ///
     /// Open and parse mork file
 
     bool open( const std::string &path );
 
-    ///
     /// Return error status
 
     MorkErrors error();
 
-    ///
     /// Returns all tables of specified scope
 
     MorkTableMap *getTables( int tableScope );
 
-    ///
     /// Rerturns all rows under specified scope
 
     MorkRowMap *getRows( int rowScope, RowScopeMap *table );
 
-    ///
     /// Return value of specified value oid
 
     std::string &getValue( int oid );
 
-    ///
     /// Return value of specified column oid
 
     std::string &getColumn( int oid );

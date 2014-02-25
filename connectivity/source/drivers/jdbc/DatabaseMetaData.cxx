@@ -39,9 +39,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-//**************************************************************
+
 //************ Class: java.sql.DatabaseMetaData
-//**************************************************************
+
 
 jclass java_sql_DatabaseMetaData::theClass              = 0;
 

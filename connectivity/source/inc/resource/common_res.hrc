@@ -22,9 +22,9 @@
 
 #include "resource/conn_shared_res.hrc"
 
-// ============================================================================
+
 // = common strings
-// ============================================================================
+
 
 #define STR_STRING_LENGTH_EXCEEDED              ( STR_COMMON_BASE +  1 )
 #define STR_CANNOT_CONVERT_STRING               ( STR_COMMON_BASE +  2 )

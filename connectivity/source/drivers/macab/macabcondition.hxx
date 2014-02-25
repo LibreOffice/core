@@ -30,7 +30,7 @@ namespace connectivity
 {
     namespace macab
     {
-// -----------------------------------------------------------------------------
+
 class MacabCondition
 {
     public:
@@ -39,7 +39,7 @@ class MacabCondition
         virtual sal_Bool isAlwaysFalse() const = 0;
         virtual sal_Bool eval(const MacabRecord *aRecord) const = 0;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionConstant : public MacabCondition
 {
     protected:
@@ -51,7 +51,7 @@ class MacabConditionConstant : public MacabCondition
         virtual sal_Bool isAlwaysFalse() const;
         virtual sal_Bool eval(const MacabRecord *aRecord) const;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionColumn : public MacabCondition
 {
     protected:
@@ -64,7 +64,7 @@ class MacabConditionColumn : public MacabCondition
         virtual sal_Bool isAlwaysTrue() const;
         virtual sal_Bool isAlwaysFalse() const;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionNull : public MacabConditionColumn
 {
     public:
@@ -73,7 +73,7 @@ class MacabConditionNull : public MacabConditionColumn
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const MacabRecord *aRecord) const;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionNotNull : public MacabConditionColumn
 {
     public:
@@ -82,7 +82,7 @@ class MacabConditionNotNull : public MacabConditionColumn
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const MacabRecord *aRecord) const;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionCompare : public MacabConditionColumn
 {
     protected:
@@ -94,7 +94,7 @@ class MacabConditionCompare : public MacabConditionColumn
             const OUString &sColumnName,
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionEqual : public MacabConditionCompare
 {
     public:
@@ -104,7 +104,7 @@ class MacabConditionEqual : public MacabConditionCompare
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const MacabRecord *aRecord) const;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionDifferent : public MacabConditionCompare
 {
     public:
@@ -114,7 +114,7 @@ class MacabConditionDifferent : public MacabConditionCompare
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const MacabRecord *aRecord) const;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionSimilar : public MacabConditionCompare
 {
     public:
@@ -124,7 +124,7 @@ class MacabConditionSimilar : public MacabConditionCompare
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const MacabRecord *aRecord) const;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionBoolean : public MacabCondition
 {
     protected:
@@ -134,7 +134,7 @@ class MacabConditionBoolean : public MacabCondition
         MacabConditionBoolean(MacabCondition *pLeft, MacabCondition *pRight);
         virtual ~MacabConditionBoolean();
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionOr : public MacabConditionBoolean
 {
     public:
@@ -143,7 +143,7 @@ class MacabConditionOr : public MacabConditionBoolean
         virtual sal_Bool isAlwaysFalse() const;
         virtual sal_Bool eval(const MacabRecord *aRecord) const;
 };
-// -----------------------------------------------------------------------------
+
 class MacabConditionAnd : public MacabConditionBoolean
 {
     public:
@@ -152,7 +152,7 @@ class MacabConditionAnd : public MacabConditionBoolean
         virtual sal_Bool isAlwaysFalse() const;
         virtual sal_Bool eval(const MacabRecord *aRecord) const;
 };
-// -----------------------------------------------------------------------------
+
     }
 }
 

@@ -26,9 +26,9 @@
 
 namespace connectivity
 {
-    //**************************************************************
+
     //************ Class: java.sql.ResultSetMetaData
-    //**************************************************************
+
     class java_sql_Connection;
     class java_sql_ResultSetMetaData :  public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>,
                                         public java_lang_Object

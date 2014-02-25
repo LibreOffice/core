@@ -59,10 +59,10 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
     using namespace hsqldb;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -86,9 +86,9 @@ namespace connectivity
 
 
 
-    //====================================================================
+
     //= ODriverDelegator
-    //====================================================================
+
 
     ODriverDelegator::ODriverDelegator(const Reference< XComponentContext >& _rxContext)
         : ODriverDelegator_BASE(m_aMutex)
@@ -689,7 +689,7 @@ namespace connectivity
 
     namespace
     {
-        //..............................................................
+
         const sal_Char* lcl_getCollationForLocale( const OUString& _rLocaleString, bool _bAcceptCountryMismatch = false )
         {
             static const sal_Char* pTranslations[] =
@@ -824,17 +824,17 @@ namespace connectivity
             return "Latin1_General";
         }
 
-        //..............................................................
+
         OUString lcl_getSystemLocale( const Reference< XComponentContext >& _rxContext )
         {
             OUString sLocaleString = "en-US";
             try
             {
-                //.........................................................
+
                 Reference< XMultiServiceFactory > xConfigProvider(
                     com::sun::star::configuration::theDefaultProvider::get( _rxContext ) );
 
-                //.........................................................
+
                 // arguments for creating the config access
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
@@ -848,7 +848,7 @@ namespace connectivity
                     makeAny( (sal_Int32)-1 ), PropertyState_DIRECT_VALUE
                 );
 
-                //.........................................................
+
                 // create the access
                 Reference< XPropertySet > xNode(
                     xConfigProvider->createInstanceWithArguments(
@@ -857,7 +857,7 @@ namespace connectivity
                     UNO_QUERY );
                 OSL_ENSURE( xNode.is(), "lcl_getSystemLocale: invalid access returned (should throw an exception instead)!" );
 
-                //.........................................................
+
                 // ask for the system locale setting
                 if ( xNode.is() )
                     xNode->getPropertyValue("ooSetupSystemLocale") >>= sLocaleString;
@@ -900,8 +900,8 @@ namespace connectivity
 
 
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,9 +23,9 @@
 
 namespace connectivity
 {
-    //**************************************************************
+
     //************ Class: java.lang.Throwable
-    //**************************************************************
+
     class java_lang_Throwable : public java_lang_Object
     {
     protected:

@@ -208,7 +208,7 @@ sal_Int32 SAL_CALL MozabDriver::getMinorVersion(  ) throw(RuntimeException)
 EDriverType MozabDriver::impl_classifyURL( const OUString& url )
 {
     // Skip 'sdbc:mozab: part of URL
-    //
+
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     OUString aAddrbookURI(url.copy(nLen+1));

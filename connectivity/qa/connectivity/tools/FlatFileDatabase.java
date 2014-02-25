@@ -29,7 +29,7 @@ import java.io.File;
 
 class FlatFileDatabase extends AbstractDatabase
 {
-    // --------------------------------------------------------------------------------------------------------
+
     protected FlatFileDatabase( final XMultiServiceFactory i_orb, final String i_urlSubScheme ) throws Exception
     {
         super(i_orb);
@@ -37,7 +37,7 @@ class FlatFileDatabase extends AbstractDatabase
         createDBDocument();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     protected FlatFileDatabase(final XMultiServiceFactory i_orb, final String i_existingDocumentURL,
         final String i_urlSubScheme ) throws Exception
     {

@@ -108,7 +108,7 @@ public class TestCacheSize {
     // if the extra table needs to be created and filled up
     boolean multikeytable = false;
 
-    //
+
     String     user;
     String     password;
     XStatement  sStatement;

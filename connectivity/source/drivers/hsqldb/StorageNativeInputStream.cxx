@@ -272,7 +272,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
         // Casting bytesRead to an int is okay, since the user can
         // only pass in an integer length to read, so the bytesRead
         // must <= len.
-        //
+
         if (nBytesRead <= 0) {
 #ifdef HSQLDB_DBG
             aOpLog.logReturn( (jint)-1 );

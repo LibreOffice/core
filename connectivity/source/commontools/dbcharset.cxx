@@ -22,14 +22,14 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
 
-    //=========================================================================
+
+
     //= OCharsetMap
-    //=========================================================================
+
 
     OCharsetMap::OCharsetMap()
     {
@@ -128,9 +128,9 @@ namespace dbtools
         return CharsetIterator( this, m_aEncodings.end() );
     }
 
-    //=========================================================================
+
     //= CharsetIteratorDerefHelper
-    //=========================================================================
+
 
     CharsetIteratorDerefHelper::CharsetIteratorDerefHelper( const CharsetIteratorDerefHelper& _rSource )
         :m_eEncoding( _rSource.m_eEncoding )
@@ -145,9 +145,9 @@ namespace dbtools
     {
     }
 
-    //=========================================================================
+
     //= OCharsetMap::CharsetIterator
-    //=========================================================================
+
 
     OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos )
         :m_pContainer( _pContainer )
@@ -210,8 +210,8 @@ namespace dbtools
         return ( lhs.m_pContainer == rhs.m_pContainer ) && ( lhs.m_aPos == rhs.m_aPos );
     }
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

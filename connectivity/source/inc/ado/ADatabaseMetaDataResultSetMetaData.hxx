@@ -31,9 +31,9 @@ namespace connectivity
 {
     namespace ado
     {
-        //**************************************************************
+
         //************ Class: ResultSetMetaData
-        //**************************************************************
+
                 typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
 
         class ODatabaseMetaDataResultSetMetaData :  public  ODatabaseMetaResultSetMetaData_BASE

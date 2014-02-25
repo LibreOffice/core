@@ -39,7 +39,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
         m_orb = orb;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public AbstractDatabase(final XMultiServiceFactory orb, final String _existingDocumentURL ) throws Exception
     {
         m_orb = orb;
@@ -153,7 +153,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
         return m_orb;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     final protected void createDBDocument(final String _docURL) throws Exception
     {
         m_databaseDocumentFile = _docURL;

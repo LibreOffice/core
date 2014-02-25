@@ -27,9 +27,9 @@ namespace connectivity
 {
     namespace kab
     {
-        // ===============================================================
+
         // = KDEInit
-        // ===============================================================
+
         class KDEInit
         {
         private:
@@ -94,7 +94,7 @@ namespace connectivity
     }
 }
 
-// =======================================================================
+
 namespace
 {
     double normalizeVersion( unsigned int major, unsigned int minor )

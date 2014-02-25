@@ -30,7 +30,7 @@ namespace connectivity
             MDatabaseMetaDataHelper();
             ~MDatabaseMetaDataHelper();
 
-            //
+
             sal_Bool getTableStrings( OConnection*                        _pCon,
                                       ::std::vector< OUString >&   _rStrings);
 

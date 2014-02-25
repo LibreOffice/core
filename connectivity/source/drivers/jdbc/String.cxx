@@ -20,9 +20,9 @@
 #include "java/lang/String.hxx"
 #include "java/tools.hxx"
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.lang.String
-//**************************************************************
+
 
 jclass java_lang_String::theClass = 0;
 

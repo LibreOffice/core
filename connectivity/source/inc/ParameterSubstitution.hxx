@@ -61,9 +61,9 @@ namespace connectivity
         virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception);
     };
-// ==================================
+
 } // connectivity
-// ==================================
+
 
 #endif
 

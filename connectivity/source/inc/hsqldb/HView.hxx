@@ -27,14 +27,14 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-//........................................................................
+
 namespace connectivity { namespace hsqldb
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= HView
-    //====================================================================
+
     typedef ::connectivity::sdbcx::OView                                HView_Base;
     typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XAlterView >  HView_IBASE;
     class HView :public HView_Base
@@ -80,9 +80,9 @@ namespace connectivity { namespace hsqldb
         using HView_Base::getFastPropertyValue;
     };
 
-//........................................................................
+
 } } // namespace connectivity::hsqldb
-//........................................................................
+
 
 #endif // CONNECTIVITY_HVIEW_HXX
 

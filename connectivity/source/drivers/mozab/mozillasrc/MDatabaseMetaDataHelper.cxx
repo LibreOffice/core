@@ -183,9 +183,9 @@ static nsresult insertPABDescription()
     }
     return rv;
 }
-//
+
 // nsAbDirectoryDataSource
-//
+
 #define NS_RDF_CONTRACTID                           "@mozilla.org/rdf"
 #define NS_RDF_DATASOURCE_CONTRACTID                NS_RDF_CONTRACTID "/datasource;1"
 #define NS_RDF_DATASOURCE_CONTRACTID_PREFIX NS_RDF_DATASOURCE_CONTRACTID "?name="

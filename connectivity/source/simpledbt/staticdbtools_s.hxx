@@ -23,14 +23,14 @@
 #include <connectivity/virtualdbtools.hxx>
 #include "refbase.hxx"
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //================================================================
+
+
     //= ODataAccessStaticTools
-    //================================================================
+
     class ODataAccessStaticTools
             :public simple::IDataAccessTypeConversion
             ,public simple::IDataAccessTools
@@ -40,15 +40,15 @@ namespace connectivity
         ODataAccessStaticTools();
 
         // IDataAccessTypeConversion
-        // ------------------------------------------------
+
         virtual ::com::sun::star::util::Date getStandardDate() const;
 
-        // ------------------------------------------------
+
         virtual double getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _rxVariant,
             const ::com::sun::star::util::Date& rNullDate ) const;
 
-        // ------------------------------------------------
+
         virtual OUString getFormattedValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
@@ -56,7 +56,7 @@ namespace connectivity
             sal_Int32 _nKey,
             sal_Int16 _nKeyType) const;
 
-        // ------------------------------------------------
+
         virtual OUString getFormattedValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& _rxFormatter,
@@ -65,7 +65,7 @@ namespace connectivity
         ) const;
 
         // IDataAccessTools
-        // ------------------------------------------------
+
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
             const OUString& _rDataSourceName,
             const OUString& _rUser,
@@ -73,7 +73,7 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
         ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
-        // ------------------------------------------------
+
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
@@ -82,38 +82,38 @@ namespace connectivity
                             , ::com::sun::star::lang::WrappedTargetException
                             , ::com::sun::star::uno::RuntimeException ) );
 
-        // ------------------------------------------------
+
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
                 const SAL_THROW ( (::com::sun::star::uno::RuntimeException) );
 
-        // ------------------------------------------------
+
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
             sal_Bool _bAllowDefault
         ) const;
 
-        // ------------------------------------------------
+
         virtual sal_Int32  getDefaultNumberFormat(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _rxTypes,
             const ::com::sun::star::lang::Locale& _rLocale
         ) const;
 
-        // ------------------------------------------------
+
         virtual void TransferFormComponentProperties(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxOld,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxNew,
             const ::com::sun::star::lang::Locale& _rLocale
         ) const;
 
-        // ------------------------------------------------
+
         virtual OUString quoteName(
             const OUString& _rQuote,
             const OUString& _rName
         ) const;
 
-        // ------------------------------------------------
+
         virtual OUString composeTableNameForSelect(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const OUString& _rCatalog,
@@ -121,13 +121,13 @@ namespace connectivity
             const OUString& _rName
         ) const;
 
-        // ------------------------------------------------
+
         virtual OUString composeTableNameForSelect(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
         ) const;
 
-        // ------------------------------------------------
+
         virtual ::com::sun::star::sdb::SQLContext prependContextInfo(
             ::com::sun::star::sdbc::SQLException& _rException,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
@@ -135,31 +135,31 @@ namespace connectivity
             const OUString& _rContextDetails
         ) const;
 
-        // ------------------------------------------------
+
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
             const OUString& _rsRegisteredName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
         ) const;
 
-        // ------------------------------------------------
+
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
             @param      _rxCursorSet    the property set
         */
         virtual sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
-        // ------------------------------------------------
+
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
             @param      _rxCursorSet    the property set
         */
         virtual sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
-        // ------------------------------------------------
+
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
             @param      _rxCursorSet    the property set
         */
         virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
-        // ------------------------------------------------
+
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             getFieldsByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
@@ -169,7 +169,7 @@ namespace connectivity
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
 
-        // ------------------------------------------------
+
         virtual ::com::sun::star::uno::Sequence< OUString >
             getFieldNamesByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
@@ -178,21 +178,21 @@ namespace connectivity
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
 
-        // ------------------------------------------------
+
         virtual bool isEmbeddedInDatabase(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActualConnection
         );
 
         // disambiguate IReference
-        // ------------------------------------------------
+
         virtual oslInterlockedCount SAL_CALL acquire();
         virtual oslInterlockedCount SAL_CALL release();
     };
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 #endif // CONNECTIVITY_STATIC_DBTOOLS_SIMPLE_HXX
 

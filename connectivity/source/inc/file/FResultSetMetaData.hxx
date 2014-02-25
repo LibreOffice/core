@@ -31,9 +31,9 @@ namespace connectivity
     namespace file
     {
         class OFileTable;
-        //**************************************************************
+
         //************ Class: ResultSetMetaData
-        //**************************************************************
+
         typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OOO_DLLPUBLIC_FILE OResultSetMetaData :

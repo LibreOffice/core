@@ -19,9 +19,9 @@
 
 #include "java/lang/Boolean.hxx"
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.lang.Boolean
-//**************************************************************
+
 
 jclass java_lang_Boolean::theClass = 0;
 

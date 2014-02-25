@@ -19,9 +19,9 @@
 
 #include "resource/jdbc_log.hrc"
 
-// ============================================================================
+
 // = log messages for the JDBC driver
-// ============================================================================
+
 
 String STR_LOG_DRIVER_CONNECTING_URL
 {

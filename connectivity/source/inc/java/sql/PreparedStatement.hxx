@@ -28,9 +28,9 @@
 
 namespace connectivity
 {
-    //**************************************************************
+
     //************ Class: java.sql.PreparedStatement
-    //**************************************************************
+
 
     class java_sql_PreparedStatement :  public  OStatement_BASE2,
                                         public  ::com::sun::star::sdbc::XPreparedStatement,
