@@ -1314,9 +1314,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScEditFieldObj::getPropertySetI
 
 void SAL_CALL ScEditFieldObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+                       lang::IllegalArgumentException, lang::WrappedTargetException,
+                       uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (aPropertyName == SC_UNONAME_ANCHOR)
