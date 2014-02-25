@@ -79,11 +79,11 @@ using namespace ::rtl;
 // - Redo
 // - Bei Tracking-Cancel DefaultSelection wieder herstellen
 
-// =======================================================================
+
 
 static FncGetSpecialChars pImplFncGetSpecialChars = NULL;
 
-// =======================================================================
+
 
 #define EDIT_ALIGN_LEFT             1
 #define EDIT_ALIGN_CENTER           2
@@ -96,7 +96,7 @@ static FncGetSpecialChars pImplFncGetSpecialChars = NULL;
 #define EDIT_DELMODE_RESTOFWORD     12
 #define EDIT_DELMODE_RESTOFCONTENT  13
 
-// =======================================================================
+
 
 struct DDInfo
 {
@@ -119,7 +119,7 @@ struct DDInfo
     }
 };
 
-// =======================================================================
+
 
 struct Impl_IMEInfos
 {
@@ -175,7 +175,7 @@ void Impl_IMEInfos::DestroyAttribs()
     nLen = 0;
 }
 
-// =======================================================================
+
 
 Edit::Edit( WindowType nType ) :
     Control( nType )
@@ -894,7 +894,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
         DBG_ASSERT( rStr.getLength() == 1, "unexpected string length. User input is expected to providse 1 char only!" );
 
         // determine if input-sequence-checking should be applied or not
-        //
+
         uno::Reference < i18n::XBreakIterator > xBI( ImplGetBreakIterator(), UNO_QUERY );
         bool bIsInputSequenceChecking = rStr.getLength() == 1 &&
                 officecfg::Office::Common::I18N::CTL::CTLFont::get() &&

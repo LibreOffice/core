@@ -370,7 +370,7 @@ void SalGtkFilePicker::impl_controlStateChanged( FilePickerEvent aEvent )
     if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );
 }
 
-//=====================================================================
+
 
 struct FilterEntry
 {
@@ -406,7 +406,7 @@ public:
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
-//=====================================================================
+
 
 
 FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
@@ -506,7 +506,7 @@ dialog_remove_buttons( GtkDialog *pDialog )
 
 
 namespace {
-    //................................................................................
+
     struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
     {
     protected:
@@ -515,7 +515,7 @@ namespace {
     public:
         FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
-        //............................................................................
+
         bool operator () ( const FilterEntry& _rEntry )
         {
             bool bMatch;
@@ -596,7 +596,7 @@ void SalGtkFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter 
 
 
 
-//
+
 
 
 void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
@@ -617,7 +617,7 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUSt
 }
 
 
-//
+
 
 
 void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
@@ -643,7 +643,7 @@ void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
 }
 
 
-//
+
 
 
 void SalGtkFilePicker::updateCurrentFilterFromName(const gchar* filtername)
@@ -785,7 +785,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::Runtim
     uno::Sequence< OUString > aFiles = getSelectedFiles();
     /*
       The previous multiselection API design was completely broken
-      and unimplementable for some hetrogenous pseudo-URIs eg. search://
+      and unimplementable for some hetrogenous pseudo-URIs eg. search:
       Thus crop unconditionally to a single selection.
     */
     aFiles.realloc (1);

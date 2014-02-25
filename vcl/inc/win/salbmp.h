@@ -25,9 +25,9 @@
 #include <salbmp.hxx>
 #include <boost/shared_ptr.hpp>
 
-// --------------
+
 // - SalBitmap  -
-// --------------
+
 
 struct  BitmapBuffer;
 class   BitmapColor;
@@ -48,7 +48,7 @@ private:
     // the buffered evtl. used Gdiplus::Bitmap instance. It is managed by
     // GdiPlusBuffer. To make this safe, it is only handed out as shared
     // pointer; the GdiPlusBuffer may delete the local instance.
-    //
+
     // mpAssociatedAlpha holds the last WinSalBitmap used to construct an
     // evtl. buffered GdiPlusBmp. This is needed since the GdiPlusBmp is a single
     // instance and remembered only on the content-WinSalBitmap, not on the

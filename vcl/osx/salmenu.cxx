@@ -203,7 +203,7 @@ static void initAppMenu()
     }
 }
 
-// =======================================================================
+
 
 SalMenu* AquaSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
@@ -236,7 +236,7 @@ void AquaSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 }
 
 
-// =======================================================================
+
 
 
 /*
@@ -524,7 +524,7 @@ void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
 bool AquaSalMenu::VisibleMenuBar()
 {
     // Enable/disable experimental native menus code?
-    //
+
     // To disable native menus, set the environment variable AQUA_NATIVE_MENUS to FALSE
 
     static const char *pExperimental = getenv ("AQUA_NATIVE_MENUS");
@@ -904,7 +904,7 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
             );
 }
 
-// =======================================================================
+
 
 /*
  * SalMenuItem

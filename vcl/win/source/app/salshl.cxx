@@ -22,11 +22,11 @@
 #include <tools/debug.hxx>
 #include <win/saldata.hxx>
 
-// =======================================================================
+
 
 SalShlData aSalShlData;
 
-// =======================================================================
+
 
 extern "C"
 {
@@ -54,7 +54,7 @@ BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 
 }
 
-// =======================================================================
+
 
 HCURSOR ImplLoadSalCursor( int nId )
 {

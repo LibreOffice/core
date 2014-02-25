@@ -34,9 +34,9 @@ class   SalGraphics;
 class   ImplSalDDB;
 class   ImplSalBitmapCache;
 
-// -------------
+
 // - SalBitmap -
-// -------------
+
 
 class VCLPLUG_GEN_PUBLIC X11SalBitmap : public SalBitmap
 {
@@ -149,9 +149,9 @@ public:
     virtual bool                GetSystemData( BitmapSystemData& rData );
 };
 
-// --------------
+
 // - ImplSalDDB -
-// --------------
+
 
 class ImplSalDDB
 {
@@ -219,9 +219,9 @@ public:
                     ) const;
 };
 
-// ----------------------
+
 // - ImplSalBitmapCache -
-// ----------------------
+
 
 struct ImplBmpObj;
 

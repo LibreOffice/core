@@ -1714,7 +1714,7 @@ inline BitmapColor lcl_AlphaBlend( int nX,               int nY,
     const sal_uInt8 nDstAlpha = 255 - pAlphaW->GetPixelIndex( nY, nX );
 
     // Perform porter-duff compositing 'over' operation
-    //
+
     // Co = Cs + Cd*(1-As)
     // Ad = As + Ad*(1-As)
     nResAlpha = (int)nSrcAlpha + (int)nDstAlpha - (int)nDstAlpha*nSrcAlpha/255;
@@ -2270,14 +2270,14 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         //Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
         //ImplRegionInfo    aInfo;
         //sal_Bool            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
-        //
+
         //while( bRgnRect )
         //{
         //  Bitmap          aBandBmp( aPaint );
         //    const Rectangle aBandRect( Point( nWorkX, nWorkY ), Size( nWorkWidth, nWorkHeight ) );
         //    const Point     aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
         //    const Size      aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
-        //
+
         //  aBandBmp.Crop( aBandRect );
         //    ImplDrawBitmap( aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp, META_BMPSCALEPART_ACTION );
         //    bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
@@ -2374,12 +2374,12 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
         //Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
         //ImplRegionInfo    aInfo;
         //sal_Bool            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
-        //
+
         //while( bRgnRect )
         //{
         //    const Point aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
         //    const Size  aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
-        //
+
         //  DrawRect( Rectangle( aMapPt, aMapSz ) );
         //  bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
         //}

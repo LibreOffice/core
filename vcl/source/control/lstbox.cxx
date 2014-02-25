@@ -1572,7 +1572,7 @@ sal_uInt16 ListBox::GetMRUCount() const
     return mpImplLB->GetEntryList()->GetMRUCount();
 }
 
-// =======================================================================
+
 MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
     ListBox( WINDOW_MULTILISTBOX )
 {

@@ -27,14 +27,14 @@
 #include <map>
 #include <vector>
 
-// =======================================================================
+
 
 typedef ::std::map< sal_uLong, ImplAccelEntry* > ImplAccelMap;
 typedef ::std::vector< ImplAccelEntry* > ImplAccelList;
 
 #define ACCELENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
 
-// =======================================================================
+
 
 class ImplAccelData
 {
@@ -43,10 +43,10 @@ public:
     ImplAccelList maIdList; // Id-List
 };
 
-// =======================================================================
 
 
-// =======================================================================
+
+
 
 sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
                                sal_uInt16* pIndex = NULL )
@@ -155,7 +155,7 @@ static sal_uInt16 ImplAccelEntryGetFirstPos( ImplAccelList* pList, sal_uInt16 nI
     return nIndex;
 }
 
-// =======================================================================
+
 
 void Accelerator::ImplInit()
 {

@@ -576,7 +576,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             //also says that the MS DMPAPER_B4 is JIS, which makes most sense. And
             //matches our Excel filter's belief about the matching XlPaperSize
             //enumeration.
-            //
+
             //http://msdn.microsoft.com/en-us/library/ms776398(VS.85).aspx said
             ////"DMPAPER_B4     12  B4 (JIS) 250 x 354"
             //which is bogus as it's either JIS 257 x 364 or ISO 250 x 353

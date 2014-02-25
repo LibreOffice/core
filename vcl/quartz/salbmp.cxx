@@ -46,14 +46,14 @@ static const unsigned long k32BitRedColorMask   = 0x00ff0000;
 static const unsigned long k32BitGreenColorMask = 0x0000ff00;
 static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
-// =======================================================================
+
 
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
 }
 
-// =======================================================================
+
 
 QuartzSalBitmap::QuartzSalBitmap()
 : mxGraphicContext( NULL )
@@ -949,7 +949,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHe
     return xMask;
 }
 
-// =======================================================================
+
 
 /** QuartzSalBitmap::GetSystemData Get platform native image data from existing image
  *

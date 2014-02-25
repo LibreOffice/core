@@ -92,9 +92,9 @@ struct _XRegion
 };
 
 
-//
+
 // X11SalGraphics
-//
+
 
 
 GC
@@ -468,9 +468,9 @@ bool X11SalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rGetImplFont
 }
 
 
-//
+
 // SalGraphics
-//
+
 
 
 sal_uInt16 X11SalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )

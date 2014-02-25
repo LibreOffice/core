@@ -26,14 +26,14 @@
 
 #include <controldata.hxx>
 
-// =======================================================================
+
 
 #define GROUP_BORDER            12
 #define GROUP_TEXT_BORDER       2
 
 #define GROUP_VIEW_STYLE        (WB_3DLOOK | WB_NOLABEL)
 
-// =======================================================================
+
 
 void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
 {

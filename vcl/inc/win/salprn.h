@@ -22,9 +22,9 @@
 
 #include <salprn.hxx>
 
-// -----------------
+
 // - SalDriverData -
-// -----------------
+
 
 // WNT3
 #define SAL_DRIVERDATA_SYSSIGN              ((sal_uIntPtr)0x574E5433)
@@ -40,9 +40,9 @@ struct SalDriverData
 
 #pragma pack()
 
-// ---------------------
+
 // - WinSalInfoPrinter -
-// ---------------------
+
 
 class WinSalGraphics;
 
@@ -75,9 +75,9 @@ public:
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
-// -----------------
+
 // - WinSalPrinter -
-// -----------------
+
 
 class WinSalPrinter : public SalPrinter
 {

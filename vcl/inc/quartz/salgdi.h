@@ -121,10 +121,10 @@ private:
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 };
 
-// ------------------
+
 // - SystemFontList -
 // TODO: move into cross-platform headers
-// ------------------
+
 class SystemFontList
 {
 public:
@@ -147,9 +147,9 @@ private:
 
 #ifdef MACOSX
 
-// -------------------
+
 // - AquaSalGraphics -
-// -------------------
+
 class AquaSalGraphics : public SalGraphics
 {
     friend class CTLayout;

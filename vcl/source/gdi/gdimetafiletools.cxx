@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graphictools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helpers
 
 namespace
@@ -255,7 +255,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #i121267# Tooling to internally clip geometry against internal clip regions
 
 void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
@@ -446,9 +446,9 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
         {
             switch(nType)
             {
-                //
+
                 // pixel actions, just check on inside
-                //
+
                 case META_PIXEL_ACTION :
                 {
                     const MetaPixelAction* pA = static_cast< const MetaPixelAction* >(pAction);
@@ -479,9 +479,9 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                //
+
                 // geometry actions
-                //
+
                 case META_LINE_ACTION :
                 {
                     const MetaLineAction* pA = static_cast< const MetaLineAction* >(pAction);
@@ -705,10 +705,10 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                //
+
                 // bitmap actions, create BitmapEx with alpha channel derived
                 // from clipping
-                //
+
                 case META_BMPEX_ACTION :
                 {
                     const MetaBmpExAction* pA = static_cast< const MetaBmpExAction* >(pAction);
@@ -857,9 +857,9 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                //
+
                 // need to handle all those 'hacks' which hide data in comments
-                //
+
                 case META_COMMENT_ACTION :
                 {
                     const MetaCommentAction* pA = static_cast< const MetaCommentAction* >(pAction);
@@ -963,9 +963,9 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                //
+
                 // need to handle gradient fills (hopefully only unroated ones)
-                //
+
 
                 case META_GRADIENT_ACTION :
                 {
@@ -1007,7 +1007,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 }
 
                 // not (yet) supported actions
-                //
+
                 // META_NULL_ACTION
                 // META_TEXT_ACTION
                 // META_TEXTARRAY_ACTION
@@ -1064,7 +1064,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource)
 {

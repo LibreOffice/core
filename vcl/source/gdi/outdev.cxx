@@ -1740,14 +1740,14 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
 
     // #100127# LineInfo is not curve-safe, subdivide always
-    //
+
     // What shall this mean? It's wrong to subdivide here when the
     // polygon is a fat line. In that case, the painted geometry
     // WILL be much different.
     // I also have no idea how this could be related to the given ID
     // which reads 'consolidate boost versions' in the task description.
     // Removing.
-    //
+
     //if( aPoly.HasFlags() )
     //{
     //    aPoly = ImplSubdivideBezier( aPoly );

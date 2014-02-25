@@ -52,13 +52,13 @@ namespace vcl_sal {
         int                             nReplacements;
     };
 
-    // ====================================================================
-    //
+
+
     // CAUTION CAUTION CAUTION
     // every string value in the replacements tables must be in UTF8
     // be careful with your editor !
-    //
-    // ====================================================================
+
+
 
     static const struct KeysymNameReplacement aImplReplacements_English[] =
     {

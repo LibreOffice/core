@@ -23,7 +23,7 @@
 
 #include "win/saldata.hxx"
 
-// =======================================================================
+
 
 rtl_TextEncoding ImplSalGetSystemEncoding()
 {
@@ -53,7 +53,7 @@ OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
                       RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
 }
 
-// =======================================================================
+
 
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 {
@@ -81,7 +81,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
     return nRet;
 }
 
-// =======================================================================
+
 
 BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {

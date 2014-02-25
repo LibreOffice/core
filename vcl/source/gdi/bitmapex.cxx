@@ -322,7 +322,7 @@ sal_uLong BitmapEx::GetChecksum() const
     return nCrc;
 }
 
-// ------------------------------------------------------------------
+
 
 void BitmapEx::SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
@@ -362,7 +362,7 @@ bool BitmapEx::Mirror( sal_uLong nMirrorFlags )
     return bRet;
 }
 
-// ------------------------------------------------------------------
+
 
 bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
@@ -386,7 +386,7 @@ bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 n
     return bRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool BitmapEx::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
@@ -828,7 +828,7 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
     return false;
 }
 
-// ------------------------------------------------------------------
+
 
 namespace
 {
@@ -925,7 +925,7 @@ BitmapEx BitmapEx::TransformBitmapEx(
     return BitmapEx(aDestination);
 }
 
-// ------------------------------------------------------------------
+
 
 BitmapEx BitmapEx::getTransformed(
     const basegfx::B2DHomMatrix& rTransformation,
@@ -1009,7 +1009,7 @@ BitmapEx BitmapEx::getTransformed(
     return aRetval;
 }
 
-// ------------------------------------------------------------------
+
 
 BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const
 {
@@ -1167,7 +1167,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,

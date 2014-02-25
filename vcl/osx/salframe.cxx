@@ -54,11 +54,11 @@
 
 using namespace std;
 
-// =======================================================================
+
 
 AquaSalFrame* AquaSalFrame::s_pCaptureFrame = NULL;
 
-// =======================================================================
+
 
 AquaSalFrame::AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle ) :
     mpNSWindow(nil),

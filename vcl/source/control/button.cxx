@@ -42,7 +42,7 @@
 #include <window.h>
 #include <controldata.hxx>
 
-// =======================================================================
+
 
 #define PUSHBUTTON_VIEW_STYLE       (WB_3DLOOK |                        \
                                      WB_LEFT | WB_CENTER | WB_RIGHT |   \
@@ -60,7 +60,7 @@
                                      WB_TOP | WB_VCENTER | WB_BOTTOM |  \
                                      WB_WORDBREAK | WB_NOLABEL)
 
-// =======================================================================
+
 
 class ImplCommonButtonData
 {
@@ -90,7 +90,7 @@ ImplCommonButtonData::~ImplCommonButtonData()
 {
 }
 
-// =======================================================================
+
 
 Button::Button( WindowType nType ) :
     Control( nType )
@@ -619,7 +619,7 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-// =======================================================================
+
 
 void PushButton::ImplInitPushButtonData()
 {
@@ -1741,7 +1741,7 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
 }
 
 
-// =======================================================================
+
 
 void OKButton::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -1806,7 +1806,7 @@ void OKButton::Click()
     }
 }
 
-// =======================================================================
+
 
 void CancelButton::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -1877,7 +1877,7 @@ CloseButton::CloseButton( Window* pParent, WinBits nStyle )
     SetText( Button::GetStandardText( BUTTON_CLOSE ) );
 }
 
-// =======================================================================
+
 
 void HelpButton::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -1925,7 +1925,7 @@ void HelpButton::Click()
     PushButton::Click();
 }
 
-// =======================================================================
+
 
 void RadioButton::ImplInitRadioButtonData()
 {
@@ -3125,7 +3125,7 @@ Size RadioButton::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
-// =======================================================================
+
 
 void CheckBox::ImplInitCheckBoxData()
 {
@@ -4032,7 +4032,7 @@ Size CheckBox::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
-// =======================================================================
+
 
 ImageButton::ImageButton( Window* pParent, WinBits nStyle ) :
     PushButton( pParent, nStyle )
@@ -4082,7 +4082,7 @@ void ImageButton::ImplInitStyle()
     SetStyle( nStyle );
 }
 
-// =======================================================================
+
 
 ImageRadioButton::ImageRadioButton( Window* pParent, WinBits nStyle ) :
     RadioButton( pParent, nStyle )
@@ -4095,7 +4095,7 @@ ImageRadioButton::~ImageRadioButton()
 {
 }
 
-// =======================================================================
+
 
 TriStateBox::TriStateBox( Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )
@@ -4109,7 +4109,7 @@ TriStateBox::~TriStateBox()
 {
 }
 
-// =======================================================================
+
 
 DisclosureButton::DisclosureButton( Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )

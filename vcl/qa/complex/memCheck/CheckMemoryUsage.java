@@ -371,7 +371,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
 
     }
 
-// -----------------------------------------------------------------------------
+
     private class OfficeMemchecker
     {
 

@@ -58,7 +58,6 @@ Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()
     return mpImplData->maItemEdgeClipRect;
 }
 
-
 void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
     mpImplData = new ImplData;
@@ -148,7 +147,6 @@ void FloatingWindow::ImplInitSettings()
         aColor = rStyleSettings.GetWindowColor();
     SetBackground( aColor );
 }
-
 
 FloatingWindow::FloatingWindow( Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_FLOATINGWINDOW )

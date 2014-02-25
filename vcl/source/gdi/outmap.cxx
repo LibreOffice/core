@@ -42,10 +42,10 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-// =======================================================================
 
 
-// =======================================================================
+
+
 
 static int const s_ImplArySize = MAP_PIXEL+1;
 static const long aImplNumeratorAry[s_ImplArySize] =
@@ -53,7 +53,7 @@ static const long aImplNumeratorAry[s_ImplArySize] =
 static const long aImplDenominatorAry[s_ImplArySize] =
      { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1 };
 
-// -----------------------------------------------------------------------
+
 
 /*
 Reduces accuracy until it is a fraction (should become
@@ -97,7 +97,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
     return aF;
 }
 
-// -----------------------------------------------------------------------
+
 
 // Fraction.GetNumerator()
 // Fraction.GetDenominator()    > 0
@@ -165,7 +165,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     rThresRes.mnThresPixToLogY /= 2;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplCalcMapResolution( const MapMode& rMapMode,
                                    long nDPIX, long nDPIY, ImplMapRes& rMapRes )
@@ -348,7 +348,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 inline void ImplCalcMapResolution( const MapMode& rMapMode,
                                    long nDPIX, long nDPIY,
@@ -359,7 +359,7 @@ inline void ImplCalcMapResolution( const MapMode& rMapMode,
     ImplCalcBigIntThreshold( nDPIX, nDPIY, rMapRes, rThresRes );
 }
 
-// -----------------------------------------------------------------------
+
 
 static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
@@ -395,7 +395,7 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
     return n;
 }
 
-// -----------------------------------------------------------------------
+
 
 static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
@@ -417,7 +417,7 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
     return (n / 2);
 }
 
-// -----------------------------------------------------------------------
+
 
 long OutputDevice::ImplLogicXToDevicePixel( long nX ) const
 {
@@ -429,7 +429,7 @@ long OutputDevice::ImplLogicXToDevicePixel( long nX ) const
                              maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX;
 }
 
-// -----------------------------------------------------------------------
+
 
 long OutputDevice::ImplLogicYToDevicePixel( long nY ) const
 {
@@ -441,7 +441,7 @@ long OutputDevice::ImplLogicYToDevicePixel( long nY ) const
                              maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY;
 }
 
-// -----------------------------------------------------------------------
+
 
 long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
 {
@@ -453,7 +453,7 @@ long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
                              maThresRes.mnThresLogToPixX );
 }
 
-// -----------------------------------------------------------------------
+
 
 long OutputDevice::ImplLogicHeightToDevicePixel( long nHeight ) const
 {
@@ -473,7 +473,7 @@ float OutputDevice::ImplFloatLogicHeightToDevicePixel( float fLogicHeight) const
     return fPixelHeight;
 }
 
-// -----------------------------------------------------------------------
+
 
 long OutputDevice::ImplDevicePixelToLogicWidth( long nWidth ) const
 {
@@ -485,7 +485,7 @@ long OutputDevice::ImplDevicePixelToLogicWidth( long nWidth ) const
                              maThresRes.mnThresPixToLogX );
 }
 
-// -----------------------------------------------------------------------
+
 
 long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
 {
@@ -497,7 +497,7 @@ long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
                              maThresRes.mnThresPixToLogY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Point OutputDevice::ImplLogicToDevicePixel( const Point& rLogicPt ) const
 {
@@ -512,7 +512,7 @@ Point OutputDevice::ImplLogicToDevicePixel( const Point& rLogicPt ) const
                                     maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
 {
@@ -527,7 +527,7 @@ Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
                                    maThresRes.mnThresLogToPixY ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle OutputDevice::ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const
 {
@@ -554,7 +554,7 @@ Rectangle OutputDevice::ImplLogicToDevicePixel( const Rectangle& rLogicRect ) co
                                         maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
 {
@@ -597,7 +597,7 @@ Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
     return aPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 PolyPolygon OutputDevice::ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyPoly ) const
 {
@@ -614,7 +614,7 @@ PolyPolygon OutputDevice::ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyP
     return aPolyPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
 {
@@ -643,7 +643,7 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
     return aInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle OutputDevice::ImplDevicePixelToLogic( const Rectangle& rPixelRect ) const
 {
@@ -670,7 +670,7 @@ Rectangle OutputDevice::ImplDevicePixelToLogic( const Rectangle& rPixelRect ) co
                                         maThresRes.mnThresPixToLogY )-maMapRes.mnMapOfsY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
 {
@@ -682,7 +682,7 @@ Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
     return aRegion;
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::EnableMapMode( bool bEnable )
 {
@@ -692,7 +692,7 @@ void OutputDevice::EnableMapMode( bool bEnable )
         mpAlphaVDev->EnableMapMode( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::SetMapMode()
 {
@@ -726,7 +726,7 @@ void OutputDevice::SetMapMode()
         mpAlphaVDev->SetMapMode();
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 {
@@ -826,7 +826,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     ImplInvalidateViewTransform();
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
 {
@@ -899,7 +899,7 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
         mpAlphaVDev->SetRelativeMapMode( rNewMapMode );
 }
 
-// -----------------------------------------------------------------------
+
 
 // #i75163#
 basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
@@ -935,7 +935,7 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 // #i75163#
 basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
@@ -963,7 +963,7 @@ basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 // #i75163#
 basegfx::B2DHomMatrix OutputDevice::GetViewTransformation( const MapMode& rMapMode ) const
@@ -988,7 +988,7 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation( const MapMode& rMapMo
     return aTransform;
 }
 
-// -----------------------------------------------------------------------
+
 
 // #i75163#
 basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation( const MapMode& rMapMode ) const
@@ -998,7 +998,7 @@ basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation( const MapMode&
     return aMatrix;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DHomMatrix OutputDevice::ImplGetDeviceTransformation() const
 {
@@ -1009,7 +1009,7 @@ basegfx::B2DHomMatrix OutputDevice::ImplGetDeviceTransformation() const
     return aTransformation;
 }
 
-// -----------------------------------------------------------------------
+
 
 Point OutputDevice::LogicToPixel( const Point& rLogicPt ) const
 {
@@ -1025,7 +1025,7 @@ Point OutputDevice::LogicToPixel( const Point& rLogicPt ) const
                                     maThresRes.mnThresLogToPixY )+mnOutOffOrigY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
 {
@@ -1041,7 +1041,7 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
                                    maThresRes.mnThresLogToPixY ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect ) const
 {
@@ -1063,7 +1063,7 @@ Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect ) const
                                         maThresRes.mnThresLogToPixY )+mnOutOffOrigY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
 {
@@ -1094,7 +1094,7 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
     return aPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const
 {
@@ -1112,7 +1112,7 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) cons
     return aPolyPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const
 {
@@ -1122,7 +1122,7 @@ basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogi
     return aTransformedPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const
 {
@@ -1132,7 +1132,7 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
     return aTransformedPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
 {
@@ -1168,7 +1168,7 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
     return aRegion;
 }
 
-// -----------------------------------------------------------------------
+
 
 Point OutputDevice::LogicToPixel( const Point& rLogicPt,
                                   const MapMode& rMapMode ) const
@@ -1190,7 +1190,7 @@ Point OutputDevice::LogicToPixel( const Point& rLogicPt,
                                     aThresRes.mnThresLogToPixY )+mnOutOffOrigY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size OutputDevice::LogicToPixel( const Size& rLogicSize,
                                  const MapMode& rMapMode ) const
@@ -1212,7 +1212,7 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize,
                                    aThresRes.mnThresLogToPixY ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect,
                                       const MapMode& rMapMode ) const
@@ -1240,7 +1240,7 @@ Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect,
                                         aThresRes.mnThresLogToPixY )+mnOutOffOrigY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
                                     const MapMode& rMapMode ) const
@@ -1277,7 +1277,7 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
     return aPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
     const MapMode& rMapMode ) const
@@ -1296,7 +1296,7 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
     return aPolyPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                                     const MapMode& rMapMode ) const
@@ -1307,7 +1307,7 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
     return aTransformedPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
                                                 const MapMode& rMapMode ) const
@@ -1318,7 +1318,7 @@ basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogi
     return aTransformedPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 Region OutputDevice::LogicToPixel( const Region& rLogicRegion, const MapMode& rMapMode ) const
 {
@@ -1354,7 +1354,7 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion, const MapMode& rM
     return aRegion;
 }
 
-// -----------------------------------------------------------------------
+
 
 Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
 {
@@ -1370,7 +1370,7 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
                                     maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
 {
@@ -1386,7 +1386,7 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
                                    maThresRes.mnThresPixToLogY ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect ) const
 {
@@ -1408,7 +1408,7 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect ) const
                                         maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
 {
@@ -1439,7 +1439,7 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
     return aPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const
 {
@@ -1465,7 +1465,7 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     return aTransformedPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
 {
@@ -1501,7 +1501,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
     return aRegion;
 }
 
-// -----------------------------------------------------------------------
+
 
 Point OutputDevice::PixelToLogic( const Point& rDevicePt,
                                   const MapMode& rMapMode ) const
@@ -1524,7 +1524,7 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt,
                                     aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
                                  const MapMode& rMapMode ) const
@@ -1547,7 +1547,7 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
                                    aThresRes.mnThresPixToLogY ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
                                       const MapMode& rMapMode ) const
@@ -1576,7 +1576,7 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
                                         aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
                                     const MapMode& rMapMode ) const
@@ -1614,7 +1614,7 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
     return aPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
     const MapMode& rMapMode ) const
@@ -1633,7 +1633,7 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
     return aPolyPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixelPoly,
                                                 const MapMode& rMapMode ) const
@@ -1644,7 +1644,7 @@ basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixe
     return aTransformedPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygon& rPixelPolyPoly,
                                                     const MapMode& rMapMode ) const
@@ -1655,7 +1655,7 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     return aTransformedPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& rMapMode ) const
 {
@@ -1691,7 +1691,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     return aRegion;
 }
 
-// -----------------------------------------------------------------------
+
 
 #define ENTER0( rSource, pMapModeSource, pMapModeDest )                 \
     if ( !pMapModeSource )                                              \
@@ -1701,7 +1701,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     if ( *pMapModeSource == *pMapModeDest )                             \
         return rSource
 
-// -----------------------------------------------------------------------
+
 
 #define ENTER1( rSource, pMapModeSource, pMapModeDest )                 \
     ENTER0( rSource, pMapModeSource, pMapModeDest );                    \
@@ -1734,7 +1734,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     else                                                                \
         aMapResDest = maMapRes
 
-// -----------------------------------------------------------------------
+
 
 #define ENTER2( eUnitSource, eUnitDest )                                \
     DBG_ASSERT( eUnitSource != MAP_SYSFONT                              \
@@ -1750,7 +1750,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     DBG_ASSERTWARNING( eUnitDest != MAP_PIXEL,                          \
                        "MAP_PIXEL mit 72dpi angenaehert" )
 
-// -----------------------------------------------------------------------
+
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
     long nNumerator      = 1;       \
@@ -1769,7 +1769,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     else if( eUnitDest == MAP_PIXEL )                                   \
         nNumerator *= 72
 
-// -----------------------------------------------------------------------
+
 
 #define ENTER4( rMapModeSource, rMapModeDest )                          \
     ImplMapRes aMapResSource;                                           \
@@ -1784,7 +1784,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     ImplCalcMapResolution( rMapModeSource, 72, 72, aMapResSource );     \
     ImplCalcMapResolution( rMapModeDest, 72, 72, aMapResDest )
 
-// -----------------------------------------------------------------------
+
 
 // return (n1 * n2 * n3) / (n4 * n5)
 static long fn5( const long n1,
@@ -1904,7 +1904,7 @@ static long fn5( const long n1,
     } // of else
 }
 
-// -----------------------------------------------------------------------
+
 
 // return (n1 * n2) / n3
 static long fn3( const long n1, const long n2, const long n3 )
@@ -1941,7 +1941,7 @@ static long fn3( const long n1, const long n2, const long n3 )
     } // of else
 }
 
-// -----------------------------------------------------------------------
+
 
 Point OutputDevice::LogicToLogic( const Point& rPtSource,
                                   const MapMode* pMapModeSource,
@@ -1959,7 +1959,7 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
                   aMapResDest.mnMapOfsY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size OutputDevice::LogicToLogic( const Size& rSzSource,
                                  const MapMode* pMapModeSource,
@@ -1975,7 +1975,7 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
                       aMapResSource.mnMapScDenomY, aMapResDest.mnMapScNumY ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
                                       const MapMode* pMapModeSource,
@@ -2001,7 +2001,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
                       aMapResDest.mnMapOfsY );
 }
 
-// -----------------------------------------------------------------------
+
 
 Point OutputDevice::LogicToLogic( const Point& rPtSource,
                                   const MapMode& rMapModeSource,
@@ -2037,7 +2037,7 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size OutputDevice::LogicToLogic( const Size& rSzSource,
                                  const MapMode& rMapModeSource,
@@ -2071,7 +2071,7 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolygon& rPolySource,
                                                 const MapMode& rMapModeSource,
@@ -2089,7 +2089,7 @@ basegfx::B2DPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolygon& rPoly
     return aPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DPolyPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolyPolygon& rPolySource,
                                                     const MapMode& rMapModeSource,
@@ -2107,7 +2107,7 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolyPolygo
     return aPoly;
 }
 
-// -----------------------------------------------------------------------
+
 
 basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, const MapMode& rMapModeDest)
 {
@@ -2148,7 +2148,7 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
     return aTransform;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
                                       const MapMode& rMapModeSource,
@@ -2194,7 +2194,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long OutputDevice::LogicToLogic( long nLongSource,
                                  MapUnit eUnitSource, MapUnit eUnitDest )
@@ -2208,7 +2208,7 @@ long OutputDevice::LogicToLogic( long nLongSource,
     return fn3( nLongSource, nNumerator, nDenominator );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::SetPixelOffset( const Size& rOffset )
 {
@@ -2226,14 +2226,14 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
         mpAlphaVDev->SetPixelOffset( rOffset );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size OutputDevice::GetPixelOffset() const
 {
     return Size(mnOutOffOrigX, mnOutOffOrigY);
 }
 
-// -----------------------------------------------------------------------
+
 
 long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
 {
@@ -2260,7 +2260,7 @@ long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
     return nX;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
 {

@@ -211,7 +211,7 @@ bool ImplSVMainHook( int * pnInit )
     return TRUE;   // indicate that ImplSVMainHook is implemented
 }
 
-// =======================================================================
+
 
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
@@ -268,7 +268,7 @@ void InitSalMain()
 {
 }
 
-// =======================================================================
+
 
 SalYieldMutex::SalYieldMutex()
 {
@@ -333,7 +333,7 @@ void ImplSalYieldMutexRelease()
         pInst->mpSalYieldMutex->release();
 }
 
-// =======================================================================
+
 
 SalInstance* CreateSalInstance()
 {

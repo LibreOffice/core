@@ -33,12 +33,12 @@
 #include <win/salframe.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-// =======================================================================
+
 
 // comment out to prevent use of beziers on GDI functions
 #define USE_GDI_BEZIERS
 
-// =======================================================================
+
 
 #define DITHER_PAL_DELTA                51
 #define DITHER_PAL_STEPS                6
@@ -47,7 +47,7 @@
 #define DITHER_EXTRA_COLORS             1
 #define DMAP( _def_nVal, _def_nThres )  ((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
 
-// =======================================================================
+
 
 struct SysColorEntry
 {
@@ -55,7 +55,7 @@ struct SysColorEntry
     SysColorEntry*  pNext;
 };
 
-// =======================================================================
+
 
 static SysColorEntry* pFirstSysColor = NULL;
 static SysColorEntry* pActSysColor = NULL;
@@ -118,19 +118,19 @@ static BYTE aOrdDither16Bit[8][8] =
    { 5, 3, 4, 2, 5, 3, 4, 2 }
 };
 
-// =======================================================================
+
 
 // we must create pens with 1-pixel width; otherwise the S3-graphics card
 // map has many paint problems when drawing polygons/polyLines and a
 // complex is set
 #define GSL_PEN_WIDTH                   1
 
-// =======================================================================
+
 
 #define SAL_POLYPOLYCOUNT_STACKBUF          8
 #define SAL_POLYPOLYPOINTS_STACKBUF         64
 
-// =======================================================================
+
 
 void ImplInitSalGDI()
 {
@@ -411,7 +411,7 @@ static int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
     return FALSE;
 }
 
-// =======================================================================
+
 
 int ImplIsSysColorEntry( SalColor nSalColor )
 {
@@ -430,7 +430,7 @@ int ImplIsSysColorEntry( SalColor nSalColor )
     return FALSE;
 }
 
-// =======================================================================
+
 
 static void ImplInsertSysColorEntry( int nSysIndex )
 {
@@ -453,7 +453,7 @@ static void ImplInsertSysColorEntry( int nSysIndex )
     }
 }
 
-// =======================================================================
+
 
 void ImplUpdateSysColorEntries()
 {
@@ -504,7 +504,7 @@ static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
     return nSalColor;
 }
 
-// =======================================================================
+
 
 void ImplSalInitGraphics( WinSalGraphics* pData )
 {
@@ -538,7 +538,7 @@ void ImplSalDeInitGraphics( WinSalGraphics* pData )
         SelectFont( pData->getHDC(), pData->mhDefFont );
 }
 
-// =======================================================================
+
 
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
 {
@@ -572,7 +572,7 @@ HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
     return pC->mhDC;
 }
 
-// =======================================================================
+
 
 void ImplReleaseCachedDC( sal_uLong nID )
 {
@@ -583,7 +583,7 @@ void ImplReleaseCachedDC( sal_uLong nID )
         SelectObject( pC->mhDC, pC->mhSelBmp );
 }
 
-// =======================================================================
+
 
 void ImplClearHDCCache( SalData* pData )
 {
@@ -604,7 +604,7 @@ void ImplClearHDCCache( SalData* pData )
     }
 }
 
-// =======================================================================
+
 
 // #100127# Fill point and flag memory from array of points which
 // might also contain bezier control points for the PolyDraw() GDI method
@@ -677,7 +677,7 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
     }
 }
 
-// =======================================================================
+
 
 // #100127# draw an array of points which might also contain bezier control points
 void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
@@ -707,7 +707,7 @@ void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const B
     }
 }
 
-// =======================================================================
+
 
 WinSalGraphics::WinSalGraphics()
 {
@@ -1052,7 +1052,7 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         // debug code if you weant to check range of the newly applied ClipRegion
         //RECT aBound;
         //const int aRegionType = GetRgnBox(mhRegion, &aBound);
-        //
+
         //bool bBla = true;
     }
     else

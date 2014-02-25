@@ -55,7 +55,7 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
     return bRet;
 }
 
-// =======================================================================
+
 
 void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {

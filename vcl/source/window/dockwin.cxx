@@ -249,7 +249,6 @@ bool ImplDockFloatWin::Close()
     return mpDockWin->Close();
 }
 
-
 bool DockingWindow::ImplStartDocking( const Point& rPos )
 {
     if ( !mbDockable )
@@ -302,7 +301,6 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
     StartTracking( STARTTRACK_KEYMOD );
     return true;
 }
-
 
 void DockingWindow::ImplInitDockingWindowData()
 {

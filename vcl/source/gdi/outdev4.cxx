@@ -362,7 +362,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
     // Also virtual devices are excluded, as some drivers are too slow.
-    //
+
     PolyPolygon*    pPolyPoly;
     Rectangle       aRect;
     Point           aCenter;

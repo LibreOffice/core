@@ -24,7 +24,7 @@
 #include "osx/salframe.h"
 #include "osx/salinst.h"
 
-// =======================================================================
+
 
 NSTimer* AquaSalTimer::pRunningTimer = nil;
 bool AquaSalTimer::bDispatchTimer = false;

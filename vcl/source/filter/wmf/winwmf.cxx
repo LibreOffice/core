@@ -644,7 +644,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
             // nSye and nSxe is the number of pixels that has to been used
             // If they are set to zero, it is as indicator not to scale the bitmap later
-            //
+
             if( nFunc == W_META_STRETCHDIB || nFunc == W_META_STRETCHBLT || nFunc == W_META_DIBSTRETCHBLT )
                 pWMF->ReadUInt16( nSye ).ReadUInt16( nSxe );
 

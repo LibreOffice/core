@@ -39,7 +39,7 @@
 #include <salwtype.hxx>
 
 
-// =======================================================================
+
 // SalInstance member to create and destroy a SalObject
 
 SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
@@ -180,7 +180,7 @@ void X11SalInstance::DestroyObject( SalObject* pObject )
 }
 
 
-// ======================================================================
+
 // SalClipRegion is a member of SalObject
 // definition of SalClipRegion my be found in unx/inc/salobj.h
 
@@ -230,7 +230,7 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 }
 
 
-// =======================================================================
+
 // SalObject Implementation
 
 

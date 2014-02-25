@@ -42,7 +42,7 @@ private:
 
 // This class implments the server font specific parts.
 // @author tse
-//
+
 class VCL_PLUGIN_PUBLIC GraphiteServerFontLayout : public ServerFontLayout
 {
 private:

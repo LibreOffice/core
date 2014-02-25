@@ -28,9 +28,9 @@
 
 #include <set>
 
-// -------------------------
+
 // - DocumentFocusListener -
-// -------------------------
+
 
 class DocumentFocusListener :
     public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleEventListener >

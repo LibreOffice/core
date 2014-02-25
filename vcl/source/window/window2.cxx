@@ -48,19 +48,19 @@
 
 using namespace com::sun::star;
 
-// =======================================================================
+
 
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
 
-// =======================================================================
+
 
 struct ImplFocusDelData : public ImplDelData
 {
     Window*         mpFocusWin;
 };
 
-// =======================================================================
+
 
 bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
 {
@@ -149,7 +149,7 @@ bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
     return false;
 }
 
-// =======================================================================
+
 
 void Window::ImplSaveOverlapBackground()
 {

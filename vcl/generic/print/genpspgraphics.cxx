@@ -348,7 +348,7 @@ bool GenPspGraphics::setClipRegion( const Region& i_rClip )
     m_pPrinterGfx->EndSetClipRegion();
 
     //m_pPrinterGfx->BeginSetClipRegion( i_rClip.GetRectCount() );
-    //
+
     //ImplRegionInfo aInfo;
     //long nX, nY, nW, nH;
     //bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
@@ -562,7 +562,7 @@ void GenPspGraphics::invert(long,long,long,long,SalInvert)
     OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
 
-//==========================================================================
+
 
 class ImplPspFontData : public PhysicalFontFace
 {
@@ -593,7 +593,7 @@ ImplFontEntry* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) co
     return pEntry;
 }
 
-//==========================================================================
+
 
 class PspFontLayout : public GenericSalLayout
 {

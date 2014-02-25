@@ -18,7 +18,7 @@
  */
 
 // Header files
-//
+
 
 // Platform
 #include <i18nlangtag/languagetag.hxx>
@@ -41,9 +41,9 @@ float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
     return .0f;
 }
 
-//
+
 // An implementation of the GraphiteLayout interface to enable Graphite enabled fonts to be used.
-//
+
 
 GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) throw()
     : ServerFontLayout(rServerFont),

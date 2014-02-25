@@ -62,7 +62,7 @@ namespace vcl_sal { class WMAdaptor; }
 
 #define PROPERTY_DEFAULT                        0x00000FCB
 
-// ------------------------------------------------------------------------
+
 // server vendor
 
 typedef enum  {

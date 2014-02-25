@@ -1840,9 +1840,9 @@ void PrintDialog::previewBackward()
 }
 
 
-//
+
 // PrintProgressDialog
-//
+
 
 
 PrintProgressDialog::PrintProgressDialog(Window* i_pParent, int i_nMax)

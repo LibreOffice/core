@@ -39,7 +39,7 @@ typedef RealType ValType;
 #include <vector>
 typedef std::vector<ValType> ValVector;
 
-// ====================================================================
+
 
 static const char* pStringIds[] = {
 /*0*/   ".notdef",      "space",            "exclam",           "quotedbl",
@@ -276,7 +276,7 @@ struct TYPE2OP
     };
 };
 
-// ====================================================================
+
 
 struct CffGlobal
 {
@@ -306,7 +306,7 @@ struct CffGlobal
     int     mnFamilyNameSID;
 };
 
-// ====================================================================
+
 
 struct CffLocal
 {
@@ -339,7 +339,7 @@ struct CffLocal
     bool        mbForceBold;
 };
 
-// ====================================================================
+
 
 class SubsetterContext
 {
@@ -355,7 +355,7 @@ public:
 SubsetterContext::~SubsetterContext( void)
 {}
 
-// ====================================================================
+
 
 class CffSubsetterContext
 :   public SubsetterContext
@@ -547,7 +547,7 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
 
     // copy the remaining values to the hint arrays
     // assert( (mnStackIdx & 1) == 0); // depends on called subrs
-    if( mnStackIdx & 1) --mnStackIdx;//#######
+    if( mnStackIdx & 1) --mnStackIdx;
     // TODO: if( !bSubr) assert( mnStackIdx >= 2);
 
     assert( (mnHintSize + mnStackIdx) <= 2*NMAXHINTS);
@@ -1334,7 +1334,7 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
 mbSawError = false;
 mbNeedClose = false;
 mbIgnoreHints = false;
-mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
+mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;
 mnCntrMask = 0;
     while( mpReadPtr < mpReadEnd)
         convertOneTypeOp();
@@ -1514,7 +1514,7 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
     assert( mpReadEnd <= mpBaseEnd);
 }
 
-// ====================================================================
+
 
 // initialize FONTDICT specific values
 CffLocal::CffLocal( void)
@@ -2335,7 +2335,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     return true;
 }
 
-// ====================================================================
+
 
 bool FontSubsetInfo::CreateFontSubsetFromCff( GlyphWidth* pOutGlyphWidths )
 {
@@ -2353,6 +2353,6 @@ bool FontSubsetInfo::CreateFontSubsetFromCff( GlyphWidth* pOutGlyphWidths )
     return bRC;
 }
 
-// ====================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

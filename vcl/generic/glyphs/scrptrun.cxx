@@ -166,7 +166,7 @@ UBool ScriptRun::next()
         int32_t pairIndex = getPairIndex(ch);
 
         // Paired character handling:
-        //
+
         // if it's an open character, push it onto the stack.
         // if it's a close character, find the matching open on the
         // stack, and use that script code. Any non-matching open

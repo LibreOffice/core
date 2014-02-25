@@ -907,7 +907,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 }
 
 //fdo#61886
-//
+
 //when printing is finished, set the paper size of the printer to either what
 //the user explicitly set as the desired paper size, or fallback to whatever
 //the printer had before printing started. That way it doesn't contain the last
