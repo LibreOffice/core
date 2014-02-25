@@ -28,12 +28,12 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 #define nMinSegments sal_uInt32(1)
 #define nMaxSegments sal_uInt32(512)
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -484,7 +484,7 @@ namespace basegfx
             }
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         // comparators with tolerance for 3D PolyPolygons
 
         bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB, const double& rfSmallValue)

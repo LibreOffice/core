@@ -45,7 +45,7 @@ static double fAngleBoundStartValue = ANGLE_BOUND_START_VALUE;
 #endif
 #define STEPSPERQUARTER     (3)
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -3133,7 +3133,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////
+
         // comparators with tolerance for 2D Polygons
 
         bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, const double& rfSmallValue)
@@ -3352,7 +3352,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // converters for com::sun::star::drawing::PointSequence
 
         B2DPolygon UnoPointSequenceToB2DPolygon(
@@ -3428,7 +3428,7 @@ namespace basegfx
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // converters for com::sun::star::drawing::PointSequence and
         // com::sun::star::drawing::FlagSequence to B2DPolygon (curved polygons)
 

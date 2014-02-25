@@ -747,11 +747,11 @@ namespace basegfx
                             // existing continuity since no 'S' or 's' statement should be written. At
                             // import, that 'previous' control vector is not available. SVG documentation
                             // says for interpretation:
-                            //
+
                             // "(If there is no previous command or if the previous command was
                             // not an C, c, S or s, assume the first control point is coincident
                             // with the current point.)"
-                            //
+
                             // That's what is done from our import, so avoid exporting it as first statement
                             // is necessary.
                             const bool bSymmetricAtEdgeStart(
@@ -764,7 +764,7 @@ namespace basegfx
                                 // the case if both control points are in
                                 // the same place when they are prolonged
                                 // to the common quadratic control point
-                                //
+
                                 // Left: P = (3P1 - P0) / 2
                                 // Right: P = (3P2 - P3) / 2
                                 aLeft = B2DPoint((3.0 * aControlEdgeStart - aEdgeStart) / 2.0);

@@ -30,7 +30,7 @@
 static double fMultFactUnsharpen = FACTOR_FOR_UNSHARPEN;
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -268,10 +268,10 @@ namespace basegfx
 
                 // Perform bezier flatness test (lecture notes from R. Schaback,
                 // Mathematics of Computer-Aided Design, Uni Goettingen, 2000)
-                //
+
                 // ||P(t) - L(t)|| <= max     ||b_j - b_0 - j/n(b_n - b_0)||
                 //                    0<=j<=n
-                //
+
                 // What is calculated here is an upper bound to the distance from
                 // a line through b_0 and b_3 (rfPA and P4 in our notation) and the
                 // curve. We can drop 0 and n from the running indices, since the
@@ -323,7 +323,7 @@ namespace basegfx
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
