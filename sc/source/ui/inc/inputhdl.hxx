@@ -120,6 +120,7 @@ private:
 
     static bool             bAutoComplete;              // from app options
     static bool             bOptLoaded;
+    ::std::deque< sal_Unicode >    maFormulaChar;  //fdo 75264
 
 private:
     void            UpdateActiveView();
@@ -156,6 +157,7 @@ private:
     void            AutoParAdded();
     bool            CursorAtClosingPar();
     void            SkipClosingPar();
+    bool            GetFuncName( OUString& aStart, OUString& aResult );  // fdo75264
     DECL_LINK( ModifyHdl, void* );
     DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent* );
     DECL_LINK( ShowHideTipVisibleSecParentListener, VclWindowEvent* );
