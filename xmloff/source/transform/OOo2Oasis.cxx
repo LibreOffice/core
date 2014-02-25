@@ -704,7 +704,7 @@ static XMLTransformerActionInit aStyleRefActionTable[] =
 
 // OOO_SHAPE_ACTIONS
 // !!ATTENTION!! If you change something here, please also change
-// aConnectorActionTable if apropriate
+// aConnectorActionTable if appropriate
 static XMLTransformerActionInit aShapeActionTable[] =
 {
     ENTRY0( SVG, X, XML_ATACTION_INCH2IN ),

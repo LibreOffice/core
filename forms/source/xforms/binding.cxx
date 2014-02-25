@@ -666,7 +666,7 @@ void Binding::bind( bool bForceRebind )
             }
         }
 
-        // now evaluate remaining MIPs in the apropriate context
+        // now evaluate remaining MIPs in the appropriate context
         maReadonly.evaluate( rContext );
         maRelevant.evaluate( rContext );
         maRequired.evaluate( rContext );

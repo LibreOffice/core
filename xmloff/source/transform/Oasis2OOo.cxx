@@ -709,7 +709,7 @@ static XMLTransformerActionInit aParaActionTable[] =
 };
 
 // !!ATTENTION!! If you change something here, please also change
-// aConnectorActionTable if apropriate
+// aConnectorActionTable if appropriate
 static XMLTransformerActionInit aShapeActionTable[] =
 {
     ENTRY1( DRAW, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,

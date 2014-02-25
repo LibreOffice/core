@@ -467,7 +467,7 @@ public class MultiPropertyTest extends MultiMethodTest
          * The method compares obj1 and obj2. It calls
          * MultiPropertyTest.compare, but subclasses can override to change
          * the behaviour, since normally compare calls Object.equals method
-         * which is not apropriate in some cases(e.g., structs with equals
+         * which is not appropriate in some cases(e.g., structs with equals
          * not overridden).
          */
         protected boolean compare(Object obj1, Object obj2)
