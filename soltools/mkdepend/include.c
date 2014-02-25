@@ -73,7 +73,7 @@ struct inclist *inc_path(register char *file, register char *include, boolean do
 // given, which certainly is not the intended behavior. Also it slows down
 // makedepend performance considerably.
 //  if (!found && (dot || *include == '/')) {
-//
+
 //      if ((exists_path(incCollection, include)) && stat(include, &st) == 0 && !( st.st_mode & S_IFDIR)) {
 //          ip = newinclude(include, include);
 //          found = TRUE;
