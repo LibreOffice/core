@@ -328,7 +328,7 @@ public class ParameterHelper
 //        if (m_sDefaultXMLFormatApplication == null)
 //        {
 //            // DEFAULT_XML_FORMAT_APP ------
-//
+
 //            String sDefaultXMLFormatApp = (String)m_aCurrentParams.get( PropertyName.DOC_COMPARATOR_DEFAULT_XML_FORMAT_APP );
 //            if (sDefaultXMLFormatApp == null || sDefaultXMLFormatApp.length() == 0)
 //            {

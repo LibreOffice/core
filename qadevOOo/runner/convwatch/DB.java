@@ -213,12 +213,12 @@ public class DB extends DBHelper
     //                                    int _nResolution )
     //     {
     //         Connection aCon = new ShareConnection().getConnection();
-    //
+
     //         String sFilename = _sFilename.replace('\\', '/');
-    //
+
     //         String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
     //         ExecSQL(aCon, sDeleteOld);
-    //
+
     //         String sValueLine = "type, filename, basename, fileformat, buildid, resolution, date";
     //         StringBuffer aDataLine = new StringBuffer();
     //         aDataLine.append( Quote(_sSourceType) ) . append( sComma ) .
@@ -228,7 +228,7 @@ public class DB extends DBHelper
     //             append( Quote( _sBuildID) )    . append( sComma ) .
     //             append( _nResolution)    . append( sComma ) .
     //             append( Quote( today() ) );
-    //
+
     //         SQLinsertValues(aCon, "file", sValueLine, aDataLine.toString());
     //     }
 
@@ -236,12 +236,12 @@ public class DB extends DBHelper
     //                                            String _sState)
     //     {
     //         Connection aCon = new ShareConnection().getConnection();
-    //
+
     //         String sFilename = _sFilename.replace('\\', '/');
-    //
+
     //         // String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
     //         // ExecSQL(aCon, sDeleteOld);
-    //
+
     //         String sSet = "state=" + Quote(_sState);
     //         String sWhere = getWhereClause() + sAND + "name=" + Quote(sFilename);
     //         SQLupdateValue( aCon, "currentdocs", sSet, sWhere );
@@ -494,25 +494,25 @@ public class DB extends DBHelper
     //     {
     //         if (_sDBInfoString == null) return;
     //         fillVariables(_sDBInfoString);
-    //
+
     //         Connection aCon = new ShareConnection().getConnection();
-    //
+
     //         String sDeleteSQL = "DELETE FROM currentdocs WHERE " + getWhereClause();
-    //
+
     //         ExecSQL(aCon, sDeleteSQL);
     //     }
-    //
+
     // public static void fileInsert(String _sDBInfoString,
     //                               String _sFilename,
     //                               String _sRemovePath)
     //     {
     //         if (_sDBInfoString == null) return;
     //         fillVariables(_sDBInfoString);
-    //
+
     //         String sFilename = _sFilename.replace('\\', '/');
-    //
+
     //         Connection aCon = new ShareConnection().getConnection();
-    //
+
     //         String sValueLine = "environment, referenceversion, currentversion, documentpool, name, state";
     //         StringBuffer aDataLine = new StringBuffer();
     //         aDataLine.append( Quote(m_sEnvironment) ) . append( sComma ) .
@@ -521,7 +521,7 @@ public class DB extends DBHelper
     //             append( Quote( m_sDocumentPool) ) . append( sComma ) .
     //             append( Quote( sFilename) )    . append( sComma ) .
     //             append( Quote( "undone"));
-    //
+
     //         SQLinsertValues(aCon, "currentdocs", sValueLine, aDataLine.toString());
     //     }
 
@@ -529,7 +529,7 @@ public class DB extends DBHelper
     // public static void insertinto_file(String _sFilename, String _sFileFormat, String _sBuildID)
     //     {
     //         Connection aCon = new ShareConnection().getConnection();
-    //
+
     //         String sValueLine = "type, filename, fileformat, buildid, date";
     //         StringBuffer aDataLine = new StringBuffer();
     //         aDataLine.append( "1" )            . append( sComma ) .
@@ -537,17 +537,17 @@ public class DB extends DBHelper
     //             append( Quote( _sFileFormat) ) . append( sComma ) .
     //             append( Quote( _sBuildID) )    . append( sComma ) .
     //             append( Quote( today() ) );
-    //
+
     //         SQLinsertValues(aCon, "file", sValueLine, aDataLine.toString());
     //     }
 
     // public static void main( String[] args )
     //     {
-    //
+
     //         String _sFilename = "";
     //         String _sFileFormat = "";
     //         String _sBuildID = "";
-    //
+
     //         // insertinto_file("c:\temp\test.txt", "test", "txt", "nix", "", 0);
     //         fillVariables("p:m128,c:m134,d:demo");
     //     }

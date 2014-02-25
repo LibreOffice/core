@@ -592,17 +592,17 @@ public class CheckModuleAPI extends ComplexTestCase
 
 //    class _FolderFilter implements FileFilter
 //    {
-//
+
 //        private String mFolderName;
-//
+
 //        public FolderFilter(String folderName)
 //        {
 //            mFolderName = folderName;
 //        }
-//
+
 //        public boolean accept_(File pathname)
 //        {
-//
+
 //            boolean found = false;
 //            if (pathname.isDirectory())
 //            {

@@ -74,7 +74,7 @@ public class FileHelper
             //     System.out.println( _sFile );
             //     System.out.println( aFile.getAbsolutePath() );
             //     MessageBox("Der JavaProzess wartet auf eine interaktion ihrerseits.");
-            //
+
             //     File aFile2 = new File(_sFile);
             //     if (aFile2.exists())
             //     {
@@ -212,7 +212,7 @@ public class FileHelper
 
     // makeDirectories("", "/tmp/a/b");
     // creates all directories /tmp/a/b
-    //
+
     public static void makeDirectories(String first, String path)
         {
             makeDirectories(first, path, "0777");
@@ -413,16 +413,16 @@ public class FileHelper
 //            {
 //                File inputFile = new File(_sSource);
 //                File outputFile = new File(_sDestination);
-//
+
 //                java.io.FileReader in = new java.io.FileReader(inputFile);
 //                java.io.FileWriter out = new java.io.FileWriter(outputFile);
 //                int c;
-//
+
 //                while ((c = in.read()) != -1)
 //                {
 //                    out.write(c);
 //                }
-//
+
 //                in.close();
 //                out.close();
 //            }
@@ -578,7 +578,7 @@ public class FileHelper
             return sNewPath;
         }
 
-    // -----------------------------------------------------------------------------
+
     public static void createInfoFile(String _sFile, ParameterHelper _aGTA)
         {
             createInfoFile(_sFile, _aGTA, "");
@@ -689,7 +689,7 @@ public class FileHelper
 //            {
 //                sExtension = sExtension.substring(1);
 //            }
-//
+
 //            DB.writeToDB(_aGTA.getInputFile(),
 //                         sNameNoSuffix,
 //                         sExtension,

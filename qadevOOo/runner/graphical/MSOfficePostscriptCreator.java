@@ -123,7 +123,7 @@ public class MSOfficePostscriptCreator implements IOffice
         // we don't have an office to stop
     }
 
-    // -----------------------------------------------------------------------------
+
     private boolean isWordDocument(String _sSuffix)
         {
             if (_sSuffix.toLowerCase().endsWith(".doc") ||
@@ -237,7 +237,7 @@ public class MSOfficePostscriptCreator implements IOffice
             }
         }
 
-    // -----------------------------------------------------------------------------
+
     /**
      * print the given file (_sInputFile) to the file name (_sPrintFile)
      * @param _aGTA

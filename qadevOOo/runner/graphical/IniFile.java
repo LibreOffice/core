@@ -141,7 +141,7 @@ public class IniFile implements Enumeration<String>
             }
             return false;
         }
-    // -----------------------------------------------------------------------------
+
 
     private boolean isRemark(String _sLine)
         {
@@ -503,7 +503,7 @@ public class IniFile implements Enumeration<String>
                 m_bListContainUnsavedChanges = true;
             }
         }
-    // -----------------------------------------------------------------------------
+
     // String replaceEvaluatedValue(String _sSection, String _sValue)
     //     {
     //         String sValue = _sValue;
@@ -529,7 +529,7 @@ public class IniFile implements Enumeration<String>
     //         }
     //         return sValue;
     //     }
-    // -----------------------------------------------------------------------------
+
 
     // public String getLocalEvaluatedValue(String _sSection, String _sKey)
     //     {
@@ -538,7 +538,7 @@ public class IniFile implements Enumeration<String>
     //         return sValue;
     //     }
 
-    // -----------------------------------------------------------------------------
+
 
     // this is a special behaviour.
     // public String getGlobalLocalEvaluatedValue(String _sSection, String _sKey)
@@ -553,7 +553,7 @@ public class IniFile implements Enumeration<String>
     //         }
     //         sLocalValue = replaceEvaluatedKey(_sSection, sLocalValue);
     //         sLocalValue = replaceEvaluatedKey("global", sLocalValue);
-    //
+
     //         return sLocalValue;
     //     }
     public void removeSection(String _sSectionToRemove)
@@ -588,8 +588,8 @@ public class IniFile implements Enumeration<String>
 //        {
 //            String sTempFile = System.getProperty("java.io.tmpdir");
 //            sTempFile += "inifile";
-//
-//
+
+
 //            IniFile aIniFile = new IniFile(sTempFile);
 //            String sValue = aIniFile.getValue("Section", "Key");
 //            // insert a new value to a already exist section
@@ -599,12 +599,12 @@ public class IniFile implements Enumeration<String>
 //            // create a new value
 //            aIniFile.insertValue("New Section", "Key", "a new key value pair");
 //            aIniFile.insertValue("New Section", "Key2", "a new second key value pair");
-//
+
 //            String sValue2 = aIniFile.getValue("Section2", "Key");
-//
+
 //            aIniFile.removeSection("Section");
 //            aIniFile.removeSection("New Section");
-//
+
 //            aIniFile.close();
 //        }
 

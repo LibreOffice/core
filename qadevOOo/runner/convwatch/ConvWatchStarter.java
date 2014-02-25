@@ -294,7 +294,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
         }
 
 
-    // -----------------------------------------------------------------------------
+
     void runGDCWithStatus(HTMLOutputter _aHTMLoutput, LISTOutputter _aLISToutput, String _sInputFile, String _sOutputPath, String _sReferencePath, String _sDiffPath, String _sNewSubDir )
         {
             // start a fresh Office

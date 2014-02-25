@@ -28,14 +28,14 @@ import helper.StringHelper;
 import java.util.ArrayList;
 import util.utils;
 
-// -----------------------------------------------------------------------------
+
 // --------------------------------- PRNCompare ---------------------------------
 
 // class DifferenceType
 // {
 //     final static int NO_DIFFERENCE = 1;
 //     final static int DIFFERENCE = 2;
-//
+
 //     public int nValue = NO_DIFFERENCE;
 //     public boolean equals(int _n)
 //         {
@@ -44,7 +44,7 @@ import util.utils;
 //         }
 // }
 
-// -----------------------------------------------------------------------------
+
 public class PRNCompare
 {
     // OSHelper m_aHelper;
@@ -162,7 +162,7 @@ public class PRNCompare
             m_sDocumentType = _sTypeName;
         }
 
-    // -----------------------------------------------------------------------------
+
 
     public StatusHelper[] compare()
         {
@@ -653,13 +653,13 @@ public class PRNCompare
             // {
             //     sComposite = "composite.exe";
             // }
-            //
+
             // String sCommand = sComposite  +" -compose difference " +
             //     StringHelper.doubleQuoteIfNeed(sOldGfx) + " " +
             //     StringHelper.doubleQuoteIfNeed(sNewGfx) + " " +
             //     StringHelper.doubleQuoteIfNeed(sDiffGfx);
-            //
-            //
+
+
             // // System.out.println(sCommand);
             // // executeSynchronously(sCommand);
             // ProcessHandler aHandler = new ProcessHandler(sCommand);
@@ -699,7 +699,7 @@ public class PRNCompare
             return aCurrentStatus;
         }
 
-    // -----------------------------------------------------------------------------
+
     /**
      * count how much pixel differ and between Old or New and the Difference graphics
      *
@@ -770,7 +770,7 @@ public class PRNCompare
 // LLA: 20040804 sample how to build jpegs from reference files
 //             a.createJPEGFromPostscript("/tmp/convwatch_java",
 //                                        "/home/apitest/WorkFromHome/20040804/reference", "worddoc.prn" );
-//
+
 //             a.createJPEGFromPostscript("/tmp/convwatch_java",
 //                                        "/home/apitest/WorkFromHome/20040804/reference", "worddoc.ps" );
 

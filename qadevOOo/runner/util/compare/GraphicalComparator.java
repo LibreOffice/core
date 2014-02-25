@@ -30,7 +30,7 @@ import java.io.IOException;
 import util.compare.DocComparator;
 import convwatch.ConvWatchException;
 
-// -----------------------------------------------------------------------------
+
 class GraphicalComparator implements DocComparator
 {
     GraphicalTestArguments m_aArguments;

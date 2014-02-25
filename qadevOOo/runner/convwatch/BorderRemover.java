@@ -24,7 +24,7 @@ import java.awt.image.RenderedImage;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Method;
 
-// -----------------------------------------------------------------------------
+
 class Rect
 {
     int x;

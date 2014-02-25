@@ -861,7 +861,7 @@ public class ProcessHandler
     {
         bUseOutput = false;
     }
-    // -------------------------------------------------------------------------
+
     class ProcessWatcher extends Thread
     {
 

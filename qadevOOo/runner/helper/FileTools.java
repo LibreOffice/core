@@ -117,11 +117,11 @@ public class FileTools {
      * @param dir the directory to clean from content
      */
     // public static boolean cleanDir(File dir){
-    //
+
     //     boolean success = true;
     //     if (dir.isDirectory()){
     //         File [] theFiles = dir.listFiles();
-    //
+
     //         if (theFiles.length != 0 )
     //             for (int i = 0; i < theFiles.length; i++){
     //                 success &= theFiles[i].delete();
