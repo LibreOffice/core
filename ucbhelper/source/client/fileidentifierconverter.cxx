@@ -31,11 +31,11 @@ using namespace com::sun::star;
 
 namespace ucbhelper {
 
-//============================================================================
-//
+
+
 //  getLocalFileURL
-//
-//============================================================================
+
+
 
 OUString
 getLocalFileURL() SAL_THROW((uno::RuntimeException))
@@ -47,11 +47,11 @@ getLocalFileURL() SAL_THROW((uno::RuntimeException))
     return OUString("file:///");
 }
 
-//============================================================================
-//
+
+
 //  getFileURLFromSystemPath
-//
-//============================================================================
+
+
 
 OUString
 getFileURLFromSystemPath(
@@ -70,11 +70,11 @@ getFileURLFromSystemPath(
         return OUString();
 }
 
-//============================================================================
-//
+
+
 //  getSystemPathFromFileURL
-//
-//============================================================================
+
+
 
 OUString
 getSystemPathFromFileURL(

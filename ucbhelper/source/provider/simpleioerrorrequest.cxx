@@ -23,7 +23,7 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-//=========================================================================
+
 SimpleIOErrorRequest::SimpleIOErrorRequest(
                 const ucb::IOErrorCode eError,
                 const uno::Sequence< uno::Any > & rArgs,

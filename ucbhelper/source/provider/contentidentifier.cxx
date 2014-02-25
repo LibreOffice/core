@@ -36,13 +36,13 @@ using namespace com::sun::star::ucb;
 namespace ucbhelper
 {
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // struct ContentIdentifier_Impl.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 struct ContentIdentifier_Impl
 {
@@ -53,11 +53,11 @@ struct ContentIdentifier_Impl
     ContentIdentifier_Impl( const OUString& rURL );
 };
 
-//=========================================================================
-//
+
+
 // ContentIdentifier_Impl Implementation.
-//
-//=========================================================================
+
+
 
 ContentIdentifier_Impl::ContentIdentifier_Impl(const OUString& rURL )
 {
@@ -74,45 +74,45 @@ ContentIdentifier_Impl::ContentIdentifier_Impl(const OUString& rURL )
     }
 }
 
-//=========================================================================
-//
+
+
 // ContentIdentifier Implementation.
-//
-//=========================================================================
+
+
 
 ContentIdentifier::ContentIdentifier( const OUString& rURL )
 {
     m_pImpl = new ContentIdentifier_Impl( rURL );
 }
 
-//=========================================================================
+
 // virtual
 ContentIdentifier::~ContentIdentifier()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
-//
-// XInterface methods.
-//
-//=========================================================================
 
-//=========================================================================
+
+// XInterface methods.
+
+
+
+
 // virtual
 void SAL_CALL ContentIdentifier::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL ContentIdentifier::release() throw()
 {
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 Any SAL_CALL
 ContentIdentifier::queryInterface( const Type & rType )
@@ -125,11 +125,11 @@ ContentIdentifier::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Sequence< sal_Int8 > SAL_CALL
@@ -149,7 +149,7 @@ ContentIdentifier::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 Sequence< com::sun::star::uno::Type > SAL_CALL
 ContentIdentifier::getTypes()
@@ -172,11 +172,11 @@ ContentIdentifier::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XContentIdentifier methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentIdentifier()
@@ -185,7 +185,7 @@ OUString SAL_CALL ContentIdentifier::getContentIdentifier()
     return m_pImpl->m_aContentId;
 }
 
-//=========================================================================
+
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
     throw( RuntimeException )

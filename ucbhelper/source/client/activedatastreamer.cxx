@@ -30,39 +30,39 @@ using namespace com::sun::star;
 namespace ucbhelper
 {
 
-//=========================================================================
-//=========================================================================
-//
-// ActiveDataStreamer Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// ActiveDataStreamer Implementation.
+
+
+
+
+
+
 // XInterface methods
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_2( ActiveDataStreamer,
                    lang::XTypeProvider,
                    io::XActiveDataStreamer );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_2( ActiveDataStreamer,
                       lang::XTypeProvider,
                       io::XActiveDataStreamer );
 
-//=========================================================================
-//
+
+
 // XActiveDataStreamer methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL ActiveDataStreamer::setStream( const uno::Reference< io::XStream >& xStream )
@@ -71,7 +71,7 @@ void SAL_CALL ActiveDataStreamer::setStream( const uno::Reference< io::XStream >
     m_xStream = xStream;
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< io::XStream > SAL_CALL ActiveDataStreamer::getStream()
     throw( uno::RuntimeException )

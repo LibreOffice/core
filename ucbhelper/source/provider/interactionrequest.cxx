@@ -30,13 +30,13 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // InteractionRequest Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 namespace ucbhelper
 {
@@ -56,32 +56,32 @@ struct InteractionRequest_Impl
 
 }
 
-//=========================================================================
+
 InteractionRequest::InteractionRequest()
 : m_pImpl( new InteractionRequest_Impl )
 {
 }
 
-//=========================================================================
+
 InteractionRequest::InteractionRequest( const uno::Any & rRequest )
 : m_pImpl( new InteractionRequest_Impl( rRequest ) )
 {
 }
 
-//=========================================================================
+
 // virtual
 InteractionRequest::~InteractionRequest()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
+
 void InteractionRequest::setRequest( const uno::Any & rRequest )
 {
     m_pImpl->m_aRequest = rRequest;
 }
 
-//=========================================================================
+
 void InteractionRequest::setContinuations(
                 const uno::Sequence< uno::Reference<
                     task::XInteractionContinuation > > & rContinuations )
@@ -89,25 +89,25 @@ void InteractionRequest::setContinuations(
     m_pImpl->m_aContinuations = rContinuations;
 }
 
-//=========================================================================
+
 rtl::Reference< InteractionContinuation >
 InteractionRequest::getSelection() const
 {
     return m_pImpl->m_xSelection;
 }
 
-//=========================================================================
+
 void InteractionRequest::setSelection(
                 const rtl::Reference< InteractionContinuation > & rxSelection )
 {
     m_pImpl->m_xSelection = rxSelection;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionRequest::acquire()
@@ -116,7 +116,7 @@ void SAL_CALL InteractionRequest::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionRequest::release()
     throw()
@@ -124,7 +124,7 @@ void SAL_CALL InteractionRequest::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionRequest::queryInterface( const uno::Type & rType )
@@ -137,11 +137,11 @@ InteractionRequest::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL InteractionRequest::getImplementationId()
@@ -160,7 +160,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionRequest::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionRequest::getTypes()
     throw( uno::RuntimeException )
@@ -182,11 +182,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRequest::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionRequest methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Any SAL_CALL InteractionRequest::getRequest()
@@ -195,7 +195,7 @@ uno::Any SAL_CALL InteractionRequest::getRequest()
     return m_pImpl->m_aRequest;
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL
 InteractionRequest::getContinuations()
@@ -204,13 +204,13 @@ InteractionRequest::getContinuations()
     return m_pImpl->m_aContinuations;
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // InteractionContinuation Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 namespace ucbhelper
 {
@@ -225,39 +225,39 @@ struct InteractionContinuation_Impl
 
 }
 
-//=========================================================================
+
 InteractionContinuation::InteractionContinuation(
                         InteractionRequest * pRequest )
 : m_pImpl( new InteractionContinuation_Impl( pRequest ) )
 {
 }
 
-//=========================================================================
+
 // virtual
 InteractionContinuation::~InteractionContinuation()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
+
 void InteractionContinuation::recordSelection()
 {
     m_pImpl->m_pRequest->setSelection( this );
 }
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionAbort Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// InteractionAbort Implementation.
+
+
+
+
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionAbort::acquire()
@@ -266,7 +266,7 @@ void SAL_CALL InteractionAbort::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionAbort::release()
     throw()
@@ -274,7 +274,7 @@ void SAL_CALL InteractionAbort::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionAbort::queryInterface( const uno::Type & rType )
@@ -289,11 +289,11 @@ InteractionAbort::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL InteractionAbort::getImplementationId()
@@ -312,7 +312,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionAbort::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionAbort::getTypes()
     throw( uno::RuntimeException )
@@ -334,11 +334,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionAbort::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionContinuation methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionAbort::select()
@@ -347,19 +347,19 @@ void SAL_CALL InteractionAbort::select()
     recordSelection();
 }
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionRetry Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// InteractionRetry Implementation.
+
+
+
+
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionRetry::acquire()
@@ -368,7 +368,7 @@ void SAL_CALL InteractionRetry::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionRetry::release()
     throw()
@@ -376,7 +376,7 @@ void SAL_CALL InteractionRetry::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionRetry::queryInterface( const uno::Type & rType )
@@ -391,11 +391,11 @@ InteractionRetry::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL InteractionRetry::getImplementationId()
@@ -414,7 +414,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionRetry::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionRetry::getTypes()
     throw( uno::RuntimeException )
@@ -436,11 +436,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRetry::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionContinuation methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionRetry::select()
@@ -449,19 +449,19 @@ void SAL_CALL InteractionRetry::select()
     recordSelection();
 }
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionApprove Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// InteractionApprove Implementation.
+
+
+
+
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionApprove::acquire()
@@ -470,7 +470,7 @@ void SAL_CALL InteractionApprove::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionApprove::release()
     throw()
@@ -478,7 +478,7 @@ void SAL_CALL InteractionApprove::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionApprove::queryInterface( const uno::Type & rType )
@@ -493,11 +493,11 @@ InteractionApprove::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL InteractionApprove::getImplementationId()
@@ -516,7 +516,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionApprove::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionApprove::getTypes()
     throw( uno::RuntimeException )
@@ -538,11 +538,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionApprove::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionContinuation methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionApprove::select()
@@ -551,19 +551,19 @@ void SAL_CALL InteractionApprove::select()
     recordSelection();
 }
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionDisapprove Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// InteractionDisapprove Implementation.
+
+
+
+
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionDisapprove::acquire()
@@ -572,7 +572,7 @@ void SAL_CALL InteractionDisapprove::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionDisapprove::release()
     throw()
@@ -580,7 +580,7 @@ void SAL_CALL InteractionDisapprove::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionDisapprove::queryInterface( const uno::Type & rType )
@@ -595,11 +595,11 @@ InteractionDisapprove::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL InteractionDisapprove::getImplementationId()
@@ -618,7 +618,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionDisapprove::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionDisapprove::getTypes()
     throw( uno::RuntimeException )
@@ -640,11 +640,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionDisapprove::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionContinuation methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionDisapprove::select()
@@ -653,19 +653,19 @@ void SAL_CALL InteractionDisapprove::select()
     recordSelection();
 }
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionSupplyAuthentication Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// InteractionSupplyAuthentication Implementation.
+
+
+
+
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::acquire()
@@ -674,7 +674,7 @@ void SAL_CALL InteractionSupplyAuthentication::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::release()
     throw()
@@ -682,7 +682,7 @@ void SAL_CALL InteractionSupplyAuthentication::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionSupplyAuthentication::queryInterface( const uno::Type & rType )
@@ -698,11 +698,11 @@ InteractionSupplyAuthentication::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL
@@ -722,7 +722,7 @@ InteractionSupplyAuthentication::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyAuthentication::getTypes()
     throw( uno::RuntimeException )
@@ -745,11 +745,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyAuthentication::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionContinuation methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::select()
@@ -758,11 +758,11 @@ void SAL_CALL InteractionSupplyAuthentication::select()
     recordSelection();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionSupplyAuthentication methods.
-//
-//=========================================================================
+
+
 
 // virtual
 sal_Bool SAL_CALL
@@ -772,7 +772,7 @@ InteractionSupplyAuthentication::canSetRealm()
     return m_bCanSetRealm;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 InteractionSupplyAuthentication::setRealm( const OUString& Realm )
@@ -785,7 +785,7 @@ InteractionSupplyAuthentication::setRealm( const OUString& Realm )
         m_aRealm = Realm;
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL
 InteractionSupplyAuthentication::canSetUserName()
@@ -794,7 +794,7 @@ InteractionSupplyAuthentication::canSetUserName()
     return m_bCanSetUserName;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 InteractionSupplyAuthentication::setUserName( const OUString& UserName )
@@ -807,7 +807,7 @@ InteractionSupplyAuthentication::setUserName( const OUString& UserName )
         m_aUserName = UserName;
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL
 InteractionSupplyAuthentication::canSetPassword()
@@ -816,7 +816,7 @@ InteractionSupplyAuthentication::canSetPassword()
     return m_bCanSetPassword;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 InteractionSupplyAuthentication::setPassword( const OUString& Password )
@@ -829,7 +829,7 @@ InteractionSupplyAuthentication::setPassword( const OUString& Password )
         m_aPassword = Password;
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< ucb::RememberAuthentication > SAL_CALL
 InteractionSupplyAuthentication::getRememberPasswordModes(
@@ -840,7 +840,7 @@ InteractionSupplyAuthentication::getRememberPasswordModes(
     return m_aRememberPasswordModes;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 InteractionSupplyAuthentication::setRememberPassword(
@@ -850,7 +850,7 @@ InteractionSupplyAuthentication::setRememberPassword(
     m_eRememberPasswordMode = Remember;
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL
 InteractionSupplyAuthentication::canSetAccount()
@@ -859,7 +859,7 @@ InteractionSupplyAuthentication::canSetAccount()
     return m_bCanSetAccount;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 InteractionSupplyAuthentication::setAccount( const OUString& Account )
@@ -872,7 +872,7 @@ InteractionSupplyAuthentication::setAccount( const OUString& Account )
         m_aAccount = Account;
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< ucb::RememberAuthentication > SAL_CALL
 InteractionSupplyAuthentication::getRememberAccountModes(
@@ -883,7 +883,7 @@ InteractionSupplyAuthentication::getRememberAccountModes(
     return m_aRememberAccountModes;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::setRememberAccount(
                                     ucb::RememberAuthentication Remember )
@@ -892,11 +892,11 @@ void SAL_CALL InteractionSupplyAuthentication::setRememberAccount(
     m_eRememberAccountMode = Remember;
 }
 
-//=========================================================================
-//
+
+
 // XInteractionSupplyAuthentication2 methods.
-//
-//=========================================================================
+
+
 
 // virtual
 ::sal_Bool SAL_CALL
@@ -908,7 +908,7 @@ InteractionSupplyAuthentication::canUseSystemCredentials(
     return m_bCanUseSystemCredentials;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::setUseSystemCredentials(
         ::sal_Bool UseSystemCredentials )
@@ -919,19 +919,19 @@ void SAL_CALL InteractionSupplyAuthentication::setUseSystemCredentials(
 }
 
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionSupplyName Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// InteractionSupplyName Implementation.
+
+
+
+
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionSupplyName::acquire()
@@ -940,7 +940,7 @@ void SAL_CALL InteractionSupplyName::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionSupplyName::release()
     throw()
@@ -948,7 +948,7 @@ void SAL_CALL InteractionSupplyName::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionSupplyName::queryInterface( const uno::Type & rType )
@@ -963,11 +963,11 @@ InteractionSupplyName::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
@@ -986,7 +986,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyName::getTypes()
     throw( uno::RuntimeException )
@@ -1008,11 +1008,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyName::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionContinuation methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionSupplyName::select()
@@ -1021,11 +1021,11 @@ void SAL_CALL InteractionSupplyName::select()
     recordSelection();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionSupplyName methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL
@@ -1035,19 +1035,19 @@ InteractionSupplyName::setName( const OUString& Name )
     m_aName = Name;
 }
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionReplaceExistingData Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// InteractionReplaceExistingData Implementation.
+
+
+
+
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionReplaceExistingData::acquire()
@@ -1056,7 +1056,7 @@ void SAL_CALL InteractionReplaceExistingData::acquire()
     OWeakObject::acquire();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionReplaceExistingData::release()
     throw()
@@ -1064,7 +1064,7 @@ void SAL_CALL InteractionReplaceExistingData::release()
     OWeakObject::release();
 }
 
-//=========================================================================
+
 // virtual
 uno::Any SAL_CALL
 InteractionReplaceExistingData::queryInterface( const uno::Type & rType )
@@ -1079,11 +1079,11 @@ InteractionReplaceExistingData::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL
@@ -1103,7 +1103,7 @@ InteractionReplaceExistingData::getImplementationId()
       return (*pId).getImplementationId();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionReplaceExistingData::getTypes()
     throw( uno::RuntimeException )
@@ -1126,11 +1126,11 @@ uno::Sequence< uno::Type > SAL_CALL InteractionReplaceExistingData::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
+
+
 // XInteractionContinuation methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL InteractionReplaceExistingData::select()

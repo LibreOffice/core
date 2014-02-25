@@ -38,13 +38,13 @@ using namespace com::sun::star::uno;
 namespace ucbhelper
 {
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // struct CommandEnvironment_Impl.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 struct CommandEnvironment_Impl
 {
@@ -58,13 +58,13 @@ struct CommandEnvironment_Impl
       m_xProgressHandler( rxProgressHandler ) {}
 };
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // CommandEnvironment Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 CommandEnvironment::CommandEnvironment(
         const Reference< XInteractionHandler >& rxInteractionHandler,
@@ -74,38 +74,38 @@ CommandEnvironment::CommandEnvironment(
                                            rxProgressHandler );
 }
 
-//=========================================================================
+
 // virtual
 CommandEnvironment::~CommandEnvironment()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_2( CommandEnvironment,
                    XTypeProvider,
                    XCommandEnvironment );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_2( CommandEnvironment,
                       XTypeProvider,
                       XCommandEnvironment );
 
-//=========================================================================
-//
+
+
 // XCommandEnvironemnt methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XInteractionHandler > SAL_CALL
@@ -115,7 +115,7 @@ CommandEnvironment::getInteractionHandler()
     return m_pImpl->m_xInteractionHandler;
 }
 
-//=========================================================================
+
 // virtual
 Reference< XProgressHandler > SAL_CALL
 CommandEnvironment::getProgressHandler()

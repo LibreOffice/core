@@ -30,39 +30,39 @@ using namespace com::sun::star;
 namespace ucbhelper
 {
 
-//=========================================================================
-//=========================================================================
-//
-// ActiveDataSink Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// ActiveDataSink Implementation.
+
+
+
+
+
+
 // XInterface methods
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_2( ActiveDataSink,
                    lang::XTypeProvider,
                    io::XActiveDataSink );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_2( ActiveDataSink,
                       lang::XTypeProvider,
                       io::XActiveDataSink );
 
-//=========================================================================
-//
+
+
 // XActiveDataSink methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL ActiveDataSink::setInputStream(
@@ -72,7 +72,7 @@ void SAL_CALL ActiveDataSink::setInputStream(
     m_xStream = aStream;
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
     throw( uno::RuntimeException )
