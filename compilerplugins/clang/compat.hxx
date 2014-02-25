@@ -10,12 +10,17 @@
 #ifndef INCLUDED_COMPILERPLUGINS_CLANG_COMPAT_HXX
 #define INCLUDED_COMPILERPLUGINS_CLANG_COMPAT_HXX
 
+#include <memory>
+#include <string>
+
 #include "clang/AST/Decl.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticIDs.h"
 #include "llvm/ADT/StringRef.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/raw_ostream.h"
 
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
@@ -63,6 +68,18 @@ inline unsigned getCustomDiagID(
         static_cast<clang::DiagnosticIDs::Level>(L), FormatString);
 #else
     return engine.getCustomDiagID(L, FormatString);
+#endif
+}
+
+inline std::unique_ptr<llvm::raw_fd_ostream> create_raw_fd_ostream(
+    char const * Filename, std::string & ErrorInfo)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+    return std::unique_ptr<llvm::raw_fd_ostream>(
+        new llvm::raw_fd_ostream(Filename, ErrorInfo, llvm::sys::fs::F_None));
+#else
+    return std::unique_ptr<llvm::raw_fd_ostream>(
+        new llvm::raw_fd_ostream(Filename, ErrorInfo));
 #endif
 }
 

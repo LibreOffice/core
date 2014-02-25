@@ -224,15 +224,16 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         sprintf( filename, "%s.new.%d", modifyFile.c_str(), getpid());
         string error;
         bool ok = false;
-        raw_fd_ostream ostream( filename, error, sys::fs::F_None );
+        std::unique_ptr<raw_fd_ostream> ostream(
+            compat::create_raw_fd_ostream(filename, error) );
         if( error.empty())
             {
-            it->second.write( ostream );
-            ostream.close();
-            if( !ostream.has_error() && rename( filename, modifyFile.c_str()) == 0 )
+            it->second.write( *ostream );
+            ostream->close();
+            if( !ostream->has_error() && rename( filename, modifyFile.c_str()) == 0 )
                 ok = true;
             }
-        ostream.clear_error();
+        ostream->clear_error();
         unlink( filename );
         if( !ok )
             report( DiagnosticsEngine::Error, "cannot write modified source to %0 (%1)" ) << modifyFile << error;
