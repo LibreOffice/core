@@ -339,7 +339,7 @@ static bool performQueryForUnknownType(XBridgeTest xLBT)
     return bRet;
 }
 
-// //==================================================================================================
+
 bool performTest(XBridgeTest xLBT)
 {
 	check( xLBT != null, "### no test interface!" );
@@ -373,7 +373,7 @@ bool performTest(XBridgeTest xLBT)
     aData.Sequence[1] = new TestElement(); //is empty
 
     // aData complete
-    //
+
     // this is a manually copy of aData for first setting...
     TestDataElements aSetData = new TestDataElements();
     Any aAnySet= new Any(typeof(Object), xI);
@@ -898,7 +898,7 @@ static bool raiseOnewayException(XBridgeTest xLBT)
     return bReturn;
 }
 
-// //==================================================================================================
+
 static bool raiseException(XBridgeTest xLBT )
 {
 	int nCount = 0;

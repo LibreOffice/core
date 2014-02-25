@@ -154,7 +154,7 @@ static inline void out( sal_Int64 nVal, FILE * stream = stderr,
     out( ar, stream, nStart, cFillchar );
 }
 
-//==================================================================================================
+
 Reference< XSingleServiceFactory > loadLibComponentFactory(
     const OUString & rLibName, const OUString & rImplName,
     const Reference< XMultiServiceFactory > & xSF, const Reference< XRegistryKey > & xKey )
@@ -399,7 +399,7 @@ inline static Sequence< OUString > getSupportedServiceNames()
     return Sequence< OUString >( &aName, 1 );
 }
 
-//==================================================================================================
+
 class TestImpl : public WeakImplHelper2< XServiceInfo, XMain >
 {
     Reference< XMultiServiceFactory > _xSMgr;
@@ -421,7 +421,7 @@ public:
     virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException);
 };
 
-//##################################################################################################
+
 
 
 TestImpl::TestImpl( const Reference< XMultiServiceFactory > & xSMgr )
@@ -433,7 +433,7 @@ TestImpl::~TestImpl()
 {
 }
 
-//==================================================================================================
+
 static Reference< XInterface > SAL_CALL TestImpl_create( const Reference< XMultiServiceFactory > & xSMgr )
 {
     return Reference< XInterface >( *new TestImpl( xSMgr ) );
@@ -502,7 +502,7 @@ Reference< XInterface > TestImpl::resolveObject( const OUString & rUnoUrl )
     return xResolvedObject;
 }
 
-//==================================================================================================
+
 class TimeEntry
 {
     sal_Int64           nLoop;
@@ -535,10 +535,10 @@ double TimeEntry::ratio( const TimeEntry & rEntry ) const
     }
 }
 
-//==================================================================================================
+
 typedef std::map< std::string, TimeEntry > t_TimeEntryMap;
 
-//==================================================================================================
+
 struct TimingSheet
 {
     t_TimeEntryMap      _entries;
@@ -550,7 +550,7 @@ void TimingSheet::insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nT
     _entries[ pText ] = TimeEntry( nLoop, nTicks );
 }
 
-//==================================================================================================
+
 typedef boost::unordered_map< std::string, TimingSheet > t_TimingSheetMap;
 
 
@@ -1258,14 +1258,14 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 
 extern "C"
 {
-//==================================================================================================
+
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
@@ -1287,7 +1287,7 @@ sal_Bool SAL_CALL component_writeInfo(
     }
     return sal_False;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
