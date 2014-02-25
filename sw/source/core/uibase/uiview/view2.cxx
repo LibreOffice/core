@@ -732,6 +732,7 @@ void SwView::Execute(SfxRequest &rReq)
                 sal_Int16 nVersion = 0;
                 bool bHasFileName = false;
                 m_pViewImpl->SetParam( 0 );
+                bool bNoAcceptDialog = false;
 
                 if( pArgs )
                 {
@@ -747,6 +748,10 @@ void SwView::Execute(SfxRequest &rReq)
                         nVersion = ((const SfxInt16Item *)pItem)->GetValue();
                         m_pViewImpl->SetParam( nVersion );
                     }
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_NO_ACCEPT_DIALOG, sal_False, &pItem ))
+                    {
+                        bNoAcceptDialog = ((const SfxBoolItem *)pItem)->GetValue();
+                    }
                 }
 
                 m_pViewImpl->InitRequest( rReq );
@@ -756,7 +761,7 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     rReq.SetReturnValue( SfxInt32Item( nSlot, nFound ));
 
-                    if (nFound > 0) // show Redline browser
+                    if (nFound > 0 && !bNoAcceptDialog) // show Redline browser
                     {
                         SfxViewFrame* pVFrame = GetViewFrame();
                         pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);

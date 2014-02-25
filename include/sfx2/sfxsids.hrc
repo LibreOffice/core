@@ -264,6 +264,7 @@
 #define SID_MAIL_SENDDOCASFORMAT            (SID_SFX_START + 1707)
 #define SID_MAIL_SENDDOCASMS                (SID_SFX_START + 1708)
 #define SID_MAIL_SENDDOCASOOO               (SID_SFX_START + 1709)
+#define SID_NO_ACCEPT_DIALOG                (SID_SFX_START + 1710)
 #define SID_NOAUTOSAVE                      (SID_SFX_START + 1711)
 #define SID_PRINT_SELECTEDSHEET             (SID_SFX_START + 1712)
 #define SID_OPTIONS_PAGEURL                 (SID_SFX_START + 1713)
@@ -284,6 +285,7 @@
 
 //      SID_SFX_free_START                  (SID_SFX_START + 1728)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
+
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
     // FREE, was SID_VIEW_ZOOM_MODE
@@ -753,7 +755,6 @@
 #define SC_VIEW_START           (SID_SC_START)
 #endif
 #define FID_CHG_RECORD          (EDIT_MENU_START + 18)
-//see sc/inc/sc.hrc for the rest of the SC_VIEW_START entries
 #define SID_CHG_PROTECT         (SC_VIEW_START + 84)
 
 // eof ------------------------------------------------------------------------

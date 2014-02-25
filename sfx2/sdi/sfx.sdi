@@ -1071,7 +1071,7 @@ SfxStringItem Comments SID_DOCINFO_COMMENTS
 
 
 SfxInt32Item CompareDocuments SID_DOCUMENT_COMPARE
-(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION, SfxBoolItem NoAcceptDialog SID_NO_ACCEPT_DIALOG)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4301,9 +4301,6 @@ SfxObjectItem Open SID_OPENDOC
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    /* status: */
-    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,
