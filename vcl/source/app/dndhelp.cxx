@@ -89,7 +89,7 @@ void vcl::unohelper::DragAndDropClient::dropActionChanged( const ::com::sun::sta
 {
 }
 
-// =======================================================================
+
 
 vcl::unohelper::DragAndDropWrapper::DragAndDropWrapper( DragAndDropClient* pClient )
 {

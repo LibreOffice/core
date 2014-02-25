@@ -19,7 +19,7 @@
 
 #include <svids.hrc>
 
-// =======================================================================
+
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_STDOFFSET)
 {
@@ -42,7 +42,7 @@ Bitmap (SV_RESID_BITMAP_SCROLLMSK)
     File = "scrmsk.png";
 };
 
-// -----------------------------------------------------------------------
+
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_STDOFFSET)
 {
@@ -294,7 +294,7 @@ Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_PRINTERADMIN)
     File = "printeradmin_16_8.png" ;
 };
 
-// -----------------------------------------------------------------------
+
 
 
 Bitmap (SV_ICON_LARGE_START)

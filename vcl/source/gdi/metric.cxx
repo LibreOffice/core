@@ -26,7 +26,7 @@
 
 #include <cstdio>
 
-// =======================================================================
+
 
 ImplFontMetric::ImplFontMetric()
 :   mnAscent( 0 ),
@@ -39,7 +39,7 @@ ImplFontMetric::ImplFontMetric()
     mnRefCount( 1 )
 {}
 
-// -----------------------------------------------------------------------
+
 
 inline void ImplFontMetric::AddReference()
 {
@@ -47,7 +47,7 @@ inline void ImplFontMetric::AddReference()
     ++mnRefCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline void ImplFontMetric::DeReference()
 {
@@ -56,7 +56,7 @@ inline void ImplFontMetric::DeReference()
         delete this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 {
@@ -76,13 +76,13 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
     return true;
 }
 
-// =======================================================================
+
 
 FontInfo::FontInfo()
 :   mpImplMetric( new ImplFontMetric )
 {}
 
-// -----------------------------------------------------------------------
+
 
 FontInfo::FontInfo( const FontInfo& rInfo )
 :  Font( rInfo )
@@ -91,14 +91,14 @@ FontInfo::FontInfo( const FontInfo& rInfo )
     mpImplMetric->AddReference();
 }
 
-// -----------------------------------------------------------------------
+
 
 FontInfo::~FontInfo()
 {
     mpImplMetric->DeReference();
 }
 
-// -----------------------------------------------------------------------
+
 
 FontInfo& FontInfo::operator=( const FontInfo& rInfo )
 {
@@ -114,7 +114,7 @@ FontInfo& FontInfo::operator=( const FontInfo& rInfo )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FontInfo::operator==( const FontInfo& rInfo ) const
 {
@@ -127,7 +127,7 @@ bool FontInfo::operator==( const FontInfo& rInfo ) const
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 FontType FontInfo::GetType() const
 {
@@ -138,49 +138,49 @@ FontMetric::FontMetric( const FontMetric& rMetric )
 :    FontInfo( rMetric )
 {}
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetAscent() const
 {
     return mpImplMetric->GetAscent();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetDescent() const
 {
     return mpImplMetric->GetDescent();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetIntLeading() const
 {
     return mpImplMetric->GetIntLeading();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetExtLeading() const
 {
     return mpImplMetric->GetExtLeading();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetLineHeight() const
 {
     return mpImplMetric->GetLineHeight();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetSlant() const
 {
     return mpImplMetric->GetSlant();
 }
 
-// -----------------------------------------------------------------------
+
 
 FontMetric& FontMetric::operator =( const FontMetric& rMetric )
 {
@@ -188,13 +188,13 @@ FontMetric& FontMetric::operator =( const FontMetric& rMetric )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FontMetric::operator==( const FontMetric& rMetric ) const
 {
     return FontInfo::operator==( rMetric );
 }
 
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

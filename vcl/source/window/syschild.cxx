@@ -52,7 +52,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                        sal_uInt16 nEvent, const void* /* pEvent */ )
@@ -110,7 +110,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
     return nRet;
 }
 
-// =======================================================================
+
 
 void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )
 {

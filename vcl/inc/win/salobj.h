@@ -22,9 +22,9 @@
 
 #include <salobj.hxx>
 
-// -----------------
+
 // - SalObjectData -
-// -----------------
+
 
 class WinSalObject : public SalObject
 {

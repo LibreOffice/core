@@ -17,7 +17,7 @@ Pixmap limitXCreatePixmap(Display *display, Drawable d, unsigned int width, unsi
     // limits of the Xserver; which we should catch by a failed XCreatePixmap
     // call. However extra large values should be caught here since we'd run into
     // 16 bit truncation here without noticing.
-    //
+
     // see, e.g. moz#424333
     if (width > SAL_MAX_INT16 || height > SAL_MAX_INT16)
     {

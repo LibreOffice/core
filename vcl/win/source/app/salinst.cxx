@@ -83,7 +83,7 @@
 #include <sehandler.hxx>
 #endif
 
-// =======================================================================
+
 
 void SalAbort( const OUString& rErrorText, bool )
 {
@@ -103,12 +103,12 @@ void SalAbort( const OUString& rErrorText, bool )
     }
 }
 
-// =======================================================================
+
 
 LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
-// =======================================================================
+
 
 class SalYieldMutex : public vcl::SolarMutexObject
 {
@@ -340,7 +340,7 @@ bool WinSalInstance::CheckYieldMutex()
     return true;
 }
 
-// =======================================================================
+
 
 void SalData::initKeyCodeMap()
 {
@@ -366,7 +366,7 @@ void SalData::initKeyCodeMap()
     initKey( ';', KEY_SEMICOLON );
 }
 
-// =======================================================================
+
 
 // SalData
 

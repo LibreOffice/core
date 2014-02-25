@@ -4401,10 +4401,10 @@ we check in the following sequence:
            considered the named destination in the target file, set relative or absolute as requested
      else strip the fragment from URL and then set URI or 'launch application' as requested
 */
-//
+
 // FIXME: check if the decode mechanisms for URL processing throughout this implementation
 // are the correct one!!
-//
+
 // extract target file type
             INetURLObject aDocumentURL( m_aContext.BaseURL );
             INetURLObject aTargetURL( rLink.m_aURL );
@@ -4503,7 +4503,7 @@ we check in the following sequence:
                         // protocol then force the uri action on it
                         // This code will permit the correct opening of application on web pages,
                         // the one that normally have fragments (but I may be wrong...)
-                        // and will force the use of URI when the protocol is not file://
+                        // and will force the use of URI when the protocol is not file:
                         if( (!aFragment.isEmpty() && !bTargetHasPDFExtension) ||
                                         eTargetProtocol != INET_PROT_FILE )
                         {

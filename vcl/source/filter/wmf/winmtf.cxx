@@ -902,7 +902,7 @@ void WinMtfOutput::UpdateClipRegion()
         mbComplexClip = false;
 
         mpGDIMetaFile->AddAction( new MetaPopAction() );                    // taking the original clipregion
-        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  //
+        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );
 
         // skip for 'no clipping at all' case
         if( !aClipPath.isEmpty() )

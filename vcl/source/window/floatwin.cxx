@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 
 
-// =======================================================================
+
 
 class FloatingWindow::ImplData
 {
@@ -60,7 +60,7 @@ Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()
     return mpImplData->maItemEdgeClipRect;
 }
 
-// =======================================================================
+
 
 void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -154,7 +154,7 @@ void FloatingWindow::ImplInitSettings()
     SetBackground( aColor );
 }
 
-// =======================================================================
+
 
 FloatingWindow::FloatingWindow( Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_FLOATINGWINDOW )

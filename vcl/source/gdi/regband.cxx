@@ -25,23 +25,23 @@
 
 #include "regband.hxx"
 
-// =======================================================================
-//
+
+
 // ImplRegionBand
-//
+
 // Each band contains all rectangles between upper and lower border.
 // For Union, Intersect, Xor and Exclude operations rectangles of
 // equal height are evaluated. The borders of the bands should always
 // be choosen such that this is possible.
-//
+
 // If possible, rectangles within the bands are condensed.
-//
+
 // When converting polygons all points of the polygon are registered
 // in the individual bands (for each band they are stored as
 // points in a list). After registration of these points they are
 // converted to rectangles and the points in the list are deleted.
-//
-//
+
+
 
 
 ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
@@ -146,7 +146,7 @@ ImplRegionBand::~ImplRegionBand()
 }
 
 
-//
+
 // generate separations from lines and process union with existing
 // separations
 
@@ -199,7 +199,7 @@ void ImplRegionBand::ProcessPoints()
 }
 
 
-//
+
 // generate separations from lines and process union with existing
 // separations
 
@@ -339,7 +339,7 @@ void ImplRegionBand::ScaleX( double fHorzScale )
 }
 
 
-//
+
 // combine overlaping sparations
 
 bool ImplRegionBand::OptimizeBand()
@@ -591,50 +591,50 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
     DBG_ASSERT( nXLeft <= nXRight, "ImplRegionBand::XOr(): nxLeft > nXRight" );
 
     // #i46602# Reworked rectangle Xor
-    //
+
     // In general, we can distinguish 11 cases of intersection
     // (details below). The old implementation explicitly handled 7
     // cases (numbered in the order of appearance, use CVS to get your
     // hands on the old version), therefore, I've sticked to that
     // order, and added four more cases. The code below references
     // those numbers via #1, #2, etc.
-    //
+
     // Num Mnem        newX:oldX newY:oldY  Description                                             Result          Can quit?
-    //
+
     // #1  Empty band      -         -      The band is empty, thus, simply add new bandSep         just add        Yes
-    //
+
     // #2  apart           -         -      The rectangles are disjunct, add new one as is          just add        Yes
-    //
+
     // #3  atop            ==        ==     The rectangles are _exactly_ the same, remove existing  just remove     Yes
-    //
+
     // #4  around          <         >      The new rectangle extends the old to both sides         intersect       No
-    //
+
     // #5  left            <         <      The new rectangle is left of the old (but intersects)   intersect       Yes
-    //
+
     // #5b left-atop       <         ==     The new is left of the old, and coincides on the right  intersect       Yes
-    //
+
     // #6  right           >         >      The new is right of the old (but intersects)            intersect       No
-    //
+
     // #6b right-atop      ==        >      The new is right of the old, and coincides on the left  intersect       No
-    //
+
     // #7 inside           >         <      The new is fully inside the old                         intersect       Yes
-    //
+
     // #8 inside-right     >         ==     The new is fully inside the old, coincides on the right intersect       Yes
-    //
+
     // #9 inside-left      ==        <      The new is fully inside the old, coincides on the left  intersect       Yes
-    //
-    //
+
+
     // Then, to correctly perform XOr, the segment that's switched off
     // (i.e. the overlapping part of the old and the new segment) must
     // be extended by one pixel value at each border:
     //           1   1
     // 0   4     0   4
     // 111100000001111
-    //
+
     // Clearly, the leading band sep now goes from 0 to 3, and the
     // trailing band sep from 11 to 14. This mimicks the xor look of a
     // bitmap operation.
-    //
+
 
     // band empty? -> add element
     if ( !mpFirstSep )
@@ -737,7 +737,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
                             "ImplRegionBand::XOr(): Case 4,5,6,7 expected all coordinates to be not equal!" );
 
                 // The plain-jane check would look like this:
-                //
+
                 // if( nXLeft < nOldLeft )
                 // {
                 //     // #4,5
@@ -762,7 +762,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
                 //         // #7 done!
                 //     }
                 // }
-                //
+
                 // but since we generally don't have to care whether
                 // it's 4 or 6 (only that we must not stop processing
                 // here), condensed that in such a way that only the

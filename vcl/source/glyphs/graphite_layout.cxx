@@ -30,7 +30,7 @@
 // #define GRLAYOUT_DEBUG 1
 
 // Header files
-//
+
 // Standard Library
 #include <algorithm>
 #include <cassert>
@@ -60,9 +60,9 @@
 #include <graphite_features.hxx>
 
 // Module private type definitions and forward declarations.
-//
+
 // Module private names.
-//
+
 
 #ifdef GRLAYOUT_DEBUG
 static FILE * grLog()
@@ -488,9 +488,9 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     return cOrigin;
 }
 
-//
+
 // An implementation of the SalLayout interface to enable Graphite enabled fonts to be used.
-//
+
 GraphiteLayout::GraphiteLayout(const gr_face * face, gr_font * font,
                                const grutils::GrFeatureParser * pFeatures) throw()
     : mpFace(face)

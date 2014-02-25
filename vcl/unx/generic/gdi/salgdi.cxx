@@ -594,7 +594,7 @@ bool X11SalGraphics::setClipRegion( const Region& i_rClip )
     //        aRect.y           = (short)nY;
     //        aRect.width       = (unsigned short)nW;
     //        aRect.height  = (unsigned short)nH;
-    //
+
     //        XUnionRectWithRegion( &aRect, mpClipRegion, mpClipRegion );
     //    }
     //    bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );

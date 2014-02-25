@@ -60,7 +60,7 @@ rDevice
     #endif
 }
 
-// ===========================================================================
+
 #ifndef IOS
 
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect&, const SalBitmap& /*rSourceBitmap*/, const SalBitmap& /*rAlphaBitmap*/ )
@@ -284,7 +284,7 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
 // particularly galling if we render only to a small,
 // well defined rectangular area inside one of these clip
 // rectangles.
-//
+
 // ensureClipFor() or ensureClip() need to be called before
 // real rendering. FIXME: we should prolly push this down to
 // bitmapdevice instead.

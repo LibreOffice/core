@@ -28,7 +28,7 @@
 #include <win/salgdi.h>
 #include <win/salvd.h>
 
-// =======================================================================
+
 
 static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
                                        sal_uInt16 nBitCount )
@@ -67,7 +67,7 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
     return hBitmap;
 }
 
-// =======================================================================
+
 
 SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        long nDX, long nDY,
@@ -158,7 +158,7 @@ void WinSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
     delete pDevice;
 }
 
-// =======================================================================
+
 
 WinSalVirtualDevice::WinSalVirtualDevice()
 {

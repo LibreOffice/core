@@ -23,14 +23,14 @@
 #include <vcl/window.hxx>
 #include <vcl/ctrl.hxx>
 
-// =======================================================================
+
 
 #define BUTTON_DRAW_FLATTEST    (BUTTON_DRAW_FLAT |             \
                                  BUTTON_DRAW_PRESSED |          \
                                  BUTTON_DRAW_CHECKED |          \
                                  BUTTON_DRAW_HIGHLIGHT)
 
-// =======================================================================
+
 
 namespace {
 
@@ -875,7 +875,7 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
-// =======================================================================
+
 
 void DecorationView::DrawFrame( const Rectangle& rRect,
                                 const Color& rLeftTopColor,
@@ -890,7 +890,7 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
-// =======================================================================
+
 
 void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
                                          sal_uInt16 nStyle )
@@ -940,7 +940,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
     DrawFrame( rRect, aLightColor, aShadowColor );
 }
 
-// =======================================================================
+
 
 Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
 {
@@ -975,7 +975,7 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
     return aRect;
 }
 
-// =======================================================================
+
 
 Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle )
 {

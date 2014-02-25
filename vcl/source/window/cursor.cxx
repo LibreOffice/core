@@ -28,7 +28,7 @@
 #include <tools/poly.hxx>
 
 
-// =======================================================================
+
 
 struct ImplCursorData
 {
@@ -44,7 +44,7 @@ struct ImplCursorData
     Window*         mpWindow;           // Zugeordnetes Windows
 };
 
-// =======================================================================
+
 
 static void ImplCursorInvert( ImplCursorData* pData )
 {
@@ -271,7 +271,7 @@ IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
     return 0;
 }
 
-// =======================================================================
+
 
 Cursor::Cursor()
 {

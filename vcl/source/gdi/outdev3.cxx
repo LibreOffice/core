@@ -4732,10 +4732,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                     {
                         // Whether hyphen or not: Put the word after the hyphen through
                         // word boundary.
-                        //
+
                         // nMaxBreakPos the last char that fits into the line
                         // nBreakPos is the word's start
-                        //
+
                         // We run into a problem if the doc is so narrow, that a word
                         // is broken into more than two lines ...
                         if ( xHyph.is() )
@@ -4774,10 +4774,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                             // We can have two cases:
                                             // 1) "packen" turns into "pak-ken"
                                             // 2) "Schiffahrt" turns into "Schiff-fahrt"
-                                            //
+
                                             // In case 1 we need to replace a char
                                             // In case 2 we add a char
-                                            //
+
                                             // Correct recognition is made harder by words such as
                                             // "Schiffahrtsbrennesseln", as the Hyphenator splits all
                                             // positions of the word and comes up with "Schifffahrtsbrennnesseln"

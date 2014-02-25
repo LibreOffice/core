@@ -34,8 +34,8 @@ using namespace ::com::sun::star::beans     ;   // PropertyValue
 using namespace ::com::sun::star::uno       ;   // Reference
 using namespace ::com::sun::star::util      ;   // XChangesBatch
 using namespace ::com::sun::star::awt       ;   // Size
-using namespace ::com::sun::star::container ;   //
-using namespace ::com::sun::star::configuration;   //
+using namespace ::com::sun::star::container ;
+using namespace ::com::sun::star::configuration;
 using namespace ::com::sun::star::task      ;   // XStatusIndicator
 
 static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const OUString& rTree )
@@ -207,7 +207,7 @@ bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XProper
             }
             catch( ::com::sun::star::uno::Exception& )
             {
-                //
+
             }
         }
         if ( bRetValue )

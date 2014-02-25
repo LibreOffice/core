@@ -1991,7 +1991,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     bool forwardButtonInsensitive = rScrollbarVal.mnMax == 0 ||
         rScrollbarVal.mnCur + rScrollbarVal.mnVisibleSize >= rScrollbarVal.mnMax;
 
-    // ----------------- BUTTON 1 //
+    // ----------------- BUTTON 1
     if ( has_backward )
     {
         NWConvertVCLStateToGTKState( rScrollbarVal.mnButton1State, &stateType, &shadowType );

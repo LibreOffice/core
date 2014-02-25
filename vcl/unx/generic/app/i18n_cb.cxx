@@ -39,9 +39,9 @@
 #include "salframe.hxx"
 
 
-//
+
 // i. preedit start callback
-//
+
 
 
 int
@@ -59,9 +59,9 @@ PreeditStartCallback ( XIC, XPointer client_data, XPointer )
 }
 
 
-//
+
 // ii. preedit done callback
-//
+
 
 
 void
@@ -77,15 +77,15 @@ PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
 }
 
 
-//
+
 // iii. preedit draw callback
-//
 
 
-//
+
+
 // Handle deletion of text in a preedit_draw_callback
 // from and howmuch are guaranteed to be nonnegative
-//
+
 
 void
 Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
@@ -148,10 +148,10 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
             nnewsize * sizeof(XIMFeedback));
 }
 
-//
+
 // Handle insertion of text in a preedit_draw_callback
 // string field of XIMText struct is guaranteed to be != NULL
-//
+
 
 void
 Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
@@ -241,9 +241,9 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     pText->pUnicodeBuffer[pText->nLength] = (sal_Unicode)0;
 }
 
-//
+
 // Handle the change of attributes in a preedit_draw_callback
-//
+
 void
 Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback* feedback,
         int from, int amount )
@@ -376,9 +376,9 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
         }
     }
 
-    //
+
     // build the SalExtTextInputEvent and send it up
-    //
+
     pPreeditData->aInputEv.mnTime = 0;
     pPreeditData->aInputEv.mpTextAttr = Preedit_FeedbackToSAL(
         pPreeditData->aText.pCharStyle, pPreeditData->aText.nLength, pPreeditData->aInputFlags);
@@ -402,9 +402,9 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
 void
 GetPreeditSpotLocation(XIC ic, XPointer client_data)
 {
-    //
+
     // Send SalEventExtTextInputPos event to get spotlocation
-    //
+
     SalExtTextInputPosEvent mPosEvent;
     preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
@@ -424,9 +424,9 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
 }
 
 
-//
+
 // iv. preedit caret callback
-//
+
 
 
 #if OSL_DEBUG_LEVEL > 1
@@ -473,10 +473,10 @@ PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
 }
 
 
-//
+
 // v. commit string callback: convert an extended text input (iiimp ... )
 //     into an ordinary key-event
-//
+
 
 
 Bool
@@ -489,9 +489,9 @@ IsControlCode(sal_Unicode nChar)
 }
 
 
-//
+
 // vi. status callbacks: for now these are empty, they are just needed for turbo linux
-//
+
 
 
 void
@@ -558,9 +558,9 @@ SwitchIMCallback (XIC, XPointer, XPointer call_data)
 }
 
 
-//
+
 // vii. destroy callbacks: internally disable all IC/IM calls
-//
+
 
 
 void

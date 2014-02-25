@@ -3316,9 +3316,9 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         }
     }
 
-      //
+
       // update the spot location for PreeditPosition IME style
-      //
+
     if (! aDeleteWatch.isDeleted())
     {
         if (mpInputContext != NULL && mpInputContext->UseContext())

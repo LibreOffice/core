@@ -60,13 +60,13 @@ namespace vcl_sal {
         int                             nReplacements;
     };
 
-    // ====================================================================
-    //
+
+
     // CAUTION CAUTION CAUTION
     // Every string value in the replacements tables must be in UTF-8
     // but with the UTF-8 bytes encoded, not as such! Be careful!
-    //
-    // ====================================================================
+
+
 
     static const struct KeysNameReplacement aImplReplacements_Asturian[] =
     {

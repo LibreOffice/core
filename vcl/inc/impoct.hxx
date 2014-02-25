@@ -22,9 +22,9 @@
 
 #include "octree.hxx"
 
-// ----------------
+
 // - ImpErrorQuad -
-// ----------------
+
 
 class ImpErrorQuad
 {
@@ -59,7 +59,7 @@ public:
     inline BitmapColor      ImplGetColor();
 };
 
-// ------------------------------------------------------------------------
+
 
 inline void ImpErrorQuad::operator=( const BitmapColor& rColor )
 {
@@ -68,7 +68,7 @@ inline void ImpErrorQuad::operator=( const BitmapColor& rColor )
     nBlue = (long) rColor.GetBlue() << 5L;
 }
 
-// ------------------------------------------------------------------------
+
 
 inline ImpErrorQuad& ImpErrorQuad::operator-=( const BitmapColor& rColor )
 {
@@ -79,7 +79,7 @@ inline ImpErrorQuad& ImpErrorQuad::operator-=( const BitmapColor& rColor )
     return *this;
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void ImpErrorQuad::ImplAddColorError1( const ImpErrorQuad& rErrQuad )
 {
@@ -88,7 +88,7 @@ inline void ImpErrorQuad::ImplAddColorError1( const ImpErrorQuad& rErrQuad )
     nBlue += ( rErrQuad.nBlue >> 4L );
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void ImpErrorQuad::ImplAddColorError3( const ImpErrorQuad& rErrQuad )
 {
@@ -97,7 +97,7 @@ inline void ImpErrorQuad::ImplAddColorError3( const ImpErrorQuad& rErrQuad )
     nBlue += ( rErrQuad.nBlue * 3L >> 4L );
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void ImpErrorQuad::ImplAddColorError5( const ImpErrorQuad& rErrQuad )
 {
@@ -106,7 +106,7 @@ inline void ImpErrorQuad::ImplAddColorError5( const ImpErrorQuad& rErrQuad )
     nBlue += ( rErrQuad.nBlue * 5L >> 4L );
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void ImpErrorQuad::ImplAddColorError7( const ImpErrorQuad& rErrQuad )
 {
@@ -115,7 +115,7 @@ inline void ImpErrorQuad::ImplAddColorError7( const ImpErrorQuad& rErrQuad )
     nBlue += ( rErrQuad.nBlue *7L >> 4L );
 }
 
-// ------------------------------------------------------------------------
+
 
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
@@ -124,9 +124,9 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
                         (sal_uInt8) ( ( nBlue < 0L ? 0L : nBlue > 8160L ? 8160L : nBlue ) >> 5L ) );
 }
 
-// -------------
+
 // - NodeCache -
-// -------------
+
 
 class ImpNodeCache
 {
@@ -141,7 +141,7 @@ public:
     inline void         ImplReleaseNode( OctreeNode* pNode );
 };
 
-// ------------------------------------------------------------------------
+
 
 inline OctreeNode* ImpNodeCache::ImplGetFreeNode()
 {
@@ -160,7 +160,7 @@ inline OctreeNode* ImpNodeCache::ImplGetFreeNode()
     return pNode;
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void ImpNodeCache::ImplReleaseNode( OctreeNode* pNode )
 {
