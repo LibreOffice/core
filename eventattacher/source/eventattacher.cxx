@@ -56,10 +56,10 @@ using namespace osl;
 
 namespace comp_EventAttacher {
 
-//*************************************************************************
+
 //  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener
-//*************************************************************************
+
 class InvocationToAllListenerMapper : public WeakImplHelper1< XInvocation >
 {
 public:
@@ -117,14 +117,14 @@ InvocationToAllListenerMapper::InvocationToAllListenerMapper
 {
 }
 
-//*************************************************************************
+
 Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection(void)
     throw( RuntimeException, std::exception )
 {
     return Reference< XIntrospectionAccess >();
 }
 
-//*************************************************************************
+
 Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
     Sequence< sal_Int16 >& , Sequence< Any >& )
         throw( IllegalArgumentException, CannotConvertException,
@@ -175,21 +175,21 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
     return aRet;
 }
 
-//*************************************************************************
+
 void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& , const Any& )
     throw( UnknownPropertyException, CannotConvertException,
            InvocationTargetException, RuntimeException, std::exception )
 {
 }
 
-//*************************************************************************
+
 Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& )
     throw( UnknownPropertyException, RuntimeException, std::exception )
 {
     return Any();
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
     throw( RuntimeException, std::exception )
 {
@@ -197,7 +197,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
     return xMethod.is();
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
     throw( RuntimeException, std::exception )
 {
@@ -205,10 +205,10 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
     return xField.is();
 }
 
-//*************************************************************************
+
 //  class EventAttacherImpl
 //  represents an implementation of the EventAttacher service
-//*************************************************************************
+
 class EventAttacherImpl : public WeakImplHelper3 < XEventAttacher2, XInitialization, XServiceInfo >
 {
 public:
@@ -283,18 +283,18 @@ private:
 };
 
 
-//*************************************************************************
+
 EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxContext )
     : m_xContext( rxContext )
 {
 }
 
-//*************************************************************************
+
 EventAttacherImpl::~EventAttacherImpl()
 {
 }
 
-//*************************************************************************
+
 Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( Exception )
 {
     Reference< XInterface > xRet;
@@ -308,7 +308,7 @@ Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Referen
     return xRet;
 }
 
-//*************************************************************************
+
 OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
     throw(RuntimeException, std::exception)
 {
@@ -327,14 +327,13 @@ Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
     return getSupportedServiceNames_Static();
 }
 
-//*************************************************************************
+
 Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames_Static(  )
 {
     OUString aStr(  SERVICENAME  );
     return Sequence< OUString >( &aStr, 1 );
 }
 
-//*************************************************************************
 void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments) throw( Exception, RuntimeException, std::exception )
 {
     // get services from the argument list
@@ -383,7 +382,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments) th
     }
 }
 
-//*************************************************************************
+
 //*** Private helper methods ***
 Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Exception )
 {
@@ -395,7 +394,7 @@ Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Excepti
     return m_xIntrospection;
 }
 
-//*************************************************************************
+
 //*** Private helper methods ***
 Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception )
 {
@@ -407,7 +406,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception 
     return m_xReflection;
 }
 
-//*************************************************************************
+
 //*** Private helper methods ***
 Reference< XInvocationAdapterFactory2 > EventAttacherImpl::getInvocationAdapterService() throw( Exception )
 {
@@ -420,7 +419,7 @@ Reference< XInvocationAdapterFactory2 > EventAttacherImpl::getInvocationAdapterS
 }
 
 
-//*************************************************************************
+
 //*** Private helper methods ***
 Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
 {
@@ -461,7 +460,7 @@ private:
     Reference< XAllListener >   m_AllListener;
 };
 
-//*************************************************************************
+
 FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, const OUString& EventMethod_,
                                               const Reference< XAllListener >& AllListener_ )
         : m_pEA( pEA_ )
@@ -471,7 +470,7 @@ FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, const OU
 {
 }
 
-//*************************************************************************
+
 void SAL_CALL FilterAllListenerImpl::firing(const AllEventObject& Event)
     throw( RuntimeException, std::exception )
 {
@@ -479,7 +478,7 @@ void SAL_CALL FilterAllListenerImpl::firing(const AllEventObject& Event)
         m_AllListener->firing( Event );
 }
 
-//*************************************************************************
+
 // Convert to the standard event return
 void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetType )
     throw( CannotConvertException )
@@ -524,7 +523,7 @@ void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetT
     }
 }
 
-//*************************************************************************
+
 Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
     throw( InvocationTargetException, RuntimeException, std::exception )
 {
@@ -555,7 +554,7 @@ Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
     return aRet;
 }
 
-//*************************************************************************
+
 void FilterAllListenerImpl::disposing(const EventObject& )
     throw( RuntimeException, std::exception )
 {
@@ -563,7 +562,7 @@ void FilterAllListenerImpl::disposing(const EventObject& )
 }
 
 
-//*************************************************************************
+
 Reference< XEventListener > EventAttacherImpl::attachListener
 (
     const Reference< XInterface >& xObject,
