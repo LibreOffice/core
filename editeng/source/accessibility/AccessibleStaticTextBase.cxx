@@ -19,9 +19,9 @@
 
 
 
-//
+
 // Global header
-//
+
 
 
 #include <limits.h>
@@ -39,9 +39,9 @@
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 
 
-//
+
 // Project-local header
-//
+
 
 
 #include <editeng/editdata.hxx>
@@ -79,9 +79,9 @@ namespace accessibility
     };
     sal_Unicode cNewLine(0x0a);
 
-    //
+
     // Static Helper
-    //
+
 
     ESelection MakeSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                               sal_Int32 nEndPara, sal_Int32 nEndIndex )
@@ -97,9 +97,9 @@ namespace accessibility
     }
 
 
-    //
+
     // AccessibleStaticTextBase_Impl declaration
-    //
+
 
 
 
@@ -209,9 +209,9 @@ namespace accessibility
     };
 
 
-    //
+
     // AccessibleStaticTextBase_Impl implementation
-    //
+
 
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
@@ -493,9 +493,9 @@ namespace accessibility
         return sal_False;
     }
 
-    //
+
     // AccessibleStaticTextBase implementation
-    //
+
 
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH

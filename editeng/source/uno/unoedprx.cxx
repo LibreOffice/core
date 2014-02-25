@@ -19,9 +19,9 @@
 
 
 
-//
+
 // Global header
-//
+
 
 
 #include <limits.h>
@@ -34,9 +34,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-//
+
 // Project-local header
-//
+
 
 #include "editeng/unoedprx.hxx"
 #include <editeng/unotext.hxx>

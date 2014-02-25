@@ -42,9 +42,9 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-// ======================================================================
+
 // ======================   Simple pass-through   =======================
-// ======================================================================
+
 
 void Outliner::SetUpdateMode( bool bUpdate )
 {

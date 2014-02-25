@@ -57,9 +57,9 @@ class SvxCaseMapItem;
 // => To determine the DefMetric simply use GetMetric(0)
 #define DEF_METRIC  0
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttrib
-// -------------------------------------------------------------------------
+
 // bFeature: Attribute must not expand/shrink, length is always 1
 // bEdge: Attribute will not expand, if you want to expand just on the edge
 class EditCharAttrib : private boost::noncopyable
@@ -143,9 +143,9 @@ inline void EditCharAttrib::Collaps( sal_uInt16 nDiff )
     nEnd = nEnd - nDiff;
 }
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribFont
-// -------------------------------------------------------------------------
+
 class EditCharAttribFont: public EditCharAttrib
 {
 public:
@@ -154,9 +154,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribWeight
-// -------------------------------------------------------------------------
+
 class EditCharAttribWeight : public EditCharAttrib
 {
 public:
@@ -164,9 +164,9 @@ public:
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
-// -------------------------------------------------------------------------
+
 // class EditCharAttribItalic
-// -------------------------------------------------------------------------
+
 class EditCharAttribItalic : public EditCharAttrib
 {
 public:
@@ -175,9 +175,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribShadow
-// -------------------------------------------------------------------------
+
 class EditCharAttribShadow : public EditCharAttrib
 {
 public:
@@ -186,9 +186,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribEscapement
-// -------------------------------------------------------------------------
+
 class EditCharAttribEscapement : public EditCharAttrib
 {
 public:
@@ -197,9 +197,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribOutline
-// -------------------------------------------------------------------------
+
 class EditCharAttribOutline : public EditCharAttrib
 {
 public:
@@ -208,9 +208,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribStrikeout
-// -------------------------------------------------------------------------
+
 class EditCharAttribStrikeout : public EditCharAttrib
 {
 public:
@@ -219,9 +219,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribCaseMap
-// -------------------------------------------------------------------------
+
 class EditCharAttribCaseMap : public EditCharAttrib
 {
 public:
@@ -230,9 +230,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribUnderline
-// -------------------------------------------------------------------------
+
 class EditCharAttribUnderline : public EditCharAttrib
 {
 public:
@@ -241,9 +241,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribOverline
-// -------------------------------------------------------------------------
+
 class EditCharAttribOverline : public EditCharAttrib
 {
 public:
@@ -252,9 +252,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribEmphasisMark
-// -------------------------------------------------------------------------
+
 class EditCharAttribEmphasisMark : public EditCharAttrib
 {
 public:
@@ -263,9 +263,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribRelief
-// -------------------------------------------------------------------------
+
 class EditCharAttribRelief : public EditCharAttrib
 {
 public:
@@ -274,9 +274,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribFontHeight
-// -------------------------------------------------------------------------
+
 class EditCharAttribFontHeight : public EditCharAttrib
 {
 public:
@@ -285,9 +285,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribFontWidth
-// -------------------------------------------------------------------------
+
 class EditCharAttribFontWidth : public EditCharAttrib
 {
 public:
@@ -296,9 +296,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribColor
-// -------------------------------------------------------------------------
+
 class EditCharAttribColor : public EditCharAttrib
 {
 public:
@@ -307,9 +307,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribLanguage
-// -------------------------------------------------------------------------
+
 class EditCharAttribLanguage : public EditCharAttrib
 {
 public:
@@ -318,9 +318,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribTab
-// -------------------------------------------------------------------------
+
 class EditCharAttribTab : public EditCharAttrib
 {
 public:
@@ -329,9 +329,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribLineBreak
-// -------------------------------------------------------------------------
+
 class EditCharAttribLineBreak : public EditCharAttrib
 {
 public:
@@ -340,9 +340,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribField
-// -------------------------------------------------------------------------
+
 class EditCharAttribField: public EditCharAttrib
 {
     OUString   aFieldValue;
@@ -370,9 +370,9 @@ public:
     void Reset();
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribPairKerning
-// -------------------------------------------------------------------------
+
 class EditCharAttribPairKerning : public EditCharAttrib
 {
 public:
@@ -381,9 +381,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribKerning
-// -------------------------------------------------------------------------
+
 class EditCharAttribKerning : public EditCharAttrib
 {
 public:
@@ -392,9 +392,9 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+
 // class EditCharAttribWordLineMode
-// -------------------------------------------------------------------------
+
 class EditCharAttribWordLineMode: public EditCharAttrib
 {
 public:

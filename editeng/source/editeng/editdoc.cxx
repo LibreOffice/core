@@ -68,7 +68,7 @@
 using namespace ::com::sun::star;
 
 
-// ------------------------------------------------------------
+
 
 sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType )
 {
@@ -157,7 +157,7 @@ sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
 }
 
 
-// ------------------------------------------------------------
+
 
 // Should later be moved to TOOLS/STRING (Current: 303)
 // for Grep: WS_TARGET

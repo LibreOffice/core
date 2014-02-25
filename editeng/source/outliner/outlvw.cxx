@@ -1186,9 +1186,9 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich, bo
 
 
 
-// ======================================================================
+
 // ======================   Simple pass-through   =======================
-// ======================================================================
+
 
 
 void OutlinerView::InsertText( const OUString& rNew, bool bSelect )
@@ -1443,9 +1443,9 @@ Selection OutlinerView::GetSurroundingTextSelection() const
 }
 
 
-// ======================================================================
+
 // ===== some code for thesaurus sub menu within context menu
-// ======================================================================
+
 
 namespace {
 

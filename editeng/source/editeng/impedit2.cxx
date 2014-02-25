@@ -687,9 +687,9 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet()
     return *pEmptyItemSet;
 }
 
-//  ----------------------------------------------------------------------
+
 //  MISC
-//  ----------------------------------------------------------------------
+
 void ImpEditEngine::CursorMoved( ContentNode* pPrevNode )
 {
     // Delete empty attributes, but only if paragraph is not empty!
@@ -730,9 +730,9 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
         CalcHeight( pNextPortion );
 }
 
-//  ----------------------------------------------------------------------
+
 //  Cursor movements
-//  ----------------------------------------------------------------------
+
 
 EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView )
 {
@@ -1881,9 +1881,9 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
 
         OUString aText = pParaPortion->GetNode()->GetString();
 
-        //
+
         // Bidi functions from icu 2.0
-        //
+
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
         nError = U_ZERO_ERROR;
@@ -2029,9 +2029,9 @@ SvxCellVerJustify ImpEditEngine::GetVerJustification( sal_Int32 nPara ) const
     return static_cast<SvxCellVerJustify>(rItem.GetEnumValue());
 }
 
-//  ----------------------------------------------------------------------
+
 //  Text changes
-//  ----------------------------------------------------------------------
+
 
 void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars, EditUndoRemoveChars* pCurUndo )
 {
@@ -2967,9 +2967,9 @@ EditPaM ImpEditEngine::InsertLineBreak(const EditSelection& aCurSel)
     return aPaM;
 }
 
-//  ----------------------------------------------------------------------
+
 //  Helper functions
-//  ----------------------------------------------------------------------
+
 Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags )
 {
     OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: PaMtoEditCursor" );

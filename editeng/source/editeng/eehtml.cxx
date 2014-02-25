@@ -337,9 +337,9 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_COLGROUP_ON:
     case HTML_COLGROUP_OFF: break;
 
-    case HTML_FONT_ON:      // ...
+    case HTML_FONT_ON:
                             break;
-    case HTML_FONT_OFF:     // ...
+    case HTML_FONT_OFF:
                             break;
 
     case HTML_TITLE_ON:
