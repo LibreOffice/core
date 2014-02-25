@@ -59,9 +59,9 @@ namespace
     }
 }
 
-//
+
 //  class ResData
-//
+
 
 ResData::ResData( const OString &rGId )
     :
@@ -92,9 +92,9 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
     sGId = sGId.replaceAll("\r", OString());
 }
 
-//
+
 // class MergeEntrys
-//
+
 
 bool MergeEntrys::GetText( OString &rReturn,
     sal_uInt16 nTyp, const OString &nLangIndex, bool bDel )
@@ -135,9 +135,9 @@ OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigTex
     return sKey + "||" + rOrigText;
 }
 
-//
+
 // class MergeDataHashMap
-//
+
 
 std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OString& rKey, MergeData* pMergeData)
 {
@@ -189,9 +189,9 @@ MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
     return aLastFound;
 }
 
-//
+
 // class MergeData
-//
+
 
 MergeData::MergeData(
     const OString &rTyp, const OString &rGID,
@@ -220,9 +220,9 @@ bool MergeData::operator==( ResData *pData )
         && pData->sResTyp.equalsIgnoreAsciiCase(sTyp);
 }
 
-//
+
 // class MergeDataFile
-//
+
 
 MergeDataFile::MergeDataFile(
     const OString &rFileName, const OString &rFile,

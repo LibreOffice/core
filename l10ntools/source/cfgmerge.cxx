@@ -84,9 +84,9 @@ void workOnTokenSet(int nTyp, char * pTokenText) {
 
 }
 
-//
+
 // class CfgStackData
-//
+
 
 CfgStackData* CfgStack::Push(const OString &rTag, const OString &rId)
 {
@@ -95,9 +95,9 @@ CfgStackData* CfgStack::Push(const OString &rTag, const OString &rId)
     return pD;
 }
 
-//
+
 // class CfgStack
-//
+
 
 CfgStack::~CfgStack()
 {
@@ -127,9 +127,9 @@ CfgStackData *CfgStack::GetStackData()
         return 0;
 }
 
-//
+
 // class CfgParser
-//
+
 
 CfgParser::CfgParser()
                 : pStackData( NULL ),
@@ -329,9 +329,9 @@ void CfgParser::Error(const OString& rError)
     yyerror(rError.getStr());
 }
 
-//
+
 // class CfgExport
-//
+
 
 CfgExport::CfgExport(
         const OString &rOutputFile,
@@ -389,9 +389,9 @@ void CfgExport::WorkOnText(
 }
 
 
-//
+
 // class CfgMerge
-//
+
 
 CfgMerge::CfgMerge(
     const OString &rMergeSource, const OString &rOutputFile,

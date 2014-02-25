@@ -216,9 +216,9 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
     }
  }
 
-//
+
 // Class PoEntry
-//
+
 
 PoEntry::PoEntry()
     : m_pGenPo( 0 )
@@ -400,9 +400,9 @@ OString PoEntry::genKeyId(const OString& rGenerator)
     return OString(sKeyId);
 }
 
-//
+
 // Class PoHeader
-//
+
 
 namespace
 {
@@ -443,9 +443,9 @@ PoHeader::~PoHeader()
     delete m_pGenPo;
 }
 
-//
+
 // Class PoOfstream
-//
+
 
 PoOfstream::PoOfstream()
     : m_aOutPut()
@@ -504,9 +504,9 @@ void PoOfstream::writeEntry( const PoEntry& rPoEntry )
     rPoEntry.m_pGenPo->writeToFile( m_aOutPut );
 }
 
-//
+
 // Class PoIfstream
-//
+
 
 namespace
 {

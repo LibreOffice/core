@@ -323,17 +323,17 @@ bool includeProject(const OString& rProject) {
 }
 
 /// Handle one directory in the hierarchy.
-///
+/
 /// Ignores symlinks and instead explicitly descends into clone/* or src/*,
 /// as the Cygwin symlinks are not supported by osl::Directory on Windows.
-///
+/
 /// @param rUrl the absolute file URL of this directory
-///
+/
 /// @param nLevel 0 if this is either the root directory that contains the
 /// projects or one of the clone/* or src/* directories that contain the
 /// additional projects; -1 if this is the clone directory; 1 if this
 /// is a project directory; 2 if this is a directory inside a project
-///
+/
 /// @param rProject the name of the project (empty and ignored if nLevel <= 0)
 /// @param rPotDir the path of pot directory
 void handleDirectory(
