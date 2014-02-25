@@ -597,7 +597,7 @@ struct W1_FFN ///////////////////////////////////////// Font Descriptor
         return (sal_uInt16)((fFlagsGet() >> 4) & 7); }
     // sal_uInt8 : 1;// 0x1:80  reserved
     sal_uInt8 szFfn[65];// 0x6      zero terminated string that records name of font.
-                            // Vorsicht: Dieses Array kann auch kleiner sein!!!
+                            // Careful: the array may be smaller!!!
                             // Possibly followed by a second sz which records the name of an
                             // alternate font to use if the first named font does not exist
                             // on this system. Maximal size of szFfn is 65 characters.
@@ -620,7 +620,7 @@ struct W1_PHE // Paragraph Height
     SVBT16 dxaCol;
     sal_uInt16 dxaColGet() {
         return SVBT16ToShort(dxaCol); }
-    SVBT16 xxx; // beachte die dreifachnutzung.... siehe doc.
+    SVBT16 xxx; // note the triple usage.... see doc.
     sal_uInt16 dylHeightGet() {
         return SVBT16ToShort(xxx); }
     sal_uInt16 dylLineGet() {

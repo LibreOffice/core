@@ -27,7 +27,7 @@
 #include <swerror.h>
 #include <statstr.hrc>
 
-// Initialisieren der Feld-FilterFlags
+// Initializing the field FilterFlags
 static sal_uLong WW1_Read_FieldIniFlags()
 {
     // sal_uInt16 i;
@@ -47,25 +47,22 @@ static sal_uLong WW1_Read_FieldIniFlags()
 }
 
 // StarWriter-Interface
-// Eine Methode liefern die call-Schnittstelle fuer den Writer.
-// Read() liest eine Datei. hierzu werden zwei Objekte erzeugt, die Shell,
-// die die Informationen aufnimmt und der Manager der sie aus der Datei liest.
-// Diese werden dann einfach per Pipe 'uebertragen'.
+// One method returns the call interface for the Writer.
+// Read() reads a file. For this, two objects get created. The Shell,
+// which collects all information, and the manager, which reads it
+// from the file.
 sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString& /*cName*/)
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");
     if (pStrm != NULL)
     {
-        sal_Bool bNew = !bInsertMode;           // New Doc ( kein Einfuegen )
+        sal_Bool bNew = !bInsertMode;           // New Doc ( no insert )
 
-        // erstmal eine shell konstruieren: die ist schnittstelle
-        // zum writer-dokument
         sal_uLong nFieldFlags = WW1_Read_FieldIniFlags();
         Ww1Shell* pRdr = new Ww1Shell( rDoc, rPam, rBaseURL, bNew, nFieldFlags );
         if( pRdr )
         {
-            // dann den manager, der liest die struktur des word-streams
             Ww1Manager* pMan = new Ww1Manager( *pStrm, nFieldFlags );
             if( pMan )
             {
@@ -74,24 +71,16 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
                     ::StartProgress( STR_STATSTR_W4WREAD, 0, 100,
                                         rDoc.GetDocShell() );
                     ::SetProgressState( 0, rDoc.GetDocShell() );
-                    // jetzt nur noch alles rueberschieben
+                    // just push everything over now
                     *pRdr << *pMan;
                     if( !pMan->GetError() )
-                        // und nur hier, wenn kein fehler auftrat
-                        // fehlerfreiheit melden
-                        nRet = 0; // besser waere: WARN_SWG_FEATURES_LOST;
+                        // signal absence of errors
+                        nRet = 0; // would be better: WARN_SWG_FEATURES_LOST;
                     ::EndProgress( rDoc.GetDocShell() );
                 }
                 else
                 {
                     if( pMan->GetFib().GetFIB().fComplexGet() )
-                        // Attention: hier muss eigentlich ein Error
-                        // wegen Fastsave kommen, das der PMW-Filter
-                        // das nicht unterstuetzt. Stattdessen temporaer
-                        // nur eine Warnung, bis die entsprechende
-                        // Meldung und Behandlung weiter oben eingebaut ist.
-                        // nRet = WARN_WW6_FASTSAVE_ERR;
-                        // Zum Einchecken mit neuem String:
                         nRet = ERR_WW6_FASTSAVE_ERR;
                 }
             }
@@ -103,11 +92,11 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
     return nRet;
 }
 
-// Die Shell ist die Schnittstelle vom Filter zum Writer. Sie ist
-// abgeleitet von der mit ww-filter gemeinsam benutzten Shell
-// SwFltShell und enthaelt alle fuer ww1 noetigen Erweiterungen. Wie
-// in einen Stream werden alle Informationen, die aus der Datei
-// gelesen werden, in die shell ge'piped'.
+// The shell is the interface from filter to Writer. It is derived
+// from SwFltShell and contains all relevant extensions for ww1.
+// SwFltShell is used in common with ww-filter. Information read from
+// the file gets 'piped' into the shell, like would be done for a
+// stream.
 Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const OUString& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags)
     : SwFltShell(&rD, rPam, rBaseURL, bNew, nFieldFlags)
 {
