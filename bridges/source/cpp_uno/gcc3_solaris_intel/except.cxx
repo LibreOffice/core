@@ -51,7 +51,6 @@ void dummy_can_throw_anything( char const * )
 {
 }
 
-//==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -89,7 +88,6 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
 #endif
 }
 
-//==================================================================================================
 class RTTI
 {
     typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
@@ -211,7 +209,6 @@ static void deleteException( void * pExc )
     }
 }
 
-//==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -272,7 +269,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     __cxa_throw( pCppExc, rtti, deleteException );
 }
 
-//==================================================================================================
 void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
     if (! header)

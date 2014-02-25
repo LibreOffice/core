@@ -38,7 +38,6 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
 // The call instruction within the asm section of callVirtualMethod may throw
 // exceptions.  So that the compiler handles this correctly, it is important
 // that (a) callVirtualMethod might call dummy_can_throw_anything (although this
@@ -148,7 +147,6 @@ void callVirtualMethod(
     }
 }
 
-//==================================================================================================
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
@@ -358,7 +356,6 @@ bool isSimpleReturnType(typelib_TypeDescription * pTD, bool recursive)
 }
 }
 
-//==================================================================================================
 
 namespace bridges { namespace cpp_uno { namespace shared {
 void unoInterfaceProxyDispatch(

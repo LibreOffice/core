@@ -43,7 +43,6 @@ struct Mapping : public uno_Mapping
     Bridge * m_bridge;
 };
 
-//==============================================================================
 struct Bridge
 {
     mutable oslInterlockedCount m_ref;
@@ -57,7 +56,6 @@ struct Bridge
 
     JNI_info const *            m_jni_info;
 
-    //
     ~Bridge() SAL_THROW(());
     explicit Bridge(
         uno_Environment * java_env, uno_ExtEnvironment * uno_env,

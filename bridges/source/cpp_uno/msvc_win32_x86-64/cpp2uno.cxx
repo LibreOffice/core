@@ -118,7 +118,6 @@ static inline typelib_TypeClass cpp2uno_call(
                 // pParamTD will be released at reconversion
                 ppTempParamTD[nTempIndexes++] = pParamTD;
             }
-            //
             else if ( bridges::cpp_uno::shared::relatesToInterfaceType( pParamTD ) )
             {
                 ::uno_copyAndConvertData(

@@ -72,7 +72,7 @@ void MapReturn(long r3, double dret, typelib_TypeClass eTypeClass, void *pRegist
 
 namespace
 {
-//==================================================================================================
+
 static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     void * pRegisterReturn, typelib_TypeDescription * pReturnTypeDescr,
         sal_uInt64 *pStack, sal_uInt32 nStack,
@@ -227,7 +227,6 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         if (bOverFlow) \
                 *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
-//==================================================================================================
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot  aVtableSlot,

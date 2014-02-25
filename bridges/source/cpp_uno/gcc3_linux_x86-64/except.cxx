@@ -49,7 +49,6 @@ using namespace ::__cxxabiv1;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-//==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -87,7 +86,6 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
 #endif
 }
 
-//==================================================================================================
 class RTTI
 {
     typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
@@ -224,7 +222,6 @@ namespace
     struct theRTTI : public rtl::Static<RTTI, theRTTI> {};
 }
 
-//==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -272,7 +269,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     __cxxabiv1::__cxa_throw( pCppExc, rtti, deleteException );
 }
 
-//==================================================================================================
 void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
     if (! header)

@@ -39,7 +39,6 @@ namespace jvmaccess { class UnoVirtualMachine; }
 namespace jni_uno
 {
 
-//------------------------------------------------------------------------------
 inline bool type_equals(
     typelib_TypeDescriptionReference * type1,
     typelib_TypeDescriptionReference * type2 )
@@ -53,14 +52,12 @@ inline bool type_equals(
     return ((type1->eTypeClass == type2->eTypeClass) && name1.equals( name2 ));
 }
 
-//------------------------------------------------------------------------------
 inline bool is_XInterface( typelib_TypeDescriptionReference * type )
 {
     return ((typelib_TypeClass_INTERFACE == type->eTypeClass) &&
             OUString::unacquired( &type->pTypeName ) == "com.sun.star.uno.XInterface");
 }
 
-//==============================================================================
 struct JNI_type_info
 {
     ::com::sun::star::uno::TypeDescription      m_td;
@@ -75,7 +72,6 @@ protected:
         JNI_context const & jni, typelib_TypeDescription * td );
 };
 
-//==============================================================================
 struct JNI_interface_type_info : public JNI_type_info
 {
     jobject                                     m_proxy_ctor; // proxy ctor
@@ -88,7 +84,6 @@ struct JNI_interface_type_info : public JNI_type_info
         JNI_context const & jni, typelib_TypeDescription * td );
 };
 
-//==============================================================================
 struct JNI_compound_type_info : public JNI_type_info
 {
     JNI_type_info const *                       m_base;
@@ -102,7 +97,6 @@ struct JNI_compound_type_info : public JNI_type_info
         JNI_context const & jni, typelib_TypeDescription * td );
 };
 
-//==============================================================================
 struct JNI_type_info_holder
 {
     JNI_type_info * m_info;
@@ -114,7 +108,6 @@ struct JNI_type_info_holder
 typedef ::boost::unordered_map<
     OUString, JNI_type_info_holder, OUStringHash > t_str2type;
 
-//==============================================================================
 class JNI_info
 {
     mutable ::osl::Mutex        m_mutex;
@@ -125,14 +118,12 @@ public:
     jclass                      m_class_Class;
     jmethodID                   m_method_Class_forName;
 
-    //
     jobject                     m_object_java_env;
     jobject                     m_object_Any_VOID;
     jobject                     m_object_Type_UNSIGNED_SHORT;
     jobject                     m_object_Type_UNSIGNED_LONG;
     jobject                     m_object_Type_UNSIGNED_HYPER;
 
-    //
     jclass                      m_class_Object;
     jclass                      m_class_Character;
     jclass                      m_class_Boolean;
@@ -151,7 +142,6 @@ public:
     jclass                      m_class_TypeClass;
     jclass                      m_class_JNI_proxy;
 
-    //
     jmethodID                   m_method_Object_toString;
     jmethodID                   m_method_Class_getName;
     jmethodID                   m_method_Throwable_getMessage;
@@ -172,7 +162,6 @@ public:
     jmethodID                   m_method_Long_longValue;
     jmethodID                   m_method_Short_shortValue;
 
-    //
     jmethodID                   m_method_IEnvironment_getRegisteredInterface;
     jmethodID                   m_method_IEnvironment_registerInterface;
     jmethodID                   m_method_UnoRuntime_generateOid;
@@ -186,7 +175,6 @@ public:
     jmethodID                   m_method_TypeClass_fromInt;
     jfieldID                    m_field_Enum_m_value;
 
-    //
     jmethodID                   m_method_JNI_proxy_get_proxy_ctor;
     jmethodID                   m_method_JNI_proxy_create;
     jfieldID                    m_field_JNI_proxy_m_receiver_handle;
@@ -194,15 +182,12 @@ public:
     jfieldID                    m_field_JNI_proxy_m_type;
     jfieldID                    m_field_JNI_proxy_m_oid;
 
-    //
     ::com::sun::star::uno::TypeDescription m_XInterface_queryInterface_td;
     ::com::sun::star::uno::Type const & m_Exception_type;
     ::com::sun::star::uno::Type const & m_RuntimeException_type;
     ::com::sun::star::uno::Type const & m_void_type;
-    //
     JNI_interface_type_info const * m_XInterface_type_info;
 
-    //
     JNI_type_info const * get_type_info(
         JNI_context const & jni,
         typelib_TypeDescription * type ) const;
@@ -212,7 +197,6 @@ public:
     JNI_type_info const * get_type_info(
         JNI_context const & jni,
         OUString const & uno_name ) const;
-    //
     inline static void append_sig(
         OStringBuffer * buf, typelib_TypeDescriptionReference * type,
         bool use_Object_for_type_XInterface = true, bool use_slashes = true );
@@ -233,14 +217,12 @@ private:
     inline ~JNI_info() {}
 };
 
-//______________________________________________________________________________
 inline void JNI_info::destroy( JNIEnv * jni_env )
 {
     destruct( jni_env );
     delete this;
 }
 
-//______________________________________________________________________________
 inline void JNI_info::append_sig(
     OStringBuffer * buf, typelib_TypeDescriptionReference * type,
     bool use_Object_for_type_XInterface, bool use_slashes )

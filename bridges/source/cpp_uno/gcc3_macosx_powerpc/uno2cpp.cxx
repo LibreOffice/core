@@ -39,7 +39,6 @@ namespace
 {
 
 
-//==================================================================================================
 static void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
@@ -113,7 +112,7 @@ static void callVirtualMethod(
      // now we need to parse the entire signature string */
      // until we get the END indicator */
 
-     // treat complex return pointer like any other parameter //
+     // treat complex return pointer like any other parameter
 
 #if OSL_DEBUG_LEVEL > 2
      /* Let's figure out what is really going on here*/
@@ -302,7 +301,6 @@ static void callVirtualMethod(
 }
 
 
-//==================================================================================================
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot  aVtableSlot,

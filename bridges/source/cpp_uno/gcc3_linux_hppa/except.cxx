@@ -51,7 +51,6 @@ namespace CPPU_CURRENT_NAMESPACE
     {
     }
 
-    //===================================================================
     static OUString toUNOname( char const * p ) SAL_THROW(())
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -89,7 +88,6 @@ namespace CPPU_CURRENT_NAMESPACE
 #endif
     }
 
-    //=====================================================================
     class RTTI
     {
         typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
@@ -211,7 +209,6 @@ namespace CPPU_CURRENT_NAMESPACE
         }
     }
 
-    //==================================================================
     void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -278,7 +275,6 @@ namespace CPPU_CURRENT_NAMESPACE
         return header->adjustedPtr;
     }
 
-    //===================================================================
     void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
     {
         if (! header)
