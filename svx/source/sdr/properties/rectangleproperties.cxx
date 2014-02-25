@@ -20,7 +20,7 @@
 #include <svx/sdr/properties/rectangleproperties.hxx>
 #include <svx/svdorect.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

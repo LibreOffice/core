@@ -28,11 +28,11 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImplPairDephAndObject
 {
@@ -57,7 +57,7 @@ public:
     double getDepth() const { return mfDepth; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void getAllHit3DObjectWithRelativePoint(
     const basegfx::B3DPoint& rFront,
@@ -96,7 +96,7 @@ void getAllHit3DObjectWithRelativePoint(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInformation3D& o_rViewInformation3D, const E3dCompoundObject& rCandidate)
 {
@@ -158,7 +158,7 @@ E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInf
     return pRootScene;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
     const basegfx::B2DPoint& rPoint,
@@ -235,7 +235,7 @@ SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool checkHitSingle3DObject(
     const basegfx::B2DPoint& rPoint,

@@ -19,10 +19,10 @@
 
 #include "fmtextcontrolfeature.hxx"
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
@@ -30,9 +30,9 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
 
-    //====================================================================
+
     //= FmTextControlFeature
-    //====================================================================
+
 
     FmTextControlFeature::FmTextControlFeature( const Reference< XDispatch >& _rxDispatcher, const URL& _rFeatureURL, SfxSlotId _nSlotId, ISlotInvalidator* _pInvalidator )
         :m_xDispatcher    ( _rxDispatcher )
@@ -112,8 +112,8 @@ namespace svx
         }
     }
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

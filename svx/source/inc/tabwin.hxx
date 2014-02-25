@@ -30,7 +30,7 @@
 #include <svtools/transfer.hxx>
 #include "svx/dbtoolsclient.hxx"
 
-//==================================================================
+
 class FmFieldWin;
 class FmFieldWinListBox
                     :public SvTreeListBox
@@ -57,7 +57,7 @@ protected:
     using SvTreeListBox::ExecuteDrop;
 };
 
-//========================================================================
+
 class FmFormShell;
 class FmFieldWinData
 {
@@ -66,7 +66,7 @@ public:
     ~FmFieldWinData();
 };
 
-//========================================================================
+
 class FmFieldWin :public SfxFloatingWindow
                     ,public SfxControllerItem
                     ,public ::comphelper::OPropertyChangeListener
@@ -119,7 +119,7 @@ protected:
     using SfxFloatingWindow::StateChanged;
 };
 
-//========================================================================
+
 class FmFieldWinMgr : public SfxChildWindow
 {
 public:

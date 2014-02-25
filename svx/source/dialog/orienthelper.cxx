@@ -27,7 +27,7 @@
 
 namespace svx {
 
-// ============================================================================
+
 
 struct OrientationHelper_Impl
 {
@@ -103,7 +103,7 @@ IMPL_LINK_NOARG(OrientationHelper_Impl, ClickHdl)
     return 0L;
 }
 
-// ============================================================================
+
 
 OrientationHelper::OrientationHelper( DialControl& rCtrlDial, NumericField& rNfRotation, CheckBox& rCbStacked ) :
     mpImpl( new OrientationHelper_Impl( rCtrlDial, rCbStacked ) )
@@ -153,7 +153,7 @@ void OrientationHelper::EnableStackedTriState( bool bEnable )
     mpImpl->mrCbStacked.EnableTriState( bEnable );
 }
 
-// ============================================================================
+
 
 OrientStackedWrapper::OrientStackedWrapper( OrientationHelper& rOrientHlp ) :
     SingleControlWrapperType( rOrientHlp )
@@ -181,7 +181,7 @@ void OrientStackedWrapper::SetControlValue( bool bValue )
     GetControl().SetStackedState( bValue ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
-// ============================================================================
+
 
 } // namespace svx
 

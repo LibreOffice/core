@@ -19,9 +19,9 @@
 
 
 
-//
+
 // Global header
-//
+
 
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>
@@ -31,9 +31,9 @@
 #include <svx/svdpool.hxx>
 
 
-//
+
 // Project-local header
-//
+
 
 
 #include "AccessibleEmptyEditSource.hxx"

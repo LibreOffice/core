@@ -141,7 +141,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
     return SvxDrawingLayerExport( pModel, xOut, xComponent );
 }
 
-//-////////////////////////////////////////////////////////////////////
+//-
 
 sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent )
 {

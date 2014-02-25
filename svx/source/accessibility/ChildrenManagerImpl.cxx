@@ -246,10 +246,10 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
 
         // 4. Find all shapes in the old list that are not in the current list,
         // send appropriate events and remove the accessible shape.
-        //
+
         // Do this *after* we have set our new list of children, because
         // removing a child may cause
-        //
+
         // ChildDescriptor::disposeAccessibleObject -->
         // AccessibleContextBase::CommitChange -->
         // AtkListener::notifyEvent ->
@@ -258,10 +258,10 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
         // AccessibleDrawDocumentView::getAccessibleChildCount ->
         // ChildrenManagerImpl::GetChildCount ->
         // maVisibleChildren.size()
-        //
+
         // to be fired, and so the operations will take place on
         // the list we are trying to replace
-        //
+
         RemoveNonVisibleChildren (maVisibleChildren, aChildList);
 
         aChildList.clear();

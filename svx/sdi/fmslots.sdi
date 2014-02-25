@@ -306,32 +306,32 @@ interface Form
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-     //--------------------------------------------------------------------------
+
     SID_FM_FMEXPLORER_CONTROL
     [
         StateMethod = GetState ;
     ]
-     //--------------------------------------------------------------------------
+
     SID_FM_DATANAVIGATOR_CONTROL
     [
         StateMethod = GetState ;
     ]
-     //--------------------------------------------------------------------------
+
     SID_FM_FIELDS_CONTROL
     [
         StateMethod = GetState ;
     ]
-     //--------------------------------------------------------------------------
+
     SID_FM_PROPERTY_CONTROL
     [
         StateMethod = GetState ;
     ]
-    //--------------------------------------------------------------------------
+
     SID_FM_FILTER_NAVIGATOR_CONTROL
     [
         StateMethod = GetState ;
     ]
-     //--------------------------------------------------------------------------
+
     SID_FM_SHOW_PROPERTIES
     [
         StateMethod = GetState ;

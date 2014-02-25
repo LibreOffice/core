@@ -25,7 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -52,12 +52,12 @@ namespace sdr
             // sub-hierarchy, even when they are group objects. This is necessary
             // to avoid that the same VOCs will be added to the draw hierarchy
             // twice which leads to problems.
-            //
+
             // This solution is only a first solution to get things running. Later
             // this needs to be replaced with creating real VOCs for the objects
             // referenced by virtual objects to avoid the 'trick' of setting the
             // offset for painting at the destination OutputDevive.
-            //
+
             // As can be seen, with primitives, the problem will be solved using
             // a transformPrimitive, so this solution can stay with primitives.
             return 0L;

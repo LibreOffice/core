@@ -50,7 +50,7 @@ private:
     MetricField                         maMFWidth;
     SfxMapUnit                          meMapUnit;
     OUString*                           rStr;
-    OUString                            mstrPT; //
+    OUString                            mstrPT;
     long                                mnCustomWidth;
     bool                                mbCustom;
     bool                                mbColseByEdit;

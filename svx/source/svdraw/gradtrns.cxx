@@ -25,7 +25,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/helpers.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, const SdrObject* pObj)
 {
@@ -176,7 +176,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
     rV.maPositionB = aEndPos;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj,
     bool bMoveSingle, bool bMoveFirst)

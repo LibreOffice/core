@@ -208,9 +208,9 @@ namespace svxform
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
     namespace DataType = ::com::sun::star::sdbc::DataType;
 
-//==============================================================================
+
 // ColumnInfo
-//==============================================================================
+
 struct ColumnInfo
 {
     // information about the column itself
@@ -246,9 +246,9 @@ struct ColumnInfo
     }
 };
 
-//==============================================================================
+
 //= ColumnInfoCache
-//==============================================================================
+
 class ColumnInfoCache
 {
 public:
@@ -426,9 +426,9 @@ const ColumnInfo& ColumnInfoCache::getColumnInfo( size_t _pos )
     return m_aColumns[ _pos ];
 }
 
-//==================================================================
+
 // OParameterContinuation
-//==================================================================
+
 class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
 {
     Sequence< PropertyValue >       m_aValues;
@@ -448,9 +448,9 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
     m_aValues = _rValues;
 }
 
-//==================================================================
+
 // FmXAutoControl
-//==================================================================
+
 struct FmFieldInfo
 {
     OUString       aFieldName;
@@ -463,9 +463,9 @@ struct FmFieldInfo
     {xField->getPropertyValue(FM_PROP_NAME) >>= aFieldName;}
 };
 
-//==================================================================
+
 // FmXAutoControl
-//==================================================================
+
 class FmXAutoControl: public UnoControl
 
 {
@@ -523,7 +523,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
         return true;
     }
 };
-//..............................................................................
+
 IMPL_LINK( FormController, OnInvalidateFeatures, void*, /*_pNotInterestedInThisParam*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1571,7 +1571,7 @@ void FormController::modified( const EventObject& _rEvent ) throw( RuntimeExcept
             // (this case may happen if somebody moves the scroll wheel of the mouse over a control
             // which does not have the focus)
             // 85511 - 29.05.2001 - frank.schoenheit@germany.sun.com
-            //
+
             // also, it happens when an image control gets a new image by double-clicking it
             // #i88458# / 2009-01-12 / frank.schoenheit@sun.com
             Reference< XWindow > xControlWindow( _rEvent.Source, UNO_QUERY_THROW );

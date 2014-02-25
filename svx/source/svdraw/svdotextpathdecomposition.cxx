@@ -40,7 +40,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // primitive decomposition helpers
 
 #include <basegfx/polygon/b2dlinegeometry.hxx>
@@ -57,13 +57,13 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PathTextPortion helper
 
 namespace
@@ -161,7 +161,7 @@ namespace
     };
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // TextBreakup helper
 
 namespace
@@ -202,7 +202,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // TextBreakup one poly and one paragraph helper
 
 namespace
@@ -560,7 +560,7 @@ namespace
     };
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // primitive decomposition helpers
 
 namespace
@@ -667,7 +667,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // primitive decomposition
 
 void SdrTextObj::impDecomposePathTextPrimitive(

@@ -72,14 +72,14 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include "svx/xlinjoit.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::AttributeProperties(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrAttrObj,SdrObject);
 
@@ -119,7 +119,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
     GetProperties().SetModel(pOldModel, pNewModel);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // syntactical sugar for ItemSet accesses
 
 void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)

@@ -66,7 +66,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
 
-//========================================================================
+
 // = FmSearchThread
 
 void FmSearchThread::run()
@@ -82,7 +82,7 @@ void FmSearchThread::onTerminated()
     delete this;
 }
 
-//========================================================================
+
 // = FmRecordCountListener
 
 //  SMART_UNO_IMPLEMENTATION(FmRecordCountListener, UsrObject);
@@ -158,7 +158,7 @@ void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::Prope
     NotifyCurrentCount();
 }
 
-//========================================================================
+
 // FmSearchEngine - local classes
 
 SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTextComponent > & _xText)
@@ -208,7 +208,7 @@ OUString CheckBoxWrapper::getCurrentText() const
     return OUString();
 }
 
-//========================================================================
+
 // = FmSearchEngine
 
 sal_Bool FmSearchEngine::MoveCursor()

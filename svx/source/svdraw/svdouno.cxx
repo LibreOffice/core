@@ -54,18 +54,18 @@
 using namespace ::com::sun::star;
 using namespace ::sdr::contact;
 
-//************************************************************
-//   Defines
-//************************************************************
 
-//************************************************************
+//   Defines
+
+
+
 //   Helper class SdrControlEventListenerImpl
-//************************************************************
+
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
-// =============================================================================
+
 class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
 protected:
@@ -105,14 +105,14 @@ void SdrControlEventListenerImpl::StartListening(const uno::Reference< lang::XCo
         xComp->addEventListener(this);
 }
 
-// =============================================================================
+
 struct SdrUnoObjDataHolder
 {
     mutable ::rtl::Reference< SdrControlEventListenerImpl >
                                     pEventListener;
 };
 
-// =============================================================================
+
 namespace
 {
     void lcl_ensureControlVisibility( SdrView* _pView, const SdrUnoObj* _pObject, bool _bVisible )
@@ -148,9 +148,9 @@ namespace
     }
 }
 
-//************************************************************
+
 //   SdrUnoObj
-//************************************************************
+
 
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
@@ -346,7 +346,7 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool SdrUnoObj::hasSpecialDrag() const
 {
@@ -386,7 +386,7 @@ SdrObject* SdrUnoObj::getFullDragClone() const
     return pRetval;
 }
 
-// -----------------------------------------------------------------------------
+
 void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
 {
     if ( GetLayer() == _nLayer )

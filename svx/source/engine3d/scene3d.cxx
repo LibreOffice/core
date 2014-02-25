@@ -47,7 +47,7 @@
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdmodel.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImpRemap3DDepth
 {
@@ -109,7 +109,7 @@ bool ImpRemap3DDepth::operator<(const ImpRemap3DDepth& rComp) const
 // typedefs for a vector of ImpRemap3DDepths
 typedef ::std::vector< ImpRemap3DDepth > ImpRemap3DDepthVector;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class Imp3DDepthRemapper
 {
@@ -169,7 +169,7 @@ sal_uInt32 Imp3DDepthRemapper::RemapOrdNum(sal_uInt32 nOrdNum) const
     return nOrdNum;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* E3dScene::CreateObjectSpecificProperties()
@@ -177,7 +177,7 @@ sdr::properties::BaseProperties* E3dScene::CreateObjectSpecificProperties()
     return new sdr::properties::E3dSceneProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* E3dScene::CreateObjectSpecificViewContact()
@@ -185,7 +185,7 @@ sdr::contact::ViewContact* E3dScene::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfE3dScene(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(E3dScene, E3dObject);
 

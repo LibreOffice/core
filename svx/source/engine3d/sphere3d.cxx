@@ -33,7 +33,7 @@
 #include <svx/sdr/contact/viewcontactofe3dsphere.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* E3dSphereObj::CreateObjectSpecificViewContact()
@@ -41,14 +41,14 @@ sdr::contact::ViewContact* E3dSphereObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfE3dSphere(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties* E3dSphereObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dSphereProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(E3dSphereObj, E3dCompoundObject);
 

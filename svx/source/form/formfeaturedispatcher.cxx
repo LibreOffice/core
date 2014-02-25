@@ -23,10 +23,10 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -35,9 +35,9 @@ namespace svx
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::runtime;
 
-    //====================================================================
+
     //= OSingleFeatureDispatcher
-    //====================================================================
+
 
     OSingleFeatureDispatcher::OSingleFeatureDispatcher( const URL& _rFeatureURL, const sal_Int16 _nFormFeature,
             const Reference< XFormOperations >& _rxFormOperations, ::osl::Mutex& _rMutex )
@@ -208,8 +208,8 @@ namespace svx
             throw DisposedException( OUString(), *const_cast< OSingleFeatureDispatcher* >( this ) );
     }
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

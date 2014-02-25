@@ -50,7 +50,7 @@
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helpers
 
 namespace
@@ -669,7 +669,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // primitive decompositions
 
 void SdrTextObj::impDecomposeContourTextPrimitive(
@@ -1176,7 +1176,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     rTarget = aConverter.getPrimitive2DSequence();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // timing generators
 #define ENDLESS_LOOP    (0xffffffff)
 #define ENDLESS_TIME    ((double)0xffffffff)

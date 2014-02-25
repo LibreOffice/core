@@ -34,7 +34,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/charthelper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

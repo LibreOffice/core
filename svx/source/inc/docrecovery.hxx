@@ -78,7 +78,7 @@
 namespace svx{
     namespace DocRecovery{
 
-//===============================================
+
 enum EDocStates
 {
     /* TEMP STATES */
@@ -106,7 +106,7 @@ enum EDocStates
     E_SUCCEDED = 512
 };
 
-//===============================================
+
 enum ERecoveryState
 {
     E_SUCCESSFULLY_RECOVERED,
@@ -116,7 +116,7 @@ enum ERecoveryState
     E_NOT_RECOVERED_YET
 };
 
-//===============================================
+
 struct TURLInfo
 {
     public:
@@ -160,10 +160,10 @@ struct TURLInfo
     {}
 };
 
-//===============================================
+
 typedef ::std::vector< TURLInfo > TURLList;
 
-//===============================================
+
 class IRecoveryUpdateListener
 {
     public:
@@ -184,14 +184,14 @@ class IRecoveryUpdateListener
         ~IRecoveryUpdateListener() {}
 };
 
-//===============================================
+
 class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
 {
-    //-------------------------------------------
+
     // types, const
     public:
 
-    //-------------------------------------------
+
     // member
     private:
 
@@ -219,28 +219,28 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
          */
         bool m_bListenForSaving;
 
-    //-------------------------------------------
+
     // native interface
     public:
 
-        //---------------------------------------
+
         /** @short  TODO */
         RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                            bool                                            bUsedForSaving);
 
-        //---------------------------------------
+
         /** @short  TODO */
         virtual ~RecoveryCore();
 
-        //---------------------------------------
+
         /** @short  TODO */
         virtual css::uno::Reference< css::uno::XComponentContext > getComponentContext();
 
-        //---------------------------------------
+
         /** @short  TODO */
         virtual TURLList* getURLListAccess();
 
-        //---------------------------------------
+
         /** @short  TODO */
         static bool isBrokenTempEntry(const TURLInfo& rInfo);
         virtual void saveBrokenTempEntries(const OUString& sSaveDir);
@@ -249,25 +249,25 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
         virtual void forgetAllRecoveryEntries();
         void forgetBrokenRecoveryEntries();
 
-        //---------------------------------------
+
         /** @short  TODO */
         virtual void setProgressHandler(const css::uno::Reference< css::task::XStatusIndicator >& xProgress);
 
-        //---------------------------------------
+
         /** @short  TODO */
         virtual void setUpdateListener(IRecoveryUpdateListener* pListener);
 
-        //---------------------------------------
+
         /** @short  TODO */
         virtual void doEmergencySavePrepare();
         virtual void doEmergencySave();
         virtual void doRecovery();
 
-        //---------------------------------------
+
         /** @short  TODO */
         static ERecoveryState mapDocState2RecoverState(sal_Int32 eDocState);
 
-    //-------------------------------------------
+
     // uno interface
     public:
 
@@ -279,26 +279,26 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
 
-    //-------------------------------------------
+
     // helper
     private:
 
-        //---------------------------------------
+
         /** @short  starts listening on the internal EmergencySave/AutoRecovery core.
          */
         void impl_startListening();
 
-        //---------------------------------------
+
         /** @short  stop listening on the internal EmergencySave/AutoRecovery core.
          */
         void impl_stopListening();
 
-        //---------------------------------------
+
         /** @short  TODO */
         css::util::URL impl_getParsedURL(const OUString& sURL);
 };
 
-//===============================================
+
 class PluginProgressWindow : public Window
 {
     private:
@@ -316,7 +316,7 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
                                                        css::lang::XComponent       >
 {
 
-    //-------------------------------------------
+
     // member
     private:
 
@@ -327,24 +327,24 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
 
         PluginProgressWindow* m_pPlugProgressWindow;
 
-    //-------------------------------------------
+
     // native interface
     public:
 
-        //---------------------------------------
+
         /** @short  TODO */
         PluginProgress(      Window*                                             pParent,
                        const css::uno::Reference< css::uno::XComponentContext >& xContext  );
 
-        //---------------------------------------
+
         /** @short  TODO */
         virtual ~PluginProgress();
 
-    //-------------------------------------------
+
     // uno interface
     public:
 
-        //---------------------------------------
+
         // XStatusIndicator
         virtual void SAL_CALL start(const OUString& sText ,
                                           sal_Int32        nRange)
@@ -362,7 +362,7 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
         virtual void SAL_CALL reset()
             throw(css::uno::RuntimeException);
 
-        //---------------------------------------
+
         // XComponent
         virtual void SAL_CALL dispose()
             throw(css::uno::RuntimeException);
@@ -374,16 +374,16 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
             throw(css::uno::RuntimeException);
 };
 
-//===============================================
+
 class IExtendedTabPage : public TabPage
 {
-    //-------------------------------------------
+
     // member
     protected:
 
         short m_nResult;
 
-    //-------------------------------------------
+
     // interface
     public:
 
@@ -406,17 +406,17 @@ class IExtendedTabPage : public TabPage
 
 typedef ::std::vector< IExtendedTabPage* > TTabPageList;
 
-//===============================================
+
 class TabDialog4Recovery : public TabDialog
 {
-    //-------------------------------------------
+
     // member
     private:
 
         TTabPageList m_lTabPages;
         TTabPageList::iterator m_pActualPage;
 
-    //-------------------------------------------
+
     // interface
     public:
 
@@ -427,10 +427,10 @@ class TabDialog4Recovery : public TabDialog
         virtual short Execute();
 };
 
-//===============================================
+
 class SaveDialog : public IExtendedTabPage
 {
-    //-------------------------------------------
+
     // member
     private:
 
@@ -445,11 +445,11 @@ class SaveDialog : public IExtendedTabPage
 
         RecoveryCore*   m_pCore;
 
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short  create all child controls of this dialog.
 
             @descr  The dialog isnt shown nor it starts any
@@ -468,26 +468,26 @@ class SaveDialog : public IExtendedTabPage
         SaveDialog(Window*       pParent,
                    RecoveryCore* pCore  );
 
-        //---------------------------------------
+
         /** @short  free all controls and used memory. */
         virtual ~SaveDialog();
 
-        //---------------------------------------
+
         /** @short  TODO*/
         virtual short   execute();
 
-        //---------------------------------------
+
         /** @short  TODO*/
         virtual void    setDefButton();
 
         DECL_LINK(OKButtonHdl, void*);
 };
 
-//===============================================
+
 class SaveProgressDialog : public ModalDialog
                          , public IRecoveryUpdateListener
 {
-    //-------------------------------------------
+
     // member
     private:
 
@@ -502,11 +502,11 @@ class SaveProgressDialog : public ModalDialog
         // @short   TODO
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
 
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short  create all child controls of this dialog.
 
             @descr  The dialog isnt shown nor it starts any
@@ -523,11 +523,11 @@ class SaveProgressDialog : public ModalDialog
         SaveProgressDialog(Window*       pParent,
                            RecoveryCore* pCore  );
 
-        //---------------------------------------
+
         /** @short  free all controls and used memory. */
         virtual ~SaveProgressDialog();
 
-        //---------------------------------------
+
         /** @short  start the emergency save operation. */
         virtual short Execute();
 
@@ -538,27 +538,27 @@ class SaveProgressDialog : public ModalDialog
         virtual void end();
 };
 
-//===============================================
+
 class RecovDocListEntry : public SvLBoxString
 {
 public:
 
-    //---------------------------------------
+
     /** @short TODO */
     RecovDocListEntry(      SvTreeListEntry* pEntry,
                             sal_uInt16       nFlags,
                       const OUString&      sText );
 
-    //---------------------------------------
+
     /** @short TODO */
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
-//===============================================
+
 class RecovDocList : public SvSimpleTable
 {
-    //-------------------------------------------
+
     // member
     public:
 
@@ -572,18 +572,18 @@ class RecovDocList : public SvSimpleTable
         OUString m_aRecovInProgrStr;
         OUString m_aNotRecovYetStr;
 
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short TODO */
         RecovDocList(SvSimpleTableContainer& rParent, ResMgr& rResMgr);
-        //---------------------------------------
+
         /** @short TODO */
         virtual ~RecovDocList();
 
-        //---------------------------------------
+
         /** @short TODO */
         virtual void InitEntry(SvTreeListEntry* pEntry,
                                const OUString& rText,
@@ -592,11 +592,11 @@ class RecovDocList : public SvSimpleTable
                                SvLBoxButtonKind eButtonKind);
 };
 
-//===============================================
+
 class RecoveryDialog : public IExtendedTabPage
                      , public IRecoveryUpdateListener
 {
-    //-------------------------------------------
+
     // member
     private:
         FixedText       m_aTitleFT;
@@ -635,52 +635,52 @@ class RecoveryDialog : public IExtendedTabPage
         bool  m_bUserDecideNext;
         bool  m_bWasRecoveryStarted;
 
-    //-------------------------------------------
+
     // member
     public:
 
-        //---------------------------------------
+
         /** @short TODO */
         RecoveryDialog(Window*       pParent,
                        RecoveryCore* pCore  );
 
-        //---------------------------------------
+
         /** @short TODO */
         virtual ~RecoveryDialog();
 
-        //---------------------------------------
+
         // IRecoveryUpdateListener
         virtual void updateItems();
         virtual void stepNext(TURLInfo* pItem);
         virtual void start();
         virtual void end();
 
-        //---------------------------------------
+
         /** @short TODO */
         virtual short execute();
 
-        //---------------------------------------
+
         /** @short  TODO*/
         virtual void    setDefButton();
 
-    //-------------------------------------------
+
     // helper
     private:
 
-        //---------------------------------------
+
         /** @short TODO */
         DECL_LINK(NextButtonHdl, void*);
         DECL_LINK(CancelButtonHdl, void*);
 
-        //---------------------------------------
+
         /** @short TODO */
         OUString impl_getStatusString( const TURLInfo& rInfo ) const;
 };
 
-//===============================================
+
 class BrokenRecoveryDialog : public ModalDialog
 {
-    //-------------------------------------------
+
     // member
     private:
         FixedText       m_aDescrFT;
@@ -698,49 +698,49 @@ class BrokenRecoveryDialog : public ModalDialog
         bool        m_bBeforeRecovery;
         sal_Bool        m_bExecutionNeeded;
 
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short TODO */
         BrokenRecoveryDialog(Window*       pParent        ,
                              RecoveryCore* pCore          ,
                              bool      bBeforeRecovery);
 
-        //---------------------------------------
+
         /** @short TODO */
         virtual ~BrokenRecoveryDialog();
 
-        //---------------------------------------
+
         /** @short TODO */
         virtual sal_Bool isExecutionNeeded();
 
-        //---------------------------------------
+
         /** @short TODO */
         virtual OUString getSaveDirURL();
 
-    //-------------------------------------------
+
     // helper
     private:
 
-        //---------------------------------------
+
         /** @short TODO */
         void impl_refresh();
 
-        //---------------------------------------
+
         /** @short TODO */
         DECL_LINK(SaveButtonHdl, void*);
 
-        //---------------------------------------
+
         /** @short TODO */
         DECL_LINK(OkButtonHdl, void*);
 
-        //---------------------------------------
+
         /** @short TODO */
         DECL_LINK(CancelButtonHdl, void*);
 
-        //---------------------------------------
+
         /** @short TODO */
         void impl_askForSavePath();
 };

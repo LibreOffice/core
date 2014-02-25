@@ -36,9 +36,9 @@
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-//........................................................................
+
 namespace sdr { namespace contact {
-//........................................................................
+
 
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::uno::Reference;
@@ -48,9 +48,9 @@ namespace sdr { namespace contact {
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
+
     //= ViewContactOfUnoControl
-    //====================================================================
+
     class ViewContactOfUnoControl_Impl
     {
     public:
@@ -72,9 +72,9 @@ namespace sdr { namespace contact {
     {
     }
 
-    //====================================================================
+
     //= ViewContactOfUnoControl
-    //====================================================================
+
     DBG_NAME( ViewContactOfUnoControl )
 
     ViewContactOfUnoControl::ViewContactOfUnoControl( SdrUnoObj& _rUnoObject )
@@ -166,8 +166,8 @@ namespace sdr { namespace contact {
         }
     }
 
-//........................................................................
+
 } } // namespace sdr::contact
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

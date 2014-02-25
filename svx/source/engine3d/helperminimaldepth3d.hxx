@@ -22,12 +22,12 @@
 
 #include <sal/types.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class E3dCompoundObject;
 
-//////////////////////////////////////////////////////////////////////////////
+
 /** support extracting the minimal depth of a 3d object in it's scene
 
     @param rObject
@@ -44,7 +44,7 @@ class E3dCompoundObject;
 
 double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject);
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SOURCE_ENGINE3D_HELPERMINIMALDEPTH3D_HXX
 

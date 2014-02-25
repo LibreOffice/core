@@ -34,7 +34,7 @@
 
 class Rectangle;
 
-// -----------------------------------------------------------------------------
+
 
 namespace editeng {
     class SvxBorderLine;
@@ -50,9 +50,9 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedCol, sal_Int
 typedef std::vector< editeng::SvxBorderLine* > BorderLineVector;
 typedef std::vector< BorderLineVector > BorderLineMap;
 
-// -----------------------------------------------------------------------------
+
 // TableModel
-// -----------------------------------------------------------------------------
+
 
 class TableLayouter
 {

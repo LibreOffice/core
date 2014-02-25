@@ -25,11 +25,11 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -62,7 +62,7 @@ namespace drawinglayer
                 // 3D shapes shadow will be set at the individual created
                 // visualisation objects and be visualized by the 3d renderer
                 // as a single shadow.
-                //
+
                 // The shadow for AutoShapes could be handled uniformely by not setting any
                 // shadow items at the helper model objects and only adding shadow here for
                 // 2D and 3D (and it works, too), but this would lead to two 3D scenes for

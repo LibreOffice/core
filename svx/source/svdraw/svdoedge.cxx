@@ -48,7 +48,7 @@
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObjConnection::~SdrObjConnection()
 {
@@ -147,7 +147,7 @@ long SdrEdgeInfoRec::ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon
     else return rPt.X();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrEdgeObj::CreateObjectSpecificProperties()
@@ -155,7 +155,7 @@ sdr::properties::BaseProperties* SdrEdgeObj::CreateObjectSpecificProperties()
     return new sdr::properties::ConnectorProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
@@ -163,7 +163,7 @@ sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrEdgeObj(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrEdgeObj,SdrTextObj);
 
@@ -1292,7 +1292,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                     else cForm='C';
                 }
             } else cForm='4'; // else is case 3 with 5 lines
-        } else cForm='?';  //
+        } else cForm='?';
         // more shapes:
         if (bInfo) {
             pInfo->cOrthoForm=cForm;
@@ -1810,7 +1810,7 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
     return pHdl;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrEdgeObj::hasSpecialDrag() const
 {
@@ -1961,7 +1961,7 @@ OUString SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const
 {

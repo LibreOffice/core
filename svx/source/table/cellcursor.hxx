@@ -25,15 +25,15 @@
 #include <cppuhelper/implbase2.hxx>
 #include "cellrange.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
 struct CellPos;
 
-// -----------------------------------------------------------------------------
+
 // CellCursor
-// -----------------------------------------------------------------------------
+
 
 typedef ::cppu::ImplInheritanceHelper2< CellRange, ::com::sun::star::table::XCellCursor, ::com::sun::star::table::XMergeableCellRange > CellCursorBase;
 

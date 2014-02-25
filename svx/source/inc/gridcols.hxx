@@ -45,7 +45,7 @@
 #define TYPE_TEXTFIELD      8
 #define TYPE_TIMEFIELD      9
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName);
 
 

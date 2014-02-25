@@ -62,7 +62,7 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
     return pH;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrTextObj::hasSpecialDrag() const
 {
@@ -82,7 +82,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     if (aGeo.nDrehWink!=0) RotatePoint(aPos,aTmpRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
     // Unshear:
     if (aGeo.nShearWink!=0) ShearPoint(aPos,aTmpRect.TopLeft(),-aGeo.nTan);
-    //
+
     bool bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
     bool bRgt=(eHdl==HDL_UPRGT || eHdl==HDL_RIGHT || eHdl==HDL_LWRGT);
     bool bTop=(eHdl==HDL_UPRGT || eHdl==HDL_UPPER || eHdl==HDL_UPLFT);
@@ -143,7 +143,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     return aTmpRect;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // drag
 
 bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
@@ -178,7 +178,7 @@ OUString SdrTextObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Create
 
 bool SdrTextObj::BegCreate(SdrDragStat& rStat)

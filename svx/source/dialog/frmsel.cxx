@@ -43,7 +43,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
-// ============================================================================
+
 // global functions from framebordertype.hxx
 
 FrameBorderType GetFrameBorderTypeFromIndex( size_t nIndex )
@@ -60,7 +60,7 @@ size_t GetIndexFromFrameBorderType( FrameBorderType eBorder )
     return static_cast< size_t >( eBorder ) - 1;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -79,7 +79,7 @@ const long FRAMESEL_GEOM_ADD_CLICK_OUTER = 5;
 /** Additional margin for click area of inner lines. */
 const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
 
-// ----------------------------------------------------------------------------
+
 
 /** Returns the corresponding flag for a frame border. */
 FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
@@ -108,9 +108,9 @@ inline void lclPolyPolyUnion( PolyPolygon& rDest, const PolyPolygon& rSource )
 
 } // namespace
 
-// ============================================================================
+
 // FrameBorder
-// ============================================================================
+
 
 FrameBorder::FrameBorder( FrameBorderType eType ) :
     meType( eType ),
@@ -210,9 +210,9 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
     return eBorder;
 }
 
-// ============================================================================
+
 // FrameSelectorImpl
-// ============================================================================
+
 
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
@@ -798,9 +798,9 @@ bool FrameSelectorImpl::SelectedBordersEqual() const
     return bEqual;
 }
 
-// ============================================================================
+
 // FrameSelector
-// ============================================================================
+
 
 FrameSelector::FrameSelector(Window* pParent)
     : Control(pParent, WB_BORDER|WB_TABSTOP)
@@ -1270,7 +1270,7 @@ Size FrameSelector::GetOptimalSize() const
     return LogicToPixel(Size(61, 65), MAP_APPFONT);
 }
 
-// ============================================================================
+
 
 template< typename Cont, typename Iter, typename Pred >
 FrameBorderIterBase< Cont, Iter, Pred >::FrameBorderIterBase( container_type& rCont ) :
@@ -1287,7 +1287,7 @@ FrameBorderIterBase< Cont, Iter, Pred >& FrameBorderIterBase< Cont, Iter, Pred >
     return *this;
 }
 
-// ============================================================================
+
 
 } // namespace svx
 

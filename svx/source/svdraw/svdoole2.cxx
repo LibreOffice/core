@@ -591,7 +591,7 @@ void SdrLightEmbeddedClient_Impl::setWindow(const uno::Reference< awt::XWindow >
     m_xWindow = _xWindow;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 class SdrEmbedObjectLink : public sfx2::SvBaseLink
 {
@@ -668,7 +668,7 @@ void SdrEmbedObjectLink::Closed()
     SvBaseLink::Closed();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 class SdrOle2ObjImpl
 {
@@ -696,7 +696,7 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // Predicate determining whether the given OLE is an internal math
 // object
@@ -720,7 +720,7 @@ static bool ImplIsMathObj( const uno::Reference < embed::XEmbeddedObject >& rObj
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrOle2Obj::CreateObjectSpecificProperties()
@@ -728,7 +728,7 @@ sdr::properties::BaseProperties* SdrOle2Obj::CreateObjectSpecificProperties()
     return new sdr::properties::OleProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
@@ -2217,14 +2217,14 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
        return sal_True;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 Graphic SdrOle2Obj::GetEmptyOLEReplacementGraphic()
 {
     return Graphic(BitmapEx(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr())));
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SdrOle2Obj::SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow)
 {

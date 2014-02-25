@@ -78,7 +78,7 @@ using namespace ::com::sun::star::util;
 using namespace ::svxform;
 using namespace ::svx;
 
-//========================================================================
+
 
 TYPEINIT1(FmFormView, E3dView);
 
@@ -96,7 +96,7 @@ void FmFormView::Init()
     pImpl = new FmXFormView(this);
     pImpl->acquire();
 
-    //////////////////////////////////////////////////////////////////////
+
     // Model setzen
     SdrModel* pModel = GetModel();
 
@@ -104,7 +104,7 @@ void FmFormView::Init()
     if( !pModel->ISA(FmFormModel) ) return;
     FmFormModel* pFormModel = (FmFormModel*)pModel;
 
-    //////////////////////////////////////////////////////////////////////
+
     // DesignMode vom Model holen
     sal_Bool bInitDesignMode = pFormModel->GetOpenInDesignMode();
     if ( pFormModel->OpenInDesignModeIsDefaulted( ) )

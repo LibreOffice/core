@@ -42,9 +42,9 @@
 
 using namespace ::com::sun::star;
 
-// ---------------
+
 // - SdrMediaObj -
-// ---------------
+
 
 // Note: the temp file is read only, until it is deleted!
 // It may be shared between multiple documents in case of copy/paste,
@@ -68,7 +68,7 @@ struct SdrMediaObj::Impl
 
 TYPEINIT1( SdrMediaObj, SdrRectObj );
 
-// ------------------------------------------------------------------------------
+
 
 SdrMediaObj::SdrMediaObj()
     : SdrRectObj()
@@ -76,7 +76,7 @@ SdrMediaObj::SdrMediaObj()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 SdrMediaObj::SdrMediaObj( const Rectangle& rRect )
     : SdrRectObj( rRect )
@@ -84,27 +84,27 @@ SdrMediaObj::SdrMediaObj( const Rectangle& rRect )
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 SdrMediaObj::~SdrMediaObj()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 bool SdrMediaObj::HasTextEdit() const
 {
     return false;
 }
 
-// ------------------------------------------------------------------------------
+
 
 sdr::contact::ViewContact* SdrMediaObj::CreateObjectSpecificViewContact()
 {
     return new ::sdr::contact::ViewContactOfSdrMediaObj( *this );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
@@ -130,14 +130,14 @@ void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
     rInfo.bCanConvToPolyLineToArea = false;
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_uInt16 SdrMediaObj::GetObjIdentifier() const
 {
     return sal_uInt16( OBJ_MEDIA );
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString SdrMediaObj::TakeObjNameSingul() const
 {
@@ -156,14 +156,14 @@ OUString SdrMediaObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString SdrMediaObj::TakeObjNamePlural() const
 {
     return ImpGetResStr(STR_ObjNamePluralMEDIA);
 }
 
-// ------------------------------------------------------------------------------
+
 
 SdrMediaObj* SdrMediaObj::Clone() const
 {
@@ -194,7 +194,7 @@ uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot()
     return m_pImpl->m_xCachedSnapshot;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /* = false */ )
 {
@@ -240,7 +240,7 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer )
 {
@@ -250,14 +250,14 @@ void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer )
     setMediaProperties( aURLItem );
 }
 
-// ------------------------------------------------------------------------------
+
 
 const OUString& SdrMediaObj::getURL() const
 {
     return m_pImpl->m_MediaProperties.getURL();
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
 {
@@ -265,21 +265,21 @@ void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
     static_cast< ::sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).executeMediaItem( getMediaProperties() );
 }
 
-// ------------------------------------------------------------------------------
+
 
 const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
 {
     return m_pImpl->m_MediaProperties;
 }
 
-// ------------------------------------------------------------------------------
+
 
 Size SdrMediaObj::getPreferredSize() const
 {
     return static_cast< ::sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).getPreferredSize();
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
 {

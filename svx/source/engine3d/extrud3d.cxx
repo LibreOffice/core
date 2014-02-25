@@ -37,7 +37,7 @@
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* E3dExtrudeObj::CreateObjectSpecificViewContact()
@@ -45,14 +45,14 @@ sdr::contact::ViewContact* E3dExtrudeObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfE3dExtrude(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dExtrudeProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
 

@@ -24,7 +24,7 @@ HelpText( "Svx-Items" )
 SlotIdFile( "svxslots.hrc" )
 ]
 {
-    //=========================================================================
+
 
     include "sfxitems.sdi"
     include "sfx.sdi"
@@ -56,7 +56,7 @@ SlotIdFile( "svxslots.hrc" )
             StateMethod = GetBckColState ;
         ]
     }
-     //============================================================================
+
     interface OLEObjects : Collection
     [
         uuid = "BA338A43-064E-11d0-89CB-008029E4B0B1" ;

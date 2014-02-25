@@ -379,7 +379,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 {
                     // #104157# Update maTextOffset, object has changed
                     // #105196#, #105203#: Cannot call that // here,
-                    // since TakeTextRect() (called from there) //
+                    // since TakeTextRect() (called from there)
                     // changes outliner content.
                     // UpdateOutliner();
 
@@ -399,7 +399,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     // will replace the Notifer for current editable cell. It
                     // is totally wrong. So add check here to avoid the
                     // incorrect replacement of notifer.
-                    //
+
                     // Currently it only happens on the editsource of
                     // AccessibleCell
                     if (mpObject && mpText)

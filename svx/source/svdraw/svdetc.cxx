@@ -92,7 +92,7 @@ const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
         pLocaleData = GetSysLocale()->GetLocaleDataPtr();
     return pLocaleData;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 OLEObjCache::OLEObjCache()
 :   std::vector<SdrOle2Obj*>()
@@ -205,7 +205,7 @@ sal_Bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
         //#i80528# The old mechanism is completely useless, only taking into account if
         // in all views the GrafDraft feature is used. This will nearly never have been the
         // case since no one ever used this option.
-        //
+
         // A much better (and working) criteria would be the VOC contact count.
         // The question is what will happen when i make it work now suddenly? I
         // will try it for 2.4.
@@ -227,7 +227,7 @@ IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, /*pTim*/)
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrLinkList::Clear()
 {
@@ -276,7 +276,7 @@ void SdrLinkList::RemoveLink(const Link& rLink)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
@@ -373,7 +373,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
     return bRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrEngineDefaults::SdrEngineDefaults():
     aFontName( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ).GetName() ),
@@ -394,7 +394,7 @@ SdrEngineDefaults& SdrEngineDefaults::GetDefaults()
     return *rGlobalData.pDefaults;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel )
 {
@@ -411,7 +411,7 @@ SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel )
     return pOutl;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 SdrLinkList& ImpGetUserMakeObjHdl()
@@ -426,7 +426,7 @@ SdrLinkList& ImpGetUserMakeObjUserDataHdl()
     return rGlobalData.aUserMakeObjUserDataHdl;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ResMgr* ImpGetResMgr()
 {
@@ -441,14 +441,14 @@ ResMgr* ImpGetResMgr()
     return rGlobalData.pResMgr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 OUString ImpGetResStr(sal_uInt16 nResID)
 {
     return ResId(nResID, *ImpGetResMgr()).toString();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -458,7 +458,7 @@ namespace sdr
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal_Bool* pbOnlyEE)
 {
@@ -546,7 +546,7 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
     return pNewWhichTable;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SvdProgressInfo::SvdProgressInfo( Link *_pLink )
 {
@@ -623,7 +623,7 @@ void SvdProgressInfo::ReportError()
     pLink->Call((void *)1L);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i101872# isolate GetTextEditBackgroundColor to tooling; it will anyways only be used as long
 // as text edit is not running on overlay
 

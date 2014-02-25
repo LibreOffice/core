@@ -1177,13 +1177,13 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     return false;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #i122649# Some comments on the below arrays:
 // - They need to have the same order and count of items
 // - They are used to translate between translated and non-translated color names
 // - To make longer names be found which start with the same basic string,
 //   these have to be in front of others
-//
+
 // It would be nice to:
 // - evtl. organize these in a single array with 2-dimensional inner to elliminate
 //   the possibility to define it wrong
@@ -1277,7 +1277,7 @@ static const sal_uInt16 SvxUnoColorNameResId[] =
     RID_SVXSTR_COLOR_TANGO_ALUMINIUM
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, OUString& rString ) throw()
 {
@@ -1373,7 +1373,7 @@ OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rA
     return rApiName;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
 {

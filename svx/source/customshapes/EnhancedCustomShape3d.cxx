@@ -364,7 +364,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             // #116336#
             // If shapes are mirrored once (mirroring two times correct geometry again)
             // double-sided at the object and two-sided-lighting at the scene need to be set.
-            //
+
             // #i122777# Also use double sided for two fill styles since there several 3d objects get
             // created with a depth of 0; one of them is the backside which needs double-sided to
             // get visible
@@ -506,7 +506,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         // #i122777# old adaption of FillStyle bitmap size to 5-times the original size; this is not needed
                         // anymore and was used in old times to male the fill look better when converting to 3D. Removed
                         // from regular 3D objects for some time, also needs to be removed from CustomShapes
-                        //
+
                         //Size aLogicalSize = aFillBmp.GetPrefSize();
                         //if ( aFillBmp.GetPrefMapMode() == MAP_PIXEL )
                         //  aLogicalSize = Application::GetDefaultDevice()->PixelToLogic( aLogicalSize, MAP_100TH_MM );
@@ -659,9 +659,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             pScene->NbcSetTransform( aNewTransform );
 
-            ///////////
-            // light //
-            ///////////
+
+            // light
+
 
             const OUString sBrightness( "Brightness" );
             double fAmbientIntensity = GetDouble( rGeometryItem, sBrightness, 22178.0 / 655.36, NULL ) / 100.0;

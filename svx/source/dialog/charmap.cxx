@@ -46,7 +46,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------
+
 sal_uInt32& SvxShowCharSet::getSelectedChar()
 {
     static sal_uInt32 cSelectedChar = ' '; // keeps selected character over app livetime
@@ -98,7 +98,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowCharSet(Window *pPar
     return new SvxShowCharSet(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::GetFocus()
 {
@@ -106,7 +106,7 @@ void SvxShowCharSet::GetFocus()
     SelectIndex( nSelectedIndex, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::LoseFocus()
 {
@@ -114,7 +114,7 @@ void SvxShowCharSet::LoseFocus()
     SelectIndex( nSelectedIndex, sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::StateChanged( StateChangedType nType )
 {
@@ -126,7 +126,7 @@ void SvxShowCharSet::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -137,7 +137,7 @@ void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -159,7 +159,7 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -173,7 +173,7 @@ void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
 {
@@ -197,7 +197,7 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 {
@@ -205,21 +205,21 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
         Control::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos) const
 {
     return _nPos / COLUMN_COUNT ;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos) const
 {
     return _nPos % COLUMN_COUNT ;
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxShowCharSet::FirstInView( void ) const
 {
@@ -229,7 +229,7 @@ int SvxShowCharSet::FirstInView( void ) const
     return nIndex;
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxShowCharSet::LastInView( void ) const
 {
@@ -241,7 +241,7 @@ int SvxShowCharSet::LastInView( void ) const
     return nIndex;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 {
@@ -250,7 +250,7 @@ inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
     int y = ((nIndex - nBase) / COLUMN_COUNT) * nY;
     return Point( x + m_nXGap, y + m_nYGap );
 }
-// -----------------------------------------------------------------------------
+
 
 int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 {
@@ -258,7 +258,7 @@ int SvxShowCharSet::PixelToMapIndex( const Point& point) const
     return (nBase + ((point.X() - m_nXGap)/nX) + ((point.Y() - m_nYGap)/nY) * COLUMN_COUNT);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 {
@@ -327,13 +327,13 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::Paint( const Rectangle& )
 {
     DrawChars_Impl( FirstInView(), LastInView() );
 }
-// -----------------------------------------------------------------------------
+
 void SvxShowCharSet::DeSelect()
 {
     DrawChars_Impl(nSelectedIndex,nSelectedIndex);
@@ -480,7 +480,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -506,7 +506,7 @@ void SvxShowCharSet::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 {
@@ -515,7 +515,7 @@ sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
     return getSelectedChar();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::SetFont( const Font& rFont )
 {
@@ -560,7 +560,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
 {
@@ -654,7 +654,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
     aHighHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, sal_Bool bFocus )
 {
@@ -671,7 +671,7 @@ void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, sal_Bool bFocus )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl)
 {
@@ -698,21 +698,21 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxShowCharSet::~SvxShowCharSet()
 {
     if ( m_pAccessible )
         ReleaseAccessible();
 }
-// -----------------------------------------------------------------------------
+
 void SvxShowCharSet::ReleaseAccessible()
 {
     m_aItems.clear();
     m_pAccessible = NULL;
     m_xAccessible = NULL;
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
     OSL_ENSURE(!m_pAccessible,"Accessible already created!");
@@ -720,7 +720,7 @@ void SvxShowCharSet::ReleaseAccessible()
     m_xAccessible = m_pAccessible;
     return m_xAccessible;
 }
-// -----------------------------------------------------------------------------
+
 ::svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
 {
     ItemsMap::iterator aFind = m_aItems.find(_nPos);
@@ -740,12 +740,12 @@ void SvxShowCharSet::ReleaseAccessible()
     return aFind->second.get();
 }
 
-// -----------------------------------------------------------------------------
+
 ScrollBar* SvxShowCharSet::getScrollBar()
 {
     return &aVscrollSB;
 }
-// -----------------------------------------------------------------------
+
 sal_Int32 SvxShowCharSet::getMaxCharCount() const
 {
     return maFontCharMap.GetCharCount();

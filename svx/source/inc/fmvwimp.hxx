@@ -77,9 +77,9 @@ namespace svx {
     struct OXFormsDescriptor;
 }
 
-//==================================================================
+
 // FormViewPageWindowAdapter
-//==================================================================
+
 typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::container::XIndexAccess
                                 ,   ::com::sun::star::form::runtime::XFormControllerContext
                                 >   FormViewPageWindowAdapter_Base;
@@ -139,9 +139,9 @@ typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::awt:
                     ,   ::comphelper::OInterfaceCompare< ::com::sun::star::awt::XControlContainer >
                     >   MapControlContainerToSetOfForms;
 class SdrModel;
-//==================================================================
+
 // FmXFormView
-//==================================================================
+
 class FmXFormView : public ::cppu::WeakImplHelper3<
                             ::com::sun::star::form::XFormControllerListener,
                             ::com::sun::star::awt::XFocusListener,

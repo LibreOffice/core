@@ -50,7 +50,7 @@ void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrPreRenderDevice::SdrPreRenderDevice(OutputDevice& rOriginal)
 :   mrOutputDevice(rOriginal)
@@ -127,12 +127,12 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
 //      // for each rectangle, copy the area
 //      const Point aTopLeft(aRegionRectanglePixel.TopLeft());
 //      const Size aSize(aRegionRectanglePixel.GetSize());
-//
+
 //      mrOutputDevice.DrawOutDev(
 //          aTopLeft, aSize,
 //          aTopLeft, aSize,
 //          maPreRenderDevice);
-//
+
 //#ifdef DBG_UTIL
 //      // #i74769#
 //      static bool bDoPaintForVisualControlRegion(false);
@@ -145,14 +145,14 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
 //      }
 //#endif
 //  }
-//
+
 //  aRegionPixel.EndEnumRects(aRegionHandle);
 
     mrOutputDevice.EnableMapMode(bMapModeWasEnabledDest);
     maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPaintWindow::impCreateOverlayManager()
 {

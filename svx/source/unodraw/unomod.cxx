@@ -53,19 +53,19 @@
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
-//-////////////////////////////////////////////////////////////////////
+//-
 
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 
-//-////////////////////////////////////////////////////////////////////
+//-
 
 #define QUERYINT( xint ) \
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)
 
-//-////////////////////////////////////////////////////////////////////
+//-
 
 class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
 {
@@ -93,7 +93,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-//-////////////////////////////////////////////////////////////////////
+//-
 
 static const SvEventDescription* ImplGetSupportedMacroItems()
 {
@@ -107,7 +107,7 @@ static const SvEventDescription* ImplGetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 
-//-////////////////////////////////////////////////////////////////////
+//-
 
 /** fills the given EventObject from the given SdrHint.
     @returns
@@ -251,8 +251,6 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
     return aSeq;
 }
 
-
-///
 SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc ) throw()
 : mpDoc( pDoc )
 {
@@ -586,9 +584,9 @@ uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::
     return SvxCreateNumRuleCompare();
 }
 
-//=============================================================================
+
 // class SvxUnoDrawPagesAccess
-//=============================================================================
+
 
 SvxUnoDrawPagesAccess::SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel )  throw()
 :   mrModel(rMyModel)
@@ -753,6 +751,6 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

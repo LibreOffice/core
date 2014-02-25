@@ -62,7 +62,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // interface to SdrPaintWindow
 
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
@@ -118,7 +118,7 @@ OutputDevice* SdrPaintView::GetFirstOutputDevice() const
     return 0L;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1( SvxViewHint, SfxHint );
 
@@ -133,7 +133,7 @@ SvxViewHint::HintType SvxViewHint::GetHintType (void) const
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 BitmapEx convertMetafileToBitmapEx(
     const GDIMetaFile& rMtf,
@@ -159,7 +159,7 @@ BitmapEx convertMetafileToBitmapEx(
     return aBitmapEx;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT2(SdrPaintView,SfxListener,SfxRepeatTarget);
 
@@ -258,7 +258,7 @@ SdrPaintView::~SdrPaintView()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -302,7 +302,7 @@ void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_
     InvalidateAllWin();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK_NOARG_INLINE_START(SdrPaintView, ImpComeBackHdl)
 {
@@ -345,7 +345,7 @@ void SdrPaintView::ModelHasChanged()
 #endif
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrPaintView::IsAction() const
 {
@@ -372,7 +372,7 @@ void SdrPaintView::TakeActionRect(Rectangle&) const
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // info about TextEdit. Default is sal_False.
 bool SdrPaintView::IsTextEdit() const
 {
@@ -385,7 +385,7 @@ SdrPageView* SdrPaintView::GetTextEditPageView() const
     return 0L;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt16 SdrPaintView::ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const
 {
@@ -429,7 +429,7 @@ void SdrPaintView::SetActualWin(const OutputDevice* pWin)
     TheresNewMapMode();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPaintView::ClearPageView()
 {
@@ -573,7 +573,7 @@ void SdrPaintView::PrePaint()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // #define SVX_REPAINT_TIMER_TEST
 
 void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
@@ -632,14 +632,14 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
 
                     //RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
                     //Rectangle aRegionRectangle;
-                    //
+
                     //while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
                     //{
                     //  pWindow->SetLineColor(COL_LIGHTGREEN);
                     //  pWindow->SetFillColor();
                     //  pWindow->DrawRect(aRegionRectangle);
                     //}
-                    //
+
                     //aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
                 }
 #endif
@@ -706,7 +706,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
 #endif // SVX_REPAINT_TIMER_TEST
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // #i72889#
 
 SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
@@ -773,7 +773,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
 {
@@ -857,7 +857,7 @@ Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& 
     return aOptimizedRepaintRegion;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
 {
@@ -880,7 +880,7 @@ void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
 {
@@ -1120,7 +1120,7 @@ sal_Bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontR
     return sal_True;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #ifdef DBG_UTIL
 void SdrPaintView::ShowItemBrowser(sal_Bool bShow)

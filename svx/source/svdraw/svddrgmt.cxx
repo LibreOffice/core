@@ -72,7 +72,7 @@
 #include <map>
 #include <vector>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntry::SdrDragEntry()
 :   mbAddToTransparent(false)
@@ -83,7 +83,7 @@ SdrDragEntry::~SdrDragEntry()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon)
 :   SdrDragEntry(),
@@ -136,7 +136,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPolyPolygon::createPr
     return aRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntrySdrObject::SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
 :   SdrDragEntry(),
@@ -203,7 +203,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrim
     return rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
     const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
@@ -229,7 +229,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPrimitive2DSequence::
     return drawinglayer::primitive2d::Primitive2DSequence(&aTransformPrimitive2D, 1);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag)
 :   maPositions(rPositions),
@@ -299,7 +299,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::create
     return aRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT0(SdrDragMethod);
 
@@ -962,7 +962,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
     return aRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragMovHdl,SdrDragMethod);
 
@@ -1178,7 +1178,7 @@ Pointer SdrDragMovHdl::GetSdrDragPointer() const
     return Pointer(POINTER_REFHAND);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragObjOwn,SdrDragMethod);
 
@@ -1489,7 +1489,7 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
     return Pointer(POINTER_MOVE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragMove,SdrDragMethod);
 
@@ -1764,7 +1764,7 @@ Pointer SdrDragMove::GetSdrDragPointer() const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragResize,SdrDragMethod);
 
@@ -2101,7 +2101,7 @@ Pointer SdrDragResize::GetSdrDragPointer() const
     return Pointer(POINTER_MOVE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragRotate,SdrDragMethod);
 
@@ -2238,7 +2238,7 @@ Pointer SdrDragRotate::GetSdrDragPointer() const
     return Pointer(POINTER_ROTATE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragShear,SdrDragMethod);
 
@@ -2520,7 +2520,7 @@ Pointer SdrDragShear::GetSdrDragPointer() const
         return Pointer(POINTER_HSHEAR);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragMirror,SdrDragMethod);
 
@@ -2651,7 +2651,7 @@ Pointer SdrDragMirror::GetSdrDragPointer() const
     return Pointer(POINTER_MIRROR);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragGradient, SdrDragMethod);
 
@@ -2812,7 +2812,7 @@ Pointer SdrDragGradient::GetSdrDragPointer() const
     return Pointer(POINTER_REFHAND);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragCrook,SdrDragMethod);
 
@@ -3486,7 +3486,7 @@ Pointer SdrDragCrook::GetSdrDragPointer() const
     return Pointer(POINTER_CROOK);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragDistort,SdrDragMethod);
 
@@ -3640,7 +3640,7 @@ void SdrDragDistort::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPol
     _MovAllPoints(rTarget);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragCrop,SdrDragResize);
 
@@ -3847,9 +3847,9 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // the crop item. It implies unrotated objects, so create the unrotated original
     // erctangle and the unrotated modified rectangle. Latter can in case of shear and/or
     // rotation not be fetched by using
-    //
+
     //Rectangle aNewRect( pObj->GetLogicRect() );
-    //
+
     // as it was done before because the top-left of that new rect *will* have an offset
     // caused by the evtl. existing shear and/or rotation, so calculate a unrotated
     // rectangle how it would be as a result when appling the unit coordinate change

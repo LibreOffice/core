@@ -27,10 +27,10 @@
 #include <sot/exchange.hxx>
 #include <comphelper/propertysetinfo.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -43,9 +43,9 @@ namespace svx
     using namespace ::com::sun::star::datatransfer;
     using namespace ::comphelper;
 
-    //====================================================================
+
     //= OComponentTransferable
-    //====================================================================
+
 
     OComponentTransferable::OComponentTransferable(const OUString& _rDatasourceOrLocation
             ,const Reference< XContent>& _xContent)
@@ -148,9 +148,9 @@ namespace svx
         return ODataAccessDescriptor();
     }
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1070,7 +1070,7 @@ void SdrObjList::RemoveObjectFromContainer (
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPageGridFrameList::Clear()
 {
@@ -1081,7 +1081,7 @@ void SdrPageGridFrameList::Clear()
     aList.clear();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // PageUser section
 
 void SdrPage::AddPageUser(sdr::PageUser& rNewUser)
@@ -1098,7 +1098,7 @@ void SdrPage::RemovePageUser(sdr::PageUser& rOldUser)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrPage::CreateObjectSpecificViewContact()
@@ -1117,7 +1117,7 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
     return *mpViewContact;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPageProperties::ImpRemoveStyleSheet()
 {
@@ -1245,7 +1245,7 @@ SfxStyleSheet* SdrPageProperties::GetStyleSheet() const
     return mpStyleSheet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrPage,SdrObjList);
 DBG_NAME(SdrPage)
@@ -1643,7 +1643,7 @@ void SdrPage::SetModel(SdrModel* pNewModel)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // #i68775# React on PageNum changes (from Model in most cases)
 void SdrPage::SetPageNum(sal_uInt16 nNew)
@@ -1685,7 +1685,7 @@ void SdrPage::SetChanged()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // MasterPage interface
 
 void SdrPage::TRG_SetMasterPage(SdrPage& rNew)
@@ -1876,7 +1876,7 @@ void SdrPage::ActionChanged() const
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // sdr::Comment interface
 
 const SdrPageProperties* SdrPage::getCorrectSdrPageProperties() const
@@ -1891,7 +1891,7 @@ const SdrPageProperties* SdrPage::getCorrectSdrPageProperties() const
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // use new redirector instead of pPaintProc
 
 StandardCheckVisisbilityRedirector::StandardCheckVisisbilityRedirector()

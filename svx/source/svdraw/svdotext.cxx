@@ -60,11 +60,11 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "svdconv.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BaseProperties section
 
 sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
@@ -72,7 +72,7 @@ sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
     return new sdr::properties::TextProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // DrawContact section
 
 sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
@@ -80,7 +80,7 @@ sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfTextObj(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrTextObj,SdrAttrObj);
 
@@ -1349,7 +1349,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXKorreg );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
 {
@@ -1568,14 +1568,14 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // transformation interface for StarOfficeAPI. This implements support for
 // homogeneous 3x3 matrices containing the transformation of the SdrObject. At the
 // moment it contains a shearX, rotation and translation, but for setting all linear
 // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
 sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
@@ -1736,7 +1736,7 @@ bool SdrTextObj::IsRealyEdited() const
     return pEdtOutl && pEdtOutl->IsModified();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 // moved inlines here form hxx
 
 long SdrTextObj::GetEckenradius() const
@@ -1960,8 +1960,8 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
     static_cast< sdr::properties::TextProperties& >(GetProperties()).SetObjectItemNoBroadcast(rItem);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // The concept of the text object:
 // ~~~~~~~~~~~~~~~~~~~~~~~~
 // Attributes/Variations:
@@ -1976,17 +1976,17 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // - enum horizontal text anchoring left,center,right,justify/block,Stretch(ni)
 // - enum vertical text anchoring top, middle, bottom, block, stretch(ni)
 // - enum ticker text                  (if it is not FontWork)
-//
+
 // Every derived object is either a text frame (bTextFrame=sal_True)
 // or a drawing object with a caption (bTextFrame=sal_False).
-//
+
 // Default anchoring for text frames:
 //   SDRTEXTHORZADJUST_BLOCK, SDRTEXTVERTADJUST_TOP
 //   = static Pool defaults
 // Default anchoring for drawing objects with a caption:
 //   SDRTEXTHORZADJUST_CENTER, SDRTEXTVERTADJUST_CENTER
 //   via "hard" attribution of SdrAttrObj
-//
+
 // Every object derived from SdrTextObj must return an "UnrotatedSnapRect"
 // (->TakeUnrotatedSnapRect()) (the reference point for the rotation is the top
 // left of the rectangle (aGeo.nDrehWink)) which is the basis for anchoring
@@ -1999,11 +1999,11 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // be larger than the anchoring area, for text frames on the other hand, it is
 // always of the same or a smaller size (except when there are negative text
 // frame margins).
-//
+
 // FitToSize takes priority over text anchoring and AutoGrowHeight/Width. When
 // FitToSize is turned on, the painting area is always equal to the anchoring
 // area. Additionally, FitToSize doesn't allow automatic line breaks.
-//
+
 // ContourTextFrame:
 // - long rotation angle
 // - long text frame margins (maybe later)
@@ -2013,7 +2013,7 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // - enum horizontal text anchoring (maybe later, for now: left, centered)
 // - enum vertical text anchoring (maybe later, for now: top)
 // - enum ticker text (maybe later, maybe even with correct clipping)
-//
+
 // When making changes, check these:
 // - Paint
 // - HitTest
@@ -2023,7 +2023,7 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // - ModelChanged (e. g. through a neighboring View or rulers) while editing
 // - FillColorChanged while editin
 // - and many more...
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

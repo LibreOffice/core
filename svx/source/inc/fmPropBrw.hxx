@@ -29,7 +29,7 @@
 #include <sfx2/childwin.hxx>
 #include "svx/fmtools.hxx"
 
-//========================================================================
+
 class FmPropBrwMgr : public SfxChildWindow
 {
 public:
@@ -39,7 +39,7 @@ public:
 
 class SfxBindings;
 class FmFormShell;
-//========================================================================
+
 class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
     sal_Bool        m_bInitialStateChange;

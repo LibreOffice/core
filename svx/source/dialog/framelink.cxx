@@ -38,13 +38,13 @@ using namespace editeng;
 namespace svx {
 namespace frame {
 
-// ============================================================================
+
 
 namespace {
 
 typedef std::vector< Point > PointVec;
 
-// ----------------------------------------------------------------------------
+
 // Link result structs for horizontal and vertical lines and borders.
 
 /** Result struct used by the horizontal/vertical frame link functions.
@@ -128,7 +128,7 @@ struct BorderResult
     BorderEndResult     maEnd;      /// Result for end of border line (right or bottom end).
 };
 
-// ----------------------------------------------------------------------------
+
 // Link result structs for diagonal lines and borders.
 
 /** Result struct used by the diagonal frame link functions.
@@ -166,7 +166,7 @@ struct DiagBordersResult
     DiagBorderResult    maBLTR;     /// Result for bottom-left to top-right frame border.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A helper struct containing two points of a line.
  */
@@ -182,7 +182,7 @@ struct LinePoints
                             maEnd( bTLBR ? rRect.BottomRight() : rRect.BottomLeft() ) {}
 };
 
-// ============================================================================
+
 
 /** Rounds and casts a double value to a long value. */
 inline long lclD2L( double fValue )
@@ -196,7 +196,7 @@ double lclScaleValue( double nValue, double fScale, sal_uInt16 nMaxWidth )
     return std::min<double>(nValue * fScale, nMaxWidth);
 }
 
-// ----------------------------------------------------------------------------
+
 // Line width offset calculation.
 
 /** Returns the start offset of the single/primary line across the frame border.
@@ -336,11 +336,11 @@ inline long lclGetBeforeBeg( const Style& rBorder )
 inline long lclGetBehindEnd( const Style& rBorder )
 { return rBorder.Prim() ? (lclGetEnd( rBorder ) + 256) : 0; }
 
-// ============================================================================
-// Linking functions
-// ============================================================================
 
-// ----------------------------------------------------------------------------
+// Linking functions
+
+
+
 // Linking of single horizontal line ends.
 
 /** Calculates X offsets for the left end of a single horizontal frame border.
@@ -505,7 +505,7 @@ void lclLinkLeftEnd_Gap(
 
     rResult.mnOffs2 = rResult.mnOffs1;
 }
-// ----------------------------------------------------------------------------
+
 // Linking of horizontal frame border ends.
 
 /** Calculates X offsets for the left end of a horizontal frame border.
@@ -557,7 +557,7 @@ void lclLinkRightEnd(
     rResult.Negate();
 }
 
-// ----------------------------------------------------------------------------
+
 // Linking of horizontal and vertical frame borders.
 
 /** Calculates X offsets for all line ends of a horizontal frame border.
@@ -607,9 +607,9 @@ void lclLinkVerFrameBorder(
         rBFromTL.Mirror(), rBFromL, rBFromB, rBFromR, rBFromTR );
 }
 
-// ============================================================================
 
-// ----------------------------------------------------------------------------
+
+
 // Linking of diagonal frame borders.
 
 /** Calculates clipping offsets for a top-left to bottom-right frame border.
@@ -689,11 +689,11 @@ void lclLinkDiagFrameBorders(
     lclLinkBLTRFrameBorder( rResult.maBLTR, rBLTR, rBLFromT, rBLFromR, rTRFromB, rTRFromL );
 }
 
-// ============================================================================
-// Drawing functions
-// ============================================================================
 
-// ----------------------------------------------------------------------------
+// Drawing functions
+
+
+
 // Simple helper functions
 
 /** Converts sub units to OutputDevice map units. */
@@ -747,8 +747,8 @@ void lclSetColorToOutDev( OutputDevice& rDev, const Color& rColor, const Color* 
     rDev.SetFillColor( pForceColor ? *pForceColor : rColor );
 }
 
-// ----------------------------------------------------------------------------
-// ============================================================================
+
+
 // Drawing of horizontal frame borders.
 
 /** Draws a horizontal thin or thick line into the passed output device.
@@ -818,7 +818,7 @@ void lclDrawHorFrameBorder(
     }
 }
 
-// ----------------------------------------------------------------------------
+
 // Drawing of vertical frame borders.
 
 /** Draws a vertical thin or thick line into the passed output device.
@@ -887,7 +887,7 @@ void lclDrawVerFrameBorder(
     }
 }
 
-// ============================================================================
+
 // Drawing of diagonal frame borders, incudes clipping functions.
 
 /** Returns the drawing coordinates for a diagonal thin line.
@@ -922,7 +922,7 @@ LinePoints lclGetDiagLineEnds( const Rectangle& rRect, bool bTLBR, long nDiagOff
     return aPoints;
 }
 
-// ----------------------------------------------------------------------------
+
 // Clipping functions for diagonal frame borders.
 
 /** Limits the clipping region to the inner area of a rectange.
@@ -1005,7 +1005,7 @@ void lclPushCrossingClipRegion( OutputDevice& rDev, const Rectangle& rRect, bool
     rDev.IntersectClipRegion( aClipReg );
 }
 
-// ----------------------------------------------------------------------------
+
 // Drawing functions for diagonal frame borders.
 
 /** Draws a diagonal thin or thick line into the passed output device.
@@ -1114,13 +1114,13 @@ void lclDrawDiagFrameBorders(
     }
 }
 
-// ============================================================================
+
 
 } // namespace
 
-// ============================================================================
+
 // Classes
-// ============================================================================
+
 
 #define SCALEVALUE( value ) lclScaleValue( value, fScale, nMaxWidth )
 
@@ -1303,16 +1303,16 @@ bool operator<( const Style& rL, const Style& rR )
 
 #undef SCALEVALUE
 
-// ============================================================================
+
 // Various helper functions
-// ============================================================================
+
 
 double GetHorDiagAngle( long nWidth, long nHeight )
 {
     return atan2( static_cast< double >( std::abs( nHeight ) ), static_cast< double >( std::abs( nWidth ) ) );
 }
 
-// ============================================================================
+
 
 long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
 {
@@ -1334,7 +1334,7 @@ long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
     return -lclD2L( nVerOffs / tan( fAngle ) - nDiagOffs / sin( fAngle ) );
 }
 
-// ============================================================================
+
 
 bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         const Style& rTFromTL, const Style& rTFromT, const Style& rTFromTR,
@@ -1359,9 +1359,9 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         );
 }
 
-// ============================================================================
+
 // Drawing functions
-// ============================================================================
+
 
 double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOpposite,
                       long nAngleSide = 9000, long nAngleOpposite = 9000 )
@@ -1490,7 +1490,7 @@ void DrawHorFrameBorder( OutputDevice& rDev,
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 void DrawVerFrameBorder( OutputDevice& rDev,
         const Point& rTPos, const Point& rBPos, const Style& rBorder,
@@ -1508,7 +1508,7 @@ void DrawVerFrameBorder( OutputDevice& rDev,
     }
 }
 
-// ============================================================================
+
 
 void DrawDiagFrameBorders(
         OutputDevice& rDev, const Rectangle& rRect, const Style& rTLBR, const Style& rBLTR,
@@ -1525,7 +1525,7 @@ void DrawDiagFrameBorders(
     }
 }
 
-// ============================================================================
+
 
 } // namespace frame
 } // namespace svx

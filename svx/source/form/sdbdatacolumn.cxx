@@ -19,10 +19,10 @@
 
 #include "sdbdatacolumn.hxx"
 
-//..............................................................................
+
 namespace svxform
 {
-//..............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -32,9 +32,9 @@ namespace svxform
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::container;
 
-    //==========================================================================
+
     //= DataColumn - a class wrapping an object implementing a sdb::DataColumn service
-    //==========================================================================
+
     DataColumn::DataColumn(const Reference< ::com::sun::star::beans::XPropertySet>& _rxIFace)
     {
         m_xPropertySet = _rxIFace;
@@ -272,8 +272,8 @@ namespace svxform
         m_xColumnUpdate->updateNumericObject(x, scale);
     }
 
-    //..............................................................................
+
 }   // namespace svxform
-//..............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

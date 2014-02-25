@@ -24,14 +24,14 @@
 #include <svtools/genericunodialog.hxx>
 #include <comphelper/proparrhlp.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OAddConditionDialog
-    //====================================================================
+
     typedef ::svt::OGenericUnoDialog OAddConditionDialogBase;
     class OAddConditionDialog
             :public OAddConditionDialogBase
@@ -74,9 +74,9 @@ namespace svxform
         virtual void executedDialog(sal_Int16 _nExecutionResult);
     };
 
-//........................................................................
+
 } // namespace svxform
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
 
