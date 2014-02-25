@@ -135,7 +135,8 @@ class NavigatorTree :   public ::cppu::BaseMutex
         virtual void _elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException);
         virtual void _elementRemoved( const container::ContainerEvent& _Event ) throw(uno::RuntimeException);
         virtual void _elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException);
-        virtual void _disposing(const lang::EventObject& _rSource) throw( uno::RuntimeException);
+        virtual void _disposing(const lang::EventObject& _rSource)
+            throw (uno::RuntimeException, std::exception);
     };
 
     enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
@@ -728,7 +729,8 @@ void NavigatorTree::_elementReplaced( const container::ContainerEvent& _rEvent )
     }
 }
 
-void NavigatorTree::_disposing(const lang::EventObject& _rSource)throw( uno::RuntimeException)
+void NavigatorTree::_disposing(const lang::EventObject& _rSource)
+    throw (uno::RuntimeException, std::exception)
 {
     removeEntry(find(_rSource.Source));
 }
