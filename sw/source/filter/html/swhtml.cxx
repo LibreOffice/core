@@ -2414,6 +2414,12 @@ void SwHTMLParser::AddParSpace()
         }
         else
         {
+            if (!pTxtNode->HasHints())
+            {
+                pTxtNode->SetAttr(
+                    SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE, RES_UL_SPACE )  );
+                return;
+            }
             //What I do here, is that I examine the attributes, and if
             //I find out, that it's CJK/CTL, then I set the paragraph space
             //to the value set in HTML_CJK_PARSPACE/HTML_CTL_PARSPACE.
