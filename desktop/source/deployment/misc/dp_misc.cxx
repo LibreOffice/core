@@ -62,7 +62,11 @@ using namespace ::com::sun::star::uno;
 #define SWRITER "swriter.exe"
 #endif
 
+#ifdef MACOSX
+#define SOFFICE2 "soffice"
+#else
 #define SOFFICE2 "soffice.bin"
+#endif
 
 namespace dp_misc {
 namespace {
