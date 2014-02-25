@@ -93,9 +93,9 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
     return s_type_XCurrentContext;
 }
 
-//##################################################################################################
 
-//==================================================================================================
+
+
 class ThreadKey
 {
     bool     _bInit;
@@ -137,7 +137,7 @@ inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW(())
     return _hThreadKey;
 }
 
-//==================================================================================================
+
 extern "C" void SAL_CALL delete_IdContainer( void * p )
 {
     if (p)
@@ -158,7 +158,7 @@ extern "C" void SAL_CALL delete_IdContainer( void * p )
         delete pId;
     }
 }
-//==================================================================================================
+
 IdContainer * getIdContainer() SAL_THROW(())
 {
     static ThreadKey s_key( delete_IdContainer );
@@ -178,7 +178,7 @@ IdContainer * getIdContainer() SAL_THROW(())
 
 }
 
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
     void * pCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext )
@@ -226,7 +226,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
     }
     return sal_True;
 }
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()

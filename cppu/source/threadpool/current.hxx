@@ -32,7 +32,7 @@ struct IdContainer
 {
     void *               pCurrentContext;
     uno_ExtEnvironment * pCurrentContextEnv;
-    //
+
     bool            bInit;
     sal_Sequence *      pLocalThreadId;
     sal_Int32           nRefCountOfCurrentId;
