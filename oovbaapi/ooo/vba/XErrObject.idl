@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 module ooo {  module vba  {
-//==============================================================================
+
 /**
 */
 interface XErrObject : ::com::sun::star::uno::XInterface

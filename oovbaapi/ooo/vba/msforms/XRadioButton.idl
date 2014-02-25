@@ -22,11 +22,11 @@
 
 #include <ooo/vba/msforms/XNewFont.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module msforms {
 
-//=============================================================================
+
 
 interface XRadioButton
 {
@@ -35,7 +35,7 @@ interface XRadioButton
     [attribute, readonly] XNewFont Font;
 };
 
-//=============================================================================
+
 
 }; }; };
 

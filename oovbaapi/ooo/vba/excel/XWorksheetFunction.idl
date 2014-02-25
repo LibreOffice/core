@@ -24,11 +24,11 @@
 #include <com/sun/star/beans/XExactName.idl>
 #include <com/sun/star/script/XInvocation.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 
 interface XWorksheetFunction
@@ -38,7 +38,7 @@ interface XWorksheetFunction
     interface ::com::sun::star::script::XInvocation;
 };
 
-//=============================================================================
+
 
 }; }; };
 

@@ -22,11 +22,11 @@
 
 #include <ooo/vba/msforms/XNewFont.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module msforms {
 
-//=============================================================================
+
 
 interface XListBox
 {
@@ -44,7 +44,7 @@ interface XListBox
     any List( [in] any pvargIndex, [in] any pvarColumn );
 };
 
-//=============================================================================
+
 
 }; }; };
 

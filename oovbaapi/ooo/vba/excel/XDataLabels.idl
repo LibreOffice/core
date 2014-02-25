@@ -22,17 +22,17 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XCollection.idl>
 #include <com/sun/star/script/BasicErrorException.idl>
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 interface XDataLabels
 {
     interface ::ooo::vba::XCollection;
 };
 
-//=============================================================================
+
 
 }; }; };
 

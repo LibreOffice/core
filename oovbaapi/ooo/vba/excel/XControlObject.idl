@@ -24,7 +24,7 @@
 
 module ooo {  module vba { module excel {
 
-//=============================================================================
+
 /** Additional attributes for all drawing controls (this interface does not
     belong to ActiveX form controls).
  */
@@ -33,7 +33,7 @@ interface XControlObject : com::sun::star::uno::XInterface
     [attribute] boolean AutoSize;
 };
 
-//=============================================================================
+
 
 }; }; };
 

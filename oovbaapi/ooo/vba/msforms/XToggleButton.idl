@@ -22,11 +22,11 @@
 
 #include <ooo/vba/msforms/XCommandButton.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module msforms {
 
-//=============================================================================
+
 
 interface XToggleButton
 {
@@ -34,7 +34,7 @@ interface XToggleButton
     [attribute] any Value;
 };
 
-//=============================================================================
+
 
 }; }; };
 

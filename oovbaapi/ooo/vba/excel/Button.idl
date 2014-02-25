@@ -24,19 +24,19 @@
 #include <ooo/vba/excel/XControlObject.idl>
 #include <ooo/vba/excel/XButton.idl>
 
-//=============================================================================
+
 
 /*  Note: This file collects all compatibility interfaces for drawing objects
     and drawing controls embedded in sheets. All these symbols are deprecated
     in VBA and kept for compatibility with old VBA scripts. */
 
-//=============================================================================
+
 
 module ooo {  module vba { module excel {
 
-//=============================================================================
 
-//=============================================================================
+
+
 
 /** Represents a drawing button control in a spreadsheet. */
 service Button
@@ -46,7 +46,7 @@ service Button
     interface XButton;
 };
 
-//=============================================================================
+
 
 }; }; };
 

@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel  {
 
-//=============================================================================
+
 
 
 interface XInterior
@@ -40,7 +40,7 @@ interface XInterior
     [attribute]  any  PatternColorIndex;
 };
 
-//=============================================================================
+
 
 }; }; };
 

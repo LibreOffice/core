@@ -23,11 +23,11 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/script/XDefaultMethod.idl>
 
-//=============================================================================
+
 
 module ooo { module vba {
 
-//=============================================================================
+
 
 /** Base interface for VBA collections.
 
@@ -41,12 +41,12 @@ module ooo { module vba {
  */
 interface XCollectionBase
 {
-    //-------------------------------------------------------------------------
+
     /** Provides an enumeration of all items in this collection.
      */
     interface ::com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
+
     /** Provides the name of the default item access method.
 
         Usually this method is called "Item". The access method has to be
@@ -54,15 +54,15 @@ interface XCollectionBase
      */
     interface ::com::sun::star::script::XDefaultMethod;
 
-    //-------------------------------------------------------------------------
+
     /** Returns the number of items contained in this collection.
      */
     [attribute, readonly] long Count;
 
-    //-------------------------------------------------------------------------
+
 };
 
-//=============================================================================
+
 
 }; };
 

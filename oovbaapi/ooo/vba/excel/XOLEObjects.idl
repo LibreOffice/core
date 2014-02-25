@@ -20,19 +20,19 @@
 #define __ooo_vba_excel_XOLEObjects_idl__
 
 #include <ooo/vba/XCollection.idl>
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
 
-//=============================================================================
+
 interface XOLEObjects
 {
     interface ::ooo::vba::XCollection;
     //[attribute, readonly] boolean Focused;
 };
 
-//=============================================================================
+
 
 }; }; };
 

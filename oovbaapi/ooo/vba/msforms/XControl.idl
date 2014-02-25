@@ -25,7 +25,7 @@
 
 module ooo {  module vba {  module msforms {
 
-//=============================================================================
+
 interface XControl
 {
     interface ::ooo::vba::XHelperInterface;
@@ -54,7 +54,7 @@ interface XControl
     [attribute] long TabIndex;
 };
 
-//=============================================================================
+
 
 }; }; };
 

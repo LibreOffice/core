@@ -20,11 +20,11 @@
 #define __ooo_vba_msforms_XSpinButton_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
-//=============================================================================
+
 
 module ooo {  module vba {  module msforms {
 
-//=============================================================================
+
 interface XSpinButton: com::sun::star::uno::XInterface
 {
     [attribute] long Max;
@@ -32,7 +32,7 @@ interface XSpinButton: com::sun::star::uno::XInterface
     [attribute] any Value;
 };
 
-//=============================================================================
+
 
 }; }; };
 

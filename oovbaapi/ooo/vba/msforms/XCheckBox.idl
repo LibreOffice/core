@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/msforms/XNewFont.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module msforms {
 
-//=============================================================================
+
 interface XCheckBox: com::sun::star::uno::XInterface
 {
     [attribute] string Caption;
@@ -37,7 +37,7 @@ interface XCheckBox: com::sun::star::uno::XInterface
     [attribute, readonly] XNewFont Font;
 };
 
-//=============================================================================
+
 
 }; }; };
 

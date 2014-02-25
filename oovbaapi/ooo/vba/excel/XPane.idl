@@ -21,11 +21,11 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//============================================================================
+
 
 module ooo { module vba { module excel {
 
-//============================================================================
+
 
 interface XRange;
 
@@ -39,7 +39,7 @@ interface XPane : com::sun::star::uno::XInterface
     void LargeScroll([in] /*Optional*/ any Down, [in] /*Optional*/ any Up, [in] /*Optional*/ any ToRight, [in] /*Optional*/ any ToLeft);
 };
 
-//============================================================================
+
 
 }; }; };
 

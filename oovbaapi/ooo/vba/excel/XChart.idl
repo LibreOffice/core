@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XHelperInterface.idl>
 #include <com/sun/star/script/BasicErrorException.idl>
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 interface XRange;
 interface XChartTitle;
 interface XChart
@@ -63,7 +63,7 @@ interface XChart
 
 };
 
-//=============================================================================
+
 
 }; }; };
 

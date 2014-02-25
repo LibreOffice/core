@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module word {
 
-//=============================================================================
+
 //interface XPane;
 interface XWindow : com::sun::star::uno::XInterface
 {
@@ -38,7 +38,7 @@ interface XWindow : com::sun::star::uno::XInterface
     any ActivePane(); // this is a fake api for it seems not support in Write
 };
 
-//=============================================================================
+
 
 }; }; };
 

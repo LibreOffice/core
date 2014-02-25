@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module word {
 
-//=============================================================================
+
 
 
 interface XPageSetup : com::sun::star::uno::XInterface
@@ -38,7 +38,7 @@ interface XPageSetup : com::sun::star::uno::XInterface
     [attribute] long SectionStart;
 };
 
-//=============================================================================
+
 
 }; }; };
 

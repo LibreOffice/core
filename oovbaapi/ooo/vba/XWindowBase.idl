@@ -23,7 +23,7 @@
 #include <ooo/vba/XHelperInterface.idl>
 
 module ooo {  module vba {
-//=============================================================================
+
 
 interface XWindowBase
 {

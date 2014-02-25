@@ -28,7 +28,7 @@
 
 module ooo {  module vba { module excel {
 
-//=============================================================================
+
 
 /** Base interface for graphic objects and drawing controls in a single sheet.
 
@@ -65,7 +65,7 @@ interface XSheetObject : ooo::vba::XHelperInterface
     [attribute] boolean PrintObject;
 };
 
-//=============================================================================
+
 
 }; }; };
 

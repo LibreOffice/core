@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module word {
 
@@ -31,7 +31,7 @@ interface XFont : com::sun::star::uno::XInterface
 {
 };
 
-//=============================================================================
+
 
 }; }; };
 

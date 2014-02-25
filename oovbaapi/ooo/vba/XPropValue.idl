@@ -21,18 +21,18 @@
 
 #include <com/sun/star/script/XDefaultProperty.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {
 
 
-//=============================================================================
+
 interface XPropValue: com::sun::star::script::XDefaultProperty
 {
     [attribute] any Value;
 };
 
-//=============================================================================
+
 
 }; };
 

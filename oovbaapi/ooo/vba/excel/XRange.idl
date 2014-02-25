@@ -30,7 +30,7 @@
 #include <ooo/vba/XHelperInterface.idl>
 #include <com/sun/star/script/BasicErrorException.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
@@ -147,7 +147,7 @@ interface XRange
     any Hyperlinks( [in] any Index );
 };
 
-//=============================================================================
+
 
 }; }; };
 

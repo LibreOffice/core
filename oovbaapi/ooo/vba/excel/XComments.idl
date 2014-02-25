@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <ooo/vba/XCollection.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
@@ -32,7 +32,7 @@ interface XComments
     interface ooo::vba::XCollection;
 };
 
-//=============================================================================
+
 
 }; }; };
 

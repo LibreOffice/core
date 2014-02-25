@@ -24,11 +24,11 @@
 #include <com/sun/star/script/XInvocation.idl>
 #include <com/sun/star/container/XNamed.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 interface XComments;
 interface XRange;
@@ -108,7 +108,7 @@ interface XWorksheet
     void PrintOut( [in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName, [in] any IgnorePrintAreas );
 };
 
-//=============================================================================
+
 
 }; }; };
 

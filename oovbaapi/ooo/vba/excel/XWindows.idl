@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XCollection.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 interface XWindows
 {
     interface ::ooo::vba::XCollection;
@@ -34,7 +34,7 @@ interface XWindows
     void Arrange( [in] long ArrangeStyle, [in] any ActiveWorkbook, [in] any SyncHorizontal, [in] any SyncVertical );
 };
 
-//=============================================================================
+
 
 }; }; };
 
