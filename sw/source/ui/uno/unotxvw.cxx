@@ -1205,7 +1205,8 @@ void SwXTextViewCursor::gotoStart(sal_Bool bExpand) throw( uno::RuntimeException
         throw uno::RuntimeException();
 }
 
-void SwXTextViewCursor::gotoEnd(sal_Bool bExpand) throw( uno::RuntimeException )
+void SwXTextViewCursor::gotoEnd(sal_Bool bExpand)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(m_pView)
