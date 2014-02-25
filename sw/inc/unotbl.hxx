@@ -239,7 +239,9 @@ public:
     virtual sal_Bool SAL_CALL mergeRange()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    virtual sal_Bool SAL_CALL splitRange( sal_Int16 Count, sal_Bool Horizontal ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL splitRange( sal_Int16 Count, sal_Bool Horizontal )
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);

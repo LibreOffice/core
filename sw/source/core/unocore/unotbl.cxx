@@ -1780,7 +1780,8 @@ sal_Bool SwXTextTableCursor::mergeRange()
     return bRet;
 }
 
-sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal) throw( uno::RuntimeException )
+sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (Count <= 0)
