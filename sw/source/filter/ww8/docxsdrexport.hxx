@@ -11,7 +11,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 
 #include <boost/shared_ptr.hpp>
-
+#include <com/sun/star/xml/dom/XDocument.hpp>
 namespace oox
 {
 namespace drawingml
@@ -83,6 +83,9 @@ public:
     void writeDMLEffectLst(const SwFrmFmt& rFrmFmt);
     /// Writes a diagram (smartart).
     void writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt, int nAnchorId);
+    void writeDiagramRels( com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument> xDom,
+            com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > xRelSeq,
+            com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOutStream, OUString sGrabBagProperyName);
     /// Writes text frame in DML format.
     void writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId);
     /// Writes text frame in VML format.

@@ -25,6 +25,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <oox/token/properties.hxx>
 
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
@@ -41,6 +42,7 @@
 #include <docxexport.hxx>
 #include <docxexportfilter.hxx>
 #include <writerhelper.hxx>
+#include <comphelper/seqstream.hxx>
 
 using namespace com::sun::star;
 using namespace oox;
@@ -683,6 +685,78 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
 
 }
 
+void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
+                                     uno::Sequence< uno::Sequence< uno::Any > > xRelSeq,
+                                     uno::Reference< io::XOutputStream > xOutStream, OUString sGrabBagProperyName)
+{
+    // add image relationships of OOXData, OOXDiagram
+    OUString sType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/image");
+    uno::Reference< xml::sax::XSAXSerializable > xSerializer(xDom, uno::UNO_QUERY);
+    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(comphelper::getProcessComponentContext());
+    xWriter->setOutputStream(xOutStream);
+
+    // retrieve the relationships from Sequence
+    for (sal_Int32 j = 0; j < xRelSeq.getLength(); j++)
+    {
+        // diagramDataRelTuple[0] => RID,
+        // diagramDataRelTuple[1] => xInputStream
+        // diagramDataRelTuple[2] => extension
+        uno::Sequence< uno::Any > diagramDataRelTuple = xRelSeq[j];
+
+        OUString sRelId, sExtension;
+        diagramDataRelTuple[0] >>= sRelId;
+        diagramDataRelTuple[2] >>= sExtension;
+        OUString sContentType;
+        if (sExtension == ".jpeg")
+            sContentType = "image/jpeg";
+        else if (sExtension == ".WMF")
+            sContentType = "image/x-wmf";
+        sRelId = sRelId.copy(3);
+
+        StreamDataSequence dataSeq;
+        diagramDataRelTuple[1] >>= dataSeq;
+        uno::Reference<io::XInputStream> dataImagebin(new ::comphelper::SequenceInputStream(dataSeq));
+
+        OUString sFragment("../media/");
+        sFragment += sGrabBagProperyName + OUString::number(j) + sExtension;
+
+        PropertySet aProps(xOutStream);
+        aProps.setAnyProperty(PROP_RelId, uno::makeAny(sal_Int32(sRelId.toInt32())));
+
+        m_pImpl->m_rExport.GetFilter().addRelation(xOutStream, sType, sFragment);
+
+        sFragment = sFragment.replaceFirst("..","word");
+        uno::Reference< io::XOutputStream > xBinOutStream = m_pImpl->m_rExport.GetFilter().openFragmentStream(sFragment, sContentType);
+
+        try
+        {
+            sal_Int32 nBufferSize = 512;
+            uno::Sequence< sal_Int8 > aDataBuffer(nBufferSize);
+            sal_Int32 nRead;
+            do
+            {
+                nRead = dataImagebin->readBytes(aDataBuffer, nBufferSize);
+                if (nRead)
+                {
+                    if (nRead < nBufferSize)
+                    {
+                        nBufferSize = nRead;
+                        aDataBuffer.realloc(nRead);
+                    }
+                    xBinOutStream->writeBytes(aDataBuffer);
+                }
+            }
+            while (nRead);
+            xBinOutStream->flush();
+        }
+        catch (const uno::Exception& rException)
+        {
+            SAL_WARN("sw.ww8", "DocxSdrExport::writeDiagramRels Failed to copy grabbaged Image: " << rException.Message);
+        }
+        dataImagebin->closeInput();
+    }
+}
+
 void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt,  int nAnchorId)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
@@ -694,6 +768,8 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     uno::Reference<xml::dom::XDocument> styleDom;
     uno::Reference<xml::dom::XDocument> colorDom;
     uno::Reference<xml::dom::XDocument> drawingDom;
+    uno::Sequence< uno::Sequence< uno::Any > > xDataRelSeq;
+    uno::Sequence< uno::Any > diagramDrawing;
 
     // retrieve the doms from the GrabBag
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -711,9 +787,12 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
         else if (propName == "OOXColor")
             propList[nProp].Value >>= colorDom;
         else if (propName == "OOXDrawing")
-            propList[nProp].Value >>= drawingDom;
+            propList[nProp].Value >>= diagramDrawing;
+        else if (propName == "OOXDiagramDataRels")
+            propList[nProp].Value >>= xDataRelSeq;
     }
 
+    diagramDrawing[0] >>= drawingDom;
     // check that we have the 4 mandatory XDocuments
     // if not, there was an error importing and we won't output anything
     if (!dataDom.is() || !layoutDom.is() || !styleDom.is() || !colorDom.is())
@@ -750,6 +829,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     OString dataRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
                                           "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData",
                                           dataFileName, false), RTL_TEXTENCODING_UTF8);
+
 
     // add layout relation
     OUString layoutFileName = "diagrams/layout" + OUString::number(diagramCount) + ".xml";
@@ -814,10 +894,14 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
 
     // write data file
     serializer.set(dataDom, uno::UNO_QUERY);
-    writer->setOutputStream(m_pImpl->m_rExport.GetFilter().openFragmentStream("word/" + dataFileName,
-                            "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"));
+    uno::Reference< io::XOutputStream > xDataOutputStream = m_pImpl->m_rExport.GetFilter().openFragmentStream(
+                "word/" + dataFileName, "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml");
+    writer->setOutputStream(xDataOutputStream);
     serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence< beans::StringPair >());
+
+    // write the associated Images and rels for data file
+    writeDiagramRels(dataDom, xDataRelSeq, xDataOutputStream, OUString("OOXDiagramDataRels"));
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -841,13 +925,20 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
                           uno::Sequence< beans::StringPair >());
 
     // write drawing file
+
     if (drawingDom.is())
     {
         serializer.set(drawingDom, uno::UNO_QUERY);
-        writer->setOutputStream(m_pImpl->m_rExport.GetFilter().openFragmentStream("word/" + drawingFileName,
-                                "application/vnd.openxmlformats-officedocument.drawingml.diagramDrawing+xml"));
+        uno::Reference< io::XOutputStream > xDrawingOutputStream = m_pImpl->m_rExport.GetFilter().openFragmentStream("word/" + drawingFileName,
+                "application/vnd.openxmlformats-officedocument.drawingml.diagramDrawing+xml");
+        writer->setOutputStream(xDrawingOutputStream);
         serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
                               uno::Sequence< beans::StringPair >());
+
+        // write the associated Images and rels for drawing file
+        uno::Sequence< uno::Sequence< uno::Any > > xDrawingRelSeq;
+        diagramDrawing[1] >>= xDrawingRelSeq;
+        writeDiagramRels(drawingDom, xDrawingRelSeq, xDrawingOutputStream, OUString("OOXDiagramDrawingRels"));
     }
 }
 

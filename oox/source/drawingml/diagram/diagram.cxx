@@ -338,6 +338,9 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
 {
     sal_Int32 length = maMainDomMap.size();
 
+    if ( 0 < maDataRelsMap.getLength() )
+        ++length;
+
     uno::Sequence<beans::PropertyValue> aValue(length);
     beans::PropertyValue* pValue = aValue.getArray();
     for (DiagramDomMap::const_iterator i = maMainDomMap.begin();
@@ -346,6 +349,13 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
     {
         pValue[0].Name = i->first;
         pValue[0].Value = uno::makeAny(i->second);
+        ++pValue;
+    }
+
+    if ( 0 < maDataRelsMap.getLength() )
+    {
+        pValue[0].Name = OUString("OOXDiagramDataRels");
+        pValue[0].Value = uno::makeAny ( maDataRelsMap );
         ++pValue;
     }
 
@@ -410,6 +420,11 @@ void loadDiagram( ShapePtr& pShape,
                        "OOXData",
                        pDiagram,
                        xRefDataModel);
+
+        pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfType( rFilter, xRefDataModel->getFragmentPath(),
+                                                           "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" );
+
+
         // Pass the info to pShape
         for( ::std::vector<OUString>::const_iterator aIt = pData->getExtDrawings().begin(), aEnd = pData->getExtDrawings().end();
                 aIt != aEnd; ++aIt )

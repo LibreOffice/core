@@ -157,6 +157,7 @@ typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
 
 
 typedef std::map< OUString, uno::Reference<xml::dom::XDocument> > DiagramDomMap;
+typedef uno::Sequence< uno::Sequence< uno::Any > > DiagramRelsMap;
 
 
 
@@ -296,7 +297,7 @@ public:
     DiagramColorMap& getColors() { return maColors; }
     const DiagramColorMap& getColors() const { return maColors; }
     DiagramDomMap & getDomMap() { return maMainDomMap; }
-
+    DiagramRelsMap & getDataRelsMap() { return maDataRelsMap; }
     void addTo( const ShapePtr & pShape );
 
     uno::Sequence<beans::PropertyValue> getDomsAsPropertyValues() const;
@@ -308,6 +309,7 @@ private:
     DiagramColorMap                maColors;
     std::map< OUString, ShapePtr > maShapeMap;
     DiagramDomMap                  maMainDomMap;
+    DiagramRelsMap                 maDataRelsMap;
 };
 
 
