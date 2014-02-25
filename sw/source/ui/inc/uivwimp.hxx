@@ -72,7 +72,8 @@ class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
 
     // XClipboardListener
     virtual void SAL_CALL changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& rEventObject )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw (com::sun::star::uno::RuntimeException,
+               std::exception);
 
 public:
     SwClipboardChangeListener( SwView& rView ) : pView( &rView ) {}
