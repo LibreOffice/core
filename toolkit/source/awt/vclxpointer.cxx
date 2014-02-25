@@ -22,9 +22,9 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXPointer
-//  ----------------------------------------------------
+
 VCLXPointer::VCLXPointer()
 {
 }

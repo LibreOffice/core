@@ -37,9 +37,9 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXSystemDependentWindow
-//  ----------------------------------------------------
+
 VCLXSystemDependentWindow::VCLXSystemDependentWindow()
 {
 }

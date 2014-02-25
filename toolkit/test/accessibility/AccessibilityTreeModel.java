@@ -111,9 +111,9 @@ public class AccessibilityTreeModel
     }
 
 
-    //
+
     // child management:
-    //
+
 
 
 
@@ -299,12 +299,12 @@ public class AccessibilityTreeModel
         return aPath.toArray();
     }
 
-    //
+
     // listeners (and helper methods)
-    //
+
     // We are registered with listeners as soon as objects are in the
     // tree cache, and we should get removed as soon as they are out.
-    //
+
 
     protected void fireTreeNodesChanged(TreeModelEvent e)
     {

@@ -29,9 +29,9 @@
 #include "toolkit/awt/scrollabledialog.hxx"
 #include <toolkit/helper/property.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXContainer
-//  ----------------------------------------------------
+
 
 void VCLXContainer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {

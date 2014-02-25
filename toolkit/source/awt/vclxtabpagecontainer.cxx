@@ -35,9 +35,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::view;
-//  ----------------------------------------------------
+
 //  class VCLXTabPageContainer
-//  ----------------------------------------------------
+
 void VCLXTabPageContainer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     VCLXWindow::ImplGetPropertyIds( rIds );

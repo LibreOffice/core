@@ -41,9 +41,9 @@ using namespace ::com::sun::star::view;
 using ::com::sun::star::awt::tab::XTabPageModel;
 
 #define WRONG_TYPE_EXCEPTION "Type must be ::com::sun::star::awt::tab::XTabPageModel!"
-//  ----------------------------------------------------
+
 //  class UnoControlTabPageContainerModel
-//  ----------------------------------------------------
+
 UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Reference< XComponentContext >& i_factory )
     :UnoControlTabPageContainerModel_Base( i_factory )
     ,maContainerListeners( *this )
@@ -214,9 +214,9 @@ void UnoControlTabPageContainerModel::removeContainerListener( const Reference< 
     maContainerListeners.removeInterface( l );
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlTabPageContainer
-//  ----------------------------------------------------
+
 UnoControlTabPageContainer::UnoControlTabPageContainer( const uno::Reference< uno::XComponentContext >& rxContext )
     :UnoControlTabPageContainer_Base(rxContext)
     ,m_aTabPageListeners( *this )

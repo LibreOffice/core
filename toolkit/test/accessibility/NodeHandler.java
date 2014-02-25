@@ -124,10 +124,10 @@ abstract class NodeHandler
     public abstract AccessibleTreeNode createChild (
         AccessibleTreeNode aParent, int nIndex);
 
-    //
+
     // The following methods support editing of children and actions.
     // They have default implementations for no actions and read-only.
-    //
+
 
     /** May this child be changed? */
     public boolean isChildEditable (AccessibleTreeNode aNode, int nIndex)

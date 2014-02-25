@@ -33,15 +33,15 @@
     // here) died, it's not said that everybody released all references to the
     // XAccessibleContext used by this component, and implemented in the acc lib.
     // So we cannot really unload the lib.
-    //
+
     // Alternatively, if the lib would us own "usage counting", i.e. every component
     // implemented therein would affect a static ref count, the acc lib could care
     // for unloading itself.
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::accessibility;
@@ -58,9 +58,9 @@ namespace toolkit
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
     }
 
-    //====================================================================
+
     //= AccessibleDummyFactory
-    //====================================================================
+
     class AccessibleDummyFactory : public IAccessibleFactory
     {
     public:
@@ -170,9 +170,9 @@ namespace toolkit
         return m_refCount;
     }
 
-    //====================================================================
+
     //= AccessibilityClient
-    //====================================================================
+
 
     AccessibilityClient::AccessibilityClient()
         :m_bInitialized( false )
@@ -270,8 +270,8 @@ namespace toolkit
         return *s_pFactory;
     }
 
-//........................................................................
+
 }   // namespace toolkit
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

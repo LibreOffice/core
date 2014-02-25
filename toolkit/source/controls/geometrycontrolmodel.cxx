@@ -52,10 +52,10 @@
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
-//........................................................................
+
 // namespace toolkit
 // {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -65,9 +65,9 @@
     using namespace ::com::sun::star::container;
     using namespace ::comphelper;
 
-    //====================================================================
+
     //= OGeometryControlModel_Base
-    //====================================================================
+
 
     OGeometryControlModel_Base::OGeometryControlModel_Base(::com::sun::star::uno::XAggregation* _pAggregateInstance)
         :OPropertySetAggregationHelper( m_aBHelper )
@@ -435,9 +435,9 @@
             xComp->dispose();
     }
 
-    //====================================================================
+
     //= OCommonGeometryControlModel
-    //====================================================================
+
 
 
     typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > HashMapString2Int;
@@ -630,8 +630,8 @@
         }
     }
 
-//........................................................................
+
 // }    // namespace toolkit
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

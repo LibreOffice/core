@@ -20,10 +20,10 @@
 #include "grideventforwarder.hxx"
 #include "gridcontrol.hxx"
 
-//......................................................................................................................
+
 namespace toolkit
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -40,9 +40,9 @@ namespace toolkit
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::lang::EventObject;
 
-    //==================================================================================================================
+
     //= GridEventForwarder
-    //==================================================================================================================
+
 
     GridEventForwarder::GridEventForwarder( UnoGridControl& i_parent )
         :m_parent( i_parent )
@@ -130,8 +130,8 @@ namespace toolkit
             xPeer->disposing( i_event );
     }
 
-//......................................................................................................................
+
 } // namespace toolkit
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

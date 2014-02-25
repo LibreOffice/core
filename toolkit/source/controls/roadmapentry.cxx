@@ -49,12 +49,12 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
                     & m_bInteractive, ::getCppuType( &m_bInteractive ) );
 
 
-    // ...
+
 
     // Note that the list of registered properties has to be fixed: Different
     // instances of this class have to register the same set of properties with
     // the same attributes.
-    //
+
     // This is because all instances of the class share the same PropertySetInfo
     // which has been built from the registered property of _one_ instance.
 }

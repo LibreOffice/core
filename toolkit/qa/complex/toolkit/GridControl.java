@@ -62,13 +62,13 @@ import org.openoffice.test.OfficeConnection;
  */
 public class GridControl
 {
-    // -----------------------------------------------------------------------------------------------------------------
+
     public GridControl()
     {
         m_context = m_connection.getComponentContext();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static void impl_dispose( final Object... i_components )
     {
         for ( int i=0; i<i_components.length; ++i )
@@ -81,7 +81,7 @@ public class GridControl
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_recreateGridModel() throws Exception
     {
         impl_dispose( m_gridControlModel, m_columnModel, m_dataModel );
@@ -101,7 +101,7 @@ public class GridControl
         assertNotNull( "the out-of-the-box data model should be mutable and sortable", m_dataModel );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void testGridControlCloning() throws Exception
     {
@@ -137,7 +137,7 @@ public class GridControl
         impl_assertEquality( originalColumnModel, clonedColumnModel );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void testDisposal() throws Exception
     {
@@ -187,7 +187,7 @@ public class GridControl
         assertTrue( "new column model is not disposed after disposing the grid column model", newColumnModelListener.isDisposed() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * tests various aspects of the <code>XMutableGridDataModel</code> interface
      */
@@ -217,7 +217,7 @@ public class GridControl
         assertEquals( "implicit extension of the column count doesn't work", 2, dataModel.getColumnCount() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void testGridColumnModel() throws Exception
     {
@@ -320,7 +320,7 @@ public class GridControl
         assertEquals( insertionIndex, newColumn.getIndex() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void testDataModel() throws Exception
     {
@@ -347,7 +347,7 @@ public class GridControl
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void testSortableDataModel() throws Exception
     {
@@ -424,7 +424,7 @@ public class GridControl
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void testView() throws Exception
     {
@@ -474,7 +474,7 @@ public class GridControl
             rowCount - 2, gridControl.getCurrentRow() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private XControl impl_createDialogWithGridControl() throws Exception
     {
         // create a simple dialog model/control/peer trinity
@@ -510,14 +510,14 @@ public class GridControl
         return gridControl;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private int impl_assertInteger( final Object i_object )
     {
         assertTrue( i_object instanceof Integer );
         return ((Integer)i_object).intValue();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_assertColumnModelConsistency() throws IndexOutOfBoundsException
     {
         for ( int col = 0; col < m_columnModel.getColumnCount(); ++col )
@@ -536,7 +536,7 @@ public class GridControl
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_assertEquality( final XGridDataModel i_reference, final XGridDataModel i_compare ) throws IndexOutOfBoundsException
     {
         assertNotNull( i_reference );
@@ -559,7 +559,7 @@ public class GridControl
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_assertEquality( final XGridColumnModel i_reference, final XGridColumnModel i_compare ) throws IndexOutOfBoundsException
     {
         assertEquals( "column model comparison: wrong column counts", i_reference.getColumnCount(), i_compare.getColumnCount() );
@@ -571,7 +571,7 @@ public class GridControl
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_assertEquality( final XGridColumn i_reference, final XGridColumn i_compare )
     {
         final Method[] methods = XGridColumn.class.getMethods();
@@ -593,7 +593,7 @@ public class GridControl
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private boolean impl_areSameInterface( final Object i_lhs, final Object i_rhs )
     {
         final XInterface lhs = UnoRuntime.queryInterface( XInterface.class, i_lhs );
@@ -601,21 +601,21 @@ public class GridControl
         return UnoRuntime.areSame( lhs, rhs );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Before
     public void initTestCase()
     {
         m_disposables.clear();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @After
     public void cleanupTestCase()
     {
         impl_dispose( m_disposables.toArray() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @BeforeClass
     public static void setUpConnection() throws java.lang.Exception
     {
@@ -630,7 +630,7 @@ public class GridControl
         System.out.println( "seeding random number generator with " + seed );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @AfterClass
     public static void tearDownConnection()
         throws InterruptedException, com.sun.star.uno.Exception
@@ -642,20 +642,20 @@ public class GridControl
         System.out.println( "--------------------------------------------------------------------------------" );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     public <T> T createInstance( Class<T> i_interfaceClass, final String i_serviceIndentifer ) throws Exception
     {
         return UnoRuntime.queryInterface( i_interfaceClass, createInstance( i_serviceIndentifer ) );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private Object createInstance( final String i_serviceName ) throws Exception
     {
         Object instance = m_context.getServiceManager().createInstanceWithContext( i_serviceName, m_context );
         assertNotNull( "could not create an instance of '" + i_serviceName + "'", instance );
         return instance;
     }
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static final class DisposeListener implements XEventListener
     {
         DisposeListener( final Object i_component )
@@ -677,7 +677,7 @@ public class GridControl
         private boolean             m_isDisposed;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static final class ColumnModelListener implements XContainerListener
     {
         ColumnModelListener()
@@ -734,7 +734,7 @@ public class GridControl
         private List< ContainerEvent > m_replacementEvents = new ArrayList< ContainerEvent >();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static final OfficeConnection m_connection = new OfficeConnection();
     private static Random m_randomGenerator = new Random();
     private final XComponentContext m_context;

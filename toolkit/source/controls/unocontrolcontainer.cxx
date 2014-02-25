@@ -40,9 +40,9 @@
 
 using namespace ::com::sun::star;
 
-//  ----------------------------------------------------
+
 //  class UnoControlHolder
-//  ----------------------------------------------------
+
 struct UnoControlHolder
 {
     uno::Reference< awt::XControl > mxControl;
@@ -310,10 +310,10 @@ OUString UnoControlHolderList::impl_getFreeName_throw()
     }
     throw uno::RuntimeException("out of identifiers", NULL );
 }
-//  ----------------------------------------------------
+
 //  Function to set the controls' visibility according
 //  to the dialog's "Step" property
-//  ----------------------------------------------------
+
 void implUpdateVisibility
 (
     sal_Int32 nDialogStep,
@@ -355,9 +355,9 @@ void implUpdateVisibility
 }
 
 
-//  ----------------------------------------------------
+
 //  class DialogStepChangedListener
-//  ----------------------------------------------------
+
 typedef ::cppu::WeakImplHelper1< beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
 class DialogStepChangedListener: public PropertyChangeListenerHelper
@@ -392,9 +392,9 @@ void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyC
     implUpdateVisibility( nDialogStep, mxControlContainer );
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlContainer
-//  ----------------------------------------------------
+
 UnoControlContainer::UnoControlContainer()
     :UnoControlContainer_Base()
     ,maCListeners( *this )

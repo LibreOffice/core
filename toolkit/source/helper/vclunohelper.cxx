@@ -56,9 +56,9 @@
 
 using namespace ::com::sun::star;
 
-//  ----------------------------------------------------
+
 //  class VCLUnoHelper
-//  ----------------------------------------------------
+
 
 uno::Reference< ::com::sun::star::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
@@ -457,9 +457,9 @@ sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
 
 using namespace ::com::sun::star::util;
 
-//====================================================================
+
 //= file-local helpers
-//====================================================================
+
 namespace
 {
     enum UnitConversionDirection
@@ -516,9 +516,9 @@ namespace
         return (sal_Int16)FUNIT_NONE;
     }
 }
-//========================================================================
+
 //= MeasurementUnitConversion
-//========================================================================
+
 
 sal_Int16 VCLUnoHelper::ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _nUNOToFieldValueFactor )
 {

@@ -199,9 +199,9 @@ namespace toolkit
     }
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXGraphicControl
-//  ----------------------------------------------------
+
 
 void VCLXGraphicControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -330,7 +330,7 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const ::com:
 
 
 //  class VCLXButton
-//  ----------------------------------------------------
+
 
 void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -613,9 +613,9 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXImageControl
-//  ----------------------------------------------------
+
 
 void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -744,9 +744,9 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
     return aProp;
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXCheckBox
-//  ----------------------------------------------------
+
 
 
 void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
@@ -1046,9 +1046,9 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXRadioButton
-//  ----------------------------------------------------
+
 void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1329,9 +1329,9 @@ void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
     }
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXSpinField
-//  ----------------------------------------------------
+
 void VCLXSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1463,9 +1463,9 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXListBox
-//  ----------------------------------------------------
+
 void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -2172,9 +2172,9 @@ void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent ) throw (Runti
     VCLXWindow::disposing( i_rEvent );
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXMessageBox
-//  ----------------------------------------------------
+
 
 void VCLXMessageBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -2257,9 +2257,9 @@ sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeExceptio
     return ::com::sun::star::awt::Size( 250, 100 );
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXDialog
-//  ----------------------------------------------------
+
 void VCLXDialog::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     VCLXTopWindow::ImplGetPropertyIds( rIds );
@@ -2443,9 +2443,9 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXTabPage
-//  ----------------------------------------------------
+
 VCLXMultiPage::VCLXMultiPage() : maTabListeners( *this ), mTabId( 1 )
 {
     OSL_TRACE("VCLXMultiPage::VCLXMultiPage()" );
@@ -2728,9 +2728,9 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     };
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXTabPage
-//  ----------------------------------------------------
+
 VCLXTabPage::VCLXTabPage()
 {
 }
@@ -2862,9 +2862,9 @@ TabPage *VCLXTabPage::getTabPage() const throw (uno::RuntimeException)
     throw uno::RuntimeException();
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXFixedHyperlink
-//  ----------------------------------------------------
+
 
 VCLXFixedHyperlink::VCLXFixedHyperlink() :
 
@@ -3154,9 +3154,9 @@ void VCLXFixedHyperlink::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXFixedText
-//  ----------------------------------------------------
+
 void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -3297,9 +3297,9 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     return VCLUnoHelper::ConvertToAWTSize( aAdjustedSize );
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXScrollBar
-//  ----------------------------------------------------
+
 void VCLXScrollBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -3774,9 +3774,9 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXEdit
-//  ----------------------------------------------------
+
 
 void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -4151,9 +4151,9 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXComboBox
-//  ----------------------------------------------------
+
 
 void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -4641,9 +4641,9 @@ void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent ) throw (Runt
     VCLXEdit::disposing( i_rEvent );
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXFormattedSpinField
-//  ----------------------------------------------------
+
 void VCLXFormattedSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     // Interestingly in the UnoControl API this is
@@ -4746,9 +4746,9 @@ void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const ::
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXDateField
-//  ----------------------------------------------------
+
 
 void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5096,9 +5096,9 @@ sal_Bool VCLXDateField::isStrictFormat() throw(::com::sun::star::uno::RuntimeExc
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXTimeField
-//  ----------------------------------------------------
+
 
 void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5405,9 +5405,9 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
     return aProp;
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXNumericField
-//  ----------------------------------------------------
+
 
 void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5999,9 +5999,9 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::su
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXCurrencyField
-//  ----------------------------------------------------
+
 
 void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -6356,9 +6356,9 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
     return aProp;
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXPatternField
-//  ----------------------------------------------------
+
 
 void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -6530,9 +6530,9 @@ void VCLXPatternField::setProperty( const OUString& PropertyName, const ::com::s
     return aProp;
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXToolBox
-//  ----------------------------------------------------
+
 VCLXToolBox::VCLXToolBox()
 {
 }
@@ -6546,9 +6546,9 @@ VCLXToolBox::~VCLXToolBox()
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-//  ----------------------------------------------------
+
 //  class VCLXFrame
-//  ----------------------------------------------------
+
 VCLXFrame::VCLXFrame()
 {
 }

@@ -28,9 +28,9 @@
 
 using namespace com::sun::star;
 
-//  ----------------------------------------------------
+
 //  class UnoControlBase
-//  ----------------------------------------------------
+
 
 bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
 {
