@@ -4413,7 +4413,8 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
 }
 
 void SAL_CALL
-ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const uno::Any& Operator, const uno::Any& Criteria2, const uno::Any& VisibleDropDown ) throw (uno::RuntimeException)
+ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const uno::Any& Operator, const uno::Any& Criteria2, const uno::Any& VisibleDropDown )
+    throw (uno::RuntimeException, std::exception)
 {
     // Is there an existing autofilter
     RangeHelper thisRange( mxRange );
