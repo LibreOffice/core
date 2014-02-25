@@ -1233,7 +1233,7 @@ ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
 bool ScRangePairList::operator==( const ScRangePairList& r ) const
 {
     if ( this == &r )
-        return true;                // identische Referenz
+        return true;                // identical reference
     if ( maPairs.size() != r.size() )
         return false;
     for ( size_t nIdx = 0, nCnt = maPairs.size(); nIdx < nCnt; ++nIdx )

@@ -2051,9 +2051,9 @@ public:
 
 }
 
-//
+
 // GetDataEntries - Strings from continuous Section around nRow
-//
+
 
 // DATENT_MAX      - max. number of entries in list for auto entry
 // DATENT_SEARCH   - max. number of cells that get transparent - new: only count Strings

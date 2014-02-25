@@ -35,7 +35,7 @@
 #include "editable.hxx"
 #include "undoblk.hxx"
 
-// ============================================================================
+
 
 SFX_IMPL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
@@ -272,6 +272,6 @@ bool ScSpellDialogChildWindow::IsSelectionChanged()
     return (*mxOldRangeList != aCurrentRangeList);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

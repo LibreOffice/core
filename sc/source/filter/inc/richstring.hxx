@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Flags used to specify import/export mode of strings. */
 typedef sal_Int32 BiffStringFlags;
@@ -46,7 +46,7 @@ const BiffStringFlags BIFF_STR_SMARTFLAGS   = 0x0004;   /// Omit flags on empty 
 const BiffStringFlags BIFF_STR_KEEPFONTS    = 0x0008;   /// Keep old fonts when reading unformatted string (default: clear fonts). Import only.
 const BiffStringFlags BIFF_STR_EXTRAFONTS   = 0x0010;   /// Read trailing rich-string font array (default: nothing). BIFF2-BIFF5 import only.
 
-// ============================================================================
+
 
 /** Contains text data and font attributes for a part of a rich formatted string. */
 class RichStringPortion : public WorkbookHelper
@@ -88,7 +88,7 @@ private:
 
 typedef ::boost::shared_ptr< RichStringPortion > RichStringPortionRef;
 
-// ----------------------------------------------------------------------------
+
 
 enum BiffFontPortionMode
 {
@@ -97,7 +97,7 @@ enum BiffFontPortionMode
     BIFF_FONTPORTION_OBJ                /// Font portion in OBJ or TXO record.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents a position in a rich-string containing current font identifier.
 
@@ -117,7 +117,7 @@ struct FontPortionModel
     void                read( SequenceInputStream& rStrm );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A vector with all font portions in a rich-string. */
 class FontPortionModelList : public ::std::vector< FontPortionModel >
@@ -131,7 +131,7 @@ public:
     void                importPortions( SequenceInputStream& rStrm );
 };
 
-// ============================================================================
+
 
 struct PhoneticDataModel
 {
@@ -145,7 +145,7 @@ struct PhoneticDataModel
     void                setBiffData( sal_Int32 nType, sal_Int32 nAlignment );
 };
 
-// ----------------------------------------------------------------------------
+
 
 class PhoneticSettings : public WorkbookHelper
 {
@@ -164,7 +164,7 @@ private:
     PhoneticDataModel   maModel;
 };
 
-// ============================================================================
+
 
 /** Contains text data and positioning information for a phonetic text portion. */
 class RichStringPhonetic : public WorkbookHelper
@@ -187,7 +187,7 @@ private:
 
 typedef ::boost::shared_ptr< RichStringPhonetic > RichStringPhoneticRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents a phonetic text portion in a rich-string with phonetic text.
     Used in binary filters only. */
@@ -204,7 +204,7 @@ struct PhoneticPortionModel
     void                read( SequenceInputStream& rStrm );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A vector with all phonetic portions in a rich-string. */
 class PhoneticPortionModelList : public ::std::vector< PhoneticPortionModel >
@@ -218,7 +218,7 @@ public:
     void                importPortions( SequenceInputStream& rStrm );
 };
 
-// ============================================================================
+
 
 /** Contains string data and a list of formatting runs for a rich formatted string. */
 class RichString : public WorkbookHelper
@@ -280,7 +280,7 @@ private:
 
 typedef ::boost::shared_ptr< RichString > RichStringRef;
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

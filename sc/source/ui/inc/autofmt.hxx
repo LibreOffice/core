@@ -30,7 +30,7 @@
 #include <svx/framelinkarray.hxx>
 #include "scdllapi.h"
 
-//------------------------------------------------------------------------
+
 
 class ScAutoFormatData;
 class SvxBoxItem;
@@ -39,11 +39,11 @@ class ScAutoFmtPreview; // s.u.
 class SvNumberFormatter;
 class ScDocument;
 
-//------------------------------------------------------------------------
+
 
 enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
-//========================================================================
+
 
 class SC_DLLPUBLIC ScAutoFmtPreview : public Window
 {
@@ -77,7 +77,7 @@ private:
     const OUString          aStrSouth;
     const OUString          aStrSum;
     SvNumberFormatter*      pNumFmt;
-    //-------------------------------------------
+
     SAL_DLLPRIVATE void  Init            ();
     SAL_DLLPRIVATE void  DoPaint         ( const Rectangle& rRect );
     SAL_DLLPRIVATE void  CalcCellArray   ( bool bFitWidth );

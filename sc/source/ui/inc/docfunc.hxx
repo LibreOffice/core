@@ -46,7 +46,7 @@ struct ScCellMergeOption;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 
-// ---------------------------------------------------------------------------
+
 
 class ScDocFunc
 {

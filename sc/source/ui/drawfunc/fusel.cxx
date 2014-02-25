@@ -278,9 +278,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 // try to select the clicked object
                 if ( pView->MarkObj( aMDPos, -2, false, rMEvt.IsMod1() ) )
                 {
-                    //*********************************************************
+
                     //Objekt verschieben
-                    //********************************************************
+
                     if (pView->IsMarkedHit(aMDPos))
                     {
                         //  Don't start drag timer if inplace editing of an OLE object
@@ -304,9 +304,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if (pViewShell->IsDrawSelMode())
                     {
-                        //*********************************************************
+
                         //Objekt selektieren
-                        //********************************************************
+
                         pView->BegMarkObj(aMDPos);
                         bReturn = true;
                     }
@@ -523,9 +523,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
-                    //
+
                     //  OLE: aktivieren
-                    //
+
 
                     if (nSdrObjKind == OBJ_OLE2)
                     {
@@ -538,11 +538,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         }
                     }
 
-                    //
+
                     //  Edit text
                     //  not in UNO controls
                     //  #i32352# not in media objects
-                    //
+
                     else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) && !pObj->ISA(SdrMediaObj) )
                     {
                         OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();

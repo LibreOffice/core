@@ -41,7 +41,7 @@ class ScNavigatorDialogWrapper;
 class ScNavigatorDlg;
 class ScNavigatorSettings;
 
-//========================================================================
+
 
 #define SC_DROPMODE_URL         0
 #define SC_DROPMODE_LINK        1
@@ -53,9 +53,9 @@ enum NavListMode { NAV_LMODE_NONE       = 0x4000,
                    NAV_LMODE_DOCS       = 0x800,
                    NAV_LMODE_SCENARIOS  = 0x400 };
 
-//========================================================================
+
 // class ScScenarioListBox -----------------------------------------------
-//========================================================================
+
 
 class ScScenarioListBox : public ListBox
 {
@@ -94,9 +94,9 @@ private:
     ScenarioList        maEntries;
 };
 
-//========================================================================
+
 // class ScScenarioWindow ------------------------------------------------
-//========================================================================
+
 class ScScenarioWindow : public Window
 {
 public:
@@ -118,9 +118,9 @@ private:
     MultiLineEdit       aEdComment;
 };
 
-//==================================================================
+
 //  class ColumnEdit
-//==================================================================
+
 class ColumnEdit : public SpinField
 {
 public:
@@ -151,9 +151,9 @@ private:
 };
 
 
-//==================================================================
+
 //  class RowEdit
-//==================================================================
+
 class RowEdit : public NumericField
 {
 public:
@@ -174,9 +174,9 @@ private:
 };
 
 
-//==================================================================
+
 //  class ScDocListBox
-//==================================================================
+
 class ScDocListBox : public ListBox
 {
 public:
@@ -191,9 +191,9 @@ private:
 };
 
 
-//==================================================================
+
 //  class CommandToolBox
-//==================================================================
+
 class CommandToolBox : public ToolBox
 {
 public:
@@ -216,9 +216,9 @@ private:
     ScNavigatorDlg& rDlg;
 };
 
-//==================================================================
+
 //  class ScNavigatorDlg
-//==================================================================
+
 
 class ScNavigatorDlg : public Window, public SfxListener
 {
@@ -334,7 +334,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-//==================================================================
+
 
 class ScNavigatorDialogWrapper: public SfxChildWindowContext
 {

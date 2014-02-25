@@ -69,7 +69,7 @@ inline bool ScBroadcastArea::operator==( const ScBroadcastArea & rArea ) const
     return aRange == rArea.aRange;
 }
 
-//=============================================================================
+
 
 struct ScBroadcastAreaEntry
 {
@@ -97,7 +97,7 @@ struct ScBroadcastAreaEqual
 
 typedef ::boost::unordered_set< ScBroadcastAreaEntry, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
 
-//=============================================================================
+
 
 struct ScBroadcastAreaBulkHash
 {
@@ -118,7 +118,7 @@ struct ScBroadcastAreaBulkEqual
 typedef ::boost::unordered_set< const ScBroadcastArea*, ScBroadcastAreaBulkHash,
         ScBroadcastAreaBulkEqual > ScBroadcastAreasBulk;
 
-//=============================================================================
+
 
 class ScBroadcastAreaSlotMachine;
 

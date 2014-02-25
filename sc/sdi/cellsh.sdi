@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- // ===========================================================================
+
 interface CellSelection
 [
     uuid ( "D7680520-137B-11D3-B25B-006097DA68F3" )
@@ -227,7 +227,7 @@ interface CellSelection
     SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
 }
 
- // ===========================================================================
+
 interface CellMovement
 [
     uuid ( "FF2E35C0-137B-11D3-B25B-006097DA68F3" )
@@ -441,7 +441,7 @@ interface Cell
     import CellMovement;
 }
 
- // ===========================================================================
+
 shell ScCellShell : ScFormatShell
 {
     import Cell[Automation];

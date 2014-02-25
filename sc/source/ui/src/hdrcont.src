@@ -49,16 +49,16 @@
         Text [ en-US ] = "~Paste" ; \
     };
 
- //-------------------------------------------------------------------------------
+
 
 Menu RID_POPUP_ROWHEADER
 {
     ItemList =
     {
         PART1
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_ROW_HEIGHT ;
@@ -71,9 +71,9 @@ Menu RID_POPUP_ROWHEADER
             HelpId = CMD_FID_ROW_OPT_HEIGHT ;
             Text [ en-US ] = "Optimal ~Row Height..." ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_INS_ROW ;
@@ -92,9 +92,9 @@ Menu RID_POPUP_ROWHEADER
             HelpId = CMD_SID_DELETE ;
             Text [ en-US ] = "De~lete Row Contents..." ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_ROW_HIDE ;
@@ -107,9 +107,9 @@ Menu RID_POPUP_ROWHEADER
             HelpId = CMD_FID_ROW_SHOW ;
             Text [ en-US ] = "~Show" ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         PART2
         MenuItem
         {
@@ -120,16 +120,16 @@ Menu RID_POPUP_ROWHEADER
     };
 };
 
- //-------------------------------------------------------------------
+
 
 Menu RID_POPUP_COLHEADER
 {
     ItemList =
     {
         PART1
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_COL_WIDTH ;
@@ -142,9 +142,9 @@ Menu RID_POPUP_COLHEADER
             HelpId = CMD_FID_COL_OPT_WIDTH ;
             Text [ en-US ] = "O~ptimal Column Width..." ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_INS_COLUMN ;
@@ -163,9 +163,9 @@ Menu RID_POPUP_COLHEADER
             HelpId = CMD_SID_DELETE ;
             Text [ en-US ] = "D~elete Column Contents..." ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_COL_HIDE ;
@@ -178,9 +178,9 @@ Menu RID_POPUP_COLHEADER
             HelpId = CMD_FID_COL_SHOW ;
             Text [ en-US ] = "~Show" ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         PART2
         MenuItem
         {

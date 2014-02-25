@@ -33,7 +33,7 @@ using namespace ::ooo::vba::excel::XlAxisGroup;
 // each 'Item' in the Axes collection is  indexed via 2 indexes,  group and type.
 // We need to 'flatten' this into a single index in order to be able to wrap
 // iteration over the set of Axis(s) in a XIndexAccess implementation
-//
+
 typedef ::std::pair<sal_Int32, sal_Int32 > AxesCoordinate; // type and group combination
 typedef ::std::vector< AxesCoordinate > vecAxesIndices;
 

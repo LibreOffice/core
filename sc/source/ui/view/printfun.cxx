@@ -380,7 +380,7 @@ static void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
     }
 }
 
-//
+
 //          output to Device (static)
 //
 //      us used for:
@@ -584,9 +584,9 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     delete pDrawView;
 }
 
-//
+
 //          Printing
-//
+
 
 static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
 {
@@ -1005,9 +1005,9 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         nRepeatStartRow = nRepeatEndRow = SCROW_REPEAT_NONE;
     }
 
-            //
+
             //  Split pages
-            //
+
 
     if (!bState)
     {
@@ -1175,7 +1175,7 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, Out
                             // operation, and k2 is the number of chars
                             // per bitmap pixel. This is approximately 50
                             // and 7 for current PDF writer, respectively.
-                            //
+
                             const double    k1( 50 );
                             const double    k2( 7 );
                             const Size      aSize( rOrg.GetSize() );
@@ -2360,10 +2360,10 @@ void ScPrintFunc::SetExclusivelyDrawOleAndDrawObjects()
     aTableParam.bNullVals = false;
 }
 
-//
+
 //  UpdatePages is only called from outside to set the breaks correctly for viewing
 //  - always without UserArea
-//
+
 
 bool ScPrintFunc::UpdatePages()
 {
@@ -2561,9 +2561,9 @@ void ScPrintFunc::ApplyPrintSettings()
 {
     if ( pPrinter )
     {
-        //
+
         //  Configure Printer to Printing
-        //
+
 
         Size aEnumSize = aPageSize;
 
@@ -2975,10 +2975,10 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
     else
         pDoc->UpdatePageBreaks( nPrintTab, NULL );      // else, end is marked
 
-    //
+
     //  Page alignment/splitting after breaks in Col/RowFlags
     //  Of several breaks in a hidden area, only one counts.
-    //
+
 
     nPagesX = 0;
     nPagesY = 0;

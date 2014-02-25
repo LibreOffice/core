@@ -37,10 +37,10 @@
 
 using namespace com::sun::star;
 
-//
+
 //  this file is compiled with exceptions enabled
 //  put functions here that need exceptions!
-//
+
 
 
 

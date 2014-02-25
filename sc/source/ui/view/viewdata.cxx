@@ -1585,9 +1585,9 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     return Point( nScrPosX, nScrPosY );
 }
 
-//
+
 //      Number of cells on a screen
-//
+
 
 SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
 {

@@ -25,7 +25,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 class DataValidationsContext : public WorksheetContextBase
 {
@@ -49,7 +49,7 @@ private:
     ::std::auto_ptr< ValidationModel > mxValModel;
 };
 
-// ============================================================================
+
 
 class WorksheetFragment : public WorksheetFragmentBase
 {

@@ -30,14 +30,14 @@
 #include "address.hxx"
 #include "queryparam.hxx"
 
-//------------------------------------------------------------------
+
 
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
 class ScTypedStrData;
 
-//==================================================================
+
 
 class ScPivotFilterDlg : public ModalDialog
 {
@@ -50,21 +50,21 @@ public:
 
 private:
     FixedLine       aFlCriteria;
-    //----------------------------
+
     ListBox         aLbField1;
     ListBox         aLbCond1;
     ComboBox        aEdVal1;
-    //----------------------------
+
     ListBox         aLbConnect1;
     ListBox         aLbField2;
     ListBox         aLbCond2;
     ComboBox        aEdVal2;
-    //----------------------------
+
     ListBox         aLbConnect2;
     ListBox         aLbField3;
     ListBox         aLbCond3;
     ComboBox        aEdVal3;
-    //----------------------------
+
     FixedText       aFtConnect;
     FixedText       aFtField;
     FixedText       aFtCond;

@@ -53,7 +53,7 @@
 #include "scresid.hxx"
 #include "document.hxx"
 
-//========================================================================
+
 // AutoFormat-Dialog:
 
 ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
@@ -62,7 +62,7 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
                                   ScDocument*               pDoc ) :
 
     ModalDialog     ( pParent, ScResId( RID_SCDLG_AUTOFORMAT ) ),
-    //
+
     aFlFormat       ( this, ScResId( FL_FORMAT ) ),
     aLbFormat       ( this, ScResId( LB_FORMAT ) ),
     pWndPreview     ( new ScAutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
@@ -86,7 +86,7 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     aStrDelTitle    ( ScResId( STR_DEL_TITLE ) ),
     aStrDelMsg      ( ScResId( STR_DEL_MSG ) ) ,
     aStrRename      ( ScResId( STR_RENAME_TITLE ) ),
-    //
+
     pFormat         ( pAutoFormat ),
     pSelFmtData     ( pSelFormatData ),
     nIndex          ( 0 ),

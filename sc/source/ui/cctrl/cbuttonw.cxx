@@ -25,9 +25,9 @@
 #include <vcl/settings.hxx>
 #include "cbutton.hxx"
 
-//========================================================================
+
 //  class ScDDComboBoxButton
-//========================================================================
+
 
 ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
     :   pOut( pOutputDevice )

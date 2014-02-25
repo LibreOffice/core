@@ -96,9 +96,9 @@ using namespace com::sun::star;
 
 
 
-//
+
 // ---  Public-Funktionen
-//
+
 
 void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
 {
@@ -709,16 +709,16 @@ static Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
     return NULL;
 }
 
-    //
+
     //  Bildschirm an Cursorposition anpassen
-    //
+
 
 void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                 const ScSplitPos* pWhich )
 {
-    //
+
     //  aktiven Teil umschalten jetzt hier
-    //
+
 
     ScSplitPos eActive = aViewData.GetActivePart();
     ScHSplitPos eActiveX = WhichH(eActive);
@@ -738,9 +738,9 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             eActiveY = SC_SPLIT_BOTTOM;
         }
 
-    //
+
     //  eigentliches Align
-    //
+
 
     if ( eMode != SC_FOLLOW_NONE )
     {
@@ -944,9 +944,9 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         if ( nNewDeltaY != nDeltaY ) ScrollY( nNewDeltaY - nDeltaY, eAlignY );
     }
 
-    //
+
     //  nochmal aktiven Teil umschalten
-    //
+
 
     if (bHFix)
         if (eActiveX == SC_SPLIT_RIGHT && nCurX < (SCsCOL)aViewData.GetFixPosX())
@@ -982,9 +982,9 @@ bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
     return bRet;
 }
 
-    //
+
     //  MoveCursor - mit Anpassung des Bildausschnitts
-    //
+
 
 void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                bool bShift, bool bControl, bool bKeepOld, bool bKeepSel )
@@ -1769,9 +1769,9 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     }
 }
 
-//
+
 //  Paint-Funktionen - nur fuer diese View
-//
+
 
 void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow )
 {

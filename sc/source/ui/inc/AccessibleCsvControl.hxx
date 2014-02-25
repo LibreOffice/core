@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// ============================================================================
+
 
 #ifndef _SC_ACCESSIBLECSVCONTROL_HXX
 #define _SC_ACCESSIBLECSVCONTROL_HXX
@@ -34,7 +34,7 @@
 #include "AccessibleContextBase.hxx"
 
 
-// ============================================================================
+
 
 class ScCsvControl;
 namespace utl { class AccessibleStateSetHelper; }
@@ -126,7 +126,7 @@ protected:
 };
 
 
-// ============================================================================
+
 
 class ScCsvRuler;
 
@@ -299,7 +299,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 class ScCsvGrid;
 
@@ -544,7 +544,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 /** Accessible class representing a cell of the CSV grid control. */
 class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility::AccessibleStaticTextBase
@@ -648,7 +648,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 #endif
 

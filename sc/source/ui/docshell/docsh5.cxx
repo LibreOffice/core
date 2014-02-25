@@ -63,9 +63,9 @@ using ::std::vector;
 
 
 
-//
+
 //  former viewfunc/dbfunc methods
-//
+
 
 void ScDocShell::ErrorMessage( sal_uInt16 nGlobStrId )
 {

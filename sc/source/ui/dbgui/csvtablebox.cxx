@@ -25,7 +25,7 @@
 // ause
 #include "editutil.hxx"
 
-// ============================================================================
+
 
 ScCsvTableBox::ScCsvTableBox( Window* pParent, WinBits nBits ) :
     ScCsvControl( pParent, maData, nBits ),
@@ -428,6 +428,6 @@ ScAccessibleCsvControl* ScCsvTableBox::ImplCreateAccessible()
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

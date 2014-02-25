@@ -387,7 +387,7 @@ class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual OUString    GetText() const;
 };
 
-//------------------------------------------------------------------------
+
 //AbstractDialogFactory_Impl implementations
 class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 {

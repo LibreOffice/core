@@ -24,7 +24,7 @@
 #include <sfx2/ctrlitem.hxx>
 
 
-//==================================================================
+
 
 class ScNavigatorDlg;
 

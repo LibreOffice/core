@@ -25,7 +25,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 class SharedStringsFragment : public WorkbookFragmentBase
 {
@@ -42,7 +42,7 @@ protected:
     virtual void        finalizeImport();
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

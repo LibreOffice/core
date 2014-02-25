@@ -29,7 +29,7 @@
 #include "scdllapi.h"
 #include "global.hxx"
 
-//===================================================================
+
 
 class SC_DLLPUBLIC ScImportOptions
 {

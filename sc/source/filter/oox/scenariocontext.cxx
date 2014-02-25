@@ -24,11 +24,11 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 ScenarioContext::ScenarioContext( WorksheetContextBase& rParent, SheetScenarios& rSheetScenarios ) :
     WorksheetContextBase( rParent ),
@@ -70,7 +70,7 @@ void ScenarioContext::onStartRecord( SequenceInputStream& rStrm )
         mrScenario.importScenario( rStrm );
 }
 
-// ============================================================================
+
 
 ScenariosContext::ScenariosContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment ),
@@ -112,7 +112,7 @@ void ScenariosContext::onStartRecord( SequenceInputStream& rStrm )
         mrSheetScenarios.importScenarios( rStrm );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

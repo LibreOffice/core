@@ -362,9 +362,9 @@ void ScChartPositioner::CreatePositionMap()
     SCROW nRow, nRow1, nRow2;
     SCTAB nTab, nTab1, nTab2;
 
-    //
+
     //  real size (without hidden rows/columns)
-    //
+
 
     SCSIZE nColCount = 0;
     SCSIZE nRowCount = 0;

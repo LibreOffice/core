@@ -32,7 +32,7 @@
 #include "viewdata.hxx"
 
 
-//==================================================================
+
 
 ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
     : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )

@@ -37,7 +37,7 @@
 #include "queryentry.hxx"
 #include "markdata.hxx"
 
-//==================================================================
+
 
 ScDBFunc::ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScViewFunc( pParent, rDocSh, pViewShell )
@@ -48,9 +48,9 @@ ScDBFunc::~ScDBFunc()
 {
 }
 
-//
+
 //      auxiliary functions
-//
+
 
 void ScDBFunc::GotoDBArea( const OUString& rDBName )
 {
@@ -240,9 +240,9 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
     }
 }
 
-//
+
 //      main functions
-//
+
 
 // Sort
 

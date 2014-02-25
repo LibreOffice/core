@@ -535,9 +535,9 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         }
     }
 
-    //
+
     //  get column info
-    //
+
 
     SCCOL nColCount = 0;
     SCCOL nCol;
@@ -605,9 +605,9 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     else
         rInfo.SetColInfo( 0, NULL );
 
-    //
+
     //  get row info
-    //
+
 
     SCROW nRowCount = 0;
     if ( bHasHeaderRow )
@@ -674,9 +674,9 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     else
         rInfo.SetRowInfo( 0, NULL );
 
-    //
+
     //  limit to visible area
-    //
+
 
     rInfo.SetTab( nTab );
     rInfo.LimitToArea( rVisiblePixel );

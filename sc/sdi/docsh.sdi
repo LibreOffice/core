@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- //============================================================================
+
 interface TableSelection
 [
     uuid = "BA338A41-064E-11d0-89CB-008029E4B0B1" ;
@@ -58,7 +58,7 @@ interface TableSelection
 }
 
 
- //============================================================================
+
 interface TableDocument
 [
     uuid = "BA338A42-064E-11d0-89CB-008029E4B0B1" ;
@@ -106,7 +106,7 @@ interface TableDocument
 }
 
 
- //============================================================================
+
 shell ScDocShell
 [
     uuid ( "3F543FA0-B6A6-101B-9961-04021C007002" )

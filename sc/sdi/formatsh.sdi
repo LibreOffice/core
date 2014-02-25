@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- // ===========================================================================
+
 interface TableFont
 [
     uuid ( "2E4AC1C0-137C-11D3-B25B-006097DA68F3" )
@@ -36,7 +36,7 @@ interface TableFont
     SID_ULINE_VAL_DOTTED    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
 }
 
- // ===========================================================================
+
 interface FormatForSelection
 [
     uuid ( "40F448A0-137C-11D3-B25B-006097DA68F3" )
@@ -141,7 +141,7 @@ interface FormatForSelection
 }
 
 
- // ===========================================================================
+
 shell ScFormatShell
 {
     import FormatForSelection[Automation];

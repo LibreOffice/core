@@ -1435,7 +1435,7 @@ ScAccessibleCsvControl* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, 
 }
 
 
-// ============================================================================
+
 
 DBG_NAME( ScAccessibleCsvCell )
 
@@ -1644,6 +1644,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

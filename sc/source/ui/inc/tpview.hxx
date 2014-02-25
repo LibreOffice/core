@@ -27,11 +27,11 @@
 #include <svtools/ctrlbox.hxx>
 #include <svx/strarray.hxx>
 
-//========================================================================
+
 
 class ScViewOptions;
 
-//========================================================================
+
 
 class ScTpContentOptions : public SfxTabPage
 {
@@ -85,7 +85,7 @@ public:
 
 };
 
-//========================================================================
+
 
 class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage
@@ -135,7 +135,7 @@ public:
     void                SetDocument(ScDocument* pPtr){pDoc = pPtr;}
 
 };
-//========================================================================
+
 
 #endif // SC_TPUSRLST_HXX
 

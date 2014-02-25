@@ -63,7 +63,7 @@ ScDPName::ScDPName() : mnDupCount(0) {}
 ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName, sal_uInt8 nDupCount) :
     maName(rName), maLayoutName(rLayoutName), mnDupCount(nDupCount) {}
 
-// ============================================================================
+
 
 ScDPLabelData::Member::Member() :
     mbVisible(true),
@@ -200,7 +200,7 @@ bool ScPivotParam::operator==( const ScPivotParam& r ) const
     return bEqual;
 }
 
-// ============================================================================
+
 
 ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
@@ -238,6 +238,6 @@ void ScPivotFuncData::Dump() const
 }
 #endif
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

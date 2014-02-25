@@ -5686,9 +5686,9 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
     if (xPropSet.is())
         lcl_CopyProperties( aImpl, *(beans::XPropertySet*)xPropSet.get() );
 
-    //
+
     //  ausfuehren...
-    //
+
 
     if (pDocSh)
     {
@@ -9555,9 +9555,9 @@ void ScUniqueCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-//
+
 //  Fill the list of formats from the document
-//
+
 
 // hash code to access the range lists by ScPatternAttr pointer
 struct ScPatternHashCode

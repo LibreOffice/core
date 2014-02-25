@@ -244,9 +244,9 @@ sal_uInt16 ScGetFontWorkId();
 
 
 
-//
+
 //          Funktionen auf Drawing-Objekten
-//
+
 
 void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 {
@@ -258,7 +258,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
     //!!!
     // wer weiss, wie lange das funktioniert? (->vom Abreisscontrol funktioniert es)
-    //
+
     if (nSlotId == SID_OBJECT_ALIGN && pArgs)
         nSlotId = SID_OBJECT_ALIGN + ((SfxEnumItem&)pArgs->Get(SID_OBJECT_ALIGN)).GetValue() + 1;
 

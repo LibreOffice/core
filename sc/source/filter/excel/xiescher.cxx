@@ -142,7 +142,7 @@ using ::com::sun::star::script::XEventAttacherManager;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 
-// ============================================================================
+
 
 namespace {
 
@@ -4336,6 +4336,6 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclImpDffPropSet& rPropSet )
     return rStrm;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

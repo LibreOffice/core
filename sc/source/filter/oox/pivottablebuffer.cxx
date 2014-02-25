@@ -52,7 +52,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -61,7 +61,7 @@ using namespace ::com::sun::star::uno;
 using namespace com::sun::star;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -158,7 +158,7 @@ const sal_uInt8 BIFF12_PTDEF_COLAXIS                = 2;
 
 } // namespace
 
-// ============================================================================
+
 
 PTFieldItemModel::PTFieldItemModel() :
     mnCacheItem( -1 ),
@@ -747,7 +747,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
     return xDPField;
 }
 
-// ============================================================================
+
 
 PTFilterModel::PTFilterModel() :
     mfValue( 0.0 ),
@@ -865,7 +865,7 @@ void PivotTableFilter::finalizeImport()
     }
 }
 
-// ============================================================================
+
 
 PTDefinitionModel::PTDefinitionModel() :
     mnCacheId( -1 ),
@@ -1345,7 +1345,7 @@ void PivotTable::importFields( IndexVector& orFields, SequenceInputStream& rStrm
         orFields.push_back( rStrm.readInt32() );
 }
 
-// ============================================================================
+
 
 PivotTableBuffer::PivotTableBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1364,7 +1364,7 @@ void PivotTableBuffer::finalizeImport()
     maTables.forEachMem( &PivotTable::finalizeImport );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

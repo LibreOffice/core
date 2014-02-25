@@ -25,7 +25,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/vclmedit.hxx>
 
-//========================================================================
+
 
 class ScUserList;
 class ScDocument;

@@ -44,7 +44,7 @@ using ::com::sun::star::text::XTextRange;
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::sheet;
@@ -83,7 +83,7 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
     }
 }
 
-// ============================================================================
+
 
 CommentModel::CommentModel() :
     mnAuthorId( -1 ),
@@ -221,7 +221,7 @@ void CommentsBuffer::finalizeImport()
     maComments.forEachMem( &Comment::finalizeImport );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

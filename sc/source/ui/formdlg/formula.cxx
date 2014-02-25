@@ -55,7 +55,7 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 
-//============================================================================
+
 using namespace formula;
 using namespace com::sun::star;
 
@@ -64,9 +64,9 @@ ScAddress ScFormulaDlg::aCursorPos;
 
 
 
-//  --------------------------------------------------------------------------
+
 //      Initialisierung / gemeinsame Funktionen  fuer Dialog
-//  --------------------------------------------------------------------------
+
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                     Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
@@ -305,9 +305,9 @@ bool ScFormulaDlg::Close()
     return true;
 }
 
-//  --------------------------------------------------------------------------
+
 //                          Funktionen fuer rechte Seite
-//  --------------------------------------------------------------------------
+
 bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
     boost::scoped_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator( pDoc, aCursorPos, rStrExp ) );
@@ -612,7 +612,7 @@ void ScFormulaDlg::setCurrentFormula(const OUString& _sReplacement)
         //c) which also modifies the editengine
         //d) on return from that modify handler the editengine attempts to use
         //   old node pointers which were replaced and removed by c
-        //
+
         //We turn it off in the ctor and back on in the dtor, but if calc has
         //to repaint, e.g. when switching to another window and back, then in
         //ScMultiTextWnd::Paint a new editengine will have been created via

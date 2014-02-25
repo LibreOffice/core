@@ -40,7 +40,7 @@ class ScViewData;
 class ScDPSaveData;
 struct ScQueryParam;
 
-// ---------------------------------------------------------------------------
+
 
 //  Items
 
@@ -146,7 +146,7 @@ public:
     sal_uInt16          GetIndex() const        { return nIndex; }
 };
 
-//----------------------------------------------------------------------------
+
 // Parameter item for the sort dialog:
 
 class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
@@ -174,7 +174,7 @@ private:
     ScSortParam     theSortData;
 };
 
-//----------------------------------------------------------------------------
+
 
 class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
@@ -205,7 +205,7 @@ private:
     bool            bIsAdvanced;
 };
 
-//----------------------------------------------------------------------------
+
 
 class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
@@ -232,7 +232,7 @@ private:
     ScSubTotalParam theSubTotalData;
 };
 
-//----------------------------------------------------------------------------
+
 
 class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
 {
@@ -253,7 +253,7 @@ private:
     ScUserList* pUserList;
 };
 
-//----------------------------------------------------------------------------
+
 
 class ScConsolidateItem : public SfxPoolItem
 {
@@ -274,7 +274,7 @@ private:
     ScConsolidateParam  theConsData;
 };
 
-//----------------------------------------------------------------------------
+
 
 class ScPivotItem : public SfxPoolItem
 {
@@ -299,7 +299,7 @@ private:
     bool            bNewSheet;
 };
 
-//----------------------------------------------------------------------------
+
 
 class ScSolveItem : public SfxPoolItem
 {
@@ -320,7 +320,7 @@ private:
     ScSolveParam    theSolveData;
 };
 
-//----------------------------------------------------------------------------
+
 
 class ScTabOpItem : public SfxPoolItem
 {

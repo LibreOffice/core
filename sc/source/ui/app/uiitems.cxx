@@ -105,9 +105,9 @@ const std::vector<editeng::MisspellRanges>* ScInputStatusItem::GetMisspellRanges
     return mpMisspellRanges;
 }
 
-//
+
 //  ScPaintHint ist nach schints.cxx verschoben
-//
+
 
 
 //  ScTablesHint - Views anpassen, wenn Tabellen eingefuegt / geloescht

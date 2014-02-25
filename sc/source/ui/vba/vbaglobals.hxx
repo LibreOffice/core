@@ -29,9 +29,9 @@
 #include "excelvbahelper.hxx"
 
 #include <vbahelper/vbaglobalbase.hxx>
-    // =============================================================================
+
     // class ScVbaGlobals
-    // =============================================================================
+
 
 typedef ::cppu::ImplInheritanceHelper1< VbaGlobalsBase, ov::excel::XGlobals > ScVbaGlobals_BASE;
 
@@ -85,6 +85,6 @@ typedef ::cppu::ImplInheritanceHelper1< VbaGlobalsBase, ov::excel::XGlobals > Sc
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();
     };
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

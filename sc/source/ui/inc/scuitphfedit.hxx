@@ -23,7 +23,7 @@
 #include "tphfedit.hxx"
 //#include <boost/graph/graph_concepts.hpp>
 
-//===================================================================
+
 enum ScHFEntryId
 {
     eNoneEntry  ,
@@ -103,7 +103,7 @@ private:
     DECL_LINK( MenuHdl, ScExtIButton* );
 };
 
-//===================================================================
+
 
 class ScRightHeaderEditPage : public ScHFEditPage
 {
@@ -114,7 +114,7 @@ private:
     ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
 };
 
-//===================================================================
+
 
 class ScLeftHeaderEditPage : public ScHFEditPage
 {
@@ -125,7 +125,7 @@ private:
     ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
 };
 
-//===================================================================
+
 
 class ScRightFooterEditPage : public ScHFEditPage
 {
@@ -136,7 +136,7 @@ private:
     ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
 };
 
-//===================================================================
+
 
 class ScLeftFooterEditPage : public ScHFEditPage
 {

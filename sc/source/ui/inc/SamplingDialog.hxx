@@ -52,7 +52,7 @@ private:
     OKButton*           mpButtonOk;
     CloseButton*        mpButtonClose;
 
-    //
+
     formula::RefEdit*   mpActiveEdit;
 
     // Data

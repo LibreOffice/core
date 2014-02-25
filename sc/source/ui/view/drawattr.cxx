@@ -36,7 +36,7 @@ OUString SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
     switch (nVal)
     {
         case 0  : p = "SVX_SNAP_DRAW_SELECT"    ; break;
-        //
+
         case 1  : p = "SVX_SNAP_DRAW_LINE"      ; break;
         case 2  : p = "SVX_SNAP_DRAW_RECT"      ; break;
         case 3  : p = "SVX_SNAP_DRAW_ELLIPSE"   ; break;

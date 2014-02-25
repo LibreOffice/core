@@ -168,7 +168,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
         bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // Fehler -> alten Zustand wiederherstellen
             pDoc->SetDBCollection(pUndoColl);       // gehoert dann dem Dokument
-                                                    //
+
         pDoc->CompileDBFormula( false );            // CompileFormulaString
 
         if (bInserted)                              // Einfuegen hat geklappt
@@ -1667,8 +1667,8 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
     }
 }
 
-//==================================================================
-//
+
+
 //      database import
 
 void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessDescriptor& rDescriptor )

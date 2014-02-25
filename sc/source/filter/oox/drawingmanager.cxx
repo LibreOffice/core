@@ -36,7 +36,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::oox::drawingml;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -94,9 +94,9 @@ const sal_uInt8 BIFF_OBJ_FILL_AUTO          = 0x01;
 
 } // namespace
 
-// ============================================================================
+
 // Model structures for BIFF OBJ record data
-// ============================================================================
+
 
 BiffObjLineModel::BiffObjLineModel() :
     mnColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
@@ -114,7 +114,7 @@ BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjLineModel& rModel )
     return rStrm;
 }
 
-// ============================================================================
+
 
 BiffObjFillModel::BiffObjFillModel() :
     mnBackColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
@@ -132,9 +132,9 @@ BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjFillModel& rModel )
     return rStrm;
 }
 
-// ============================================================================
+
 // BIFF drawing objects
-// ============================================================================
+
 
 BiffDrawingObjectContainer::BiffDrawingObjectContainer()
 {
@@ -145,7 +145,7 @@ void BiffDrawingObjectContainer::convertAndInsert( BiffDrawingBase& rDrawing, co
     maObjects.forEachMem( &BiffDrawingObjectBase::convertAndInsert, ::boost::ref( rDrawing ), ::boost::cref( rxShapes ), pParentRect );
 }
 
-// ============================================================================
+
 
 BiffDrawingObjectBase::BiffDrawingObjectBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -393,9 +393,9 @@ void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, c
     aFillProps.pushToPropMap( rPropMap, getBaseFilter().getGraphicHelper() );
 }
 
-// ============================================================================
+
 // BIFF drawing page
-// ============================================================================
+
 
 BiffDrawingBase::BiffDrawingBase( const WorksheetHelper& rHelper, const Reference< XDrawPage >& rxDrawPage ) :
     WorksheetHelper( rHelper ),
@@ -419,7 +419,7 @@ void BiffDrawingBase::finalizeImport()
     maRawObjs.convertAndInsert( *this, xShapes );
 }
 
-// ============================================================================
+
 
 BiffSheetDrawing::BiffSheetDrawing( const WorksheetHelper& rHelper ) :
     BiffDrawingBase( rHelper, rHelper.getDrawPage() )
@@ -432,7 +432,7 @@ void BiffSheetDrawing::notifyShapeInserted( const Reference< XShape >& /*rxShape
     extendShapeBoundingBox( rShapeRect );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

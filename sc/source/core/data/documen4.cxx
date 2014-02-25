@@ -712,9 +712,9 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
         return fVal;
 }
 
-//
+
 //          bedingte Formate und Gueltigkeitsbereiche
-//
+
 
 sal_uLong ScDocument::AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab )
 {
@@ -920,9 +920,9 @@ void ScDocument::SetDetOpList(ScDetOpList* pNew)
 }
 
 
-//
+
 //      Vergleich von Dokumenten
-//
+
 
 
 //  Pfriemel-Faktoren
@@ -1168,9 +1168,9 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             bInFill = true;
     }
 
-    //
+
     //  Tabellen in der gefundenen Reihenfolge vergleichen
-    //
+
 
     for (nThisTab=0; nThisTab<nThisCount; nThisTab++)
     {

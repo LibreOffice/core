@@ -588,7 +588,7 @@ const sal_uInt8 BIFF_STRF_PHONETIC          = 0x04;
 const sal_uInt8 BIFF_STRF_RICH              = 0x08;
 const sal_uInt8 BIFF_STRF_UNKNOWN           = 0xF2;
 
-// ============================================================================
+
 
 /** Static helper functions for BIFF filters. */
 class BiffHelper
@@ -633,7 +633,7 @@ private:
                         ~BiffHelper();  // not implemented
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** BIFF12 stream operator for an OUString, reads 32-bit string length and Unicode array. */
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, OUString& orString )
@@ -642,7 +642,7 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, OUString& or
     return rStrm;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

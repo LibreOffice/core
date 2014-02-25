@@ -261,6 +261,6 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait, bool bStric
         SetScPaperSize( rSize, bPortrait, true );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

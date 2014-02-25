@@ -43,7 +43,7 @@ protected:
     XclFunctionProvider maFuncProv;
     const XclBiff       meBiff;
 
-    // ---------------------------------------------------------------
+
     void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs );
 
     void                ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData&, const bool bName );
@@ -95,7 +95,7 @@ inline bool ExcelToSc::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16
     return ( ( nRow1 & 0x3FFF ) == 0x0000 ) && ( ( nRow2 & 0x3FFF ) == 0x3FFF );
 }
 
-// ============================================================================
+
 
 class XclImpLinkManager;
 class XclImpExtName;
