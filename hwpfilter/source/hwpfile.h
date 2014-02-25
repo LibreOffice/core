@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//
+
 // hwpfile.h
 // (C) 1998 Mizi Research, All rights are reserved
-//
+
 
 #ifndef _HWPFILE_H_
 #define _HWPFILE_H_
