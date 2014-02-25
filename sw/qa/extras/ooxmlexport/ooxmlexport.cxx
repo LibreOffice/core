@@ -1589,8 +1589,10 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
       else if (aGrabBag[i].Name == "OOXDrawing")
       {
         bDrawing = sal_True;
+        uno::Sequence< uno::Any > diagramDrawing;
         uno::Reference<xml::dom::XDocument> aDrawingDom;
-        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aDrawingDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= diagramDrawing);
+        CPPUNIT_ASSERT(diagramDrawing[0] >>= aDrawingDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aDrawingDom.get()); // Reference not empty
       }
     }
@@ -3713,6 +3715,26 @@ DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_Aut
     CPPUNIT_ASSERT( contents.match(" INDEX \\e \"") );
     // check for section break doestn't appear for any paragraph
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
+{
+    /*
+     * fdo#74792 : The images associated with smart-art data[i].xml
+     * were not preserved on exporting to DOCX format
+     * Added support to grabbag the rels, with associated images.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/diagrams/_rels/data1.xml.rels");
+    if(!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship", 4);
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
+                         comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+
+    //check that images are also saved
+    OUString sImageFile( "word/media/OOXDiagramDataRels0.jpeg" );
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName( sImageFile ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT( xInputStream.is() );
 }
 
 #endif

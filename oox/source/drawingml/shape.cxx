@@ -1200,6 +1200,46 @@ void Shape::putPropertiesToGrabBag( const Sequence< PropertyValue >& aProperties
     }
 }
 
+uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfType(core::XmlFilterBase& rFilter, OUString sFragment, OUString sType )
+{
+    uno::Sequence< uno::Sequence< uno::Any > > xRelListTemp;
+    sal_Int32 counter = 0;
+
+    core::RelationsRef xRels = rFilter.importRelations( sFragment );
+    if ( xRels )
+    {
+        core::RelationsRef xImageRels = xRels->getRelationsFromType( sType );
+        if ( xImageRels )
+        {
+            xRelListTemp.realloc( xImageRels->size() );
+            for( ::std::map< OUString, core::Relation >::const_iterator aIt = xImageRels->begin(), aEnd = xImageRels->end(); aIt != aEnd; ++aIt )
+            {
+                uno::Sequence< uno::Any > diagramRelTuple (3);
+                // [0] => RID, [1] => InputStream [2] => extension
+                OUString sRelId = aIt->second.maId;
+
+                diagramRelTuple[0] = uno::makeAny ( sRelId );
+                OUString sTarget = xImageRels->getFragmentPathFromRelId( sRelId );
+
+                uno::Reference< io::XInputStream > xImageInputStrm( rFilter.openInputStream( sTarget ), uno::UNO_SET_THROW );
+                StreamDataSequence dataSeq;
+                if ( rFilter.importBinaryData( dataSeq, sTarget ) )
+                {
+                    diagramRelTuple[1] = uno::makeAny( dataSeq );
+                }
+
+                diagramRelTuple[2] = uno::makeAny( sTarget.copy( sTarget.lastIndexOf(".") ) );
+
+                xRelListTemp[counter] = diagramRelTuple;
+                ++counter;
+            }
+            xRelListTemp.realloc(counter);
+
+        }
+    }
+    return xRelListTemp;
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
