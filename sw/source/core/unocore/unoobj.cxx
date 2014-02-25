@@ -2952,7 +2952,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
 
 void SAL_CALL
 SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
-throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

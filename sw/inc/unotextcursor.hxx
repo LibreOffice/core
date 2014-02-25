@@ -272,7 +272,8 @@ public:
     virtual void SAL_CALL sort(
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue >& xDescriptor)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     // XDocumentInsertable
     virtual void SAL_CALL insertDocumentFromURL(
