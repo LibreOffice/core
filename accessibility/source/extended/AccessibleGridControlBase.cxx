@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -39,12 +39,12 @@ using namespace ::svt;
 using namespace ::svt::table;
 
 
-// ============================================================================
+
 
 namespace accessibility {
 
 using namespace com::sun::star::accessibility::AccessibleStateType;
-// ============================================================================
+
 
 AccessibleGridControlBase::AccessibleGridControlBase(
         const Reference< XAccessible >& rxParent,
@@ -446,7 +446,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint
 {
     return NULL;
 }
-//
+
 sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -489,7 +489,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::su
     return nColor;
 }
 
-//// ============================================================================
+
 GridControlAccessibleElement::GridControlAccessibleElement( const Reference< XAccessible >& rxParent,
                         IAccessibleTable& rTable,
                         AccessibleTableControlObjType  eObjType )
@@ -517,10 +517,10 @@ GridControlAccessibleElement::~GridControlAccessibleElement( )
 {
 }
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

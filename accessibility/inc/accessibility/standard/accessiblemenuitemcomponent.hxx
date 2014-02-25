@@ -23,9 +23,9 @@
 #include <accessibility/standard/accessiblemenubasecomponent.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class OAccessibleMenuItemComponent
-//  ----------------------------------------------------
+
 
 class OAccessibleMenuItemComponent : public OAccessibleMenuBaseComponent
 {

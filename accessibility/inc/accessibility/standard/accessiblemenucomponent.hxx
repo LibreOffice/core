@@ -25,9 +25,9 @@
 #include <cppuhelper/implbase1.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class OAccessibleMenuComponent
-//  ----------------------------------------------------
+
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 

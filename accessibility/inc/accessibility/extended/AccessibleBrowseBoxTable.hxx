@@ -23,11 +23,11 @@
 
 #include "accessibility/extended/AccessibleBrowseBoxTableBase.hxx"
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 /** This class represents the accessible object of the data table of a
     BrowseBox control. */
@@ -157,11 +157,11 @@ protected:
         throw ( ::com::sun::star::uno::RuntimeException );
 };
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif
 

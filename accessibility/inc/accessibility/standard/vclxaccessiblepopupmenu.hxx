@@ -23,9 +23,9 @@
 #include <accessibility/standard/accessiblemenucomponent.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessiblePopupMenu
-//  ----------------------------------------------------
+
 
 class VCLXAccessiblePopupMenu : public OAccessibleMenuComponent
 {

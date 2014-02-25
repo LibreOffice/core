@@ -34,10 +34,10 @@
 #include <vector>
 
 
-//.........................................................................
+
 namespace accessibility
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -45,9 +45,9 @@ namespace accessibility
     using namespace ::com::sun::star::accessibility;
     using namespace ::comphelper;
 
-    //  ----------------------------------------------------
+
     //  class AccessibleTabBar
-    //  ----------------------------------------------------
+
 
     AccessibleTabBar::AccessibleTabBar( TabBar* pTabBar )
         :AccessibleTabBarBase( pTabBar )
@@ -530,8 +530,8 @@ namespace accessibility
 
 
 
-//.........................................................................
+
 }   // namespace accessibility
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

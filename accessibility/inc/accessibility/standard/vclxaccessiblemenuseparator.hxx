@@ -23,9 +23,9 @@
 #include <accessibility/standard/accessiblemenuitemcomponent.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleMenuSeparator
-//  ----------------------------------------------------
+
 
 class VCLXAccessibleMenuSeparator : public OAccessibleMenuItemComponent
 {

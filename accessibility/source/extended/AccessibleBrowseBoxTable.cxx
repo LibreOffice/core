@@ -20,7 +20,7 @@
 #include "accessibility/extended/AccessibleBrowseBoxTable.hxx"
 #include <svtools/accessibletableprovider.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -30,11 +30,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 // Ctor/Dtor/disposing --------------------------------------------------------
 
@@ -252,10 +252,10 @@ Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(
     return Reference< XAccessibleTable >( xRet, uno::UNO_QUERY );
 }
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

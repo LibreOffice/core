@@ -28,9 +28,9 @@ namespace accessibility
 {
 // .................................................................................
 
-    // =============================================================================
+
     // = AccessibleBrowseBoxCell
-    // =============================================================================
+
     /** common accessibility-functionality for browse box elements which occupy a cell
     */
     class AccessibleBrowseBoxCell : public AccessibleBrowseBoxBase
