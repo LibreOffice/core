@@ -1319,7 +1319,7 @@ namespace osl_StreamSocket
                 // {
                 //     t_print("problem with hostname: ");
                 //     printSocketResult(aResult);
-                //
+
                 // }
 
                 if (! aSocketAddr.is())

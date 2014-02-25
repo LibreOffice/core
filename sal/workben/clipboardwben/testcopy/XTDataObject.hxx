@@ -39,9 +39,9 @@ public:
     CXTDataObject( LONG nRefCntInitVal = 0);
     ~CXTDataObject( );
 
-    //-----------------------------------------------------------------
+
     // ole interface implementation
-    //-----------------------------------------------------------------
+
 
     //IUnknown
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);

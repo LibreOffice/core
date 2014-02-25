@@ -39,9 +39,9 @@
 #define OSLTEST_DECLARE_USTRING( str_name, str_value ) \
     ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( str_value )
 
-//------------------------------------------------------------------------
+
 // condition names
-//------------------------------------------------------------------------
+
 OSLTEST_DECLARE_USTRING( TestCon,  "testcondition" );
 
 const char pTestString[17] = "Sun Microsystems";

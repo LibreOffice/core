@@ -233,10 +233,10 @@ static sal_Bool InitSignal()
         }
 
         // WORKAROUND FOR SEGV HANDLER CONFLICT
-        //
+
         // the java jit needs SIGSEGV for proper work
         // and we need SIGSEGV for the office crashguard
-        //
+
         // TEMPORARY SOLUTION:
         //   the office sets the signal handler during startup
         //   java can than overwrite it, if needed

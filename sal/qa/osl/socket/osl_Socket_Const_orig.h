@@ -40,9 +40,9 @@ extern "C"
 #endif
 
 #   include <stdio.h>
-//------------------------------------------------------------------------
+
 // OS dependent declaration and includes
-//------------------------------------------------------------------------
+
 #if ( defined UNX )     //Unix
 #   include <unistd.h>
 #   include <limits.h>
@@ -65,12 +65,12 @@ extern "C"
 #endif
 
 
-//------------------------------------------------------------------------
+
 // macro definition for the ASCII array/OUString declarations,
 // we use p### for the ASCII array,
 //        a### for the OUString,
 //        n###Len for its length
-//------------------------------------------------------------------------
+
 
 #define OSLTEST_DECLARE( str_name, str_value ) \
     static const sal_Char  p##str_name[]        = str_value;  \
@@ -78,14 +78,14 @@ extern "C"
     ::rtl::OUString a##str_name                 = rtl::OUString::createFromAscii( p##str_name )
 
 
-//------------------------------------------------------------------------
+
 // Ip version definition
-//------------------------------------------------------------------------
+
 #define IP_VER     4                   /// currently only IPv4 is considered.
 
-//------------------------------------------------------------------------
+
 // Ip port definition
-//------------------------------------------------------------------------
+
 #define IP_PORT_ZERO    0
 #define IP_PORT_FTP    21
 #define IP_PORT_TELNET 23
@@ -114,9 +114,9 @@ extern "C"
 #define IP_PORT_TMP    9999
 #define IP_PORT_INVAL  99999
 
-//------------------------------------------------------------------------
+
 // service definitions.
-//------------------------------------------------------------------------
+
 OSLTEST_DECLARE( ServiceFTP,  "ftp" );
 OSLTEST_DECLARE( ServiceTELNET,  "telnet" );
 OSLTEST_DECLARE( ServiceGOPHER,  "gopher" );
@@ -124,15 +124,15 @@ OSLTEST_DECLARE( ServiceIMAP,  "imap" );
 OSLTEST_DECLARE( ServiceHTTPS,  "https" );
 OSLTEST_DECLARE( ServiceNETBIOS,  "netbios-dgm" );
 
-//------------------------------------------------------------------------
+
 // protocol definitions.
-//------------------------------------------------------------------------
+
 OSLTEST_DECLARE( ProtocolTCP,  "tcp" );
 OSLTEST_DECLARE( ProtocolUDP,  "udp" );
 
-//------------------------------------------------------------------------
+
 // Hostnames.
-//------------------------------------------------------------------------
+
 OSLTEST_DECLARE( HostName1,  "localhost" );
 OSLTEST_DECLARE( HostIp1,  "127.0.0.1" );
 OSLTEST_DECLARE( HostName2,  "longshot.prc.sun.com" );
@@ -150,9 +150,9 @@ OSLTEST_DECLARE( HostIpInval1,  "123.345.67.89" );  //this is real invalid ip nu
 OSLTEST_DECLARE( HostNameInval,  "www.the_hostname_that_can_not_resolvable_to_an_IP_Address.com" );
 OSLTEST_DECLARE( HostIpZero,  "0.0.0.0" );
 
-//------------------------------------------------------------------------
+
 // OS independent file definition
-//------------------------------------------------------------------------
+
 OSLTEST_DECLARE( NullURL,  "" );
 
 #ifdef __cplusplus

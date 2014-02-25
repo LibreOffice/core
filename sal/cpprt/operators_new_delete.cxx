@@ -23,9 +23,9 @@
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 
-// =======================================================================
+
 // AllocatorTraits
-// =======================================================================
+
 
 namespace
 {
@@ -70,7 +70,7 @@ struct AllocatorTraits
     }
 };
 
-// =======================================================================
+
 
 struct VectorTraits : public AllocatorTraits
 {
@@ -95,9 +95,9 @@ const AllocatorTraits::signature_type ScalarTraits::g_signature = "new()  ";
 
 } // anonymous namespace
 
-// =======================================================================
+
 // Allocator
-// =======================================================================
+
 
 static void default_handler (void)
 {
@@ -105,7 +105,7 @@ static void default_handler (void)
     throw std::bad_alloc();
 }
 
-// =======================================================================
+
 
 static void* allocate (
     std::size_t n, AllocatorTraits const & rTraits)
@@ -128,7 +128,7 @@ static void* allocate (
     }
 }
 
-// =======================================================================
+
 
 static void* allocate_nothrow (
     std::size_t n, AllocatorTraits const & rTraits)
@@ -144,7 +144,7 @@ static void* allocate_nothrow (
     }
 }
 
-// =======================================================================
+
 
 static void deallocate (void * p, AllocatorTraits const & rTraits)
     SAL_THROW(())
@@ -155,70 +155,70 @@ static void deallocate (void * p, AllocatorTraits const & rTraits)
     }
 }
 
-// =======================================================================
+
 // T * p = new T; delete p;
-// =======================================================================
+
 
 void* SAL_CALL operator new (std::size_t n) throw (std::bad_alloc)
 {
     return allocate (n, ScalarTraits());
 }
 
-// =======================================================================
+
 
 void SAL_CALL operator delete (void * p) throw ()
 {
     deallocate (p, ScalarTraits());
 }
 
-// =======================================================================
+
 // T * p = new(nothrow) T; delete(nothrow) p;
-// =======================================================================
+
 
 void* SAL_CALL operator new (std::size_t n, std::nothrow_t const &) throw ()
 {
     return allocate_nothrow (n, ScalarTraits());
 }
 
-// =======================================================================
+
 
 void SAL_CALL operator delete (void * p, std::nothrow_t const &) throw ()
 {
     deallocate (p, ScalarTraits());
 }
 
-// =======================================================================
+
 // T * p = new T[n]; delete[] p;
-// =======================================================================
+
 
 void* SAL_CALL operator new[] (std::size_t n) throw (std::bad_alloc)
 {
     return allocate (n, VectorTraits());
 }
 
-// =======================================================================
+
 
 void SAL_CALL operator delete[] (void * p) throw ()
 {
     deallocate (p, VectorTraits());
 }
 
-// =======================================================================
+
 // T * p = new(nothrow) T[n]; delete(nothrow)[] p;
-// =======================================================================
+
 
 void* SAL_CALL operator new[] (std::size_t n, std::nothrow_t const &) throw ()
 {
     return allocate_nothrow (n, VectorTraits());
 }
 
-// =======================================================================
+
 
 void SAL_CALL operator delete[] (void * p, std::nothrow_t const &) throw ()
 {
     deallocate (p, VectorTraits());
 }
 
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

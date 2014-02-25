@@ -294,7 +294,7 @@ static const sal_Int32 kSInt32Max = INT_MAX;
 static const sal_Int64 kUInt32Max = UINT_MAX;
 static const sal_Int64 kSInt64Max = SAL_CONST_INT64(9223372036854775807);
 
-//------------------------------------------------------------------------
+
 
 static const sal_Int32 kInt32MaxNumsCount = 5;
 
@@ -319,25 +319,25 @@ static const sal_Int32 kBinaryNumsCount = 16;
 
 static const sal_Int32 kBinaryMaxNumsCount = 7;
 
-//------------------------------------------------------------------------
+
 
 static const sal_Int32 kOctolNumsCount = 16;
 
 static const sal_Int32 kOctolMaxNumsCount = 7;
 
-//------------------------------------------------------------------------
+
 
 static const sal_Int32 kDecimalNumsCount = 16;
 
 static const sal_Int32 kDecimalMaxNumsCount = 7;
 
-//------------------------------------------------------------------------
+
 
 static const sal_Int32 kHexDecimalNumsCount = 16;
 
 static const sal_Int32 kHexDecimalMaxNumsCount = 7;
 
-//------------------------------------------------------------------------
+
 
 static const sal_Int32 kBase36NumsCount = 36;
 
@@ -352,7 +352,7 @@ static const double   expValDouble[nDoubleCount]=
             1.7e-309,6.5822e-16,1.7e+307,2.2e30,3.1,3.1,-3.1,
             0.0,0.0,0.0,1.00e+308
     };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nFloatCount=22;
 static const float  expValFloat[nFloatCount] =
         {
@@ -362,7 +362,7 @@ static const float  expValFloat[nFloatCount] =
             1.00e38f,6.241e-37f,6.241e37f,3.1f,3.1f,-3.1f,
             3.1f,0.0f,0.0f,0.0f
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nCharCount=15;
 static const sal_Unicode  expValChar[nCharCount] =
         {
@@ -371,7 +371,7 @@ static const sal_Unicode  expValChar[nCharCount] =
             64,10,39,34,
             0,0,83
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nDefaultCount=6;
 static const sal_Unicode input1Default[nDefaultCount] =
         {
@@ -385,7 +385,7 @@ static const sal_Int32  expValDefault[nDefaultCount] =
         {
             4,9,-1,-1,3,-1
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nNormalCount=10;
 static const sal_Unicode input1Normal[nNormalCount] =
         {
@@ -399,7 +399,7 @@ static const sal_Int32  expValNormal[nNormalCount] =
         {
             4,-1,-1,9,15,-1,-1,-1,-1,-1
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nlastDefaultCount=5;
 static const sal_Unicode input1lastDefault[nlastDefaultCount] =
         {
@@ -413,7 +413,7 @@ static const sal_Int32  expVallastDefault[nlastDefaultCount] =
         {
             4,15,-1,21,-1
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nlastNormalCount=8;
 static const sal_Unicode input1lastNormal[nlastNormalCount] =
         {
@@ -427,7 +427,7 @@ static const sal_Int32  expVallastNormal[nlastNormalCount] =
         {
             4,-1,4,15,-1,-1,-1,-1
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nStrDefaultCount=6;
 static const sal_Int32 input2StrDefault[nStrDefaultCount] =
         {
@@ -437,7 +437,7 @@ static const sal_Int32 expValStrDefault[nStrDefaultCount] =
         {
             0,4,-1,-1,-1,3
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nStrNormalCount=9;
 static const sal_Int32 input2StrNormal[nStrNormalCount] =
         {
@@ -447,7 +447,7 @@ static const sal_Int32 expValStrNormal[nStrNormalCount] =
         {
             0,-1,4,-1,-1,-1,-1,-1,3
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nStrLastDefaultCount=6;
 static const sal_Int32 input2StrLastDefault[nStrLastDefaultCount] =
         {
@@ -457,7 +457,7 @@ static const sal_Int32  expValStrLastDefault[nStrLastDefaultCount] =
         {
             0,4,-1,-1,-1,3
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 nStrLastNormalCount=12;
 static const sal_Int32 input2StrLastNormal[nStrLastNormalCount] =
         {
@@ -467,10 +467,10 @@ static const sal_Int32  expValStrLastNormal[nStrLastNormalCount] =
         {
             0,-1,0,4,-1,-1,-1,-1,-1,3,15,11
         };
-//------------------------------------------------------------------------
+
 static const sal_Int32 kNonSInt32Max = INT_MIN;
 static const sal_Int32 kNonSInt16Max = SHRT_MIN;
-//------------------------------------------------------------------------
+
 #ifdef __cplusplus
 }
 #endif

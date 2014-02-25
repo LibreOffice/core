@@ -246,18 +246,18 @@ namespace rtl_ustr
 }; // class compare
 
 
-//
-//
+
+
 //     class hashCode : public CppUnit::TestFixture
 //     {
 //     public:
-//
+
 //         void hashCode_000()
 //             {
 //                 sal_Int32 nHashCode = rtl_ustr_hashCode( NULL );
 //                 volatile int dummy = 0;
 //             }
-//
+
 //         void hashCode_001()
 //             {
 //                 rtl::OString aStr1 = "Line for a hashCode.";
@@ -265,33 +265,33 @@ namespace rtl_ustr
 //                 printf("hashcode: %d\n", nHashCode);
 //                 // CPPUNIT_ASSERT_MESSAGE("failed.", nValue == 0);
 //             }
-//
+
 //         void hashCode_002()
 //             {
 //                 rtl::OString aStr1 = "Line for a hashCode.";
 //                 sal_Int32 nHashCode1 = rtl_ustr_hashCode( aStr1.getStr() );
-//
+
 //                 rtl::OString aStr2 = "Line for a hashCode.";
 //                 sal_Int32 nHashCode2 = rtl_ustr_hashCode( aStr2.getStr() );
-//
+
 //                 CPPUNIT_ASSERT_MESSAGE("hashcodes must be equal.", nHashCode1 == nHashCode2 );
 //             }
-//
+
 //         void hashCode_003()
 //             {
 //                 rtl::OString aStr1 = "Line for a hashCode.";
 //                 sal_Int32 nHashCode1 = rtl_ustr_hashCode( aStr1.getStr() );
-//
+
 //                 rtl::OString aStr2 = "Line for an other hashcode.";
 //                 sal_Int32 nHashCode2 = rtl_ustr_hashCode( aStr2.getStr() );
-//
+
 //                 CPPUNIT_ASSERT_MESSAGE("hashcodes must differ.", nHashCode1 != nHashCode2 );
 //             }
-//
+
 //         // Change the following lines only, if you add, remove or rename
 //         // member functions of the current class,
 //         // because these macros are need by auto register mechanism.
-//
+
 //         CPPUNIT_TEST_SUITE(hashCode);
 //         CPPUNIT_TEST(hashCode_000);
 //         CPPUNIT_TEST(hashCode_001);
@@ -299,10 +299,10 @@ namespace rtl_ustr
 //         CPPUNIT_TEST(hashCode_003);
 //         CPPUNIT_TEST_SUITE_END();
 //     }; // class compare
-//
-//
-//
-//
+
+
+
+
     class indexOfChar : public CppUnit::TestFixture
     {
     public:
@@ -348,7 +348,7 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class indexOfChar
 
-//
+
     class lastIndexOfChar : public CppUnit::TestFixture
     {
     public:
@@ -1251,16 +1251,16 @@ namespace rtl_ustr
         //     {
         //         rtl::OUString suStr1("change this to ascii upper case.");
         //         rtl::OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
-        //
+
         //         sal_uInt32 nLength = suStr1.getLength() * sizeof(sal_Unicode);
         //         sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
         //         CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
         //         memset(pStr, 0, nLength + sizeof(sal_Unicode));
         //         memcpy(pStr, suStr1.getStr(), nLength);
-        //
+
         //         rtl_ustr_ascii_compareIgnoreAsciiCase( pStr );
         //         rtl::OUString suStr(pStr, suStr1.getLength());
-        //
+
         //         CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
         //         free(pStr);
         //     }
@@ -1349,16 +1349,16 @@ namespace rtl_ustr
         //     {
         //         rtl::OUString suStr1("change this to ascii upper case.");
         //         rtl::OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
-        //
+
         //         sal_uInt32 nLength = suStr1.getLength() * sizeof(sal_Unicode);
         //         sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
         //         CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
         //         memset(pStr, 0, nLength + sizeof(sal_Unicode));
         //         memcpy(pStr, suStr1.getStr(), nLength);
-        //
+
         //         rtl_ustr_ascii_compareIgnoreAsciiCase( pStr );
         //         rtl::OUString suStr(pStr, suStr1.getLength());
-        //
+
         //         CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
         //         free(pStr);
         //     }

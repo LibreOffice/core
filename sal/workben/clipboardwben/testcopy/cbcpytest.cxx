@@ -19,7 +19,7 @@
 
 
 // TestWin32.cpp : Defines the entry point for the application.
-//
+
 
 #define _WIN32_DCOM
 #undef _UNICODE
@@ -144,9 +144,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 
 //  FUNCTION: MyRegisterClass()
-//
+
 //  PURPOSE: Registers the window class.
-//
+
 //  COMMENTS:
 //    This function and its usage are only necessary if this code
 //    needs to be compatible with Win32 systems prior to 'RegisterClassEx'
@@ -177,9 +177,9 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 
 
 //   FUNCTION: InitInstance(HANDLE, int)
-//
+
 //   PURPOSE: Saves instance access number and creates main window
-//
+
 //   Comments:
 //        In this function, the instance access number is stored in a global variable
 //        and the main program window is displayed.
@@ -205,9 +205,9 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 
 
 //  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
-//
+
 //  PURPOSE: Processes messages for the main window.
-//
+
 //  WM_COMMAND  - Handle application menu
 //  WM_PAINT    - Display main windows
 //  WM_DESTROY  - Output completion message and return
