@@ -31,9 +31,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-//=====================================================================
+
 //= AccessibleEventNotifier
-//=====================================================================
+
 
 namespace
 {
@@ -143,10 +143,10 @@ namespace
     }
 }
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 
     AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient( )
@@ -293,8 +293,8 @@ namespace comphelper
         }
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

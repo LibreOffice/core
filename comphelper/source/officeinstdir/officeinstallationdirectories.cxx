@@ -38,11 +38,11 @@ using namespace com::sun::star;
 
 using namespace comphelper;
 
-//=========================================================================
-// helpers
-//=========================================================================
 
-//=========================================================================
+// helpers
+
+
+
 static bool makeCanonicalFileURL( OUString & rURL )
 {
     OSL_ENSURE( rURL.matchAsciiL( "file:", sizeof( "file:" ) - 1 , 0 ) ,
@@ -81,13 +81,13 @@ static bool makeCanonicalFileURL( OUString & rURL )
     return false;
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // OfficeInstallationDirectories Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
@@ -100,7 +100,7 @@ OfficeInstallationDirectories::OfficeInstallationDirectories(
 {
 }
 
-//=========================================================================
+
 // virtual
 OfficeInstallationDirectories::~OfficeInstallationDirectories()
 {
@@ -108,9 +108,9 @@ OfficeInstallationDirectories::~OfficeInstallationDirectories()
     delete m_pUserDir;
 }
 
-//=========================================================================
+
 // util::XOfficeInstallationDirectories
-//=========================================================================
+
 
 // virtual
 OUString SAL_CALL
@@ -121,7 +121,7 @@ OfficeInstallationDirectories::getOfficeInstallationDirectoryURL()
     return OUString( *m_pOfficeBrandDir );
 }
 
-//=========================================================================
+
 // virtual
 OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
@@ -132,7 +132,7 @@ OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
 }
 
 
-//=========================================================================
+
 // virtual
 OUString SAL_CALL
 OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
@@ -168,7 +168,7 @@ OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
     return OUString( URL );
 }
 
-//=========================================================================
+
 // virtual
 OUString SAL_CALL
 OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
@@ -203,9 +203,9 @@ OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
     return OUString( URL );
 }
 
-//=========================================================================
+
 // lang::XServiceInfo
-//=========================================================================
+
 
 // virtual
 OUString SAL_CALL
@@ -231,7 +231,7 @@ OfficeInstallationDirectories::getSupportedServiceNames()
     return getSupportedServiceNames_static();
 }
 
-//=========================================================================
+
 // static
 OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName_static()
@@ -239,7 +239,7 @@ OfficeInstallationDirectories::getImplementationName_static()
     return OUString("com.sun.star.comp.util.OfficeInstallationDirectories");
 }
 
-//=========================================================================
+
 // static
 uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames_static()
@@ -248,14 +248,14 @@ OfficeInstallationDirectories::getSupportedServiceNames_static()
     return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
-//=========================================================================
+
 // static
 OUString SAL_CALL OfficeInstallationDirectories::getSingletonName_static()
 {
     return OUString("com.sun.star.util.theOfficeInstallationDirectories");
 }
 
-//=========================================================================
+
 // static
 uno::Reference< uno::XInterface > SAL_CALL
 OfficeInstallationDirectories::Create(
@@ -265,9 +265,9 @@ OfficeInstallationDirectories::Create(
         new OfficeInstallationDirectories( rxContext ) );
 }
 
-//=========================================================================
+
 // non-UNO
-//=========================================================================
+
 
 void OfficeInstallationDirectories::initDirs()
 {

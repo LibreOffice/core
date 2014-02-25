@@ -40,10 +40,10 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -80,9 +80,9 @@ namespace comphelper
     using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::lang::DisposedException;
 
-    //====================================================================
+
     //= MapData
-    //====================================================================
+
     class IMapModificationListener;
     typedef ::std::vector< IMapModificationListener* > MapListeners;
 
@@ -114,9 +114,9 @@ namespace comphelper
         MapData& operator=( const MapData& _source );   // not implemented
     };
 
-    //====================================================================
+
     //= IMapModificationListener
-    //====================================================================
+
     /** implemented by components who want to be notified of modifications in the MapData they work with
     */
     class SAL_NO_VTABLE IMapModificationListener
@@ -129,9 +129,9 @@ namespace comphelper
         }
     };
 
-    //====================================================================
+
     //= MapData helpers
-    //====================================================================
+
 
     static void lcl_registerMapModificationListener( MapData& _mapData, IMapModificationListener& _listener )
     {
@@ -176,9 +176,9 @@ namespace comphelper
         }
     }
 
-    //====================================================================
+
     //= EnumerableMap
-    //====================================================================
+
     typedef ::cppu::WeakAggComponentImplHelper3 <   XInitialization
                                                 ,   XEnumerableMap
                                                 ,   XServiceInfo
@@ -241,17 +241,17 @@ namespace comphelper
                             m_aDependentComponents;
     };
 
-    //====================================================================
+
     //= EnumerationType
-    //====================================================================
+
     enum EnumerationType
     {
         eKeys, eValues, eBoth
     };
 
-    //====================================================================
+
     //= MapEnumerator
-    //====================================================================
+
     class MapEnumerator : public IMapModificationListener
     {
     public:
@@ -299,9 +299,9 @@ namespace comphelper
         MapEnumerator& operator=( const MapEnumerator& );   // not implemented
     };
 
-    //====================================================================
+
     //= MapEnumeration
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XEnumeration
                                     >   MapEnumeration_Base;
     class MapEnumeration :public ComponentBase
@@ -339,9 +339,9 @@ namespace comphelper
         MapEnumerator               m_aEnumerator;
     };
 
-    //====================================================================
+
     //= EnumerableMap
-    //====================================================================
+
 
     EnumerableMap::EnumerableMap()
         :Map_IFace( m_aMutex )
@@ -721,9 +721,9 @@ namespace comphelper
         return *new EnumerableMap;
     }
 
-    //====================================================================
+
     //= MapEnumerator
-    //====================================================================
+
 
     bool MapEnumerator::hasMoreElements()
     {
@@ -757,9 +757,9 @@ namespace comphelper
         m_disposed = true;
     }
 
-    //====================================================================
+
     //= MapEnumeration - implementation
-    //====================================================================
+
 
     ::sal_Bool SAL_CALL MapEnumeration::hasMoreElements(  ) throw (RuntimeException, std::exception)
     {
@@ -774,9 +774,9 @@ namespace comphelper
         return m_aEnumerator.nextElement();
     }
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 void createRegistryInfo_Map()
 {

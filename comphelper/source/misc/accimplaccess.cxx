@@ -25,10 +25,10 @@
 #include <set>
 #include <string.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
@@ -39,9 +39,9 @@ namespace comphelper
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::accessibility::XAccessibleContext;
 
-    //=====================================================================
+
     //= OAccImpl_Impl
-    //=====================================================================
+
     struct OAccImpl_Impl
     {
         Reference< XAccessible >    m_xAccParent;
@@ -49,9 +49,9 @@ namespace comphelper
     };
 
 
-    //=====================================================================
+
     //= OAccessibleImplementationAccess
-    //=====================================================================
+
 
     OAccessibleImplementationAccess::OAccessibleImplementationAccess( )
         :m_pImpl( new OAccImpl_Impl )
@@ -150,9 +150,9 @@ namespace comphelper
         return ( NULL != pImplementation );
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,19 +19,19 @@
 
 #include <comphelper/accessibleselectionhelper.hxx>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    //=====================================================================
+
     //= OCommonAccessibleSelection
-    //=====================================================================
+
 
     OCommonAccessibleSelection::OCommonAccessibleSelection( )
     {
@@ -105,9 +105,9 @@ namespace comphelper
         implSelect( nSelectedChildIndex, sal_False );
     }
 
-    //=====================================================================
+
     //= OAccessibleSelectionHelper
-    //=====================================================================
+
 
     OAccessibleSelectionHelper::OAccessibleSelectionHelper( IMutex* _pExternalLock ) : OAccessibleComponentHelper(_pExternalLock)
     {
@@ -173,8 +173,8 @@ namespace comphelper
         OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

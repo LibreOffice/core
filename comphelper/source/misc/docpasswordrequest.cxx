@@ -43,7 +43,7 @@ using ::com::sun::star::task::XInteractionRequest;
 
 namespace comphelper {
 
-// ============================================================================
+
 
 class AbortContinuation : public ::cppu::WeakImplHelper1< XInteractionAbort >
 {
@@ -59,7 +59,7 @@ private:
     bool            mbSelected;
 };
 
-// ============================================================================
+
 
 class PasswordContinuation : public ::cppu::WeakImplHelper1< XInteractionPassword2 >
 {
@@ -87,7 +87,7 @@ private:
     bool            mbSelected;
 };
 
-// ============================================================================
+
 
 SimplePasswordRequest::SimplePasswordRequest( PasswordRequestMode eMode )
 : mpAbort( NULL )
@@ -126,7 +126,7 @@ Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest
     return maContinuations;
 }
 
-// ============================================================================
+
 
 DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
         PasswordRequestMode eMode, const OUString& rDocumentName, bool bPasswordToModify )
@@ -192,7 +192,7 @@ Sequence< Reference< XInteractionContinuation > > SAL_CALL DocPasswordRequest::g
     return maContinuations;
 }
 
-// ============================================================================
+
 
 } // namespace comphelper
 

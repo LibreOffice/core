@@ -31,10 +31,10 @@
 #include <algorithm>
 #include <set>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -57,9 +57,9 @@ namespace comphelper
             return pResult;
         }
     }
-//==================================================================
+
 //= OPropertyArrayAggregationHelper
-//==================================================================
+
 
 
 OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
@@ -349,9 +349,9 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     return nHitCount;
 }
 
-//==================================================================
+
 //= PropertyForwarder
-//==================================================================
+
 namespace internal
 {
     class PropertyForwarder
@@ -435,9 +435,9 @@ namespace internal
     }
 }
 
-//==================================================================
+
 //= OPropertySetAggregationHelper
-//==================================================================
+
 
 
 OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHlp )
@@ -1030,8 +1030,8 @@ bool OPropertySetAggregationHelper::isCurrentlyForwardingProperty( sal_Int32 _nH
     return m_pForwarder->getCurrentlyForwardedProperty() == _nHandle;
 }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

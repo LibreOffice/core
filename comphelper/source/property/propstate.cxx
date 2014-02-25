@@ -23,10 +23,10 @@
 #include <comphelper/sequence.hxx>
 #include <rtl/instance.hxx>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Type;
@@ -39,9 +39,9 @@ namespace comphelper
     using ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 
-    //=====================================================================
+
     // OPropertyStateHelper
-    //=====================================================================
+
 
 
     ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException, std::exception)
@@ -176,9 +176,9 @@ namespace comphelper
         return  ::com::sun::star::uno::Any();
     }
 
-    //=====================================================================
+
     // OStatefulPropertySet
-    //=====================================================================
+
 
     OStatefulPropertySet::OStatefulPropertySet()
         :OPropertyStateHelper( GetBroadcastHelper() )
@@ -235,8 +235,8 @@ namespace comphelper
         ::cppu::OWeakObject::release();
     }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
