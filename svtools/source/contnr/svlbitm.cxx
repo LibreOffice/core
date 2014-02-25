@@ -383,9 +383,7 @@ void SvLBoxButton::Paint(
     sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
         rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
 
-/
-//Native drawing
-/
+    //Native drawing
     sal_Bool bNativeOK = sal_False;
     ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
     if ( nIndex != SV_BMP_STATICIMAGE && rDev.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
