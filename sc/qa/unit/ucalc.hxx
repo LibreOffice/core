@@ -271,6 +271,7 @@ public:
     void testSharedFormulasRefUpdateCopySheets();
     void testSharedFormulasCopyPaste();
     void testSharedFormulaInsertColumn();
+    void testSharedFormulaMoveBlock();
     void testFormulaPosition();
 
     void testMixData();
@@ -442,6 +443,7 @@ public:
     CPPUNIT_TEST(testSharedFormulasRefUpdateCopySheets);
     CPPUNIT_TEST(testSharedFormulasCopyPaste);
     CPPUNIT_TEST(testSharedFormulaInsertColumn);
+    CPPUNIT_TEST(testSharedFormulaMoveBlock);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testMixData);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);

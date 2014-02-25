@@ -430,6 +430,64 @@ bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected
     return true;
 }
 
+bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
+{
+    OUString aStr(rPos.Format(SCA_VALID));
+    const ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
+    if (!pFC)
+    {
+        cerr << "Formula cell expected at " << aStr << " but not found." << endl;
+        return false;
+    }
+
+    if (pFC->aPos != rPos)
+    {
+        OUString aStr2(pFC->aPos.Format(SCA_VALID));
+        cerr << "Formula cell at " << aStr << " has incorrect position of " << aStr2 << endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool checkFormulaPositions(
+    ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount)
+{
+    ScAddress aPos(nCol, 0, nTab);
+    for (size_t i = 0; i < nRowCount; ++i)
+    {
+        SCROW nRow = pRows[i];
+        aPos.SetRow(nRow);
+
+        if (!checkFormulaPosition(rDoc, aPos))
+        {
+            OUString aStr(aPos.Format(SCA_VALID));
+            cerr << "Formula cell position failed at " << aStr << "." << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+void clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange )
+{
+    const ScAddress& s = rRange.aStart;
+    const ScAddress& e = rRange.aEnd;
+    for (SCTAB nTab = s.Tab(); nTab <= e.Tab(); ++nTab)
+    {
+        for (SCCOL nCol = s.Col(); nCol <= e.Col(); ++nCol)
+        {
+            for (SCROW nRow = s.Row(); nRow <= e.Row(); ++nRow)
+            {
+                ScAddress aPos(nCol, nRow, nTab);
+                ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
+                if (pFC)
+                    pFC->SetChanged(false);
+            }
+        }
+    }
+}
+
 bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos)
 {
     ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);

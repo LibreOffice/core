@@ -15,6 +15,7 @@
 #include "clipparam.hxx"
 #include "undoblk.hxx"
 #include "scopetools.hxx"
+#include <docfunc.hxx>
 #include "svl/sharedstring.hxx"
 
 #include "formula/grammar.hxx"
@@ -734,6 +735,112 @@ void Test::testSharedFormulaInsertColumn()
 
     if (!checkFormula(*m_pDoc, ScAddress(8,2,0), "H4*B4"))
         CPPUNIT_FAIL("Wrong formula!");
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSharedFormulaMoveBlock()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Set values to A1:A3.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 2.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 3.0);
+
+    // Set formulas in B1:B3 to reference A1:A3.
+    m_pDoc->SetString(ScAddress(1,0,0), "=RC[-1]");
+    m_pDoc->SetString(ScAddress(1,1,0), "=RC[-1]");
+    m_pDoc->SetString(ScAddress(1,2,0), "=RC[-1]");
+
+    ScRange aFormulaRange(1,0,0,1,2,0);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    clearFormulaCellChangedFlag(*m_pDoc, aFormulaRange);
+
+    // Move A1:A3 to D1:D3.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.MoveBlock(ScRange(0,0,0,0,2,0), ScAddress(3,0,0), true, true, false, true);
+
+    // The result should stay the same.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    clearFormulaCellChangedFlag(*m_pDoc, aFormulaRange);
+
+    // Make sure these formula cells in B1:B3 have correct positions even after the move.
+    std::vector<SCROW> aRows;
+    aRows.push_back(0);
+    aRows.push_back(1);
+    aRows.push_back(2);
+    bool bRes = checkFormulaPositions(*m_pDoc, 0, 1, &aRows[0], aRows.size());
+    CPPUNIT_ASSERT(bRes);
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo and check the result.
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    clearFormulaCellChangedFlag(*m_pDoc, aFormulaRange);
+
+    // Redo and check the result.
+    pUndoMgr->Redo();
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    // Clear the range and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,MAXROW,0));
+
+    // Set values 1,2,3,4,5 to A1:A5.
+    for (SCROW i = 0; i <= 4; ++i)
+        m_pDoc->SetValue(ScAddress(0,i,0), (i+1));
+
+    // Set formulas to B1:B5.
+    for (SCROW i = 0; i <= 4; ++i)
+        m_pDoc->SetString(ScAddress(1,i,0), "=RC[-1]");
+
+    // Check the initial formula results.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    // Move A1:A2 to D2:D3.
+    rFunc.MoveBlock(ScRange(0,0,0,0,1,0), ScAddress(3,1,0), true, true, false, true);
+
+    // Check the formula values again.  They should not change.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    pUndoMgr->Redo();
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
 
     m_pDoc->DeleteTab(0);
 }
