@@ -2083,7 +2083,7 @@ OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
         chart2::data::LabelOrigin eLabelOrigin )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (bDisposed)
