@@ -444,7 +444,7 @@ namespace svt
 
     sal_Bool OWizardMachine::skipBackwardUntil( WizardState _nTargetState )
     {
-        // alowed to leave the current page?
+        // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( eTravelBackward ) )
             return sal_False;
 
@@ -473,7 +473,7 @@ namespace svt
     {
         WizardState nCurrentState = getCurrentState();
 
-        // alowed to leave the current page?
+        // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? eTravelForward : eTravelBackward ) )
             return sal_False;
 
@@ -512,7 +512,7 @@ namespace svt
     sal_Bool OWizardMachine::skip(sal_Int32 _nSteps)
     {
         DBG_ASSERT(_nSteps > 0, "OWizardMachine::skip: invalid number of steps!");
-        // alowed to leave the current page?
+        // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( eTravelForward ) )
             return sal_False;
 
@@ -578,7 +578,7 @@ namespace svt
     {
         DBG_ASSERT(m_pImpl->aStateHistory.size() > 0, "OWizardMachine::travelPrevious: have no previous page!");
 
-        // alowed to leave the current page?
+        // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( eTravelBackward ) )
             return sal_False;
 
