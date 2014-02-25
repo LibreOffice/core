@@ -53,7 +53,6 @@ private:
     void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
     std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
 
-    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( StandardHdl_Impl, void * );
     DECL_LINK( ResetBtnHdl_Impl, void * );
 

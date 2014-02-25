@@ -30,10 +30,6 @@ class BitmapEx;
 
 class GraphicHelper
 {
-
-    static sal_Bool mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapEx& rOverlay,
-                   const Rectangle& rOverlayRect, BitmapEx& rReturn );
-
 public:
 
     static SvMemoryStream* getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, sal_uInt32 nFormat );

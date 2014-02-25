@@ -116,39 +116,6 @@ ImplImageTree::ImplImageTree() { m_cacheIcons = true; }
 
 ImplImageTree::~ImplImageTree() {}
 
-bool ImplImageTree::checkStyle(OUString const & style)
-{
-    bool exists;
-
-    // using cache because setStyle is an expensive operation
-    // setStyle calls resetPaths => closes any opened zip files with icons, cleans the icon cache, ...
-    if (checkStyleCacheLookup(style, exists)) {
-        return exists;
-    }
-
-    setStyle(style);
-
-    exists = false;
-    OUString aURL = m_path.first;
-
-    osl::File aZip(aURL + ".zip");
-    if (aZip.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
-        aZip.close();
-        exists = true;
-    }
-
-    osl::Directory aLookaside(aURL);
-    if (aLookaside.open() == ::osl::FileBase::E_None) {
-        aLookaside.close();
-        exists = true;
-        m_cacheIcons = false;
-    } else {
-        m_cacheIcons = true;
-    }
-    m_checkStyleCache[style] = exists;
-    return exists;
-}
-
 bool ImplImageTree::loadImage(
     OUString const & name, OUString const & style, BitmapEx & bitmap,
     bool localized, bool loadMissing )
@@ -222,7 +189,6 @@ void ImplImageTree::shutDown() {
     m_style = OUString();
         // for safety; empty m_style means "not initialized"
     m_iconCache.clear();
-    m_checkStyleCache.clear();
     m_linkHash.clear();
 }
 
@@ -252,18 +218,6 @@ void ImplImageTree::resetPaths() {
         url += "images";
     m_path = std::make_pair(
         url, css::uno::Reference< css::container::XNameAccess >());
-}
-
-bool ImplImageTree::checkStyleCacheLookup(
-    OUString const & style, bool &exists)
-{
-    CheckStyleCache::iterator i(m_checkStyleCache.find(style));
-    if (i != m_checkStyleCache.end()) {
-        exists = i->second;
-        return true;
-    } else {
-        return false;
-    }
 }
 
 bool ImplImageTree::iconCacheLookup(

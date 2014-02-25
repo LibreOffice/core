@@ -485,23 +485,6 @@ void SvxPixelCtlAccessible::ensureIsValidColumn( sal_Int32 nColumn )
             OUString( RTL_CONSTASCII_USTRINGPARAM("column index is invalid") ), *this );
 }
 
-void SvxPixelCtlAccessible::ensureIsValidAddress(
-        sal_Int32 nRow, sal_Int32 nColumn )
-    throw ( lang::IndexOutOfBoundsException )
-{
-    ensureIsValidRow( nRow );
-    ensureIsValidColumn( nColumn );
-}
-
-void SvxPixelCtlAccessible::ensureIsValidIndex( sal_Int32 nChildIndex )
-    throw ( lang::IndexOutOfBoundsException )
-{
-    if( nChildIndex >=  pPixelCtl->GetSquares())
-        throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("child index is invalid") ), *this );
-}
-
-
 //XAccessibleEventBroadcaster
 void SAL_CALL SvxPixelCtlAccessible::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )  throw( RuntimeException )
 {
@@ -557,11 +540,6 @@ void SAL_CALL SvxPixelCtlAccessible::disposing()
         //mxParent = uno::Reference< XAccessible >();
 
     }
-}
-
-void SvxPixelCtlAccessible::Invalidate()
-{
-    pPixelCtl = 0;
 }
 
 void SvxPixelCtlAccessible::IsValid() throw (uno::RuntimeException)

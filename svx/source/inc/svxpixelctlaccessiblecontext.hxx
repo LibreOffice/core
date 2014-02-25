@@ -244,7 +244,6 @@ public:
 
     void LoseFocus();
 
-    void Invalidate();
     /// @returns true if it's disposed or in disposing
     inline sal_Bool IsAlive( void ) const;
     /// @returns true if it's not disposed and no in disposing
@@ -261,17 +260,6 @@ protected:
         If the specified column index is invalid. */
     void ensureIsValidColumn( sal_Int32 nColumn )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
-    /** @attention  This method requires locked mutex's and a living object.
-        @throws <type>IndexOutOfBoundsException</type>
-        If the specified cell address is invalid. */
-    void ensureIsValidAddress( sal_Int32 nRow, sal_Int32 nColumn )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
-    /** @attention  This method requires locked mutex's and a living object.
-        @throws <type>IndexOutOfBoundsException</type>
-        If the specified child index is invalid. */
-    void ensureIsValidIndex( sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
-
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> m_xCurChild;
 public:

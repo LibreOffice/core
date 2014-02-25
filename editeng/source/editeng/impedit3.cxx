@@ -364,7 +364,7 @@ void ImpEditEngine::FormatFullDoc()
 
 void ImpEditEngine::FormatDoc()
 {
-    if (!GetUpdateMode() || IsFormatting() || !GetUpdateModeForAcc())
+    if (!GetUpdateMode() || IsFormatting())
         return;
 
     EnterBlockNotifications();
@@ -3855,11 +3855,6 @@ void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )
     aEditDoc.Insert(nPos, pNode);
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPos );
-}
-
-void ImpEditEngine::SetUpdateModeForAcc(bool bUp)
-{
-    bUpdateForAcc = bUp;
 }
 
 EditPaM ImpEditEngine::SplitContent( sal_Int32 nNode, sal_Int32 nSepPos )

@@ -42,9 +42,6 @@ public:
 
     ~ImplImageTree();
 
-    /// check whether the icon style is installed
-    bool checkStyle(OUString const & style);
-
     bool loadImage(
         OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized = false, bool loadMissing = false );
@@ -77,7 +74,6 @@ private:
 
     OUString m_style;
     Path m_path;
-    CheckStyleCache m_checkStyleCache;
     IconCache m_iconCache;
     bool m_cacheIcons;
     IconLinkHash m_linkHash;
@@ -86,7 +82,6 @@ private:
 
     void resetPaths();
 
-    bool checkStyleCacheLookup( OUString const & style, bool &exists );
     bool iconCacheLookup( OUString const & name, bool localized, BitmapEx & bitmap );
 
     bool find(std::vector< OUString > const & paths, BitmapEx & bitmap );

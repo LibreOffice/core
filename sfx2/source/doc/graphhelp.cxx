@@ -206,61 +206,6 @@ sal_Bool GraphicHelper::supportsMetaFileHandle_Impl()
 
 
 // static
-sal_Bool GraphicHelper::mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapEx& rOverlay,
-                   const Rectangle& rOverlayRect, BitmapEx& rReturn )
-{
-    // the implementation is provided by KA
-
-    Point           aNullPt;
-    Rectangle       aBmpRect( aNullPt, rBmpEx.GetSizePixel() );
-    VirtualDevice   aVDev;
-
-    if( !rReturn.IsEmpty() )
-        rReturn.SetEmpty();
-
-    if( !rBmpEx.IsEmpty() && aVDev.SetOutputSizePixel( aBmpRect.GetSize() ) )
-    {
-        Rectangle aOverlayRect( rOverlayRect );
-
-        aOverlayRect.Intersection( aBmpRect );
-
-        if( rOverlay.IsEmpty() || rOverlayRect.IsEmpty() )
-            rReturn = rBmpEx;
-        else
-        {
-            aVDev.DrawBitmap( aNullPt, aVDev.GetOutputSizePixel(), rBmpEx.GetBitmap() );
-            aVDev.DrawBitmapEx( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), rOverlay );
-
-            Bitmap aBmp( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
-            aBmp.Convert( BMP_CONVERSION_24BIT );
-
-            if( !rBmpEx.IsTransparent() )
-                rReturn = aBmp;
-            else
-            {
-                aVDev.DrawBitmap( aNullPt, aVDev.GetOutputSizePixel(), rBmpEx.GetMask() );
-                Bitmap aOverlayMergeBmp( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ) );
-
-                if( rOverlay.IsTransparent() )
-                    aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), rOverlay.GetMask() );
-                else
-                {
-                    aVDev.SetLineColor( COL_BLACK );
-                    aVDev.SetFillColor( COL_BLACK );
-                    aVDev.DrawRect( aOverlayRect);
-                }
-
-                aOverlayMergeBmp.CombineSimple( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ), BMP_COMBINE_AND );
-                aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), aOverlayMergeBmp );
-                rReturn = BitmapEx( aBmp, aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
-            }
-        }
-    }
-
-    return !rReturn.IsEmpty();
-}
-
-// static
 sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
                                                         const uno::Reference< io::XStream >& xStream )
 {

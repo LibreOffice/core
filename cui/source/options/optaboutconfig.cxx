@@ -458,11 +458,6 @@ CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( Window* pWindow,
 
 }
 
-IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, /*pBar*/ )
-{
-    return 0;
-}
-
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl )
 {
     Reset();
