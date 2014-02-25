@@ -37,7 +37,7 @@ class ParagraphData
 protected:
     sal_Int16           nDepth;
     sal_Int16           mnNumberingStartValue;
-    sal_Bool            mbParaIsNumberingRestart;
+    bool                mbParaIsNumberingRestart;
 
 public:
     ParagraphData( const ParagraphData& );

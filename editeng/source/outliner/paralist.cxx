@@ -29,7 +29,7 @@
 ParagraphData::ParagraphData()
 : nDepth( -1 )
 , mnNumberingStartValue( -1 )
-, mbParaIsNumberingRestart( sal_False )
+, mbParaIsNumberingRestart( false )
 {
 }
 
