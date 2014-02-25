@@ -18,7 +18,7 @@
  */
 
 // Natural, Clamped, or Periodic Cubic Splines
-//
+
 // Input:  A list of N+1 points (x_i,a_i), 0 <= i <= N, which are sampled
 // from a function, a_i = f(x_i).  The function f is unknown.  Boundary
 // conditions are
@@ -26,21 +26,21 @@
 //   (2) Clamped splines:  f'(x_0) and f'(x_N) are user-specified.
 //   (3) Periodic splines:  f(x_0) = f(x_N) [in which case a_N = a_0 is
 //       required in the input], f'(x_0) = f'(x_N), and f"(x_0) = f"(x_N).
-//
+
 // Output: b_i, c_i, d_i, 0 <= i <= N-1, which are coefficients for the cubic
 // spline S_i(x) = a_i + b_i(x-x_i) + c_i(x-x_i)^2 + d_i(x-x_i)^3 for
 // x_i <= x < x_{i+1}.
-//
+
 // The natural and clamped algorithms were implemented from
-//
+
 //    Numerical Analysis, 3rd edition
 //    Richard L. Burden and J. Douglas Faires
 //    Prindle, Weber & Schmidt
 //    Boston, 1985, pp. 122-124.
-//
+
 // The algorithm sets up a tridiagonal linear system of equations in the
 // c_i values.  This can be solved in O(N) time.
-//
+
 // The periodic spline algorithm was implemented from my own derivation.  The
 // linear system of equations is not tridiagonal.  For now I use a standard
 // linear solver that does not take advantage of the sparseness of the

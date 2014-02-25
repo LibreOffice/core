@@ -490,7 +490,7 @@ static const hchar *GetOutlineStyleChars(int style)
         {                                         // 3
             0x2f18, 0x2f16, 0x2f12, 0x2f10, 0x2f06, 0x2f00, 0x2043, 0x0000
         },
-        {                                         //
+        {
             0xAC61, 0xB677, 0xB861, 0xB8F7, 0xB781, 0x0000
         },
     };

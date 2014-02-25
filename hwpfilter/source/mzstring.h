@@ -169,9 +169,9 @@ inline const char* MzString::c_str() const
 }
 
 
-//
+
 // Non friend, non member operators
-//
+
 #endif                                            /* _MZSTRING_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

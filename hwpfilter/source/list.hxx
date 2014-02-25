@@ -95,12 +95,12 @@ private:
 
 
 
-//
+
 // IMPLEMENTATION
-//
+
 // (the implementation of template classes must be accessible to using
 // code, hence this implementation is in the header.)
-//
+
 
 #include <algorithm>
 
