@@ -154,8 +154,8 @@ void SAL_CALL ScSheetLinkObj::refresh() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScSheetLinkObj::addRefreshListener(
-                                const uno::Reference<util::XRefreshListener >& xListener )
-                                                throw(uno::RuntimeException)
+    const uno::Reference<util::XRefreshListener >& xListener )
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<util::XRefreshListener>* pObj =
