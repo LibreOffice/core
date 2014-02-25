@@ -515,7 +515,7 @@ uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Poin
     sal_Bool bPixelColorOrBG= sal_Bool(mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex)));
     Size size(mrPixelCtl.GetWidth() / mrPixelCtl.GetLineCount(),mrPixelCtl.GetHeight() / mrPixelCtl.GetLineCount());
     uno::Reference<XAccessible> xChild;
-    xChild = new SvxPixelCtlAccessibleChild(&mrPixelCtl,
+    xChild = new SvxPixelCtlAccessibleChild(mrPixelCtl,
                 bPixelColorOrBG,
                 Point(nX,nY),
                 Rectangle(mPoint,size),
@@ -583,7 +583,7 @@ DBG_NAME( SvxPixelCtlAccessibleChild )
 
 
 SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
-    SvxPixelCtl* rWindow,
+    SvxPixelCtl& rWindow,
     sal_Bool bPixelColorOrBG,
     const Point &aPoint,
     const Rectangle& rBoundingBox,
@@ -640,8 +640,8 @@ awt::Rectangle SAL_CALL SvxPixelCtlAccessibleChild::getBounds() throw( RuntimeEx
     //Modified by lq, 09/26
     //return AWTRectangle( GetBoundingBox() );
     awt::Rectangle rect = AWTRectangle( GetBoundingBox() );
-    rect.X = rect.X + mrParentWindow->GetClientWindowExtentsRelative(NULL).Left()-mrParentWindow->GetWindowExtentsRelative(NULL).Left();
-    rect.Y = rect.Y + mrParentWindow->GetClientWindowExtentsRelative(NULL).Top()-mrParentWindow->GetWindowExtentsRelative(NULL).Top();
+    rect.X = rect.X + mrParentWindow.GetClientWindowExtentsRelative(NULL).Left()-mrParentWindow.GetWindowExtentsRelative(NULL).Left();
+    rect.Y = rect.Y + mrParentWindow.GetClientWindowExtentsRelative(NULL).Top()-mrParentWindow.GetWindowExtentsRelative(NULL).Top();
     return rect;
     // End
 }
@@ -674,7 +674,7 @@ sal_Int32 SvxPixelCtlAccessibleChild::getForeground(  )
     //::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
-    return mrParentWindow->GetControlForeground().GetColor();
+    return mrParentWindow.GetControlForeground().GetColor();
 }
 sal_Int32 SvxPixelCtlAccessibleChild::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException)
@@ -683,7 +683,7 @@ sal_Int32 SvxPixelCtlAccessibleChild::getBackground(  )
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
-    return mrParentWindow->GetControlBackground().GetColor();
+    return mrParentWindow.GetControlBackground().GetColor();
 }
 
 //=====  XAccessibleContext  ==================================================
@@ -750,17 +750,14 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SvxPixelCtlAccessibleChild::getAc
         pStateSetHelper->AddState( AccessibleStateType::SHOWING );
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
 
-        if (mrParentWindow )
+        long nIndex = mrParentWindow.GetFoucsPosIndex();
+        if ( nIndex == mnIndexInParent)
         {
-            long nIndex = mrParentWindow->GetFoucsPosIndex();
-            if ( nIndex == mnIndexInParent)
-            {
-                pStateSetHelper->AddState( AccessibleStateType::SELECTED );
-            }
-            if (mrParentWindow->GetBitmapPixel(sal_uInt16(mnIndexInParent)))
-            {
-                pStateSetHelper->AddState( AccessibleStateType::CHECKED );
-            }
+            pStateSetHelper->AddState( AccessibleStateType::SELECTED );
+        }
+        if (mrParentWindow.GetBitmapPixel(sal_uInt16(mnIndexInParent)))
+        {
+            pStateSetHelper->AddState( AccessibleStateType::CHECKED );
         }
     }
     else
@@ -881,7 +878,7 @@ Rectangle SvxPixelCtlAccessibleChild::GetBoundingBoxOnScreen( void ) throw( Runt
     // no ThrowExceptionIfNotAlive() because its done in GetBoundingBox()
     Rectangle           aRect( GetBoundingBox() );
 
-    return Rectangle( mrParentWindow->OutputToAbsoluteScreenPixel( aRect.TopLeft() ), aRect.GetSize() );
+    return Rectangle( mrParentWindow.OutputToAbsoluteScreenPixel( aRect.TopLeft() ), aRect.GetSize() );
 }
 
 Rectangle SvxPixelCtlAccessibleChild::GetBoundingBox( void ) throw( RuntimeException )
@@ -894,8 +891,8 @@ Rectangle SvxPixelCtlAccessibleChild::GetBoundingBox( void ) throw( RuntimeExcep
 
 OUString SvxPixelCtlAccessibleChild::GetName()
 {
-    sal_Int32 nXIndex = mnIndexInParent % mrParentWindow->GetLineCount();
-    sal_Int32 nYIndex = mnIndexInParent / mrParentWindow->GetLineCount();
+    sal_Int32 nXIndex = mnIndexInParent % mrParentWindow.GetLineCount();
+    sal_Int32 nYIndex = mnIndexInParent / mrParentWindow.GetLineCount();
 
     OUString str;
     str += "(";

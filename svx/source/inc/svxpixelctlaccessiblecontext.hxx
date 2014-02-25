@@ -67,7 +67,7 @@ class SvxPixelCtlAccessibleChild :
     public ::comphelper::OBaseMutex,
     public SvxPixelCtlAccessibleChild_BASE
 {
-    SvxPixelCtl* mrParentWindow;
+    SvxPixelCtl& mrParentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxParent;
        void IsValid() throw (::com::sun::star::uno::RuntimeException);
     sal_Bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
@@ -79,7 +79,7 @@ class SvxPixelCtlAccessibleChild :
     ::osl::Mutex                        m_aMutex;
 public:
     SvxPixelCtlAccessibleChild(
-                SvxPixelCtl* rWindow,
+                SvxPixelCtl& rWindow,
                 sal_Bool bPixelColorOrBG,
                 const Point& aPoint,
                 const Rectangle& rBounds,
