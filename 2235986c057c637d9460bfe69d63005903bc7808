@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_d302ccb3",
+        "filename": "svx/inc/galtheme.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-25T20:01:56Z",
+      "side": 1,
+      "message": "This is a matter of opinion. I would put // to an empty line too, to indicate that this a single comment block, not two separate ones.",
+      "revId": "2235986c057c637d9460bfe69d63005903bc7808",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
