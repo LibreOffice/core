@@ -694,7 +694,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             // productions that matches the input string (and for which the
             // appropriate style bit is set in eStyle, if applicable)
             // determines the scheme. The productions use the auxiliary rules
-            //
+
             //    domain = label *("." label)
             //    label = alphanum [*(alphanum / "-") alphanum]
             //    alphanum = ALPHA / DIGIT
@@ -705,7 +705,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             //    hexseq = hex4 *(":" hex4)
             //    hex4 = 1*4HEXDIG
             //    UCS4 = <any UCS4 character>
-            //
+
             // 1st Production (known scheme):
             //    <one of the known schemes, ignoring case> ":" *UCS4
             // 2nd Production (mailto):
@@ -724,7 +724,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             //    ALPHA ":" ["/" *UCS4]
             // 9th Production (DOS file; FSYS_DOS only):
             //    ALPHA ":" ["\" *UCS4]
-            //
+
             // For the 'non URL' file productions 6--9, the interpretation of
             // the input as a (degenerate) URI is turned off, i.e., escape
             // sequences and fragments are never detected as such, but are
@@ -987,7 +987,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     // appropriate style bit is set in eStyle, if applicable)
                     // determines the used notation.  The productions use the
                     // auxiliary rules
-                    //
+
                     //    domain = label *("." label)
                     //    label = alphanum [*(alphanum / "-") alphanum]
                     //    alphanum = ALPHA / DIGIT
@@ -1505,12 +1505,12 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         // in INetURLObject::setAbsURIRef(), because most of those productions
         // interfere with the syntax of relative URI references.)  The
         // productions use the auxiliary rules
-        //
+
         //    domain = label *("." label)
         //    label = alphanum [*(alphanum / "-") alphanum]
         //    alphanum = ALPHA / DIGIT
         //    UCS4 = <any UCS4 character>
-        //
+
         // 1st Production (UNC file; FSYS_DOS only):
         //    "\\" domain ["\" *UCS4]
         // 2nd Production (Unix-like DOS file; FSYS_DOS only):
