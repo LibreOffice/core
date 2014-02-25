@@ -122,6 +122,6 @@ public:
 typedef boost::shared_ptr< GraphicImport >          GraphicImportPtr;
 }}
 
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

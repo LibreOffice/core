@@ -305,7 +305,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     //2.2
     //2.3
     //3.4
-    //
+
 
     if( m_nFWord6 > 0) //Word 6 compatibility
     {

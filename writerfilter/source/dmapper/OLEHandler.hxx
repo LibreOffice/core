@@ -88,6 +88,6 @@ public:
 typedef boost::shared_ptr< OLEHandler >  OLEHandlerPtr;
 }}
 
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
