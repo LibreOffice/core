@@ -1813,13 +1813,13 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextTableCursor::getPropertySetInf
     return xRef;
 }
 
-void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
-                                                        const uno::Any& aValue)
-            throw( beans::UnknownPropertyException,
-                        beans::PropertyVetoException,
-                     lang::IllegalArgumentException,
-                     lang::WrappedTargetException,
-                     uno::RuntimeException)
+void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+    throw (beans::UnknownPropertyException,
+           beans::PropertyVetoException,
+           lang::IllegalArgumentException,
+           lang::WrappedTargetException,
+           uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
