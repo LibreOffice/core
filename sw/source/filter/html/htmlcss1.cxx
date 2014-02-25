@@ -1454,12 +1454,12 @@ sal_Bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
 {
     // abs-pos
     // left/top none    auto    twip    perc
-    //
+
     // none     Z       Z       -       -
     // auto     Z       Z       -       -
     // twip     Z       Z       S/R     -
     // perc     -       -       -       -
-    //
+
     // - das Tag wird absolut positioniert und left/top sind beide
     //   gegeben und enthalten auch keine %-Angabe, oder
     // - das Tag soll fliessen, und

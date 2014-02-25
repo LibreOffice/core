@@ -961,7 +961,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // POS_CHANGED event.
                 // Therefore, the event's type has to be adapted and the event
                 // has to be put at the end.
-                //
+
                 // fdo#56031 An INVALID_CONTENT event overwrites a INVALID_ATTR
                 // event and overwrites its flags
                 OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,

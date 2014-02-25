@@ -24,7 +24,7 @@ interface TextList : BaseTextList
     import TextSelection;
 }
 
- //=========================================================================
+
 
 shell SwListShell : SwBaseShell
 {

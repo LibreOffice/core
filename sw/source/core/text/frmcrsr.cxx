@@ -924,7 +924,7 @@ bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
     return SwCntntFrm::UnitUp( pPam, nOffset, bSetInReadOnly );
 }
 
-//
+
 // Used for Bidi. nPos is the logical position in the string, bLeft indicates
 // if left arrow or right arrow was pressed. The return values are:
 // nPos: the new visual position
@@ -1115,9 +1115,9 @@ void SwTxtFrm::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
     const bool bVisualRight = ( nDefaultDir == UBIDI_LTR && bForward ) ||
                                   ( nDefaultDir == UBIDI_RTL && ! bForward );
 
-    //
+
     // Bidi functions from icu 2.0
-    //
+
     const sal_Unicode* pLineString = GetTxtNode()->GetTxt().getStr();
 
     UErrorCode nError = U_ZERO_ERROR;

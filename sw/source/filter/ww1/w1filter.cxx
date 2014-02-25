@@ -1002,7 +1002,7 @@ oncemore:
         case 42: // nextif command
         case 43: // skipif command
         case 44: // number of record
-        //
+
         case 45: // dde ref
         case 46: // dde auto ref
         case 47: // glossary entry

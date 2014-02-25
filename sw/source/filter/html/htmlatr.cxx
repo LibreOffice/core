@@ -1111,7 +1111,7 @@ class HTMLEndPosLst
     SwDoc *pDoc;            // das aktuelle Dokument
     SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
     const Color* pDfltColor;// die Default-Vordergrund-Farbe
-    std::set<OUString>& rScriptTxtStyles;    //
+    std::set<OUString>& rScriptTxtStyles;
 
     sal_uLong nHTMLMode;
     sal_Bool bOutStyles : 1;    // werden Styles exportiert

@@ -303,7 +303,7 @@ class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
     SwTOXBase* pTOXBase;
     sal_uInt16 nCols;
     sal_Bool bHadBreakItem; // there was a break item BEFORE insertion of the TOX
-    sal_Bool bHadPageDescItem; // ...
+    sal_Bool bHadPageDescItem;
 public:
     SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols = 0);
     SwFltTOX(const SwFltTOX&);
@@ -343,8 +343,8 @@ public:
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // hier beginnen die fuer ww1-filter neu erstellten klassen. diese
 // sollen eine simple oberflaeche fuer die komplexen strukturen des
 // writers speziell fuer filter sein. soll etwas in den writer gegeben
@@ -352,10 +352,10 @@ public:
 // worden. ausserdem soll moeglich sein das objekt nach vielen
 // zustaenden der momentanen formatierung zu fragen, sodasz diese der
 // filter nicht selbst verwalten musz.
-//
+
 // den anfang macht eine vorlagen-oberklasse, die einfachen umgang mit
 // formatvorlagen ermoeglicht:
-//
+
 
 class SwFltOutBase
 {
@@ -490,7 +490,7 @@ public:
     virtual void EndFly();
 };
 
-//
+
 // dies nun ist die zauberhafteklasse: intention: alle eins nach dem
 // andern hinein'pipe'n. wird eine besondere struktur eingelesen, wird
 // eine klammer geoeffnet (BeginXxx) und nach beendigung geschlossen
@@ -500,7 +500,7 @@ public:
 // beginnt ein neuer absatz oder aehnliches, wird NextXxx genutzt.
 // hier ist moeglich, Tab, Zeilenumbruch, Absatzende, Seitenumbruch
 // und Sektionsende einzufuegen.
-//
+
 class SwFltShell
 {
     SwFltOutDoc* pOutDoc;
@@ -526,11 +526,11 @@ class SwFltShell
 
 // Fly items:
     sal_uInt16 nAktStyle;               // zur Indizierung pStyleFlyTable
-//
+
     SwFltControlStack aStack;
     SwFltEndStack aEndStack;
     SwPaM* pPaM;
-//
+
     OUString sBaseURL;
     sal_uInt16 nPageDescOffset; // fuers update der pagedescs
     rtl_TextEncoding eSrcCharSet; // charset der quelle

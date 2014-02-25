@@ -73,7 +73,7 @@
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 // 50 cm 28350
-//
+
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
@@ -358,7 +358,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     }
 
     // Footnotes
-    //
+
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_FTN_INFO,
             false, &pItem ) )
         rPageDesc.SetFtnInfo( ((SwPageFtnInfoItem*)pItem)->GetPageFtnInfo() );

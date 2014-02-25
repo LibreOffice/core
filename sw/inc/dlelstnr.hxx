@@ -39,12 +39,12 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-///////////////////////////////////////////////////////////////////////////
+
 // SwLinguServiceEventListener
 // is a EventListener that triggers spellchecking
 // and hyphenation when relevant changes (to the
 // dictionaries of the dictionary list, or properties) were made.
-//
+
 
 class SwLinguServiceEventListener :
     public cppu::WeakImplHelper2

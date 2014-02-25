@@ -2516,9 +2516,9 @@ void WW8TabDesc::MergeCells()
                 for( short i = 0; i < pActBand->nWwCols; i++ )
                 {
                     WW8SelBoxInfo* pActMGroup = 0;
-                    //
+
                     // start a new merge group if appropriate
-                    //
+
                     OSL_ENSURE(nRow < (sal_uInt16)pTabLines->size(),
                         "Too few lines, table ended early");
                     if (nRow >= (sal_uInt16)pTabLines->size())
@@ -2711,12 +2711,12 @@ void WW8TabDesc::FinishSwTable()
 
 
 // browse aMergeGroups, detect the index of the first fitting group or -1 otherwise
-//
+
 // Parameter: nXcenter  = center position of asking box
 //            nWidth    = width of asking box
 //            bExact    = flag, if box has to fit into group
 //                              or only has to touch
-//
+
 WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 {
     if( !aMergeGroups.empty() )
@@ -2740,16 +2740,16 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
                 nGrX1 = rActGroup.nGroupXStart - nToleranz;
                 nGrX2 = rActGroup.nGroupXStart
                              +rActGroup.nGroupWidth  + nToleranz;
-                //
+
                 // If box fits report success
-                //
+
                 if( ( nX1 > nGrX1 ) && ( nX2 < nGrX2 ) )
                 {
                     return &rActGroup;
                 }
-                //
+
                 // does the box share areas with the group?
-                //
+
                 if( !bExact )
                 {
                     // successful if nX1 *or* nX2 are inside the group
@@ -3834,7 +3834,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
         return;
 
     rSI.bImported = true;                      // set flag now to avoid endless loops
-                                                //
+
     // valid and not NUL and not yet imported
 
     if( rSI.nBase < cstd && !pIo->vColl[rSI.nBase].bImported )
@@ -4427,7 +4427,7 @@ void WW8RStyle::Import()
     // via WW-UI so this does not matter.
     // This could be done by:
     //  if( bNew ) rDoc.SetDefault( pDefCharFmt->GetAttrSet() );
-    //
+
     // for e.g. tables an always valid Std-Style is necessary
 
     if( pIo->StyleExists(0) && !pIo->vColl.empty() &&

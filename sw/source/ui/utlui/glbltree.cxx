@@ -95,26 +95,26 @@ using namespace ::com::sun::star::uno;
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
 static const char* aHelpForMenu[] =
 {
-    0,                          //
+    0,
     HID_GLBLTREE_UPDATE,        //CTX_UPDATE
     HID_GLBLTREE_INSERT,        //CTX_INSERT
     HID_GLBLTREE_EDIT,          //CTX_EDIT
     HID_GLBLTREE_DEL,           //CTX_DELETE
     HID_GLBLTREE_EDIT_LINK,     //CTX_EDIT_LINK
-    0,                        //
-    0,                        //
-    0,                        //
-    0,                        //
+    0,
+    0,
+    0,
+    0,
     HID_GLBLTREE_INS_IDX,       //CTX_INSERT_ANY_INDEX
     HID_GLBLTREE_INS_FILE,      //CTX_INSERT_FILE
     HID_GLBLTREE_INS_NEW_FILE,  //CTX_INSERT_NEW_FILE
     HID_GLBLTREE_INS_TEXT,      //CTX_INSERT_TEXT
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     HID_GLBLTREE_UPD_SEL,       //CTX_UPDATE_SEL
     HID_GLBLTREE_UPD_IDX,       //CTX_UPDATE_INDEX
     HID_GLBLTREE_UPD_LINK,      //CTX_UPDATE_LINK

@@ -414,7 +414,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
 
-    //
+
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
@@ -470,7 +470,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
-    //
+
     void    Invalidate() {pxDoc = 0;}
 };
 

@@ -725,21 +725,21 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             // values in pColumn
 
             // Take over values according to the following table (Netscape 4.0 pv 3):
-            //
+
             // WIDTH:           no COLS         COLS
-            //
+
             // none             min = min       min = absmin
             //                  max = max       max = max
-            //
+
             // >= min           min = min       min = width
             //                  max = width     max = width
-            //
+
             // >= absmin        min = wdith(*)  min = width
             //                  max = width     max = width
-            //
+
             // < absmin         min = absmin    min = absmin
             //                  max = absmin    max = absmin
-            //
+
             // (*) Netscape uses the minimum width without a break before
             //     the last graphic here. We don't have that (yet?),
             //     so we leave it set to width.
@@ -895,10 +895,10 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             // minimum width of all affected cells with the relative width
             // of the column.
             // Thus, the width ratio among the columns is correct.
-            //
+
             // Furthermore, a factor is calculated that says by how much the
             // cell has gotten wider than the minimum width.
-            //
+
             // In the second step the calculated widths are divided by this
             // factor.  Thereby a cell's width is preserved and serves as a
             // basis for the other cells.
@@ -1163,14 +1163,14 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
             // the available width.
             // Top tables only get a relative width if the available space
             // is *strictly larger* than the minimum width.
-            //
+
             // CAUTION: We need the "strictly larger" because changing from a
             // relative width to an absolute width by resizing would lead
             // to an infinite loop.
-            //
+
             // Because we do not call resize for tables in frames if the
             // frame has a non-relative width, we cannot play such games.
-            //
+
             // Let's play such games now anyway. We had a graphic in a 1% wide
             // table and it didn't fit in of course.
             nAbsTabWidth = (sal_uInt16)( ((sal_uLong)nAbsAvail * nWidthOption) / 100 );

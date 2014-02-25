@@ -191,18 +191,18 @@ public:
     virtual void FieldVanish( const OUString& rTxt, ww::eField eType );
 
     /// Output redlining.
-    ///
+    /
     /// The common attribute that can be among the run properties.
     virtual void Redline( const SwRedlineData* pRedline );
 
     /// Output redlining.
-    ///
+    /
     /// Start of the tag that encloses the run, fills the info according to
     /// the value of pRedlineData.
     void StartRedline( const SwRedlineData * pRedlineData );
 
     /// Output redlining.
-    ///
+    /
     /// End of the tag that encloses the run.
     void EndRedline( const SwRedlineData * pRedlineData );
 
@@ -298,7 +298,7 @@ public:
     virtual void SectionBiDi( bool bBiDi );
 
     /// The style of the page numbers.
-    ///
+    /
     virtual void SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber );
 
     /// The type of breaking.
@@ -357,7 +357,7 @@ public:
 
 private:
     /// Initialize the structures where we are going to collect some of the paragraph properties.
-    ///
+    /
     /// Some of the properties have to be collected from more sources, and are
     /// actually not written between StartParagraphProperties and
     /// EndParagraphProperties.  They are output in this method, which is
@@ -365,28 +365,28 @@ private:
     void InitCollectedParagraphProperties();
 
     /// Output what we collected during the run properties output.
-    ///
+    /
     /// @see WriteCollectedParagrapProperties().
     void WriteCollectedParagraphProperties();
 
     /// Initialize the structures where we are going to collect some of the run properties.
-    ///
+    /
     /// This is an equivalent of InitCollectedParagraphProperties(), resp.
     /// WriteCollectectedParagraphProperties().
-    ///
+    /
     /// @see InitCollectedParagraphProperties().
     void InitCollectedRunProperties();
 
     /// Output what we collected during the run properties output.
-    ///
+    /
     /// @see InitCollectedRunProperies(), WriteCollectedParagraphProperties()
     void WriteCollectedRunProperties();
 
     /// Output graphic fly frames or replacement graphics for OLE nodes.
-    ///
+    /
     /// For graphic frames, just use the first two parameters, for OLE
     /// replacement graphics, set the first as 0, and pass the remaining three.
-    ///
+    /
     /// @see WriteOLE2Obj()
     void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt = 0, SwOLENode* pOLENode = 0, const SdrObject* pSdrObj = 0);
     void WriteSrcRect( const SdrObject* pSdrObj );

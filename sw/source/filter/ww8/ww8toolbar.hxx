@@ -149,7 +149,7 @@ class SwCTBWrapper : public Tcg255SubStruct
 
     sal_Int32 cbDTBC;
 
-    std::vector< SwTBC > rtbdc; //
+    std::vector< SwTBC > rtbdc;
     std::vector< Customization > rCustomizations; // array of Customizations
     std::vector< sal_Int16 > dropDownMenuIndices; // array of indexes of Customization toolbars that are dropped by a menu
     SwCTBWrapper(const SwCTBWrapper&);

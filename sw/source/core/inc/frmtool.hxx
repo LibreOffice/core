@@ -242,7 +242,7 @@ public:
 
 // SwBorderAttrs encapsulates the calculation for margin attributes including
 // border. The whole class is cached.
-//
+
 // WARNING! If more attributes should be cached also adjust the method
 //          Modify::Modify!
 class SwBorderAttrs : public SwCacheObj

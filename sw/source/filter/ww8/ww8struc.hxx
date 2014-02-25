@@ -661,7 +661,7 @@ struct WW8_DP_LINE
 {
 //  WW8_DPHEAD dphead;      // 0    Common header for a drawing primitive
     SVBT16 xaStart;         // starting point for line
-    SVBT16 yaStart;         //
+    SVBT16 yaStart;
     SVBT16 xaEnd;           // ending point for line
     SVBT16 yaEnd;
     WW8_DP_LINETYPE aLnt;
@@ -768,7 +768,7 @@ struct WW8_ATRD                 // fuer die 8-Version
 
 struct WW8_ATRDEXTRA
 {
-    // ---  Extended bit since Word 2002 --- //
+    // ---  Extended bit since Word 2002 ---
 
     SVBT32 dttm;
     SVBT16 bf;

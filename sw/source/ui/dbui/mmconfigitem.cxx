@@ -503,7 +503,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
     {
         switch(nProp)
         {
-            case 0: pValues[nProp] <<= bIsOutputToLetter; break;//
+            case 0: pValues[nProp] <<= bIsOutputToLetter; break;
             case 1: pValues[nProp] <<= bIncludeCountry; break;
             case 2: pValues[nProp] <<= sExcludeCountry; break;
             case 3: pValues[nProp] <<= GetAddressBlocks(sal_True); break;

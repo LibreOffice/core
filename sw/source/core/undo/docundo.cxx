@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
 
 
-// UndoManager ///////////////////////////////////////////////////////////
+// UndoManager
 
 namespace sw {
 
@@ -411,7 +411,7 @@ SwUndo * UndoManager::RemoveLastUndo()
     return dynamic_cast<SwUndo *>(pLastUndo);
 }
 
-// svl::IUndoManager /////////////////////////////////////////////////////
+// svl::IUndoManager
 
 void UndoManager::EnableUndo(bool bEnable)
 {

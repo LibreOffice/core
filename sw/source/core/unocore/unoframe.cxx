@@ -789,7 +789,7 @@ bool SwOLEProperties_Impl::AnyToItemSet(
          && !GetProperty(FN_EMBEDDED_OBJECT, 0, pTemp) )
         return false;
     SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound);
-    //
+
     return true;
 }
 

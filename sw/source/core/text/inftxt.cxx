@@ -273,9 +273,9 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         m_nDirection = DIR_LEFT2RIGHT;
     }
 
-    //
+
     // The Options
-    //
+
     m_pOpt = m_pVsh ?
            m_pVsh->GetViewOptions() :
            SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) ); // Options from Module, due to StarONE
@@ -1540,9 +1540,9 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
     cHookChar = 0;
     sal_Int32 i = nStart;
 
-    //
+
     // Used for decimal tab handling:
-    //
+
     const sal_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
     const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
     // #i45951# German (Switzerland) uses ' as thousand separator
@@ -1590,10 +1590,10 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
                     }
                 }
 
-                //
+
                 // Compatibility: First non-digit character behind a
                 // a digit character becomes the hook character
-                //
+
                 if ( bTabCompat )
                 {
                     if ( ( 0x2F < cPos && cPos < 0x3A ) ||

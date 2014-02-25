@@ -163,7 +163,7 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( rInf.GetFont()->IsPaintBlank() )
         {
             OUString aTxtDouble("  ");
-            //
+
             SwRect aClipRect;
             rInf.CalcRect( *this, &aClipRect, 0 );
             SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );

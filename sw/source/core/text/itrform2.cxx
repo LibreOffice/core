@@ -154,7 +154,7 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
 {
     // We want the rest height relative to the page.
     // If we're in a table, then pFrm->GetUpper() is not the page.
-    //
+
     // GetFrmRstHeight() is being called with Ftn.
     // Wrong: const SwFrm *pUpper = pFrm->GetUpper();
     const SwFrm *pPage = (const SwFrm*)pFrm->FindPageFrm();
@@ -962,10 +962,10 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     // We assume that a font's characters are not larger than twice
     // as wide as heigh.
     // Very crazy: We need to take the ascent into account.
-    //
+
     // Mind the trap! GetSize() contains the wished-for height, the real height
     // is only known in CalcAscent!
-    //
+
     // The ratio is even crazier: a blank in Times New Roman has an ascent of
     // 182, a height of 200 and a width of 53!
     // It follows that a line with a lot of blanks is processed incorrectly.

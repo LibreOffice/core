@@ -454,7 +454,7 @@ class SW_DLLPUBLIC SwTOXBase : public SwClient
 
     sal_uInt16      nCreateType;        // sources to create the index from
     sal_uInt16      nOLEOptions;        // OLE sources
-    SwCaptionDisplay eCaptionDisplay;   //
+    SwCaptionDisplay eCaptionDisplay;
     sal_Bool        bProtected : 1;         // index protected ?
     sal_Bool        bFromChapter : 1;       // create from chapter or document
     sal_Bool        bFromObjectNames : 1;   // create a table or object index
@@ -479,7 +479,7 @@ public:
     // If not, so create it an copy all other used things. The return is this
     SwTOXBase& CopyTOXBase( SwDoc*, const SwTOXBase& );
 
-    const SwTOXType*    GetTOXType() const; //
+    const SwTOXType*    GetTOXType() const;
 
     sal_uInt16              GetCreateType() const;      // creation types
 
@@ -573,9 +573,9 @@ public:
      Description:  Inlines
  --------------------------------------------------------------------*/
 
-//
+
 //SwTOXMark
-//
+
 inline OUString SwTOXMark::GetAlternativeText() const
     {   return aAltText;    }
 
@@ -670,9 +670,9 @@ inline OUString SwTOXMark::GetSecondaryKeyReading() const
     return aSecondaryKeyReading;
 }
 
-//
+
 //SwForm
-//
+
 inline void SwForm::SetTemplate(sal_uInt16 nLevel, const OUString& rTemplate)
 {
     SAL_WARN_IF(nLevel >= GetFormMax(), "sw", "Index >= GetFormMax()");
@@ -696,18 +696,18 @@ inline sal_uInt16 SwForm::GetFormMax() const
 }
 
 
-//
+
 //SwTOXType
-//
+
 inline OUString SwTOXType::GetTypeName() const
     {   return aName;   }
 
 inline TOXTypes SwTOXType::GetType() const
     {   return eType;   }
 
-//
+
 // SwTOXBase
-//
+
 inline const SwTOXType* SwTOXBase::GetTOXType() const
     { return (SwTOXType*)GetRegisteredIn(); }
 

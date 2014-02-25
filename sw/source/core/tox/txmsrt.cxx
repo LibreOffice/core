@@ -288,9 +288,9 @@ SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
     nOpt = nOptions;
 }
 
-//
+
 // Compare keywords. Only relates to the text.
-//
+
 
 
 bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
@@ -313,7 +313,7 @@ bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     return bRet;
 }
 
-//
+
 // operator, only depends on the text
 
 bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
@@ -340,7 +340,7 @@ bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
     return bRet;
 }
 
-//
+
 // The keyword itself
 
 TextAndReading SwTOXIndex::GetText_Impl() const
@@ -504,9 +504,9 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 
     }
 }
 
-//
+
 // The level for displaying it
-//
+
 
 
 sal_uInt16 SwTOXContent::GetLevel() const

@@ -651,7 +651,7 @@ void Ww1Sprm::InitTab()
     aTab[ 69] = new Ww1SingleSprmByte(DUMPNAME("sprmCKul")); //  69 chp.kul kul byte
     aTab[ 70] = new Ww1SingleSprm(3, DUMPNAME("sprmCSizePos")); //  70 chp.hps, chp.hpsPos (see below) 3 bytes
     aTab[ 71] = new Ww1SingleSprmWord(DUMPNAME("sprmCDxaSpace")); //  71 chp.dxaSpace dxa word
-    aTab[ 72] = new Ww1SingleSprmWord(DUMPNAME("//")); //  72 //
+    aTab[ 72] = new Ww1SingleSprmWord(DUMPNAME("//")); //  72
     aTab[ 73] = new Ww1SingleSprmByte(DUMPNAME("sprmCIco")); //  73 chp.ico ico byte
     aTab[ 74] = new Ww1SingleSprmByte(DUMPNAME("sprmCHps")); //  74 chp.hps hps !byte!
     aTab[ 75] = new Ww1SingleSprmByte(DUMPNAME("sprmCHpsInc")); //  75 chp.hps (see below) byte
