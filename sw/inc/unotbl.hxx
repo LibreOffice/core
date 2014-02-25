@@ -602,7 +602,9 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //XTableColumns
-    virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( ::com::sun::star::uno::RuntimeException );
 
     //XServiceInfo

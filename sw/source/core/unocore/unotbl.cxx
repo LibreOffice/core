@@ -5019,7 +5019,8 @@ sal_Bool SwXTableColumns::hasElements(void) throw( uno::RuntimeException )
 }
 
 ///@see SwXTableRows::insertByIndex (TODO: seems to be C&P programming here)
-void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno::RuntimeException )
+void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (nCount == 0)
