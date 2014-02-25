@@ -137,7 +137,7 @@ void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName
 }
 
 
-//==========================================================================
+
 
 
 uno::Any CreateEventData_Impl( const SvxMacro *pMacro )

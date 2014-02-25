@@ -164,7 +164,7 @@ bool IsLockingUsed()
 #endif
 
 } // anonymous namespace
-//==========================================================
+
 
 
 
@@ -857,7 +857,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 // actually, the checks for sftp: here are just wishful thinking; I
 // don't this there is any support for actually editing documents
 // behind sftp: URLs anyway.
-//
+
 // Sure, there could perhaps be a 3rd-party extension that brings UCB
 // the potential to handle files behind sftp:. But there could also be
 // an extension that handles some arbitrary foobar: scheme *and* it

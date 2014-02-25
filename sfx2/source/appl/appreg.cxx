@@ -40,7 +40,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/mnuitem.hxx>
 
-//===================================================================
+
 
 void SfxApplication::Registrations_Impl()
 {

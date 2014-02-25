@@ -146,10 +146,10 @@ DBG_NAME(SfxWorkWindow)
 
 //SV_IMPL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl );
 
-//====================================================================
+
 // Sort the Children according their alignment
 // The order corresponds to the enum SfxChildAlignment (->CHILDWIN.HXX).
-//
+
 
 // Help to make changes to the alignment compatible!
 
@@ -541,7 +541,7 @@ void SfxWorkWindow::Sort_Impl()
 }
 
 
-//====================================================================
+
 // constructor for workwin of a Frame
 
 SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm, SfxFrame* pMaster )
@@ -579,7 +579,7 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm, SfxFra
     nUpdateMode = SFX_VISIBILITY_STANDARD;
 }
 
-//====================================================================
+
 // Constructor of the base class
 
 SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pParentWorkwin ) :
@@ -625,7 +625,7 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     pLayoutManagerListener->setFrame( xFrame );
 }
 
-//====================================================================
+
 // Destructor
 
 SfxWorkWindow::~SfxWorkWindow()
@@ -755,7 +755,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
     nChildren = 0;
 }
 
-//====================================================================
+
 // Virtual method for placing the child window.
 
 void SfxWorkWindow::ArrangeChildren_Impl( sal_Bool /*bForce*/)

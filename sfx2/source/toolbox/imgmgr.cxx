@@ -137,7 +137,7 @@ static sal_Int16 impl_convertBools( sal_Bool bLarge )
     return nIndex;
 }
 
-//=========================================================================
+
 
 SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule )
     : m_pModule(pModule)
@@ -276,7 +276,7 @@ IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
 
 
 
-//=========================================================================
+
 
 SfxImageManager::SfxImageManager( SfxModule* pModule )
 {

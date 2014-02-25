@@ -29,15 +29,15 @@
 
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace sfx2 {
 
 #define MAX_SAVE_COUNT      (sal_uInt16)10
 
-// ============================================================================
+
 // SearchDialog
-// ============================================================================
+
 
 SearchDialog::SearchDialog(Window* pWindow, const OUString& rConfigName)
     : ModelessDialog(pWindow, "SearchDialog", "sfx/ui/searchdialog.ui")
@@ -165,10 +165,10 @@ void SearchDialog::Move()
         m_sWinState = GetWindowState( WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE );
 }
 
-// ============================================================================
+
 
 } // namespace sfx2
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

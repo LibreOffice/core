@@ -40,7 +40,7 @@ void Sidebar::ShowPanel (
         // - Make sure that the panel is visible and expanded after
         // the switch.
         // - Make sure to use a context that really shows the panel
-        //
+
         // All that is not necessary for the current use cases so lets
         // keep it simple for the time being.
         pController->RequestSwitchToDeck(pPanelDescriptor->msDeckId);

@@ -23,13 +23,13 @@
 #include <list>
 #include <svl/itempool.hxx>
 
-// ============================================================================
+
 
 namespace sfx {
 
-// ============================================================================
+
 // Helpers
-// ============================================================================
+
 
 namespace {
 
@@ -70,17 +70,17 @@ void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSe
         rDestSet.ClearItem( nWhich );
 }
 
-// ============================================================================
+
 // Base control wrapper classes
-// ============================================================================
+
 
 ControlWrapperBase::~ControlWrapperBase()
 {
 }
 
-// ============================================================================
+
 // Single control wrappers
-// ============================================================================
+
 
 DummyWindowWrapper::DummyWindowWrapper( Window& rWindow ) :
     SingleControlWrapperType( rWindow )
@@ -162,9 +162,9 @@ void ColorListBoxWrapper::SetControlValue( Color aColor )
     GetControl().SelectEntry( aColor );
 }
 
-// ============================================================================
+
 // Multi control wrappers
-// ============================================================================
+
 
 typedef std::vector< ControlWrapperBase* >  ControlWrpVec;
 typedef ControlWrpVec::iterator             ControlWrpVecI;
@@ -209,9 +209,9 @@ void MultiControlWrapperHelper::SetControlDontKnow( bool bSet )
         (*aIt)->SetControlDontKnow( bSet );
 }
 
-// ============================================================================
+
 // Base connection classes
-// ============================================================================
+
 
 ItemConnectionBase::ItemConnectionBase( ItemConnFlags nFlags ) :
     mnFlags( nFlags )
@@ -254,9 +254,9 @@ TriState ItemConnectionBase::GetShowState( bool bKnown ) const
     return lclConvertToTriState( bKnown, (mnFlags & ITEMCONN_SHOW_KNOWN) != 0, (mnFlags & ITEMCONN_HIDE_UNKNOWN) != 0 );
 }
 
-// ============================================================================
+
 // Standard connections
-// ============================================================================
+
 
 DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, Window& rWindow, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
@@ -280,9 +280,9 @@ bool DummyItemConnection::FillItemSet( SfxItemSet& /*rDestSet*/, const SfxItemSe
     return false;   // item set not changed
 }
 
-// ============================================================================
+
 // Array of connections
-// ============================================================================
+
 
 class ItemConnectionArrayImpl
 {
@@ -358,7 +358,7 @@ bool ItemConnectionArray::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& r
     return mxImpl->FillItemSet( rDestSet, rOldSet );
 }
 
-// ============================================================================
+
 
 } // namespace sfx
 

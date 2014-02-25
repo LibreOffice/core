@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem _SwitchViewShell0 SID_VIEWSHELL0
 
 [
@@ -43,7 +43,7 @@ SfxBoolItem _SwitchViewShell0 SID_VIEWSHELL0
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem _SwitchViewShell1 SID_VIEWSHELL1
 
 [
@@ -70,7 +70,7 @@ SfxBoolItem _SwitchViewShell1 SID_VIEWSHELL1
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem _SwitchViewShell2 SID_VIEWSHELL2
 
 [
@@ -97,7 +97,7 @@ SfxBoolItem _SwitchViewShell2 SID_VIEWSHELL2
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem _SwitchViewShell3 SID_VIEWSHELL3
 
 [
@@ -124,7 +124,7 @@ SfxBoolItem _SwitchViewShell3 SID_VIEWSHELL3
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem _SwitchViewShell4 SID_VIEWSHELL4
 
 [
@@ -151,7 +151,7 @@ SfxBoolItem _SwitchViewShell4 SID_VIEWSHELL4
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem About SID_ABOUT
 ()
 [
@@ -176,7 +176,7 @@ SfxVoidItem About SID_ABOUT
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem Activate SID_ACTIVATE
 ()
 [
@@ -201,7 +201,7 @@ SfxObjectItem Activate SID_ACTIVATE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ActiveHelp SID_HELPBALLOONS
 
 [
@@ -228,7 +228,7 @@ SfxBoolItem ActiveHelp SID_HELPBALLOONS
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item ActualStyleFamily SID_STYLE_FAMILY
 
 [
@@ -255,7 +255,7 @@ SfxUInt16Item ActualStyleFamily SID_STYLE_FAMILY
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem NewDoc SID_NEWDOC
 (SfxStringItem Region SID_TEMPLATE_REGIONNAME,SfxStringItem Name SID_TEMPLATE_NAME)
 [
@@ -283,7 +283,7 @@ SfxObjectItem NewDoc SID_NEWDOC
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AddBookmark SID_CREATELINK
 (SfxStringItem URL SID_BOOKMARK_URL,SfxStringItem Title SID_BOOKMARK_TITLE)
 [
@@ -308,7 +308,7 @@ SfxVoidItem AddBookmark SID_CREATELINK
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem AddDirect SID_NEWDOCDIRECT
 ()
 [
@@ -336,7 +336,7 @@ SfxObjectItem AddDirect SID_NEWDOCDIRECT
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AddressBookSource SID_TEMPLATE_ADDRESSBOKSOURCE
 ()
 [
@@ -361,7 +361,7 @@ SfxVoidItem AddressBookSource SID_TEMPLATE_ADDRESSBOKSOURCE
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AddWatch SID_BASICIDE_ADDWATCH
 ()
 [
@@ -386,7 +386,7 @@ SfxVoidItem AddWatch SID_BASICIDE_ADDWATCH
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem Author SID_DOCINFO_AUTHOR
 
 [
@@ -413,7 +413,7 @@ SfxStringItem Author SID_DOCINFO_AUTHOR
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem AutoHide SID_AUTOHIDE
 
 [
@@ -440,7 +440,7 @@ SfxBoolItem AutoHide SID_AUTOHIDE
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AutoPilotMenu SID_AUTOPILOTMENU
 ()
 [
@@ -468,7 +468,7 @@ SfxVoidItem AutoPilotMenu SID_AUTOPILOTMENU
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Backspace SID_BACKSPACE
 ()
 [
@@ -493,7 +493,7 @@ SfxVoidItem Backspace SID_BACKSPACE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BasicBreak SID_BASICBREAK
 ()
 [
@@ -518,7 +518,7 @@ SfxVoidItem BasicBreak SID_BASICBREAK
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BasicIDEAppear SID_BASICIDE_APPEAR
 (SfxStringItem Document SID_BASICIDE_ARG_DOCUMENT,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME,
  SfxStringItem Name SID_BASICIDE_ARG_NAME,SfxStringItem Type SID_BASICIDE_ARG_TYPE,
@@ -546,7 +546,7 @@ SfxVoidItem BasicIDEAppear SID_BASICIDE_APPEAR
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BasicStepInto SID_BASICSTEPINTO
 ()
 [
@@ -571,7 +571,7 @@ SfxVoidItem BasicStepInto SID_BASICSTEPINTO
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BasicStepOut SID_BASICSTEPOUT
 ()
 [
@@ -596,7 +596,7 @@ SfxVoidItem BasicStepOut SID_BASICSTEPOUT
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BasicStepOver SID_BASICSTEPOVER
 ()
 [
@@ -621,7 +621,7 @@ SfxVoidItem BasicStepOver SID_BASICSTEPOVER
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BasicStop SID_BASICSTOP
 ()
 [
@@ -646,7 +646,7 @@ SfxVoidItem BasicStop SID_BASICSTOP
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Beamer SID_BROWSER
 
 [
@@ -673,7 +673,7 @@ SfxBoolItem Beamer SID_BROWSER
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BreakPointsChanged SID_BASICIDE_BRKPNTSCHANGED
 ()
 [
@@ -698,7 +698,7 @@ SfxVoidItem BreakPointsChanged SID_BASICIDE_BRKPNTSCHANGED
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BrowseBackward SID_BROWSE_BACKWARD
 (SfxUInt16Item nSteps SID_BROWSE_BACKWARD)
 [
@@ -726,7 +726,7 @@ SfxVoidItem BrowseBackward SID_BROWSE_BACKWARD
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BrowseForward SID_BROWSE_FORWARD
 (SfxUInt16Item nSteps SID_BROWSE_FORWARD)
 [
@@ -754,7 +754,7 @@ SfxVoidItem BrowseForward SID_BROWSE_FORWARD
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem BrowseView SID_BROWSER_MODE
 
 [
@@ -781,7 +781,7 @@ SfxBoolItem BrowseView SID_BROWSER_MODE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt32Item BuildVersion SID_BUILD_VERSION
 
 [
@@ -808,7 +808,7 @@ SfxUInt32Item BuildVersion SID_BUILD_VERSION
     GroupId = GID_INTERN;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem Caption SID_CAPTION
 
 [
@@ -835,7 +835,7 @@ SfxStringItem Caption SID_CAPTION
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxTemplateItem CharStyle SID_STYLE_FAMILY1
 
 [
@@ -862,7 +862,7 @@ SfxTemplateItem CharStyle SID_STYLE_FAMILY1
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem ChooseMacro SID_BASICIDE_CHOOSEMACRO
 ()
 [
@@ -887,7 +887,7 @@ SfxStringItem ChooseMacro SID_BASICIDE_CHOOSEMACRO
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ClearHistory SID_CLEARHISTORY
 ()
 [
@@ -912,7 +912,7 @@ SfxVoidItem ClearHistory SID_CLEARHISTORY
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CloseWins SID_CLOSEWINS
 ()
 [
@@ -937,7 +937,7 @@ SfxBoolItem CloseWins SID_CLOSEWINS
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CloseDocs SID_CLOSEDOCS
 ()
 [
@@ -962,7 +962,7 @@ SfxVoidItem CloseDocs SID_CLOSEDOCS
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CloseDoc SID_CLOSEDOC
 (SfxBoolItem saveChanges SID_CLOSEDOC_SAVE,SfxStringItem fileName SID_CLOSEDOC_FILENAME)
 [
@@ -990,7 +990,7 @@ SfxBoolItem CloseDoc SID_CLOSEDOC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CloseWin SID_CLOSEWIN
 ()
 [
@@ -1015,7 +1015,7 @@ SfxVoidItem CloseWin SID_CLOSEWIN
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Closing SID_CLOSING
 
 [
@@ -1042,7 +1042,7 @@ SfxBoolItem Closing SID_CLOSING
     GroupId = GID_INTERN;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem Comments SID_DOCINFO_COMMENTS
 
 [
@@ -1069,7 +1069,7 @@ SfxStringItem Comments SID_DOCINFO_COMMENTS
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item CompareDocuments SID_DOCUMENT_COMPARE
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION)
 [
@@ -1094,7 +1094,7 @@ SfxInt32Item CompareDocuments SID_DOCUMENT_COMPARE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CompileBasic SID_BASICCOMPILE
 ()
 [
@@ -1119,7 +1119,7 @@ SfxVoidItem CompileBasic SID_BASICCOMPILE
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ConfigureDialog SID_CONFIG
 (SfxStringItem ResourceURL SID_CONFIG)
 [
@@ -1144,7 +1144,7 @@ SfxVoidItem ConfigureDialog SID_CONFIG
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem Context SID_CONTEXT
 
 [
@@ -1171,7 +1171,7 @@ SfxStringItem Context SID_CONTEXT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Copy SID_COPY
 ()
 [
@@ -1196,7 +1196,7 @@ SfxVoidItem Copy SID_COPY
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Crash SID_CRASH
 (SfxBoolItem Direct SID_CRASH)
 [
@@ -1221,7 +1221,7 @@ SfxVoidItem Crash SID_CRASH
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CreateMacro SID_BASICIDE_CREATEMACRO
 (SfxMacroInfoItem aMacroInfo SID_BASICIDE_ARG_MACROINFO)
 [
@@ -1246,7 +1246,7 @@ SfxVoidItem CreateMacro SID_BASICIDE_CREATEMACRO
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem CurrentURL SID_CURRENT_URL
 
 [
@@ -1273,7 +1273,7 @@ SfxStringItem CurrentURL SID_CURRENT_URL
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CursorEndOfScreen SID_CURSORENDOFSCREEN
 ()
 [
@@ -1298,7 +1298,7 @@ SfxVoidItem CursorEndOfScreen SID_CURSORENDOFSCREEN
     GroupId = GID_INTERN;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem CursorTopOfScreen SID_CURSORTOPOFSCREEN
 ()
 [
@@ -1323,7 +1323,7 @@ SfxVoidItem CursorTopOfScreen SID_CURSORTOPOFSCREEN
     GroupId = GID_INTERN;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem CustomerNumber SID_OFFICE_CUSTOMERNUMBER
 
 [
@@ -1350,7 +1350,7 @@ SfxStringItem CustomerNumber SID_OFFICE_CUSTOMERNUMBER
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Cut SID_CUT
 ()
 [
@@ -1375,7 +1375,7 @@ SfxVoidItem Cut SID_CUT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem DefaultFilePath SID_DEFAULTFILEPATH
 
 [
@@ -1402,7 +1402,7 @@ SfxStringItem DefaultFilePath SID_DEFAULTFILEPATH
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem DefaultFileName SID_DEFAULTFILENAME
 
 [
@@ -1429,7 +1429,7 @@ SfxStringItem DefaultFileName SID_DEFAULTFILENAME
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Delete SID_DELETE
 ()
 [
@@ -1454,7 +1454,7 @@ SfxVoidItem Delete SID_DELETE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem DeleteCurrent SID_BASICIDE_DELETECURRENT
 ()
 [
@@ -1479,7 +1479,7 @@ SfxVoidItem DeleteCurrent SID_BASICIDE_DELETECURRENT
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item DeleteStyle SID_STYLE_DELETE
 (SfxStringItem Param SID_STYLE_DELETE,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
@@ -1504,7 +1504,7 @@ SfxUInt16Item DeleteStyle SID_STYLE_DELETE
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DesignerDialog SID_STYLE_DESIGNER
 
 [
@@ -1532,7 +1532,7 @@ SfxBoolItem DesignerDialog SID_STYLE_DESIGNER
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
 ()
 [
@@ -1557,7 +1557,7 @@ SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem EditDoc SID_EDITDOC
 (SfxBoolItem Editable SID_EDITDOC)
 [
@@ -1582,7 +1582,7 @@ SfxBoolItem EditDoc SID_EDITDOC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem EditMacro SID_BASICIDE_EDITMACRO
 (SfxMacroInfoItem aMacroInfo SID_BASICIDE_ARG_MACROINFO)
 [
@@ -1607,7 +1607,7 @@ SfxVoidItem EditMacro SID_BASICIDE_EDITMACRO
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item EditStyle SID_STYLE_EDIT
 (SfxStringItem Param SID_STYLE_EDIT,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
@@ -1632,7 +1632,7 @@ SfxUInt16Item EditStyle SID_STYLE_EDIT
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item HideStyle SID_STYLE_HIDE
 (SfxStringItem Param SID_STYLE_HIDE,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
@@ -1657,7 +1657,7 @@ SfxUInt16Item HideStyle SID_STYLE_HIDE
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item ShowStyle SID_STYLE_SHOW
 (SfxStringItem Param SID_STYLE_SHOW,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
@@ -1682,7 +1682,7 @@ SfxUInt16Item ShowStyle SID_STYLE_SHOW
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExecuteSearch FID_SEARCH_NOW
 (SvxSearchItem SearchItem SID_SEARCH_ITEM, SfxBoolItem Quiet SID_SEARCH_QUIET )
 [
@@ -1708,7 +1708,7 @@ SfxVoidItem ExecuteSearch FID_SEARCH_NOW
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ExtendedHelp SID_EXTENDEDHELP
 
 [
@@ -1735,7 +1735,7 @@ SfxBoolItem ExtendedHelp SID_EXTENDEDHELP
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem FileName SID_FILE_NAME
 
 [
@@ -1762,7 +1762,7 @@ SfxStringItem FileName SID_FILE_NAME
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FocusUrlBox SID_FOCUSURLBOX
 ()
 [
@@ -1790,7 +1790,7 @@ SfxVoidItem FocusUrlBox SID_FOCUSURLBOX
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem FormatMenu SID_FORMATMENU
 ()
 [
@@ -1815,7 +1815,7 @@ SfxVoidItem FormatMenu SID_FORMATMENU
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxTemplateItem FrameStyle SID_STYLE_FAMILY3
 
 [
@@ -1842,7 +1842,7 @@ SfxTemplateItem FrameStyle SID_STYLE_FAMILY3
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem FullName SID_PROGFILENAME
 
 [
@@ -1869,7 +1869,7 @@ SfxStringItem FullName SID_PROGFILENAME
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem FullName SID_DOCFULLNAME
 
 [
@@ -1896,7 +1896,7 @@ SfxStringItem FullName SID_DOCFULLNAME
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem FullScreen SID_WIN_FULLSCREEN
 
 [
@@ -1923,7 +1923,7 @@ SfxBoolItem FullScreen SID_WIN_FULLSCREEN
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomPageWidth SID_ZOOM_PAGE_WIDTH
 
 [
@@ -1951,7 +1951,7 @@ SfxVoidItem ZoomPageWidth SID_ZOOM_PAGE_WIDTH
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomOptimal SID_ZOOM_OPTIMAL
 
 [
@@ -1979,7 +1979,7 @@ SfxVoidItem ZoomOptimal SID_ZOOM_OPTIMAL
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomPage SID_ZOOM_ENTIRE_PAGE
 
 [
@@ -2007,7 +2007,7 @@ SfxVoidItem ZoomPage SID_ZOOM_ENTIRE_PAGE
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Zoom200Percent SID_ZOOM_200_PERCENT
 
 [
@@ -2035,7 +2035,7 @@ SfxVoidItem Zoom200Percent SID_ZOOM_200_PERCENT
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Zoom150Percent SID_ZOOM_150_PERCENT
 
 [
@@ -2063,7 +2063,7 @@ SfxVoidItem Zoom150Percent SID_ZOOM_150_PERCENT
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Zoom100Percent SID_ZOOM_100_PERCENT
 
 [
@@ -2091,7 +2091,7 @@ SfxVoidItem Zoom100Percent SID_ZOOM_100_PERCENT
 ]
 
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Zoom75Percent SID_ZOOM_75_PERCENT
 
 [
@@ -2118,7 +2118,7 @@ SfxVoidItem Zoom75Percent SID_ZOOM_75_PERCENT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Zoom50Percent SID_ZOOM_50_PERCENT
 
 [
@@ -2145,7 +2145,7 @@ SfxVoidItem Zoom50Percent SID_ZOOM_50_PERCENT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem GetFrameWindow SID_FILLFRAME
 (SfxStringItem WindowName SID_FILLFRAME)
 [
@@ -2170,7 +2170,7 @@ SfxObjectItem GetFrameWindow SID_FILLFRAME
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoDown SID_CURSORDOWN
 (SfxInt16Item By SID_CURSORDOWN)
 [
@@ -2195,7 +2195,7 @@ SfxVoidItem GoDown SID_CURSORDOWN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoDownBlock SID_CURSORPAGEDOWN
 (SfxInt16Item By SID_CURSORPAGEDOWN,SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2220,7 +2220,7 @@ SfxVoidItem GoDownBlock SID_CURSORPAGEDOWN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoDownBlockSel SID_CURSORPAGEDOWN_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
@@ -2245,7 +2245,7 @@ SfxVoidItem GoDownBlockSel SID_CURSORPAGEDOWN_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoDownSel SID_CURSORDOWN_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
@@ -2270,7 +2270,7 @@ SfxVoidItem GoDownSel SID_CURSORDOWN_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoLeft SID_CURSORLEFT
 (SfxInt16Item By SID_CURSORLEFT,SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2295,7 +2295,7 @@ SfxVoidItem GoLeft SID_CURSORLEFT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoLeftBlock SID_CURSORPAGELEFT
 (SfxInt16Item By FN_PARAM_1,SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2320,7 +2320,7 @@ SfxVoidItem GoLeftBlock SID_CURSORPAGELEFT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoLeftBlockSel SID_CURSORPAGELEFT_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
@@ -2345,7 +2345,7 @@ SfxVoidItem GoLeftBlockSel SID_CURSORPAGELEFT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoLeftSel SID_CURSORLEFT_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
@@ -2370,7 +2370,7 @@ SfxVoidItem GoLeftSel SID_CURSORLEFT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoRight SID_CURSORRIGHT
 (SfxInt16Item By SID_CURSORRIGHT,SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2395,7 +2395,7 @@ SfxVoidItem GoRight SID_CURSORRIGHT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoRightSel SID_CURSORRIGHT_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
@@ -2420,7 +2420,7 @@ SfxVoidItem GoRightSel SID_CURSORRIGHT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoToEndOfData SID_CURSORENDOFFILE
 (SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2445,7 +2445,7 @@ SfxVoidItem GoToEndOfData SID_CURSORENDOFFILE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoToEndOfDataSel SID_CURSORENDOFFILE_SEL
 ()
 [
@@ -2470,7 +2470,7 @@ SfxVoidItem GoToEndOfDataSel SID_CURSORENDOFFILE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoToEndOfRow SID_CURSOREND
 (SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2495,7 +2495,7 @@ SfxVoidItem GoToEndOfRow SID_CURSOREND
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoToEndOfRowSel SID_CURSOREND_SEL
 ()
 [
@@ -2520,7 +2520,7 @@ SfxVoidItem GoToEndOfRowSel SID_CURSOREND_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoToStart SID_CURSORTOPOFFILE
 (SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2545,7 +2545,7 @@ SfxVoidItem GoToStart SID_CURSORTOPOFFILE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoToStartOfRow SID_CURSORHOME
 ()
 [
@@ -2570,7 +2570,7 @@ SfxVoidItem GoToStartOfRow SID_CURSORHOME
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoToStartOfRowSel SID_CURSORHOME_SEL
 ()
 [
@@ -2595,7 +2595,7 @@ SfxVoidItem GoToStartOfRowSel SID_CURSORHOME_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoToStartSel SID_CURSORTOPOFFILE_SEL
 ()
 [
@@ -2620,7 +2620,7 @@ SfxVoidItem GoToStartSel SID_CURSORTOPOFFILE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoUp SID_CURSORUP
 (SfxInt16Item By SID_CURSORUP,SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2645,7 +2645,7 @@ SfxVoidItem GoUp SID_CURSORUP
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoUpBlock SID_CURSORPAGEUP
 (SfxInt16Item By SID_CURSORPAGEUP,SfxBoolItem Sel FN_PARAM_2)
 [
@@ -2670,7 +2670,7 @@ SfxVoidItem GoUpBlock SID_CURSORPAGEUP
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoUpBlockSel SID_CURSORPAGEUP_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
@@ -2695,7 +2695,7 @@ SfxVoidItem GoUpBlockSel SID_CURSORPAGEUP_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem GoUpSel SID_CURSORUP_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
@@ -2720,7 +2720,7 @@ SfxVoidItem GoUpSel SID_CURSORUP_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpAnnotate SID_HELP_ANNOTATE
 ()
 [
@@ -2745,7 +2745,7 @@ SfxVoidItem HelpAnnotate SID_HELP_ANNOTATE
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpBookmark SID_HELP_BOOKMARK
 ()
 [
@@ -2770,7 +2770,7 @@ SfxVoidItem HelpBookmark SID_HELP_BOOKMARK
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem HelpChooseFile SID_HELP_HELPFILEBOX
 
 [
@@ -2800,7 +2800,7 @@ SfxStringItem HelpChooseFile SID_HELP_HELPFILEBOX
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpDownload SID_HELP_DOWNLOAD
 ()
 [
@@ -2825,7 +2825,7 @@ SfxVoidItem HelpDownload SID_HELP_DOWNLOAD
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpIndex SID_HELPINDEX
 ()
 [
@@ -2850,7 +2850,7 @@ SfxVoidItem HelpIndex SID_HELPINDEX
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpMenu SID_HELPMENU
 ()
 [
@@ -2875,7 +2875,7 @@ SfxVoidItem HelpMenu SID_HELPMENU
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpOnHelp SID_HELPONHELP
 ()
 [
@@ -2900,7 +2900,7 @@ SfxVoidItem HelpOnHelp SID_HELPONHELP
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpSearch SID_HELP_SEARCH
 ()
 [
@@ -2925,7 +2925,7 @@ SfxVoidItem HelpSearch SID_HELP_SEARCH
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem HelpTip SID_HELPTIPS
 
 [
@@ -2952,7 +2952,7 @@ SfxBoolItem HelpTip SID_HELPTIPS
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpZoomIn SID_HELP_ZOOMIN
 ()
 [
@@ -2977,7 +2977,7 @@ SfxVoidItem HelpZoomIn SID_HELP_ZOOMIN
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpZoomOut SID_HELP_ZOOMOUT
 ()
 [
@@ -3002,7 +3002,7 @@ SfxVoidItem HelpZoomOut SID_HELP_ZOOMOUT
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HideCurPage SID_BASICIDE_HIDECURPAGE
 ()
 [
@@ -3027,7 +3027,7 @@ SfxVoidItem HideCurPage SID_BASICIDE_HIDECURPAGE
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem HyperlinkDialog SID_HYPERLINK_DIALOG
 
 [
@@ -3054,7 +3054,7 @@ SfxBoolItem HyperlinkDialog SID_HYPERLINK_DIALOG
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem InsertDoc SID_INSERTDOC
 (SfxStringItem Name SID_INSERTDOC,SfxStringItem Filter FN_PARAM_1)
 [
@@ -3079,7 +3079,7 @@ SfxBoolItem InsertDoc SID_INSERTDOC
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertObjectFloatingFrame SID_INSERT_FLOATINGFRAME
 (
     SfxStringItem Name          FN_PARAM_1,
@@ -3110,7 +3110,7 @@ SfxVoidItem InsertObjectFloatingFrame SID_INSERT_FLOATINGFRAME
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem IsLoading SID_DOC_LOADING
 
 [
@@ -3137,7 +3137,7 @@ SfxBoolItem IsLoading SID_DOC_LOADING
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem IsLoadingImages SID_IMG_LOADING
 
 [
@@ -3164,7 +3164,7 @@ SfxBoolItem IsLoadingImages SID_IMG_LOADING
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem IsPrinting SID_PRINTOUT
 [
     SfxVoidItem PrintOut(SfxInt16Item from SID_PRINT_FIRST_PAGE,SfxInt16Item to SID_PRINT_LAST_PAGE,SfxInt16Item copies SID_PRINT_COPIES,SfxBoolItem silent SID_SILENT);
@@ -3192,7 +3192,7 @@ SfxBoolItem IsPrinting SID_PRINTOUT
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem JumpToMark SID_JUMPTOMARK
 (SfxStringItem Bookmark SID_JUMPTOMARK)
 [
@@ -3217,7 +3217,7 @@ SfxVoidItem JumpToMark SID_JUMPTOMARK
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem Keywords SID_DOCINFO_KEYWORDS
 
 [
@@ -3244,7 +3244,7 @@ SfxStringItem Keywords SID_DOCINFO_KEYWORDS
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
@@ -3272,7 +3272,7 @@ SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
@@ -3300,7 +3300,7 @@ SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem LibSelect SID_BASICIDE_LIBSELECTED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
@@ -3328,7 +3328,7 @@ SfxStringItem LibSelect SID_BASICIDE_LIBSELECTED
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem LibSelector SID_BASICIDE_LIBSELECTOR
 
 [
@@ -3355,7 +3355,7 @@ SfxStringItem LibSelector SID_BASICIDE_LIBSELECTOR
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LoadAccel SID_CONFIGACCEL
 (SfxStringItem FileName SID_CFGFILE)
 [
@@ -3380,7 +3380,7 @@ SfxVoidItem LoadAccel SID_CONFIGACCEL
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LoadBasic SID_BASICLOAD
 ()
 [
@@ -3405,7 +3405,7 @@ SfxVoidItem LoadBasic SID_BASICLOAD
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LoadConfiguration SID_LOADCONFIG
 (SfxStringItem FileName SID_CFGFILE)
 [
@@ -3430,7 +3430,7 @@ SfxVoidItem LoadConfiguration SID_LOADCONFIG
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LoadEvents SID_CONFIGEVENT
 (SfxStringItem FileName SID_CFGFILE)
 [
@@ -3455,7 +3455,7 @@ SfxVoidItem LoadEvents SID_CONFIGEVENT
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LoadMenu SID_CONFIGMENU
 (SfxStringItem FileName SID_CFGFILE)
 [
@@ -3480,7 +3480,7 @@ SfxVoidItem LoadMenu SID_CONFIGMENU
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LoadStatusBar SID_CONFIGSTATUSBAR
 (SfxStringItem FileName SID_CFGFILE)
 [
@@ -3505,7 +3505,7 @@ SfxVoidItem LoadStatusBar SID_CONFIGSTATUSBAR
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem LoadToolBox SID_TOOLBOXOPTIONS
 ()
 [
@@ -3530,7 +3530,7 @@ SfxVoidItem LoadToolBox SID_TOOLBOXOPTIONS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Logout SID_LOGOUT
 ()
 [
@@ -3558,7 +3558,7 @@ SfxVoidItem Logout SID_LOGOUT
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ScriptOrganizer SID_SCRIPTORGANIZER
 (SfxScriptOrganizerItem ScriptOrganizer SID_SCRIPTORGANIZER)
 [
@@ -3586,7 +3586,7 @@ SfxVoidItem ScriptOrganizer SID_SCRIPTORGANIZER
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem MacroOrganizer SID_MACROORGANIZER
 (SfxUInt16Item TabId SID_MACROORGANIZER)
 [
@@ -3614,7 +3614,7 @@ SfxVoidItem MacroOrganizer SID_MACROORGANIZER
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ReccomendReadonly SID_RECOMMENDREADONLY
 
 [
@@ -3666,7 +3666,7 @@ SfxBoolItem ShowLines SID_SHOWLINES
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RunMacro SID_RUNMACRO
 ()
 [
@@ -3715,7 +3715,7 @@ SfxVoidItem GotoLine SID_GOTOLINE
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem MacroDialog SID_BASICCHOOSER
 ()
 [
@@ -3740,7 +3740,7 @@ SfxVoidItem MacroDialog SID_BASICCHOOSER
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item MailReceipt SID_MAIL_NOTIFY
 
 [
@@ -3767,7 +3767,7 @@ SfxUInt16Item MailReceipt SID_MAIL_NOTIFY
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
 ()
 [
@@ -3792,7 +3792,7 @@ SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem MenuBarVisible SID_TOGGLE_MENUBAR
 
 [
@@ -3819,7 +3819,7 @@ SfxBoolItem MenuBarVisible SID_TOGGLE_MENUBAR
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt32Item MergeDocuments SID_DOCUMENT_MERGE
 (SfxStringItem URL SID_FILE_NAME,SfxInt16Item Version SID_VERSION)
 [
@@ -3844,7 +3844,7 @@ SfxInt32Item MergeDocuments SID_DOCUMENT_MERGE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item MetricUnit SID_ATTR_METRIC
 
 [
@@ -3871,7 +3871,7 @@ SfxUInt16Item MetricUnit SID_ATTR_METRIC
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ApplyCharUnit SID_ATTR_APPLYCHARUNIT
 
 [
@@ -3898,7 +3898,7 @@ SfxBoolItem ApplyCharUnit SID_ATTR_APPLYCHARUNIT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Modified SID_MODIFIED
 
 [
@@ -3925,7 +3925,7 @@ SfxBoolItem Modified SID_MODIFIED
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ModifiedStatus SID_DOC_MODIFIED
 
 [
@@ -3952,7 +3952,7 @@ SfxBoolItem ModifiedStatus SID_DOC_MODIFIED
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ModuleDialog SID_BASICIDE_MODULEDLG
 ()
 [
@@ -3977,7 +3977,7 @@ SfxVoidItem ModuleDialog SID_BASICIDE_MODULEDLG
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem NameChangedOnTab SID_BASICIDE_NAMECHANGEDONTAB
 (SfxUInt16Item TabId SID_BASICIDE_ARG_TABID,SfxStringItem NewName SID_BASICIDE_ARG_MODULENAME)
 [
@@ -4002,7 +4002,7 @@ SfxVoidItem NameChangedOnTab SID_BASICIDE_NAMECHANGEDONTAB
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Navigator SID_NAVIGATOR
 
 [
@@ -4029,7 +4029,7 @@ SfxBoolItem Navigator SID_NAVIGATOR
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TaskPane SID_TASKPANE
 [
     /* flags: */
@@ -4055,7 +4055,7 @@ SfxBoolItem TaskPane SID_TASKPANE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Sidebar SID_SIDEBAR
 [
     /* flags: */
@@ -4081,7 +4081,7 @@ SfxBoolItem Sidebar SID_SIDEBAR
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RestoreEditingView SID_RESTORE_EDITING_VIEW
 
 [
@@ -4108,7 +4108,7 @@ SfxVoidItem RestoreEditingView SID_RESTORE_EDITING_VIEW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem NewDialog SID_BASICIDE_NEWDIALOG
 ()
 [
@@ -4133,7 +4133,7 @@ SfxVoidItem NewDialog SID_BASICIDE_NEWDIALOG
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem NewModule SID_BASICIDE_NEWMODULE
 ()
 [
@@ -4158,7 +4158,7 @@ SfxVoidItem NewModule SID_BASICIDE_NEWMODULE
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem NewObject SID_CREATE_BASICOBJECT
 (SfxStringItem ClassName SID_CREATE_BASICOBJECT)
 [
@@ -4183,7 +4183,7 @@ SfxObjectItem NewObject SID_CREATE_BASICOBJECT
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item NewStyle SID_STYLE_NEW
 (SfxStringItem Param SID_STYLE_NEW,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
@@ -4208,7 +4208,7 @@ SfxUInt16Item NewStyle SID_STYLE_NEW
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem NewWindow SID_NEWWINDOW
 ()
 [
@@ -4233,7 +4233,7 @@ SfxVoidItem NewWindow SID_NEWWINDOW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ObjectCatalog SID_BASICIDE_OBJCAT
 ()
 [
@@ -4258,7 +4258,7 @@ SfxVoidItem ObjectCatalog SID_BASICIDE_OBJCAT
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem ObjectMenue SID_OBJECT
 (SfxUInt16Item VerbID SID_OBJECT)
 [
@@ -4285,7 +4285,7 @@ SfxStringItem ObjectMenue SID_OBJECT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem Open SID_OPENDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER,SfxStringItem SuggestedSaveAsDir SID_DEFAULTFILEPATH,SfxStringItem SuggestedSaveAsName SID_DEFAULTFILENAME)
 [
@@ -4337,7 +4337,7 @@ SfxObjectItem WebHtml SID_WEBHTML
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem OpenHyperlink SID_OPENHYPERLINK
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER)
 [
@@ -4362,7 +4362,7 @@ SfxObjectItem OpenHyperlink SID_OPENHYPERLINK
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem DocInfoTitle SID_DOCINFO_TITLE
 
 [
@@ -4389,7 +4389,7 @@ SfxStringItem DocInfoTitle SID_DOCINFO_TITLE
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxObjectItem OpenTemplate SID_OPENTEMPLATE
 (SfxStringItem Region SID_TEMPLATE_REGIONNAME,SfxStringItem Name SID_TEMPLATE_NAME)
 [
@@ -4486,7 +4486,7 @@ SfxVoidItem CheckIn SID_CHECKIN
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem OpenUrl SID_OPENURL
 
 [
@@ -4516,7 +4516,7 @@ SfxStringItem OpenUrl SID_OPENURL
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Options SID_OPTIONS
 ()
 [
@@ -4565,7 +4565,7 @@ SfxVoidItem TemplateManager SID_TEMPLATE_MANAGER
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxTemplateItem PageStyle SID_STYLE_FAMILY4
 
 [
@@ -4592,7 +4592,7 @@ SfxTemplateItem PageStyle SID_STYLE_FAMILY4
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxTemplateItem ParaStyle SID_STYLE_FAMILY2
 
 [
@@ -4619,7 +4619,7 @@ SfxTemplateItem ParaStyle SID_STYLE_FAMILY2
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem PartWindow SID_PARTWIN
 
 [
@@ -4646,7 +4646,7 @@ SfxBoolItem PartWindow SID_PARTWIN
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Paste SID_PASTE
 ()
 [
@@ -4671,7 +4671,7 @@ SfxVoidItem Paste SID_PASTE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
 (SfxUInt32Item SelectedFormat SID_CLIPBOARD_FORMAT_ITEMS)
 [
@@ -4699,7 +4699,7 @@ SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt16Item PasteSpecial SID_PASTE_SPECIAL
 (SfxUInt32Item Format SID_PASTE_SPECIAL)
 [
@@ -4820,7 +4820,7 @@ SfxVoidItem PasteOnlyValue SID_PASTE_ONLY_VALUE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem DocPath SID_DOCPATH
 
 [
@@ -4847,7 +4847,7 @@ SfxStringItem DocPath SID_DOCPATH
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem PickList SID_PICKLIST
 ()
 [
@@ -4872,7 +4872,7 @@ SfxVoidItem PickList SID_PICKLIST
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem PlugInsActive SID_PLUGINS_ACTIVE
 
 [
@@ -4899,7 +4899,7 @@ SfxBoolItem PlugInsActive SID_PLUGINS_ACTIVE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Print SID_PRINTDOC
 (SfxStringItem PrinterName SID_PRINTER_NAME,SfxStringItem FileName SID_FILE_NAME,SfxInt16Item From SID_PRINT_FIRST_PAGE,SfxInt16Item To SID_PRINT_LAST_PAGE,SfxInt16Item Copies SID_PRINT_COPIES,SfxStringItem RangeText SID_PRINT_PAGES,SfxBoolItem Selection SID_SELECTION,SfxBoolItem Asynchron SID_ASYNCHRON,SfxBoolItem Collate SID_PRINT_COLLATE,SfxBoolItem Silent SID_SILENT)
 [
@@ -4924,7 +4924,7 @@ SfxBoolItem Print SID_PRINTDOC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem PrintDefault SID_PRINTDOCDIRECT
 ()
 [
@@ -4949,7 +4949,7 @@ SfxBoolItem PrintDefault SID_PRINTDOCDIRECT
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem Printer SID_PRINTER_NAME
 
 [
@@ -4976,7 +4976,7 @@ SfxStringItem Printer SID_PRINTER_NAME
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem PrinterSetup SID_SETUPPRINTER
 ()
 [
@@ -5001,7 +5001,7 @@ SfxVoidItem PrinterSetup SID_SETUPPRINTER
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem PrintPreview SID_PRINTPREVIEW
 
 [
@@ -5028,7 +5028,7 @@ SfxBoolItem PrintPreview SID_PRINTPREVIEW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SetDocumentProperties SID_DOCINFO
 (SfxDocumentInfoItem Properties SID_DOCINFO)
 [
@@ -5053,7 +5053,7 @@ SfxVoidItem SetDocumentProperties SID_DOCINFO
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Quit SID_QUITAPP
 ()
 [
@@ -5081,7 +5081,7 @@ SfxVoidItem Quit SID_QUITAPP
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ReadOnly SID_DOC_READONLY
 
 [
@@ -5108,7 +5108,7 @@ SfxBoolItem ReadOnly SID_DOC_READONLY
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem MacroRecorder SID_RECORDMACRO
 
 [
@@ -5135,7 +5135,7 @@ SfxBoolItem MacroRecorder SID_RECORDMACRO
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem StopRecording SID_STOP_RECORDING
 (SfxBoolItem DontRecord FN_PARAM_1)
 [
@@ -5160,7 +5160,7 @@ SfxVoidItem StopRecording SID_STOP_RECORDING
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
 
 [
@@ -5187,7 +5187,7 @@ SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Redo SID_REDO
 ( SfxUInt16Item Redo SID_REDO )
 [
@@ -5215,7 +5215,7 @@ SfxVoidItem Redo SID_REDO
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ReleaseObject SID_DELETE_BASICOBJECT
 (SfxObjectItem Object SID_DELETE_BASICOBJECT)
 [
@@ -5240,7 +5240,7 @@ SfxVoidItem ReleaseObject SID_DELETE_BASICOBJECT
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Reload SID_RELOAD
 ()
 [
@@ -5268,7 +5268,7 @@ SfxBoolItem Reload SID_RELOAD
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RemoveWatch SID_BASICIDE_REMOVEWATCH
 ()
 [
@@ -5293,7 +5293,7 @@ SfxVoidItem RemoveWatch SID_BASICIDE_REMOVEWATCH
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RenameCurrent SID_BASICIDE_RENAMECURRENT
 ()
 [
@@ -5318,7 +5318,7 @@ SfxVoidItem RenameCurrent SID_BASICIDE_RENAMECURRENT
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Repaint SID_REPAINT
 ()
 [
@@ -5343,7 +5343,7 @@ SfxVoidItem Repaint SID_REPAINT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem RepeatAction SID_REPEAT
 [
     SfxVoidItem Repeat();
@@ -5371,7 +5371,7 @@ SfxStringItem RepeatAction SID_REPEAT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem RubyDialog SID_RUBY_DIALOG
 
 [
@@ -5398,7 +5398,7 @@ SfxBoolItem RubyDialog SID_RUBY_DIALOG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RunBasic SID_BASICRUN
 ()
 [
@@ -5423,7 +5423,7 @@ SfxVoidItem RunBasic SID_BASICRUN
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Save SID_SAVEDOC
 (SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR)
 [
@@ -5451,7 +5451,7 @@ SfxBoolItem Save SID_SAVEDOC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SaveAll SID_SAVEDOCS
 ()
 [
@@ -5476,7 +5476,7 @@ SfxBoolItem SaveAll SID_SAVEDOCS
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SaveAs SID_SAVEASDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxBoolItem PasswordInteraction SID_PASSWORDINTERACTION,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
 [
@@ -5504,7 +5504,7 @@ SfxBoolItem SaveAs SID_SAVEASDOC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
 (SfxStringItem TemplateRegion SID_TEMPLATE_REGIONNAME,SfxStringItem TemplateName SID_TEMPLATE_NAME)
 [
@@ -5529,7 +5529,7 @@ SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 
 SfxBoolItem SaveACopy SID_SAVEACOPY
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxBoolItem Overwrite SID_OVERWRITE, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxBoolItem SaveACopy SID_SAVEACOPYITEM)
@@ -5554,7 +5554,7 @@ SfxBoolItem SaveACopy SID_SAVEACOPY
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem SaveBasicAs SID_BASICSAVEAS
 ()
 [
@@ -5579,7 +5579,7 @@ SfxVoidItem SaveBasicAs SID_BASICSAVEAS
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ExportDialog SID_EXPORT_DIALOG
 ()
 [
@@ -5604,7 +5604,7 @@ SfxVoidItem ExportDialog SID_EXPORT_DIALOG
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ImportDialog SID_IMPORT_DIALOG
 ()
 [
@@ -5629,7 +5629,7 @@ SfxVoidItem ImportDialog SID_IMPORT_DIALOG
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SaveConfiguration SID_SAVECONFIG
 (SfxStringItem FileName SID_CFGFILE)
 [
@@ -5654,7 +5654,7 @@ SfxVoidItem SaveConfiguration SID_SAVECONFIG
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Saved SID_DOC_SAVED
 
 [
@@ -5681,7 +5681,7 @@ SfxBoolItem Saved SID_DOC_SAVED
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SbxDeleted SID_BASICIDE_SBXDELETED
 (SbxItem Sbx SID_BASICIDE_ARG_SBX)
 [
@@ -5706,7 +5706,7 @@ SfxVoidItem SbxDeleted SID_BASICIDE_SBXDELETED
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SbxInserted SID_BASICIDE_SBXINSERTED
 (SbxItem Sbx SID_BASICIDE_ARG_SBX)
 [
@@ -5731,7 +5731,7 @@ SfxVoidItem SbxInserted SID_BASICIDE_SBXINSERTED
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SbxRenamed SID_BASICIDE_SBXRENAMED
 ()
 [
@@ -5756,7 +5756,7 @@ SfxVoidItem SbxRenamed SID_BASICIDE_SBXRENAMED
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ScrollBodyPageDown SID_MAIL_SCROLLBODY_PAGEDOWN
 ()
 [
@@ -5781,7 +5781,7 @@ SfxBoolItem ScrollBodyPageDown SID_MAIL_SCROLLBODY_PAGEDOWN
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SearchDialog SID_SEARCH_DLG
 [
     /* flags: */
@@ -5806,7 +5806,7 @@ SfxBoolItem SearchDialog SID_SEARCH_DLG
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item SearchOptions SID_SEARCH_OPTIONS
 
 [
@@ -5833,7 +5833,7 @@ SfxUInt16Item SearchOptions SID_SEARCH_OPTIONS
     GroupId = GID_INTERN;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxSearchItem SearchProperties SID_SEARCH_ITEM
 
 [
@@ -5860,7 +5860,7 @@ SvxSearchItem SearchProperties SID_SEARCH_ITEM
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SelectAll SID_SELECTALL
 ()
 [
@@ -5885,7 +5885,7 @@ SfxVoidItem SelectAll SID_SELECTALL
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SendFax FN_FAX
 ()
 [
@@ -5910,7 +5910,7 @@ SfxVoidItem SendFax FN_FAX
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SendMail SID_MAIL_SENDDOC
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY,SfxBoolItem AttachedDoc SID_MAIL_ATTACH,SfxStringItem AttachFiles SID_MAIL_ATTACH_FILE)
 [
@@ -6074,7 +6074,7 @@ SfxBoolItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SetOptions SID_SETOPTIONS
 ()
 [
@@ -6099,7 +6099,7 @@ SfxVoidItem SetOptions SID_SETOPTIONS
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowBrowser SID_SHOW_BROWSER
 
 [
@@ -6126,7 +6126,7 @@ SfxBoolItem ShowBrowser SID_SHOW_BROWSER
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ShowPopups SID_SHOWPOPUPS
 
 [
@@ -6153,7 +6153,7 @@ SfxBoolItem ShowPopups SID_SHOWPOPUPS
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ShowSbx SID_BASICIDE_SHOWSBX
 (SbxItem Sbx SID_BASICIDE_ARG_SBX)
 [
@@ -6178,7 +6178,7 @@ SfxVoidItem ShowSbx SID_BASICIDE_SHOWSBX
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SourceView SID_SOURCEVIEW
 
 [
@@ -6205,7 +6205,7 @@ SfxBoolItem SourceView SID_SOURCEVIEW
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem StatusBarVisible SID_TOGGLESTATUSBAR
 
 [
@@ -6232,7 +6232,7 @@ SfxBoolItem StatusBarVisible SID_TOGGLESTATUSBAR
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem StatusGetDate SID_BASICIDE_STAT_DATE
 
 [
@@ -6259,7 +6259,7 @@ SfxStringItem StatusGetDate SID_BASICIDE_STAT_DATE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem StatusGetPosition SID_BASICIDE_STAT_POS
 
 [
@@ -6286,7 +6286,7 @@ SfxStringItem StatusGetPosition SID_BASICIDE_STAT_POS
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem StatusGetTitle SID_BASICIDE_STAT_TITLE
 
 [
@@ -6313,7 +6313,7 @@ SfxStringItem StatusGetTitle SID_BASICIDE_STAT_TITLE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem StoreAllModuleSources SID_BASICIDE_STOREALLMODULESOURCES
 ()
 [
@@ -6338,7 +6338,7 @@ SfxVoidItem StoreAllModuleSources SID_BASICIDE_STOREALLMODULESOURCES
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem StoreModuleSource SID_BASICIDE_STOREMODULESOURCE
 (SfxMacroInfoItem aMacroInfo SID_BASICIDE_ARG_MACROINFO)
 [
@@ -6410,7 +6410,7 @@ SfxVoidItem StylePreview SID_STYLE_PREVIEW
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxTemplateItem StyleApplyState SID_STYLE_APPLY
 [
     SfxUInt16Item StyleApply(SfxStringItem Template SID_STYLE_APPLY,SfxUInt16Item Family SID_STYLE_FAMILY,SfxStringItem FamilyName SID_STYLE_FAMILYNAME,SfxStringItem Style SID_APPLY_STYLE);
@@ -6438,7 +6438,7 @@ SfxTemplateItem StyleApplyState SID_STYLE_APPLY
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem StyleNewByExample SID_STYLE_NEW_BY_EXAMPLE
 (SfxStringItem Param SID_STYLE_NEW_BY_EXAMPLE,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
@@ -6463,7 +6463,7 @@ SfxVoidItem StyleNewByExample SID_STYLE_NEW_BY_EXAMPLE
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem StyleUpdateByExample SID_STYLE_UPDATE_BY_EXAMPLE
 (SfxStringItem Param SID_STYLE_UPDATE_BY_EXAMPLE,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
@@ -6488,7 +6488,7 @@ SfxVoidItem StyleUpdateByExample SID_STYLE_UPDATE_BY_EXAMPLE
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN
 
 [
@@ -6515,7 +6515,7 @@ SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item SwitchViewShell SID_VIEWSHELL
 
 [
@@ -6542,7 +6542,7 @@ SfxUInt16Item SwitchViewShell SID_VIEWSHELL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TaskBarVisible SID_TASKBAR
 
 [
@@ -6569,7 +6569,7 @@ SfxBoolItem TaskBarVisible SID_TASKBAR
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxTemplateItem ListStyle SID_STYLE_FAMILY5
 
 [
@@ -6596,7 +6596,7 @@ SfxTemplateItem ListStyle SID_STYLE_FAMILY5
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem TipsDialog SID_TIPWINDOW
 
 [
@@ -6623,7 +6623,7 @@ SfxBoolItem TipsDialog SID_TIPWINDOW
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem Title SID_DOCTITLE
 
 [
@@ -6650,7 +6650,7 @@ SfxStringItem Title SID_DOCTITLE
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Title SID_TITLE
 ()
 [
@@ -6675,7 +6675,7 @@ SfxVoidItem Title SID_TITLE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ToggleBreakPoint SID_BASICIDE_TOGGLEBRKPNT
 ()
 [
@@ -6700,7 +6700,7 @@ SfxVoidItem ToggleBreakPoint SID_BASICIDE_TOGGLEBRKPNT
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
 (SfxStringItem Document SID_BASICIDE_ARG_DOCUMENT,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME,
  SfxStringItem Name SID_BASICIDE_ARG_NAME,SfxStringItem Type SID_BASICIDE_ARG_TYPE,
@@ -6728,7 +6728,7 @@ SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Undo SID_UNDO
 ( SfxUInt16Item Undo SID_UNDO )
 [
@@ -6756,7 +6756,7 @@ SfxVoidItem Undo SID_UNDO
     GroupId = GID_EDIT;
 ]
 
-//------------------------------------------------
+
 SfxVoidItem FormatPaintbrush SID_FORMATPAINTBRUSH ( SfxBoolItem PersistentCopy SID_FORMATPAINTBRUSH )
 [
       /* flags: */
@@ -6783,7 +6783,7 @@ SfxVoidItem FormatPaintbrush SID_FORMATPAINTBRUSH ( SfxBoolItem PersistentCopy S
       GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item UndoCount SID_ATTR_UNDO_COUNT
 
 [
@@ -6810,7 +6810,7 @@ SfxUInt16Item UndoCount SID_ATTR_UNDO_COUNT
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem UpdateAllModuleSources SID_BASICIDE_UPDATEALLMODULESOURCES
 ()
 [
@@ -6835,7 +6835,7 @@ SfxVoidItem UpdateAllModuleSources SID_BASICIDE_UPDATEALLMODULESOURCES
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem UpdateModuleSource SID_BASICIDE_UPDATEMODULESOURCE
 (SfxMacroInfoItem aMacroInfo SID_BASICIDE_ARG_MACROINFO)
 [
@@ -6860,7 +6860,7 @@ SfxVoidItem UpdateModuleSource SID_BASICIDE_UPDATEMODULESOURCE
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ManageBreakPoints SID_BASICIDE_MANAGEBRKPNTS
 ()
 [
@@ -6885,7 +6885,7 @@ SfxVoidItem ManageBreakPoints SID_BASICIDE_MANAGEBRKPNTS
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ToggleBreakPointEnabled SID_BASICIDE_TOGGLEBRKPNTENABLED
 ()
 [
@@ -6910,7 +6910,7 @@ SfxVoidItem ToggleBreakPointEnabled SID_BASICIDE_TOGGLEBRKPNTENABLED
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt32Item UpdateVersion SID_UPDATE_VERSION
 
 [
@@ -6937,7 +6937,7 @@ SfxUInt32Item UpdateVersion SID_UPDATE_VERSION
     GroupId = GID_INTERN;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem VersionDialog SID_VERSION
 ()
 [
@@ -6985,7 +6985,7 @@ SfxUInt16Item Signature SID_SIGNATURE
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxUInt16Item MacroSignature SID_MACRO_SIGNATURE
 [
     /* flags: */
@@ -7009,7 +7009,7 @@ SfxUInt16Item MacroSignature SID_MACRO_SIGNATURE
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem VersionVisible SID_VERSION_VISIBLE
 (SfxBoolItem Show SID_VERSION_VISIBLE)
 [
@@ -7037,7 +7037,7 @@ SfxVoidItem VersionVisible SID_VERSION_VISIBLE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
 
 [
@@ -7064,7 +7064,7 @@ SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem WinVisible SID_WIN_VISIBLE
 
 [
@@ -7091,7 +7091,7 @@ SfxBoolItem WinVisible SID_WIN_VISIBLE
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem WindowList SID_MDIWINDOWLIST
 ()
 [
@@ -7116,7 +7116,7 @@ SfxVoidItem WindowList SID_MDIWINDOWLIST
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomMinus SID_ZOOM_IN
 ()
 [
@@ -7141,7 +7141,7 @@ SfxVoidItem ZoomMinus SID_ZOOM_IN
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Zooming SID_ZOOM
 (SfxUInt32Item ZoomScale ID_VAL_ZOOM)
 [
@@ -7166,7 +7166,7 @@ SfxVoidItem Zooming SID_ZOOM
     GroupId = ;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomNext SID_ZOOM_NEXT
 ()
 [
@@ -7191,7 +7191,7 @@ SfxVoidItem ZoomNext SID_ZOOM_NEXT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomPlus SID_ZOOM_OUT
 ()
 [
@@ -7216,7 +7216,7 @@ SfxVoidItem ZoomPlus SID_ZOOM_OUT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ZoomPrevious SID_ZOOM_PREV
 ()
 [
@@ -7241,7 +7241,7 @@ SfxVoidItem ZoomPrevious SID_ZOOM_PREV
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 TbxImageItem ZoomToolBox SID_ZOOM_TOOLBOX
 
 [
@@ -7268,7 +7268,7 @@ TbxImageItem ZoomToolBox SID_ZOOM_TOOLBOX
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ExportTo SID_EXPORTDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxBoolItem Overwrite SID_OVERWRITE, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxBoolItem SaveACopy SID_SAVEACOPYITEM)
 [
@@ -7293,7 +7293,7 @@ SfxBoolItem ExportTo SID_EXPORTDOC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
 (SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
 [
@@ -7342,7 +7342,7 @@ SfxBoolItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
 
 [
@@ -7369,7 +7369,7 @@ SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem SaveVersionOnClose SID_SAVE_VERSION_ON_CLOSE
 
 [
@@ -7396,7 +7396,7 @@ SfxBoolItem SaveVersionOnClose SID_SAVE_VERSION_ON_CLOSE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem Addons SID_ADDONS
 [
     /* flags: */
@@ -7447,7 +7447,7 @@ SfxBoolItem ShowImeStatusWindow SID_SHOW_IME_STATUS_WINDOW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem UpdateConfiguration SID_UPDATE_CONFIG
 (SfxStringItem StreamName SID_UPDATE_CONFIG )
 [
@@ -7472,7 +7472,7 @@ SfxVoidItem UpdateConfiguration SID_UPDATE_CONFIG
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem SendFeedback SID_SEND_FEEDBACK
 ()
 [
@@ -7497,7 +7497,7 @@ SfxVoidItem SendFeedback SID_SEND_FEEDBACK
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ShowLicense SID_SHOW_LICENSE
 ()
 [
@@ -7522,7 +7522,7 @@ SfxVoidItem ShowLicense SID_SHOW_LICENSE
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem ShowCredits SID_SHOW_CREDITS
 ()
 [
@@ -7547,7 +7547,7 @@ SfxVoidItem ShowCredits SID_SHOW_CREDITS
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem HelpTutorials SID_HELP_TUTORIALS
 ()
 [
@@ -7572,7 +7572,7 @@ SfxVoidItem HelpTutorials SID_HELP_TUTORIALS
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AddonHelp SID_ADDONHELP
 [
     /* flags: */
@@ -7598,7 +7598,7 @@ SfxVoidItem AddonHelp SID_ADDONHELP
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxStringItem FormatMenuState SID_FORMATMENUSTATE
 [
     /* flags: */
@@ -7622,7 +7622,7 @@ SfxStringItem FormatMenuState SID_FORMATMENUSTATE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InternetDialog SID_INET_DLG
 ()
 [
@@ -7647,7 +7647,7 @@ SfxVoidItem InternetDialog SID_INET_DLG
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
 (SfxStringItem PLZ SID_OFFICE_CHECK_PLZ)
 [
@@ -7672,7 +7672,7 @@ SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AutoPilotAddressDataSource SID_ADDRESS_DATA_SOURCE
 ()
 [
@@ -7697,7 +7697,7 @@ SfxVoidItem AutoPilotAddressDataSource SID_ADDRESS_DATA_SOURCE
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertBusinessCard FN_BUSINESS_CARD
 ( SfxUnoFrameItem Frame SID_FILLFRAME, SfxBoolItem Hidden SID_HIDDEN )
 [
@@ -7722,7 +7722,7 @@ SfxVoidItem InsertBusinessCard FN_BUSINESS_CARD
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem InsertLabels FN_LABEL
 ( SfxUnoFrameItem Frame SID_FILLFRAME, SfxBoolItem Hidden SID_HIDDEN )
 [
@@ -7747,7 +7747,7 @@ SfxVoidItem InsertLabels FN_LABEL
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem NewXForms FN_XFORMS_INIT
 ( SfxUnoFrameItem Frame SID_FILLFRAME, SfxBoolItem Hidden SID_HIDDEN )
 [
@@ -7772,7 +7772,7 @@ SfxVoidItem NewXForms FN_XFORMS_INIT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AutoPilotPresentations SID_SD_AUTOPILOT
 ( SfxUnoFrameItem Frame SID_FILLFRAME, SfxBoolItem Hidden SID_HIDDEN )
 [
@@ -7797,7 +7797,7 @@ SfxVoidItem AutoPilotPresentations SID_SD_AUTOPILOT
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem NewPresentation SID_NEWSD
 ( SfxUnoFrameItem Frame SID_FILLFRAME, SfxBoolItem Hidden SID_HIDDEN )
 [
@@ -7822,7 +7822,7 @@ SfxVoidItem NewPresentation SID_NEWSD
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem BibliographyComponent SID_COMP_BIBLIOGRAPHY
 ()
 [
@@ -7847,7 +7847,7 @@ SfxVoidItem BibliographyComponent SID_COMP_BIBLIOGRAPHY
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
 (SfxStringItem PLZ SID_OFFICE_CHECK_PLZ)
 [
@@ -7872,7 +7872,7 @@ SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
     GroupId = GID_SPECIAL;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem Minimized SID_MINIMIZED
 
 [
@@ -7968,7 +7968,7 @@ SfxBoolItem TerminateInplaceActivation SID_TERMINATE_INPLACEACTIVATION
     ToolBoxConfig = FALSE,
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem RecentFileList SID_RECENTFILELIST
 [
     /* flags: */
@@ -7992,7 +7992,7 @@ SfxVoidItem RecentFileList SID_RECENTFILELIST
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxVoidItem AvailableToolbars SID_AVAILABLE_TOOLBARS
 (SfxStringItem Toolbar SID_AVAILABLE_TOOLBARS)
 [
@@ -8088,7 +8088,7 @@ SfxVoidItem MoreDictionaries SID_MORE_DICTIONARIES
         ToolBoxConfig = TRUE,
         GroupId = GID_OPTIONS;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ActivateStyleApply SID_ACTIVATE_STYLE_APPLY
 ()
 [
@@ -8113,7 +8113,7 @@ SfxVoidItem ActivateStyleApply SID_ACTIVATE_STYLE_APPLY
     GroupId = GID_TEMPLATE;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow0 SID_DOCKWIN_0
 
 [
@@ -8140,7 +8140,7 @@ SfxBoolItem DockingWindow0 SID_DOCKWIN_0
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow1 SID_DOCKWIN_1
 
 [
@@ -8167,7 +8167,7 @@ SfxBoolItem DockingWindow1 SID_DOCKWIN_1
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow2 SID_DOCKWIN_2
 
 [
@@ -8194,7 +8194,7 @@ SfxBoolItem DockingWindow2 SID_DOCKWIN_2
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow3 SID_DOCKWIN_3
 
 [
@@ -8221,7 +8221,7 @@ SfxBoolItem DockingWindow3 SID_DOCKWIN_3
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow4 SID_DOCKWIN_4
 
 [
@@ -8248,7 +8248,7 @@ SfxBoolItem DockingWindow4 SID_DOCKWIN_4
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow5 SID_DOCKWIN_5
 
 [
@@ -8275,7 +8275,7 @@ SfxBoolItem DockingWindow5 SID_DOCKWIN_5
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow6 SID_DOCKWIN_6
 
 [
@@ -8302,7 +8302,7 @@ SfxBoolItem DockingWindow6 SID_DOCKWIN_6
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow7 SID_DOCKWIN_7
 
 [
@@ -8329,7 +8329,7 @@ SfxBoolItem DockingWindow7 SID_DOCKWIN_7
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow8 SID_DOCKWIN_8
 
 [
@@ -8356,7 +8356,7 @@ SfxBoolItem DockingWindow8 SID_DOCKWIN_8
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxBoolItem DockingWindow9 SID_DOCKWIN_9
 
 [
@@ -8383,7 +8383,7 @@ SfxBoolItem DockingWindow9 SID_DOCKWIN_9
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
+
 SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
 ()
 [
@@ -8408,7 +8408,7 @@ SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
+
 // call thesaurus dialog from context menu
 SfxInt16Item ThesaurusFromContext SID_THES
 (SfxStringItem WordReplace SID_THES)
@@ -8434,7 +8434,7 @@ SfxInt16Item ThesaurusFromContext SID_THES
     GroupId = GID_TEXT;
 ]
 
-//--------------------------------------------------------------------------
+
 SvxZoomItem Zoom SID_ATTR_ZOOM
 
 [

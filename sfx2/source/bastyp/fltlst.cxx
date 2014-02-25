@@ -31,9 +31,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//*****************************************************************************************************************
+
 //  namespaces
-//*****************************************************************************************************************
+
 using namespace ::com::sun::star;
 
 
@@ -67,7 +67,7 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
         }
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          ctor
     @descr          These initialize an instance of a SfxFilterListener class. Created object listen automaticly
                     on right FilterFactory-Service for all changes and synchronize right SfxFilterContainer with

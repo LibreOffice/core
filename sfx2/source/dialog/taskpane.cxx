@@ -54,10 +54,10 @@
 #include <tools/urlobj.hxx>
 #include <boost/noncopyable.hpp>
 
-//......................................................................................................................
+
 namespace sfx2
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -89,9 +89,9 @@ namespace sfx2
 
     namespace PosSize = ::com::sun::star::awt::PosSize;
 
-    //==================================================================================================================
+
     //= helpers
-    //==================================================================================================================
+
     namespace
     {
 
@@ -196,9 +196,9 @@ namespace sfx2
         }
     }
 
-    //==================================================================================================================
+
     //= TaskPaneDockingWindow
-    //==================================================================================================================
+
 
     TaskPaneDockingWindow::TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper, Window* i_pParent, WinBits i_nBits )
         :TitledDockingWindow( i_pBindings, &i_rWrapper, i_pParent, i_nBits )
@@ -228,9 +228,9 @@ namespace sfx2
         m_aTaskPane.SetPosSizePixel( Point(), GetContentWindow().GetOutputSizePixel() );
     }
 
-    //==================================================================================================================
+
     //= TaskPaneWrapper
-    //==================================================================================================================
+
 
     SFX_IMPL_DOCKINGWINDOW( TaskPaneWrapper, SID_TASKPANE );
 
@@ -259,9 +259,9 @@ namespace sfx2
         pDockingWindow->ActivateToolPanel( i_rPanelURL );
     }
 
-    //==================================================================================================================
+
     //= CustomPanelUIElement
-    //==================================================================================================================
+
     class CustomPanelUIElement
     {
     public:
@@ -291,9 +291,9 @@ namespace sfx2
         Reference< XWindow >    m_xPanelWindow;
     };
 
-    //==================================================================================================================
+
     //= CustomToolPanel
-    //==================================================================================================================
+
     class CustomToolPanel : public ::svt::ToolPanelBase
     {
     public:
@@ -497,9 +497,9 @@ namespace sfx2
         return xPanelAccessible;
     }
 
-    //==================================================================================================================
+
     //= ModuleTaskPane_Impl
-    //==================================================================================================================
+
     class ModuleTaskPane_Impl : public ::boost::noncopyable
     {
     public:
@@ -719,9 +719,9 @@ namespace sfx2
         m_aPanelDeck.SetLayouter( new ::svt::TabDeckLayouter( m_aPanelDeck, m_aPanelDeck, i_eTabAlignment, i_eTabContent ) );
     }
 
-    //==================================================================================================================
+
     //= ModuleTaskPane
-    //==================================================================================================================
+
 
     ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame )
         :Window( &i_rParentWindow, WB_DIALOGCONTROL )
@@ -784,9 +784,9 @@ namespace sfx2
         m_pImpl->SetTabsLayout( i_eTabAlignment, i_eTabContent );
     }
 
-    // =====================================================================================================================
+
     // = PanelSelectorLayout
-    // =====================================================================================================================
+
     enum PanelSelectorLayout
     {
         LAYOUT_DRAWERS,
@@ -796,9 +796,9 @@ namespace sfx2
         LAYOUT_TABS_BOTTOM
     };
 
-    //==================================================================================================================
+
     //= helper
-    //==================================================================================================================
+
     namespace
     {
         PanelSelectorLayout lcl_getTabLayoutFromAlignment( const SfxChildAlignment i_eAlignment )
@@ -817,9 +817,9 @@ namespace sfx2
         }
     }
 
-    // =====================================================================================================================
+
     // = PanelDescriptor
-    // =====================================================================================================================
+
     /** is a helper class for TaskPaneController_Impl, holding the details about a single panel which is not
         contained in the IToolPanel implementation itself.
     */
@@ -841,9 +841,9 @@ namespace sfx2
         }
     };
 
-    //==================================================================================================================
+
     //= TaskPaneController_Impl
-    //==================================================================================================================
+
     class TaskPaneController_Impl   :public ::boost::noncopyable
                                     ,public ::svt::IToolPanelDeckListener
     {
@@ -1252,9 +1252,9 @@ namespace sfx2
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    //==================================================================================================================
+
     //= TaskPaneController
-    //==================================================================================================================
+
 
     TaskPaneController::TaskPaneController( ModuleTaskPane& i_rTaskPane, TitledDockingWindow& i_rDockingWindow )
         :m_pImpl( new TaskPaneController_Impl( i_rTaskPane, i_rDockingWindow ) )
@@ -1272,8 +1272,8 @@ namespace sfx2
         m_pImpl->ActivateToolPanel( i_rPanelURL );
     }
 
-//......................................................................................................................
+
 } // namespace sfx2
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
