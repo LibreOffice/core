@@ -524,9 +524,6 @@ public:
     virtual bool set_property(const OString &rKey, const OString &rValue);
 
 protected:
-    using SvListView::Expand;
-    using SvListView::Collapse;
-    using SvListView::Select;
     using SvListView::SelectAll;
 
     SVT_DLLPRIVATE short        GetHeightOffset( const Image& rBmp, Size& rLogicSize);

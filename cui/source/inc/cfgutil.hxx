@@ -161,7 +161,6 @@ class SfxConfigGroupListBox : public SvTreeListBox
 
 protected:
     virtual void        RequestingChildren( SvTreeListEntry *pEntry);
-    using SvListView::Expand;
     virtual sal_Bool        Expand( SvTreeListEntry* pParent );
 
 public:

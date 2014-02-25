@@ -254,6 +254,15 @@ class SVT_DLLPUBLIC SvListView
 protected:
     SvTreeList* pModel;
 
+    void                ExpandListEntry( SvTreeListEntry* pParent )
+    { pModel->Expand((SvListView*)this,pParent); }
+
+    void                CollapseListEntry( SvTreeListEntry* pParent )
+    { pModel->Collapse((SvListView*)this,pParent); }
+
+    sal_Bool            SelectListEntry( SvTreeListEntry* pEntry, sal_Bool bSelect )
+    { return pModel->Select((SvListView*)this,pEntry,bSelect); }
+
 public:
                         SvListView();   // Sets the Model to 0
     virtual             ~SvListView();
@@ -318,15 +327,6 @@ public:
 
     sal_uLong           GetChildSelectionCount( SvTreeListEntry* pParent ) const
     { return pModel->GetChildSelectionCount((SvListView*)this,pParent); }
-
-    void                Expand( SvTreeListEntry* pParent )
-    { pModel->Expand((SvListView*)this,pParent); }
-
-    void                Collapse( SvTreeListEntry* pParent )
-    { pModel->Collapse((SvListView*)this,pParent); }
-
-    sal_Bool            Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True )
-    { return pModel->Select((SvListView*)this,pEntry,bSelect); }
 
     // Does not call the Select Handler
     virtual void        SelectAll( sal_Bool bSelect, sal_Bool )

@@ -98,9 +98,6 @@ class SwContentTree : public SvTreeListBox
 
     using SvTreeListBox::ExecuteDrop;
     using SvTreeListBox::EditEntry;
-    using SvListView::Expand;
-    using SvListView::Collapse;
-    using SvListView::Select;
 
 protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt );

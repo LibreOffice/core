@@ -158,7 +158,6 @@ private:
 protected:
     virtual void    RequestingChildren( SvTreeListEntry *pEntry);
     virtual sal_Bool    Expand( SvTreeListEntry* pParent );
-    using SvListView::Expand;
 
 public:
     SvxConfigGroupListBox(Window* pParent, WinBits nStyle);

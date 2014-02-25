@@ -2499,7 +2499,7 @@ sal_Bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
         if( ExpandingHdl() )
         {
             bExpanded = sal_True;
-            SvListView::Expand( pParent );
+            ExpandListEntry( pParent );
             pImp->EntryExpanded( pParent );
             pHdlEntry = pParent;
             ExpandedHdl();
@@ -2537,7 +2537,7 @@ sal_Bool SvTreeListBox::Collapse( SvTreeListEntry* pParent )
     {
         bCollapsed = sal_True;
         pImp->CollapsingEntry( pParent );
-        SvListView::Collapse( pParent );
+        CollapseListEntry( pParent );
         pImp->EntryCollapsed( pParent );
         pHdlEntry = pParent;
         ExpandedHdl();
@@ -2556,7 +2556,7 @@ sal_Bool SvTreeListBox::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT(pEntry,"Select: Null-Ptr");
-    sal_Bool bRetVal = SvListView::Select( pEntry, bSelect );
+    sal_Bool bRetVal = SelectListEntry( pEntry, bSelect );
     DBG_ASSERT(IsSelected(pEntry)==bSelect,"Select failed");
     if( bRetVal )
     {
@@ -2819,9 +2819,9 @@ void SvTreeListBox::EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,
     if( IsSelected( pEntry ))
     {
         pImp->ShowCursor( false );
-        SvListView::Select( pEntry, sal_False );
+        SelectListEntry( pEntry, sal_False );
         PaintEntry( pEntry );
-        SvListView::Select( pEntry, sal_True );
+        SelectListEntry( pEntry, sal_True );
         pImp->ShowCursor( true );
     }
     pEdEntry = pEntry;
