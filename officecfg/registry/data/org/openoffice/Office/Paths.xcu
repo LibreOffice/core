@@ -158,6 +158,7 @@
     </node>
     <node oor:name="Template" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/template/common" oor:op="fuse"/>
         <node oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/template/$(vlang)" oor:op="fuse"/>
       </node>
       <!--
