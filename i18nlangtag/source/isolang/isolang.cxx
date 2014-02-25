@@ -27,7 +27,7 @@
 
 using namespace com::sun::star;
 
-// =======================================================================
+
 
 static const LanguageType kSAME = 0xffff;
 
@@ -130,10 +130,10 @@ struct IsoLangOtherEntry
 // recommended by rfc5646 (obsoletes rfc4646 (obsoletes rfc3066 (obsoletes
 // rfc1766))). convertIsoNamesToLanguage(), convertLocaleToLanguageImpl()
 // and lookupFallbackLocale() are case insensitive.
-//
+
 // Sort order: Most used first and within one language the default fallback
 // locale of that language first.
-//
+
 // The default entry for a LangID <-> ISO mapping has to be first. For
 // conversion of legacy mappings one LangID can map to multiple ISO codes
 // except if the LangID is primary-only, and one ISO code combination can map
@@ -896,7 +896,7 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
     { LANGUAGE_DONTKNOW,                    NULL             }  // marks end of table
 };
 
-// =======================================================================
+
 
 // static
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
@@ -1125,7 +1125,7 @@ com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageS
     return aLastResortFallbackEntry.getLocale();
 }
 
-// =======================================================================
+
 
 // static
 LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& rPriv )
