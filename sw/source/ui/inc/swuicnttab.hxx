@@ -74,8 +74,8 @@ class SwMultiTOXTabDialog : public SfxTabDialog
 
     SwOneExampleFrame*      pExampleFrame;
 
-    SwTOXDescription**      pDescArr; //
-    SwForm**                pFormArr; //
+    SwTOXDescription**      pDescArr;
+    SwForm**                pFormArr;
     SwIndexSections_Impl**  pxIndexSectionsArr;
 
     SwTOXBase*              pParamTOXBase;

@@ -63,7 +63,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     OUString aStr;
     if( RES_INPUTFLD == pField->GetTyp()->Which() )
     {   // it is an input field
-        //
+
         pInpFld = (SwInputField*)pField;
         m_pLabelED->SetText( pInpFld->GetPar2() );
         sal_uInt16 nSubType = pInpFld->GetSubType();

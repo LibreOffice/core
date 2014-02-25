@@ -200,9 +200,9 @@ static sal_Bool lcl_FindAnchorPos(
     return bRet;
 }
 
-//
+
 //! also used in unoframe.cxx
-//
+
 sal_Bool sw_ChkAndSetNewAnchor(
     SwEditShell& rEditShell,
     const SwFlyFrm& rFly,
@@ -1389,7 +1389,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
          Size aSz( rRect.SSize() );
 
         //JP 28.02.2001: Task 74707 - ask for fly in fly with automatic size
-        //
+
         const SwFrm* pAnchor;
         const SwTxtNode* pTNd;
         const SwpHints* pHts;

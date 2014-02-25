@@ -601,7 +601,7 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 //      3. Fontname
 //      4. Language
 // the delimiter character is ","
-//
+
 
 void SwAsciiOptions::ReadUserData( const OUString& rStr )
 {

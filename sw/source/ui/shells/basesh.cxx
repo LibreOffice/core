@@ -1818,9 +1818,9 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 break;
             case FN_WRAP_ANCHOR_ONLY:
                 aWrap.SetAnchorOnly(!aWrap.IsAnchorOnly());
-                //
+
                 // keep previous wrapping
-                //
+
                 // switch to wrap SURROUND_PARALLEL, if previous wrap is SURROUND_NONE
                 if ( nOldSurround != SURROUND_NONE )
                 {

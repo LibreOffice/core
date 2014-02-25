@@ -1049,7 +1049,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                                      (sal_uInt16) 0x3fff );
             sal_uInt16 nWidthSum = 0;
             // #101224# one column is no column
-            //
+
             if(nCount > 1)
                 for(sal_uInt16 i = 0; i < nCount; i++)
                 {

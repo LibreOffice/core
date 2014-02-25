@@ -1080,7 +1080,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     // Bookmarks are moved too (currently without Undo support).
 
     // If footnotes are being moved to the special section, remove them now.
-    //
+
     // Or else delete the Frames for all footnotes that are being moved
     // and have it rebuild after the Move (footnotes can change pages).
     // Additionally we have to correct the FtnIdx array's sorting.

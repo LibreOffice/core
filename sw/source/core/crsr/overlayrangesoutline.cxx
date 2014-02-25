@@ -23,7 +23,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -105,5 +105,5 @@ namespace sw
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eof

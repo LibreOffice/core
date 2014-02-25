@@ -45,9 +45,9 @@ public:
 };
 
 
-// ---------------------------------------
+
 // SwPtrMsgPoolItem (old SwObjectDying!)
-// ---------------------------------------
+
 
 class SwPtrMsgPoolItem : public SwMsgPoolItem
 {

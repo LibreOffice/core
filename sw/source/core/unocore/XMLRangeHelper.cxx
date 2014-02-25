@@ -26,7 +26,7 @@
 #include <functional>
 
 
-// ================================================================================
+
 
 namespace
 {
@@ -286,7 +286,7 @@ bool lcl_getCellRangeAddressFromXMLString(
 
 } // anonymous namespace
 
-// ================================================================================
+
 
 //namespace chart
 //{

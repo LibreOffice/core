@@ -64,9 +64,9 @@ class SwUndoTblToTxt;
 class SwUndoTxtToTbl;
 struct SwPosition;
 
-// --------------------
+
 // class SwNodes
-// --------------------
+
 
 typedef SwNode * SwNodePtr;
 typedef bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );

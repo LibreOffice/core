@@ -48,7 +48,7 @@
 #include <flyfrm.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-//
+
 #include <pam.hxx>
 #include <docsh.hxx>
 #include <poolfmt.hxx>
@@ -1069,7 +1069,7 @@ bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
     pStream( &rStrm ),

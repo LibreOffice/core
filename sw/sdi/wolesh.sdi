@@ -24,7 +24,7 @@ interface WebOLEObject : BaseTextOLEObject
 }
 
 
- //=========================================================================
+
 
 shell SwWebOleShell : SwWebFrameShell
 {

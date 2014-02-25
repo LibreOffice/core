@@ -963,7 +963,7 @@ void SwCntntFrm::Cut()
         {
             if ( pUp->GetUpper() )
             {
-                //
+
                 // prevent delete of <ColLocked> footnote frame
                 if ( pUp->IsFtnFrm() && !pUp->IsColLocked())
                 {
@@ -978,7 +978,7 @@ void SwCntntFrm::Cut()
                 }
                 else
                 {
-                    //
+
                     if ( pSct->IsColLocked() || !pSct->IsInFtn() ||
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
                     {

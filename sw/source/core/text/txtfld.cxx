@@ -478,9 +478,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             {
                 const Font *pFmtFnt = rNumFmt.GetBulletFont();
 
-                //
+
                 // Build a new bullet font basing on the current paragraph font:
-                //
+
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                 // #i53199#
@@ -501,10 +501,10 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CTL );
                 }
 
-                //
+
                 // Apply the explicit attributes from the character style
                 // associated with the numering to the new bullet font.
-                //
+
                 if( pFmt )
                     pNumFnt->SetDiffFnt( pFmt, pIDSA );
 
@@ -544,9 +544,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 // vorliegt!
                 if( !aTxt.isEmpty() )
                 {
-                    //
+
                     // Build a new numbering font basing on the current paragraph font:
-                    //
+
                     pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                     // #i53199#
@@ -560,10 +560,10 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     }
 
 
-                    //
+
                     // Apply the explicit attributes from the character style
                     // associated with the numering to the new bullet font.
-                    //
+
                     if( pFmt )
                         pNumFnt->SetDiffFnt( pFmt, pIDSA );
 

@@ -58,7 +58,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 // uses templates from <cppuhelper/interfacecontainer.h>
 // and <unotools/configitem.hxx>
@@ -75,7 +75,7 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar
         PropHashType_Impl
     > OPropertyListenerContainerHelper;
 
-////////////////////////////////////////////////////////////
+
 
 class SwNewDBMgr;
 class MailMergeExecuteFinalizer;
@@ -190,7 +190,7 @@ extern com::sun::star::uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSuppor
 extern OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
 extern com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( com::sun::star::uno::Exception );
 
-////////////////////////////////////////////////////////////
+
 
 #endif
 

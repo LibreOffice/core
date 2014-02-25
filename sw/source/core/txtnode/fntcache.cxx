@@ -847,9 +847,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     Font* pTmpFont = bUseScrFont ? pScrFont : pPrtFont;
 
-    //
+
     //  bDirectPrint and bUseScrFont should have these values:
-    //
+
     //  Outdev / RefDef  | Printer | VirtPrinter | Window
 
     //  Printer          | 1 - 0   | 0 - 1       | -
@@ -857,10 +857,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     //  VirtPrinter/PDF  | 0 - 1   | 0 - 1       | -
 
     //  Window/VirtWindow| 0 - 1   | 0 - 1       | 1 - 0
-    //
+
     // Exception: During painting of a Writer OLE object, we do not have
     // a window. Therefore bUseSrcFont is always 0 in this case.
-    //
+
 
 #if OSL_DEBUG_LEVEL > 0
 
@@ -976,9 +976,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         rInf.SetLen( rInf.GetText().getLength() );
 
 
-    //
+
     // ASIAN LINE AND CHARACTER GRID MODE START: snap to characters
-    //
+
 
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
@@ -1069,7 +1069,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     // For text grid refactor
     // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
-    //
+
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
@@ -1211,9 +1211,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
     }
 
-    //
+
     // DIRECT PAINTING WITHOUT SCREEN ADJUSTMENT
-    //
+
 
     if ( bDirectPrint )
     {
@@ -1266,9 +1266,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-            //
+
             // Modify Array for special justifications
-            //
+
             long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
             bool bSpecialJust = false;
 
@@ -1435,9 +1435,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                     rInf.GetIdx(), rInf.GetLen() );
     }
 
-    //
+
     // PAINTING WITH FORMATTING DEVICE/SCREEN ADJUSTMENT
-    //
+
 
     else
     {
@@ -1475,9 +1475,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                         rInf.GetIdx(), rInf.GetLen() );
         }
 
-        //
+
         // Modify Printer and ScreenArrays for special justifications
-        //
+
         long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
         bool bNoHalfSpace = false;
 

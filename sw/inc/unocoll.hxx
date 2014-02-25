@@ -189,9 +189,9 @@ class SwUnoCollection
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
-//
+
 // case-corrected versions of service-names (see #i67811)
-//
+
 #define CSS_TEXT_TEXTFIELD_DATE_TIME                    "com.sun.star.text.textfield.DateTime"
 #define CSS_TEXT_TEXTFIELD_USER                         "com.sun.star.text.textfield.User"
 #define CSS_TEXT_TEXTFIELD_SET_EXPRESSION               "com.sun.star.text.textfield.SetExpression"

@@ -99,13 +99,13 @@ sal_Unicode CSS1Parser::GetNextChar()
 }
 
 // Diese Funktion realisiert den in
-//
+
 //      http://www.w3.orh/pub/WWW/TR/WD-css1.html
 // bzw. http://www.w3.orh/pub/WWW/TR/WD-css1-960220.html
-//
+
 // beschriebenen Scanner fuer CSS1. Es handelt sich um eine direkte
 // Umsetzung der dort beschriebenen Lex-Grammatik
-//
+
 CSS1Token CSS1Parser::GetNextToken()
 {
     CSS1Token nRet = CSS1_NULL;
@@ -661,22 +661,22 @@ CSS1Token CSS1Parser::GetNextToken()
 
 
 // Dies folegenden Funktionen realisieren den in
-//
+
 //      http://www.w3.orh/pub/WWW/TR/WD-css1.html
 // bzw. http://www.w3.orh/pub/WWW/TR/WD-css1-960220.html
-//
+
 // beschriebenen Parser fuer CSS1. Es handelt sich um eine direkte
 // Umsetzung der dort beschriebenen Grammatik
 
 // stylesheet
 //  : import* rule*
-//
+
 // import
 //  : IMPORT_SYM url
-//
+
 // url
 //  : STRING
-//
+
 void CSS1Parser::ParseStyleSheet()
 {
     LOOP_CHECK_DECL
@@ -741,7 +741,7 @@ void CSS1Parser::ParseStyleSheet()
 // rule
 //  : selector [ ',' selector ]*
 //    '{' declaration [ ';' declaration ]* '}'
-//
+
 void CSS1Parser::ParseRule()
 {
     // selector
@@ -818,24 +818,24 @@ void CSS1Parser::ParseRule()
 
 // selector
 //  : simple_selector+ [ ':' pseudo_element ]?
-//
+
 // simple_selector
 //  : element_name [ DOT_WO_WS class ]?
 //  | DOT_W_WS class
 //  | id_selector
-//
+
 // element_name
 //  : IDENT
-//
+
 // class
 //  : IDENT
-//
+
 // id_selector
 //  : '#' IDENT
-//
+
 // pseude_element
 //  : IDENT
-//
+
 CSS1Selector *CSS1Parser::ParseSelector()
 {
     CSS1Selector *pRoot = 0, *pLast = 0;
@@ -985,24 +985,24 @@ CSS1Selector *CSS1Parser::ParseSelector()
 // declaration
 //  : property ':' expr prio?
 //  | /* empty */
-//
+
 // expression
 //  : term [ operator term ]*
-//
+
 // term
 //  : unary_operator?
 //     [ NUMBER | STRING | PERCENTAGE | LENGTH | EMS | EXS | IDENT |
 //       HEXCOLOR | URL | RGB ]
-//
+
 // operator
 //  : '/' | ',' | /* empty */
-//
+
 // unary_operator
 //  : '-' | '+'
-//
+
 // property
 //  : ident
-//
+
 // das Vorzeichen wird nur fuer numerische Werte (ausser PERCENTAGE)
 // beruecksichtigt und wird auf nValue angewendet!
 CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )

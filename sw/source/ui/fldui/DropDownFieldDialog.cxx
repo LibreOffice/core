@@ -56,7 +56,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(Window *pParent, SwWrtShell &rS,
     }
     if( RES_DROPDOWN == pField->GetTyp()->Which() )
     {
-        //
+
         pDropField = (SwDropDownField*)pField;
         OUString sTitle = GetText();
         sTitle += pDropField->GetPar2();

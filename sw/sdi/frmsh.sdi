@@ -24,7 +24,7 @@ interface TextFrame : BaseTextFrame
     import TextSelection;
 }
 
- //=========================================================================
+
 
 shell SwFrameShell : SwBaseShell
 {
