@@ -305,7 +305,8 @@ sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException)
     return nType;
 }
 
-void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType ) throw(uno::RuntimeException)
+void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType )
+    throw (uno::RuntimeException, std::exception)
 {
     // see property 'IsSharedFormula' for RT_SHARED
     SolarMutexGuard aGuard;

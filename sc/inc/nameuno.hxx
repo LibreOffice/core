@@ -91,7 +91,9 @@ public:
                                     throw (::com::sun::star::uno::RuntimeException,
                                            std::exception);
     virtual sal_Int32       SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setType( sal_Int32 nType )
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
 
                             /// XFormulaTokens
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getTokens()
