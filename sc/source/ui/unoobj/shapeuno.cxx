@@ -962,7 +962,8 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScShapeObj::getPropertyStates(
 }
 
 void SAL_CALL ScShapeObj::setPropertyToDefault( const OUString& aPropertyName )
-                            throw(beans::UnknownPropertyException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aNameString(aPropertyName);
