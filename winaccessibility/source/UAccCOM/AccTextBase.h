@@ -18,8 +18,8 @@
  */
 
 // AccTextBase.h: interface for the CAccTextBase class.
-//
-//////////////////////////////////////////////////////////////////////
+
+
 
 #if !defined(AFX_ACCTEXTBASE_H__B9AE05F6_E28B_4CF3_A8F2_EEE5D2E00B82__INCLUDED_)
 #define AFX_ACCTEXTBASE_H__B9AE05F6_E28B_4CF3_A8F2_EEE5D2E00B82__INCLUDED_

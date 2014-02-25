@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//////////////////////////////////////////////////////////////////////
+
 // AccComponentBase.h: interface for the CAccComponentBase class.
-//////////////////////////////////////////////////////////////////////
+
 
 #if !defined(AFX_ACCCOMPONENTBASE_H__946BE230_1DCB_494B_ACF6_32A2E197DD2A__INCLUDED_)
 #define AFX_ACCCOMPONENTBASE_H__946BE230_1DCB_494B_ACF6_32A2E197DD2A__INCLUDED_
