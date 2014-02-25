@@ -1782,14 +1782,6 @@ void ScTable::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
         aCol[i].CalcAfterLoad(rCxt);
 }
 
-bool ScTable::IsEmptyData( SCCOL nCol ) const
-{
-    if (!ValidCol(nCol))
-        return true;
-
-    return aCol[nCol].IsEmptyData();
-}
-
 void ScTable::ResetChanged( const ScRange& rRange )
 {
     SCCOL nStartCol = rRange.aStart.Col();

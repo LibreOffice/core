@@ -514,8 +514,6 @@ public:
                             0;
                     }
 
-    bool IsEmptyData( SCCOL nCol ) const;
-
     void        ResetChanged( const ScRange& rRange );
 
     void        SetDirty();

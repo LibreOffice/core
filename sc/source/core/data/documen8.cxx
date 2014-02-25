@@ -417,15 +417,6 @@ ScMacroManager* ScDocument::GetMacroManager()
     return mpMacroMgr.get();
 }
 
-bool ScDocument::IsEmptyData( SCTAB nTab, SCCOL nCol ) const
-{
-    const ScTable* pTab = FetchTable(nTab);
-    if (!pTab)
-        return true;
-
-    return pTab->IsEmptyData(nCol);
-}
-
 void ScDocument::FillMatrix(
     ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {

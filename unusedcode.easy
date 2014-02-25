@@ -77,7 +77,6 @@ ScDBQueryDataIterator::DataAccessInternal::setPos(unsigned long)
 ScDPFilteredCache::SingleFilter::getMatchValue() const
 ScDocument::CreateFormatTable() const
 ScDocument::GetCellCount(short, short) const
-ScDocument::IsEmptyData(short, short) const
 ScExtIButton::GetSelected() const
 ScFlatBoolRowSegments::getValue(int)
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)

@@ -1764,11 +1764,6 @@ public:
 
     SC_DLLPUBLIC ScMacroManager* GetMacroManager();
 
-    /**
-     * See if specified column has any non-empty cells.
-     */
-    bool IsEmptyData( SCTAB nTab, SCCOL nCol ) const;
-
     void FillMatrix( ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
 
     /**
