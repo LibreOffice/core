@@ -42,19 +42,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class BaseControl {
-    
+
     protected XComponentContext context;
     private Object unoModel;
     protected Object unoControl;
     protected XPropertySet properties;
     protected BaseControl parentControl;
-    
+
     public abstract String getName();
-    
+
     public Object getUnoModel() {
         return unoModel;
     }
-    
+
     /**
      * This is used <b>internally</b> to update the UnoModel and refresh the
      * associated PropertySet.
@@ -64,21 +64,21 @@ public abstract class BaseControl {
         this.unoModel = unoModel;
         properties = UnoRuntime.queryInterface(XPropertySet.class, unoModel);
     }
-    
+
     public Object getUnoControl() {
         return unoControl;
     }
-    
+
     public void setParentControl(BaseControl parentControl) {
         //TODO : remove from existing parentControl
         try {
             String name = getName();
             XNameContainer nameContainer = UnoRuntime.queryInterface(XNameContainer.class, parentControl.unoModel);
             nameContainer.insertByName(name, unoModel);
-            
+
             XControlContainer controlContainer = UnoRuntime.queryInterface(XControlContainer.class, parentControl.unoControl);
             unoControl = controlContainer.getControl(name);
-            
+
             this.parentControl = parentControl;
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(BaseControl.class.getName()).log(Level.SEVERE, null, ex);
@@ -88,14 +88,14 @@ public abstract class BaseControl {
             Logger.getLogger(BaseControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public BaseControl(XComponentContext context) {
         this.context = context;
         unoModel = null;
         unoControl = null;
         parentControl = null;
     }
-    
+
     protected void setProperty(String name, Object value) {
         try {
             properties.setPropertyValue(name, value);
@@ -109,7 +109,7 @@ public abstract class BaseControl {
             Logger.getLogger(BaseControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     protected Object getProperty(String name) {
         try {
             return properties.getPropertyValue(name);
@@ -120,19 +120,19 @@ public abstract class BaseControl {
         }
         return null;
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="Uno Properties">
-    
+
     public void setPosition(int x, int y) {
         setProperty("PositionX", new Integer(x));
         setProperty("PositionY", new Integer(y));
     }
-    
+
     public void setSize(int width, int height) {
         setProperty("Width", new Integer(width));
         setProperty("Height", new Integer(height));
     }
-    
+
     public void setEnabled(boolean enabled) {
         setProperty("Enabled", new Boolean(enabled));
     }
@@ -141,7 +141,7 @@ public abstract class BaseControl {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, unoControl);
         xWindow.setVisible(visible);
     }
-    
+
     // </editor-fold>
 
 }

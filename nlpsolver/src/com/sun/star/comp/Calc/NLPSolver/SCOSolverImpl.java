@@ -119,7 +119,7 @@ public final class SCOSolverImpl extends BaseEvolutionarySolver
 
             if (m_solverStatusDialog.getUserState() == IEvolutionarySolverStatusDialog.CONTINUE)
                 lockDocument();
-            
+
             m_toleratedCount = 0;
             m_toleratedMin = -1.0 * m_tolerance.getValue();
             m_toleratedMax = m_tolerance.getValue();

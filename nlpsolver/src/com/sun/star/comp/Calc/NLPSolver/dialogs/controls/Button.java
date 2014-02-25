@@ -36,10 +36,10 @@ import java.util.logging.Logger;
 import com.sun.star.comp.Calc.NLPSolver.dialogs.BaseDialog;
 
 public class Button extends LabeledControl {
-    
+
     private String name;
     private XButton xButton;
-    
+
     public Button(BaseDialog owner, String name) {
         super(owner.context);
         try {
@@ -61,11 +61,11 @@ public class Button extends LabeledControl {
         super.setParentControl(parentControl);
         xButton = UnoRuntime.queryInterface(XButton.class, unoControl);
     }
-    
+
     public void addActionListener(XActionListener actionListener) {
         xButton.addActionListener(actionListener);
     }
-    
+
     public void setActionCommand(String actionCommand) {
         xButton.setActionCommand(actionCommand);
     }

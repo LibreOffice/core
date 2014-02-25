@@ -229,7 +229,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
         ArrayList<ExtSolverConstraint> constraints = new ArrayList<ExtSolverConstraint>();
         for (int i = 0; i < m_constraintCount; i++) {
             Double doubleValue;
-            
+
             if (m_extConstraints[i].Right != null)
                 doubleValue = null;
             else

@@ -35,23 +35,23 @@ public class DummyEvolutionarySolverStatusDialog
     }
 
     public void setBestSolution(double solution, boolean feasible) {
-        
+
     }
 
     public void setMaxIterations(int maxIterations) {
-        
+
     }
 
     public void setMaxStagnation(int maxStagnation) {
-        
+
     }
 
     public void setIteration(int iteration) {
-        
+
     }
 
     public void setStagnation(int stagnation) {
-        
+
     }
 
     public void setRuntime(long runtime) {
@@ -67,7 +67,7 @@ public class DummyEvolutionarySolverStatusDialog
     }
 
     public void dispose() {
-        
+
     }
 
 }

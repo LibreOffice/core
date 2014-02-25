@@ -94,5 +94,5 @@ public class ResourceManager {
             return defaultValue;
         }
     }
-    
+
 }

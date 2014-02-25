@@ -34,17 +34,17 @@ public abstract class LabeledControl extends BaseControl {
     public LabeledControl(XComponentContext context) {
         super(context);
     }
-    
+
     public void setLabel(String label) {
         setProperty("Label", label);
     }
-    
+
     public void setAlign(TextAlign align) {
         setProperty("Align", new Short(align.getUnoValue()));
     }
-    
+
     public void setMultiLine(boolean multiLine) {
         setProperty("MultiLine", new Boolean(multiLine));
     }
-    
+
 }

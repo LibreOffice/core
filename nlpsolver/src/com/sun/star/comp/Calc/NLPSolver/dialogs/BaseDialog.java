@@ -55,7 +55,7 @@ import java.util.logging.Logger;
  * It automatically loads the necessary interfaces to access OpenOffice.org dialogs.
  */
 public abstract class BaseDialog extends BaseControl {
-    
+
     private XMultiComponentFactory xMCF;
     private Object toolkit;
     private XMultiServiceFactory xMSF;
@@ -63,12 +63,12 @@ public abstract class BaseDialog extends BaseControl {
     protected XDialog xDialog;
     protected XWindowPeer xWindowPeer;
     protected ModalState modalState;
-    
+
     @Override
     public String getName() {
         return null;
     }
-    
+
     public XMultiServiceFactory getMultiServiceFactory() {
         return xMSF;
     }
@@ -89,7 +89,7 @@ public abstract class BaseDialog extends BaseControl {
     public Rectangle getWorkspaceDimensions() {
         return getCurrentFrame().getComponentWindow().getPosSize();
     }
-    
+
     public BaseDialog(XComponentContext context, String title, int x, int y, int width, int height) {
         super(context);
         modalState = ModalState.Exit;
@@ -97,7 +97,7 @@ public abstract class BaseDialog extends BaseControl {
             xMCF = context.getServiceManager();
             setUnoModel(xMCF.createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", context));
             xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, getUnoModel());
-            
+
             setProperty("Title", title);
             setPosition(x, y);
             setSize(width, height);
@@ -106,7 +106,7 @@ public abstract class BaseDialog extends BaseControl {
             XControl xControl = UnoRuntime.queryInterface(XControl.class, unoControl);
             XControlModel xControlModel = UnoRuntime.queryInterface(XControlModel.class, getUnoModel());
             xControl.setModel(xControlModel);
-            
+
             toolkit = xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", context);
             XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, toolkit);
             xWindow = UnoRuntime.queryInterface(XWindow.class, unoControl);
@@ -114,9 +114,9 @@ public abstract class BaseDialog extends BaseControl {
             XWindowPeer xParentWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, getCurrentFrame().getComponentWindow());
             xControl.createPeer(xToolkit, xParentWindowPeer);
             xWindowPeer = xControl.getPeer();
-            
+
             xDialog = UnoRuntime.queryInterface(XDialog.class, unoControl);
-            
+
             //center if necessary
             if (x < 0 || y < 0) {
                 Rectangle workspacePosSize = getWorkspaceDimensions();
@@ -125,11 +125,11 @@ public abstract class BaseDialog extends BaseControl {
                     dialogPosSize.X = workspacePosSize.X + (workspacePosSize.Width / 2) - (dialogPosSize.Width / 2);
                 if (y < 0)
                     dialogPosSize.Y = workspacePosSize.Y + (workspacePosSize.Height / 2) - (dialogPosSize.Height / 2);
-                
+
                 xWindow.setPosSize(dialogPosSize.X, dialogPosSize.Y,
                         dialogPosSize.Width, dialogPosSize.Height, PosSize.POS);
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(BaseDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -141,13 +141,13 @@ public abstract class BaseDialog extends BaseControl {
         xComponent.dispose();
         super.finalize();
     }
-    
+
     public ModalState showModal() {
         xWindow.setVisible(true);
         xDialog.execute();
         return modalState;
     }
-    
+
     public void close() {
         xDialog.endExecute();
         xWindow.setVisible(false);
@@ -161,5 +161,5 @@ public abstract class BaseDialog extends BaseControl {
         xWindowPeer.invalidate((short)(InvalidateStyle.CHILDREN /*| InvalidateStyle.NOERASE*/ |
                 InvalidateStyle.UPDATE | InvalidateStyle.TRANSPARENT));
     }
-       
+
 }
