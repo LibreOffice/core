@@ -54,11 +54,11 @@ static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
 }
 
 
-//#####################################################################
-//
+
+
 // Class IconChoicePage
-//
-//#####################################################################
+
+
 
 /**********************************************************************
 |
@@ -179,11 +179,11 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-//#####################################################################
-//
+
+
 // Class IconChoiceDialog
-//
-//#####################################################################
+
+
 
 /**********************************************************************
 |
@@ -288,7 +288,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
         delete pUserData;
     }
 
-    //
+
     if ( pRanges )
         delete pRanges;
     if ( pOutSet )
@@ -444,18 +444,18 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     const Point aCtrlOffset ( LogicToPixel( Point( CTRLS_OFFSET, CTRLS_OFFSET ), MAP_APPFONT ) );
     Size aOutSize ( GetOutputSizePixel() );
 
-    ////////////////////////////////////////
+
     // Button-Defaults
-    //
+
     Size aDefaultButtonSize = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
 
     // Reset-Button
     Size aResetButtonSize ( bInit ? aDefaultButtonSize :
                                     aResetBtn.GetSizePixel () );
 
-    ////////////////////////////////////////
+
     // IconChoiceCtrl resizen & positionieren
-    //
+
     SvtTabAppearanceCfg aCfg;
     const long nDefaultWidth = (aCfg.GetScaleFactor() * ICONCTRL_WIDTH_PIXEL) / 100;
     const long nDefaultHeight = (aCfg.GetScaleFactor() * ICONCTRL_HEIGHT_PIXEL) / 100;
@@ -492,9 +492,9 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     maIconCtrl.SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
     maIconCtrl.ArrangeIcons();
 
-    ////////////////////////////////////////
+
     // resize & position the pages
-    //
+
     for ( size_t i = 0; i < maPageList.size(); i++ )
     {
         IconChoicePageData* pData = maPageList[ i ];
@@ -537,9 +537,9 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
             pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
     }
 
-    ////////////////////////////////////////
+
     // position the buttons
-    //
+
     sal_uLong nXOffset=0;
     if ( meChoicePos == PosRight )
         nXOffset = aNewIconCtrlSize.Width()+(2*aCtrlOffset.X());

@@ -69,10 +69,10 @@ namespace Lang
     unsigned const All = -1;
 }
 
-//
+
 // vRowInfo[] -- rows (text + one or more edit boxes)
 // The order is the same as in RowType above, which is up to down.
-//
+
 struct
 {
     // id of the text
@@ -97,10 +97,10 @@ const vRowInfo[] =
     { "faxft",       Lang::All },
 };
 
-//
+
 // vFieldInfo[] -- edit boxes
 // The order is up to down, and then left to right.
-//
+
 struct
 {
     // in which row?
@@ -159,9 +159,9 @@ const vFieldInfo[] =
 
 
 
-//
+
 // Row
-//
+
 struct SvxGeneralTabPage::Row
 {
     // which row is it?
@@ -184,9 +184,9 @@ public:
 
 
 
-//
+
 // Field
-//
+
 struct SvxGeneralTabPage::Field
 {
     // which field is this? (in vFieldInfo[] above)

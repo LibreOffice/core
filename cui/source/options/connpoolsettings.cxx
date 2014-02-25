@@ -19,14 +19,14 @@
 
 #include "connpoolsettings.hxx"
 
-//........................................................................
+
 namespace offapp
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DriverPooling
-    //====================================================================
+
 
     DriverPooling::DriverPooling( const OUString& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout )
         :sName(_rName)
@@ -43,17 +43,17 @@ namespace offapp
             &&  (nTimeoutSeconds == _rR.nTimeoutSeconds);
     }
 
-    //====================================================================
+
     //= DriverPoolingSettings
-    //====================================================================
+
 
     DriverPoolingSettings::DriverPoolingSettings()
     {
     }
 
-    //====================================================================
+
     //= DriverPoolingSettingsItem
-    //====================================================================
+
     TYPEINIT1( DriverPoolingSettingsItem, SfxPoolItem )
 
     DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings )
@@ -95,9 +95,9 @@ namespace offapp
 
 
 
-//........................................................................
+
 }   // namespace offapp
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

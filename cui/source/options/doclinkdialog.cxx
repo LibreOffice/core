@@ -29,19 +29,19 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
-//......................................................................
+
 namespace svx
 {
-//......................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::svt;
 
-    //==================================================================
+
     //= ODocumentLinkDialog
-    //==================================================================
+
 
     ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
         : ModalDialog(_pParent, "DatabaseLinkDialog",
@@ -202,8 +202,8 @@ namespace svx
         return 0L;
     }
 
-//......................................................................
+
 }   // namespace svx
-//......................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

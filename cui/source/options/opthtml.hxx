@@ -65,7 +65,7 @@ public:
 };
 
 
-#endif //
+#endif
 
 
 

@@ -1428,7 +1428,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     m_pLocaleSettingLB->Enable(!bReadonly);
     m_pLocaleSettingFT->Enable(!bReadonly);
 
-    //
+
     m_pDecimalSeparatorCB->Check( pLangConfig->aSysLocaleOptions.IsDecimalSeparatorAsLocale());
     m_pDecimalSeparatorCB->SaveValue();
 
@@ -1477,7 +1477,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
     //collect the configuration values first
     m_pCurrentDocCB->Enable(false);
-    //
+
     Any aWestLang;
     Any aCJKLang;
     Any aCTLLang;

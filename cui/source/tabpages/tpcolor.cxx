@@ -627,9 +627,9 @@ SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
 
 
 
-//
+
 // is called when the content of the MtrFields is changed for color values
-//
+
 IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
 {
     if (eCM == CM_RGB)
@@ -1052,10 +1052,10 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
 //{
 //    long nCount = pColorList->Count();
 //    XColorEntry* pColorEntry;
-//
+
 //    if( nCount > 104 )
 //        rVs.SetStyle( rVs.GetStyle() | WB_VSCROLL );
-//
+
 //    for( long i = 0; i < nCount; i++ )
 //    {
 //        pColorEntry = pColorList->GetColor( i );

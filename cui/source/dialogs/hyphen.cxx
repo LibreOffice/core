@@ -116,7 +116,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
     // 'multi-line-editor' is regarded as single word we also need to discard those
     // hyphenation positions to the left of the rightmost '-' that is still left of
     // the rightmost valid hyphenation position according to 1)
-    //
+
     // Example:
     // If the possible hyphenation position in 'multi-line-editor' are to eb marked
     // by '=' then the text will look like this 'mul=ti-line-ed=it=or'.

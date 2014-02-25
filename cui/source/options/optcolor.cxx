@@ -163,9 +163,9 @@ const vEntryInfo[] =
 
 } // namespace
 
-//
+
 // ColorConfigWindow_Impl
-//
+
 
 class ColorConfigWindow_Impl
     : public VclContainer
@@ -275,9 +275,9 @@ private:
     bool IsGroupVisible (Group) const;
 };
 
-//
+
 // ColorConfigWindow_Impl::Chapter
-//
+
 
 // ctor for default groups
 // rParent: parent window (ColorConfigWindow_Impl)
@@ -322,9 +322,9 @@ void ColorConfigWindow_Impl::Chapter::Hide ()
     m_pText->Hide();
 }
 
-//
+
 // ColorConfigWindow_Impl::Entry
-//
+
 
 ColorConfigWindow_Impl::Entry::Entry(ColorConfigWindow_Impl& rParent, unsigned iEntry,
     long nCheckBoxLabelOffset, bool bShow)
@@ -498,9 +498,9 @@ void ColorConfigWindow_Impl::Entry::SetColor (Color aColor)
 }
 
 
-//
+
 // ColorConfigWindow_Impl
-//
+
 
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent)
     : VclContainer(pParent)
@@ -1027,9 +1027,9 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
 };
 
 
-//
+
 // SvxColorOptionsTabPage
-//
+
 
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     Window* pParent, const SfxItemSet& rCoreSet)

@@ -359,7 +359,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
             // as foreground color when the 1st bitmap in the bitmap
             // list is selected. I see no reason why this is done,
             // thus I will take it out
-            //
+
             //if( 0 == m_pLbBitmaps->GetSelectEntryPos() )
             //{
             //  m_pLbColor->SelectEntry( Color( COL_BLACK ) );

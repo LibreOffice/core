@@ -26,9 +26,9 @@
 
 #include "hangulhanjadlg.hrc"
 
-//=============================================================================
+
 // SvxClickInfoCtr
-//=============================================================================
+
 
 
 SvxClickInfoCtr::SvxClickInfoCtr( Window* pParent, const ResId& rResId ) :
@@ -73,9 +73,9 @@ SvxClickInfoCtr::~SvxClickInfoCtr()
 {
 }
 
-//=============================================================================
+
 // SvxCommonLinguisticControl
-//=============================================================================
+
 
 SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     :Window( _pParent, CUI_RES( RID_SVX_WND_COMMON_LINGU ) )

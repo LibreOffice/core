@@ -28,10 +28,10 @@
 #include <comphelper/processfactory.hxx>
 #include "sdbcdriverenum.hxx"
 
-//........................................................................
+
 namespace offapp
 {
-//........................................................................
+
 
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
@@ -78,9 +78,9 @@ namespace offapp
         return s_sNodeName;
     }
 
-    //====================================================================
+
     //= ConnectionPoolConfig
-    //====================================================================
+
 
     void ConnectionPoolConfig::GetOptions(SfxItemSet& _rFillItems)
     {
@@ -205,9 +205,9 @@ namespace offapp
             aConnectionPoolRoot.commit();
     }
 
-//........................................................................
+
 }   // namespace offapp
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

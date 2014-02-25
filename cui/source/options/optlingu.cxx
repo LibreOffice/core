@@ -217,9 +217,9 @@ public:
 
 };
 
-//
+
 // User for user-dictionaries (XDictionary interface)
-//
+
 class DicUserData
 {
     sal_uLong   nVal;
@@ -1253,9 +1253,9 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
 
 
-    //
+
     // activate dictionaries according to checkbox state
-    //
+
     Sequence< OUString > aActiveDics;
     sal_Int32 nActiveDics = 0;
     sal_uLong nEntries = m_pLinguDicsCLB->GetEntryCount();
@@ -1451,9 +1451,9 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     }
 
 
-    //
+
     //  get data from configuration
-    //
+
 
     SvtLinguConfig aLngCfg;
 
@@ -2105,18 +2105,18 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     for(sal_uLong i = 0; i < m_pModulesCLB->GetEntryCount(); i++)
         delete (ModuleUserData_Impl*)m_pModulesCLB->GetEntry(i)->GetUserData();
 
-    //
+
     // display entries for new selected language
-    //
+
     m_pModulesCLB->Clear();
     if(LANGUAGE_DONTKNOW != eCurLanguage)
     {
         sal_uLong n;
         ServiceInfo_Impl* pInfo;
 
-        //
+
         // spellchecker entries
-        //
+
         SvTreeListEntry* pEntry = CreateEntry( sSpell,  CBCOL_SECOND );
         ModuleUserData_Impl* pUserData = new ModuleUserData_Impl(
                                          OUString(), sal_True, sal_False, TYPE_SPELL, 0 );
@@ -2159,9 +2159,9 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             }
         }
 
-        //
+
         // grammar checker entries
-        //
+
         pEntry = CreateEntry( sGrammar,    CBCOL_SECOND );
         pUserData = new ModuleUserData_Impl( OUString(), sal_True, sal_False, TYPE_GRAMMAR, 0 );
         pEntry->SetUserData( (void *)pUserData );
@@ -2203,9 +2203,9 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             }
         }
 
-        //
+
         // hyphenator entries
-        //
+
         pEntry = CreateEntry( sHyph,    CBCOL_SECOND );
         pUserData = new ModuleUserData_Impl( OUString(), sal_True, sal_False, TYPE_HYPH, 0 );
         pEntry->SetUserData( (void *)pUserData );
@@ -2247,9 +2247,9 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             }
         }
 
-        //
+
         // thesaurus entries
-        //
+
         pEntry = CreateEntry( sThes,    CBCOL_SECOND );
         pUserData = new ModuleUserData_Impl( OUString(), sal_True, sal_False, TYPE_THES, 0 );
         pEntry->SetUserData( (void *)pUserData );

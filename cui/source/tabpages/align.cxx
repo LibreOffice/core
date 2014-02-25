@@ -92,7 +92,7 @@ static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
     { VALUESET_ITEM_NOTFOUND,   SVX_ROTATE_MODE_STANDARD    }
 };
 
-// ============================================================================
+
 
 static sal_uInt16 s_pRanges[] =
 {
@@ -108,7 +108,7 @@ static sal_uInt16 s_pRanges[] =
     0
 };
 
-// ============================================================================
+
 
 namespace {
 
@@ -150,7 +150,7 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
 
 }//namespace
 
-// ============================================================================
+
 
 AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
@@ -413,7 +413,7 @@ IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl)
     return 0;
 }
 
-// ============================================================================
+
 
 } // namespace svx
 

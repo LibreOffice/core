@@ -32,7 +32,7 @@
 #include <vcl/msgbox.hxx>
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 class PasswordReenterEdit_Impl : public Edit
 {
@@ -77,7 +77,7 @@ void PasswordReenterEdit_Impl::Paint( const Rectangle& rRect )
 }
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 struct PasswordToOpenModifyDialog_Impl
 {
@@ -218,7 +218,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
@@ -264,6 +264,6 @@ bool PasswordToOpenModifyDialog::IsRecommendToOpenReadonly() const
 }
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

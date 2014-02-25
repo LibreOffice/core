@@ -311,9 +311,9 @@ namespace offapp
         }
     }
 
-    //====================================================================
+
     //= ConnectionPoolOptionsPage
-    //====================================================================
+
 
     ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet)
         : SfxTabPage(_pParent, "ConnPoolPage", "cui/ui/connpooloptions.ui", _rAttrSet)

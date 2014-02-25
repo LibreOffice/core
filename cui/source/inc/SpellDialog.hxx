@@ -55,7 +55,7 @@ namespace linguistic2{
 namespace svx{
 class SpellDialog;
 struct SpellErrorDescription;
-// ------------------------------------------------------------------
+
 class SentenceEditWindow_Impl : public VclMultiLineEdit
 {
     using VclMultiLineEdit::SetText;

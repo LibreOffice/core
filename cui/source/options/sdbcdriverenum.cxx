@@ -23,19 +23,19 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 
-//........................................................................
+
 namespace offapp
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
 
-    //====================================================================
+
     //= ODriverEnumerationImpl
-    //====================================================================
+
     class ODriverEnumerationImpl
     {
     protected:
@@ -73,9 +73,9 @@ namespace offapp
         }
     }
 
-    //====================================================================
+
     //= ODriverEnumeration
-    //====================================================================
+
 
     ODriverEnumeration::ODriverEnumeration() throw()
         :m_pImpl(new ODriverEnumerationImpl)
@@ -99,9 +99,9 @@ namespace offapp
     {
         return m_pImpl->getDriverImplNames().end();
     }
-//........................................................................
+
 }   // namespace offapp
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

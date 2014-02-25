@@ -693,9 +693,9 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     aBoxInfoItem.SetValid( VALID_HORI,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_HOR )    != svx::FRAMESTATE_DONTCARE );
     aBoxInfoItem.SetValid( VALID_VERT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_VER )    != svx::FRAMESTATE_DONTCARE );
 
-    //
+
     // Put or Clear of the border?
-    //
+
     bPut = true;
 
     if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     false ))
@@ -873,9 +873,9 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
     return 0;
 }
 
-// ============================================================================
+
 // ValueSet handling
-// ============================================================================
+
 
 // number of preset images to show
 const sal_uInt16 SVX_BORDER_PRESET_COUNT = 5;
@@ -1012,7 +1012,7 @@ void SvxBorderTabPage::FillValueSets()
     FillShadowVS();
 }
 
-// ============================================================================
+
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 {
     return SvxBorderLine::threeDMediumColor( aMain );
@@ -1208,6 +1208,6 @@ void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet)
             HideShadowControls();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
