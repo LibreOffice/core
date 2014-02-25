@@ -9,32 +9,107 @@
 
 #include "filterdetect.hxx"
 
-#include "tools/urlobj.hxx"
-#include "ucbhelper/content.hxx"
+#include <svtools/htmltokn.h>
+#include <tools/urlobj.hxx>
+#include <ucbhelper/content.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define WRITER_TEXT_FILTER "Text"
 #define CALC_TEXT_FILTER   "Text - txt - csv (StarCalc)"
 
+#define WEB_HTML_FILTER    "HTML"
+#define WRITER_HTML_FILTER "HTML (StarWriter)"
+#define CALC_HTML_FILTER   "calc_HTML_WebQuery"
+
+#define WRITER_DOCSERVICE  "com.sun.star.text.TextDocument"
+#define CALC_DOCSERVICE    "com.sun.star.sheet.SpreadsheetDocument"
+
 using namespace ::com::sun::star;
+using utl::MediaDescriptor;
 
 namespace {
 
-template<typename T>
-void setPropValue(uno::Sequence<beans::PropertyValue>& rProps, sal_Int32 nPos, const char* pName, const T& rValue)
+bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
 {
-    if (nPos >= 0)
-        rProps[nPos].Value <<= rValue;
-    else
+    boost::scoped_ptr<SvStream> pInStream( utl::UcbStreamHelper::CreateStream( xInStream ) );
+    if ( !pInStream || pInStream->GetError() )
+        // No stream
+        return false;
+
+    // Read the stream header
+    pInStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
+    const sal_Size nUniPos = pInStream->Tell();
+    const sal_uInt16 nSize = 4096;
+
+    OString sHeader;
+    if ( nUniPos == 3 || nUniPos == 0 ) // UTF-8 or non-Unicode
+        sHeader = read_uInt8s_ToOString( *pInStream, nSize );
+    else // UTF-16 (nUniPos = 2)
+        sHeader = OUStringToOString( read_uInt16s_ToOUString( *pInStream, nSize ), RTL_TEXTENCODING_ASCII_US );
+
+    // Now check whether the stream begins with a known HTML tag.
+    enum DetectPhase { BeforeTag, TagOpened, InTagName };
+    DetectPhase dp = BeforeTag;
+
+    const char* pHeader = sHeader.getStr();
+    const int   nLength = sHeader.getLength();
+    int i = 0, nStartOfTagIndex = 0;
+
+    for ( i = 0; i < nLength; ++i, ++pHeader )
     {
-        sal_Int32 n = rProps.getLength();
-        rProps.realloc(n+1);
-        rProps[n].Name = OUString::createFromAscii(pName);
-        rProps[n].Value <<= rValue;
+        char c = *pHeader;
+        if ( c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\f' )
+        {
+            if ( dp == TagOpened )
+                return false; // Invalid: Should start with a tag name
+            else if ( dp == InTagName )
+                break; // End of tag name reached
+        }
+        else if ( c == '<' )
+        {
+            if ( dp == BeforeTag )
+                dp = TagOpened;
+            else
+                return false; // Invalid: Nested '<'
+        }
+        else if ( c == '>' )
+        {
+            if ( dp == InTagName )
+                break; // End of tag name reached
+            else
+                return false; // Invalid: Empty tag or before '<'
+        }
+        else if ( c == '!' )
+        {
+            if ( dp == TagOpened )
+                return true; // "<!" - DOCTYPE or comments block
+            else
+                return false; // Invalid: '!' before '<' or inside tag name
+        }
+        else
+        {
+            if ( dp == BeforeTag )
+                return false; // Invalid: Should start with a tag
+            else if ( dp == TagOpened )
+            {
+                nStartOfTagIndex = i;
+                dp = InTagName;
+            }
+        }
     }
+
+    // The string following '<' has to be a known HTML token.
+    OString aToken = sHeader.copy( nStartOfTagIndex, i - nStartOfTagIndex );
+    if ( GetHTMLToken( OStringToOUString( aToken.toAsciiLowerCase(), RTL_TEXTENCODING_ASCII_US ) ) != 0 )
+        return true;
+
+    return false;
 }
 
 }
@@ -46,65 +121,54 @@ PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
 OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor) throw (uno::RuntimeException, std::exception)
 {
-    OUString aType;
-    OUString aDocService;
-    OUString aExt;
-    OUString aUrl;
+    MediaDescriptor aMediaDesc(lDescriptor);
 
-    sal_Int32 nFilter = -1;
+    OUString aType = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_TYPENAME(), OUString() );
+    OUString aDocService = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_DOCUMENTSERVICE(), OUString() );
+    OUString aUrl = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString() );
 
-    for (sal_Int32 i = 0, n = lDescriptor.getLength(); i < n; ++i)
+    // Get the file name extension.
+    INetURLObject aParser(aUrl);
+    OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+    aExt = aExt.toAsciiLowerCase();
+
+    if (aType == "generic_HTML")
     {
-        if (lDescriptor[i].Name == "TypeName")
-            lDescriptor[i].Value >>= aType;
-        else if (lDescriptor[i].Name == "FilterName")
-            nFilter = i;
-        else if (lDescriptor[i].Name == "DocumentService")
-            lDescriptor[i].Value >>= aDocService;
-        else if (lDescriptor[i].Name == "URL")
-        {
-            lDescriptor[i].Value >>= aUrl;
-
-            // Get the file name extension.
-            INetURLObject aParser(aUrl);
-            aExt = aParser.getExtension(
-                INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
-            aExt = aExt.toAsciiLowerCase();
-        }
-    }
-
-    if (aType == "generic_Text")
-    {
-        // Generic text type.
+        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY);
+        if (!xInStream.is() || !IsHTMLStream(xInStream))
+            return OUString();
 
         // Decide which filter to use based on the document service first,
         // then on extension if that's not available.
 
-        if (aDocService == "com.sun.star.sheet.SpreadsheetDocument")
-            // Open it in Calc.
-            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
-        else if (aDocService == "com.sun.star.text.TextDocument")
-            // Open it in Writer.
-            setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
-        else if (aExt == "csv")
-            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
-        else if (aExt == "tsv")
-            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
-        else if (aExt == "tab")
-            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
+        if (aDocService == CALC_DOCSERVICE)
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_HTML_FILTER);
+        else if (aDocService == WRITER_DOCSERVICE)
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_HTML_FILTER);
         else if (aExt == "xls")
-            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
-        else if (aExt == "txt")
-            setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_HTML_FILTER);
         else
-            // No clue.  Open it in Writer by default.
-            setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
-
-        return aType;
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WEB_HTML_FILTER);
     }
 
-    // failed!
-    return OUString();
+    else if (aType == "generic_Text")
+    {
+        if (aDocService == CALC_DOCSERVICE)
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
+        else if (aDocService == WRITER_DOCSERVICE)
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
+        else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls")
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
+        else
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
+    }
+
+    else
+        // Nothing to detect.
+        return OUString();
+
+    aMediaDesc >> lDescriptor;
+    return aType;
 }
 
 // XInitialization

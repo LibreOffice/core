@@ -13,14 +13,19 @@ $(eval $(call gb_Library_Library,textfd))
 
 $(eval $(call gb_Library_set_componentfile,textfd,filter/source/textfilterdetect/textfd))
 
+$(eval $(call gb_Library_use_external,textfd,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,textfd))
 
 $(eval $(call gb_Library_use_libraries,textfd,\
+	comphelper \
 	ucbhelper \
 	cppuhelper \
 	cppu \
 	sal \
 	tl \
+	utl \
+	svt \
 	$(gb_UWINAPI) \
 ))
 
