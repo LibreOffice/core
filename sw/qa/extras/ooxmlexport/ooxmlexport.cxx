@@ -3444,7 +3444,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspaci
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testW14TextEffects, "TextEffects.docx")
+DECLARE_OOXMLEXPORT_TEST(testW14TextEffects, "TextEffects_Glow_Shadow_Reflection.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
