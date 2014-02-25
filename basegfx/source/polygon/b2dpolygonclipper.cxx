@@ -29,7 +29,7 @@
 #include <basegfx/tools/rectcliptools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -337,7 +337,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
@@ -461,7 +461,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         B2DPolyPolygon clipPolygonOnPolyPolygon(const B2DPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
@@ -475,7 +475,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
         /*
         * let a plane be defined as
@@ -619,16 +619,12 @@ namespace basegfx
 
                 if(nVertexCount)
                 {
-                    ////////////////////////////////////////////////////////////////////////
-                    ////////////////////////////////////////////////////////////////////////
-                    ////////////////////////////////////////////////////////////////////////
-                    //
                     // Upper bound for the maximal number of vertices when intersecting an
                     // axis-aligned rectangle with a triangle in E2
-                    //
+
                     // The rectangle and the triangle are in general position, and have 4 and 3
                     // vertices, respectively.
-                    //
+
                     //   Lemma: Since the rectangle is a convex polygon ( see
                     //   http://mathworld.wolfram.com/ConvexPolygon.html for a definition), and
                     //   has no holes, it follows that any straight line will intersect the
@@ -640,7 +636,7 @@ namespace basegfx
                     //   other 'outside') will at utmost add _one_  vertex to the resulting
                     //   intersection polygon (adding two intersection vertices, and removing at
                     //   least one rectangle vertex):
-                    //
+
                     //         *
                     //     +--+-----------------+
                     //     | *                  |
@@ -649,7 +645,7 @@ namespace basegfx
                     //    *|                    |
                     //   * |                    |
                     //     +--------------------+
-                    //
+
                     //   Proof: If the straight line intersects the rectangle two
                     //   times, it does so for distinct edges, i.e. the intersection has
                     //   minimally one of the rectangle's vertices on either side of the straight
@@ -657,17 +653,17 @@ namespace basegfx
                     //   minimally _one_ rectangle vertex removed from the resulting clip
                     //   polygon, and therefore, a clip against a half-plane has the net effect
                     //   of adding at utmost _one_ vertex to the resulting clip polygon.
-                    //
+
                     // Theorem: The intersection of a rectangle and a triangle results in a
                     // polygon with at utmost 7 vertices.
-                    //
+
                     // Proof: The inside of the triangle can be described as the consecutive
                     // intersection with three half-planes. Together with the lemma above, this
                     // results in at utmost 3 additional vertices added to the already existing 4
                     // rectangle vertices.
-                    //
+
                     // This upper bound is attained with the following example configuration:
-                    //
+
                     //                               *
                     //                             ***
                     //                           ** *
@@ -689,7 +685,7 @@ namespace basegfx
                     //     --*6-----5-----
                     //         **  *
                     //           **
-                    //
+
                     // As we need to scissor all triangles against the
                     // output rectangle we employ an output buffer for the
                     // resulting vertices.  the question is how large this
@@ -707,10 +703,6 @@ namespace basegfx
                     // fan.  for the maximum number of 7 vertices of
                     // resulting triangle fans we therefore need 15 times
                     // the number of original vertices.
-                    //
-                    ////////////////////////////////////////////////////////////////////////
-                    ////////////////////////////////////////////////////////////////////////
-                    ////////////////////////////////////////////////////////////////////////
 
                     //const size_t nBufferSize = sizeof(vertex)*(nVertexCount*16);
                     //vertex *pVertices = (vertex*)alloca(nBufferSize);
@@ -787,7 +779,7 @@ namespace basegfx
             return aResult;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
 
     } // end of namespace tools
 } // end of namespace basegfx

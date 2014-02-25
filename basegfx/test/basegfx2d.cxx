@@ -160,17 +160,17 @@ public:
         aExport = tools::exportToSvgD( aPoly, true, true, false );
 
         // Adaptions for B2DPolygon bezier change (see #i77162#):
-        //
+
         // The import/export of aPath1 does not reproduce aExport again. This is
         // correct since aPath1 contains a segment with non-used control points
         // which gets exported now correctly as 'l' and also a point (#4, index 3)
         // with C2 continuity which produces a 's' staement now.
-        //
+
         // The old SVGexport identified nun-used ControlVectors erraneously as bezier segments
         // because the 2nd vector at the start point was used, even when added
         // with start point was identical to end point. Exactly for that reason
         // i reworked the B2DPolygon to use prev, next control points.
-        //
+
         // so for correct unit test i add the new exported string here as sExportStringSimpleBezier
         // and compare to it.
         const char* sExportStringSimpleBezier =
@@ -180,7 +180,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("exporting bezier polygon to SVG-D", aExport.equalsAscii(sExportStringSimpleBezier));
 
         // Adaptions for B2DPolygon bezier change (see #i77162#):
-        //
+
         // a 2nd good test is that re-importing of aExport has to create the same
         // B2DPolPolygon again:
         B2DPolyPolygon aReImport;
@@ -191,7 +191,7 @@ public:
         aExport = tools::exportToSvgD( aPoly, true, true, false );
 
         // Adaptions for B2DPolygon bezier change (see #i77162#):
-        //
+
         // same here, the corrected export with the corrected B2DPolygon is simply more efficient,
         // so i needed to change the compare string. Also adding the re-import comparison below.
         const char* sExportString1 =

@@ -26,7 +26,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <numeric>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -533,15 +533,15 @@ namespace basegfx
             const double fBottom=fTotalSize;
 
             // from 0 to 5: pair of segment corner coordinates
-            //
+
             // segment corner indices are these:
-            //
+
             //   0 - 1
             //   |   |
             //   2 - 3
             //   |   |
             //   4 - 5
-            //
+
             static const double corners[] =
             {
                 fLeft,  fTop,
@@ -553,7 +553,7 @@ namespace basegfx
             };
 
             // from 0 to 9: which segments are 'lit' for this number?
-            //
+
             // array denotes graph edges to traverse, with -1 means
             // stop (the vertices are the corner indices from above):
             //     0
@@ -563,7 +563,7 @@ namespace basegfx
             // 4 |   | 5
             //     -
             //     6
-            //
+
             static const int numbers[] =
             {
                 1, 1, 1, 0, 1, 1, 1, // 0
@@ -647,7 +647,7 @@ namespace basegfx
             return aRes;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // converters for com::sun::star::drawing::PointSequence
 
         B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
@@ -692,7 +692,7 @@ namespace basegfx
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+
         // converters for com::sun::star::drawing::PolyPolygonBezierCoords (curved polygons)
 
         B2DPolyPolygon UnoPolyPolygonBezierCoordsToB2DPolyPolygon(

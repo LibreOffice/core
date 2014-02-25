@@ -31,7 +31,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -130,7 +130,7 @@ namespace basegfx
     } // end of namespace tools
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {

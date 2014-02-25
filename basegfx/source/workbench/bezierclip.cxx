@@ -348,14 +348,14 @@ void Impl_deCasteljauAt( Bezier&        part1,
                          double         t        )
 {
     // deCasteljau bezier arc, scheme is:
-    //
+
     // First row is    C_0^n,C_1^n,...,C_n^n
     // Second row is         P_1^n,...,P_n^n
     // etc.
     // with P_k^r = (1 - x_s)P_{k-1}^{r-1} + x_s P_k{r-1}
-    //
+
     // this results in:
-    //
+
     // P1  P2  P3  P4
     // L1  P2  P3  R4
     //     L2  H   R3
@@ -648,51 +648,51 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
     // calc new curve from hodograph, c and linear blend
 
     // Coefficients for derivative of c are (C_i=n(C_{i+1} - C_i)):
-    //
+
     // 3(P1 - P0), 3(P2 - P1), 3(P3 - P2) (bezier curve of degree 2)
-    //
+
     // The hodograph is then (bezier curve of 2nd degree is P0(1-t)^2 + 2P1(1-t)t + P2t^2):
-    //
+
     // 3(P1 - P0)(1-t)^2 + 6(P2 - P1)(1-t)t + 3(P3 - P2)t^2
-    //
+
     // rotate by 90 degrees: x=-y, y=x and you get the normal vector function N(t):
-    //
+
     // x(t) = -(3(P1.y - P0.y)(1-t)^2 + 6(P2.y - P1.y)(1-t)t + 3(P3.y - P2.y)t^2)
     // y(t) =   3(P1.x - P0.x)(1-t)^2 + 6(P2.x - P1.x)(1-t)t + 3(P3.x - P2.x)t^2
-    //
+
     // Now, the focus curve is defined to be F(t)=P(t) + c(t)N(t),
     // where P(t) is the original curve, and c(t)=c0(1-t) + c1 t
-    //
+
     // This results in the following expression for F(t):
-    //
+
     // x(t) =  P0.x (1-t)^3 + 3 P1.x (1-t)^2t + 3 P2.x (1.t)t^2 + P3.x t^3 -
     //          (c0(1-t) + c1 t)(3(P1.y - P0.y)(1-t)^2 + 6(P2.y - P1.y)(1-t)t + 3(P3.y - P2.y)t^2)
-    //
+
     // y(t) =  P0.y (1-t)^3 + 3 P1.y (1-t)^2t + 3 P2.y (1.t)t^2 + P3.y t^3 +
     //          (c0(1-t) + c1 t)(3(P1.x - P0.x)(1-t)^2 + 6(P2.x - P1.x)(1-t)t + 3(P3.x - P2.x)t^2)
-    //
+
     // As a heuristic, we set F(0)=F(1) (thus, the curve is closed and _tends_ to be small):
-    //
+
     // For F(0), the following results:
-    //
+
     // x(0) = P0.x - c0 3(P1.y - P0.y)
     // y(0) = P0.y + c0 3(P1.x - P0.x)
-    //
+
     // For F(1), the following results:
-    //
+
     // x(1) = P3.x - c1 3(P3.y - P2.y)
     // y(1) = P3.y + c1 3(P3.x - P2.x)
-    //
+
     // Reorder, collect and substitute into F(0)=F(1):
-    //
+
     // P0.x - c0 3(P1.y - P0.y) = P3.x - c1 3(P3.y - P2.y)
     // P0.y + c0 3(P1.x - P0.x) = P3.y + c1 3(P3.x - P2.x)
-    //
+
     // which yields
-    //
+
     // (P0.y - P1.y)c0 + (P3.y - P2.y)c1 = (P3.x - P0.x)/3
     // (P1.x - P0.x)c0 + (P2.x - P3.x)c1 = (P3.y - P0.y)/3
-    //
+
 
     // so, this is what we calculate here (determine c0 and c1):
     fMatrix[0] = c.p1.x - c.p0.x;
@@ -716,7 +716,7 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
 
     // now, the reordered and per-coefficient collected focus curve is
     // the following third degree bezier curve F(t):
-    //
+
     // x(t) =  P0.x (1-t)^3 + 3 P1.x (1-t)^2t + 3 P2.x (1.t)t^2 + P3.x t^3 -
     //          (c0(1-t) + c1 t)(3(P1.y - P0.y)(1-t)^2 + 6(P2.y - P1.y)(1-t)t + 3(P3.y - P2.y)t^2)
     //      =  P0.x (1-t)^3 + 3 P1.x (1-t)^2t + 3 P2.x (1.t)t^2 + P3.x t^3 -
@@ -732,7 +732,7 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
     //         3(P1.x - c1(P1.y - P0.y) - 2c0(P2.y - P1.y))(1-t)^2t +
     //         3(P2.x - 2 c1(P2.y - P1.y) - c0(P3.y - P2.y))(1-t)t^2 +
     //         (P3.x - 3 c1(P3.y - P2.y))t^3
-    //
+
     // y(t) =  P0.y (1-t)^3 + 3 P1.y (1-t)^2t + 3 P2.y (1-t)t^2 + P3.y t^3 +
     //          (c0(1-t) + c1 t)(3(P1.x - P0.x)(1-t)^2 + 6(P2.x - P1.x)(1-t)t + 3(P3.x - P2.x)t^2)
     //      =  P0.y (1-t)^3 + 3 P1.y (1-t)^2t + 3 P2.y (1-t)t^2 + P3.y t^3 +
@@ -742,14 +742,14 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
     //         3(P1.y + 2 c0 (P2.x - P1.x) + c1 (P1.x - P0.x))(1-t)^2t +
     //         3(P2.y + c0 (P3.x - P2.x) + 2 c1 (P2.x - P1.x))(1-t)t^2 +
     //         (P3.y + 3 c1 (P3.x - P2.x))t^3
-    //
+
     // Therefore, the coefficients F0 to F3 of the focus curve are:
-    //
+
     // F0.x = (P0.x - 3 c0(P1.y - P0.y))                    F0.y = (P0.y + 3 c0 (P1.x - P0.x))
     // F1.x = (P1.x - c1(P1.y - P0.y) - 2c0(P2.y - P1.y))   F1.y = (P1.y + 2 c0 (P2.x - P1.x) + c1 (P1.x - P0.x))
     // F2.x = (P2.x - 2 c1(P2.y - P1.y) - c0(P3.y - P2.y))  F2.y = (P2.y + c0 (P3.x - P2.x) + 2 c1 (P2.x - P1.x))
     // F3.x = (P3.x - 3 c1(P3.y - P2.y))                    F3.y = (P3.y + 3 c1 (P3.x - P2.x))
-    //
+
     res.p0.x = c.p0.x - 3*fRes[0]*(c.p1.y - c.p0.y);
     res.p1.x = c.p1.x - fRes[1]*(c.p1.y - c.p0.y) - 2*fRes[0]*(c.p2.y - c.p1.y);
     res.p2.x = c.p2.x - 2*fRes[1]*(c.p2.y - c.p1.y) - fRes[0]*(c.p3.y - c.p2.y);
@@ -773,54 +773,54 @@ bool Impl_calcSafeParams_focus( double&         t1,
     // this statement is P'(t)(P(t) - F) = 0, i.e. hodograph P'(t) and
     // line through P(t) and F are perpendicular.
     // If you expand this equation, you end up with something like
-    //
+
     // (\sum_{i=0}^n (P_i - F)B_i^n(t))^T (\sum_{j=0}^{n-1} n(P_{j+1} - P_j)B_j^{n-1}(t))
-    //
+
     // Multiplying that out (as the scalar product is linear, we can
     // extract some terms) yields:
-    //
+
     // (P_i - F)^T n(P_{j+1} - P_j) B_i^n(t)B_j^{n-1}(t) + ...
-    //
+
     // If we combine the B_i^n(t)B_j^{n-1}(t) product, we arrive at a
     // Bernstein polynomial of degree 2n-1, as
-    //
+
     // \binom{n}{i}(1-t)^{n-i}t^i) \binom{n-1}{j}(1-t)^{n-1-j}t^j) =
     // \binom{n}{i}\binom{n-1}{j}(1-t)^{2n-1-i-j}t^{i+j}
-    //
+
     // Thus, with the defining equation for a 2n-1 degree Bernstein
     // polynomial
-    //
+
     // \sum_{i=0}^{2n-1} d_i B_i^{2n-1}(t)
-    //
+
     // the d_i are calculated as follows:
-    //
+
     // d_i = \sum_{j+k=i, j\in\{0,...,n\}, k\in\{0,...,n-1\}} \frac{\binom{n}{j}\binom{n-1}{k}}{\binom{2n-1}{i}} n (P_{k+1} - P_k)^T(P_j - F)
-    //
-    //
+
+
     // Okay, but F is now not a single point, but itself a curve
     // F(u). Thus, for every value of u, we get a different 2n-1
     // bezier curve from the above equation. Therefore, we have a
     // tensor product bezier patch, with the following defining
     // equation:
-    //
+
     // d(t,u) = \sum_{i=0}^{2n-1} \sum_{j=0}^m B_i^{2n-1}(t) B_j^{m}(u) d_{ij}, where
     // d_{ij} = \sum_{k+l=i, l\in\{0,...,n\}, k\in\{0,...,n-1\}} \frac{\binom{n}{l}\binom{n-1}{k}}{\binom{2n-1}{i}} n (P_{k+1} - P_k)^T(P_l - F_j)
-    //
+
     // as above, only that now F is one of the focus' control points.
-    //
+
     // Note the difference in the binomial coefficients to the
     // reference paper, these formulas most probably contained a typo.
-    //
+
     // To determine, where D(t,u) is _not_ zero (these are the parts
     // of the curve that don't share normals with the focus and can
     // thus be safely clipped away), we project D(u,t) onto the
     // (d(t,u), t) plane, determine the convex hull there and proceed
     // as for the curve intersection part (projection is orthogonal to
     // u axis, thus simply throw away u coordinate).
-    //
+
     // \fallfac are so-called falling factorials (see Concrete
     // Mathematics, p. 47 for a definition).
-    //
+
 
     // now, for tensor product bezier curves, the convex hull property
     // holds, too. Thus, we simply project the control points (t_{ij},
@@ -828,9 +828,9 @@ bool Impl_calcSafeParams_focus( double&         t1,
     // intersections of the convex hull with the t axis, as for the
     // bezier clipping case.
 
-    //
+
     // calc polygon of control points (t_{ij}, d_{ij}):
-    //
+
     const int n( 3 ); // cubic bezier curves, as a matter of fact
     const int i_card( 2*n );
     const int j_card( n + 1 );
