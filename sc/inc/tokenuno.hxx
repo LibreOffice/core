@@ -76,7 +76,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL parseFormula(
                                     const OUString& aFormula,
                                     const ::com::sun::star::table::CellAddress& rReferencePos )
-                                throw (::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual OUString SAL_CALL printFormula( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::sheet::FormulaToken >& aTokens,
                                     const ::com::sun::star::table::CellAddress& rReferencePos )

@@ -125,8 +125,8 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
 }
 
 uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
-        const OUString& aFormula, const table::CellAddress& rReferencePos )
-                                throw (uno::RuntimeException)
+    const OUString& aFormula, const table::CellAddress& rReferencePos )
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence<sheet::FormulaToken> aRet;
