@@ -57,10 +57,10 @@ static void sendEmptyCommit( SalFrame* pFrame )
 }
 
 
-//
+
 // Constructor / Destructor, the InputContext is bound to the SalFrame, as it
 // needs the shell window as a focus window
-//
+
 
 
 SalI18N_InputContext::~SalI18N_InputContext()
@@ -134,9 +134,9 @@ get_font_set( Display *p_display )
 }
 
 
-//
+
 // Constructor for a InputContext (IC)
-//
+
 
 
 SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
@@ -196,9 +196,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         maClientData.aText.nCursorPos       = 0;
         maClientData.aText.nLength          = 0;
 
-        //
+
         // Status attributes
-        //
+
 
         switch ( mnStatusStyle )
         {
@@ -236,9 +236,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 break;
         }
 
-        //
+
         // set preedit attributes
-        //
+
 
         switch ( mnPreeditStyle )
         {
@@ -374,10 +374,10 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 }
 
 
-//
+
 // In Solaris 8 the status window does not unmap if the frame unmapps, so
 // unmap it the hard way
-//
+
 
 
 void
@@ -420,10 +420,10 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
 }
 
 
-//
+
 // Handle DestroyCallbacks
 // in fact this is a callback called from the XNDestroyCallback
-//
+
 
 
 void
@@ -434,10 +434,10 @@ SalI18N_InputContext::HandleDestroyIM()
 }
 
 
-//
+
 //  make sure, the input method gets all the X-Events it needs, this is only
 //  called once on each frame, it relys on a valid maContext
-//
+
 
 
 void
@@ -461,9 +461,9 @@ SalI18N_InputContext::ExtendEventMask( XLIB_Window aFocusWindow )
 }
 
 
-//
+
 // tune the styles provided by the input method with the supported one
-//
+
 
 
 unsigned int
@@ -548,9 +548,9 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
 }
 
 
-//
+
 // handle extended and normal key input
-//
+
 
 
 int
@@ -604,11 +604,11 @@ SalI18N_InputContext::UpdateSpotLocation()
 }
 
 
-//
+
 // set and unset the focus for the Input Context
 // the context may be NULL despite it is useable if the framewindow is
 // in unmapped state
-//
+
 
 
 void
@@ -656,9 +656,9 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 }
 
 
-//
+
 // multi byte input method only
-//
+
 
 
 void

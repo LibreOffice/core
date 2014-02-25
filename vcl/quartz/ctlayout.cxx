@@ -167,7 +167,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 // drawing position relative to the right margin on our own to avoid the
 // rounding errors. That is basically a hack, and it should go away if one day
 // we managed to get rid of those rounding errors.
-//
+
 // We continue using GetDrawPosition() for non-right aligned text, to minimize
 // any unforeseen side effects.
 CGPoint CTLayout::GetTextDrawPosition(void) const

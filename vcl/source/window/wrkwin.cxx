@@ -34,7 +34,7 @@
 #include <brdwin.hxx>
 #include <window.h>
 
-// =======================================================================
+
 
 void WorkWindow::ImplInitWorkWindowData()
 {

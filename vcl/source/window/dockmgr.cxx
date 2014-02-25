@@ -39,7 +39,6 @@
 
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_PINABLE | WB_ROLLABLE )
 
-
 class ImplDockFloatWin2 : public FloatingWindow
 {
 private:
@@ -74,7 +73,6 @@ public:
 
     sal_uLong GetLastTicks() const { return mnLastTicks; }
 };
-
 
 ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
                                     ImplDockingWindowWrapper* pDockingWin ) :
@@ -306,7 +304,6 @@ bool ImplDockFloatWin2::Close()
     return mpDockWin->Close();
 }
 
-
 DockingManager::DockingManager()
 {
 }
@@ -464,10 +461,10 @@ Rectangle DockingManager::GetPosSizePixel( const Window *pWindow )
     return aRect;
 }
 
-// =======================================================================
+
 // special floating window for popup mode
 // main purpose: provides tear-off area for undocking
-// =======================================================================
+
 
 // if TEAROFF_DASHED defined a single dashed line is used
 // otherwise multiple smaller lines will be painted
@@ -889,7 +886,6 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     GetWindow()->StartTracking( STARTTRACK_KEYMOD );
     return true;
 }
-
 
 void ImplDockingWindowWrapper::ImplInitData()
 {

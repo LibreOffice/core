@@ -1521,7 +1521,7 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
     return nDone || Edit::PreNotify( rNEvt );
 }
 
-//
+
 // Internals for derived classes, e.g. TextComponent
 
 ExtTextEngine* VclMultiLineEdit::GetTextEngine() const

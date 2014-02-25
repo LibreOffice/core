@@ -80,7 +80,7 @@ private:
 
 // This class uses the SIL Graphite engine to provide complex text layout services to the VCL
 // @author tse
-//
+
 class VCL_PLUGIN_PUBLIC GraphiteLayout : public SalLayout
 {
 public:

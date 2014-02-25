@@ -35,9 +35,9 @@
 #include <iostream>
 #endif
 
-//////////////////////////////////////////////////////////////////////////
+
 // CommandEvent
-//////////////////////////////////////////////////////////////////////////
+
 
 KDECommandEvent::KDECommandEvent( const QString &qCommand, QStringList *pStringList )
     : QCustomEvent( TypeId, pStringList ),
@@ -73,9 +73,9 @@ KDECommandEvent::KDECommandEvent( const QString &qCommand, QStringList *pStringL
     m_eCommand = pIdx->eType;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 // CommandThread
-//////////////////////////////////////////////////////////////////////////
+
 
 KDECommandThread::KDECommandThread( QWidget *pObject )
     : m_pObject( pObject )

@@ -25,7 +25,7 @@
 #include <svdata.hxx>
 
 
-// =======================================================================
+
 
 OUString GetStandardText( sal_uInt16 nStdText )
 {
@@ -38,7 +38,7 @@ OUString GetStandardText( sal_uInt16 nStdText )
     return OUString();
 }
 
-// =======================================================================
+
 
 void ShowServiceNotAvailableError(Window* pParent,
     const OUString& rServiceName, bool bError)

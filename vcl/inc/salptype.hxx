@@ -22,9 +22,9 @@
 
 #include <tools/solar.h>
 
-// --------------------
+
 // - SalJobSetupFlags -
-// --------------------
+
 
 #define SAL_JOBSET_ORIENTATION                  ((sal_uLong)0x00000001)
 #define SAL_JOBSET_PAPERBIN                     ((sal_uLong)0x00000002)
@@ -35,16 +35,16 @@
                                                  SAL_JOBSET_PAPERSIZE   |\
                                                  SAL_JOBSET_DUPLEXMODE)
 
-// -------------------
+
 // - SalPrinterError -
-// -------------------
+
 
 #define SAL_PRINTER_ERROR_GENERALERROR          1
 #define SAL_PRINTER_ERROR_ABORT                 2
 
-// -------------------
+
 // - SalPrinterProcs -
-// -------------------
+
 
 class SalPrinter;
 typedef long (*SALPRNABORTPROC)( void* pInst, SalPrinter* pPrinter );

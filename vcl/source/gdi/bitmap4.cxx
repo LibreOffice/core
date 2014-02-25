@@ -1063,11 +1063,11 @@ void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContribu
 }
 
 // Separable Gaussian Blur
-//
+
 // Separable Gaussian Blur filter and accepts a blur radius
 // as a parameter so the user can change the strength of the blur.
 // Radius of 1.0 is 3 * standard deviation of gauss function.
-//
+
 // Separable Blur implementation uses 2x separable 1D convolution
 // to process the image.
 bool Bitmap::ImplSeparableBlurFilter(const double radius)

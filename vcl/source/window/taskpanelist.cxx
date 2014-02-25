@@ -172,7 +172,7 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     // The old design was the following one:
     // < Ctrl-TAB cycles through Menubar, Toolbars and Floatingwindows only and is
     // < only active if one of those items has the focus
-    //
+
     // Since the design of Ctrl-Tab looks to be inconsistent ( non-modal dialogs are not reachable
     // and the shortcut conflicts with tab-control shortcut ), it is no more supported
     bool bSplitterOnly = false;

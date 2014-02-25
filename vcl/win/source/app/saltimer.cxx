@@ -27,12 +27,12 @@
 #endif
 
 
-// =======================================================================
+
 
 // maximum period
 #define MAX_SYSPERIOD     65533
 
-// =======================================================================
+
 
 void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
 {

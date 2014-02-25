@@ -431,7 +431,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     bool forwardButtonInsensitive = pScrollbarVal->mnMax == 0 ||
         pScrollbarVal->mnCur + pScrollbarVal->mnVisibleSize >= pScrollbarVal->mnMax;
 
-    // ----------------- BUTTON 1 //
+    // ----------------- BUTTON 1
     if ( has_backward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateFlags, &shadowType );

@@ -30,7 +30,7 @@
 using namespace ::com::sun::star;
 
 
-// =======================================================================
+
 
 MnemonicGenerator::MnemonicGenerator()
 {
@@ -318,7 +318,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
 //        do
 //        {
 //            c = aKey.GetChar( nIndex );
-//
+
 //            nMnemonicIndex = ImplGetMnemonicIndex( c );
 //            if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
 //            {
@@ -327,7 +327,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
 //                bChanged = sal_True;
 //                break;
 //            }
-//
+
 //            // Search for next word
 //            do
 //            {

@@ -1225,7 +1225,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         // #i123216# Not used in the test case of #121382# (always identity in XForm), also
                         // no hints in ms docu if FontSize should be scaled with WT. Using with the example
                         // from #i123216# creates errors, so removing.
-                        //
+
                         // // #i121382# Need to apply WorldTransform to FontHeight/Width; this should be completely
                         // // changed to basegfx::B2DHomMatrix instead of 'struct XForm', but not now due to time
                         // // constraints and dangers

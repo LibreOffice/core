@@ -59,7 +59,7 @@
 
 using namespace vcl;
 
-// =======================================================================
+
 
 CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
 :   PhysicalFontFace( rSrc )

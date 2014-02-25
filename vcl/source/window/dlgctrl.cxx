@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 static bool ImplHasIndirectTabParent( Window* pWindow )
 {

@@ -712,12 +712,12 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         // the number of metafile actions, and it finds all distinct
         // regions of rectangle-bounded connected components. This
         // algorithm was designed by AF.
-        //
 
-        //
+
+
         //  STAGE 1: Detect background
-        //  ==========================
-        //
+
+
 
         // Receives uniform background content, and is _not_ merged
         // nor checked for intersection against other aCCList elements
@@ -860,10 +860,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             ++nActionNum;
         }
 
-        //
+
         //  STAGE 2: Generate connected components list
-        //  ===========================================
-        //
+
+
 
         // iterate over all actions (start where background action
         // search left off)
@@ -888,10 +888,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             bool                                    bTreatSpecial( false );
             ConnectedComponents                     aTotalComponents;
 
-            //
+
             //  STAGE 2.1: Search for intersecting cc entries
-            //  =============================================
-            //
+
+
 
             // if aBBCurrAct is empty, it will intersect with no
             // aCCList member. Thus, we can save the check.
@@ -983,10 +983,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 while( bSomeComponentsChanged );
             }
 
-            //
+
             //  STAGE 2.2: Determine special state for cc element
-            //  =================================================
-            //
+
+
 
             // now test whether the whole connected component must be
             // treated specially (i.e. rendered as a bitmap): if the
@@ -1054,10 +1054,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             }
 
 
-            //
+
             //  STAGE 2.3: Add newly generated CC list element
-            //  ==============================================
-            //
+
+
 
             // set new bounds and add action to list
             aTotalComponents.aBounds = aTotalBounds;
@@ -1104,10 +1104,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             }
         }
 
-        //
+
         //  STAGE 3.1: Output background mtf actions (if there are any)
-        //  ===========================================================
-        //
+
+
 
         ComponentList::iterator       aCurrAct( aBackgroundComponent.aComponentList.begin() );
         const ComponentList::iterator aLastAct( aBackgroundComponent.aComponentList.end() );
@@ -1119,10 +1119,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         }
 
 
-        //
+
         //  STAGE 3.2: Generate banded bitmaps for special regions
-        //  ====================================================
-        //
+
+
 
         Point aPageOffset;
         Size aTmpSize( GetOutputSizePixel() );
@@ -1296,10 +1296,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         while( nCount-- )
             aMapModeVDev.Pop();
 
-        //
+
         //  STAGE 4: Copy actions to output metafile
-        //  ========================================
-        //
+
+
 
         // iterate over all actions and duplicate the ones not in a
         // special aCCList member into rOutMtf

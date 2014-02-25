@@ -28,7 +28,7 @@
 #include <tools/rc.h>
 
 
-// =======================================================================
+
 static const sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
 {
     0, 0, 0, 0,                                                    // KEYFUNC_DONTKNOW
@@ -64,7 +64,7 @@ void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, 
         rCode4 = aImplKeyFuncTab[nIndex+3];
 }
 
-// =======================================================================
+
 
 KeyCode::KeyCode( KeyFuncType eFunction )
 {

@@ -2954,9 +2954,9 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
         const UBiDiLevel nBidiLevel = IsRightToLeft() ? 1 /*RTL*/ : 0 /*LTR*/;
         OUString aText( pParaPortion->GetNode()->GetText() );
 
-        //
+
         // Bidi functions from icu 2.0
-        //
+
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
         nError = U_ZERO_ERROR;

@@ -168,7 +168,7 @@ namespace
 
     //See fdo#30729 for where an old opensymbol installed system-wide can
     //clobber the new opensymbol installed locally
-    //
+
     //See if this font is a duplicate with equal attributes which has already been
     //inserted, or if it an older version of an inserted fonts. Depends on FcFontSet
     //on being sorted with SortFont
@@ -568,7 +568,7 @@ void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, 
                 //remove font, reuse index
                 //we want to remove unusable fonts here, in case there is a usable font
                 //which duplicates the properties of the unusable one
-                //
+
                 //not removing the unusable font will risk the usable font being rejected
                 //as a duplicate by isPreviouslyDuplicateOrObsoleted
                 lcl_FcFontSetRemove(pFSet, i--);

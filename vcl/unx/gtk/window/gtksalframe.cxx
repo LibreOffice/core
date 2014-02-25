@@ -1817,10 +1817,10 @@ void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 
             //For these floating windows we don't want the main window to lose focus, and metacity has...
             // metacity-2.24.0/src/core/window.c
-            //
+
             //  if ((focus_window != NULL) && XSERVER_TIME_IS_BEFORE (compare, focus_window->net_wm_user_time))
             //      "compare" window focus prevented by other activity
-            //
+
             //  where "compare" is this window
 
             //  which leads to...
@@ -1833,7 +1833,7 @@ void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
             //          "The focus window %s is an ancestor of the newly mapped "
             //         "window %s which isn't being focused.  Unfocusing the "
             //          "ancestor.\n",
-            //
+
             // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
             // awesome.
             if( nUserTime == 0 )
@@ -2721,7 +2721,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
                 // FIXME: for some unknown reason gdk_pointer_grab does not
                 // really produce owner events for GtkPlug windows
                 // the cause is yet unknown
-                //
+
                 // this is of course a bad hack, especially as we cannot
                 // set the right cursor this way
                 if( !pEnv || !*pEnv )
@@ -3564,7 +3564,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     // while we have the pointer grabbed, this should not come from
     // the window manager. Is this an event that was still queued ?
     // The focus does not seem to get set inside our process
-    //
+
     // in the meantime do not propagate focus get/lose if floats are open
     if( m_nFloats == 0 )
         pThis->CallCallback( pEvent->in ? SALEVENT_GETFOCUS : SALEVENT_LOSEFOCUS, NULL );

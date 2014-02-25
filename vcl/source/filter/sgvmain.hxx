@@ -92,8 +92,8 @@ struct ObjAreaType {
     // So don't clean the "unused dummy" fields away. (Actually it
     // might well be that many other fields around here are never used
     // in our code either.)
-    sal_uInt8   FDummy1;   //
-    sal_Int16   FDummy2;   //
+    sal_uInt8   FDummy1;
+    sal_Int16   FDummy2;
     sal_uInt16  FMuster;   //  [Index] incl. Invers, transparency
 };
 
