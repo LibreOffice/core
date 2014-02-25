@@ -331,7 +331,8 @@ public:
 
     virtual void SAL_CALL addActivationEventListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XActivationEventListener >& aListener )
-                                    throw (::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException,
+                                           std::exception);
     virtual void SAL_CALL removeActivationEventListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XActivationEventListener >& aListener )
                                     throw (::com::sun::star::uno::RuntimeException);
