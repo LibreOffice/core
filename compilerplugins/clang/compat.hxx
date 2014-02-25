@@ -14,6 +14,8 @@
 #include <string>
 
 #include "clang/AST/Decl.h"
+#include "clang/AST/DeclBase.h"
+#include "clang/AST/DeclCXX.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/Diagnostic.h"
@@ -24,6 +26,22 @@
 
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
+
+inline bool isExternCContext(clang::DeclContext const & ctxt) {
+#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+    return ctxt.isExternCContext();
+#else
+    for (clang::DeclContext const * c = &ctxt;
+         c->getDeclKind() != clang::Decl::TranslationUnit; c = c->getParent())
+    {
+        if (c->getDeclKind() == clang::Decl::LinkageSpec) {
+            return llvm::cast<clang::LinkageSpecDecl>(c)->getLanguage()
+                == clang::LinkageSpecDecl::lang_c;
+        }
+    }
+    return false;
+#endif
+}
 
 inline clang::QualType getReturnType(clang::FunctionDecl const & decl) {
 #if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
