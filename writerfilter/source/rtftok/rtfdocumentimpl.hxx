@@ -391,7 +391,8 @@ namespace writerfilter {
                     writerfilter::Reference<Properties>::Pointer_t &,
                     writerfilter::Reference<Properties>::Pointer_t &,
                     int const nCells, int const nCurrentCellX);
-                void pushProperties(
+                /// Send the passed properties to dmapper.
+                void sendProperties(
                     writerfilter::Reference<Properties>::Pointer_t const&,
                     writerfilter::Reference<Properties>::Pointer_t const&,
                     writerfilter::Reference<Properties>::Pointer_t const&);

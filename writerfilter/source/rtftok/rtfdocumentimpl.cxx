@@ -1265,7 +1265,7 @@ void RTFDocumentImpl::prepareProperties(
             rState.aTableRowAttributes, rState.aTableRowSprms));
 }
 
-void RTFDocumentImpl::pushProperties(
+void RTFDocumentImpl::sendProperties(
     writerfilter::Reference<Properties>::Pointer_t const& pParagraphProperties,
     writerfilter::Reference<Properties>::Pointer_t const& pFrameProperties,
     writerfilter::Reference<Properties>::Pointer_t const& pTableRowProperties)
@@ -1326,7 +1326,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
             replayRowBuffer(rRowBuffer.buffer, rRowBuffer.cellsSprms,
                     rRowBuffer.cellsAttributes, rRowBuffer.nCells);
 
-            pushProperties(rRowBuffer.pParaProperties,
+            sendProperties(rRowBuffer.pParaProperties,
                     rRowBuffer.pFrameProperties, rRowBuffer.pRowProperties);
         }
         else if (boost::get<0>(aTuple) == BUFFER_CELLEND)
@@ -2102,7 +2102,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 prepareProperties(m_aStates.top(),
                         paraProperties, frameProperties, rowProperties,
                         m_nTopLevelCells, m_nTopLevelCurrentCellX);
-                pushProperties(paraProperties, frameProperties, rowProperties);
+                sendProperties(paraProperties, frameProperties, rowProperties);
 
                 m_bNeedPap = true;
                 m_bNeedFinalPar = true;
