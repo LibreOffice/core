@@ -71,7 +71,7 @@ private:
     DocumentEventNotifier m_aNotifier;
 };
 
-//
+
 
 class LibBox : public DocListenerBox
 {

@@ -29,9 +29,9 @@ struct IVideoWindow;
 
 namespace avmedia { namespace win {
 
-// ---------------
+
 // - Window -
-// ---------------
+
 
 class Player;
 

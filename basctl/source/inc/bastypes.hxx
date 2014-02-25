@@ -71,10 +71,10 @@ struct BasicStatus
         nBasicFlags(0) { }
 };
 
-//
+
 // basctl::DockingWindow -- special docking window for the Basic IDE
 // Not to be confused with ::DockingWindow from vcl.
-//
+
 class DockingWindow : public ::DockingWindow
 {
 public:
@@ -112,10 +112,10 @@ private:
     void DockThis ();
 };
 
-//
+
 // basctl::TabBar
 // Not to be confused with ::TabBar from svtools.
-//
+
 class TabBar : public ::TabBar
 {
 protected:
@@ -142,9 +142,9 @@ enum BasicWindowStatus
 
 class EntryDescriptor;
 
-//
+
 // BaseWindow -- the base of both ModulWindow and DialogWindow.
-//
+
 class BaseWindow : public Window
 {
 private:

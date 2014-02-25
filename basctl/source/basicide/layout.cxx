@@ -155,10 +155,10 @@ void Layout::DataChanged (DataChangedEvent const& rDCEvt)
     }
 }
 
-//
+
 // SplittedSide
-// ============
-//
+
+
 
 // ctor
 Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :

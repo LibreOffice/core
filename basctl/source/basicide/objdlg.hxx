@@ -32,10 +32,10 @@
 namespace basctl
 {
 
-//
+
 // ObjectCatalog -- a docking window that contains the currently loaded macros
 // in a tree structure.
-//
+
 class ObjectCatalog : public DockingWindow
 {
 public:

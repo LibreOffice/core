@@ -25,9 +25,9 @@ namespace basctl
 
 class DlgEditor;
 
-//============================================================================
+
 // DlgEdFunc
-//============================================================================
+
 
 class DlgEdFunc /* : public LinkHdl */
 {
@@ -48,9 +48,9 @@ public:
     virtual bool KeyInput( const KeyEvent& rKEvt );
 };
 
-//============================================================================
+
 // DlgEdFuncInsert
-//============================================================================
+
 
 class DlgEdFuncInsert : public DlgEdFunc
 {
@@ -63,9 +63,9 @@ public:
     virtual bool MouseMove( const MouseEvent& rMEvt );
 };
 
-//============================================================================
+
 // DlgEdFuncSelect
-//============================================================================
+
 
 class DlgEdFuncSelect : public DlgEdFunc
 {

@@ -37,9 +37,9 @@ namespace avmedia
 
     namespace priv
     {
-        // ----------------------
+
         // - MediaWindowControl -
-        // ----------------------
+
 
         class MediaWindowControl : public MediaControl
         {
@@ -54,9 +54,9 @@ namespace avmedia
             void    execute( const MediaItem& rItem );
         };
 
-        // --------------------
+
         // - MediaChildWindow -
-        // --------------------
+
 
         class MediaChildWindow : public SystemChildWindow
         {
@@ -77,7 +77,7 @@ namespace avmedia
 
         // ------------------.
         // - MediaWindowImpl -
-        // -------------------
+
 
         class MediaEventListenersImpl;
 

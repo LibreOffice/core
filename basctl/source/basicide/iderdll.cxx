@@ -155,10 +155,10 @@ ExtraData* Dll::GetExtraData ()
 
 } // namespace
 
-//
+
 // basctl::ExtraData
-// ===================
-//
+
+
 
 ExtraData::ExtraData () :
     pSearchItem(new SvxSearchItem(SID_SEARCH_ITEM)),
