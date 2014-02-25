@@ -22,10 +22,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XCollection.idl>
 
-//=============================================================================
+
 module ooo {  module vba {  module excel {
 interface XSeries;
-//=============================================================================
+
 
 interface XSeriesCollection
 {
@@ -36,7 +36,7 @@ interface XSeriesCollection
     any XSeries( [in] any Item );
 };
 
-//=============================================================================
+
 
 }; }; };
 

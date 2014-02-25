@@ -29,7 +29,7 @@
 
 module ooo {  module vba { module excel {
 
-//=============================================================================
+
 
 /** Additional attributes for a push button drawing control (this interface
     does not belong to ActiveX form controls).
@@ -56,7 +56,7 @@ interface XButton : com::sun::star::uno::XInterface
     XCharacters Characters( [in] any Start, [in] any Length );
 };
 
-//=============================================================================
+
 
 }; }; };
 

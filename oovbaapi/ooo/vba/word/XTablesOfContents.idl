@@ -24,11 +24,11 @@
 #include <ooo/vba/XCollection.idl>
 
 
-//=============================================================================
+
 
 module ooo {  module vba {  module word {
 
-//=============================================================================
+
 
 interface XTableOfContents;
 interface XRange;

@@ -23,11 +23,11 @@
 #include <ooo/vba/excel/XPivotCache.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 //interface XPivotTable: com::sun::star::uno::XInterface
 interface XPivotTable
@@ -36,7 +36,7 @@ interface XPivotTable
     XPivotCache PivotCache();
 };
 
-//=============================================================================
+
 
 }; }; };
 

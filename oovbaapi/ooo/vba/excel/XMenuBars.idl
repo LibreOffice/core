@@ -24,18 +24,18 @@
 #include <com/sun/star/script/BasicErrorException.idl>
 #include <ooo/vba/XCollection.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 interface XMenuBars
 {
     interface ooo::vba::XCollection;
 };
 
-//=============================================================================
+
 
 }; }; };
 

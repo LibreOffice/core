@@ -23,10 +23,10 @@
 #include <com/sun/star/script/XDefaultMethod.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <ooo/vba/XHelperInterface.idl>
-//=============================================================================
+
 
 module ooo {  module vba {
-//=============================================================================
+
 
 interface XCollection
 {

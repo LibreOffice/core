@@ -21,7 +21,7 @@
 
 #include <ooo/vba/msforms/XShape.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
@@ -42,7 +42,7 @@ interface XComment
     string Text([in] any Text, [in] any Start, [in] any Overwrite);
 };
 
-//=============================================================================
+
 
 }; }; };
 

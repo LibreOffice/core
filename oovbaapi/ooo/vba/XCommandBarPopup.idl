@@ -20,10 +20,10 @@
 #define __ooo_vba_XCommandBarPopup_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
-//=============================================================================
+
 
 module ooo {  module vba {
-//=============================================================================
+
 
 interface XCommandBarPopup: com::sun::star::uno::XInterface
 {

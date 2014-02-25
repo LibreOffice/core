@@ -24,11 +24,11 @@
 #include <com/sun/star/script/BasicErrorException.idl>
 #include <ooo/vba/XCollection.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 //interface XVPageBreak;
 
@@ -40,7 +40,7 @@ interface XVPageBreaks
     any Add( [in] any Before ) raises( com::sun::star::script::BasicErrorException );
 };
 
-//=============================================================================
+
 
 }; }; };
 

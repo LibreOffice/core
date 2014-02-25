@@ -23,11 +23,11 @@
 #include <ooo/vba/XHelperInterface.idl>
 
 
-//=============================================================================
+
 
 module ooo {  module vba {  module word {
 
-//=============================================================================
+
 
 interface XDialog : com::sun::star::uno::XInterface
 {

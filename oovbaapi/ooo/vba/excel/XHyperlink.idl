@@ -21,7 +21,7 @@
 
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module msforms {
     interface XShape;
@@ -31,7 +31,7 @@ module ooo {  module vba {  module excel {
 
 interface XRange;
 
-//=============================================================================
+
 
 interface XHyperlink
 {
@@ -47,11 +47,11 @@ interface XHyperlink
     [attribute, readonly] ooo::vba::msforms::XShape Shape;
 };
 
-//=============================================================================
+
 
 }; }; };
 
-//=============================================================================
+
 
 #endif
 

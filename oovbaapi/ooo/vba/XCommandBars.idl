@@ -22,10 +22,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XCollection.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {
-//=============================================================================
+
 interface XCommandBar;
 
 interface XCommandBars

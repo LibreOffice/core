@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 interface XValidation
 {
@@ -47,7 +47,7 @@ interface XValidation
     void Add( [in] any Type, [in] any AlertStyle, [in] any Operator, [in] any Formula1, [in] any Formula2);
 };
 
-//=============================================================================
+
 
 }; }; };
 

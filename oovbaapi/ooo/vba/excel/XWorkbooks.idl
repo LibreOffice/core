@@ -23,11 +23,11 @@
 #include <ooo/vba/XCollection.idl>
 
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 interface XWorkbooks : com::sun::star::uno::XInterface
 {

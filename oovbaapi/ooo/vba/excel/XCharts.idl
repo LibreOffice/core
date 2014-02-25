@@ -23,11 +23,11 @@
 #include <ooo/vba/XCollection.idl>
 #include <com/sun/star/script/BasicErrorException.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 interface XChart;
-//=============================================================================
+
 interface XCharts
 {
     interface ooo::vba::XCollection;
@@ -35,7 +35,7 @@ interface XCharts
     XChart getActiveChart() raises (com::sun::star::script::BasicErrorException);
 };
 
-//=============================================================================
+
 
 }; }; };
 

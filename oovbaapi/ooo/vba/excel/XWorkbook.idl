@@ -22,11 +22,11 @@
 #include <com/sun/star/lang/XUnoTunnel.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 interface XWorksheet;
 interface XWorksheets;

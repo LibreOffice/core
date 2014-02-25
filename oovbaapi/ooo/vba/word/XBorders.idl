@@ -23,11 +23,11 @@
 #include <ooo/vba/XCollection.idl>
 
 
-//=============================================================================
+
 
 module ooo {  module vba {  module word {
 
-//=============================================================================
+
 interface XBorders
 {
     interface ooo::vba::XCollection;
@@ -35,7 +35,7 @@ interface XBorders
     [attribute] boolean Shadow;
 };
 
-//=============================================================================
+
 
 }; }; };
 

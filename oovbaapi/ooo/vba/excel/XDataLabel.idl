@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XHelperInterface.idl>
 #include <com/sun/star/script/BasicErrorException.idl>
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 interface XDataLabel
 {
     interface ::ooo::vba::XHelperInterface;
@@ -35,7 +35,7 @@ interface XDataLabel
     string Name() raises (com::sun::star::script::BasicErrorException);
 };
 
-//=============================================================================
+
 
 }; }; };
 

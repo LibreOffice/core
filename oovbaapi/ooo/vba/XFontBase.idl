@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {
 
@@ -44,7 +44,7 @@ interface XFontBase
     [attribute] any  Name;
 };
 
-//=============================================================================
+
 
 }; };
 

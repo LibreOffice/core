@@ -21,11 +21,11 @@
 
 #include <ooo/vba/XHelperInterface.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 interface XRange;
 interface XWorksheet;
@@ -79,7 +79,7 @@ interface XWindow : com::sun::star::uno::XInterface
     XPane ActivePane() raises(com::sun::star::script::BasicErrorException);
 };
 
-//=============================================================================
+
 
 }; }; };
 

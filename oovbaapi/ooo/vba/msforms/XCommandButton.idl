@@ -22,11 +22,11 @@
 
 #include <ooo/vba/msforms/XNewFont.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module msforms {
 
-//=============================================================================
+
 
 interface XCommandButton
 {
@@ -40,7 +40,7 @@ interface XCommandButton
     [attribute, readonly] XNewFont Font;
 };
 
-//=============================================================================
+
 
 }; }; };
 

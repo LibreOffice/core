@@ -24,11 +24,11 @@
 #include <com/sun/star/script/BasicErrorException.idl>
 #include <ooo/vba/XCollection.idl>
 
-//=============================================================================
+
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
+
 
 interface XMenuItem;
 
@@ -39,7 +39,7 @@ interface XMenuItems
     XMenuItem Add( [in] string Caption, [in] any OnAction, [in] any ShortcutKey, [in] any Before, [in] any Restore, [in] any StatusBar, [in] any HelpFile, [in] any HelpContextID ) raises ( com::sun::star::script::BasicErrorException );
 };
 
-//=============================================================================
+
 
 }; }; };
 
