@@ -469,7 +469,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
 
 void SAL_CALL SdUnoDrawView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage )
-    throw(RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
     SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;

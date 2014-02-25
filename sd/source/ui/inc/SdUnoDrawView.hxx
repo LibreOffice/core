@@ -70,7 +70,8 @@ public:
 
     virtual void SAL_CALL setCurrentPage (
         const css::uno::Reference<css::drawing::XDrawPage >& xPage)
-        throw(css::uno::RuntimeException);
+        throw (css::uno::RuntimeException,
+               std::exception);
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw(css::uno::RuntimeException);
