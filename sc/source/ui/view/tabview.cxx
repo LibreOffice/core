@@ -162,7 +162,7 @@ void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-//==================================================================
+
 
 static bool lcl_HasColOutline( const ScViewData& rViewData )
 {
@@ -531,9 +531,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     else
         nBarX = nBarY = 0;
 
-        //
+
         //      Splitter auswerten
-        //
+
 
     long nLeftSize   = nSizeX;
     long nRightSize  = 0;
@@ -668,9 +668,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                 Point(nSplitPosX,nPosY), Size(nRightSize,nTopSize), nTotalWidth, bLayoutRTL );
     }
 
-                //
+
                 //  Scrollbars updaten
-                //
+
 
     if (!bInUpdateHeader)
     {
@@ -1446,9 +1446,9 @@ void ScTabView::UpdateShow()
     if ( aViewData.GetDocShell()->IsPreview() )
         bHScrollMode = bVScrollMode = bTabMode = bHeader = bOutlMode = bHOutline = bVOutline = false;
 
-        //
+
         //  Windows anlegen
-        //
+
 
     if (bShowH && !pGridWin[SC_SPLIT_BOTTOMRIGHT])
     {
@@ -1483,9 +1483,9 @@ void ScTabView::UpdateShow()
         pRowBar[SC_SPLIT_TOP] = new ScRowBar( pFrameWin, &aViewData, SC_SPLIT_TOP,
                                                 &aHdrFunc, pHdrSelEng );
 
-        //
+
         //  Windows anzeigen
-        //
+
 
     ShowHide( &aHScrollLeft, bHScrollMode );
     ShowHide( &aHScrollRight, bShowH && bHScrollMode );

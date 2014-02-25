@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 
-//==============================================================================
+
 
 ScMyIteratorBase::ScMyIteratorBase()
 {
@@ -58,7 +58,7 @@ void ScMyIteratorBase::UpdateAddress( table::CellAddress& rCellAddress )
 }
 
 
-//==============================================================================
+
 
 bool ScMyShape::operator<(const ScMyShape& aShape) const
 {
@@ -182,7 +182,7 @@ void ScMyNoteShapesContainer::Sort()
     aNoteShapeList.sort();
 }
 
-//==============================================================================
+
 
 bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
 {
@@ -274,7 +274,7 @@ void ScMyMergedRangesContainer::Sort()
     aRangeList.sort();
 }
 
-//==============================================================================
+
 
 bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
 {
@@ -356,7 +356,7 @@ void ScMyAreaLinksContainer::Sort()
     aAreaLinkList.sort();
 }
 
-//==============================================================================
+
 
 ScMyCellRangeAddress::ScMyCellRangeAddress(const table::CellRangeAddress& rRange)
     : table::CellRangeAddress(rRange)
@@ -436,7 +436,7 @@ void ScMyEmptyDatabaseRangesContainer::Sort()
     aDatabaseList.sort();
 }
 
-//==============================================================================
+
 
 bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
 {
@@ -524,7 +524,7 @@ void ScMyDetectiveObjContainer::Sort()
     aDetectiveObjList.sort();
 }
 
-//==============================================================================
+
 
 bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
 {
@@ -590,7 +590,7 @@ void ScMyDetectiveOpContainer::Sort()
     aDetectiveOpList.sort();
 }
 
-//==============================================================================
+
 
 ScMyCell::ScMyCell() :
     aShapeList(),
@@ -614,7 +614,7 @@ ScMyCell::~ScMyCell()
 {
 }
 
-//==============================================================================
+
 
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
     : pShapes(NULL),

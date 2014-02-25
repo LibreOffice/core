@@ -1105,9 +1105,9 @@ void ScAttrArray::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLine
     }
 }
 
-//
+
 // apply border
-//
+
 
 // ApplyFrame - on an entry into the array
 

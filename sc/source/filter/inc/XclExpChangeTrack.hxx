@@ -29,7 +29,7 @@
 #include "ftools.hxx"
 #include "excrecds.hxx"
 
-//___________________________________________________________________
+
 // XclExpUserBView - one UserBView record for each user
 
 class XclExpUserBView : public ExcRecord
@@ -49,7 +49,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // XclExpUserBViewList - list of UserBView records
 
 class XclExpUserBViewList : public ExcEmptyRec
@@ -76,7 +76,7 @@ public:
     virtual void                Save( XclExpStream& rStrm );
 };
 
-//___________________________________________________________________
+
 // XclExpUsersViewBegin - begin of view block (one per sheet)
 
 class XclExpUsersViewBegin : public ExcRecord
@@ -93,7 +93,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // XclExpUsersViewEnd - end of view block (one per sheet)
 
 class XclExpUsersViewEnd : public ExcRecord
@@ -106,7 +106,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // dummy record for "User Names" stream
 
 class XclExpChTr0x0191 : public ExcRecord
@@ -119,7 +119,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // dummy record for "User Names" stream
 
 class XclExpChTr0x0198 : public ExcRecord
@@ -132,7 +132,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // dummy record for "User Names" stream
 
 class XclExpChTr0x0192 : public ExcRecord
@@ -145,7 +145,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // dummy record for "User Names" stream
 
 class XclExpChTr0x0197 : public ExcRecord
@@ -158,7 +158,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // dummy record without content
 
 class XclExpChTrEmpty : public ExcRecord
@@ -174,7 +174,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // dummy record for "Revision Log" stream
 
 class XclExpChTr0x0195 : public ExcRecord
@@ -189,7 +189,7 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
-//___________________________________________________________________
+
 // dummy record for "Revision Log" stream
 
 class XclExpChTr0x0194 : public ExcRecord
@@ -214,7 +214,7 @@ inline XclExpChTr0x0194::XclExpChTr0x0194( const ScChangeTrack& rChangeTrack ) :
 {
 }
 
-//___________________________________________________________________
+
 // XclExpChTrHeader - header record, includes action count
 
 class XclExpChTrHeader : public ExcRecord
@@ -238,7 +238,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-//___________________________________________________________________
+
 // XclExpChTrInfo - header of action group of a user
 
 class XclExpChTrInfo : public ExcRecord
@@ -273,7 +273,7 @@ inline XclExpChTrInfo::XclExpChTrInfo( const OUString& rUsername, const DateTime
     memcpy( aGUID, pGUID, 16 );
 }
 
-//___________________________________________________________________
+
 // XclExpChTrTabIdBuffer - buffer for tab id's
 
 class XclExpChTrTabIdBuffer
@@ -301,7 +301,7 @@ public:
                                     { memcpy( pDest, pBuffer, sizeof(sal_uInt16) * GetBufferCount() ); }
 };
 
-//___________________________________________________________________
+
 // XclExpChTrTabId - tab id record
 
 class XclExpChTrTabId : public ExcRecord
@@ -329,7 +329,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-//___________________________________________________________________
+
 // XclExpChTrAction - base class for action records
 
 class XclExpChTrAction : public ExcRecord
@@ -425,7 +425,7 @@ inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) cons
     rStrm << GetTabId( nTab );
 }
 
-//___________________________________________________________________
+
 // XclExpChTrData - cell content itself
 
 struct XclExpChTrData
@@ -452,7 +452,7 @@ struct XclExpChTrData
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
 };
 
-//___________________________________________________________________
+
 // XclExpChTrCellContent - changed cell content
 
 class XclExpChTrCellContent : public XclExpChTrAction, protected XclExpRoot
@@ -486,7 +486,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-//___________________________________________________________________
+
 // XclExpChTrInsert - insert/delete columns/rows
 
 class XclExpChTrInsert : public XclExpChTrAction
@@ -515,7 +515,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-//___________________________________________________________________
+
 // XclExpChTrInsertTab - insert table
 
 class XclExpChTrInsertTab : public XclExpChTrAction, protected XclExpRoot
@@ -539,7 +539,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-//___________________________________________________________________
+
 // XclExpChTrMoveRange - move cell range
 
 class XclExpChTrMoveRange : public XclExpChTrAction
@@ -566,7 +566,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-//___________________________________________________________________
+
 // XclExpChTr0x019A - additional data for delete action
 
 class XclExpChTr0x014A : public XclExpChTrInsert
@@ -584,7 +584,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-//___________________________________________________________________
+
 // XclExpChangeTrack - exports the "Revision Log" stream
 
 class XclExpChangeTrack : protected XclExpRoot
@@ -614,7 +614,7 @@ public:
     void                        WriteXml( XclExpXmlStream& rStrm );
 };
 
-//___________________________________________________________________
+
 
 #endif
 

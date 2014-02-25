@@ -77,7 +77,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::formula;
 using namespace ::oox;
 
-// ============================================================================
+
 
 XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt16 nMaxRecSize ) :
     mrStrm( rOutStrm ),
@@ -465,7 +465,7 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
         mrStrm.Write( &nData, nBytesLeft );
 }
 
-// ============================================================================
+
 
 XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
     mnOldPos(STREAM_SEEK_TO_END),
@@ -970,7 +970,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
 }
 
 
-// ============================================================================
+
 
 XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC )
     : XmlFilterBase( rCC ),

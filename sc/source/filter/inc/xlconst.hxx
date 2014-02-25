@@ -256,7 +256,7 @@ const sal_uInt16 EXC_BORDER_MEDIUM = 35;
 const sal_uInt16 EXC_BORDER_THIN   = 15;
 const sal_uInt16 EXC_BORDER_HAIR   = 1;
 
-// ============================================================================
+
 
 #endif
 

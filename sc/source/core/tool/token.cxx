@@ -110,7 +110,7 @@ namespace
         // sheet index must be absolute for external refs
         rRef.SetAbsTab(0);
     }
-//
+
 } // namespace
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
@@ -744,7 +744,7 @@ ScRefList* ScToken::GetRefList()
     OSL_FAIL( "ScToken::GetRefList: virtual dummy called" );
     return NULL;
 }
-// ==========================================================================
+
 // real implementations of virtual functions
 
 
@@ -852,7 +852,7 @@ FormulaToken* ScMatrixRangeToken::Clone() const
     return new ScMatrixRangeToken(*this);
 }
 
-// ============================================================================
+
 
 ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& r ) :
     ScToken( svExternalSingleRef, ocPush),
@@ -908,7 +908,7 @@ bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
     return maSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
 }
 
-// ============================================================================
+
 
 ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& r ) :
     ScToken( svExternalDoubleRef, ocPush),
@@ -984,7 +984,7 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
     return maDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
 }
 
-// ============================================================================
+
 
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedString& rName ) :
     ScToken( svExternalName, ocPush),
@@ -1023,7 +1023,7 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
     return maName.getData() == r.GetString().getData();
 }
 
-// ============================================================================
+
 
 ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
 bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
@@ -1187,7 +1187,7 @@ bool ScHybridCellToken::operator==( const FormulaToken& r ) const
 
 
 
-//////////////////////////////////////////////////////////////////////////
+
 
 bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef)
 {
@@ -1732,7 +1732,7 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
     return ImplGetReference(rRange, rPos, true);
 }
 
-////////////////////////////////////////////////////////////////////////////
+
 
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),

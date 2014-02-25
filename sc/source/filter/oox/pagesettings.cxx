@@ -47,7 +47,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::Relations;
 
-// ============================================================================
+
 
 namespace {
 
@@ -90,7 +90,7 @@ const sal_uInt16 BIFF12_CHARTPAGESETUP_DRAFTQUALITY = 0x0020;
 
 } // namespace
 
-// ============================================================================
+
 
 PageSettingsModel::PageSettingsModel() :
     mfLeftMargin( OOX_MARGIN_DEFAULT_LR ),
@@ -133,7 +133,7 @@ void PageSettingsModel::setBiffPrintErrors( sal_uInt8 nPrintErrors )
     mnPrintErrors = STATIC_ARRAY_SELECT( spnErrorIds, nPrintErrors, XML_none );
 }
 
-// ============================================================================
+
 
 PageSettings::PageSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -331,8 +331,8 @@ void PageSettings::importPictureData( const Relations& rRelations, const OUStrin
         maModel.maGraphicUrl = getBaseFilter().getGraphicHelper().importEmbeddedGraphicObject( aPicturePath );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 enum HFPortionId
 {
@@ -369,7 +369,7 @@ bool HFPortionInfo::initialize( const Reference<text::XText>& rxText )
     return bRet;
 }
 
-// ============================================================================
+
 
 class HeaderFooterParser : public WorkbookHelper
 {
@@ -879,7 +879,7 @@ void HeaderFooterParser::setNewPortion( HFPortionId ePortion )
     }
 }
 
-// ============================================================================
+
 
 
 
@@ -1063,7 +1063,7 @@ sal_Int32 PageSettingsConverter::writeHeaderFooter(
     return nHeight;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

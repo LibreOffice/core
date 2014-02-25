@@ -31,7 +31,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
-// ============================================================================
+
 
 namespace {
 
@@ -60,7 +60,7 @@ static const sal_uInt16 nDatePartResIds[] =
 
 } // namespace
 
-// ============================================================================
+
 
 ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton& rRbAuto, RadioButton& rRbMan, Edit& rEdValue ) :
     mrRbAuto( rRbAuto ),
@@ -157,8 +157,8 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
     mrEdValue.SetDate( aDate );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DPNUMGROUP ) ),
@@ -214,7 +214,7 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
     return aInfo;
 }
 
-// ============================================================================
+
 
 ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
         const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate ) :
@@ -355,6 +355,6 @@ IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvxCheckListBox*, pListBox )
     return 0;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

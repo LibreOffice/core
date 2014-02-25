@@ -716,9 +716,9 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 
 //      Feldbefehle fuer Kopf- und Fusszeilen
 
-//
+
 //      Zahlen aus \sw\source\core\doc\numbers.cxx
-//
+
 
 static OUString lcl_GetCharStr( sal_Int32 nNo )
 {
@@ -844,9 +844,9 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return aRet;
 }
 
-//
+
 //                          Feld-Daten
-//
+
 
 ScFieldEditEngine::ScFieldEditEngine(
     ScDocument* pDoc, SfxItemPool* pEnginePoolP,

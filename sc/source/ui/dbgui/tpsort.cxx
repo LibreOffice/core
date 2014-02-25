@@ -68,8 +68,8 @@ using namespace com::sun::star;
  * This still needs to be changed!
  */
 
-//========================================================================
-//========================================================================
+
+
 // Sort Criteria Tab page
 
 ScTabPageSortFields::ScTabPageSortFields(Window* pParent,
@@ -77,11 +77,11 @@ ScTabPageSortFields::ScTabPageSortFields(Window* pParent,
     : SfxTabPage(pParent, "SortCriteriaPage",
         "modules/scalc/ui/sortcriteriapage.ui", rArgSet)
     ,
-        //
+
         aStrUndefined   ( SC_RESSTR( SCSTR_UNDEFINED ) ),
         aStrColumn      ( SC_RESSTR( SCSTR_COLUMN ) ),
         aStrRow         ( SC_RESSTR( SCSTR_ROW ) ),
-        //
+
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         pDlg            ( (ScSortDlg*)(GetParentDialog()) ),
         pViewData       ( NULL ),
@@ -501,9 +501,9 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
     return 0;
 }
 
-//========================================================================
+
 // Sort option Tab Page:
-//========================================================================
+
 
 ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                                             const SfxItemSet&   rArgSet )

@@ -117,9 +117,9 @@ ScTextWndBase::ScTextWndBase( Window* pParent,  WinBits nStyle )
     }
 }
 
-//==================================================================
+
 //  class ScInputWindowWrapper
-//==================================================================
+
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScInputWindowWrapper,FID_INPUTLINE_STATUS)
 
@@ -148,7 +148,7 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
     return aInfo;
 }
 
-//==================================================================
+
 
 #define IMAGE(id) pImgMgr->SeekImage(id)
 static bool lcl_isExperimentalMode()
@@ -158,9 +158,9 @@ static bool lcl_isExperimentalMode()
     return true;
 }
 
-//==================================================================
+
 //  class ScInputWindow
-//==================================================================
+
 
 static ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind )
 {
@@ -908,9 +908,9 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 
-//========================================================================
+
 //                  ScInputBarGroup
-//========================================================================
+
 
 ScInputBarGroup::ScInputBarGroup(Window* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
@@ -1157,9 +1157,9 @@ void ScInputBarGroup::TextGrabFocus()
     aMultiTextWnd.TextGrabFocus();
 }
 
-//========================================================================
+
 //                      ScMultiTextWnd
-//========================================================================
+
 
 ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )
     :
@@ -1457,9 +1457,9 @@ void ScMultiTextWnd::SetTextString( const OUString& rNewString )
     SetScrollBarRange();
     DoScroll();
 }
-//========================================================================
+
 // 							ScTextWnd
-//========================================================================
+
 
 ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE | WB_BORDER) ),
@@ -2081,9 +2081,9 @@ void ScTextWnd::TextGrabFocus()
     GrabFocus();
 }
 
-//========================================================================
+
 //                          Positionsfenster
-//========================================================================
+
 
 ScPosWnd::ScPosWnd( Window* pParent ) :
     ComboBox    ( pParent, WinBits(WB_HIDE | WB_DROPDOWN) ),

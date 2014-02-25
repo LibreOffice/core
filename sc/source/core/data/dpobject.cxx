@@ -1683,9 +1683,9 @@ bool ScDPObject::ParseFilters(
     std::vector<OUString> aFieldNames;    // column/row/data fields
     std::vector< uno::Sequence<OUString> > aFieldValues;
 
-    //
+
     // get all the field and item names
-    //
+
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
@@ -1750,9 +1750,9 @@ bool ScDPObject::ParseFilters(
         }
     }
 
-    //
+
     // compare and build filters
-    //
+
 
     SCSIZE nDataFields = aDataNames.size();
     SCSIZE nFieldCount = aFieldNames.size();
@@ -3154,9 +3154,9 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
             return xRowSet;
         }
 
-        //
+
         //  set source parameters
-        //
+
         uno::Any aAny;
         aAny <<= rDBName;
         xRowProp->setPropertyValue(

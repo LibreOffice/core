@@ -185,9 +185,9 @@ void ScHTMLStyles::insertProp(
     pProps->insert(PropsType::value_type(aProp, aValue));
 }
 
-// ============================================================================
+
 // BASE class for HTML parser classes
-// ============================================================================
+
 
 ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
     ScEEParser( pEditEngine ),
@@ -212,7 +212,7 @@ ScDocument& ScHTMLParser::GetDoc()
     return *mpDoc;
 }
 
-// ============================================================================
+
 
 ScHTMLLayoutParser::ScHTMLLayoutParser(
     EditEngine* pEditP, const OUString& rBaseURL, const Size& aPageSizeP,
@@ -1769,9 +1769,9 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
 
 
 
-// ============================================================================
+
 // HTML DATA QUERY PARSER
-// ============================================================================
+
 
 template< typename Type >
 inline Type getLimitedValue( const Type& rValue, const Type& rMin, const Type& rMax )
@@ -1829,7 +1829,7 @@ void ScHTMLEntry::Strip( const EditEngine& rEditEngine )
     }
 }
 
-// ============================================================================
+
 
 /** A map of ScHTMLTable objects.
 
@@ -1955,7 +1955,7 @@ ScHTMLTableIterator::ScHTMLTableIterator( const ScHTMLTableMap* pTableMap ) :
     }
 }
 
-// ============================================================================
+
 
 ScHTMLTableAutoId::ScHTMLTableAutoId( ScHTMLTableId& rnUnusedId ) :
     mnTableId( rnUnusedId ),
@@ -2889,7 +2889,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
     }
 }
 
-// ============================================================================
+
 
 ScHTMLGlobalTable::ScHTMLGlobalTable(
     SfxItemPool& rPool,
@@ -2916,7 +2916,7 @@ void ScHTMLGlobalTable::Recalc()
     RecalcDocPos( GetDocPos() );
 }
 
-// ============================================================================
+
 
 ScHTMLQueryParser::ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
     ScHTMLParser( pEditEngine, pDoc ),
@@ -3313,6 +3313,6 @@ IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
     return 0;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

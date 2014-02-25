@@ -17,7 +17,7 @@
  */
 
 
- // ===========================================================================
+
 interface TableOLEObject
 [
     uuid ( "C04AA960-137B-11D3-B25B-006097DA68F3" )
@@ -34,7 +34,7 @@ interface TableOLEObject
     SID_OBJECT_HEIGHT   [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
 }
 
- //============================================================================
+
 interface Tables
 [
     uuid = "5692EFC0-355B-11cf-89CB-008029E4B0B1" ;
@@ -53,7 +53,7 @@ interface Tables
     FID_TAB_EVENTS      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
 }
 
- // ===========================================================================
+
 interface BaseSelection
 [
     uuid = "02ABE040-137B-11D3-B25B-006097DA68F3" ;
@@ -216,9 +216,9 @@ interface TableEditView
 }
 
 
- //
+
  //     Pivot-Krempel
- //
+
 
 interface DataPilotTables
 [
@@ -256,7 +256,7 @@ interface DataPilotField
     [ HelpText = "" ; ]
 }
 
- // ===========================================================================
+
 shell ScTabViewShell
 {
     import TableSelection "ActiveDocument.ActiveTable";

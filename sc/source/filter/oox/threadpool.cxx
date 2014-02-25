@@ -58,7 +58,7 @@ public:
         return pRet;
     }
 
-    //
+
     // Why a condition per worker thread - you may ask.
     //
     // Unfortunately the Windows synchronisation API that we wrap
@@ -67,7 +67,7 @@ public:
     // The existing osl::Condition API should only ever be used
     // between one producer and one consumer thread to avoid the
     // lost wakeup problem.
-    //
+
     void signalNewWork()
     {
         maNewWork.set();

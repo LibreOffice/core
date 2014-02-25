@@ -130,9 +130,9 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 {
     OSL_ENSURE(pDoc->IsClipboard(), "wrong document");
 
-    //
+
     // get aBlock from clipboard doc
-    //
+
 
     SCCOL nCol1;
     SCROW nRow1;
@@ -586,9 +586,9 @@ ScMarkData ScTransferObj::GetSourceMarkData()
     return aMarkData;
 }
 
-//
+
 //  initialize aDocShellRef with a live document from the ClipDoc
-//
+
 // #i123405# added parameter to allow size calculation without limitation
 // to PageSize, e.g. used for Metafile creation for clipboard.
 

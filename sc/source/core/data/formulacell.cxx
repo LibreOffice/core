@@ -481,7 +481,7 @@ void ScFormulaCellGroup::compileCode(
     }
 }
 
-// ============================================================================
+
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     eTempGrammar(formula::FormulaGrammar::GRAM_DEFAULT),

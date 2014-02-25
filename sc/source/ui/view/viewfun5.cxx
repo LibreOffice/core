@@ -107,9 +107,9 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     TransferableDataHelper aDataHelper( rxTransferable );
     bool bRet = false;
 
-    //
+
     //  handle individual formats
-    //
+
 
     if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE ||
          nFormatId == SOT_FORMATSTR_ID_LINK_SOURCE ||

@@ -35,7 +35,7 @@ ScSortDlg::ScSortDlg(Window* pParent, const SfxItemSet* pArgSet)
     AddTabPage("options", ScTabPageSortOptions::Create, 0);
 }
 
-//==================================================================
+
 ScSortWarningDlg::ScSortWarningDlg(Window* pParent,
     const OUString& rExtendText, const OUString& rCurrentText)
     : ModalDialog(pParent, "SortWarning", "modules/scalc/ui/sortwarning.ui")
@@ -65,6 +65,6 @@ IMPL_LINK( ScSortWarningDlg, BtnHdl, PushButton*, pBtn )
     }
     return 0;
 }
-//========================================================================//
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

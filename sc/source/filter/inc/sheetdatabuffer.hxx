@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Stores basic data about cell values and formatting. */
 struct CellModel
@@ -46,7 +46,7 @@ struct CellModel
     explicit            CellModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Stores data about cell formulas. */
 struct CellFormulaModel
@@ -64,7 +64,7 @@ struct CellFormulaModel
     bool                isValidSharedRef( const ::com::sun::star::table::CellAddress& rCellAddr );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Stores data about table operations. */
 struct DataTableModel
@@ -79,7 +79,7 @@ struct DataTableModel
     explicit            DataTableModel();
 };
 
-// ============================================================================
+
 
 /** Manages all cell blocks currently in use. */
 class CellBlockBuffer : public WorksheetHelper
@@ -100,7 +100,7 @@ private:
     sal_Int32           mnCurrRow;              /// Current row index used for buffered cell import.
 };
 
-// ============================================================================
+
 
 
 /** Manages the cell contents and cell formatting of a sheet.
@@ -253,7 +253,7 @@ private:
     std::map< sal_Int32, std::vector< ValueRange > > maXfIdRowRangeList; /// Cached XF identifiers for a ranges of rows, we try and process rowranges with the same XF id together
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -34,7 +34,7 @@ class ScViewData;
 class ScDocument;
 
 
-//============================================================================
+
 
 class ScSimpleRefDlg: public ScAnyRefDlg
 {

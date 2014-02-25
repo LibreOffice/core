@@ -598,7 +598,7 @@ void ScDocumentPool::DeleteVersionMaps()
 }
 
 
-//
+
 //  Fuer die Pattern-Attribute (SetItems) kann der sal_uInt16 RefCount leicht ueberlaufen
 //  (z.B. 600 ganze Zeilen abwechselnd formatieren).
 //  Darum wird der RefCount bei SC_MAX_POOLREF festgehalten und nicht mehr hoch- oder
@@ -606,7 +606,7 @@ void ScDocumentPool::DeleteVersionMaps()
 //  Die Differenz zwischen SC_MAX_POOLREF und SC_SAFE_POOLREF ist ein wenig groesser
 //  als noetig, um zu erkennen, wenn der RefCount aus Versehen doch "normal" veraendert
 //  wird (Assertions).
-//
+
 
 const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {

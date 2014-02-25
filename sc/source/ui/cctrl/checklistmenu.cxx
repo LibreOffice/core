@@ -859,7 +859,7 @@ ScDocument* ScMenuFloatingWindow::getDoc()
     return mpDoc;
 }
 
-// ============================================================================
+
 
 ScCheckListMenuWindow::Config::Config() :
     mbAllowEmptySet(true), mbRTL(false)

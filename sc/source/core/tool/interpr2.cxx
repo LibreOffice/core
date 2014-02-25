@@ -1950,9 +1950,9 @@ void ScInterpreter::ScStyle()
         if (nTimeOut < 0)
             nTimeOut = 0;
 
-        //
+
         //  Request ausfuehren, um Vorlage anzuwenden
-        //
+
 
         if ( !pDok->IsClipOrUndo() )
         {

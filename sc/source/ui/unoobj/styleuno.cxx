@@ -188,7 +188,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {OUString(SC_UNO_PAGE_CENTERVER),   ATTR_PAGE_VERCENTER,::getBooleanCppuType(),            0, 0 },
         {OUString(SC_UNONAME_DISPNAME),     SC_WID_UNO_DISPNAME,::getCppuType((OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNO_PAGE_FIRSTPAGE),   ATTR_PAGE_FIRSTPAGENO,::getCppuType((const sal_Int16*)0),      0, 0 },
-//
+
         {OUString(SC_UNO_PAGE_FTRBACKCOL),  SC_WID_UNO_FOOTERSET,::getCppuType((const sal_Int32*)0),           0, 0 },
         {OUString(SC_UNO_PAGE_FTRGRFFILT),  SC_WID_UNO_FOOTERSET,::getCppuType((const OUString*)0),     0, 0 },
         {OUString(SC_UNO_PAGE_FTRGRFLOC),   SC_WID_UNO_FOOTERSET,::getCppuType((const style::GraphicLocation*)0), 0, 0 },
@@ -215,7 +215,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {OUString(OLD_UNO_PAGE_FTRSHARED),  SC_WID_UNO_FOOTERSET,::getBooleanCppuType(),                       0, 0 },
         {OUString(SC_UNO_PAGE_FTRTOPBOR),   SC_WID_UNO_FOOTERSET,::getCppuType((const table::BorderLine*)0),   0, 0 },
         {OUString(SC_UNO_PAGE_FTRTOPBDIS),  SC_WID_UNO_FOOTERSET,::getCppuType((const sal_Int32*)0),           0, 0 },
-//
+
         {OUString(SC_UNO_PAGE_HDRBACKCOL),  SC_WID_UNO_HEADERSET,::getCppuType((const sal_Int32*)0),           0, 0 },
         {OUString(SC_UNO_PAGE_HDRGRFFILT),  SC_WID_UNO_HEADERSET,::getCppuType((const OUString*)0),     0, 0 },
         {OUString(SC_UNO_PAGE_HDRGRFLOC),   SC_WID_UNO_HEADERSET,::getCppuType((const style::GraphicLocation*)0), 0, 0 },
@@ -242,7 +242,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {OUString(OLD_UNO_PAGE_HDRSHARED),  SC_WID_UNO_HEADERSET,::getBooleanCppuType(),                       0, 0 },
         {OUString(SC_UNO_PAGE_HDRTOPBOR),   SC_WID_UNO_HEADERSET,::getCppuType((const table::BorderLine*)0),   0, 0 },
         {OUString(SC_UNO_PAGE_HDRTOPBDIS),  SC_WID_UNO_HEADERSET,::getCppuType((const sal_Int32*)0),           0, 0 },
-//
+
         {OUString(SC_UNO_PAGE_HEIGHT),      ATTR_PAGE_SIZE,     ::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
         {OUString(OLD_UNO_PAGE_BACKTRANS),  ATTR_BACKGROUND,    ::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {OUString(SC_UNO_PAGE_LANDSCAPE),   ATTR_PAGE,          ::getBooleanCppuType(),            0, MID_PAGE_ORIENTATION },

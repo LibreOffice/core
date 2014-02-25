@@ -35,9 +35,9 @@
 #include "scitems.hxx"
 #include "printfun.hxx"
 
-//========================================================================
+
 // class ScZoomSliderControl ---------------------------------------
-//========================================================================
+
 
 
 
@@ -140,8 +140,8 @@ const long nButtonWidth     = 10;
 const long nButtonHeight    = 10;
 const long nIncDecWidth     = 11;
 const long nIncDecHeight    = 11;
-const long nSliderHeight    = 2;      //
-const long nSliderWidth     = 4;      //
+const long nSliderHeight    = 2;
+const long nSliderWidth     = 4;
 const long nSnappingHeight  = 4;
 const long nSliderXOffset   = 20;
 const long nSnappingEpsilon = 5; // snapping epsilon in pixels

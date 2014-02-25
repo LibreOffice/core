@@ -3811,9 +3811,9 @@ void ScDocument::ResetChanged( const ScRange& rRange )
             maTabs[nTab]->ResetChanged(rRange);
 }
 
-//
+
 //  Spaltenbreiten / Zeilenhoehen   --------------------------------------
-//
+
 
 
 void ScDocument::SetColWidth( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth )
@@ -4035,9 +4035,9 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
 }
 
 
-//
+
 //  Spalten-/Zeilen-Flags   ----------------------------------------------
-//
+
 
 void ScDocument::ShowCol(SCCOL nCol, SCTAB nTab, bool bShow)
 {
@@ -4489,9 +4489,9 @@ void ScDocument::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, S
         maTabs[nTab]->ExtendHidden( rX1, rY1, rX2, rY2 );
 }
 
-//
+
 //  Attribute   ----------------------------------------------------------
-//
+
 
 const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const
 {
@@ -5707,9 +5707,9 @@ void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX,
         maTabs[nTab]->GetNextPos( rCol, rRow, nMovX, nMovY, bMarked, bUnprotected, aCopyMark );
 }
 
-//
+
 //  Datei-Operationen
-//
+
 
 
 void ScDocument::UpdStlShtPtrsFrmNms()

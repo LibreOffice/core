@@ -41,7 +41,7 @@
 #define SC_INSTBDLG_CXX
 #include "instbdlg.hxx"
 
-//==================================================================
+
 
 ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
     : ModalDialog(pParent, "InsertSheetDialog", "modules/scalc/ui/insertsheet.ui")

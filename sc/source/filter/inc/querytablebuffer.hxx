@@ -26,7 +26,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 struct QueryTableModel : public AutoFormatModel
 {
@@ -49,7 +49,7 @@ struct QueryTableModel : public AutoFormatModel
     explicit            QueryTableModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class QueryTable : public WorksheetHelper
 {
@@ -68,7 +68,7 @@ private:
     QueryTableModel     maModel;
 };
 
-// ============================================================================
+
 
 class QueryTableBuffer : public WorksheetHelper
 {
@@ -86,7 +86,7 @@ private:
     QueryTableVector    maQueryTables;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

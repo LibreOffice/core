@@ -47,7 +47,7 @@
 
 static const sal_Unicode cDelimiter = ',';
 
-//========================================================================
+
 // Benutzerdefinierte Listen:
 
 

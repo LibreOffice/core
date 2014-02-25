@@ -254,7 +254,7 @@ private:
     void SetChangeTrack( const ScCellValue& rOldCell );
 };
 
-// ============================================================================
+
 
 /** Undo action for inserting, removing, and replacing a cell note. */
 class ScUndoReplaceNote : public ScSimpleUndo
@@ -298,7 +298,7 @@ private:
     SdrUndoAction*  mpDrawUndo;
 };
 
-// ============================================================================
+
 
 /** Undo action for showing or hiding a cell note caption. */
 class ScUndoShowHideNote : public ScSimpleUndo
@@ -320,7 +320,7 @@ private:
     bool            mbShown;
 };
 
-// ============================================================================
+
 
 class ScUndoDetective: public ScSimpleUndo
 {

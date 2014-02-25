@@ -49,9 +49,9 @@ class CommandEvent;
 
 struct ESelection;
 
-//========================================================================
+
 //  ScInputHandler
-//========================================================================
+
 
 class ScInputHandler : boost::noncopyable
 {
@@ -262,9 +262,9 @@ public:
     static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }
 };
 
-//========================================================================
+
 //  ScInputHdlState
-//========================================================================
+
 class ScInputHdlState
 {
     friend class ScInputHandler;

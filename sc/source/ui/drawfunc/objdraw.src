@@ -20,9 +20,9 @@
 #include "sc.hrc"
 #include "submenu.hrc"
 #include <svx/globlmn.hrc>
- //
+
  // Defines -------------------------------------------------------------------------------
- //
+
 #define MN_RESET\
     MenuItem\
     {\
@@ -364,40 +364,40 @@
         };\
     };
 
- //
- // ------------------------------------------------------------------------------
- //
- //
+
+
+
+
  //     Objekt-Leisten
- //
+
 String RID_DRAW_OBJECTBAR
 {
     Text [ en-US ] = "Drawing Object Bar" ;
 };
- //
+
  // Text-Toolbox
- //
+
 String RID_TEXT_TOOLBOX
 {
     Text [ en-US ] = "Text Object Bar" ;
 };
- //
+
  // Graphics toolbox
- //
+
 String RID_GRAPHIC_OBJECTBAR
 {
     Text [ en-US ] = "Image Object Bar";
 };
- //
+
  // Popup-Menues ---------------------------------------------------------------------
- //
+
 String RID_POPUP_DRAW
 {
     Text [ en-US ] = "Pop-up menu for drawing objects" ;
 };
- //
+
  //     Pop-up menu for drawing objects
- //
+
 Menu RID_POPUP_DRAW
 {
     ItemList =
@@ -413,17 +413,17 @@ Menu RID_POPUP_DRAW
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_MIRRORSUB
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
         MN_ASSIGNMACRO
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             ITEM_FORMAT_BEZIER_EDIT
@@ -434,22 +434,22 @@ Menu RID_POPUP_DRAW
         {
             ITEM_FORMAT_FONTWORK
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         ITEM_GROUP_MENU
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_EDITLNK
         MN_DELLNK
         MenuItem { ITEM_OPEN_HYPERLINK };
     };
 };
 
- //
+
  //     Popup-Menue fuer (Uno-) Controls
- //
+
 
 Menu RID_POPUP_CONTROL
 {
@@ -463,27 +463,27 @@ Menu RID_POPUP_CONTROL
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
         MenuItem { ITEM_FORM_PROPERTIES };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         ITEM_GROUP_MENU
     };
 };
 
- //
+
  //     Grafik
- //
+
 
 Menu RID_POPUP_GRAPHIC
 {
@@ -501,21 +501,21 @@ Menu RID_POPUP_GRAPHIC
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_MIRRORSUB
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
         MN_ASSIGNMACRO
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         ITEM_GROUP_MENU
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_EDITLNK
         MN_DELLNK
         MenuItem { ITEM_OPEN_HYPERLINK };
@@ -524,9 +524,9 @@ Menu RID_POPUP_GRAPHIC
     };
 };
 
- //
+
  //     Media
- //
+
 
 Menu RID_POPUP_MEDIA
 {
@@ -540,23 +540,23 @@ Menu RID_POPUP_MEDIA
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_MIRRORSUB
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         ITEM_GROUP_MENU
        };
 };
 
- //
+
  //     Ole-Objekt
- //
+
 
 Menu RID_POPUP_OLE
 {
@@ -577,22 +577,22 @@ Menu RID_POPUP_OLE
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         ITEM_GROUP_MENU
     };
 };
 
- //
+
  //     Charts
- //
+
 
 Menu RID_POPUP_CHART
 {
@@ -613,15 +613,15 @@ Menu RID_POPUP_CHART
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         ITEM_GROUP_MENU
         MenuItem
         {
@@ -632,9 +632,9 @@ Menu RID_POPUP_CHART
     };
 };
 
- //
+
  //  PopUpDraw Text
- //
+
 
 String RID_POPUP_DRAWTEXT
 {

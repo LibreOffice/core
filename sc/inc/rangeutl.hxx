@@ -273,9 +273,9 @@ public:
     SCROW nRowEnd;
 };
 
-///
+
 ///  @return areas with reference and all db-areas
-///
+
 
 class SC_DLLPUBLIC ScAreaNameIterator
 {

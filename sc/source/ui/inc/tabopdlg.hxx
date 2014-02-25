@@ -27,7 +27,7 @@
 #include "anyrefdg.hxx"
 
 
-//------------------------------------------------------------------------
+
 
 enum ScTabOpErr
 {
@@ -40,7 +40,7 @@ enum ScTabOpErr
     TABOPERR_NOROWFORMULA
 };
 
-//========================================================================
+
 
 class ScTabOpDlg : public ScAnyRefDlg
 {

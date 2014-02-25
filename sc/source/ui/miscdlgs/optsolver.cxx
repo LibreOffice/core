@@ -151,7 +151,7 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
 {
 }
 
-//============================================================================
+
 //  class ScOptSolverDlg
 
 
@@ -161,7 +161,7 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     : ScAnyRefDlg(pB, pCW, pParent, "SolverDialog", "modules/scalc/ui/solverdlg.ui")
     , maInputError(ScGlobal::GetRscString(STR_INVALIDINPUT))
     , maConditionError(ScGlobal::GetRscString(STR_INVALIDCONDITION))
-    //
+
     , mpDocShell(pDocSh)
     , mpDoc(pDocSh->GetDocument())
     , mnCurTab(aCursorPos.Tab())

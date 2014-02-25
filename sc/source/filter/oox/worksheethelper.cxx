@@ -81,7 +81,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -94,7 +94,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -106,8 +106,8 @@ void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double f
 
 } // namespace
 
-// ============================================================================
-// ============================================================================
+
+
 
 ColumnModel::ColumnModel() :
     maRange( -1 ),
@@ -215,8 +215,8 @@ void ValidationModel::setBiffErrorStyle( sal_uInt8 nErrorStyle )
     mnErrorStyle = STATIC_ARRAY_SELECT( spnErrorStyles, nErrorStyle, XML_stop );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 class WorksheetGlobals : public WorkbookHelper, public IWorksheetProgress
 {
@@ -1377,8 +1377,8 @@ void WorksheetGlobals::finalizeDrawings()
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 WorksheetHelper::WorksheetHelper( WorksheetGlobals& rSheetGlob ) :
     WorkbookHelper( rSheetGlob ),
@@ -1639,8 +1639,8 @@ void WorksheetHelper::createSharedFormulaMapEntry(
     getFormulaBuffer().createSharedFormulaMapEntry(rAddress, rRange, nSharedId, rTokens);
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 } // namespace xls
 } // namespace oox

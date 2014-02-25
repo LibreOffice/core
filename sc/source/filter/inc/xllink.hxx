@@ -79,7 +79,7 @@ enum XclSupbookType
     EXC_SBTYPE_EUROTOOL     /// SUPBOOK is uesd for EUROCONVERT.
 };
 
-// ============================================================================
+
 
 #endif
 

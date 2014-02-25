@@ -1398,7 +1398,7 @@ void ScChildrenShapes::VisAreaChanged() const
     std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aVisAreaChanged);
 }
 
-// ============================================================================
+
 
 ScAccessibleDocument::ScAccessibleDocument(
         const uno::Reference<XAccessible>& rxParent,

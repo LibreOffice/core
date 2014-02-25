@@ -23,7 +23,7 @@ struct SC_DLLPUBLIC ScSubTotalParam
     bool            bRemoveOnly:1;
     bool            bReplace:1;                 ///< replace existing results
     bool            bPagebreak:1;               ///< page break at change of group
-    bool            bCaseSens:1;                //
+    bool            bCaseSens:1;
     bool            bDoSort:1;                  ///< presort
     bool            bAscending:1;               ///< sort ascending
     bool            bUserDef:1;                 ///< sort user defined

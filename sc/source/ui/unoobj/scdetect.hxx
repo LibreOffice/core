@@ -57,9 +57,9 @@ public:
         impl_createInstance( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext )
             throw (com::sun::star::uno::Exception);
 
-    //----------------------------------------------------------------------------------
+
     // XExtendedFilterDetect
-    //----------------------------------------------------------------------------------
+
     virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor )
         throw (com::sun::star::uno::RuntimeException, std::exception);
 };

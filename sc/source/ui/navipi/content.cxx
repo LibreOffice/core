@@ -111,9 +111,9 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
     return pSh;
 }
 
-//
+
 //          ScContentTree
-//
+
 
 ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     SvTreeListBox   ( pParent, rResId ),

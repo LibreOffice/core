@@ -56,9 +56,9 @@
 
 static ScEditWindow* pActiveEdWnd = NULL;
 
-//========================================================================
+
 // class ScHFEditPage
-//
+
 
 ScHFEditPage::ScHFEditPage( Window*             pParent,
                             const SfxItemSet&   rCoreAttrs,
@@ -840,9 +840,9 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
     return 0;
 }
 
-//========================================================================
+
 // class ScRightHeaderEditPage
-//========================================================================
+
 
 ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -856,9 +856,9 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
 SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
 
-//========================================================================
+
 // class ScLeftHeaderEditPage
-//========================================================================
+
 
 ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -872,9 +872,9 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
 SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
 
-//========================================================================
+
 // class ScRightFooterEditPage
-//========================================================================
+
 
 ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -888,9 +888,9 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
 SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
 
-//========================================================================
+
 // class ScLeftFooterEditPage
-//========================================================================
+
 
 ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,

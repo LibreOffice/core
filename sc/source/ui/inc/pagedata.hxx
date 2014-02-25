@@ -23,7 +23,7 @@
 #include "global.hxx"
 #include "address.hxx"
 
-//============================================================================
+
 
 class ScPrintRangeData
 {

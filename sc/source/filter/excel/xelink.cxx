@@ -36,9 +36,9 @@ using ::std::find_if;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
 
-// ============================================================================
+
 // *** Helper classes ***
-// ============================================================================
+
 
 // External names =============================================================
 
@@ -623,9 +623,9 @@ private:
     XclExpXtiVec        maXtiVec;       /// List of XTI structures for the EXTERNSHEET record.
 };
 
-// ============================================================================
+
 // *** Implementation ***
-// ============================================================================
+
 
 // Excel sheet indexes ========================================================
 
@@ -2249,7 +2249,7 @@ sal_uInt16 XclExpLinkManagerImpl8::InsertXti( const XclExpXti& rXti )
     return ulimit_cast< sal_uInt16 >( maXtiVec.size() - 1 );
 }
 
-// ============================================================================
+
 
 XclExpLinkManager::XclExpLinkManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -2348,6 +2348,6 @@ void XclExpLinkManager::Save( XclExpStream& rStrm )
     mxImpl->Save( rStrm );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,9 +20,9 @@
 #include "sc.hrc"
 #include "submenu.hrc"
 #include <svx/globlmn.hrc>
- //
+
  // Defines -------------------------------------------------------------------------------
- //
+
 #define MN_LAYER\
     ToolBoxItem\
     {\
@@ -167,14 +167,14 @@
 
 
  // Popup-Menues ---------------------------------------------------------------------
- //
+
 String RID_POPUP_DRAWFORM
 {
     Text [ en-US ] = "Popup menu for form objects";
 };
- //
+
  //     Popup-Menue fuer (Uno-) Controls
- //
+
 Menu RID_POPUP_DRAWFORM
 {
     ItemList =
@@ -187,21 +187,21 @@ Menu RID_POPUP_DRAWFORM
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
         MenuItem { ITEM_FORM_PROPERTIES };
         MenuItem { ITEM_REPLACE_CONTROL };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         ITEM_GROUP_MENU
     };
 };

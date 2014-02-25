@@ -27,13 +27,13 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
 
-// ============================================================================
+
 
 PivotCacheFieldContext::PivotCacheFieldContext( WorkbookFragmentBase& rFragment, PivotCacheField& rCacheField ) :
     WorkbookContextBase( rFragment ),
@@ -106,7 +106,7 @@ void PivotCacheFieldContext::onStartRecord( SequenceInputStream& rStrm )
         mrCacheField.importPCDField( rStrm );
 }
 
-// ============================================================================
+
 
 PivotCacheDefinitionFragment::PivotCacheDefinitionFragment(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath, PivotCache& rPivotCache ) :
@@ -208,7 +208,7 @@ void PivotCacheDefinitionFragment::finalizeImport()
     }
 }
 
-// ============================================================================
+
 
 PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorksheetHelper& rHelper,
         const OUString& rFragmentPath, const PivotCache& rPivotCache ) :
@@ -323,8 +323,8 @@ void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceIn
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 namespace {
 
@@ -383,7 +383,7 @@ bool BiffPivotCacheFragment::importFragment()
     return rStrm.getRecId() == BIFF_ID_EOF;
 }
 
-// ============================================================================
+
 
 BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorksheetHelper& rHelper, const PivotCache& rPivotCache ) :
     BiffWorksheetContextBase( rHelper ),
@@ -460,7 +460,7 @@ void BiffPivotCacheRecordsContext::startNextRow()
     mbInRow = true;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

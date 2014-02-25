@@ -60,7 +60,7 @@ namespace chart2 { namespace data {
 
 #define SC_FORCEMODE_NONE   0xff
 
-// ---------------------------------------------------------------------------
+
 //      Help - Window
 
 class ScCornerButton : public Window
@@ -82,7 +82,7 @@ public:
 };
 
 
-// ---------------------------------------------------------------------------
+
 
 class ScTabView : boost::noncopyable
 {

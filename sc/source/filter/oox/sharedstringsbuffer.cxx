@@ -24,12 +24,12 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 SharedStringsBuffer::SharedStringsBuffer( const WorkbookHelper& rHelper ) :
      WorkbookHelper( rHelper )
@@ -53,7 +53,7 @@ RichStringRef SharedStringsBuffer::getString( sal_Int32 nStringId ) const
     return maStrings.get( nStringId );
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

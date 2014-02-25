@@ -40,9 +40,9 @@ namespace oox { namespace ole {
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 // DrawingML
-// ============================================================================
+
 
 class ShapeMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
 {
@@ -57,7 +57,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 };
 
-// ============================================================================
+
 
 class Shape : public ::oox::drawingml::Shape, public WorksheetHelper
 {
@@ -76,7 +76,7 @@ private:
     OUString     maMacroName;
 };
 
-// ============================================================================
+
 
 /** Context handler for creation of shapes embedded in group shapes. */
 class GroupShapeContext : public ::oox::drawingml::ShapeGroupContext, public WorksheetHelper
@@ -104,7 +104,7 @@ protected:
                             const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 };
 
-// ============================================================================
+
 
 /** Fragment handler for a complete sheet drawing. */
 class DrawingFragment : public WorksheetFragmentBase
@@ -128,9 +128,9 @@ private:
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
 };
 
-// ============================================================================
+
 // VML
-// ============================================================================
+
 
 class VmlControlMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
 {
@@ -149,7 +149,7 @@ private:
     sal_Int32           mnDropStyle;
 };
 
-// ============================================================================
+
 
 class VmlDrawing : public ::oox::vml::Drawing, public WorksheetHelper
 {
@@ -205,7 +205,7 @@ private:
     ::oox::vml::TextFontModel maListBoxFont;
 };
 
-// ============================================================================
+
 
 class VmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetHelper
 {
@@ -218,7 +218,7 @@ protected:
     virtual void        finalizeImport();
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -432,9 +432,9 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
                 aCol[i].DeleteArea(nRow1, nRow2, nDelFlag);
         }
 
-            //
+
             // Zellschutz auf geschuetzter Tabelle nicht setzen
-            //
+
 
         if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
         {
@@ -473,9 +473,9 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, boo
             mpCondFormatList->DeleteArea( pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row() );
     }
 
-        //
+
         // Zellschutz auf geschuetzter Tabelle nicht setzen
-        //
+
 
     if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
     {

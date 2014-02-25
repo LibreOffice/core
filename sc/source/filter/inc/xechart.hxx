@@ -154,7 +154,7 @@ private:
     XclExpChRootDataRef mxChData;           /// Reference to the root data object.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for chart record groups. Provides helper functions to write sub records.
 
@@ -185,7 +185,7 @@ private:
     XclChFrBlock        maFrBlock;          /// Future records block settings.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for chart future records. On saving, the record writes missing
     CHFRBLOCKBEGIN records automatically.
@@ -219,7 +219,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChFramePos > XclExpChFramePosRef;
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpChLineFormat : public XclExpRecord
 {
@@ -254,7 +254,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChLineFormat > XclExpChLineFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpChAreaFormat : public XclExpRecord
 {
@@ -288,7 +288,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChAreaFormat > XclExpChAreaFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpChEscherFormat : public XclExpChGroupBase
 {
@@ -323,7 +323,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChEscherFormat > XclExpChEscherFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for record groups containing frame formatting.
 
@@ -357,7 +357,7 @@ private:
     XclExpChEscherFormatRef mxEscherFmt;    /// Complex area format (CHESCHERFORMAT record).
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHFRAME record group containing object frame properties.
 
@@ -445,7 +445,7 @@ public:
 
 typedef boost::shared_ptr< XclExpChFont > XclExpChFontRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHOBJECTLINK record linking a text object to a specific chart object. */
 class XclExpChObjectLink : public XclExpRecord
@@ -462,7 +462,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChObjectLink > XclExpChObjectLinkRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Additional data label settings in the future record CHFRLABELPROPS. */
 class XclExpChFrLabelProps : public XclExpChFutureRecordBase
@@ -485,7 +485,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChFrLabelProps > XclExpChFrLabelPropsRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Base class for objects with font settings. Provides font conversion helper functions. */
 class XclExpChFontBase
@@ -506,7 +506,7 @@ public:
     void                ConvertRotationBase( const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet, bool bSupportsStacked );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHTEXT record group containing text object properties.
 
@@ -597,7 +597,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChMarkerFormat > XclExpChMarkerFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHPIEFORMAT record containing data point formatting data for pie segments. */
 class XclExpChPieFormat : public XclExpUInt16Record
@@ -611,7 +611,7 @@ public:
 
 typedef boost::shared_ptr< XclExpChPieFormat > XclExpChPieFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CH3DDATAFORMAT record containing the bar type in 3D bar charts. */
 class XclExpCh3dDataFormat : public XclExpRecord
@@ -631,7 +631,7 @@ private:
 
 typedef boost::shared_ptr< XclExpCh3dDataFormat > XclExpCh3dDataFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** The CHATTACHEDLABEL record that contains the type of a data point label. */
 class XclExpChAttachedLabel : public XclExpUInt16Record
@@ -642,7 +642,7 @@ public:
 
 typedef boost::shared_ptr< XclExpChAttachedLabel > XclExpChAttLabelRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHDATAFORMAT record group containing data point properties.
 
@@ -683,7 +683,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChDataFormat > XclExpChDataFormatRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHSERTRENDLINE record containing settings for a trend line. */
 class XclExpChSerTrendLine : public XclExpRecord, protected XclExpChRoot
@@ -713,7 +713,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChSerTrendLine > XclExpChSerTrendLineRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHSERERRORBAR record containing settings for error bars. */
 class XclExpChSerErrorBar : public XclExpRecord, protected XclExpChRoot
@@ -733,7 +733,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChSerErrorBar > XclExpChSerErrorBarRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHSERIES record group describing a data series in a chart.
 
@@ -838,7 +838,7 @@ private:
     XclChTypeInfo       maTypeInfo;         /// Chart type info for the contained type.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHCHART3D record that contains 3D view settings. */
 class XclExpChChart3d : public XclExpRecord
@@ -863,7 +863,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChChart3d > XclExpChChart3dRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHLEGEND record group describing the chart legend.
 
@@ -893,7 +893,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChLegend > XclExpChLegendRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHDROPBAR record group describing pos/neg bars in line charts.
 
@@ -921,7 +921,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChDropBar > XclExpChDropBarRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHTYPEGROUP record group describing a group of series.
 
@@ -1029,7 +1029,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChLabelRange > XclExpChLabelRangeRef;
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpChValueRange : public XclExpRecord, protected XclExpChRoot
 {
@@ -1050,7 +1050,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChValueRange > XclExpChValueRangeRef;
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpChTick : public XclExpRecord, protected XclExpChRoot
 {
@@ -1074,7 +1074,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChTick > XclExpChTickRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHAXIS record group describing an entire chart axis.
 
@@ -1129,7 +1129,7 @@ private:
 
 typedef boost::shared_ptr< XclExpChAxis > XclExpChAxisRef;
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the CHAXESSET record group describing an axes set (X/Y/Z axes).
 
@@ -1239,7 +1239,7 @@ private:
     XclExpChTextList    maLabels;           /// Data point labels (CHTEXT groups).
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the group of DFF and OBJ records containing all drawing shapes
     embedded in the chart object.
@@ -1260,7 +1260,7 @@ private:
     boost::shared_ptr< XclExpRecordBase > mxObjRecs;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Represents the entire chart substream (all records in BOF/EOF block). */
 class XclExpChart : public XclExpSubStream, protected XclExpRoot
@@ -1273,7 +1273,7 @@ public:
                             XModelRef xModel, const Rectangle& rChartRect );
 };
 
-// ============================================================================
+
 
 #endif
 

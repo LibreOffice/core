@@ -47,7 +47,7 @@
         ((SvxSetItem&)(set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
 
-//==================================================================
+
 
 ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           Window*           pParent,

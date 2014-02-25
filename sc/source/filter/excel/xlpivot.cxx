@@ -34,9 +34,9 @@ namespace ScDPLayoutMode = ::com::sun::star::sheet::DataPilotFieldLayoutMode;
 namespace ScDPRefItemType = ::com::sun::star::sheet::DataPilotFieldReferenceItemType;
 namespace ScDPGroupBy = ::com::sun::star::sheet::DataPilotFieldGroupBy;
 
-// ============================================================================
+
 // Pivot cache
-// ============================================================================
+
 
 XclPCItem::XclPCItem() :
     meType( EXC_PCITEM_INVALID ),
@@ -386,9 +386,9 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPCInfo& rInfo )
         << XclExpString( rInfo.maUserName );
 }
 
-// ============================================================================
+
 // Pivot table
-// ============================================================================
+
 
 // cached name ================================================================
 
@@ -935,7 +935,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo )
         << EXC_PT_NOSTRING;             // length of vacate style name
 }
 
-// ============================================================================
+
 
 // Pivot table autoformat settings ============================================
 

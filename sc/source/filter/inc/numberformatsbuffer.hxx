@@ -33,7 +33,7 @@ namespace oox { class PropertyMap; }
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 struct NumFmtModel
 {
@@ -44,7 +44,7 @@ struct NumFmtModel
     explicit            NumFmtModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all API number format attributes. */
 struct ApiNumFmtData
@@ -54,7 +54,7 @@ struct ApiNumFmtData
     explicit            ApiNumFmtData();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all data for a number format code. */
 class NumberFormat : public WorkbookHelper
@@ -88,7 +88,7 @@ private:
 
 typedef ::boost::shared_ptr< NumberFormat > NumberFormatRef;
 
-// ============================================================================
+
 
 class NumberFormatsBuffer : public WorkbookHelper
 {
@@ -123,7 +123,7 @@ private:
     sal_Int32           mnHighestId;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

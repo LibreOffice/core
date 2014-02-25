@@ -56,7 +56,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     , maErrInvalidNameStr(ScGlobal::GetRscString(STR_ERR_NAME_INVALID))
     , maErrNameInUse(ScGlobal::GetRscString(STR_ERR_NAME_EXISTS))
     , maStrMultiSelect(ScGlobal::GetRscString(STR_MULTI_SELECT))
-    //
+
     , mpViewData(ptrViewData)
     , mpDoc(ptrViewData->GetDocument())
     , maCursorPos(aCursorPos)

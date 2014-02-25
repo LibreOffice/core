@@ -37,9 +37,9 @@
 using ::std::vector;
 
 
-// ============================================================================
+
 // *** Helper classes ***
-// ============================================================================
+
 
 // Cached external cells ======================================================
 
@@ -216,9 +216,9 @@ private:
     XclImpSupbookList   maSupbookList;      /// List of external documents.
 };
 
-// ============================================================================
+
 // *** Implementation ***
-// ============================================================================
+
 
 // Excel sheet indexes ========================================================
 
@@ -866,7 +866,7 @@ void XclImpLinkManagerImpl::LoadCachedValues()
         itSupbook->LoadCachedValues();
 }
 
-// ============================================================================
+
 
 XclImpLinkManager::XclImpLinkManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -939,6 +939,6 @@ const OUString& XclImpLinkManager::GetMacroName( sal_uInt16 nExtSheet, sal_uInt1
     return mxImpl->GetMacroName( nExtSheet, nExtName );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

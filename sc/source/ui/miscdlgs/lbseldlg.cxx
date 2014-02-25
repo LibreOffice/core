@@ -30,7 +30,7 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-//==================================================================
+
 
 ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<OUString> &rEntryList)
     : ModalDialog(pParent, "SelectRangeDialog", "modules/scalc/ui/selectrange.ui")

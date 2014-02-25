@@ -26,7 +26,7 @@
 #include "miscdlgs.hrc"
 
 
-//==================================================================
+
 
 bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
@@ -38,7 +38,7 @@ sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  
 ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
                                           sal_uInt16  nCheckDefaults ) :
     ModalDialog     ( pParent, "DeleteContentsDialog", "modules/scalc/ui/deletecontents.ui" ),
-    //
+
     bObjectsDisabled( false )
 {
     get( aBtnDelAll, "deleteall" );

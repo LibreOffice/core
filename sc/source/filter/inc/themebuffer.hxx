@@ -28,7 +28,7 @@ namespace xls {
 
 struct FontModel;
 
-// ============================================================================
+
 
 class ThemeBuffer : public ::oox::drawingml::Theme, public WorkbookHelper
 {
@@ -47,7 +47,7 @@ private:
     FontModelPtr        mxDefFontModel;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

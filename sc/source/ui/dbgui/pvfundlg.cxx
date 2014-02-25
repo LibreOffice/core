@@ -40,14 +40,14 @@
 
 #include <vector>
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::sheet;
 
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
 
-// ============================================================================
+
 
 namespace {
 
@@ -154,7 +154,7 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 
 } // namespace
 
-// ============================================================================
+
 
 ScDPFunctionListBox::ScDPFunctionListBox(Window* pParent, WinBits nStyle)
     : ListBox(pParent, nStyle)
@@ -197,7 +197,7 @@ void ScDPFunctionListBox::FillFunctionNames()
         InsertEntry( aArr.GetString( nIndex ) );
 }
 
-// ============================================================================
+
 
 ScDPFunctionDlg::ScDPFunctionDlg(
         Window* pParent, const ScDPLabelDataVector& rLabelVec,
@@ -413,7 +413,7 @@ IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl)
     return 0;
 }
 
-// ============================================================================
+
 
 ScDPSubtotalDlg::ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
@@ -519,7 +519,7 @@ IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
     return 0;
 }
 
-// ============================================================================
+
 
 ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( Window* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
@@ -771,7 +771,7 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
     return 0;
 }
 
-// ============================================================================
+
 
 ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DPSHOWDETAIL ) ),
@@ -841,6 +841,6 @@ IMPL_LINK( ScDPShowDetailDlg, DblClickHdl, ListBox*, pLBox )
     return 0;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -97,9 +97,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     bDragWasInternal( false ),
     nSourceDocID( 0 )
 {
-    //
+
     //  check what kind of objects are contained
-    //
+
 
     SdrPage* pPage = pModel->GetPage(0);
     if (pPage)
@@ -108,9 +108,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
         SdrObject* pObject = aIter.Next();
         if (pObject && !aIter.Next())               // exactly one object?
         {
-            //
+
             //  OLE object
-            //
+
 
             sal_uInt16 nSdrObjKind = pObject->GetObjIdentifier();
             if (nSdrObjKind == OBJ_OLE2)
@@ -127,9 +127,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                 // aOleData is initialized later
             }
 
-            //
+
             //  Graphic object
-            //
+
 
             if (nSdrObjKind == OBJ_GRAF)
             {
@@ -138,9 +138,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                     bGrIsBit = true;
             }
 
-            //
+
             //  URL button
-            //
+
 
             SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
@@ -202,9 +202,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
         }
     }
 
-    //
+
     //  get size for object descriptor
-    //
+
 
     // #i71538# use complete SdrViews
     // SdrExchangeView aView(pModel);
@@ -223,9 +223,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     aObjDesc.maSize = aSrcSize;
     PrepareOLE( aObjDesc );
 
-    //
+
     // remember a unique ID of the source document
-    //
+
     if ( pContainerShell )
     {
         ScDocument* pDoc = pContainerShell->GetDocument();
@@ -719,9 +719,9 @@ SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
     return NULL;
 }
 
-//
+
 //  initialize aDocShellRef with a live document from the ClipDoc
-//
+
 
 void ScDrawTransferObj::InitDocShell()
 {

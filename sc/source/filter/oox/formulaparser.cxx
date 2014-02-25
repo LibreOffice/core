@@ -38,7 +38,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::sheet::ReferenceFlags;
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -2741,7 +2741,7 @@ bool BiffFormulaParserImpl::pushBiffFunction( sal_uInt16 nFuncId, sal_uInt8 nPar
     return pushFunctionOperator( OPCODE_NONAME, nParamCount );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -2902,7 +2902,7 @@ OUString FormulaParser::importMacroName( const OUString& rFormulaString )
     return OUString();
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -842,7 +842,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     }
 
     // now we have for sure a value
-    //
+
     double nValMin = getMinValue();
     double nValMax = getMaxValue();
     double nMin = getMin(nValMin, nValMax);

@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-// ============================================================================
+
 
 ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
@@ -124,7 +124,7 @@ void ScXMLExternalRefTabSourceContext::EndElement()
     pRefMgr->setFilterData(mrExternalRefInfo.mnFileId, maFilterName, maFilterOptions);
 }
 
-// ============================================================================
+
 
 ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
@@ -167,7 +167,7 @@ void ScXMLExternalRefRowsContext::EndElement()
 {
 }
 
-// ============================================================================
+
 
 ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
@@ -244,7 +244,7 @@ void ScXMLExternalRefRowContext::EndElement()
     mrExternalRefInfo.mnRow += mnRepeatRowCount;
 }
 
-// ============================================================================
+
 
 ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
@@ -397,7 +397,7 @@ void ScXMLExternalRefCellContext::SetCellString(const OUString& rStr)
     maCellString = rStr;
 }
 
-// ============================================================================
+
 
 ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,

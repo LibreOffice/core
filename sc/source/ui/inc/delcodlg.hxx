@@ -24,7 +24,7 @@
 #include <vcl/button.hxx>
 #include "global.hxx"
 
-//------------------------------------------------------------------------
+
 
 class ScDeleteContentsDlg : public ModalDialog
 {

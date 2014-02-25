@@ -44,7 +44,7 @@ struct  ScMyCell;
 class   ScXMLExport;
 class   ScFormatRangeStyles;
 
-//==============================================================================
+
 
 class ScMyIteratorBase
 {
@@ -61,7 +61,7 @@ public:
     virtual void                UpdateAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 };
 
-//==============================================================================
+
 
 struct ScMyShape
 {
@@ -124,7 +124,7 @@ public:
     void                        SkipTable(SCTAB nSkip);
 };
 
-//==============================================================================
+
 
 struct ScMyMergedRange
 {
@@ -153,7 +153,7 @@ public:
     void                        SkipTable(SCTAB nSkip);
 };
 
-//==============================================================================
+
 
 struct ScMyAreaLink
 {
@@ -194,7 +194,7 @@ public:
     void                        SkipTable(SCTAB nSkip);
 };
 
-//==============================================================================
+
 
 struct ScMyCellRangeAddress : com::sun::star::table::CellRangeAddress
 {
@@ -221,7 +221,7 @@ public:
     void                        SkipTable(SCTAB nSkip);
 };
 
-//==============================================================================
+
 
 struct ScMyDetectiveObj
 {
@@ -258,7 +258,7 @@ public:
     void                        SkipTable(SCTAB nSkip);
 };
 
-//==============================================================================
+
 
 struct ScMyDetectiveOp
 {
@@ -289,7 +289,7 @@ public:
     void                        SkipTable(SCTAB nSkip);
 };
 
-//==============================================================================
+
 
 // contains data to export for the current cell position
 struct ScMyCell
@@ -330,7 +330,7 @@ struct ScMyCell
                                 ~ScMyCell();
 };
 
-//==============================================================================
+
 
 class ScMyNotEmptyCellsIterator : boost::noncopyable
 {

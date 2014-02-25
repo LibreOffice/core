@@ -55,7 +55,7 @@
 #include "patattr.hxx"
 
 
-//========================================================================
+
 
 ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
                                     ScDocument*     pDocument )
@@ -198,9 +198,9 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
 }
 
 
-//
+
 //                      Standard-Vorlagen
-//
+
 
 
 #define SCSTR(id)   ScGlobal::GetRscString(id)
@@ -260,9 +260,9 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     OUString  aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
 
-    //==========================================================
+
     // Zellformatvorlagen:
-    //==========================================================
+
 
 
     // 1. Standard
@@ -350,9 +350,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet = &pSheet->GetItemSet();
     pSet->Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
 
-    //==========================================================
+
     // Seitenformat-Vorlagen:
-    //==========================================================
+
 
 
     // 1. Standard

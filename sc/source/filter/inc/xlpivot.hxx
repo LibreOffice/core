@@ -363,9 +363,9 @@ const sal_uInt16 EXC_SXFDBTYPE_DEFAULT      = 0x0000;
 // (0x0810) SXVIEWEX9 ---------------------------------------------------------
 const sal_uInt16 EXC_ID_SXVIEWEX9       = 0x0810;
 
-// ============================================================================
+
 // Pivot cache
-// ============================================================================
+
 
 /** Represents a data item of any type in a pivot cache. Supposed as base class for import and export. */
 class XclPCItem
@@ -538,9 +538,9 @@ struct XclPCInfo
 XclImpStream& operator>>( XclImpStream& rStrm, XclPCInfo& rInfo );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPCInfo& rInfo );
 
-// ============================================================================
+
 // Pivot table
-// ============================================================================
+
 
 // cached name ================================================================
 
@@ -556,7 +556,7 @@ struct XclPTCachedName
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedName );
 
-// ----------------------------------------------------------------------------
+
 
 /** Base struct for named info structs. Supports explicit naming and using the cache. */
 struct XclPTVisNameInfo
@@ -748,7 +748,7 @@ struct XclPTExtInfo
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTExtInfo& rInfo );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo );
 
-// ============================================================================
+
 
 // Pivot table autoformat settings ==============================================
 
@@ -767,7 +767,7 @@ struct XclPTViewEx9Info
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTViewEx9Info& rInfo );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo );
 
-// ============================================================================
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

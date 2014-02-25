@@ -222,10 +222,10 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
         return eERR_FORMAT;
 
     if( bSyntErrWarn )
-        //###############################################
+
         // ACHTUNG: Hier fehlt noch die richtige Warnung!
         return eERR_RNGOVRFLW;
-        //###############################################
+
     else if( bOverflowWarn )
         return eERR_RNGOVRFLW;
     else

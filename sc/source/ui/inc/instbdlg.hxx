@@ -39,7 +39,7 @@ class ScDocShell;
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
 
-//------------------------------------------------------------------------
+
 
 class ScInsertTableDlg : public ModalDialog
 {

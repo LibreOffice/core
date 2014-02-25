@@ -84,9 +84,9 @@ inline bool IsAmbiguousScript( sal_uInt8 nScript )
 
 
 
-//
+
 //  Data operations
-//
+
 
 
 

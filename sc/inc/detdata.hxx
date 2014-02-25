@@ -54,9 +54,9 @@ public:
                             { return eOperation == r.eOperation && aPos == r.aPos; }
 };
 
-//
+
 //  list of operators
-//
+
 
 typedef boost::ptr_vector<ScDetOpData> ScDetOpDataVector;
 

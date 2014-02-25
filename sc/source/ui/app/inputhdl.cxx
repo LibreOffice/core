@@ -382,7 +382,7 @@ void ScInputHandler::DeleteRangeFinder()
     }
 }
 
-//==================================================================
+
 
 inline OUString GetEditText(EditEngine* pEng)
 {
@@ -492,7 +492,7 @@ static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
     return (sal_Int32) (p - p0);
 }
 
-//==================================================================
+
 
 ScInputHandler::ScInputHandler()
     :   pInputWin( NULL ),
@@ -703,9 +703,9 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
     }
 }
 
-//
+
 //      Funktionen/Bereichsnamen etc. als Tip-Hilfe
-//
+
 
 //  die anderen Typen sind in ScDocument::GetFormulaEntries festgelegt
 
@@ -1303,9 +1303,9 @@ void ScInputHandler::PasteFunctionData()
         pActiveView->ShowCursor();
 }
 
-//
+
 //      Selektion berechnen und als Tip-Hilfe anzeigen
-//
+
 
 static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const ScAddress &rPos )
 {
@@ -1511,9 +1511,9 @@ void ScInputHandler::SkipClosingPar()
     --nAutoPar;
 }
 
-//
+
 //      Auto-Eingabe
-//
+
 
 void ScInputHandler::GetColData()
 {
@@ -1674,9 +1674,9 @@ void ScInputHandler::NextAutoEntry( bool bBack )
         pActiveView->ShowCursor();
 }
 
-//
+
 //      Klammern hervorheben
-//
+
 
 void ScInputHandler::UpdateParenthesis()
 {
@@ -2381,9 +2381,9 @@ void ScInputHandler::InvalidateAttribs()
     }
 }
 
-//
+
 //      --------------- public Methoden --------------------------------------------
-//
+
 
 void ScInputHandler::SetMode( ScInputMode eNewMode )
 {
@@ -3919,9 +3919,9 @@ void ScInputHandler::InputTurnOffWinEngine()
     bInOwnChange = false;
 }
 
-//========================================================================
+
 //  ScInputHdlState
-//========================================================================
+
 
 ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
                                   const ScAddress& rStartPos,

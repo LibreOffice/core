@@ -159,7 +159,7 @@ interface TablePrintPreview
 }
 
 
- // ===========================================================================
+
 shell ScPreviewShell
 {
     import TablePrintPreview;
