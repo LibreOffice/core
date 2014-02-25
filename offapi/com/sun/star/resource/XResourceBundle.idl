@@ -133,7 +133,7 @@ module com { module sun { module star { module resource {
     class MyResource extends com.sun.star.resource.XResourceBundle
     {
         // some queryInterface stuff
-        // ...
+
         public final Object getDirectElement(String key)
         {
             if (key.equals("okKey")) return "Ok";

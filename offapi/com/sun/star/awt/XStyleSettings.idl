@@ -49,7 +49,7 @@ interface XStyleSettings
     /// specifies the color of the border of active windows
     [attribute] ::com::sun::star::util::Color ActiveBorderColor;
 
-    ///
+
     [attribute] ::com::sun::star::util::Color ActiveColor;
 
     /// specifies the color of the active tab of a tab control
@@ -64,7 +64,7 @@ interface XStyleSettings
     /// specifies the color to use for text on buttons
     [attribute] ::com::sun::star::util::Color ButtonTextColor;
 
-    ///
+
     [attribute] ::com::sun::star::util::Color CheckedColor;
 
     /// specifies the dark portion of the shadow to use for UI elements
@@ -73,7 +73,7 @@ interface XStyleSettings
     /// specifies the color of the border of inactive windows
     [attribute] ::com::sun::star::util::Color DeactiveBorderColor;
 
-    ///
+
     [attribute] ::com::sun::star::util::Color DeactiveColor;
 
     /// specifies the text color for inactive UI components
@@ -88,10 +88,10 @@ interface XStyleSettings
     /// specifies the text color for disabled UI elements
     [attribute] ::com::sun::star::util::Color DisableColor;
 
-    ///
+
     [attribute] ::com::sun::star::util::Color FaceColor;
 
-    ///
+
     [attribute, readonly] ::com::sun::star::util::Color FaceGradientColor;
 
     /// specifies the background color for dialog input controls
@@ -127,7 +127,7 @@ interface XStyleSettings
     /// specifies the text color of label elements in dialogs
     [attribute] ::com::sun::star::util::Color LabelTextColor;
 
-    ///
+
     [attribute] ::com::sun::star::util::Color LightColor;
 
     /// specifies the background color of menu bars

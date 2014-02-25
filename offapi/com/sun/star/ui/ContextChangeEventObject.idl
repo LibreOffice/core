@@ -42,6 +42,6 @@ struct ContextChangeEventObject : com::sun::star::lang::EventObject
 
 }; }; }; };
 
-//=============================================================================
+
 
 #endif
