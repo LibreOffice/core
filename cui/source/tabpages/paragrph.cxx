@@ -1388,7 +1388,7 @@ sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
         if ( !pOld || ( (const SvxPageModelItem*)pOld )->GetValue() != sPage )
         {
-            rOutSet.Put( SvxPageModelItem( sPage, sal_False, _nWhich ) );
+            rOutSet.Put( SvxPageModelItem( sPage, false, _nWhich ) );
             bModified = sal_True;
         }
         else
@@ -1397,7 +1397,7 @@ sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     else if(TRISTATE_TRUE == eState && m_pApplyCollBtn->IsEnabled())
         bIsPageModel = true;
     else
-        rOutSet.Put( SvxPageModelItem( sPage, sal_False, _nWhich ) );
+        rOutSet.Put( SvxPageModelItem( sPage, false, _nWhich ) );
 
     _nWhich = GetWhich( SID_ATTR_PARA_PAGEBREAK );
 

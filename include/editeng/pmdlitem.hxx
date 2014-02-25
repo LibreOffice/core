@@ -32,13 +32,13 @@
 class EDITENG_DLLPUBLIC SvxPageModelItem : public SfxStringItem
 {
 private:
-    sal_Bool bAuto;
+    bool bAuto;
 
 public:
     TYPEINFO();
 
     explicit inline SvxPageModelItem( sal_uInt16 nWh  );
-    inline SvxPageModelItem( const OUString& rModel, sal_Bool bA /*= sal_False*/,
+    inline SvxPageModelItem( const OUString& rModel, bool bA /*= false*/,
                              sal_uInt16 nWh  );
     inline SvxPageModelItem& operator=( const SvxPageModelItem& rModel );
 
@@ -51,16 +51,16 @@ public:
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-    sal_Bool IsAuto() const { return bAuto; }
+    bool IsAuto() const { return bAuto; }
 };
 
 inline SvxPageModelItem::SvxPageModelItem( sal_uInt16 nWh )
-    : bAuto( sal_False )
+    : bAuto( false )
 {
     SetWhich( nWh );
 }
 
-inline SvxPageModelItem::SvxPageModelItem( const OUString& rModel, sal_Bool bA,
+inline SvxPageModelItem::SvxPageModelItem( const OUString& rModel, bool bA,
                                            sal_uInt16 nWh ) :
     SfxStringItem( nWh, rModel ),
     bAuto( bA )

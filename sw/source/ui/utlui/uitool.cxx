@@ -650,7 +650,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
     }
 
     if(bPut)
-        rCoreSet.Put( SvxPageModelItem( aName, sal_True, SID_ATTR_PARA_MODEL ) );
+        rCoreSet.Put( SvxPageModelItem( aName, true, SID_ATTR_PARA_MODEL ) );
 }
 
 // Determine metric
