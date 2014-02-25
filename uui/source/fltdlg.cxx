@@ -35,7 +35,7 @@
 namespace uui
 {
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      initialize filter dialog with start values
     @descr      We set some necessary information on these instance for later working and create internal structures.
                 After construction user should call "SetFilters()" and "SetURL()" to fill listbox with selectable filter
@@ -64,7 +64,7 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
     FreeResource();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      set file name on dialog control
     @descr      We convert given URL (it must be an URL!) into valid file name and show it on our dialog.
 
@@ -82,7 +82,7 @@ void FilterDialog::SetURL( const OUString& sURL )
     m_ftURL.SetText( impl_buildUIFileName(sURL) );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      change list of filter names
     @descr      We save given pointer internal and use it to fill our listbox with given names.
                 Saved list pointer is used on method "AskForFilter()" too, to find user selected item
@@ -116,7 +116,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      ask user for his decision
     @descr      We show the dialog and if user finish it with "OK" - we try to find selected item in internal saved
                 name list (which you must set in "ChangeFilters()"!). If we return sal_True as result, you can use out
@@ -159,7 +159,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     return bSelected;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      helper class to calculate length of given string
     @descr      Instances of it can be used as callback for INetURLObject::getAbbreviated() method to build
                 short URLs to show it on GUI. We use in ctor set OutputDevice to call special VCL method ...
@@ -190,7 +190,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
         const OutputDevice* m_pDevice;
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      try to build short name of given URL to show it n GUI
     @descr      We detect type of given URL automaticly and build this short name depend on this type ...
                 If we couldnt make it right we return full given string without any changes ...

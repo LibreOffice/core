@@ -25,7 +25,7 @@
 #include "vcl/fixed.hxx"
 #include "vcl/edit.hxx"
 
-//============================================================================
+
 
 enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
 

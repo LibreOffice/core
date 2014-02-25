@@ -120,10 +120,10 @@ PasswordDialog::PasswordDialog(
     aOKBtn.SetClickHdl( LINK( this, PasswordDialog, OKHdl_Impl ) );
 
 
-    //
+
     // move controls down by extra height needed for aFTPassword
     // (usually only needed if a URL was provided)
-    //
+
 
     long nLabelWidth    = aFTPassword.GetSizePixel().Width();
     long nLabelHeight   = aFTPassword.GetSizePixel().Height();

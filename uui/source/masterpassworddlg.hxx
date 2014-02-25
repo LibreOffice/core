@@ -27,7 +27,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/group.hxx>
 
-//============================================================================
+
 class MasterPasswordDialog : public ModalDialog
 {
     Edit*     m_pEDMasterPassword;

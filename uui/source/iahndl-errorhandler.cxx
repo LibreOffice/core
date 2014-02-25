@@ -206,7 +206,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
         //     Disapprove = 4,
         //     Retry = 2,
         //     Abort = 1
-        //
+
         // The mapping has five properties on which the code to select the
         // correct continuation relies:
         // 1  The OK button is mapped to Approve if that is available,
@@ -215,10 +215,10 @@ UUIInteractionHelper::handleErrorHandlerRequest(
         // 3  The RETRY button is always mapped to Retry.
         // 4  The NO button is always mapped to Disapprove.
         // 5  The YES button is always mapped to Approve.
-        //
+
         // Because the WinBits button combinations are quite restricted, not
         // every request can be served here.
-        //
+
         // Finally, it seems to be better to leave default button
         // determination to VCL (the favouring of CANCEL as default button
         // seems to not always be what the user wants)...
