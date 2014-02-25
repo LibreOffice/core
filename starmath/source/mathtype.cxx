@@ -2516,6 +2516,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
     switch(pNode->GetToken().eType)
     {
     case TINT:
+    case TINTD:
         if (nOldVariation != 0xff)
             pS->WriteUChar( sal_uInt8(0x18) ); //selector
         else
@@ -2640,6 +2641,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
         pS->WriteUChar( sal_uInt8(0x86) );
         pS->WriteUInt16( sal_uInt16(0x222B) );
     case TINT:
+    case TINTD:
     case TLINT:
         pS->WriteUChar( sal_uInt8(CHAR) );
         pS->WriteUChar( sal_uInt8(0x86) );
