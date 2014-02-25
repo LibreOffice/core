@@ -115,7 +115,7 @@ basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&    rCl
                                            const basegfx::B2DSize&           rUserSize )
 {
     // setup canvas clipping
-    // =====================
+
 
     // AW: Simplified
     const basegfx::B2DRange aClipRange(0, 0, rUserSize.getX(), rUserSize.getY());
@@ -272,7 +272,7 @@ class LayerSpriteContainer
         // sprites, assign upper bound of individual sprite range as
         // sprite prio (the layer itself gets assigned the lower bound
         // of sprite 0's individual range):
-        //
+
         // | layer 0                    | layer 1                    | ...
         // |    sprite 0 |    sprite 1  |    sprite 0 |    sprite 1  | ...
         return maLayerPrioRange.getMinimum() + maLayerPrioRange.getRange()*(nSpriteNum+1)/(maSprites.size()+1);

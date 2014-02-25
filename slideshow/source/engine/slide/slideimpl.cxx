@@ -198,7 +198,7 @@ private:
     void addPolygons(PolyPolygonVector aPolygons);
 
     // Types
-    // =====
+
 
     enum SlideAnimationState
     {
@@ -221,7 +221,7 @@ private:
 
 
     // Member variables
-    // ================
+
 
     /// The page model object
     uno::Reference< drawing::XDrawPage >                mxDrawPage;
@@ -291,7 +291,7 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
+
 
 
 class SlideRenderer
@@ -332,7 +332,7 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
+
 
 
 SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDrawPage,
@@ -818,13 +818,13 @@ bool SlideImpl::implPrefetchShow()
                        "SlideImpl::implPrefetchShow(): Invalid layer manager" );
 
     // fetch desired page content
-    // ==========================
+
 
     if( !loadShapes() )
         return false;
 
     // New animations framework: import the shape effect info
-    // ======================================================
+
 
     try
     {
@@ -1112,7 +1112,7 @@ bool SlideImpl::loadShapes()
                        "SlideImpl::loadShapes(): Invalid layer manager" );
 
     // fetch desired page content
-    // ==========================
+
 
     // also take master page content
     uno::Reference< drawing::XDrawPage > xMasterPage;

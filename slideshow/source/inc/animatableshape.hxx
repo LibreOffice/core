@@ -40,7 +40,7 @@ namespace slideshow
         {
         public:
             // Animation methods
-            //------------------------------------------------------------------
+
 
             /** Notify the Shape that an animation starts now
 

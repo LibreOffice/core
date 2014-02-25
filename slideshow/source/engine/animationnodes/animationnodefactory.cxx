@@ -138,7 +138,7 @@ public:
         // e.g. activity counting does not work - subset
         // would be removed after first animation node
         // disables it).
-        //
+
         // NOTE: this is only a problem for animation
         // nodes that explicitly call
         // disableSubsetShape(). Independent shape subsets
@@ -185,7 +185,7 @@ bool implCreateIteratedNodes(
                    "(visually equivalent to whole-shape effect)" );
 
     // Determine target shape (or subset)
-    // ==================================
+
 
     // TODO(E1): I'm not too sure what to expect here...
     ENSURE_OR_RETURN_FALSE(
@@ -223,7 +223,7 @@ bool implCreateIteratedNodes(
     }
 
     // Lookup shape, and fill NodeContext
-    // ==================================
+
 
     AttributableShapeSharedPtr  pTargetShape(
         lookupAttributableShape( rContext.maContext.mpSubsettableShapeManager,
@@ -287,7 +287,7 @@ bool implCreateIteratedNodes(
                                                         uno::UNO_QUERY_THROW );
 
     // Generate subsets
-    // ================
+
 
     if( bParagraphTarget ||
         nSubItem != presentation::ShapeAnimationSubType::ONLY_TEXT )
@@ -299,9 +299,9 @@ bool implCreateIteratedNodes(
         // method). For ONLY_TEXT effects,
         // we skip this part, to animate
         // only the text.
-        //
+
         // OR
-        //
+
         // prepend with subset animation for full
         // _paragraph_, from which the individual
         // paragraph subsets are subtracted. Note that the

@@ -75,12 +75,12 @@ namespace slideshow
                 double(mnCurrPerformCalls) / mnMinNumberOfFrames );
 
             // okay, so now, the decision is easy:
-            //
+
             // If the fraction of time elapsed is smaller than the
             // number of calls required to be performed, then we calc
             // the position on the animation range according to
             // elapsed time. That is, we're so to say ahead of time.
-            //
+
             // In contrary, if the fraction of time elapsed is larger,
             // then we're lagging, and we thus calc the position on
             // the animation time line according to the fraction of
@@ -114,14 +114,14 @@ namespace slideshow
 
 
             // get relative animation position
-            // ===============================
+
 
             const double nCurrElapsedTime( maTimer.getElapsedTime() );
             double nT( nCurrElapsedTime / mnMinSimpleDuration );
 
 
             // one of the stop criteria reached?
-            // =================================
+
 
             // will be set to true below, if one of the termination criteria
             // matched.
@@ -130,7 +130,7 @@ namespace slideshow
             if( isRepeatCountValid() )
             {
                 // Finite duration
-                // ===============
+
 
                 // When we've autoreverse on, the repeat count
                 // doubles
@@ -154,7 +154,7 @@ namespace slideshow
 
 
             // need to do auto-reverse?
-            // ========================
+
 
             double nRepeats;
             double nRelativeSimpleTime;
@@ -187,7 +187,7 @@ namespace slideshow
             else
             {
                 // determine repeat
-                // ================
+
 
                 // calc simple time and number of repeats from nT
                 // Now, that's easy, since the fractional part of
@@ -213,7 +213,7 @@ namespace slideshow
                     // with modf, nRelativeSimpleTime will never
                     // become 1.0, since nRepeats is incremented and
                     // nRelativeSimpleTime set to 0.0 then.
-                    //
+
                     // For the animation to reach its final value,
                     // nRepeats must although become
                     // maRepeats.getValue()-1.0, and
@@ -224,7 +224,7 @@ namespace slideshow
             }
 
             // actually perform something
-            // ==========================
+
 
             simplePerform( nRelativeSimpleTime,
                            // nRepeats is already integer-valued

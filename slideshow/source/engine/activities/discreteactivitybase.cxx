@@ -111,7 +111,7 @@ namespace slideshow
             const ::std::size_t nVectorSize( maDiscreteTimes.size() );
 
             // actually perform something
-            // ==========================
+
 
             // TODO(Q3): Refactor this mess
 
@@ -144,17 +144,17 @@ namespace slideshow
                 // repeat is handled locally, only apply acceleration/deceleration.
                 // Scale time vector with simple duration, offset with full repeat
                 // times.
-                //
+
                 // Somewhat condensed, the argument for setNextTimeout below could
                 // be written as
-                //
+
                 // mnSimpleDuration*(nFullRepeats + calcAcceleratedTime( currentRepeatTime )),
-                //
+
                 // with currentRepeatTime = maDiscreteTimes[ currentRepeatIndex ]
-                //
+
                 // Note that calcAcceleratedTime() is only applied to the current repeat's value,
                 // not to the total resulting time. This is in accordance with the SMIL spec.
-                //
+
                 mpWakeupEvent->setNextTimeout(
                     mnSimpleDuration*(
                         calcRepeatCount(

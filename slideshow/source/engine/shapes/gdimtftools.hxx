@@ -36,7 +36,7 @@ class MetaAction;
 class GDIMetaFile;
 class Graphic;
 
-// -----------------------------------------------------------------------------
+
 
 namespace slideshow
 {
@@ -58,7 +58,7 @@ namespace slideshow
         };
 
         // Animation info
-        // ==============
+
 
         struct MtfAnimationFrame
         {

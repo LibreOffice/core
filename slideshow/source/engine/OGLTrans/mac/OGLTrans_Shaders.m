@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
   /* Subclass should put initialisation code that can be performaned
      lazily (on first frame render) here */
   initialised = TRUE;
-  
+
   /* Create a GLU quadric, used for rendering certain geometry */
   quadric = gluNewQuadric();
   gluQuadricDrawStyle(quadric, GLU_FILL);
@@ -77,13 +77,13 @@
   GLint vertex_compiled;
   GLint fragment_compiled;
   GLint linked;
-  
+
   /* Delete any existing program object */
   if (program_object) {
     glDeleteObjectARB(program_object);
     program_object = NULL;
   }
-  
+
   /* Load and compile both shaders */
   if (vertexString) {
     vertex_shader   = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
@@ -96,7 +96,7 @@
     vertex_shader   = NULL;
     vertex_compiled = 1;
   }
-    
+
   if (fragmentString) {
     fragment_shader   = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
     fragment_string   = [fragmentString cStringUsingEncoding:NSASCIIStringEncoding];
@@ -108,7 +108,7 @@
     fragment_shader   = NULL;
     fragment_compiled = 1;
   }
-  
+
   /* Ensure both shaders compiled */
   if (!vertex_compiled || !fragment_compiled) {
     if (vertex_shader) {
@@ -121,7 +121,7 @@
     }
     return 1;
   }
-    
+
   /* Create a program object and link both shaders */
   program_object = glCreateProgramObjectARB();
   if (vertex_shader != NULL)
@@ -137,13 +137,13 @@
   glLinkProgramARB(program_object);
   glGetObjectParameterivARB(program_object, GL_OBJECT_LINK_STATUS_ARB, &linked);
   /* TODO - Get info log */
-  
+
   if (!linked) {
     glDeleteObjectARB(program_object);
     program_object = NULL;
     return 1;
   }
-  
+
   return 0;
 }
 
@@ -185,7 +185,7 @@
 int NextHighestPowerOf2(int n)
 {
   n--;
-  n |= n >> 1; 
+  n |= n >> 1;
   n |= n >> 2;
   n |= n >> 4;
   n |= n >> 8;
@@ -208,12 +208,12 @@ NSBitmapImageRep *LoadImage(NSString *path, int shouldFlipVertical)
   NSImage *image;
   image = [[[NSImage alloc] initWithContentsOfFile: path] autorelease];
   bitmapimagerep = [[NSBitmapImageRep alloc] initWithData:[image TIFFRepresentation]];
-  
+
   if (shouldFlipVertical)
   {
     int bytesPerRow, lowRow, highRow;
     unsigned char *pixelData, *swapRow;
-    
+
     bytesPerRow = [bitmapimagerep bytesPerRow];
     pixelData = [bitmapimagerep bitmapData];
 

@@ -53,7 +53,7 @@ namespace {
 typedef int StateTransitionTable[17];
 
 // State transition tables
-// =========================================================================
+
 
 const int* getStateTransitionTable( sal_Int16 nRestartMode,
                                     sal_Int16 nFillMode )
@@ -259,7 +259,7 @@ bool isMainSequenceRootNode_(
 } // anon namespace
 
 // BaseNode implementation
-//=========================================================================
+
 
 /** state transition handling
  */
@@ -675,7 +675,7 @@ void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 }
 
 // Debug
-//=========================================================================
+
 
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 void BaseNode::showState() const

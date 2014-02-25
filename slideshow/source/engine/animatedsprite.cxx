@@ -77,7 +77,7 @@ namespace slideshow
             // (linear means: without translational components). The
             // only translation that is imposed at the view transform
             // is the local content pixel offset.
-            //
+
             // We can apply that directly here, no need to call
             // aLinearTransform.translate(), since, as said above, the
             // last column of aLinearTransform is assumed [0 0 1]

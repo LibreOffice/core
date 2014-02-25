@@ -148,7 +148,7 @@ namespace slideshow
                 if( xFactory.is() )
                 {
                     // create an awt window to contain the applet
-                    // ==========================================
+
 
                     uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create(mxComponentContext);
 
@@ -168,7 +168,7 @@ namespace slideshow
 
 
                     // create a frame, and load the applet into it
-                    // ===========================================
+
 
                     mxFrame = frame::Frame::create( mxComponentContext );
                     mxFrame->initialize( xOwnWindow );
@@ -180,7 +180,7 @@ namespace slideshow
 
 
                     // resize surrounding window and applet to current shape size
-                    // ==========================================================
+
 
                     ::basegfx::B2DRange aTmpRange;
                     ::canvas::tools::calcTransformedRectBounds( aTmpRange,

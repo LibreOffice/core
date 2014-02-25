@@ -69,7 +69,7 @@ namespace slideshow
             void dispose();
 
             // the following parrots STL container concept methods
-            // ===================================================
+
 
             std::size_t size() const { return maViews.size(); }
             bool empty() const { return maViews.empty(); }

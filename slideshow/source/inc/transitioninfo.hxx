@@ -30,14 +30,14 @@ struct TransitionInfo
 {
     // the following two member serve as the search key
     // for an incoming XTransitionFilter node
-    //
+
     // {
 
     sal_Int16       mnTransitionType;
     sal_Int16       mnTransitionSubType;
 
     // }
-    //
+
 
     /** This enum classifies a transition type
      */

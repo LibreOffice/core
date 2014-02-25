@@ -192,7 +192,7 @@ private:
     // calculate the MixerState value for given time
     double GetMixerState(sal_uInt32 nTime);
 
-    ////////////////////////////////////////////////////////////////////
+
 
     SlideShowContext                            maContext;
     boost::shared_ptr<WakeupEvent>              mpWakeupEvent;
@@ -243,7 +243,7 @@ private:
     Rectangle                                   maPaintRectangleLogic;
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler,
                                    private boost::noncopyable
@@ -261,7 +261,7 @@ private:
     ActivityImpl& mrActivity;
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 double ActivityImpl::GetMixerState( sal_uInt32 nTime )
 {
@@ -615,9 +615,9 @@ void ActivityImpl::updateShapeAttributes(
     }
     else if(mpMetaFile) // scroll mode:
     {
-        //
+
         // keep care: the below code is highly sensible to changes...
-        //
+
 
         // rectangle of the pure text:
         double const fPaintWidth = maPaintRectangleLogic.GetWidth();
