@@ -274,7 +274,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 
 
 Any SAL_CALL SdUnoDrawView::getSelection()
-    throw(RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Any aAny;
 

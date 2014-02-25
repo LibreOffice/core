@@ -54,7 +54,8 @@ public:
             css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL getSelection (void)
-        throw(css::uno::RuntimeException);
+        throw (css::uno::RuntimeException,
+               std::exception);
 
     virtual void SAL_CALL addSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
