@@ -38,9 +38,9 @@ namespace utl {
 class AccessibleStateSetHelper;
 }
 
-//  ----------------------------------------------------
+
 //  class OAccessibleMenuBaseComponent
-//  ----------------------------------------------------
+
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 

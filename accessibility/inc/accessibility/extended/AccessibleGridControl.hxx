@@ -26,13 +26,13 @@
 #include <cppuhelper/weakref.hxx>
 #include <svtools/accessibletable.hxx>
 
-// ============================================================================
+
 
 namespace accessibility {
 
     class AccessibleGridControl_Impl;
 
-// ============================================================================
+
 
 /** This class represents the complete accessible Grid Control object. */
 class AccessibleGridControl : public AccessibleGridControlBase
@@ -180,7 +180,7 @@ private:
     boost::scoped_ptr< AccessibleGridControl_Impl > m_pImpl;
 };
 
-// ============================================================================
+
 /** the XAccessible which creates/returns an AccessibleGridControl
 
     <p>The instance holds it's XAccessibleContext with a hard reference, while
@@ -278,10 +278,10 @@ private:
     AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& );   // never implemented
 };
 
-// ============================================================================
+
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif
 

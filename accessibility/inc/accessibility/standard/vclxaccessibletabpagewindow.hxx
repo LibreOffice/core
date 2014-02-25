@@ -27,9 +27,9 @@ class TabControl;
 class TabPage;
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleTabPageWindow
-//  ----------------------------------------------------
+
 
 class VCLXAccessibleTabPageWindow : public VCLXAccessibleComponent
 {

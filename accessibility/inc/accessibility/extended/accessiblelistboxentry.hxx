@@ -51,10 +51,10 @@ namespace com { namespace sun { namespace star { namespace awt {
 class SvTreeListBox;
 class SvTreeListEntry;
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
+
 
 // class AccessibleListBoxEntry ------------------------------------------
 /*
@@ -232,9 +232,9 @@ namespace accessibility
         sal_Int32 GetRoleType();
     };
 
-//........................................................................
+
 }// namespace accessibility
-//........................................................................
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBLELISTBOXENTRY_HXX_
 

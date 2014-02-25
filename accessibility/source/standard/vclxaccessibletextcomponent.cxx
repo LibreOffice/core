@@ -43,9 +43,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleTextComponent
-//  ----------------------------------------------------
+
 
 VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )

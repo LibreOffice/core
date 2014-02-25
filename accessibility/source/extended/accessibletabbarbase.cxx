@@ -24,10 +24,10 @@
 #include <toolkit/helper/externallock.hxx>
 #include <svtools/tabbar.hxx>
 
-//.........................................................................
+
 namespace accessibility
 {
-//.........................................................................
+
 
 AccessibleTabBarBase::AccessibleTabBarBase( TabBar* pTabBar ) :
     AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() ),
@@ -98,8 +98,8 @@ void AccessibleTabBarBase::ClearTabBarPointer()
     }
 }
 
-//.........................................................................
+
 }   // namespace accessibility
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

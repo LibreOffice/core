@@ -27,7 +27,7 @@
 
 class SvHeaderTabListBox;
 
-// ============================================================================
+
 
 namespace accessibility {
 
@@ -97,11 +97,11 @@ protected:
     virtual AccessibleBrowseBoxTable*   createAccessibleTable();
 };
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBLETABLISTBOX_HXX
 
