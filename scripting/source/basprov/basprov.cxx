@@ -58,14 +58,14 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::document;
 using namespace ::sf_misc;
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
 
-    // =============================================================================
+
+
     // component operations
-    // =============================================================================
+
 
     static OUString getImplementationName_BasicProviderImpl()
     {
@@ -103,9 +103,9 @@ namespace basprov
         return *pNames;
     }
 
-    // =============================================================================
+
     // BasicProviderImpl
-    // =============================================================================
+
 
     BasicProviderImpl::BasicProviderImpl( const Reference< XComponentContext >& xContext )
         :m_pAppBasicManager( 0 )
@@ -515,9 +515,9 @@ namespace basprov
         return browse::BrowseNodeTypes::CONTAINER;
     }
 
-    // =============================================================================
+
     // component operations
-    // =============================================================================
+
 
     static Reference< XInterface > SAL_CALL create_BasicProviderImpl(
         Reference< XComponentContext > const & xContext )
@@ -540,14 +540,14 @@ namespace basprov
 
 
 
-//.........................................................................
+
 }   // namespace basprov
-//.........................................................................
 
 
-// =============================================================================
+
+
 // component exports
-// =============================================================================
+
 
 extern "C"
 {

@@ -134,7 +134,7 @@ public class Parcel implements XNameContainer
         // TODO at the moment this returns void indicating
         // type is unknown ( from UNO point of view this is correct )
         // but, maybe we want to have a private UNO interface
-        //
+
         return new Type();
     }
 

@@ -48,14 +48,14 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::container;
 
 
-//.........................................................................
+
 namespace stringresource
 {
-//.........................................................................
 
-// =============================================================================
+
+
 // mutex
-// =============================================================================
+
 
 ::osl::Mutex& getMutex()
 {
@@ -73,9 +73,9 @@ namespace stringresource
 }
 
 
-// =============================================================================
+
 // StringResourceImpl
-// =============================================================================
+
 
 // component operations
 static Sequence< OUString > getSupportedServiceNames_StringResourceImpl()
@@ -98,7 +98,7 @@ static Reference< XInterface > SAL_CALL create_StringResourceImpl(
 }
 
 
-// =============================================================================
+
 
 StringResourceImpl::StringResourceImpl( const Reference< XComponentContext >& rxContext )
     : m_xContext( rxContext )
@@ -112,7 +112,7 @@ StringResourceImpl::StringResourceImpl( const Reference< XComponentContext >& rx
 {
 }
 
-// =============================================================================
+
 
 StringResourceImpl::~StringResourceImpl()
 {
@@ -130,7 +130,7 @@ StringResourceImpl::~StringResourceImpl()
 }
 
 
-// =============================================================================
+
 // XServiceInfo
 
 OUString StringResourceImpl::getImplementationName(  ) throw (RuntimeException)
@@ -149,7 +149,7 @@ Sequence< OUString > StringResourceImpl::getSupportedServiceNames(  ) throw (Run
 }
 
 
-// =============================================================================
+
 // XModifyBroadcaster
 
 void StringResourceImpl::addModifyListener( const Reference< XModifyListener >& aListener )
@@ -173,7 +173,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
 }
 
 
-// =============================================================================
+
 // XStringResourceResolver
 
 OUString StringResourceImpl::implResolveString
@@ -321,7 +321,7 @@ Sequence< Locale > StringResourceImpl::getLocales(  )
 }
 
 
-// =============================================================================
+
 // XStringResourceManager
 
 void StringResourceImpl::implCheckReadOnly( const sal_Char* pExceptionMsg )
@@ -641,7 +641,7 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 }
 
 
-// =============================================================================
+
 // Private helper methods
 
 LocaleItem* StringResourceImpl::getItemForLocale
@@ -723,7 +723,7 @@ void StringResourceImpl::implNotifyListeners( void )
 }
 
 
-// =============================================================================
+
 // Loading
 
 bool StringResourceImpl::loadLocale( LocaleItem* pLocaleItem )
@@ -758,9 +758,9 @@ Reference< XMultiComponentFactory > StringResourceImpl::getMultiComponentFactory
 }
 
 
-// =============================================================================
+
 // StringResourcePersistenceImpl
-// =============================================================================
+
 
 StringResourcePersistenceImpl::StringResourcePersistenceImpl( const Reference< XComponentContext >& rxContext )
     : StringResourcePersistenceImpl_BASE( rxContext )
@@ -1658,7 +1658,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
 }
 
 
-// =============================================================================
+
 // Private helper methods
 
 bool checkNamingSceme( const OUString& aName, const OUString& aNameBase,
@@ -2263,9 +2263,9 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
 }
 
 
-// =============================================================================
+
 // StringResourceWithStorageImpl
-// =============================================================================
+
 
 // component operations
 static Sequence< OUString > getSupportedServiceNames_StringResourceWithStorageImpl()
@@ -2544,9 +2544,9 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 }
 
 
-// =============================================================================
+
 // Private helper methods
-// =============================================================================
+
 
 // Scan locale properties files
 void StringResourceWithStorageImpl::implScanLocales( void )
@@ -2590,9 +2590,9 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
 }
 
 
-// =============================================================================
+
 // StringResourceWithLocationImpl
-// =============================================================================
+
 
 // component operations
 static Sequence< OUString > getSupportedServiceNames_StringResourceWithLocationImpl()
@@ -2899,9 +2899,9 @@ void StringResourceWithLocationImpl::setURL( const OUString& URL )
 }
 
 
-// =============================================================================
+
 // Private helper methods
-// =============================================================================
+
 
 // Scan locale properties files
 void StringResourceWithLocationImpl::implScanLocales( void )
@@ -2957,9 +2957,9 @@ const Reference< ucb::XSimpleFileAccess3 > StringResourceWithLocationImpl::getFi
 }
 
 
-// =============================================================================
+
 // component export operations
-// =============================================================================
+
 
 static const struct ::cppu::ImplementationEntry s_component_entries [] =
 {
@@ -2985,14 +2985,14 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
 };
 
 
-//.........................................................................
+
 }   // namespace dlgprov
-//.........................................................................
 
 
-// =============================================================================
+
+
 // component exports
-// =============================================================================
+
 
 extern "C"
 {

@@ -42,10 +42,10 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
+
 #define BASSCRIPT_PROPERTY_ID_CALLER         1
 #define BASSCRIPT_PROPERTY_CALLER            OUString( "Caller" )
 
@@ -53,9 +53,9 @@ namespace basprov
 
     typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
 
-    // =============================================================================
+
     // BasicScriptImpl
-    // =============================================================================
+
 
 
 
@@ -291,8 +291,8 @@ namespace basprov
 
 
 
-//.........................................................................
+
 }   // namespace basprov
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

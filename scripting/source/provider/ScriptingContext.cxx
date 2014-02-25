@@ -38,10 +38,10 @@ using namespace com::sun::star::uno;
 namespace func_provider
 {
 
-//*************************************************************************
+
 // XScriptingContext implementation
-//
-//*************************************************************************
+
+
 ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xContext ) : //ScriptingContextImpl_BASE( GetMutex()),
     OPropertyContainer( GetBroadcastHelper() ),
         m_xContext( xContext, UNO_SET_THROW )

@@ -24,14 +24,14 @@
 #include <cppuhelper/interfacecontainer.h>
 
 
-//.........................................................................
+
 namespace scripting_helper
 {
-//.........................................................................
 
-    //  ----------------------------------------------------
+
+
     //  class OMutexHolder
-    //  ----------------------------------------------------
+
 
     class OMutexHolder
     {
@@ -39,9 +39,9 @@ namespace scripting_helper
         ::osl::Mutex m_aMutex;
     };
 
-    //  ----------------------------------------------------
+
     //  class OBroadcastHelperHolder
-    //  ----------------------------------------------------
+
 
     class OBroadcastHelperHolder
     {
@@ -55,9 +55,9 @@ namespace scripting_helper
         const ::cppu::OBroadcastHelper& GetBroadcastHelper() const  { return m_aBHelper; }
     };
 
-//.........................................................................
+
 }   // namespace scripting_helper
-//.........................................................................
+
 
 #endif // SCRIPTING_BCHOLDER_HXX
 

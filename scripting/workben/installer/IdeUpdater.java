@@ -85,7 +85,7 @@ public class IdeUpdater extends Thread {
                         try {
                             wait();
                         } catch (InterruptedException eInt) {
-                            //...
+
                         }
                     }
         }

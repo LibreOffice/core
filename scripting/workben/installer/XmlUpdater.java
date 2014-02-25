@@ -125,7 +125,7 @@ public class XmlUpdater extends Thread {
                     try {
                         wait();
                     } catch (InterruptedException eInt) {
-                        //...
+
                     }
                 }
             }
@@ -330,7 +330,7 @@ public class XmlUpdater extends Thread {
                 return;
             }
 
-    //--------------------------------
+
 
             progressBar.setString("Registering Scripting Framework");
             progressBar.setValue(3);
