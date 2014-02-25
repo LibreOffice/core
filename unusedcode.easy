@@ -36,7 +36,6 @@ LanguageTag::getRegion() const
 LanguageTag::reset(_rtl_Locale const&)
 ListBox::GetMRUCount() const
 Menu::GetHighlightItem() const
-Menu::GetItemAccKeyStrFromPos(unsigned short) const
 MenuBar::AddMenuBarButton(Image const&, Link const&, rtl::OUString const&, unsigned short)
 MenuBar::GetMenuBarButtonRectPixel(unsigned short)
 MenuBar::RemoveMenuBarButton(unsigned short)

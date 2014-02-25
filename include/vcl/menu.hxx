@@ -239,8 +239,6 @@ public:
     void                SetHightlightItem(sal_uInt16 nHighlightedItem);
     sal_uInt16          GetHighlightItem() const;
 
-    OUString            GetItemAccKeyStrFromPos(sal_uInt16 nPos) const;
-
     void                SetDefaultItem( sal_uInt16 nItemId )    { nDefaultItem = nItemId; }
     sal_uInt16              GetDefaultItem() const              { return nDefaultItem; }
 

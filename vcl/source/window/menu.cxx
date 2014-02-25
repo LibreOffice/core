@@ -1584,16 +1584,6 @@ sal_uInt16 Menu::GetHighlightItem() const
     return nHighlightedItem;
 }
 
-OUString Menu::GetItemAccKeyStrFromPos(sal_uInt16 nPos) const
-{
-    MenuItemData* pData = pItemList->GetDataFromPos( nPos );
-    if (pData)
-    {
-        return pData->aAccelKey.GetName();
-    }
-    return OUString();
-}
-
 sal_uInt16 Menu::GetCurItemId() const
 {
     return nSelectedId;
