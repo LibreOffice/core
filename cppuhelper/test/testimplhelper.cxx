@@ -77,7 +77,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-//==================================================================================================
+
 struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
 {
     sal_Int32 nRef;
@@ -115,7 +115,7 @@ struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
         { return OUString("g"); }
 };
 
-//==================================================================================================
+
 struct TestWeakAggImpl : public WeakAggImplHelper4< CA, DBA, FE, G >
 {
     virtual ~TestWeakAggImpl()
@@ -144,7 +144,7 @@ struct TestWeakAggImpl : public WeakAggImplHelper4< CA, DBA, FE, G >
         { return OUString("g"); }
 };
 
-//==================================================================================================
+
 struct TestWeakImpl : public WeakImplHelper4< CA, DBA, FE, G >
 {
     TestWeakImpl() {}
@@ -188,7 +188,7 @@ protected:
     TestWeakImpl(int, int, int, int, int, int, int = 0) {}
 };
 
-//==================================================================================================
+
 struct TestWeakComponentImpl : public WeakComponentImplHelper4< CA, DBA, FE, G >
 {
     Mutex m;
@@ -224,7 +224,7 @@ struct TestWeakComponentImpl : public WeakComponentImplHelper4< CA, DBA, FE, G >
         { return OUString("g"); }
 };
 
-//==================================================================================================
+
 struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, FE, G >
 {
     Mutex m;
@@ -260,7 +260,7 @@ struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, F
         { return OUString("g"); }
 };
 
-//==================================================================================================
+
 struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
 {
     TestImplInh() {}
@@ -294,7 +294,7 @@ struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
         { return OUString("i"); }
 };
 
-//==================================================================================================
+
 struct TestAggImplInh : public AggImplInheritanceHelper2< TestWeakAggImpl, H, I >
 {
     virtual ~TestAggImplInh()
@@ -321,7 +321,7 @@ static bool isIn( Sequence< Type > const & rTypes, char const * name )
     return false;
 }
 
-//==================================================================================================
+
 static void dotest( const Reference< XInterface > & xOriginal )
 {
     Reference< lang::XTypeProvider > xTP( xOriginal, UNO_QUERY );
@@ -419,7 +419,7 @@ void throw_one(
 }
 
 
-//==================================================================================================
+
 void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
 {
     Reference< XInterface > xImpl( (lang::XTypeProvider *)new TestImpl() );
@@ -432,7 +432,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
     Reference< lang::XTypeProvider > xTP4( xWeakComponentImpl, UNO_QUERY );
     Reference< XInterface > xWeakAggComponentImpl( (OWeakObject *)new TestWeakAggComponentImpl() );
     Reference< lang::XTypeProvider > xTP5( xWeakAggComponentImpl, UNO_QUERY );
-    //
+
     OSL_ASSERT(
         xTP1->getImplementationId() != xTP2->getImplementationId() &&
         xTP1->getImplementationId() != xTP3->getImplementationId() &&
@@ -444,7 +444,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
         xTP3->getImplementationId() != xTP4->getImplementationId() &&
         xTP3->getImplementationId() != xTP5->getImplementationId() &&
         xTP4->getImplementationId() != xTP5->getImplementationId() );
-    //
+
 
     dotest( xImpl );
     dotest( xWeakImpl );
@@ -468,7 +468,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
     OSL_ASSERT( xH->h() == "h2" );
     OSL_ASSERT( xI->i() == "i2" );
 
-    //
+
     OSL_ASSERT(
         xTP6->getImplementationId() != xTP1->getImplementationId() &&
         xTP6->getImplementationId() != xTP2->getImplementationId() &&
@@ -481,7 +481,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
         xTP7->getImplementationId() != xTP3->getImplementationId() &&
         xTP7->getImplementationId() != xTP4->getImplementationId() &&
         xTP7->getImplementationId() != xTP5->getImplementationId() );
-    //
+
 
     bool exc_succ = false;
     lang::IllegalAccessException exc(
