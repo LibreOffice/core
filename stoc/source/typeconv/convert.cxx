@@ -99,7 +99,7 @@ static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW(())
 
 static inline double round( double aVal )
 {
-    sal_Bool bPos   = (aVal >= 0.0);    //
+    sal_Bool bPos   = (aVal >= 0.0);
     aVal            = ::fabs( aVal );
     double aUpper   = ::ceil( aVal );
 
@@ -188,7 +188,7 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
     return sal_True;
 }
 
-//==================================================================================================
+
 static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
 {
     sal_Int32 nLen = rStr.getLength();
@@ -252,7 +252,7 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
     return sal_False;
 }
 
-//==================================================================================================
+
 class TypeConverter_Impl : public WeakImplHelper2< XTypeConverter, XServiceInfo >
 {
     // ...misc helpers...
@@ -909,7 +909,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
 namespace stoc_services
 {
-//*************************************************************************
+
 Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference< XComponentContext > & )
     throw( RuntimeException )

@@ -425,7 +425,7 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
         (XWeak *)(OWeakObject *)this );
 }
 
-//==================================================================================================
+
 Reference< XInterface > SAL_CALL IdlReflectionServiceImpl_create(
     const Reference< XComponentContext > & xContext )
     throw(::com::sun::star::uno::Exception)

@@ -126,9 +126,9 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const & arguments)
                     "com.sun.star.reflection.theTypeDescriptionManager")),
         css::uno::UNO_QUERY_THROW);
 
-    ////////////////////////////////////////
+
     // test: add cmd line rdbs to manager
-    ////////////////////////////////////////
+
 
     OSL_ASSERT( arguments.getLength() > 0 );
     css::uno::Reference<css::container::XSet> xSet(
@@ -166,7 +166,7 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const & arguments)
         }
     }
 
-    ///////
+    /
 
     css::uno::Reference< css::reflection::XIndirectTypeDescription > sequence(
         manager->getByHierarchicalName(

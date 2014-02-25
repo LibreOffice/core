@@ -29,7 +29,7 @@
 
 namespace stoc_sec
 {
-//==================================================================================================
+
 class Permission : public ::salhelper::SimpleReferenceObject
 {
 public:
@@ -48,7 +48,7 @@ public:
     virtual bool implies( Permission const & perm ) const SAL_THROW(()) = 0;
     virtual OUString toString() const SAL_THROW(()) = 0;
 };
-//==================================================================================================
+
 class AllPermission : public Permission
 {
 public:
@@ -62,7 +62,7 @@ public:
     virtual OUString toString() const SAL_THROW(());
 };
 
-//==================================================================================================
+
 class PermissionCollection
 {
     ::rtl::Reference< Permission > m_head;

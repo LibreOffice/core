@@ -83,7 +83,7 @@ namespace stoc_inspect
 typedef WeakImplHelper3< XIntrospectionAccess, XMaterialHolder, XExactName > IntrospectionAccessHelper;
 
 
-//==================================================================================================
+
 
 // Special value for Method-Concept, to be able to mark "normal" functions
 #define  MethodConcept_NORMAL_IMPL        0x80000000
@@ -109,7 +109,7 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
     return sal_False;
 }
 
-//========================================================================
+
 
 // *** Classification of Properties (no enum, to be able to use Sequence) ***
 // Properties from a PropertySet-Interface
@@ -127,9 +127,9 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
 
 
 
-//**************************************
+
 //*** IntrospectionAccessStatic_Impl ***
-//**************************************
+
 // Equals to the old IntrospectionAccessImpl, forms now a static
 // part of the new Instance-related ImplIntrospectionAccess
 
@@ -682,9 +682,9 @@ void IntrospectionAccessStatic_Impl::checkInterfaceArraySize( Sequence< Referenc
 }
 
 
-//*******************************
+
 //*** ImplIntrospectionAccess ***
-//*******************************
+
 
 // Neue Impl-Klasse im Rahmen der Introspection-Umstellung auf Instanz-gebundene
 // Introspection mit Property-Zugriff ueber XPropertySet. Die alte Klasse
@@ -765,9 +765,9 @@ ImplIntrospectionAccess::~ImplIntrospectionAccess()
 }
 
 
-//*******************************
+
 //*** ImplIntrospectionAdapter ***
-//*******************************
+
 
 // Neue Impl-Klasse im Rahmen der Introspection-Umstellung auf Instanz-gebundene
 // Introspection mit Property-Zugriff ueber XPropertySet. Die alte Klasse
@@ -931,9 +931,9 @@ Any SAL_CALL ImplIntrospectionAdapter::queryInterface( const Type& rType )
 }
 
 
-//***************************************************
+
 //*** Implementation von ImplIntrospectionAdapter ***
-//***************************************************
+
 
 // Methoden von XPropertySet
 Reference<XPropertySetInfo> ImplIntrospectionAdapter::getPropertySetInfo(void)
@@ -1150,9 +1150,9 @@ void ImplIntrospectionAdapter::set(Any& array, sal_Int32 index, const Any& value
 }
 
 
-//**************************************************
+
 //*** Implementation von ImplIntrospectionAccess ***
-//**************************************************
+
 
 // Methoden von XIntrospectionAccess
 sal_Int32 ImplIntrospectionAccess::getSuppliedMethodConcepts(void)
@@ -1576,9 +1576,9 @@ typedef boost::unordered_map
 >
 TypeProviderAccessCacheMap;
 
-//*************************
+
 //*** ImplIntrospection ***
-//*************************
+
 
 struct OIntrospectionMutex
 {
@@ -1786,7 +1786,7 @@ Sequence< OUString > ImplIntrospection::getSupportedServiceNames(void) throw()
     return getSupportedServiceNames_Static();
 }
 
-//*************************************************************************
+
 // Helper XServiceInfo
 OUString ImplIntrospection::getImplementationName_Static(  )
 {
@@ -1801,7 +1801,7 @@ Sequence< OUString > ImplIntrospection::getSupportedServiceNames_Static(void) th
     return aSNS;
 }
 
-//*************************************************************************
+
 
 // Methoden von XIntrospection
 Reference<XIntrospectionAccess> ImplIntrospection::inspect(const Any& aToInspectObj)
@@ -2076,9 +2076,9 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
     pMapTypeArray = pAccess->maMapTypeSeq.getArray();
     pPropertyConceptArray = pAccess->maPropertyConceptSeq.getArray();
 
-    //*************************
+
     //*** Analyse vornehmen ***
-    //*************************
+
     if( eType == TypeClass_INTERFACE )
     {
         // Zunaechst nach speziellen Interfaces suchen, die fuer
@@ -2191,7 +2191,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                         aCheckedInterfacesMap[ pIface ] = pIface;
                     }
 
-                    //********************************************************************
+
 
                     // 2. Fields als Properties registrieren
 
@@ -2249,7 +2249,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                         rPropCount++;
                     }
 
-                    //********************************************************************
+
 
                     // 3. Methoden
 
@@ -2625,7 +2625,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                     }
 
 
-                    //********************************************************************
+
 
                     // 4. Methoden in die Gesamt-Sequence uebernehmen
 
@@ -2841,7 +2841,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
     return pAccess;
 }
 
-//*************************************************************************
+
 Reference< XInterface > SAL_CALL ImplIntrospection_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr )
     throw( RuntimeException )
 {

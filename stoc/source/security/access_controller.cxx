@@ -67,7 +67,7 @@ namespace {
 static OUString s_envType = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 const char s_acRestriction[] = "access-control.restriction";
 
-//##################################################################################################
+
 
 /** ac context intersects permissions of two ac contexts
 */
@@ -308,7 +308,7 @@ Any acc_CurrentContext::getValueByName( OUString const & name )
     }
 }
 
-//##################################################################################################
+
 
 static inline Reference< security::XAccessControlContext > getDynamicRestriction(
     Reference< XCurrentContext > const & xContext )
@@ -336,7 +336,7 @@ static inline Reference< security::XAccessControlContext > getDynamicRestriction
     }
     return Reference< security::XAccessControlContext >();
 }
-//==================================================================================================
+
 class cc_reset
 {
     void * m_cc;
@@ -347,7 +347,7 @@ public:
         { ::uno_setCurrentContext( m_cc, s_envType.pData, 0 ); }
 };
 
-//##################################################################################################
+
 
 struct MutexHolder
 {
@@ -356,7 +356,7 @@ struct MutexHolder
 typedef WeakComponentImplHelper3<
     security::XAccessController, lang::XServiceInfo, lang::XInitialization > t_helper;
 
-//==================================================================================================
+
 class AccessController
     : public MutexHolder
     , public t_helper

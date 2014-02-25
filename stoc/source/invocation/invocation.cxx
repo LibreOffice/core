@@ -86,7 +86,7 @@ inline Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< 
 }
 
 
-//==================================================================================================
+
 class Invocation_Impl
     : public OWeakObject
     , public XInvocation2
@@ -201,7 +201,7 @@ public:
     virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException );
 
 
-    //=====================================================================================================
+
 private:
     void getInfoSequenceImpl( Sequence< OUString >* pStringSeq, Sequence< InvocationInfo >* pInfoSeq );
     void fillInfoForNameAccess( InvocationInfo& rInfo, const OUString& aName );
@@ -227,14 +227,14 @@ private:
     Reference<XEnumerationAccess>       _xEnumerationAccess;
     Reference<XElementAccess>           _xElementAccess;
 
-    //
+
     Reference<XExactName>               _xENDirect, _xENIntrospection, _xENNameAccess;
 };
 
 
-//==================================================================================================
-//==================================================================================================
-//==================================================================================================
+
+
+
 
 
 Invocation_Impl::Invocation_Impl
@@ -253,9 +253,9 @@ Invocation_Impl::Invocation_Impl
 
 Invocation_Impl::~Invocation_Impl() {}
 
-//##################################################################################################
+
 //### INTERFACE IMPLEMENTATIONS ####################################################################
-//##################################################################################################
+
 
 
 Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
@@ -1063,9 +1063,9 @@ Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  ) throw( Ru
     return pId->getImplementationId();
 }
 
-//==================================================================================================
-//==================================================================================================
-//==================================================================================================
+
+
+
 class InvocationService
     : public WeakImplHelper2< XSingleServiceFactory, XServiceInfo >
 {
@@ -1148,7 +1148,7 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
 }
 
 
-//*************************************************************************
+
 Reference<XInterface> SAL_CALL InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
     throw( RuntimeException )
 {

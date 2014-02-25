@@ -841,7 +841,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             }
 
             jfw_freeJavaInfo(pJavaInfo);
-            //
+
             //Error: %PRODUCTNAME requires a Java
             //runtime environment (JRE) to perform this task. The selected JRE
             //is defective. Please select another version or install a new JRE

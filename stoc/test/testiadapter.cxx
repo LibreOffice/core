@@ -50,7 +50,7 @@ using namespace com::sun::star::registry;
 
 
 
-//==================================================================================================
+
 sal_Bool equals( const test::TestElement & rData1, const test::TestElement & rData2 )
 {
     OSL_ENSURE( rData1.Bool == rData2.Bool, "### bool does not match!" );
@@ -85,7 +85,7 @@ sal_Bool equals( const test::TestElement & rData1, const test::TestElement & rDa
             rData1.Interface == rData2.Interface &&
             rData1.Any == rData2.Any);
 }
-//==================================================================================================
+
 sal_Bool equals( const test::TestData & rData1, const test::TestData & rData2 )
 {
     sal_Int32 nLen;
@@ -109,7 +109,7 @@ sal_Bool equals( const test::TestData & rData1, const test::TestData & rData2 )
     }
     return sal_False;
 }
-//==================================================================================================
+
 void assign( test::TestElement & rData,
              sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
              sal_Int16 nShort, sal_uInt16 nUShort,
@@ -136,7 +136,7 @@ void assign( test::TestElement & rData,
     rData.Interface = xTest;
     rData.Any = rAny;
 }
-//==================================================================================================
+
 void assign( test::TestData & rData,
              sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
              sal_Int16 nShort, sal_uInt16 nUShort,
@@ -154,7 +154,7 @@ void assign( test::TestData & rData,
     rData.Sequence = rSequence;
 }
 
-//==================================================================================================
+
 class Test_Impl : public WeakImplHelper1< XLanguageBindingTest >
 {
     test::TestData _aData, _aStructData;
@@ -277,7 +277,7 @@ public:
     virtual sal_Int32 SAL_CALL getRuntimeException() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException);
 };
-//==================================================================================================
+
 class XLB_Invocation : public WeakImplHelper1< XInvocation >
 {
     Reference< XLanguageBindingTest > _xLBT;
@@ -665,7 +665,7 @@ sal_Bool XLB_Invocation::hasProperty( const OUString & rName )
             rName == "RuntimeException" );
 }
 
-//##################################################################################################
+
 
 
 void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
@@ -737,7 +737,7 @@ test::TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_In
      return _aStructData;
 }
 
-//==================================================================================================
+
 sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 {
     OSL_ENSURE( xLBT.is(), "### no test interface!" );
@@ -760,7 +760,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 
         aData.Sequence = Sequence<test::TestElement >( (const test::TestElement *)&aData, 1 );
         // aData complete
-        //================================================================================
+
 
         // this is a manually copy of aData for first setting...
         test::TestData aSetData;
@@ -876,7 +876,7 @@ void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(::c
     throw aExc;
 }
 
-//==================================================================================================
+
 sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
 {
     try
@@ -932,7 +932,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
     return sal_False;
 }
 
-//==================================================================================================
+
 static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
@@ -977,7 +977,7 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 
     return (performTest( xLBT ) && raiseException( xLBT ));
 }
-//==================================================================================================
+
 static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(

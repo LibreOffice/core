@@ -115,9 +115,9 @@ Reference< XInterface > SAL_CALL Test_Manager_Impl_CreateInstance_Impl()
 }
 
 
-//*************************************************************************
+
 // Test_Manager_Impl_CreateInstance()
-//
+
 Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
     const Reference< XMultiServiceFactory > & /*rSMgr*/ ) throw (Exception)
 {
@@ -127,9 +127,9 @@ Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
 }
 
 
-//*************************************************************************
+
 // Test_Manager_Impl::getImplementationName
-//
+
 OUString Test_Manager_Impl::getImplementationName() throw()
 {
     return OUString(IMPLEMENTATION_NAME);
@@ -141,17 +141,17 @@ sal_Bool Test_Manager_Impl::supportsService( const OUString& ServiceName ) throw
     return cppu::supportsService(this, ServiceName);
 }
 
-//*************************************************************************
+
 // Test_Manager_Impl::getSupportedServiceNames
-//
+
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames(void) throw ()
 {
     return getSupportedServiceNames_Static();
 }
 
-//*************************************************************************
+
 // Test_Manager_Impl::getSupportedServiceNames_Static
-//
+
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static(void) throw ()
 {
     Sequence< OUString > aSNS( 2 );
@@ -218,9 +218,9 @@ extern "C" void SAL_CALL test_ServiceManager()
     // try to get an instance for a unknown service
     OSL_VERIFY( !xSMgr->createInstance("bla.blup.Q").is() );
 
-    //
+
     // First test : register service via the internal function of the component itself
-    //
+
     {
         Reference< XImplementationRegistration >
             xInst( xSMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
@@ -260,7 +260,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 
 extern "C"
 {
-//==================================================================================================
+
 sal_Bool SAL_CALL component_writeInfo(
     void * /*pServiceManager*/, void * pRegistryKey )
 {
@@ -287,7 +287,7 @@ sal_Bool SAL_CALL component_writeInfo(
     }
     return sal_False;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
