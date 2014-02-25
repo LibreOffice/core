@@ -244,7 +244,9 @@ public:
     virtual OUString SAL_CALL  getString()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    virtual void SAL_CALL  setString(const OUString& aString) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL  setString(const OUString& aString)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //XScreenCursor
     virtual sal_Bool SAL_CALL screenDown()

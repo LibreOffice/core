@@ -1461,7 +1461,8 @@ OUString SwXTextViewCursor::getString()
     return uRet;
 }
 
-void SwXTextViewCursor::setString(const OUString& aString) throw( uno::RuntimeException )
+void SwXTextViewCursor::setString(const OUString& aString)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(m_pView)
