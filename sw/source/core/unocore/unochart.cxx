@@ -2062,7 +2062,7 @@ uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData(  )
 }
 
 OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (bDisposed)

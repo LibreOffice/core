@@ -309,7 +309,9 @@ public:
 
     // XDataSequence
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getSourceRangeRepresentation(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getSourceRangeRepresentation()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL generateLabel( ::com::sun::star::chart2::data::LabelOrigin eLabelOrigin )
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
