@@ -466,8 +466,10 @@ sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& r
     return 0;
 }
 
-void SAL_CALL SvXMLImport::startDocument( void )
-    throw( xml::sax::SAXException, uno::RuntimeException )
+void SAL_CALL SvXMLImport::startDocument()
+    throw (xml::sax::SAXException,
+           uno::RuntimeException,
+           std::exception)
 {
     SAL_INFO( "xmloff.core", "{ SvXMLImport::startDocument" );
     if( !mxGraphicResolver.is() || !mxEmbeddedResolver.is() )

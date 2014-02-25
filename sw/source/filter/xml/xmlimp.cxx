@@ -493,8 +493,10 @@ static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCurso
     return pTxtCrsr;
 }
 
-void SwXMLImport::startDocument( void )
-    throw( xml::sax::SAXException, uno::RuntimeException )
+void SwXMLImport::startDocument()
+    throw (xml::sax::SAXException,
+           uno::RuntimeException,
+           std::exception)
 {
     // delegate to parent
     SvXMLImport::startDocument();

@@ -195,8 +195,10 @@ public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
     // ::com::sun::star::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL startDocument()
+        throw (::com::sun::star::xml::sax::SAXException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL endDocument()
         throw(::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException,

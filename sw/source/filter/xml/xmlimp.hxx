@@ -115,8 +115,10 @@ public:
     ~SwXMLImport() throw();
 
     // ::com::sun::star::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL startDocument()
+        throw (::com::sun::star::xml::sax::SAXException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
