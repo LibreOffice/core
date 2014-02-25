@@ -89,7 +89,7 @@ static bool inited_juhx( JNIEnv * jni_env )
     return true;
 }
 
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT jboolean JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr,
@@ -100,7 +100,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             pJEnv, jClass, jLibName, jSMgr, jRegKey, loader );
     return JNI_FALSE;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     JNIEnv * pJEnv, jclass jClass, jstring jLibName, jstring jImplName,
@@ -111,7 +111,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             pJEnv, jClass, jLibName, jImplName, jSMgr, jRegKey, loader );
     return 0;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     JNIEnv * jni_env, jclass jClass, jstring juno_rc, jobjectArray jpairs,

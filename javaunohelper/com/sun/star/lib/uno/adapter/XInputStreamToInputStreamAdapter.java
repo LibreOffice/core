@@ -122,7 +122,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
             // Casting bytesRead to an int is okay, since the user can
             // only pass in an integer length to read, so the bytesRead
             // must <= len.
-            //
+
             if (bytesRead <= 0) {
                 return(-1);
         } else if (bytesRead < len) {

@@ -35,7 +35,7 @@ import com.sun.star.comp.helper.RegistryServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 
-//==================================================================================================
+
 public class Factory_Test
     extends WeakBase
     implements XServiceInfo
@@ -44,11 +44,11 @@ public class Factory_Test
     static final String m_supported_services [] = {
         "Factory_Test.Service0", "Factory_Test.Service1" };
 
-    //______________________________________________________________________________________________
+
     public Factory_Test()
     {
     }
-    //______________________________________________________________________________________________
+
     public Factory_Test( XComponentContext xContext )
         throws com.sun.star.uno.Exception
     {
@@ -58,7 +58,7 @@ public class Factory_Test
                 "bad component context given!", this );
         }
     }
-    //______________________________________________________________________________________________
+
     public static Object __create( XComponentContext xContext )
         throws com.sun.star.uno.Exception
     {
@@ -66,12 +66,12 @@ public class Factory_Test
     }
 
     // XServiceInfo impl
-    //______________________________________________________________________________________________
+
     public final String getImplementationName()
     {
         return m_impl_name;
     }
-    //______________________________________________________________________________________________
+
     public final boolean supportsService( String service_name )
     {
         for ( int nPos = 0; nPos < m_supported_services.length; ++nPos )
@@ -81,13 +81,13 @@ public class Factory_Test
         }
         return false;
     }
-    //______________________________________________________________________________________________
+
     public final String [] getSupportedServiceNames()
     {
         return m_supported_services;
     }
 
-    //==============================================================================================
+
     public static XSingleComponentFactory __getComponentFactory( String implName )
     {
           if (implName.equals( m_impl_name ))
@@ -97,14 +97,14 @@ public class Factory_Test
         }
         return null;
     }
-    //==============================================================================================
+
     public static boolean __writeRegistryServiceInfo( XRegistryKey xKey )
     {
         return Factory.writeRegistryServiceInfo(
             m_impl_name, Factory_Test.m_supported_services, xKey );
     }
 
-    //==============================================================================================
+
     static void service_info_test( Object inst )
     {
         XServiceInfo xInfo = UnoRuntime.queryInterface( XServiceInfo.class, inst );
@@ -134,7 +134,7 @@ public class Factory_Test
             }
         }
     }
-    //==============================================================================================
+
     public static void main( String args [] )
     {
         try

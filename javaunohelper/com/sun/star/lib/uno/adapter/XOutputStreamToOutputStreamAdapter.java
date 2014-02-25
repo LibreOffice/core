@@ -76,7 +76,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         byte[] tmp = new byte[len];
 
         // Copy the input array into a temp array, and write it out.
-        //
+
         System.arraycopy(b, off, tmp, 0, len);
 
         try {

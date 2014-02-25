@@ -33,17 +33,17 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 
-//==================================================================================================
+
 class Disposer implements XEventListener
 {
     private XComponent m_xComp;
 
-    //----------------------------------------------------------------------------------------------
+
     Disposer( XComponent xComp )
     {
         m_xComp = xComp;
     }
-    //______________________________________________________________________________________________
+
     public void disposing( EventObject Source )
     {
         m_xComp.dispose();
@@ -117,7 +117,7 @@ public class ComponentContext implements XComponentContext, XComponent
     }
 
     // XComponentContext impl
-    //______________________________________________________________________________________________
+
     public Object getValueByName( String rName )
     {
         Object o = m_table.get( rName );
@@ -210,7 +210,7 @@ public class ComponentContext implements XComponentContext, XComponent
             return Any.VOID;
         }
     }
-    //______________________________________________________________________________________________
+
     public XMultiComponentFactory getServiceManager()
     {
         if (m_xSMgr == null)
@@ -222,7 +222,7 @@ public class ComponentContext implements XComponentContext, XComponent
     }
 
     // XComponent impl
-    //______________________________________________________________________________________________
+
     public void dispose()
     {
         if (DEBUG)
@@ -289,7 +289,7 @@ public class ComponentContext implements XComponentContext, XComponent
         if (DEBUG)
             System.err.println( "... finished" );
     }
-    //______________________________________________________________________________________________
+
     public void addEventListener( XEventListener xListener )
     {
         if (xListener == null)
@@ -299,7 +299,7 @@ public class ComponentContext implements XComponentContext, XComponent
 
            m_eventListener.add( xListener );
     }
-    //______________________________________________________________________________________________
+
     public void removeEventListener( XEventListener xListener )
     {
         if (xListener == null)

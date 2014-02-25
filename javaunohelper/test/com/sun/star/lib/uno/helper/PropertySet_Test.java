@@ -392,7 +392,7 @@ public class PropertySet_Test
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
 
 
-            // ------------------------------------------------------------------------------
+
             cl.resetPropertyMembers();
             value= new Boolean(true);
             cl.setPropertyValue("PropBoolClass", value);
@@ -573,7 +573,7 @@ public class PropertySet_Test
             r[i++]= cl.propObjectA == null;
 
 
-            //
+
 
         }catch(java.lang.Exception e){
             i++;
