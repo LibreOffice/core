@@ -56,6 +56,7 @@
 #include <dflyobj.hxx>
 #include <undoflystrattr.hxx>
 #include <switerator.hxx>
+#include <boost/scoped_ptr.hpp>
 
 extern sal_uInt16 GetHtmlMode( const SwDocShell* );
 
@@ -422,7 +423,7 @@ bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     if( !rSet.Count() )
         return false;
 
-    ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
+    boost::scoped_ptr<SwUndoFmtAttrHelper> pSaveUndo;
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {

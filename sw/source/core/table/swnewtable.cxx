@@ -33,8 +33,8 @@
 #include <vector>
 #include <set>
 #include <list>
-#include <memory>
 #include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
@@ -810,7 +810,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     }
     CHECK_TABLE( *this )
     // We have to assert a "rectangular" box selection before we start to merge
-    std::auto_ptr< SwBoxSelection > pSel( CollectBoxSelection( rPam ) );
+    boost::scoped_ptr< SwBoxSelection > pSel( CollectBoxSelection( rPam ) );
     if( !pSel.get() || pSel->isEmpty() )
         return false;
     // Now we should have a rectangle of boxes,

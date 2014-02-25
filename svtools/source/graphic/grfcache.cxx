@@ -26,7 +26,7 @@
 #include <rtl/strbuf.hxx>
 #include "grfcache.hxx"
 #include <rtl/crc.h>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #define RELEASE_TIMEOUT 10000
 #define MAX_BMP_EXTENT  4096
@@ -884,7 +884,7 @@ void GraphicCache::AddGraphicObject(
         if( !bInserted )
         {
             GraphicCacheEntryList::iterator it = maGraphicCache.begin();
-            ::std::auto_ptr< GraphicID > apID;
+            boost::scoped_ptr< GraphicID > apID;
 
             if( !pID )
             {

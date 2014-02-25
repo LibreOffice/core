@@ -19,7 +19,6 @@
 
 
 #include <vector>
-#include <memory>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -49,6 +48,7 @@
 #include "lru_cache.h"
 #include "permissions.h"
 
+#include <boost/scoped_ptr.hpp>
 
 #define SERVICE_NAME "com.sun.star.security.AccessController"
 #define USER_CREDS "access-control.user-credentials"
@@ -593,7 +593,7 @@ inline void AccessController::clearPostPoned() SAL_THROW(())
 void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
 {
     // check postponed permissions
-    auto_ptr< t_rec_vec > rec( reinterpret_cast< t_rec_vec * >( m_rec.getData() ) );
+    boost::scoped_ptr< t_rec_vec > rec( reinterpret_cast< t_rec_vec * >( m_rec.getData() ) );
     m_rec.setData( 0 ); // takeover ownership
     OSL_ASSERT( rec.get() );
     if (rec.get())

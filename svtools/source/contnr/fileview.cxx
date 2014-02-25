@@ -52,7 +52,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <algorithm>
-#include <memory>
 #include <vector>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -72,6 +71,7 @@
 #include <unotools/syslocale.hxx>
 #include <svl/urlfilter.hxx>
 #include <boost/ptr_container/ptr_set.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -1790,7 +1790,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     m_aCurrentAsyncActionHandler = Link();
 
     // minimum time to wait
-    ::std::auto_ptr< TimeValue > pTimeout( new TimeValue );
+    boost::scoped_ptr< TimeValue > pTimeout( new TimeValue );
     sal_Int32 nMinTimeout = pAsyncDescriptor->nMinTimeout;
     OSL_ENSURE( nMinTimeout > 0, "SvtFileView_Impl::GetFolderContent_Impl: invalid minimum timeout!" );
     if ( nMinTimeout <= 0 )

@@ -66,6 +66,7 @@
 #include <SwUndoFmt.hxx>
 #include <UndoManager.hxx>
 #include <docsh.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -376,7 +377,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     // #i96644#
-    std::auto_ptr< SwDataChanged > pDataChanged;
+    boost::scoped_ptr< SwDataChanged > pDataChanged;
     if ( bSendDataChangedEvents )
     {
         pDataChanged.reset( new SwDataChanged( *pPam ) );
@@ -1725,7 +1726,7 @@ static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 
             if ( bChangeOfListStyleAtParagraph )
             {
-                std::auto_ptr< SwRegHistory > pRegH;
+                boost::scoped_ptr< SwRegHistory > pRegH;
                 if ( pPara->pHistory )
                 {
                     pRegH.reset( new SwRegHistory( pTNd, *pTNd, pPara->pHistory ) );

@@ -41,6 +41,7 @@
 #include <fmtfsize.hxx>
 #include <list>
 #include <boost/foreach.hpp>
+#include <boost/scoped_ptr.hpp>
 
 static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
@@ -516,7 +517,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
 
     // First copy the new content and then delete the old one.
     // Do not create empty Sections, otherwise they will be deleted!
-    std::auto_ptr< SwNodeRange > pRg( pCpyBox ?
+    boost::scoped_ptr< SwNodeRange > pRg( pCpyBox ?
         new SwNodeRange ( *pCpyBox->GetSttNd(), 1,
         *pCpyBox->GetSttNd()->EndOfSectionNode() ) : 0 );
 

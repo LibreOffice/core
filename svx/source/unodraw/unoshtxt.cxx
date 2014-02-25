@@ -47,6 +47,7 @@
 #include <svx/svdotable.hxx>
 #include "../table/cell.hxx"
 #include <svx/sdrpaintwindow.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -1030,7 +1031,7 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify && !mbNotificationsDisabled )
     {
-        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
+        boost::scoped_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
 
         if( aHint.get() )
             Broadcast( *aHint.get() );

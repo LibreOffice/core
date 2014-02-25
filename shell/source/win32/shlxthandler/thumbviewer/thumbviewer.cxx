@@ -43,7 +43,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 extern HINSTANCE g_hModule;
 
@@ -357,7 +357,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
     try
     {
         std::wstring fname = getShortPathName( filename_ );
-        std::auto_ptr<ZipFile> zipfile( new ZipFile( WStringToString( fname ) ) );
+        boost::scoped_ptr<ZipFile> zipfile( new ZipFile( WStringToString( fname ) ) );
 
         if (zipfile->HasContent(THUMBNAIL_CONTENT))
         {

@@ -50,6 +50,7 @@
 #include <unotools/useroptions.hxx>
 #include <usrfld.hxx>
 #include <viewsh.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -1522,7 +1523,7 @@ bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
                          double& rVal, SwDoc* const pDoc )
 {
     const SvtSysLocale aSysLocale;
-    ::std::auto_ptr<const LocaleDataWrapper> pLclD;
+    boost::scoped_ptr<const LocaleDataWrapper> pLclD;
     if( pDoc )
     {
         LanguageType eLang = GetDocAppScriptLang( *pDoc );

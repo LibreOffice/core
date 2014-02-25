@@ -35,7 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #define LOGICAL_EDIT_HEIGHT         12
 
@@ -202,7 +202,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
     // Sizes-Liste auff"ullen
     sal_Int64 nOldVal = GetValue(); // alten Wert merken
     const FontList* _pFontList = NULL;
-    ::std::auto_ptr<FontList> aHold( new FontList( this ));
+    boost::scoped_ptr<FontList> aHold( new FontList( this ));
     _pFontList = aHold.get();
 
     if ( !rCurrentFont.Name.isEmpty() )

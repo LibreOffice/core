@@ -38,7 +38,7 @@
 #include <editeng/editeng.hxx>
 
 #include "svx/unoapi.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -186,7 +186,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 
     default:
         {
-            ::std::auto_ptr<SfxPoolItem> pNewItem( pPool->GetDefaultItem( nWhich ).Clone() );
+            boost::scoped_ptr<SfxPoolItem> pNewItem( pPool->GetDefaultItem( nWhich ).Clone() );
             sal_uInt8 nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
             if( pPool->GetMetric(nWhich) == SFX_MAPUNIT_100TH_MM )
                 nMemberId &= (~CONVERT_TWIPS);

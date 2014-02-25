@@ -27,7 +27,7 @@
 #include <svl/stylepool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 using namespace boost;
 
@@ -400,7 +400,7 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
     // Every SfxPoolItem in the SfxItemSet causes a step deeper into the tree,
     // a complete empty SfxItemSet would stay at the root node.
     // #i86923# insert ignorable items to the tree leaves.
-    std::auto_ptr<SfxItemSet> pFoundIgnorableItems;
+    boost::scoped_ptr<SfxItemSet> pFoundIgnorableItems;
     if ( mpIgnorableItems )
     {
         pFoundIgnorableItems.reset( new SfxItemSet( *mpIgnorableItems ) );

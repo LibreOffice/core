@@ -36,7 +36,7 @@
 #include <svtools/svmedit.hxx>
 
 #include <algorithm>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #define IMPICNVIEW_ACC_RETURN 1
 #define IMPICNVIEW_ACC_ESCAPE 2
@@ -320,7 +320,7 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t
 
 void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( MnemonicGenerator* _pGenerator )
 {
-    ::std::auto_ptr< MnemonicGenerator > pAutoDeleteOwnGenerator;
+    boost::scoped_ptr< MnemonicGenerator > pAutoDeleteOwnGenerator;
     if ( !_pGenerator )
     {
         _pGenerator = new MnemonicGenerator;

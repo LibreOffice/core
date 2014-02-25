@@ -80,6 +80,7 @@
 #include <list.hxx>
 #include <switerator.hxx>
 #include <attrhint.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -839,7 +840,7 @@ void SwTxtNode::Update(
 {
     SetAutoCompleteWordDirty( true );
 
-    ::std::auto_ptr<SwpHts> pCollector;
+    boost::scoped_ptr<SwpHts> pCollector;
     const sal_Int32 nChangePos = rPos.GetIndex();
 
     if ( HasHints() )
