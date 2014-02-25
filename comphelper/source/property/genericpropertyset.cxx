@@ -33,7 +33,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <rtl/uuid.h>
 
-///////////////////////////////////////////////////////////////////////
+
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -93,7 +93,7 @@ namespace comphelper
 
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) throw()
 : PropertySetHelper( pInfo )

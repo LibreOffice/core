@@ -30,10 +30,10 @@
 #include <functional>
 #include <algorithm>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Sequence;
@@ -46,9 +46,9 @@ namespace comphelper
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 
-    //====================================================================
+
     //= NamedValueCollection_Impl
-    //====================================================================
+
     typedef ::boost::unordered_map< OUString, Any, OUStringHash >    NamedValueRepository;
 
     struct NamedValueCollection_Impl
@@ -56,9 +56,9 @@ namespace comphelper
         NamedValueRepository    aValues;
     };
 
-    //====================================================================
+
     //= NamedValueCollection
-    //====================================================================
+
 
     NamedValueCollection::NamedValueCollection()
         :m_pImpl( new NamedValueCollection_Impl )
@@ -349,8 +349,8 @@ namespace comphelper
         return _out_rValues.getLength();
     }
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

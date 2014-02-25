@@ -21,7 +21,7 @@
 #include "comphelper/propertysetinfo.hxx"
 #include "comphelper/propertysethelper.hxx"
 
-///////////////////////////////////////////////////////////////////////
+
 
 using namespace ::rtl;
 using namespace ::comphelper;
@@ -55,7 +55,7 @@ PropertyMapEntry const * PropertySetHelperImpl::find( const OUString& aName ) co
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw()
 {

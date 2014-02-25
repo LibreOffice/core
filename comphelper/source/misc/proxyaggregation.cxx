@@ -24,18 +24,18 @@
 #include <comphelper/proxyaggregation.hxx>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 
-//.............................................................................
+
 namespace comphelper
 {
-//.............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::reflection;
 
-    //=========================================================================
+
     //= OProxyAggregation
-    //=========================================================================
+
 
     OProxyAggregation::OProxyAggregation( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
@@ -97,9 +97,9 @@ namespace comphelper
             // ourself) to this proxy, and thus delete it
     }
 
-    //=========================================================================
+
     //= OComponentProxyAggregationHelper
-    //=========================================================================
+
 
     OComponentProxyAggregationHelper::OComponentProxyAggregationHelper( const Reference< XComponentContext >& _rxContext,
         ::cppu::OBroadcastHelper& _rBHelper )
@@ -146,7 +146,7 @@ namespace comphelper
     {
         OSL_ENSURE( m_rBHelper.bDisposed, "OComponentProxyAggregationHelper::~OComponentProxyAggregationHelper: you should dispose your derived class in the dtor, if necessary!" );
             // if this asserts, add the following to your derived class dtor:
-            //
+
             // if ( !m_rBHelper.bDisposed )
             // {
             //   acquire(); // to prevent duplicate dtor calls
@@ -185,9 +185,9 @@ namespace comphelper
         }
     }
 
-    //=========================================================================
+
     //= OComponentProxyAggregation
-    //=========================================================================
+
 
     OComponentProxyAggregation::OComponentProxyAggregation( const Reference< XComponentContext >& _rxContext,
             const Reference< XComponent >& _rxComponent )
@@ -260,8 +260,8 @@ namespace comphelper
     }
 
 
-//.............................................................................
+
 }   // namespace comphelper
-//.............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
