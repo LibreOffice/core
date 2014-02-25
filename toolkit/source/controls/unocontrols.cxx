@@ -117,9 +117,9 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
 
     return xGraphic;
 }
-//  ----------------------------------------------------
+
 //  class UnoControlEditModel
-//  ----------------------------------------------------
+
 UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -176,9 +176,9 @@ stardiv_Toolkit_UnoControlEditModel_get_implementation(
     return cppu::acquire(new UnoControlEditModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoEditControl
-//  ----------------------------------------------------
+
 UnoEditControl::UnoEditControl()
     :UnoControlBase()
     ,maTextListeners( *this )
@@ -502,9 +502,9 @@ stardiv_Toolkit_UnoEditControl_get_implementation(
     return cppu::acquire(new UnoEditControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlFileControlModel
-//  ----------------------------------------------------
+
 UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -570,9 +570,9 @@ stardiv_Toolkit_UnoControlFileControlModel_get_implementation(
     return cppu::acquire(new UnoControlFileControlModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoFileControl
-//  ----------------------------------------------------
+
 UnoFileControl::UnoFileControl()
     :UnoEditControl()
 {
@@ -591,9 +591,9 @@ stardiv_Toolkit_UnoFileControl_get_implementation(
     return cppu::acquire(new UnoFileControl());
 }
 
-//  ----------------------------------------------------
+
 //  class GraphicControlModel
-//  ----------------------------------------------------
+
 uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_GRAPHIC )
@@ -662,9 +662,9 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
     }
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlButtonModel
-//  ----------------------------------------------------
+
 UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
@@ -727,9 +727,9 @@ stardiv_Toolkit_UnoControlButtonModel_get_implementation(
     return cppu::acquire(new UnoControlButtonModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoButtonControl
-//  ----------------------------------------------------
+
 UnoButtonControl::UnoButtonControl()
     :UnoButtonControl_Base()
     ,maActionListeners( *this )
@@ -875,9 +875,9 @@ stardiv_Toolkit_UnoButtonControl_get_implementation(
     return cppu::acquire(new UnoButtonControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlImageControlModel
-//  ----------------------------------------------------
+
 UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
     ,mbAdjustingImageScaleMode( false )
@@ -965,9 +965,9 @@ stardiv_Toolkit_UnoControlImageControlModel_get_implementation(
     return cppu::acquire(new UnoControlImageControlModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoImageControlControl
-//  ----------------------------------------------------
+
 UnoImageControlControl::UnoImageControlControl()
     :UnoImageControlControl_Base()
     ,maActionListeners( *this )
@@ -1018,9 +1018,9 @@ stardiv_Toolkit_UnoImageControlControl_get_implementation(
     return cppu::acquire(new UnoImageControlControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlRadioButtonModel
-//  ----------------------------------------------------
+
 UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
@@ -1072,9 +1072,9 @@ stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation(
     return cppu::acquire(new UnoControlRadioButtonModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoRadioButtonControl
-//  ----------------------------------------------------
+
 UnoRadioButtonControl::UnoRadioButtonControl()
     :UnoRadioButtonControl_Base()
     ,maItemListeners( *this )
@@ -1212,7 +1212,7 @@ void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) thr
         // note that speaking stricly, this is wrong: When in 1.0.x, the user would have de-selected
         // a radio button _without_ selecing another one, this would have caused a notification.
         // With the change done here, this today won't cause a notification anymore.
-        //
+
         // Fortunately, it's not possible for the user to de-select a radio button without selecting another on,
         // at least not via the regular UI. It _would_ be possible via the Accessibility API, which
         // counts as "user input", too. But in 1.0.x, there was no Accessibility API, so there is nothing
@@ -1242,9 +1242,9 @@ stardiv_Toolkit_UnoRadioButtonControl_get_implementation(
     return cppu::acquire(new UnoRadioButtonControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlCheckBoxModel
-//  ----------------------------------------------------
+
 UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
@@ -1296,9 +1296,9 @@ stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation(
     return cppu::acquire(new UnoControlCheckBoxModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoCheckBoxControl
-//  ----------------------------------------------------
+
 UnoCheckBoxControl::UnoCheckBoxControl()
     :UnoCheckBoxControl_Base()
     ,maItemListeners( *this ), maActionListeners( *this )
@@ -1441,9 +1441,9 @@ stardiv_Toolkit_UnoCheckBoxControl_get_implementation(
     return cppu::acquire(new UnoCheckBoxControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlFixedHyperlinkModel
-//  ----------------------------------------------------
+
 UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -1505,9 +1505,9 @@ stardiv_Toolkit_UnoControlFixedHyperlinkModel_get_implementation(
     return cppu::acquire(new UnoControlFixedHyperlinkModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoFixedHyperlinkControl
-//  ----------------------------------------------------
+
 UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
     :UnoControlBase()
     ,maActionListeners( *this )
@@ -1644,9 +1644,9 @@ stardiv_Toolkit_UnoFixedHyperlinkControl_get_implementation(
     return cppu::acquire(new UnoFixedHyperlinkControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlFixedTextModel
-//  ----------------------------------------------------
+
 UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -1702,9 +1702,9 @@ stardiv_Toolkit_UnoControlFixedTextModel_get_implementation(
     return cppu::acquire(new UnoControlFixedTextModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoFixedTextControl
-//  ----------------------------------------------------
+
 UnoFixedTextControl::UnoFixedTextControl()
     :UnoControlBase()
 {
@@ -1791,9 +1791,9 @@ stardiv_Toolkit_UnoFixedTextControl_get_implementation(
     return cppu::acquire(new UnoFixedTextControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlGroupBoxModel
-//  ----------------------------------------------------
+
 UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -1851,9 +1851,9 @@ stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation(
     return cppu::acquire(new UnoControlGroupBoxModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoGroupBoxControl
-//  ----------------------------------------------------
+
 UnoGroupBoxControl::UnoGroupBoxControl()
     :UnoControlBase()
 {
@@ -1879,9 +1879,9 @@ stardiv_Toolkit_UnoGroupBoxControl_get_implementation(
     return cppu::acquire(new UnoGroupBoxControl());
 }
 
-// =====================================================================================================================
+
 // = UnoControlListBoxModel_Data
-// =====================================================================================================================
+
 struct ListItem
 {
     OUString ItemText;
@@ -1981,9 +1981,9 @@ private:
     ::std::vector< ListItem >   m_aListItems;
 };
 
-// =====================================================================================================================
+
 // = UnoControlListBoxModel
-// =====================================================================================================================
+
 
 UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XComponentContext >& rxContext, ConstructorMode const i_mode )
     :UnoControlListBoxModel_Base( rxContext )
@@ -2433,9 +2433,9 @@ stardiv_Toolkit_UnoControlListBoxModel_get_implementation(
     return cppu::acquire(new UnoControlListBoxModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoListBoxControl
-//  ----------------------------------------------------
+
 UnoListBoxControl::UnoListBoxControl()
     :UnoListBoxControl_Base()
     ,maActionListeners( *this )
@@ -2865,9 +2865,9 @@ stardiv_Toolkit_UnoListBoxControl_get_implementation(
     return cppu::acquire(new UnoListBoxControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlComboBoxModel
-//  ----------------------------------------------------
+
 UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentContext >& rxContext )
     :UnoControlListBoxModel( rxContext, ConstructWithoutProperties )
 {
@@ -2949,9 +2949,9 @@ stardiv_Toolkit_UnoControlComboBoxModel_get_implementation(
     return cppu::acquire(new UnoControlComboBoxModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoComboBoxControl
-//  ----------------------------------------------------
+
 UnoComboBoxControl::UnoComboBoxControl()
     :UnoEditControl()
     ,maActionListeners( *this )
@@ -3270,9 +3270,9 @@ stardiv_Toolkit_UnoComboBoxControl_get_implementation(
     return cppu::acquire(new UnoComboBoxControl());
 }
 
-//  ----------------------------------------------------
+
 //  UnoSpinFieldControl
-//  ----------------------------------------------------
+
 UnoSpinFieldControl::UnoSpinFieldControl()
     :UnoEditControl()
     ,maSpinListeners( *this )
@@ -3362,9 +3362,9 @@ void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::sta
         xField->enableRepeat( bRepeat );
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlDateFieldModel
-//  ----------------------------------------------------
+
 UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -3414,9 +3414,9 @@ stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
     return cppu::acquire(new UnoControlDateFieldModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoDateFieldControl
-//  ----------------------------------------------------
+
 UnoDateFieldControl::UnoDateFieldControl()
     :UnoSpinFieldControl()
 {
@@ -3618,9 +3618,9 @@ stardiv_Toolkit_UnoDateFieldControl_get_implementation(
     return cppu::acquire(new UnoDateFieldControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlTimeFieldModel
-//  ----------------------------------------------------
+
 UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -3670,9 +3670,9 @@ stardiv_Toolkit_UnoControlTimeFieldModel_get_implementation(
     return cppu::acquire(new UnoControlTimeFieldModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoTimeFieldControl
-//  ----------------------------------------------------
+
 UnoTimeFieldControl::UnoTimeFieldControl()
     :UnoSpinFieldControl()
 {
@@ -3833,9 +3833,9 @@ stardiv_Toolkit_UnoTimeFieldControl_get_implementation(
     return cppu::acquire(new UnoTimeFieldControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlNumericFieldModel
-//  ----------------------------------------------------
+
 UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -3885,9 +3885,9 @@ stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation(
     return cppu::acquire(new UnoControlNumericFieldModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoNumericFieldControl
-//  ----------------------------------------------------
+
 UnoNumericFieldControl::UnoNumericFieldControl()
     :UnoSpinFieldControl()
 {
@@ -4045,9 +4045,9 @@ stardiv_Toolkit_UnoNumericFieldControl_get_implementation(
     return cppu::acquire(new UnoNumericFieldControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlCurrencyFieldModel
-//  ----------------------------------------------------
+
 UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -4103,9 +4103,9 @@ stardiv_Toolkit_UnoControlCurrencyFieldModel_get_implementation(
     return cppu::acquire(new UnoControlCurrencyFieldModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoCurrencyFieldControl
-//  ----------------------------------------------------
+
 UnoCurrencyFieldControl::UnoCurrencyFieldControl()
     :UnoSpinFieldControl()
 {
@@ -4262,9 +4262,9 @@ stardiv_Toolkit_UnoCurrencyFieldControl_get_implementation(
     return cppu::acquire(new UnoCurrencyFieldControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlPatternFieldModel
-//  ----------------------------------------------------
+
 UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -4313,9 +4313,9 @@ stardiv_Toolkit_UnoControlPatternFieldModel_get_implementation(
     return cppu::acquire(new UnoControlPatternFieldModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoPatternFieldControl
-//  ----------------------------------------------------
+
 UnoPatternFieldControl::UnoPatternFieldControl()
     :UnoSpinFieldControl()
 {
@@ -4410,9 +4410,9 @@ stardiv_Toolkit_UnoPatternFieldControl_get_implementation(
     return cppu::acquire(new UnoPatternFieldControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlProgressBarModel
-//  ----------------------------------------------------
+
 UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -4474,9 +4474,9 @@ stardiv_Toolkit_UnoControlProgressBarModel_get_implementation(
     return cppu::acquire(new UnoControlProgressBarModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoProgressBarControl
-//  ----------------------------------------------------
+
 UnoProgressBarControl::UnoProgressBarControl()
     :UnoControlBase()
 {
@@ -4558,9 +4558,9 @@ stardiv_Toolkit_UnoProgressBarControl_get_implementation(
     return cppu::acquire(new UnoProgressBarControl());
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlFixedLineModel
-//  ----------------------------------------------------
+
 UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -4618,9 +4618,9 @@ stardiv_Toolkit_UnoControlFixedLineModel_get_implementation(
     return cppu::acquire(new UnoControlFixedLineModel(context));
 }
 
-//  ----------------------------------------------------
+
 //  class UnoFixedLineControl
-//  ----------------------------------------------------
+
 UnoFixedLineControl::UnoFixedLineControl()
     :UnoControlBase()
 {

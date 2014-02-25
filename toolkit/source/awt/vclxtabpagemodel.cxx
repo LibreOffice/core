@@ -24,9 +24,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
-//  ----------------------------------------------------
+
 //  class VCLXDialog
-//  ----------------------------------------------------
+
 
 VCLXTabPageModel::VCLXTabPageModel()
 {

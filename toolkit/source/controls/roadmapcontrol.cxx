@@ -24,10 +24,10 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -35,9 +35,9 @@ namespace toolkit
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-//  ----------------------------------------------------
+
 //  helper
-//  ----------------------------------------------------
+
 
 static void lcl_throwIllegalArgumentException( )
 {   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
@@ -49,9 +49,9 @@ static void lcl_throwIndexOutOfBoundsException( )
     throw IndexOutOfBoundsException();
 }
 
-    // ===================================================================
+
     // = UnoControlRoadmapModel
-    // ===================================================================
+
 
     UnoControlRoadmapModel::UnoControlRoadmapModel( const Reference< XComponentContext >& i_factory )
         :UnoControlRoadmapModel_Base( i_factory )
@@ -353,9 +353,9 @@ static void lcl_throwIndexOutOfBoundsException( )
         maContainerListeners.removeInterface( xListener );
     }
 
-    // ===================================================================
+
     // = UnoRoadmapControl
-    // ===================================================================
+
 
     UnoRoadmapControl::UnoRoadmapControl()
         :UnoControlRoadmap_Base()

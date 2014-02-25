@@ -34,9 +34,9 @@ namespace toolkit
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::style;
 
-    //==================================================================================================================
+
     //= DefaultGridColumnModel
-    //==================================================================================================================
+
 
     GridColumn::GridColumn()
         :GridColumn_Base( m_aMutex )

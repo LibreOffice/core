@@ -29,9 +29,9 @@
 
 namespace toolkit {
 
-// ===================================================================
+
 // = UnoTreeModel
-// ===================================================================
+
 class UnoTreeModel : public UnoControlModel
 {
 protected:

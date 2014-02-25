@@ -37,9 +37,9 @@ namespace toolkit
 
 class GridEventForwarder;
 
-// ===================================================================
+
 // = UnoGridModel
-// ===================================================================
+
 class UnoGridModel : public UnoControlModel
 {
 protected:
@@ -69,9 +69,9 @@ public:
 };
 
 
-// ===================================================================
+
 // = UnoGridControl
-// ===================================================================
+
 typedef ::cppu::ImplInheritanceHelper2  <   UnoControlBase
                                         ,   ::com::sun::star::awt::grid::XGridControl
                                         ,   ::com::sun::star::awt::grid::XGridRowSelection

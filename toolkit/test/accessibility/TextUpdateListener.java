@@ -171,7 +171,7 @@ class TextUpdateListener implements TreeModelListener
     //         {
     //             // create a new node
     //             DefaultMutableTreeNode aNew = newTextTreeNode( xText );
-    //
+
     //             // get parent (must be DefaultMutableTreeNode)
     //             DefaultMutableTreeNode aParent =
     //                 (DefaultMutableTreeNode)aNode.getParent();

@@ -110,9 +110,9 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
     }
 }
 
-//  ----------------------------------------------------
+
 //  class UnoControlModel
-//  ----------------------------------------------------
+
 UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel_Base()
     ,MutexAndBroadcastHelper()
@@ -1052,7 +1052,7 @@ bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYPE* /
     }
 }
 
-// ..................................................................
+
 sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue ) throw (IllegalArgumentException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

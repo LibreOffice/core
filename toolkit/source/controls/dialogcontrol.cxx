@@ -63,7 +63,7 @@ using namespace ::com::sun::star::util;
 #define PROPERTY_DIALOGSOURCEURL OUString( "DialogSourceURL" )
 #define PROPERTY_IMAGEURL OUString( "ImageURL" )
 #define PROPERTY_GRAPHIC OUString( "Graphic" )
-//
+
 
 // we probably will need both a hash of control models and hash of controls
 // => use some template magic
@@ -301,9 +301,9 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
 
 }
 
-// ============================================================================
+
 // = class UnoDialogControl
-// ============================================================================
+
 
 UnoDialogControl::UnoDialogControl( const uno::Reference< uno::XComponentContext >& rxContext )
     :UnoDialogControl_Base( rxContext )
@@ -648,9 +648,9 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
     ControlContainerBase::ImplModelPropertiesChanged(rEvents);
 }
 
-//  ----------------------------------------------------
+
 //  class MultiPageControl
-//  ----------------------------------------------------
+
 UnoMultiPageControl::UnoMultiPageControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext), maTabListeners( *this )
 {
     maComponentInfos.nWidth = 280;
@@ -951,9 +951,9 @@ sal_Bool SAL_CALL UnoMultiPageModel::getGroupControl(  ) throw (RuntimeException
     return sal_True;
 }
 
-//  ----------------------------------------------------
+
 //  class UnoPageControl
-//  ----------------------------------------------------
+
 UnoPageControl::UnoPageControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext)
 {
     maComponentInfos.nWidth = 280;
@@ -1058,9 +1058,9 @@ sal_Bool SAL_CALL UnoPageModel::getGroupControl(  ) throw (RuntimeException)
 
 // Frame control
 
-//  ----------------------------------------------------
+
 //  class UnoFrameControl
-//  ----------------------------------------------------
+
 UnoFrameControl::UnoFrameControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext)
 {
     maComponentInfos.nWidth = 280;

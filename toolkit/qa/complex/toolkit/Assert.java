@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
  */
 public class Assert
 {
-    // --------------------------------------------------------------------------------------------------------
+
     /** invokes a given method on a given object, and assures a certain exception is caught
      * @param i_message
      *          is the message to print when the check fails
@@ -215,7 +215,7 @@ public class Assert
             i_object, i_methodName, i_argClasses, i_methodArgs, i_expectedExceptionClass );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public static void assertException( Object i_object, Class<?> _unoInterfaceClass, String i_methodName, Object[] i_methodArgs,
         Class<?> i_expectedExceptionClass )
     {
