@@ -121,7 +121,8 @@ void RTFSdrImport::popParent()
 
 void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder)
 {
-    writerfilter::dmapper::DomainMapper& rMapper = (writerfilter::dmapper::DomainMapper&)m_rImport.Mapper();
+    writerfilter::dmapper::DomainMapper& rMapper =
+        dynamic_cast<writerfilter::dmapper::DomainMapper&>(m_rImport.Mapper());
     writerfilter::dmapper::GraphicZOrderHelper* pHelper = rMapper.graphicZOrderHelper();
     xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder)));
     pHelper->addItem(xPropertySet, nZOrder);
