@@ -47,19 +47,19 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 using ::comphelper::DocumentInfo;
 
-//=========================================================================
-//=========================================================================
-//
-// OfficeDocumentsCloseListener Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
+
+
+// OfficeDocumentsCloseListener Implementation.
+
+
+
+
+
+
 // util::XCloseListener
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing(
@@ -69,7 +69,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing
 {
 }
 
-//=========================================================================
+
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosing(
          const lang::EventObject& Source )
     throw ( uno::RuntimeException )
@@ -80,11 +80,11 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
     m_pManager->notifyEvent( aDocEvent );
 }
 
-//=========================================================================
-//
+
+
 // lang::XEventListener (base of util::XCloseListener)
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
@@ -93,13 +93,13 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
 {
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // OfficeDocumentsManager Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 OfficeDocumentsManager::OfficeDocumentsManager(
             const uno::Reference< uno::XComponentContext > & rxContext,
@@ -115,7 +115,7 @@ OfficeDocumentsManager::OfficeDocumentsManager(
     buildDocumentsList();
 }
 
-//=========================================================================
+
 // virtual
 OfficeDocumentsManager::~OfficeDocumentsManager()
 {
@@ -126,14 +126,14 @@ OfficeDocumentsManager::~OfficeDocumentsManager()
     // upon shutdown.
 }
 
-//=========================================================================
+
 void OfficeDocumentsManager::destroy()
 {
     uno::Reference< document::XEventBroadcaster >(
         m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->removeEventListener( this );
 }
 
-//=========================================================================
+
 static OUString
 getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
 {
@@ -174,11 +174,11 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
     return aId;
 }
 
-//=========================================================================
-//
+
+
 // document::XEventListener
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL OfficeDocumentsManager::notifyEvent(
@@ -425,11 +425,11 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
     }
 }
 
-//=========================================================================
-//
+
+
 // lang::XEventListener (base of document::XEventListener)
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL OfficeDocumentsManager::disposing(
@@ -438,11 +438,11 @@ void SAL_CALL OfficeDocumentsManager::disposing(
 {
 }
 
-//=========================================================================
-//
+
+
 // Non-interface.
-//
-//=========================================================================
+
+
 
 void OfficeDocumentsManager::buildDocumentsList()
 {
@@ -514,7 +514,7 @@ void OfficeDocumentsManager::buildDocumentsList()
     }
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage >
 OfficeDocumentsManager::queryStorage( const OUString & rDocId )
 {
@@ -527,14 +527,14 @@ OfficeDocumentsManager::queryStorage( const OUString & rDocId )
     return (*it).second.xStorage;
 }
 
-//=========================================================================
+
 OUString OfficeDocumentsManager::queryDocumentId(
     const uno::Reference< frame::XModel > & xModel )
 {
     return getDocumentId( xModel );
 }
 
-//=========================================================================
+
 uno::Reference< frame::XModel >
 OfficeDocumentsManager::queryDocumentModel( const OUString & rDocId )
 {
@@ -547,7 +547,7 @@ OfficeDocumentsManager::queryDocumentModel( const OUString & rDocId )
     return (*it).second.xModel;
 }
 
-//=========================================================================
+
 uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
 {
     osl::MutexGuard aGuard( m_aMtx );
@@ -565,7 +565,7 @@ uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
     return aRet;
 }
 
-//=========================================================================
+
 OUString
 OfficeDocumentsManager::queryStorageTitle( const OUString & rDocId )
 {
@@ -578,7 +578,7 @@ OfficeDocumentsManager::queryStorageTitle( const OUString & rDocId )
     return (*it).second.aTitle;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isDocumentPreview(
         const uno::Reference< frame::XModel > & xModel )
 {
@@ -591,7 +591,7 @@ bool OfficeDocumentsManager::isDocumentPreview(
     return bIsPreview;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isHelpDocument(
         const uno::Reference< frame::XModel > & xModel )
 {
@@ -605,7 +605,7 @@ bool OfficeDocumentsManager::isHelpDocument(
     return false;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isWithoutOrInTopLevelFrame(
         const uno::Reference< frame::XModel > & xModel )
 {
@@ -632,7 +632,7 @@ bool OfficeDocumentsManager::isWithoutOrInTopLevelFrame(
     return true;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isBasicIDE(
         const uno::Reference< frame::XModel > & xModel )
 {
@@ -684,7 +684,7 @@ bool OfficeDocumentsManager::isBasicIDE(
     return false;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isOfficeDocument(
         const uno::Reference< uno::XInterface > & xDoc )
 {

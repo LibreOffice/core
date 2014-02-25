@@ -40,11 +40,11 @@
 using namespace com::sun::star;
 using namespace http_dav_ucp;
 
-//=========================================================================
-//
+
+
 // ContentProvider implementation.
-//
-//=========================================================================
+
+
 
 bool ContentProvider::getProperty(
         const OUString & rPropName, beans::Property & rProp, bool bStrict )
@@ -56,9 +56,9 @@ bool ContentProvider::getProperty(
         {
             m_pProps = new PropertyMap;
 
-            //////////////////////////////////////////////////////////////
+
             // Fill map of known properties...
-            //////////////////////////////////////////////////////////////
+
 
             // Mandatory UCB properties.
             m_pProps->insert(
@@ -237,9 +237,9 @@ bool ContentProvider::getProperty(
         }
     }
 
-    //////////////////////////////////////////////////////////////
+
     // Lookup property.
-    //////////////////////////////////////////////////////////////
+
 
     beans::Property aProp;
     aProp.Name = rPropName;
@@ -264,11 +264,11 @@ bool ContentProvider::getProperty(
     return true;
 }
 
-//=========================================================================
-//
+
+
 // Content implementation.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
@@ -486,7 +486,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     return aProperties;
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< ucb::CommandInfo > Content::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -495,9 +495,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     uno::Sequence< ucb::CommandInfo > aCmdInfo( 10 );
 
-    ///////////////////////////////////////////////////////////////
+
     // Mandatory commands
-    ///////////////////////////////////////////////////////////////
+
 
     aCmdInfo[ 0 ] =
             ucb::CommandInfo(
@@ -522,9 +522,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 getCppuType( static_cast<
                     uno::Sequence< beans::PropertyValue > * >( 0 ) ) );
 
-    ///////////////////////////////////////////////////////////////
+
     // Optional standard commands
-    ///////////////////////////////////////////////////////////////
+
 
     aCmdInfo[ 4 ] =
             ucb::CommandInfo(
@@ -544,9 +544,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 getCppuType( static_cast<
                     ucb::OpenCommandArgument2 * >( 0 ) ) );
 
-    ///////////////////////////////////////////////////////////////
+
     // New commands
-    ///////////////////////////////////////////////////////////////
+
 
     aCmdInfo[ 7 ] =
             ucb::CommandInfo(
@@ -589,9 +589,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     if ( bFolder )
     {
-        ///////////////////////////////////////////////////////////////
+
         // Optional standard commands
-        ///////////////////////////////////////////////////////////////
+
 
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(

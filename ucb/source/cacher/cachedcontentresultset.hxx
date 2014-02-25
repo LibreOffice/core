@@ -32,7 +32,7 @@
 #define CACHED_CONTENT_RESULTSET_SERVICE_NAME "com.sun.star.ucb.CachedContentResultSet"
 #define CACHED_CONTENT_RESULTSET_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetFactory"
 
-//=========================================================================
+
 
 namespace com { namespace sun { namespace star { namespace script {
     class XTypeConverter;
@@ -44,7 +44,7 @@ class CachedContentResultSet
                 , public com::sun::star::lang::XTypeProvider
                 , public com::sun::star::lang::XServiceInfo
 {
-    //--------------------------------------------------------------------------
+
     // class CCRS_Cache
 
     class CCRS_Cache
@@ -90,7 +90,7 @@ class CachedContentResultSet
         sal_Bool SAL_CALL
         hasKnownLast();
 
-        //---
+
         const com::sun::star::uno::Any& SAL_CALL
         getAny( sal_Int32 nRow, sal_Int32 nColumnIndex )
             throw( com::sun::star::sdbc::SQLException,
@@ -110,7 +110,7 @@ class CachedContentResultSet
         getContent( sal_Int32 nRow )
             throw( com::sun::star::uno::RuntimeException );
     };
-    //-----------------------------------------------------------------
+
     //members
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -129,7 +129,7 @@ class CachedContentResultSet
     CCRS_PropertySetInfo*   m_pMyPropSetInfo;
 
 
-    //
+
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifierMapping >
                             m_xContentIdentifierMapping;// can be used for remote optimized ContentAccess
 
@@ -157,12 +157,12 @@ class CachedContentResultSet
 
 
 private:
-    //-----------------------------------------------------------------
+
     //helping XPropertySet methods.
     virtual void SAL_CALL impl_initPropertySetInfo();
 
 
-    //-----------------------------------------------------------------
+
     sal_Bool SAL_CALL
     applyPositionToOrigin( sal_Int32 nRow )
         throw( com::sun::star::sdbc::SQLException,
@@ -198,22 +198,22 @@ public:
 
     virtual ~CachedContentResultSet();
 
-    //-----------------------------------------------------------------
+
     // XInterface inherited
-    //-----------------------------------------------------------------
+
     XINTERFACE_DECL()
-    //-----------------------------------------------------------------
+
     // XTypeProvider
-    //-----------------------------------------------------------------
+
     XTYPEPROVIDER_DECL()
-    //-----------------------------------------------------------------
+
     // XServiceInfo
-    //-----------------------------------------------------------------
+
     XSERVICEINFO_NOFACTORY_DECL()
 
-    //-----------------------------------------------------------------
+
     // XPropertySet inherited
-    //-----------------------------------------------------------------
+
 
     virtual void SAL_CALL
     setPropertyValue( const OUString& aPropertyName,
@@ -230,9 +230,9 @@ public:
         com::sun::star::lang::WrappedTargetException,
         com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // own inherited
-    //-----------------------------------------------------------------
+
     virtual void SAL_CALL
     impl_disposing( const com::sun::star::lang::EventObject& Source )
         throw( com::sun::star::uno::RuntimeException );
@@ -246,9 +246,9 @@ public:
         throw( com::sun::star::beans::PropertyVetoException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XContentAccess inherited
-    //-----------------------------------------------------------------
+
     virtual OUString SAL_CALL
     queryContentIdentifierString()
         throw( com::sun::star::uno::RuntimeException );
@@ -263,9 +263,9 @@ public:
     queryContent()
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XResultSet inherited
-    //-----------------------------------------------------------------
+
     virtual sal_Bool SAL_CALL
     next()
         throw( com::sun::star::sdbc::SQLException,
@@ -340,9 +340,9 @@ public:
         throw( com::sun::star::sdbc::SQLException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // XRow inherited
-    //-----------------------------------------------------------------
+
     virtual sal_Bool SAL_CALL
     wasNull()
         throw( com::sun::star::sdbc::SQLException,
@@ -451,9 +451,9 @@ public:
         throw( com::sun::star::sdbc::SQLException,
                com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------------------
+
     // Type Converter support
-    //-----------------------------------------------------------------
+
 
 private:
     sal_Bool m_bTriedToGetTypeConverter;
@@ -467,7 +467,7 @@ private:
         T (SAL_CALL css::sdbc::XRow::* f)(sal_Int32), sal_Int32 columnIndex);
 };
 
-//=========================================================================
+
 
 class CachedContentResultSetFactory
                 : public cppu::OWeakObject
@@ -487,19 +487,19 @@ public:
 
     virtual ~CachedContentResultSetFactory();
 
-    //-----------------------------------------------------------------
+
     // XInterface
     XINTERFACE_DECL()
 
-    //-----------------------------------------------------------------
+
     // XTypeProvider
     XTYPEPROVIDER_DECL()
 
-    //-----------------------------------------------------------------
+
     // XServiceInfo
     XSERVICEINFO_DECL()
 
-    //-----------------------------------------------------------------
+
     // XCachedContentResultSetFactory
 
     virtual com::sun::star::uno::Reference<

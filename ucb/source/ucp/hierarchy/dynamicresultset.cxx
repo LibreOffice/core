@@ -33,13 +33,13 @@
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // DynamicResultSet Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 DynamicResultSet::DynamicResultSet(
             const uno::Reference< uno::XComponentContext >& rxContext,
@@ -50,11 +50,11 @@ DynamicResultSet::DynamicResultSet(
 {
 }
 
-//=========================================================================
-//
+
+
 // Non-interface methods.
-//
-//=========================================================================
+
+
 
 void DynamicResultSet::initStatic()
 {
@@ -67,7 +67,7 @@ void DynamicResultSet::initStatic()
                                                  m_aCommand.Mode ) );
 }
 
-//=========================================================================
+
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1

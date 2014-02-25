@@ -27,7 +27,7 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 
-//=========================================================================
+
 
 class ContentIdentifier :
                 public cppu::OWeakObject,

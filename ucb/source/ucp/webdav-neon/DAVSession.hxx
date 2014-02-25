@@ -75,7 +75,7 @@ public:
     virtual sal_Bool UsesProxy() = 0;
 
     // DAV methods
-    //
+
 
     virtual void OPTIONS( const OUString & inPath,
                           DAVCapabilities & outCapabilities,

@@ -81,13 +81,13 @@ using namespace com::sun::star::sdbc;
 
 
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // Content Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
                         FTPContentProvider* pProvider,
@@ -119,18 +119,18 @@ FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
 
 
 
-//=========================================================================
+
 
 FTPContent::~FTPContent()
 {
 }
 
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_6( FTPContent,
                    XTypeProvider,
@@ -140,11 +140,11 @@ XINTERFACE_IMPL_6( FTPContent,
                    XContentCreator,
                    XChild);
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_6( FTPContent,
                           XTypeProvider,
@@ -154,11 +154,11 @@ XTYPEPROVIDER_IMPL_6( FTPContent,
                       XContentCreator,
                       XChild);
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 // needed, because the service shall not be creatable!!
 #undef XSERVICEINFO_CREATE_INSTANCE_IMPL
@@ -170,11 +170,11 @@ XSERVICEINFO_IMPL_1( FTPContent,
 
 
 
-//=========================================================================
-//
+
+
 // XContent methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL FTPContent::getContentType()
@@ -184,11 +184,11 @@ OUString SAL_CALL FTPContent::getContentType()
 }
 
 
-//=========================================================================
-//
+
+
 // XCommandProcessor methods.
-//
-//=========================================================================
+
+
 
 
 //virtual
@@ -248,11 +248,11 @@ public:
 
 
 
-//=========================================================================
-//
+
+
 // XCommandProcessor methods.
-//
-//=========================================================================
+
+
 
 enum ACTION { NOACTION,
               THROWAUTHENTICATIONREQUEST,

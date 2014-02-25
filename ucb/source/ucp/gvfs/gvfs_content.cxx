@@ -148,9 +148,9 @@ Content::~Content()
     gnome_vfs_file_info_clear( &m_info );
 }
 
-//
+
 // XInterface methods.
-//
+
 
 void SAL_CALL Content::acquire()
     throw( )
@@ -176,9 +176,9 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
         return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
-//
+
 // XTypeProvider methods.
-//
+
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
@@ -231,9 +231,9 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
         return pFileCollection->getTypes();
 }
 
-//
+
 // XServiceInfo methods.
-//
+
 
 OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
@@ -249,9 +249,9 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     return aSNS;
 }
 
-//
+
 // XContent methods.
-//
+
 
 OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
@@ -262,9 +262,9 @@ OUString SAL_CALL Content::getContentType()
         return OUString( GVFS_FILE_TYPE );
 }
 
-//
+
 // XCommandProcessor methods.
-//
+
 
 uno::Any Content::getBadArgExcept()
 {
@@ -428,9 +428,9 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     // FIXME: we should use the GnomeVFSCancellation APIs here ...
 }
 
-//
+
 // XContentCreator methods.
-//
+
 
 uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
     const uno::Reference< ucb::XCommandEnvironment >& xEnv)

@@ -28,7 +28,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XContentProvider;
 } } } }
 
-//============================================================================
+
 class ProviderListEntry_Impl
 {
     com::sun::star::uno::Reference<
@@ -59,10 +59,10 @@ ProviderListEntry_Impl::getResolvedProvider() const
     return m_xResolvedProvider.is() ? m_xResolvedProvider : resolveProvider();
 }
 
-//============================================================================
+
 typedef std::list< ProviderListEntry_Impl > ProviderList_Impl;
 
-//============================================================================
+
 typedef ucb_impl::RegexpMap< ProviderList_Impl > ProviderMap_Impl;
 
 #endif // _UCB_PROVIDERMAP_HXX_

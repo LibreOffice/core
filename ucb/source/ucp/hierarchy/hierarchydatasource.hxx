@@ -33,7 +33,7 @@ namespace cppu { class OInterfaceContainerHelper; }
 
 namespace hierarchy_ucp {
 
-//=========================================================================
+
 
 class HierarchyDataSource : public cppu::OWeakObject,
                             public com::sun::star::lang::XServiceInfo,

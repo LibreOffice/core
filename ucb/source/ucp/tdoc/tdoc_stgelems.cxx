@@ -36,13 +36,13 @@
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ParentStorageHolder Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 ParentStorageHolder::ParentStorageHolder(
             const uno::Reference< embed::XStorage > & xParentStorage,
@@ -55,13 +55,13 @@ ParentStorageHolder::ParentStorageHolder(
         m_bParentIsRootStorage = true;
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // Storage Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
                   const rtl::Reference< StorageElementFactory > & xFactory,
@@ -117,7 +117,7 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
     }
 }
 
-//=========================================================================
+
 // virtual
 Storage::~Storage()
 {
@@ -146,11 +146,11 @@ Storage::~Storage()
     }
 }
 
-//=========================================================================
-//
+
+
 // uno::XInterface
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Any SAL_CALL Storage::queryInterface( const uno::Type& aType )
@@ -166,7 +166,7 @@ uno::Any SAL_CALL Storage::queryInterface( const uno::Type& aType )
     return m_xAggProxy->queryAggregation( aType );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::acquire()
     throw ()
@@ -174,7 +174,7 @@ void SAL_CALL Storage::acquire()
     osl_atomic_increment( &m_refCount );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::release()
     throw ()
@@ -189,11 +189,11 @@ void SAL_CALL Storage::release()
     OWeakObject::release();
 }
 
-//=========================================================================
-//
+
+
 // lang::XTypeProvider
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Storage::getTypes()
@@ -202,7 +202,7 @@ uno::Sequence< uno::Type > SAL_CALL Storage::getTypes()
     return m_xWrappedTypeProv->getTypes();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL Storage::getImplementationId()
     throw ( uno::RuntimeException )
@@ -210,11 +210,11 @@ uno::Sequence< sal_Int8 > SAL_CALL Storage::getImplementationId()
     return m_xWrappedTypeProv->getImplementationId();
 }
 
-//=========================================================================
-//
+
+
 // lang::XComponent (base of embed::XStorage)
-//
-//=========================================================================
+
+
 // virtual
 void SAL_CALL Storage::dispose()
     throw ( uno::RuntimeException )
@@ -222,7 +222,7 @@ void SAL_CALL Storage::dispose()
     m_xWrappedStorage->dispose();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::addEventListener(
         const uno::Reference< lang::XEventListener >& xListener )
@@ -230,7 +230,7 @@ void SAL_CALL Storage::addEventListener(
 {
     m_xWrappedStorage->addEventListener( xListener );
 }
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::removeEventListener(
         const uno::Reference< lang::XEventListener >& aListener )
@@ -239,11 +239,11 @@ void SAL_CALL Storage::removeEventListener(
     m_xWrappedStorage->removeEventListener( aListener );
 }
 
-//=========================================================================
-//
+
+
 // container::XElementAccess (base of container::XNameAccess)
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Type SAL_CALL Storage::getElementType()
@@ -252,7 +252,7 @@ uno::Type SAL_CALL Storage::getElementType()
     return m_xWrappedStorage->getElementType();
 }
 
-//=========================================================================
+
 // virtual
 ::sal_Bool SAL_CALL Storage::hasElements()
     throw ( uno::RuntimeException )
@@ -260,11 +260,11 @@ uno::Type SAL_CALL Storage::getElementType()
     return m_xWrappedStorage->hasElements();
 }
 
-//=========================================================================
-//
+
+
 // container::XNameAccess (base of embed::XStorage)
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Any SAL_CALL Storage::getByName( const OUString& aName )
@@ -275,7 +275,7 @@ uno::Any SAL_CALL Storage::getByName( const OUString& aName )
     return m_xWrappedStorage->getByName( aName );
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
     throw ( uno::RuntimeException )
@@ -283,7 +283,7 @@ uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
     return m_xWrappedStorage->getElementNames();
 }
 
-//=========================================================================
+
 // virtual
 ::sal_Bool SAL_CALL Storage::hasByName( const OUString& aName )
     throw ( uno::RuntimeException )
@@ -291,11 +291,11 @@ uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
     return m_xWrappedStorage->hasByName( aName );
 }
 
-//=========================================================================
-//
+
+
 // embed::XStorage
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL Storage::copyToStorage(
@@ -309,7 +309,7 @@ void SAL_CALL Storage::copyToStorage(
     m_xWrappedStorage->copyToStorage( xDest );
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< io::XStream > SAL_CALL Storage::openStreamElement(
         const OUString& aStreamName, sal_Int32 nOpenMode )
@@ -323,7 +323,7 @@ uno::Reference< io::XStream > SAL_CALL Storage::openStreamElement(
     return m_xWrappedStorage->openStreamElement( aStreamName, nOpenMode );
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< io::XStream > SAL_CALL Storage::openEncryptedStreamElement(
         const OUString& aStreamName,
@@ -341,7 +341,7 @@ uno::Reference< io::XStream > SAL_CALL Storage::openEncryptedStreamElement(
         aStreamName, nOpenMode, aPassword );
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< embed::XStorage > SAL_CALL Storage::openStorageElement(
         const OUString& aStorName, sal_Int32 nOpenMode )
@@ -354,7 +354,7 @@ uno::Reference< embed::XStorage > SAL_CALL Storage::openStorageElement(
     return m_xWrappedStorage->openStorageElement( aStorName, nOpenMode );
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< io::XStream > SAL_CALL Storage::cloneStreamElement(
         const OUString& aStreamName )
@@ -368,7 +368,7 @@ uno::Reference< io::XStream > SAL_CALL Storage::cloneStreamElement(
     return m_xWrappedStorage->cloneStreamElement( aStreamName );
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< io::XStream > SAL_CALL Storage::cloneEncryptedStreamElement(
         const OUString& aStreamName,
@@ -385,7 +385,7 @@ uno::Reference< io::XStream > SAL_CALL Storage::cloneEncryptedStreamElement(
                                                            aPassword );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::copyLastCommitTo(
         const uno::Reference< embed::XStorage >& xTargetStorage )
@@ -398,7 +398,7 @@ void SAL_CALL Storage::copyLastCommitTo(
     m_xWrappedStorage->copyLastCommitTo( xTargetStorage );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::copyStorageElementLastCommitTo(
         const OUString& aStorName,
@@ -412,7 +412,7 @@ void SAL_CALL Storage::copyStorageElementLastCommitTo(
     m_xWrappedStorage->copyStorageElementLastCommitTo( aStorName, xTargetStorage );
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL Storage::isStreamElement(
         const OUString& aElementName )
@@ -424,7 +424,7 @@ sal_Bool SAL_CALL Storage::isStreamElement(
     return m_xWrappedStorage->isStreamElement( aElementName );
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL Storage::isStorageElement(
         const OUString& aElementName )
@@ -436,7 +436,7 @@ sal_Bool SAL_CALL Storage::isStorageElement(
     return m_xWrappedStorage->isStorageElement( aElementName );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::removeElement( const OUString& aElementName )
     throw ( embed::InvalidStorageException,
@@ -449,7 +449,7 @@ void SAL_CALL Storage::removeElement( const OUString& aElementName )
     m_xWrappedStorage->removeElement( aElementName );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::renameElement( const OUString& aEleName,
                                       const OUString& aNewName )
@@ -464,7 +464,7 @@ void SAL_CALL Storage::renameElement( const OUString& aEleName,
     m_xWrappedStorage->renameElement( aEleName, aNewName );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::copyElementTo(
         const OUString& aElementName,
@@ -481,7 +481,7 @@ void SAL_CALL Storage::copyElementTo(
     m_xWrappedStorage->copyElementTo( aElementName, xDest, aNewName );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::moveElementTo(
         const OUString& aElementName,
@@ -498,11 +498,11 @@ void SAL_CALL Storage::moveElementTo(
     m_xWrappedStorage->moveElementTo( aElementName, xDest, rNewName );
 }
 
-//=========================================================================
-//
+
+
 // embed::XTransactedObject
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL Storage::commit()
@@ -535,7 +535,7 @@ void SAL_CALL Storage::commit()
     }
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Storage::revert()
     throw ( io::IOException,
@@ -564,13 +564,13 @@ void SAL_CALL Storage::revert()
     }
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // OutputStream Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 OutputStream::OutputStream(
             const uno::Reference< uno::XComponentContext > & rxContext,
@@ -623,7 +623,7 @@ OutputStream::OutputStream(
     }
 }
 
-//=========================================================================
+
 // virtual
 OutputStream::~OutputStream()
 {
@@ -631,11 +631,11 @@ OutputStream::~OutputStream()
         m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
 }
 
-//=========================================================================
-//
+
+
 // uno::XInterface
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
@@ -652,11 +652,11 @@ uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
         return uno::Any();
 }
 
-//=========================================================================
-//
+
+
 // lang::XTypeProvider
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL OutputStream::getTypes()
@@ -665,7 +665,7 @@ uno::Sequence< uno::Type > SAL_CALL OutputStream::getTypes()
     return m_xWrappedTypeProv->getTypes();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL OutputStream::getImplementationId()
     throw ( uno::RuntimeException )
@@ -673,11 +673,11 @@ uno::Sequence< sal_Int8 > SAL_CALL OutputStream::getImplementationId()
     return m_xWrappedTypeProv->getImplementationId();
 }
 
-//=========================================================================
-//
+
+
 // io::XOutputStream
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL
@@ -690,7 +690,7 @@ OutputStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     m_xWrappedStream->writeBytes( aData );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 OutputStream::flush()
@@ -702,7 +702,7 @@ OutputStream::flush()
     m_xWrappedStream->flush();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 OutputStream::closeOutput(  )
@@ -718,11 +718,11 @@ OutputStream::closeOutput(  )
     setParentStorage( uno::Reference< embed::XStorage >() );
 }
 
-//=========================================================================
-//
+
+
 // lang::XComponent
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL
@@ -736,7 +736,7 @@ OutputStream::dispose()
     setParentStorage( uno::Reference< embed::XStorage >() );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 OutputStream::addEventListener(
@@ -746,7 +746,7 @@ OutputStream::addEventListener(
     m_xWrappedComponent->addEventListener( xListener );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL
 OutputStream::removeEventListener(
@@ -756,13 +756,13 @@ OutputStream::removeEventListener(
     m_xWrappedComponent->removeEventListener( aListener );
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // Stream Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 Stream::Stream(
             const uno::Reference< uno::XComponentContext > & rxContext,
@@ -818,7 +818,7 @@ Stream::Stream(
     }
 }
 
-//=========================================================================
+
 // virtual
 Stream::~Stream()
 {
@@ -826,11 +826,11 @@ Stream::~Stream()
         m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
 }
 
-//=========================================================================
-//
+
+
 // uno::XInterface
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
@@ -847,11 +847,11 @@ uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
         return uno::Any();
 }
 
-//=========================================================================
-//
+
+
 // lang::XTypeProvider
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Stream::getTypes()
@@ -860,7 +860,7 @@ uno::Sequence< uno::Type > SAL_CALL Stream::getTypes()
     return m_xWrappedTypeProv->getTypes();
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< sal_Int8 > SAL_CALL Stream::getImplementationId()
     throw ( uno::RuntimeException )
@@ -868,11 +868,11 @@ uno::Sequence< sal_Int8 > SAL_CALL Stream::getImplementationId()
     return m_xWrappedTypeProv->getImplementationId();
 }
 
-//=========================================================================
-//
+
+
 // io::XStream.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< io::XInputStream > SAL_CALL Stream::getInputStream()
@@ -881,7 +881,7 @@ uno::Reference< io::XInputStream > SAL_CALL Stream::getInputStream()
     return uno::Reference< io::XInputStream >( this );
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< io::XOutputStream > SAL_CALL Stream::getOutputStream()
     throw( uno::RuntimeException )
@@ -889,11 +889,11 @@ uno::Reference< io::XOutputStream > SAL_CALL Stream::getOutputStream()
     return uno::Reference< io::XOutputStream >( this );
 }
 
-//=========================================================================
-//
+
+
 // io::XOutputStream.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL Stream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
@@ -909,7 +909,7 @@ void SAL_CALL Stream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     }
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Stream::flush()
     throw( io::NotConnectedException,
@@ -924,7 +924,7 @@ void SAL_CALL Stream::flush()
     }
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Stream::closeOutput()
     throw( io::NotConnectedException,
@@ -942,11 +942,11 @@ void SAL_CALL Stream::closeOutput()
     setParentStorage( uno::Reference< embed::XStorage >() );
 }
 
-//=========================================================================
-//
+
+
 // io::XTruncate.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL Stream::truncate()
@@ -960,11 +960,11 @@ void SAL_CALL Stream::truncate()
     }
 }
 
-//=========================================================================
-//
+
+
 // io::XInputStream.
-//
-//=========================================================================
+
+
 
 // virtual
 sal_Int32 SAL_CALL Stream::readBytes( uno::Sequence< sal_Int8 >& aData,
@@ -977,7 +977,7 @@ sal_Int32 SAL_CALL Stream::readBytes( uno::Sequence< sal_Int8 >& aData,
     return m_xWrappedInputStream->readBytes( aData, nBytesToRead );
 }
 
-//=========================================================================
+
 // virtual
 sal_Int32 SAL_CALL Stream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
                                           sal_Int32 nMaxBytesToRead )
@@ -989,7 +989,7 @@ sal_Int32 SAL_CALL Stream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
     return m_xWrappedInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Stream::skipBytes( sal_Int32 nBytesToSkip )
     throw( io::NotConnectedException,
@@ -1000,7 +1000,7 @@ void SAL_CALL Stream::skipBytes( sal_Int32 nBytesToSkip )
     m_xWrappedInputStream->skipBytes( nBytesToSkip );
 }
 
-//=========================================================================
+
 // virtual
 sal_Int32 SAL_CALL Stream::available()
     throw( io::NotConnectedException,
@@ -1010,7 +1010,7 @@ sal_Int32 SAL_CALL Stream::available()
     return m_xWrappedInputStream->available();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Stream::closeInput()
     throw( io::NotConnectedException,
@@ -1020,11 +1020,11 @@ void SAL_CALL Stream::closeInput()
     m_xWrappedInputStream->closeInput();
 }
 
-//=========================================================================
-//
+
+
 // lang::XComponent
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL Stream::dispose()
@@ -1037,7 +1037,7 @@ void SAL_CALL Stream::dispose()
     setParentStorage( uno::Reference< embed::XStorage >() );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Stream::addEventListener(
         const uno::Reference< lang::XEventListener >& xListener )
@@ -1046,7 +1046,7 @@ void SAL_CALL Stream::addEventListener(
     m_xWrappedComponent->addEventListener( xListener );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL Stream::removeEventListener(
         const uno::Reference< lang::XEventListener >& aListener )
@@ -1055,11 +1055,11 @@ void SAL_CALL Stream::removeEventListener(
     m_xWrappedComponent->removeEventListener( aListener );
 }
 
-//=========================================================================
-//
+
+
 // Non-UNO
-//
-//=========================================================================
+
+
 
 void Stream::commitChanges()
     throw( io::IOException )

@@ -42,11 +42,11 @@ using namespace package_ucp;
 namespace package_ucp
 {
 
-//=========================================================================
-//
+
+
 // struct ResultListEntry.
-//
-//=========================================================================
+
+
 
 struct ResultListEntry
 {
@@ -58,19 +58,19 @@ struct ResultListEntry
     ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
 };
 
-//=========================================================================
-//
+
+
 // ResultList.
-//
-//=========================================================================
+
+
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-//=========================================================================
-//
+
+
 // struct DataSupplier_Impl.
-//
-//=========================================================================
+
+
 
 struct DataSupplier_Impl
 {
@@ -94,7 +94,7 @@ struct DataSupplier_Impl
     ~DataSupplier_Impl();
 };
 
-//=========================================================================
+
 DataSupplier_Impl::~DataSupplier_Impl()
 {
     ResultList::const_iterator it  = m_aResults.begin();
@@ -109,13 +109,13 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // DataSupplier Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 DataSupplier::DataSupplier(
                 const uno::Reference< uno::XComponentContext >& rxContext,
@@ -125,14 +125,14 @@ DataSupplier::DataSupplier(
 {
 }
 
-//=========================================================================
+
 // virtual
 DataSupplier::~DataSupplier()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
+
 // virtual
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
@@ -156,7 +156,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     return OUString();
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContentIdentifier >
 DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
@@ -185,7 +185,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContentIdentifier >();
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContent > DataSupplier::queryContent(
                                                         sal_uInt32 nIndex )
@@ -222,7 +222,7 @@ uno::Reference< ucb::XContent > DataSupplier::queryContent(
     return uno::Reference< ucb::XContent >();
 }
 
-//=========================================================================
+
 // virtual
 bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
@@ -312,7 +312,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     return bFound;
 }
 
-//=========================================================================
+
 // virtual
 sal_uInt32 DataSupplier::totalCount()
 {
@@ -379,21 +379,21 @@ sal_uInt32 DataSupplier::totalCount()
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
+
 // virtual
 sal_uInt32 DataSupplier::currentCount()
 {
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
+
 // virtual
 bool DataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
                                                         sal_uInt32 nIndex  )
@@ -425,7 +425,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
     return uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
+
 // virtual
 void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
@@ -435,13 +435,13 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
         m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
+
 // virtual
 void DataSupplier::close()
 {
 }
 
-//=========================================================================
+
 // virtual
 void DataSupplier::validate()
     throw( ucb::ResultSetException )
@@ -450,7 +450,7 @@ void DataSupplier::validate()
         throw ucb::ResultSetException();
 }
 
-//=========================================================================
+
 OUString DataSupplier::assembleChildURL( const OUString& aName )
 {
     OUString aURL;

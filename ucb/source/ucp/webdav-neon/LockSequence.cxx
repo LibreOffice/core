@@ -36,7 +36,7 @@ using namespace com::sun::star;
 
 #define BEEHIVE_BUGS_WORKAROUND
 
-//////////////////////////////////////////////////////////////////////////
+
 
 struct LockSequenceParseContext
 {
@@ -68,7 +68,7 @@ struct LockSequenceParseContext
 #define STATE_WRITE         (STATE_TOP + 9)
 #define STATE_HREF          (STATE_TOP + 10)
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockSequence_startelement_callback(
     void *,
     int parent,
@@ -125,7 +125,7 @@ extern "C" int LockSequence_startelement_callback(
     return NE_XML_DECLINE;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockSequence_chardata_callback(
     void *userdata,
     int state,
@@ -186,9 +186,9 @@ extern "C" int LockSequence_chardata_callback(
         }
 
         case STATE_TIMEOUT:
-            //
+
             //  RFC2518, RFC2616:
-            //
+
             //  TimeType = ("Second-" DAVTimeOutVal | "Infinite" | Other)
             //  DAVTimeOutVal = 1*digit
             //  Other = "Extend" field-value
@@ -243,7 +243,7 @@ extern "C" int LockSequence_chardata_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockSequence_endelement_callback(
     void *userdata,
     int state,
@@ -308,7 +308,7 @@ extern "C" int LockSequence_endelement_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 // static
 bool LockSequence::createFromXML( const OString & rInData,
                                   uno::Sequence< ucb::Lock > & rOutData )

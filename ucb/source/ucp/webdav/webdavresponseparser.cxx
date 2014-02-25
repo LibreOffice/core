@@ -30,11 +30,11 @@
 #include <map>
 #include <unordered_map>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // WebDAVNamespace enum and StringToEnum converter
 
 namespace
@@ -63,9 +63,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
 // WebDAVName enum and StringToEnum converter using unordered_map
-
 namespace
 {
     enum WebDAVName
@@ -136,7 +134,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // WebDAVContext, holding information for each start/endElement pair
 
 namespace
@@ -271,7 +269,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // the Xml parser itself
 
 namespace
@@ -786,7 +784,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // wrapper for various calls to the parser
 
 namespace
@@ -840,7 +838,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helper to parse a XML WebDAV response
 
 namespace http_dav_ucp

@@ -44,7 +44,7 @@ struct MutexHolder
     osl::Mutex m_aMutex;
 };
 
-//=======================================================================
+
 
 class ParentStorageHolder : public MutexHolder
 {
@@ -69,7 +69,7 @@ private:
     bool                                  m_bParentIsRootStorage;
 };
 
-//=======================================================================
+
 
 typedef
     cppu::WeakImplHelper2<
@@ -304,7 +304,7 @@ private:
     friend class std::auto_ptr< Storage >;
 };
 
-//=======================================================================
+
 
 typedef
     cppu::WeakImplHelper2<
@@ -384,7 +384,7 @@ private:
         com::sun::star::lang::XTypeProvider >   m_xWrappedTypeProv;
 };
 
-//=======================================================================
+
 
 typedef cppu::WeakImplHelper5< com::sun::star::io::XStream,
                                com::sun::star::io::XOutputStream,

@@ -27,13 +27,13 @@
 using namespace com::sun::star;
 using namespace gvfs;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ContentProvider Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 ContentProvider::ContentProvider(
     const uno::Reference< uno::XComponentContext >& rxContext )
@@ -41,56 +41,56 @@ ContentProvider::ContentProvider(
 {
 }
 // sdafas
-//=========================================================================
+
 // virtual
 ContentProvider::~ContentProvider()
 {
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
                    com::sun::star::ucb::XContentProvider );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       com::sun::star::ucb::XContentProvider );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.GnomeVFSContentProvider" ),
                      OUString( "com.sun.star.ucb.GnomeVFSContentProvider" ) );
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
-//
+
+
 // XContentProvider methods.
-//
-//=========================================================================
+
+
 
 uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
 ContentProvider::queryContent(

@@ -24,10 +24,10 @@
 #include <ucbhelper/resultset.hxx>
 #include <comphelper/processfactory.hxx>
 
-//......................................................................................................................
+
 namespace ucb { namespace ucp { namespace ext
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -46,9 +46,9 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::ucb::OpenCommandArgument2;
     using ::com::sun::star::ucb::XCommandEnvironment;
 
-    //==================================================================================================================
+
     //= ResultSet
-    //==================================================================================================================
+
 
     ResultSet::ResultSet( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent,
             const OpenCommandArgument2& i_rCommand, const Reference< XCommandEnvironment >& i_rEnv )
@@ -82,8 +82,8 @@ namespace ucb { namespace ucp { namespace ext
         m_xResultSet2 = m_xResultSet1;
     }
 
-//......................................................................................................................
+
 } } }   // namespace ucp::ext
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

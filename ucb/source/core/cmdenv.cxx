@@ -32,13 +32,13 @@
 using namespace com::sun::star;
 using namespace ucb_cmdenv;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // UcbCommandEnvironment Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 UcbCommandEnvironment::UcbCommandEnvironment(
     const uno::Reference< lang::XMultiServiceFactory >& /*xSMgr*/ )
@@ -46,17 +46,17 @@ UcbCommandEnvironment::UcbCommandEnvironment(
 {
 }
 
-//=========================================================================
+
 // virtual
 UcbCommandEnvironment::~UcbCommandEnvironment()
 {
 }
 
-//=========================================================================
-//
+
+
 // XInitialization methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL UcbCommandEnvironment::initialize(
@@ -70,11 +70,11 @@ void SAL_CALL UcbCommandEnvironment::initialize(
         throw lang::IllegalArgumentException();
 }
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL UcbCommandEnvironment::getImplementationName()
@@ -83,7 +83,7 @@ OUString SAL_CALL UcbCommandEnvironment::getImplementationName()
     return getImplementationName_Static();
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL
 UcbCommandEnvironment::supportsService( const OUString& ServiceName )
@@ -92,7 +92,7 @@ UcbCommandEnvironment::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< OUString > SAL_CALL
 UcbCommandEnvironment::getSupportedServiceNames()
@@ -101,14 +101,14 @@ UcbCommandEnvironment::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-//=========================================================================
+
 // static
 OUString UcbCommandEnvironment::getImplementationName_Static()
 {
     return OUString( "com.sun.star.comp.ucb.CommandEnvironment" );
 }
 
-//=========================================================================
+
 // static
 uno::Sequence< OUString >
 UcbCommandEnvironment::getSupportedServiceNames_Static()
@@ -118,11 +118,11 @@ UcbCommandEnvironment::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-//=========================================================================
-//
+
+
 // XCommandInfo methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< task::XInteractionHandler > SAL_CALL
@@ -132,7 +132,7 @@ UcbCommandEnvironment::getInteractionHandler()
     return m_xIH;
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XProgressHandler > SAL_CALL
 UcbCommandEnvironment::getProgressHandler()
@@ -141,11 +141,11 @@ UcbCommandEnvironment::getProgressHandler()
     return m_xPH;
 }
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 static uno::Reference< uno::XInterface > SAL_CALL
 UcbCommandEnvironment_CreateInstance(
@@ -157,7 +157,7 @@ UcbCommandEnvironment_CreateInstance(
     return uno::Reference< uno::XInterface >::query( pX );
 }
 
-//=========================================================================
+
 // static
 uno::Reference< lang::XSingleServiceFactory >
 UcbCommandEnvironment::createServiceFactory(

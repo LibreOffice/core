@@ -40,13 +40,13 @@
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // HierarchyContentProvider Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 HierarchyContentProvider::HierarchyContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -54,17 +54,17 @@ HierarchyContentProvider::HierarchyContentProvider(
 {
 }
 
-//=========================================================================
+
 // virtual
 HierarchyContentProvider::~HierarchyContentProvider()
 {
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_4( HierarchyContentProvider,
                    lang::XTypeProvider,
@@ -72,11 +72,11 @@ XINTERFACE_IMPL_4( HierarchyContentProvider,
                    ucb::XContentProvider,
                    lang::XInitialization );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
                       lang::XTypeProvider,
@@ -84,29 +84,29 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
                       ucb::XContentProvider,
                       lang::XInitialization );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_IMPL_1_CTX( HierarchyContentProvider,
                      OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ),
                      OUString( HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyContentProvider );
 
-//=========================================================================
-//
+
+
 // XContentProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
@@ -139,11 +139,11 @@ HierarchyContentProvider::queryContent(
     return xContent;
 }
 
-//=========================================================================
-//
+
+
 // XInitialization methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL HierarchyContentProvider::initialize(
@@ -154,11 +154,11 @@ void SAL_CALL HierarchyContentProvider::initialize(
         OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );
 }
 
-//=========================================================================
-//
+
+
 //  Non-interface methods.
-//
-//=========================================================================
+
+
 
 uno::Reference< lang::XMultiServiceFactory >
 HierarchyContentProvider::getConfigProvider(
@@ -198,7 +198,7 @@ HierarchyContentProvider::getConfigProvider(
     return (*it).second.xConfigProvider;
 }
 
-//=========================================================================
+
 uno::Reference< container::XHierarchicalNameAccess >
 HierarchyContentProvider::getRootConfigReadNameAccess(
                                 const OUString & rServiceSpecifier )
@@ -257,7 +257,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
     return (*it).second.xRootReadAccess;
 }
 
-//=========================================================================
+
 uno::Reference< util::XOfficeInstallationDirectories >
 HierarchyContentProvider::getOfficeInstallationDirectories()
 {

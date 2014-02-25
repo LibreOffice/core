@@ -25,7 +25,7 @@
 using namespace com::sun::star;
 using namespace ftp;
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpftp1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -36,9 +36,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpftp1_component_getFactory(
             pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
+
     // FTP Content Provider.
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( FTPContentProvider::getImplementationName_Static().
          equalsAscii( pImplName ) )

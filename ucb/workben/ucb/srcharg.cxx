@@ -33,11 +33,11 @@ using namespace unnamed_chaos_ucbdemo_srcharg;
 
 using namespace com::sun::star;
 
-//============================================================================
-//
+
+
 //  skipWhiteSpace
-//
-//============================================================================
+
+
 
 namespace unnamed_chaos_ucbdemo_srcharg {
 
@@ -48,11 +48,11 @@ void skipWhiteSpace(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
         ++rBegin;
 }
 
-//============================================================================
-//
+
+
 //  scanAtom
-//
-//============================================================================
+
+
 
 String scanAtom(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
 {
@@ -62,11 +62,11 @@ String scanAtom(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
     return String(pTheBegin, rBegin - pTheBegin);
 }
 
-//============================================================================
-//
+
+
 //  scanProperty
-//
-//============================================================================
+
+
 
 String scanProperty(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
 {
@@ -77,11 +77,11 @@ String scanProperty(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
     return String(pTheBegin, rBegin - pTheBegin);
 }
 
-//============================================================================
-//
+
+
 //  scanOperator
-//
-//============================================================================
+
+
 
 String scanOperator(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
 {
@@ -95,11 +95,11 @@ String scanOperator(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
 
 }
 
-//============================================================================
-//
+
+
 //  parseSearchArgument
-//
-//============================================================================
+
+
 
 bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
 {

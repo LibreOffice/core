@@ -40,11 +40,11 @@
 #include <ucbhelper/registerucb.hxx>
 
 #include <vector>
-//=========================================================================
+
 
 #define UCB_SERVICE_NAME "com.sun.star.ucb.UniversalContentBroker"
 
-//=========================================================================
+
 
 namespace cppu { class OInterfaceContainerHelper; }
 

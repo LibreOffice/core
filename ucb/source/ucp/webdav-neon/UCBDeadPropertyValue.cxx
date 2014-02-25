@@ -36,7 +36,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
+
 
 struct UCBDeadPropertyValueParseContext
 {
@@ -69,7 +69,7 @@ const OUString UCBDeadPropertyValue::aXMLEnd("</value></ucbprop>");
 #define STATE_TYPE      (STATE_TOP + 1)
 #define STATE_VALUE     (STATE_TOP + 2)
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int UCBDeadPropertyValue_startelement_callback(
     void *,
     int parent,
@@ -97,7 +97,7 @@ extern "C" int UCBDeadPropertyValue_startelement_callback(
     return NE_XML_DECLINE;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int UCBDeadPropertyValue_chardata_callback(
     void *userdata,
     int state,
@@ -128,7 +128,7 @@ extern "C" int UCBDeadPropertyValue_chardata_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int UCBDeadPropertyValue_endelement_callback(
     void *userdata,
     int state,
@@ -158,13 +158,13 @@ extern "C" int UCBDeadPropertyValue_endelement_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 static OUString encodeValue( const OUString & rValue )
 {
     // Note: I do not use the usual &amp; + &lt; + &gt; encoding, because
     //       I want to prevent any XML parser from trying to 'understand'
     //       the value. This caused problems:
-    //
+
     //       Example:
     //       - Unencoded property value: x<z
     //       PROPPATCH:
@@ -194,7 +194,7 @@ static OUString encodeValue( const OUString & rValue )
     return aResult.makeStringAndClear();
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 static OUString decodeValue( const OUString & rValue )
 {
     OUStringBuffer aResult;
@@ -305,7 +305,7 @@ static OUString decodeValue( const OUString & rValue )
     return aResult.makeStringAndClear();
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 // static
 bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 {
@@ -333,7 +333,7 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
     return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 // static
 bool UCBDeadPropertyValue::createFromXML( const OString & rInData,
                                           uno::Any & rOutData )
@@ -417,7 +417,7 @@ bool UCBDeadPropertyValue::createFromXML( const OString & rInData,
     return success;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 // static
 bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
                                   OUString & rOutData )

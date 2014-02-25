@@ -31,18 +31,18 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 
-//=========================================================================
+
 
 #define PROVIDER_FACTORY_SERVICE_NAME \
                             "com.sun.star.ucb.ContentProviderProxyFactory"
 #define PROVIDER_PROXY_SERVICE_NAME \
                             "com.sun.star.ucb.ContentProviderProxy"
 
-//============================================================================
-//
+
+
 // class UcbContentProviderProxyFactory.
-//
-//============================================================================
+
+
 
 class UcbContentProviderProxyFactory :
                 public cppu::OWeakObject,
@@ -75,11 +75,11 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
-//============================================================================
-//
+
+
 // class UcbContentProviderProxy.
-//
-//============================================================================
+
+
 
 class UcbContentProviderProxy :
                 public cppu::OWeakObject,

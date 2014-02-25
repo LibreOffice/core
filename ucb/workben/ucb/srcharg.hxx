@@ -25,7 +25,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     struct SearchInfo;
 } } } }
 
-//============================================================================
+
 bool parseSearchArgument(String const & rInput,
                          com::sun::star::ucb::SearchInfo & rInfo);
 

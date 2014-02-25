@@ -61,11 +61,11 @@
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
-//=========================================================================
-//
+
+
 // HierarchyContent implementation.
-//
-//=========================================================================
+
+
 
 #define MAKEPROPSEQUENCE( a ) \
     uno::Sequence< beans::Property >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
@@ -73,12 +73,12 @@ using namespace hierarchy_ucp;
 #define MAKECMDSEQUENCE( a ) \
     uno::Sequence< ucb::CommandInfo >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
 
-//=========================================================================
-//
+
+
 // IMPORTANT: If any property data ( name / type / ... ) are changed, then
 //            HierarchyContent::getPropertyValues(...) must be adapted too!
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Sequence< beans::Property > HierarchyContent::getProperties(
@@ -88,19 +88,19 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 
     if ( m_eKind == LINK )
     {
-        //=================================================================
-        //
+
+
         // Link: Supported properties
-        //
-        //=================================================================
+
+
 
         if ( isReadOnly() )
         {
             static const beans::Property aLinkPropertyInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required properties
-                ///////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
@@ -129,9 +129,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard properties
-                ///////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "TargetURL" ),
                     -1,
@@ -147,9 +147,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                         const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY )
-                ///////////////////////////////////////////////////////////
+
                 // New properties
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKEPROPSEQUENCE( aLinkPropertyInfoTable );
         }
@@ -157,9 +157,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         {
             static const beans::Property aLinkPropertyInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required properties
-                ///////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
@@ -187,9 +187,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                     getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard properties
-                ///////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "TargetURL" ),
                     -1,
@@ -204,28 +204,28 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                         const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY )
-                ///////////////////////////////////////////////////////////
+
                 // New properties
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKEPROPSEQUENCE( aLinkPropertyInfoTable );
         }
     }
     else if ( m_eKind == FOLDER )
     {
-        //=================================================================
-        //
+
+
         // Folder: Supported properties
-        //
-        //=================================================================
+
+
 
         if ( isReadOnly() )
         {
             static const beans::Property aFolderPropertyInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required properties
-                ///////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
@@ -254,9 +254,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard properties
-                ///////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString(
                         "CreatableContentsInfo" ),
@@ -265,9 +265,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                         const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY )
-                ///////////////////////////////////////////////////////////
+
                 // New properties
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKEPROPSEQUENCE( aFolderPropertyInfoTable );
         }
@@ -275,9 +275,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         {
             static const beans::Property aFolderPropertyInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required properties
-                ///////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
@@ -305,9 +305,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                     getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard properties
-                ///////////////////////////////////////////////////////////
+
                 beans::Property(
                     OUString(
                         "CreatableContentsInfo" ),
@@ -316,29 +316,29 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                         const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY )
-                ///////////////////////////////////////////////////////////
+
                 // New properties
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKEPROPSEQUENCE( aFolderPropertyInfoTable );
         }
     }
     else
     {
-        //=================================================================
-        //
+
+
         // Root Folder: Supported properties
-        //
-        //=================================================================
+
+
 
         // Currently no difference between reonly /read-write
         // -> all props ar read-only
 
         static const beans::Property aRootFolderPropertyInfoTable[] =
         {
-            ///////////////////////////////////////////////////////////////
+
             // Required properties
-            ///////////////////////////////////////////////////////////////
+
             beans::Property(
                 OUString( "ContentType" ),
                 -1,
@@ -367,9 +367,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
-            ///////////////////////////////////////////////////////////////
+
             // Optional standard properties
-            ///////////////////////////////////////////////////////////////
+
             beans::Property(
                     OUString(
                         "CreatableContentsInfo" ),
@@ -378,15 +378,15 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                         const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY )
-            ///////////////////////////////////////////////////////////////
+
             // New properties
-            ///////////////////////////////////////////////////////////////
+
         };
         return MAKEPROPSEQUENCE( aRootFolderPropertyInfoTable );
     }
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
@@ -395,19 +395,19 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
 
     if ( m_eKind == LINK )
     {
-        //=================================================================
-        //
+
+
         // Link: Supported commands
-        //
-        //=================================================================
+
+
 
         if ( isReadOnly() )
         {
             static const ucb::CommandInfo aLinkCommandInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -431,13 +431,13 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 )
-                ///////////////////////////////////////////////////////////
-                // Optional standard commands
-                ///////////////////////////////////////////////////////////
 
-                ///////////////////////////////////////////////////////////
+                // Optional standard commands
+
+
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKECMDSEQUENCE( aLinkCommandInfoTable );
         }
@@ -445,9 +445,9 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
         {
             static const ucb::CommandInfo aLinkCommandInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -471,9 +471,9 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "delete" ),
                     -1,
@@ -484,28 +484,28 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                     -1,
                     getCppuVoidType()
                 )
-                ///////////////////////////////////////////////////////////
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKECMDSEQUENCE( aLinkCommandInfoTable );
         }
     }
     else if ( m_eKind == FOLDER )
     {
-        //=================================================================
-        //
+
+
         // Folder: Supported commands
-        //
-        //=================================================================
+
+
 
         if ( isReadOnly() )
         {
             static const ucb::CommandInfo aFolderCommandInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -529,18 +529,18 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
                     getCppuType(
                         static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 )
-                ///////////////////////////////////////////////////////////
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKECMDSEQUENCE( aFolderCommandInfoTable );
         }
@@ -548,9 +548,9 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
         {
             static const ucb::CommandInfo aFolderCommandInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -574,9 +574,9 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "delete" ),
                     -1,
@@ -603,28 +603,28 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                     -1,
                     getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
                 )
-                ///////////////////////////////////////////////////////////
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKECMDSEQUENCE( aFolderCommandInfoTable );
         }
     }
     else
     {
-        //=================================================================
-        //
+
+
         // Root Folder: Supported commands
-        //
-        //=================================================================
+
+
 
         if ( isReadOnly() )
         {
             static const ucb::CommandInfo aRootFolderCommandInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -648,18 +648,18 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
                     getCppuType(
                         static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 )
-                ///////////////////////////////////////////////////////////
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKECMDSEQUENCE( aRootFolderCommandInfoTable );
         }
@@ -667,9 +667,9 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
         {
             static const ucb::CommandInfo aRootFolderCommandInfoTable[] =
             {
-                ///////////////////////////////////////////////////////////
+
                 // Required commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
@@ -693,9 +693,9 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                         static_cast<
                             uno::Sequence< beans::PropertyValue > * >( 0 ) )
                 ),
-                ///////////////////////////////////////////////////////////
+
                 // Optional standard commands
-                ///////////////////////////////////////////////////////////
+
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
@@ -712,9 +712,9 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                     -1,
                     getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
                 )
-                ///////////////////////////////////////////////////////////
+
                 // New commands
-                ///////////////////////////////////////////////////////////
+
             };
             return MAKECMDSEQUENCE( aRootFolderCommandInfoTable );
         }

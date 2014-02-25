@@ -38,11 +38,11 @@ using namespace tdoc_ucp;
 namespace tdoc_ucp
 {
 
-//=========================================================================
-//
+
+
 // struct ResultListEntry.
-//
-//=========================================================================
+
+
 
 struct ResultListEntry
 {
@@ -54,19 +54,19 @@ struct ResultListEntry
     ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
 };
 
-//=========================================================================
-//
+
+
 // ResultList.
-//
-//=========================================================================
+
+
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-//=========================================================================
-//
+
+
 // struct DataSupplier_Impl.
-//
-//=========================================================================
+
+
 
 struct DataSupplier_Impl
 {
@@ -90,7 +90,7 @@ struct DataSupplier_Impl
     ~DataSupplier_Impl();
 };
 
-//=========================================================================
+
 DataSupplier_Impl::~DataSupplier_Impl()
 {
     ResultList::const_iterator it  = m_aResults.begin();
