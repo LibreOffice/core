@@ -28,17 +28,17 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-//.........................................................................
+
 namespace utl
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     //= NodeValueAccessor
-    //=====================================================================
+
     enum LocationType
     {
         ltSimplyObjectInstance,
@@ -162,9 +162,9 @@ namespace utl
         }
     }
 
-    //=====================================================================
+
     //= functors on NodeValueAccessor instances
-    //=====================================================================
+
 
     /// base class for functors syncronizing between exchange locations and config sub nodes
     struct SubNodeAccess : public ::std::unary_function< NodeValueAccessor, void >
@@ -207,9 +207,9 @@ namespace utl
 
     typedef std::vector<NodeValueAccessor> NodeValueAccessors;
 
-    //=====================================================================
+
     //= OConfigurationValueContainerImpl
-    //=====================================================================
+
     struct OConfigurationValueContainerImpl
     {
         Reference< XComponentContext >          xORB;           // the service factory
@@ -225,9 +225,9 @@ namespace utl
         }
     };
 
-    //=====================================================================
+
     //= OConfigurationValueContainer
-    //=====================================================================
+
 
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rAccessSafety,
@@ -247,7 +247,7 @@ namespace utl
     {
         DBG_ASSERT( !m_pImpl->aConfigRoot.isValid(), "OConfigurationValueContainer::implConstruct: already initialized!" );
 
-        // .................................
+
         // create the configuration node we're about to work with
         m_pImpl->aConfigRoot = OConfigurationTreeRoot::createWithComponentContext(
             m_pImpl->xORB,
@@ -344,8 +344,8 @@ namespace utl
         lcl_copyData( _rAccessor, m_pImpl->aConfigRoot.getNodeValue( _rAccessor.getPath() ), m_pImpl->rMutex );
     }
 
-//.........................................................................
+
 }   // namespace utl
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

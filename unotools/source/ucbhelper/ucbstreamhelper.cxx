@@ -138,7 +138,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
     return pStream;
 }
 
-//============================================================================
+
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          UcbLockBytesHandler* pHandler )

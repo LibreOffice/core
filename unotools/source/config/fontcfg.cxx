@@ -431,7 +431,7 @@ FontSubstConfiguration::~FontSubstConfiguration()
 /*
  *  FontSubstConfigItem::getMapName
  */
-// =======================================================================
+
 
 static const char* const aImplKillLeadingList[] =
 {
@@ -748,7 +748,7 @@ static bool ImplFindAndErase( OUString& rName, const char* pStr )
     return true;
 }
 
-// =======================================================================
+
 
 void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rShortName,
                                          OUString& rFamilyName, FontWeight& rWeight,

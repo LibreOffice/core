@@ -36,10 +36,10 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -48,9 +48,9 @@ namespace utl
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::configuration;
 
-    //========================================================================
+
     //= OConfigurationNode
-    //========================================================================
+
 
     OConfigurationNode::OConfigurationNode(const Reference< XInterface >& _rxNode )
         :m_bEscapeNames(false)
@@ -479,9 +479,9 @@ namespace utl
         m_xContainerAccess.clear();
     }
 
-    //========================================================================
+
     //= helper
-    //========================================================================
+
     namespace
     {
 
@@ -611,8 +611,8 @@ namespace utl
         return OConfigurationTreeRoot();
     }
 
-//........................................................................
+
 }   // namespace utl
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

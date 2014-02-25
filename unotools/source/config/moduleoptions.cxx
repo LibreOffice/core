@@ -39,7 +39,7 @@
 
 #include "itemholder1.hxx"
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          These values are used to define necessary keys from our configuration management to support
                     all functionality of these implementation.
                     It's a fast way to make changes if some keys change his name or location!
@@ -84,7 +84,7 @@
 
 #define FACTORYCOUNT                        10
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr  This struct hold information about one factory. We declare a complete array which can hold infos
             for all well known factories. Values of enum "EFactory" (see header!) are directly used as index!
             So we can support a fast access on these information.
@@ -285,7 +285,7 @@ struct FactoryInfo
 
 typedef FactoryInfo   FactoryInfoList[FACTORYCOUNT];
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          IMPL data container for wrapper class SvtModulOptions!
     @descr          These class is used as a static data container of class SvtModuleOptions. The hold it by using
                     a refcount and make it threadsafe by using an osl mutex. So we don't must do anything for that.
@@ -354,7 +354,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         bool            m_bReadOnlyStatesWellKnown;
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      default ctor
     @descr      We open our configuration here and read all necessary values from it.
                 These values are cached till everyone call Commit(). Then we write changed ones back to cfg.
@@ -386,7 +386,7 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     EnableNotification( lFactories );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      default dtor
     @descr      If any values of our cache was modified we should write it back to configuration.
 
@@ -409,7 +409,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      called for notify of configmanager
     @descr      These method is called from the ConfigManager before application ends or from the
                 PropertyChangeListener if the sub tree broadcasts changes. You must update our
@@ -433,7 +433,7 @@ void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
     OSL_FAIL( "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @short      write changes to configuration
     @descr      These method writes the changed values into the sub tree
                 and should always called in our destructor to guarantee consistency of config data.
@@ -486,7 +486,7 @@ void SvtModuleOptions_Impl::Commit()
     }
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @short      access method to get internal values
     @descr      These methods implement easy access to our internal values.
                 You give us right enum value to specify which module interest you ... we return right information.
@@ -587,7 +587,7 @@ bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eModule
     return aRet;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sName;
@@ -600,7 +600,7 @@ OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFact
     return sName;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFactory)
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
@@ -639,7 +639,7 @@ OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFacto
     return sShortName;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sFile;
@@ -652,7 +652,7 @@ OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EF
     return sFile;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory ) const
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
@@ -690,7 +690,7 @@ OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EF
     return sURL;
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sDefaultFilter;
@@ -701,7 +701,7 @@ OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFact
     }
     return sDefaultFilter;
 }
-//*****************************************************************************************************************
+
 bool SvtModuleOptions_Impl::IsDefaultFilterReadonly( SvtModuleOptions::EFactory eFactory   ) const
 {
     bool bRet = false;
@@ -712,7 +712,7 @@ bool SvtModuleOptions_Impl::IsDefaultFilterReadonly( SvtModuleOptions::EFactory 
     return bRet;
 }
 
-//*****************************************************************************************************************
+
 sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFactory ) const
 {
     sal_Int32 nIcon = 0;
@@ -725,7 +725,7 @@ sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFac
     return nIcon;
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::EFactory eFactory   ,
                                                         const OUString&           sTemplate  )
 {
@@ -736,7 +736,7 @@ void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::
     }
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFactory eFactory,
                                                      const OUString&           sFilter )
 {
@@ -747,7 +747,7 @@ void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFa
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      return list of key names of ouer configuration management which represent our module tree
     @descr      You give use a list of current existing set node names .. and we expand it for all
                 well known properties which are necessary for this implementation.
@@ -782,7 +782,7 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
     return lPropNames;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      helper to classify given factory by name
     @descr      Every factory has his own long and short name. So we can match right enum value for internal using.
 
@@ -865,7 +865,7 @@ bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtMod
     return bState;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      read factory configuration
     @descr      Give us a list of pure factory names (long names!) which can be used as
                 direct set node names ... and we read her property values and fill internal list.
@@ -939,7 +939,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
     }
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 {
     if (m_bReadOnlyStatesWellKnown)
@@ -974,15 +974,15 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     m_bReadOnlyStatesWellKnown = true;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL  ;
 sal_Int32               SvtModuleOptions::m_nRefCount       = 0     ;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard constructor and destructor
     @descr      This will initialize an instance with default values. We initialize/deinitialize our static data
                 container and create a static mutex, which is used for threadsafe code in further time of this object.
@@ -1007,7 +1007,7 @@ SvtModuleOptions::SvtModuleOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 SvtModuleOptions::~SvtModuleOptions()
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
@@ -1019,7 +1019,7 @@ SvtModuleOptions::~SvtModuleOptions()
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      access to configuration data
     @descr      This methods allow read/write access to configuration values.
                 They are threadsafe. All calls are forwarded to impl-data-container. See there for further information!
@@ -1038,48 +1038,48 @@ bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
     return m_pDataContainer->IsModuleInstalled( eModule );
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryName( eFactory );
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryStandardTemplate( eFactory );
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryEmptyDocumentURL( eFactory );
 }
 
-//*****************************************************************************************************************
+
 OUString SvtModuleOptions::GetFactoryDefaultFilter( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryDefaultFilter( eFactory );
 }
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsDefaultFilterReadonly( EFactory eFactory   ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     m_pDataContainer->MakeReadonlyStatesAvailable();
     return m_pDataContainer->IsDefaultFilterReadonly( eFactory );
 }
-//*****************************************************************************************************************
+
 sal_Int32 SvtModuleOptions::GetFactoryIcon( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryIcon( eFactory );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::ClassifyFactoryByName( const OUString& sName    ,
                                                         EFactory&        eFactory )
 {
@@ -1087,7 +1087,7 @@ bool SvtModuleOptions::ClassifyFactoryByName( const OUString& sName    ,
     return SvtModuleOptions_Impl::ClassifyFactoryByName( sName, eFactory );
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFactory   ,
                                                    const OUString& sTemplate  )
 {
@@ -1095,7 +1095,7 @@ void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFacto
     m_pDataContainer->SetFactoryStandardTemplate( eFactory, sTemplate );
 }
 
-//*****************************************************************************************************************
+
 void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
                                                 const OUString& sFilter )
 {
@@ -1103,54 +1103,54 @@ void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
     m_pDataContainer->SetFactoryDefaultFilter( eFactory, sFilter );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsMath() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SMATH );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsChart() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SCHART );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsCalc() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SCALC );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsDraw() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SDRAW );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsWriter() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SWRITER );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsImpress() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SIMPRESS );
 }
 
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsBasicIDE() const
 {
     return true;
 }
-//*****************************************************************************************************************
+
 bool SvtModuleOptions::IsDataBase() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
@@ -1161,7 +1161,7 @@ namespace
 {
     class theModuleOptionsMutex : public rtl::Static<osl::Mutex, theModuleOptionsMutex> {};
 }
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @short      return a reference to a static mutex
     @descr      These class is threadsafe.
                 We create a static mutex only for one time and use it to protect our refcount and container

@@ -25,17 +25,17 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
 
-//.........................................................................
+
 namespace utl
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     //= OEventListenerImpl
-    //=====================================================================
+
     class OEventListenerImpl : public ::cppu::WeakImplHelper1< XEventListener >
     {
     protected:
@@ -93,18 +93,18 @@ namespace utl
         m_pAdapter->_disposing(_rSource);
     }
 
-    //=====================================================================
+
     //= OEventListenerAdapterImpl
-    //=====================================================================
+
     struct OEventListenerAdapterImpl
     {
     public:
         ::std::vector< void* >  aListeners;
     };
 
-    //=====================================================================
+
     //= OEventListenerAdapter
-    //=====================================================================
+
 
     OEventListenerAdapter::OEventListenerAdapter()
         :m_pImpl(new OEventListenerAdapterImpl)
@@ -170,8 +170,8 @@ namespace utl
         m_pImpl->aListeners.push_back(pListenerImpl);
     }
 
-//.........................................................................
+
 }   // namespace utl
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
