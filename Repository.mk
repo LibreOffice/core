@@ -537,6 +537,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	tvhlp1 \
 	ucb1 \
 	ucbhelper \
+	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucpfile1 \
 	ucpftp1 \
 	ucpchelp1 \
@@ -569,7 +570,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	pyuno \
 	pyuno_wrapper \
 	recentfile \
-	ucpdav1 \
 	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \

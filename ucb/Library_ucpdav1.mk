@@ -24,6 +24,8 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(WITH_WEBDAV),neon)
+
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
 	libxml2 \
@@ -54,6 +56,59 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-neon/webdavresultset \
 	ucb/source/ucp/webdav-neon/webdavservices \
 ))
+
+else # WITH_WEBDAV == serf
+
+$(eval $(call gb_Library_set_warnings_not_errors,ucpdav1))
+
+$(eval $(call gb_Library_use_externals,ucpdav1,\
+	boost_headers \
+	apr \
+	openssl \
+	serf \
+	zlib \
+))
+
+$(eval $(call gb_Library_add_libs,ucpdav1,\
+	$(if $(filter $(OS),LINUX),-lpthread) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,ucpdav1,\
+	ucb/source/ucp/webdav/AprEnv \
+	ucb/source/ucp/webdav/ContentProperties \
+	ucb/source/ucp/webdav/DAVProperties \
+	ucb/source/ucp/webdav/DAVResourceAccess \
+	ucb/source/ucp/webdav/DAVSessionFactory \
+	ucb/source/ucp/webdav/DateTimeHelper \
+	ucb/source/ucp/webdav/SerfCallbacks \
+	ucb/source/ucp/webdav/SerfCopyReqProcImpl \
+	ucb/source/ucp/webdav/SerfDeleteReqProcImpl \
+	ucb/source/ucp/webdav/SerfGetReqProcImpl \
+	ucb/source/ucp/webdav/SerfHeadReqProcImpl \
+	ucb/source/ucp/webdav/SerfInputStream \
+	ucb/source/ucp/webdav/SerfMkColReqProcImpl \
+	ucb/source/ucp/webdav/SerfMoveReqProcImpl \
+	ucb/source/ucp/webdav/SerfPostReqProcImpl \
+	ucb/source/ucp/webdav/SerfPropFindReqProcImpl \
+	ucb/source/ucp/webdav/SerfPropPatchReqProcImpl \
+	ucb/source/ucp/webdav/SerfPutReqProcImpl \
+	ucb/source/ucp/webdav/SerfRequestProcessor \
+	ucb/source/ucp/webdav/SerfRequestProcessorImpl \
+	ucb/source/ucp/webdav/SerfRequestProcessorImplFac \
+	ucb/source/ucp/webdav/SerfSession \
+	ucb/source/ucp/webdav/SerfUri \
+	ucb/source/ucp/webdav/UCBDeadPropertyValue \
+	ucb/source/ucp/webdav/webdavcontent \
+	ucb/source/ucp/webdav/webdavcontentcaps \
+	ucb/source/ucp/webdav/webdavdatasupplier \
+	ucb/source/ucp/webdav/webdavprovider \
+	ucb/source/ucp/webdav/webdavresponseparser \
+	ucb/source/ucp/webdav/webdavresultset \
+	ucb/source/ucp/webdav/webdavservices \
+ ))
+	#ucb/source/ucp/webdav/SerfLockStore
+
+endif # WITH_WEBDAV
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,ucpdav1,\
