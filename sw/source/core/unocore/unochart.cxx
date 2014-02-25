@@ -554,7 +554,8 @@ SwChartDataProvider::~SwChartDataProvider()
 
 uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createDataSource(
         const uno::Sequence< beans::PropertyValue >& rArguments, sal_Bool bTestOnly )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     if (bDisposed)
