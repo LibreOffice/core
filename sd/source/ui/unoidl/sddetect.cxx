@@ -352,6 +352,17 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                         pStm = aMedium.GetInStream();
                         if (!pStm)
                             pFilter = NULL;
+
+                        pStm->Seek(STREAM_SEEK_TO_END);
+                        const sal_Size nSize = pStm->Tell();
+                        pStm->Seek(STREAM_SEEK_TO_BEGIN);
+
+                        // Do not attempt to create an SotStorage on a
+                        // 0-length stream as that would create the compound
+                        // document header on the stream and effectively write to
+                        // disk!
+                        if (!nSize)
+                            pFilter = NULL;
                     }
 
                     if (pFilter && pStm)
