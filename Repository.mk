@@ -533,7 +533,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	textconv_dict \
 	ucb1 \
 	ucbhelper \
-	$(if $(DISABLE_NEON),,ucpdav1) \
+	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucpfile1 \
 	ucpftp1 \
 	ucpchelp1 \

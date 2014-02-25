@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	Library_srtrs1 \
 	Library_ucb1 \
 	$(if $(ENABLE_CMIS),Library_ucpcmis1) \
+	$(if $(WITH_WEBDAV),Library_ucpdav1) \
 	Library_ucpexpand1 \
 	Library_ucpext \
 	Library_ucpfile1 \
@@ -22,12 +23,6 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	Library_ucppkg1 \
 	Library_ucptdoc1 \
 ))
-
-ifneq ($(DISABLE_NEON),TRUE)
-$(eval $(call gb_Module_add_targets,ucb,\
-	Library_ucpdav1 \
-))
-endif
 
 ifeq ($(ENABLE_GIO),TRUE)
 $(eval $(call gb_Module_add_targets,ucb,\
