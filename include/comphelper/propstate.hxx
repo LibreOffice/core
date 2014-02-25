@@ -32,18 +32,18 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-//=========================================================================
-//= property helper classes
-//=========================================================================
 
-//.........................................................................
+//= property helper classes
+
+
+
 namespace comphelper
 {
-//.........................................................................
 
-    //==================================================================
+
+
     //= OPropertyStateHelper
-    //==================================================================
+
     /// helper class for implementing property states
     class COMPHELPER_DLLPUBLIC OPropertyStateHelper :public ::cppu::OPropertySetHelper2
                                                     ,public ::com::sun::star::beans::XPropertyState
@@ -79,9 +79,9 @@ namespace comphelper
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-    //==================================================================
+
     //= OPropertyStateHelper
-    //==================================================================
+
     class COMPHELPER_DLLPUBLIC OStatefulPropertySet  :public ::cppu::OWeakObject
                                 ,public ::com::sun::star::lang::XTypeProvider
                                 ,public OMutexAndBroadcastHelper    // order matters: before OPropertyStateHelper/OPropertySetHelper
@@ -96,9 +96,9 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER()
     };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_PROPSTATE_HXX
 

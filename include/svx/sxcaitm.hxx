@@ -24,23 +24,23 @@
 #include <svx/sdangitm.hxx>
 #include <svx/sdooitm.hxx>
 
-//------------------------------------
+
 // class SdrCaptionFixedAngleItem
 // sal_True=Winkel durch SdrCaptionAngleItem vorgegeben
 // sal_False=Freier Winkel
-//------------------------------------
+
 class SdrCaptionFixedAngleItem: public SdrOnOffItem {
 public:
     SdrCaptionFixedAngleItem(sal_Bool bFix=sal_True): SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,bFix) {}
     SdrCaptionFixedAngleItem(SvStream& rIn) : SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,rIn)  {}
 };
 
-//------------------------------
+
 // class SdrCaptionAngleItem
 // Winkelangabe in 1/100 Degree
 // Nur bei Type2, Type3 und Type4
 // und nur wenn SdrCaptionIsFixedAngleItem=TRUE
-//------------------------------
+
 class SdrCaptionAngleItem: public SdrAngleItem {
 public:
     SdrCaptionAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_CAPTIONANGLE,nAngle) {}

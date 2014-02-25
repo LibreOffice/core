@@ -28,14 +28,14 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//=========================================================================
+
 //= property helper classes
-//=========================================================================
+
 
 //... namespace comphelper .......................................................
 namespace comphelper
 {
-//.........................................................................
+
 
 struct PropertyMapEntry
 {
@@ -80,7 +80,7 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//.........................................................................
+
 }
 //... namespace comphelper .......................................................
 

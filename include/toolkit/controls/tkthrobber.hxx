@@ -28,14 +28,14 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= UnoThrobberControlModel
-    //====================================================================
+
     class UnoThrobberControlModel : public UnoControlModel
     {
     protected:
@@ -59,9 +59,9 @@ namespace toolkit
         ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     };
 
-    //====================================================================
+
     //= UnoThrobberControl
-    //====================================================================
+
 
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XThrobber
                                 >   UnoThrobberControl_Base;
@@ -94,9 +94,9 @@ namespace toolkit
         ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     };
 
-//........................................................................
+
 } // namespacetoolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_TKTHROBBER_HXX
 

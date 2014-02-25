@@ -22,36 +22,36 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-//------------------------------
+
 // class SdrAllPositionXItem
-//------------------------------
+
 class SdrAllPositionXItem: public SdrMetricItem {
 public:
     SdrAllPositionXItem(long nPosX=0): SdrMetricItem(SDRATTR_ALLPOSITIONX,nPosX) {}
     SdrAllPositionXItem(SvStream& rIn): SdrMetricItem(SDRATTR_ALLPOSITIONX,rIn)  {}
 };
 
-//------------------------------
+
 // class SdrAllPositionYItem
-//------------------------------
+
 class SdrAllPositionYItem: public SdrMetricItem {
 public:
     SdrAllPositionYItem(long nPosY=0): SdrMetricItem(SDRATTR_ALLPOSITIONY,nPosY) {}
     SdrAllPositionYItem(SvStream& rIn): SdrMetricItem(SDRATTR_ALLPOSITIONY,rIn)  {}
 };
 
-//------------------------------
+
 // class SdrAllSizeWidthItem
-//------------------------------
+
 class SdrAllSizeWidthItem: public SdrMetricItem {
 public:
     SdrAllSizeWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_ALLSIZEWIDTH,nWdt)  {}
     SdrAllSizeWidthItem(SvStream& rIn): SdrMetricItem(SDRATTR_ALLSIZEWIDTH,rIn) {}
 };
 
-//------------------------------
+
 // class SdrAllSizeWidthItem
-//------------------------------
+
 class SdrAllSizeHeightItem: public SdrMetricItem {
 public:
     SdrAllSizeHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_ALLSIZEHEIGHT,nHgt)  {}

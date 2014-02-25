@@ -31,17 +31,17 @@
 
 class PushButton;
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     class PanelTabBar_Impl;
     class IToolPanelDeck;
 
-    //====================================================================
+
     //= PanelTabBar
-    //====================================================================
+
     /** a tab bar for selecting panels
 
         At the moment, this control aligns the tabs vertically, this might be extended to also support a horizontal
@@ -87,9 +87,9 @@ namespace svt
         ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_PANELTABBAR_HXX
 

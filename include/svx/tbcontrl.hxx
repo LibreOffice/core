@@ -162,11 +162,11 @@ namespace svx
 {
     class ToolboxButtonColorUpdater;
 }
-//########################################################################
 
-//========================================================================
+
+
 // class SvxStyleToolBoxControl ------------------------------------------
-//========================================================================
+
 class SVX_DLLPUBLIC SvxStyleToolBoxControl : public SfxToolBoxControl
 {
     struct Impl;
@@ -215,9 +215,9 @@ friend class SfxStyleControllerItem_Impl;
     SVX_DLLPRIVATE SfxStyleFamily   GetActFamily    ();
 };
 
-//========================================================================
+
 // class SvxFontNameToolBoxControl ---------------------------------------
-//========================================================================
+
 
 
 class SVX_DLLPUBLIC SvxFontNameToolBoxControl : public SfxToolBoxControl
@@ -233,9 +233,9 @@ public:
 
 
 
-//========================================================================
+
 // class SvxFontColorToolBoxControl --------------------------------------
-//========================================================================
+
 
 
 
@@ -257,9 +257,9 @@ public:
 
 
 
-//========================================================================
+
 // class SvxColorExtToolBoxControl --------------------------------------
-//========================================================================
+
 
 
 
@@ -286,9 +286,9 @@ public:
 
 
 
-//========================================================================
+
 // class SvxColorToolBoxControl ------------------------------------------
-//========================================================================
+
 
 
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
@@ -308,9 +308,9 @@ public:
 
 
 
-//========================================================================
+
 // class SvxFrameToolBoxControl ------------------------------------------
-//========================================================================
+
 
 
 class SVX_DLLPUBLIC SvxFrameToolBoxControl : public SfxToolBoxControl
@@ -328,9 +328,9 @@ public:
 
 
 
-//========================================================================
+
 // class SvxLineStyleToolBoxControl --------------------------------------
-//========================================================================
+
 
 
 class SVX_DLLPUBLIC SvxFrameLineStyleToolBoxControl : public SfxToolBoxControl
@@ -347,9 +347,9 @@ public:
 
 
 
-//========================================================================
+
 // class SvxFrameLineColorToolBoxControl ---------------------------------
-//========================================================================
+
 
 
 class SVX_DLLPUBLIC SvxFrameLineColorToolBoxControl : public SfxToolBoxControl

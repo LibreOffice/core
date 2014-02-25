@@ -21,12 +21,12 @@
 namespace msfilter {
 namespace util {
 
-/// Returns the best-fit default 8bit encoding for a given locale
-/// i.e. useful when dealing with legacy formats which use legacy text encodings without recording
-/// what the encoding is, but you know or can guess the language
+// Returns the best-fit default 8bit encoding for a given locale
+// i.e. useful when dealing with legacy formats which use legacy text encodings without recording
+// what the encoding is, but you know or can guess the language
 MSFILTER_DLLPUBLIC rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Locale &rLocale);
 
-/// Convert a color in BGR format to RGB.
+// Convert a color in BGR format to RGB.
 MSFILTER_DLLPUBLIC sal_uInt32 BGRToRGB(sal_uInt32 nColour);
 
 /** Convert from DTTM to Writer's DateTime
@@ -42,24 +42,24 @@ I guess there must be an implementation of this somewhere in LO, but I failed
 to find it, unfortunately :-(
 */
 
-/// Given a cBullet in encoding r_ioChrSet and fontname r_ioFontName return a
-/// suitable new Bullet and change r_ioChrSet and r_ioFontName to form the
-/// best-fit replacement in terms of default available MSOffice symbol
-/// fonts.
-///
-/// Set bDisableUnicodeSupport when exporting to 8bit encodings
-///
-/// Used to map from [Open|Star]Symbol to some Windows font or other.
+// Given a cBullet in encoding r_ioChrSet and fontname r_ioFontName return a
+// suitable new Bullet and change r_ioChrSet and r_ioFontName to form the
+// best-fit replacement in terms of default available MSOffice symbol
+// fonts.
+
+// Set bDisableUnicodeSupport when exporting to 8bit encodings
+
+// Used to map from [Open|Star]Symbol to some Windows font or other.
 MSFILTER_DLLPUBLIC sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cBullet,
     rtl_TextEncoding& r_ioChrSet, OUString& r_ioFontName, bool bDisableUnicodeSupport = false);
 
 
 enum TextCategory
 {
-    latin,      //Latin
-    cs,         //Complex Script
-    ea,         //East Asian
-    sym         //Symbol
+    latin,      // Latin
+    cs,         // Complex Script
+    ea,         // East Asian
+    sym         // Symbol
 };
 
 /** Categorize codepoints according to how MS seems to do it.
@@ -82,7 +82,7 @@ MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const 
 MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor, bool bAutoColor = false );
 
 
-/** Paper size in 1/100 millimeters. */
+// Paper size in 1/100 millimeters
 struct MSFILTER_DLLPUBLIC ApiPaperSize
 {
     sal_Int32           mnWidth;
@@ -132,10 +132,10 @@ struct MSFILTER_DLLPUBLIC EquationResult
 
 MSFILTER_DLLPUBLIC EquationResult ParseCombinedChars(const OUString& rStr);
 
-/// Similar to EnhancedCustomShapeTypeNames::Get(), but it also supports OOXML types and returns a drawingML string.
+// Similar to EnhancedCustomShapeTypeNames::Get(), but it also supports OOXML types and returns a drawingML string.
 MSFILTER_DLLPUBLIC const char* GetOOXMLPresetGeometry( const char* sShapeType );
 
-/// Similar to EnhancedCustomShapeTypeNames::Get(), but returns an MSO_SPT (binary / VML type).
+// Similar to EnhancedCustomShapeTypeNames::Get(), but returns an MSO_SPT (binary / VML type).
 MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(OString aType);
 
 }

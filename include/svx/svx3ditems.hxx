@@ -325,7 +325,7 @@ public:
     SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 // #107245# Item to replace bExtrudeSmoothed and bLatheSmoothed
 class Svx3DSmoothNormalsItem : public SfxBoolItem {
 public:

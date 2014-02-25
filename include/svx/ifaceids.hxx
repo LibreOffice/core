@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_IFACEIDS_HXX
 #define INCLUDED_SVX_IFACEIDS_HXX
 
-// -----------------------------------------------------------------------
+
 
 #include <sfx2/shell.hxx>
 

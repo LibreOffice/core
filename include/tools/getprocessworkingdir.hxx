@@ -27,7 +27,7 @@
 namespace tools {
 
 // get the process's current working directory, taking OOO_CWD into account
-//
+
 // @param rUrl
 // Receives the directory URL (with or without a final slash) upon successful
 // return, and the empty string upon unsuccessful return

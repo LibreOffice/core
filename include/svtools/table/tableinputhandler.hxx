@@ -28,16 +28,16 @@ class HelpEvent;
 class CommandEvent;
 class NotifyEvent;
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
+
 
     class ITableControl;
 
-    //====================================================================
+
     //= ITableInputHandler
-    //====================================================================
+
     /** interface for components handling input in a ->TableControl
     */
     class ITableInputHandler
@@ -64,9 +64,9 @@ namespace svt { namespace table
     };
     typedef ::boost::shared_ptr< ITableInputHandler >   PTableInputHandler;
 
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLEINPUTHANDLER_HXX
 

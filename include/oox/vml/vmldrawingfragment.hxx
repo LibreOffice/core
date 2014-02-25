@@ -28,7 +28,7 @@ namespace vml {
 
 class Drawing;
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC DrawingFragment : public ::oox::core::FragmentHandler2
 {
@@ -50,7 +50,7 @@ private:
     Drawing&            mrDrawing;
 };
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

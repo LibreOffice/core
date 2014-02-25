@@ -16,7 +16,7 @@
 
 namespace oox {
 namespace ole {
-// ============================================================================
+
 
 /** A wrapper for a binary output stream that supports aligned write operations.
 
@@ -75,7 +75,7 @@ typedef ::std::pair< sal_Int32, sal_Int32 > AxPairData;
 /** An array of string values as a property. */
 typedef ::std::vector< OUString > AxStringArray;
 
-// ============================================================================
+
 
 /** Export helper to write simple and complex ActiveX form control properties
     to a binary input stream. */
@@ -167,7 +167,7 @@ private:
     bool                mb64BitPropFlags;
 };
 
-// ============================================================================
+
 } // namespace ole
 } // namespace oox
 

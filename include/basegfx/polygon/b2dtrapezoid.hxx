@@ -25,7 +25,7 @@
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -36,7 +36,7 @@ namespace basegfx
         // Geometry data. YValues are down-oriented, this means bottom should
         // be bigger than top to be below it. The constructor implementation
         // guarantees:
-        //
+
         // - mfBottomY >= mfTopY
         // - mfTopXRight >= mfTopXLeft
         // - mfBottomXRight >= mfBottomXLeft
@@ -73,7 +73,7 @@ namespace basegfx
 
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -117,7 +117,7 @@ namespace basegfx
     } // end of namespace tools
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_BASEGFX_POLYGON_B2DTRAPEZOID_HXX
 

@@ -25,20 +25,20 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//=========================================================================
-//= selection helper classes
-//=========================================================================
 
-//.........................................................................
+//= selection helper classes
+
+
+
 namespace comphelper
 {
-//.........................................................................
+
 
     class OSelectionChangeMultiplexer;
 
-    //==================================================================
+
     //= OSelectionChangeListener
-    //==================================================================
+
     /// simple listener adapter for selections
     class COMPHELPER_DLLPUBLIC OSelectionChangeListener
     {
@@ -61,9 +61,9 @@ namespace comphelper
         void    setAdapter( OSelectionChangeMultiplexer* _pAdapter );
     };
 
-    //==================================================================
+
     //= OSelectionChangeMultiplexer
-    //==================================================================
+
     /// multiplexer for selection changes
     class COMPHELPER_DLLPUBLIC OSelectionChangeMultiplexer  :public cppu::WeakImplHelper1< ::com::sun::star::view::XSelectionChangeListener>
     {
@@ -97,9 +97,9 @@ namespace comphelper
         void dispose();
     };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_SELECTIONMULTIPLEX_HXX
 

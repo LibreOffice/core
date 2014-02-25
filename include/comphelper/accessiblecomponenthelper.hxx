@@ -27,14 +27,14 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OCommonAccessibleComponent
-    //=====================================================================
+
     /** base class encapsulating common functionality for the helper classes implementing
         the XAccessibleComponent respectively XAccessibleExtendendComponent
     */
@@ -61,9 +61,9 @@ namespace comphelper
         ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
     };
 
-    //=====================================================================
+
     //= OAccessibleComponentHelper
-    //=====================================================================
+
 
     struct OAccessibleComponentHelper_Base :
         public ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleComponent >
@@ -96,9 +96,9 @@ namespace comphelper
         virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-    //=====================================================================
+
     //= OAccessibleExtendedComponentHelper
-    //=====================================================================
+
 
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleExtendedComponent
                                 >   OAccessibleExtendedComponentHelper_Base;
@@ -127,9 +127,9 @@ namespace comphelper
         virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_ACCESSIBLECOMPONENTHELPER_HXX
 

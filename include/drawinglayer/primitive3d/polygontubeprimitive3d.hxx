@@ -24,7 +24,7 @@
 
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace basegfx {
@@ -32,7 +32,7 @@ namespace basegfx {
     class B3DHomMatrix;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -101,7 +101,7 @@ namespace drawinglayer
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
 

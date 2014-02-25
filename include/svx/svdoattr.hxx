@@ -28,9 +28,9 @@
 #include <svx/svdattr.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   Initial Declarations
-//************************************************************
+
 
 class SfxPoolItem;
 class SfxSetItem;
@@ -38,9 +38,9 @@ class SdrOutliner;
 class SfxItemSet;
 class SfxItemPool;
 
-//************************************************************
+
 //   SdrAttrObj
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrAttrObj : public SdrObject
 {
@@ -76,7 +76,7 @@ public:
     virtual void SetModel(SdrModel* pNewModel);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDOATTR_HXX
 

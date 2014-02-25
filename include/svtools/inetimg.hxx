@@ -24,7 +24,7 @@
 class SvData;
 class SotDataObject;
 
-//=========================================================================
+
 
 class INetImage
 {

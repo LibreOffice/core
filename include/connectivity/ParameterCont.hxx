@@ -25,9 +25,9 @@
 
 namespace dbtools
 {
-//====================================================================
+
     //= OParameterContinuation
-    //====================================================================
+
     class OOO_DLLPUBLIC_DBTOOLS OParameterContinuation : public comphelper::OInteraction< ::com::sun::star::sdb::XInteractionSupplyParameters >
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >       m_aValues;

@@ -24,7 +24,7 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/contextid.hxx>
 
-//______________________________________________________________________________
+
 
 #define XML_PM_TYPE_PAGESTYLELAYOUT     (XML_PM_TYPES_START +  0)
 #define XML_PM_TYPE_NUMFORMAT           (XML_PM_TYPES_START +  1)

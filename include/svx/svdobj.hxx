@@ -942,7 +942,7 @@ public:
 
     // retrieves the instance responsible for notifying changes in the properties of the shape associated with
     // the SdrObject
-    //
+
     // @precond
     //     There already exists an SvxShape instance associated with the SdrObject
     // @throws ::com::sun::star::uno::RuntimeException
@@ -951,7 +951,7 @@ public:
         getShapePropertyChangeNotifier();
 
     // notifies a change in the given property, to all applicable listeners registered at the associated SvxShape
-    //
+
     // This method is equivalent to calling getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty ),
     // exception that it is allowed to be called when there does not yet exist an associated SvxShape - in which
     // case the method will silently return without doing anything.
@@ -961,7 +961,7 @@ public:
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
     // moment it contains a shearX, rotation and translation, but for setting all linear
     // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
-    //
+
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
@@ -998,12 +998,12 @@ public:
 
 protected:
     // Sets a new UNO shape
-    //
+
     // The default implementation of this function sets the new UNO
     // shape. Derived classes should override the function to handle
     // any other actions that are needed when the shape is being
     // changed.
-    //
+
     // The implementation _must_ call the same method of its parent
     // class (preferably as the first step)!
     virtual void    impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );

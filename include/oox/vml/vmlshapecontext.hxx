@@ -38,7 +38,7 @@ class RectangleShape;
 
 class ShapeContainer;
 
-// ============================================================================
+
 
 class ShapeLayoutContext : public ::oox::core::ContextHandler2
 {
@@ -54,7 +54,7 @@ private:
     Drawing&            mrDrawing;
 };
 
-// ============================================================================
+
 
 class ClientDataContext : public ::oox::core::ContextHandler2
 {
@@ -74,7 +74,7 @@ private:
     OUString     maElementText;
 };
 
-// ============================================================================
+
 
 class ShapeContextBase : public ::oox::core::ContextHandler2
 {
@@ -90,7 +90,7 @@ protected:
     explicit            ShapeContextBase( ::oox::core::ContextHandler2Helper& rParent );
 };
 
-// ============================================================================
+
 
 class ShapeTypeContext : public ShapeContextBase
 {
@@ -114,7 +114,7 @@ private:
     ShapeTypeModel&     mrTypeModel;
 };
 
-// ============================================================================
+
 
 class ShapeContext : public ShapeTypeContext
 {
@@ -148,7 +148,7 @@ private:
     ShapeModel&         mrShapeModel;
 };
 
-// ============================================================================
+
 
 class GroupShapeContext : public ShapeContext
 {
@@ -165,7 +165,7 @@ private:
     ShapeContainer&     mrShapes;
 };
 
-// ============================================================================
+
 
 class RectangleShapeContext : public ShapeContext
 {
@@ -178,7 +178,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

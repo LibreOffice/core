@@ -30,14 +30,14 @@
 #include <rtl/ustring.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
 
-    //=========================================================================
+
+
     //= OCharsetMap
-    //=========================================================================
+
     /** is a class which translates between different charset representations.
 
         <p>The set of recognized charsets is very limited: only the ones which are database relevant are
@@ -94,9 +94,9 @@ namespace dbtools
         virtual sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
     };
 
-    //-------------------------------------------------------------------------
+
     //- CharsetIteratorDerefHelper
-    //-------------------------------------------------------------------------
+
     class OOO_DLLPUBLIC_DBTOOLS CharsetIteratorDerefHelper
     {
         friend class OCharsetMap::CharsetIterator;
@@ -116,9 +116,9 @@ namespace dbtools
     };
 
 
-    //-------------------------------------------------------------------------
+
     //- OCharsetMap::CharsetIterator
-    //-------------------------------------------------------------------------
+
     class OOO_DLLPUBLIC_DBTOOLS OCharsetMap::CharsetIterator
     {
         friend class OCharsetMap;
@@ -155,9 +155,9 @@ namespace dbtools
         CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos );
     };
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_DBCHARSET_HXX
 

@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 namespace sdr { namespace contact {
@@ -31,7 +31,7 @@ namespace sdr { namespace contact {
     class ViewObjectContact;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -59,7 +59,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
 

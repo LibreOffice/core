@@ -24,9 +24,9 @@
 
 class Window;
 
-// ---------
+
 // - Sound -
-// ---------
+
 
 class VCL_DLLPUBLIC Sound
 {

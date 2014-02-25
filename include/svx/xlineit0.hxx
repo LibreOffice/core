@@ -22,9 +22,9 @@
 
 #include <svx/xenum.hxx>
 #include <svl/eitem.hxx>
-//---------------------
+
 // class LineStyleItem
-//---------------------
+
 #include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC XLineStyleItem : public SfxEnumItem

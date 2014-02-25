@@ -25,16 +25,16 @@
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
 
-    //==========================================================================
+
+
     //= OCommandsListener
     // is helper class to avoid a cycle in refcount between the XEventListener
     // and the member XEventBroadcaster
-    //==========================================================================
+
     class COMPHELPER_DLLPUBLIC OEventListenerHelper : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
     {
         ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XEventListener> m_xListener;
@@ -42,9 +42,9 @@ namespace comphelper
         OEventListenerHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rxListener);
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     };
-//........................................................................
+
 }   // namespace comphelper
-//........................................................................
+
 #endif // INCLUDED_COMPHELPER_EVTLISTENERHLP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

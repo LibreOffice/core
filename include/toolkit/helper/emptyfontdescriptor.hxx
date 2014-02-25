@@ -25,9 +25,9 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 
-//  ----------------------------------------------------
+
 //  class EmptyFontDescriptor
-//  ----------------------------------------------------
+
 class EmptyFontDescriptor : public ::com::sun::star::awt::FontDescriptor
 {
 public:

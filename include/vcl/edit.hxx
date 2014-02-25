@@ -39,18 +39,18 @@ namespace i18n {
 struct DDInfo;
 struct Impl_IMEInfos;
 
-// --------------
+
 // - Edit-Types -
-// --------------
+
 
 #define EDIT_NOLIMIT                SAL_MAX_INT32
 #define EDIT_UPDATEDATA_TIMEOUT     350
 
 typedef OUString (*FncGetSpecialChars)( Window* pWin, const Font& rFont );
 
-// --------
+
 // - Edit -
-// --------
+
 
 enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOMPLETE_TABBACKWARD };
 

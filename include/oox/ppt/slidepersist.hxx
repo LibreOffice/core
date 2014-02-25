@@ -46,7 +46,7 @@ enum ShapeLocation
     Slide
 };
 
-// ---------------------------------------------------------------------
+
 class TimeNode;
 class SlidePersist;
 

@@ -23,9 +23,9 @@
 #include <svx/grfcrop.hxx>
 #include <svx/svddef.hxx>
 
-//------------------
+
 // SdrGrafCropItem -
-//------------------
+
 
 class SVX_DLLPUBLIC SdrGrafCropItem : public SvxGrfCrop
 {

@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star {
 namespace ucbhelper
 {
 
-//============================================================================
+
 /** Cancel the execution of a command by throwing the appropriate exception.
     If an Interaction Handler is given with the command environment and the
     handler handles the exception by selecting the supplied continuation,

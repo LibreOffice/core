@@ -48,7 +48,7 @@ namespace comphelper{
 class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
                                               , public  ::cppu::WeakImplHelper1< css::frame::XUntitledNumbers >
 {
-    //-------------------------------------------
+
     // types, const
     private:
 
@@ -66,21 +66,21 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 
         typedef ::std::vector< long > TDeadItemList;
 
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short  lightweight constructor.
          */
         NumberedCollection();
 
-        //---------------------------------------
+
         /** @short  free all internally used resources.
          */
         virtual ~NumberedCollection();
 
-        //---------------------------------------
+
         /** set an outside component which uses this container and must be set
             as source of all broadcasted messages, exceptions.
 
@@ -94,7 +94,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
          */
         void setOwner (const css::uno::Reference< css::uno::XInterface >& xOwner);
 
-        //---------------------------------------
+
         /** set the localized prefix to be used for untitled components.
 
             Localization has to be done outside. This container will return
@@ -106,34 +106,34 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
          */
         void setUntitledPrefix(const OUString& sPrefix);
 
-        //---------------------------------------
+
         /** @see css.frame.XUntitledNumbers */
         virtual ::sal_Int32 SAL_CALL leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent)
             throw (css::lang::IllegalArgumentException,
                    css::uno::RuntimeException, std::exception         );
 
-        //---------------------------------------
+
         /** @see css.frame.XUntitledNumbers */
         virtual void SAL_CALL releaseNumber(::sal_Int32 nNumber)
             throw (css::lang::IllegalArgumentException,
                    css::uno::RuntimeException, std::exception         );
 
-        //---------------------------------------
+
         /** @see css.frame.XUntitledNumbers */
         virtual void SAL_CALL releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent)
             throw (css::lang::IllegalArgumentException,
                    css::uno::RuntimeException, std::exception         );
 
-        //---------------------------------------
+
         /** @see css.frame.XUntitledNumbers */
         virtual OUString SAL_CALL getUntitledPrefix()
             throw (css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------
+
     // internal
     private:
 
-        //---------------------------------------
+
         /** @short  trys to find an unique number not already used within this collection.
 
             @descr  It reuses the smalles number which isnt used by any component
@@ -155,7 +155,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
         void impl_cleanUpDeadItems (      TNumberedItemHash& lItems    ,
                                     const TDeadItemList&     lDeadItems);
 
-    //-------------------------------------------
+
     // member
     private:
 

@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
@@ -35,7 +35,7 @@
 #define DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER        OUString("ImageIdentifier")
 #define DYNAMICMENU_PROPERTYNAME_TARGETNAME             OUString("TargetName")
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          You can use these enum values to specify right menu if you call our interface methods.
 *//*-*************************************************************************************************************/
 enum EDynamicMenuType
@@ -45,7 +45,7 @@ enum EDynamicMenuType
     E_HELPBOOKMARKS =   2
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -54,7 +54,7 @@ enum EDynamicMenuType
 
 class SvtDynamicMenuOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
 
@@ -67,7 +67,7 @@ class SvtDynamicMenuOptions_Impl;
 class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtDynamicMenuOptions : public utl::detail::Options
 {
     public:
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -86,7 +86,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtDynamicMenuOptions : public utl::det
          SvtDynamicMenuOptions();
         virtual ~SvtDynamicMenuOptions();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return complete specified list
             @descr      Call it to get all entries of an dynamic menu.
                         We return a list of all nodes with his names and properties.
@@ -102,7 +102,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtDynamicMenuOptions : public utl::det
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetMenu( EDynamicMenuType eMenu ) const;
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!

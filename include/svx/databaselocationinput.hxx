@@ -28,14 +28,14 @@ namespace svt { class OFileURLControl; }
 
 #include <memory>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DatabaseLocationInputController
-    //====================================================================
+
     class DatabaseLocationInputController_Impl;
     /** helper class to control controls needed to input a database location
 
@@ -78,9 +78,9 @@ namespace svx
                 m_pImpl;
     };
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_DATABASELOCATIONINPUT_HXX
 

@@ -115,9 +115,9 @@ enum Paper
 // defined for 'equal size' test with the implementation array
 #define NUM_PAPER_ENTRIES   (PAPER_SCREEN_16_10 - PAPER_A0 + 1)
 
-// ---------
+
 // - Paper -
-// ---------
+
 
 class I18NUTIL_DLLPUBLIC PaperInfo
 {

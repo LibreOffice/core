@@ -37,9 +37,9 @@ namespace utl
     namespace stario    = ::com::sun::star::io;
     namespace staruno   = ::com::sun::star::uno;
 
-//==================================================================
+
 //= OInputStreamWrapper
-//==================================================================
+
 typedef ::cppu::WeakImplHelper1 <   stario::XInputStream
                                 > InputStreamWrapper_Base;
 // needed for some compilers
@@ -74,9 +74,9 @@ protected:
     void checkError() const;
 };
 
-//==================================================================
+
 //= OSeekableInputStreamWrapper
-//==================================================================
+
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
                             >   OSeekableInputStreamWrapper_Base;
 /** helper class for wrapping an SvStream into an com.sun.star.io::XInputStream
@@ -96,9 +96,9 @@ public:
     virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//==================================================================
+
 //= OOutputStreamWrapper
-//==================================================================
+
 typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
     // needed for some compilers
 class OOutputStreamWrapper : public OutputStreamWrapper_Base
@@ -121,9 +121,9 @@ protected:
     SvStream&       rStream;
 };
 
-//==================================================================
+
 //= OSeekableOutputStreamWrapper
-//==================================================================
+
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
                             >   OSeekableOutputStreamWrapper_Base;
 /** helper class for wrapping an SvStream into an com.sun.star.io::XOutputStream

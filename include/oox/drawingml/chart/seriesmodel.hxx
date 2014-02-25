@@ -27,7 +27,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct DataLabelModelBase
 {
@@ -51,7 +51,7 @@ struct DataLabelModelBase
                         ~DataLabelModelBase();
 };
 
-// ============================================================================
+
 
 struct DataLabelModel : public DataLabelModelBase
 {
@@ -66,7 +66,7 @@ struct DataLabelModel : public DataLabelModelBase
                         ~DataLabelModel();
 };
 
-// ============================================================================
+
 
 struct DataLabelsModel : public DataLabelModelBase
 {
@@ -81,7 +81,7 @@ struct DataLabelsModel : public DataLabelModelBase
                         ~DataLabelsModel();
 };
 
-// ============================================================================
+
 
 struct PictureOptionsModel
 {
@@ -95,7 +95,7 @@ struct PictureOptionsModel
                         ~PictureOptionsModel();
 };
 
-// ============================================================================
+
 
 struct ErrorBarModel
 {
@@ -120,7 +120,7 @@ struct ErrorBarModel
                         ~ErrorBarModel();
 };
 
-// ============================================================================
+
 
 struct TrendlineLabelModel
 {
@@ -139,7 +139,7 @@ struct TrendlineLabelModel
                         ~TrendlineLabelModel();
 };
 
-// ============================================================================
+
 
 struct TrendlineModel
 {
@@ -162,7 +162,7 @@ struct TrendlineModel
                         ~TrendlineModel();
 };
 
-// ============================================================================
+
 
 struct DataPointModel
 {
@@ -183,7 +183,7 @@ struct DataPointModel
                         ~DataPointModel();
 };
 
-// ============================================================================
+
 
 struct SeriesModel
 {
@@ -226,7 +226,7 @@ struct SeriesModel
                         ~SeriesModel();
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

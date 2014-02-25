@@ -26,7 +26,7 @@
 // Please be careful:
 // Changing just one part here doesn't add new
 // docking windows automatically!
-//
+
 
 #define SID_DOCKWIN_0               SID_DOCKWIN_START
 #define SID_DOCKWIN_1               SID_DOCKWIN_START+1
@@ -39,11 +39,11 @@
 #define SID_DOCKWIN_8               SID_DOCKWIN_START+8
 #define SID_DOCKWIN_9               SID_DOCKWIN_START+9
 
-//=========================================================================
+
 
 #define SID_UNKNOWN                         SID_SFX_START
 
-//-------------------------------------------------------------------------
+
 
 // default-ids for application
 #define SID_QUITAPP                         (SID_SFX_START + 300)
@@ -703,7 +703,7 @@
 #define ID_VAL_ZOOM                         (SID_SD_START+234)
 #define SID_SIZE_OPTIMAL                    (SID_SD_START+99)
 
-//-----------------------------------------------------------------------
+
 
 #define SID_ZOOM_OPTIMAL                    (SID_SIZE_OPTIMAL)
 #define SID_ZOOM_ENTIRE_PAGE                (SID_SIZE_PAGE)
@@ -714,7 +714,7 @@
 #define SID_ZOOM_150_PERCENT                (SID_SVX_START + 1423)
 #define SID_ZOOM_200_PERCENT                (SID_SVX_START + 1424)
 
-//-----------------------------------------------------------------------
+
 
 // SfxScriptOrganizerItem
 #define MID_SCRIPT_ORGANIZER_LANGUAGE       1 // Don't use zero for MID's. It's forbidden to do it!
@@ -730,7 +730,7 @@
 
 #endif  // #ifndef _SFXSIDS_HRC
 
-//-----------------------------------------------------------------------
+
 // SfxSecurityPage related stuff
 
 #define FN_EDIT2                (SID_SW_START + 1800)

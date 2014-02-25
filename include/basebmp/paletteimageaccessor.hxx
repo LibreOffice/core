@@ -86,12 +86,12 @@ public:
         mnNumEntries(numEntries)
     {}
 
-    // -------------------------------------------------------
+
 
     Accessor const& getWrappedAccessor() const { return maAccessor; }
     Accessor&       getWrappedAccessor() { return maAccessor; }
 
-    // -------------------------------------------------------
+
 
     data_type lookup(value_type const& v) const
     {
@@ -119,7 +119,7 @@ public:
         return best_entry-mpPalette;
     }
 
-    // -------------------------------------------------------
+
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -133,7 +133,7 @@ public:
         return mpPalette[ maAccessor(i,diff) ];
     }
 
-    // -------------------------------------------------------
+
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const

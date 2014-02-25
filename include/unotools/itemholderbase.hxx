@@ -34,57 +34,57 @@ struct ItemHolderMutexBase
 enum EItem
 {
     E_ACCESSIBILITYOPTIONS          ,   // 2
-    E_ADDXMLTOSTORAGEOPTIONS        ,   //
+    E_ADDXMLTOSTORAGEOPTIONS        ,
     E_APEARCFG                      ,   // 2
 
     E_CJKOPTIONS                    ,   // 2
-    E_CMDOPTIONS                    ,   //
+    E_CMDOPTIONS                    ,
     E_COLORCFG                      ,   // 2
-    E_COMPATIBILITY                 ,   //
+    E_COMPATIBILITY                 ,
     E_CTLOPTIONS                    ,   // 2
 
-    E_DEFAULTOPTIONS                ,   //
-    E_DYNAMICMENUOPTIONS            ,   //
+    E_DEFAULTOPTIONS                ,
+    E_DYNAMICMENUOPTIONS            ,
 
-    E_EVENTCFG                      ,   //
-    E_EXTENDEDSECURITYOPTIONS       ,   //
+    E_EVENTCFG                      ,
+    E_EXTENDEDSECURITYOPTIONS       ,
 
-    E_FLTRCFG                       ,   //
-    E_FONTOPTIONS                   ,   //
+    E_FLTRCFG                       ,
+    E_FONTOPTIONS                   ,
     E_FONTSUBSTCONFIG               ,   // 2
 
     E_HELPOPTIONS                   ,   // 2
-    E_HISTORYOPTIONS                ,   //
+    E_HISTORYOPTIONS                ,
 
     E_LANGUAGEOPTIONS               ,   // 2
-    E_LINGUCFG                      ,   //
-    E_LOCALISATIONOPTIONS           ,   //
+    E_LINGUCFG                      ,
+    E_LOCALISATIONOPTIONS           ,
 
-    E_MENUOPTIONS                   ,   //
+    E_MENUOPTIONS                   ,
     E_MISCCFG                       ,   // 2
-    E_MISCOPTIONS                   ,   //
-    E_MODULEOPTIONS                 ,   //
+    E_MISCOPTIONS                   ,
+    E_MODULEOPTIONS                 ,
 
-    E_OPTIONSDLGOPTIONS             ,   //
+    E_OPTIONSDLGOPTIONS             ,
 
-    E_PATHOPTIONS                   ,   //
+    E_PATHOPTIONS                   ,
     E_PRINTOPTIONS                  ,   // 2
     E_PRINTFILEOPTIONS              ,   // 2
-    E_PRINTWARNINGOPTIONS           ,   //
+    E_PRINTWARNINGOPTIONS           ,
 
-    E_REGOPTIONS                    ,   //
+    E_REGOPTIONS                    ,
 
-    E_SAVEOPTIONS                   ,   //
-    E_SEARCHOPT                     ,   //
-    E_SECURITYOPTIONS               ,   //
+    E_SAVEOPTIONS                   ,
+    E_SEARCHOPT                     ,
+    E_SECURITYOPTIONS               ,
     E_SYSLOCALEOPTIONS              ,   // 2
 
     E_USEROPTIONS                   ,   // 2
 
-    E_VIEWOPTIONS_DIALOG            ,   //
-    E_VIEWOPTIONS_TABDIALOG         ,   //
-    E_VIEWOPTIONS_TABPAGE           ,   //
-    E_VIEWOPTIONS_WINDOW                //
+    E_VIEWOPTIONS_DIALOG            ,
+    E_VIEWOPTIONS_TABDIALOG         ,
+    E_VIEWOPTIONS_TABPAGE           ,
+    E_VIEWOPTIONS_WINDOW
 };
 
 struct TItemInfo

@@ -29,7 +29,7 @@
 
 class Window;
 
-//////////////////////////////////////////////////////////////////////
+
 
 class SVT_DLLPUBLIC XWindowItem : public SfxPoolItem
 {
@@ -51,7 +51,7 @@ public:
     com::sun::star::uno::Reference< com::sun::star::awt::XWindow >  GetXWindow() const  { return m_xWin; }
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 #endif
 

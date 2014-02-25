@@ -35,7 +35,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct TextModel;
 
@@ -63,7 +63,7 @@ private:
                             bool bAddNewLine ) const;
 };
 
-// ============================================================================
+
 
 struct TitleModel;
 
@@ -80,7 +80,7 @@ public:
                             sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
 };
 
-// ============================================================================
+
 
 struct LegendModel;
 
@@ -95,7 +95,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

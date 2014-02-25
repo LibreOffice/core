@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -35,7 +35,7 @@
 
 class SvtSecurityOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          These values present modes to handle StarOffice basic scripts.
                     see GetBasicMode/SetBasicMode() for further information
 *//*-*************************************************************************************************************/
@@ -47,7 +47,7 @@ enum EBasicSecurityMode
     eALWAYS_EXECUTE = 2
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about security features
     @descr          -
 
@@ -103,7 +103,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         */
 
     public:
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -122,7 +122,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
          SvtSecurityOptions();
         virtual ~SvtSecurityOptions();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      returns readonly state
             @descr      It can be called to get information about the readonly state of a provided item.
             @seealso    -
@@ -135,7 +135,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
 
         bool IsReadOnly( EOption eOption ) const ;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/SecureURL"
             @descr      These value displays the list of all trustworthy URLs.
                         zB.:    file:/                  => All scripts from the local file system including a LAN;
@@ -156,7 +156,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         ::com::sun::star::uno::Sequence< OUString >  GetSecureURLs(                                                                      ) const ;
         void                                                SetSecureURLs( const ::com::sun::star::uno::Sequence< OUString >& seqURLList )       ;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/StarOfficeBasic"
             @descr      These value determines how StarOffice Basic scripts should be handled.
                         It exist 3 different modes:
@@ -218,13 +218,13 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         bool IsConfirmationEnabled() const;
         void SetConfirmationEnabled( bool bSet );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
@@ -240,9 +240,9 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

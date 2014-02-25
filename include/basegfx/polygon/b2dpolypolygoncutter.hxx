@@ -23,7 +23,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -104,7 +104,7 @@ namespace basegfx
         // For convenience: The four basic operations OR, XOR, AND and DIFF for
         // two PolyPolygons. These are combinations of the above methods. To not be forced
         // to do evtl. already done preparations twice, You have to do the operations Yourself.
-        //
+
         // A source preparation consists of preparing it to be seen as XOR-Rule PolyPolygon,
         // so it is freed of intersections, self-intersections and the orientations are corrected.
         // Important is that it will define the same areas as before, but is intersection-free.
@@ -145,7 +145,7 @@ namespace basegfx
     } // end of namespace tools
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 
 #endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX

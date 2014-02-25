@@ -85,7 +85,7 @@ namespace sfx2
 {
     class LinkManager;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #define SDR_SWAPGRAPHICSMODE_NONE       0x00000000
 #define SDR_SWAPGRAPHICSMODE_TEMP       0x00000001
@@ -93,7 +93,7 @@ namespace sfx2
 #define SDR_SWAPGRAPHICSMODE_PURGE      0x00000100
 #define SDR_SWAPGRAPHICSMODE_DEFAULT    (SDR_SWAPGRAPHICSMODE_TEMP|SDR_SWAPGRAPHICSMODE_DOC|SDR_SWAPGRAPHICSMODE_PURGE)
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 enum SdrHintKind
 {
@@ -138,7 +138,7 @@ public:
     SdrHintKind GetKind() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // Flag um nach dem Laden des Pools Aufzuraeumen (d.h. die RefCounts
 // neu zu bestimmen und unbenutztes wegzuwerfen). sal_False == aktiv
@@ -211,7 +211,7 @@ protected:
     sal_uInt32          nMaxUndoCount;
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 // sdr::Comment interface
 private:
     // the next unique comment ID, used for counting added comments. Initialized
@@ -682,11 +682,11 @@ public:
 
 typedef tools::WeakReference< SdrModel > SdrModelWeakRef;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDMODEL_HXX
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
+/*
             +-----------+
             | SdrModel  |
             +--+------+-+

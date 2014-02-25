@@ -27,7 +27,7 @@ namespace drawingml {
 
 class Color;
 
-// ============================================================================
+
 
 /** Context handler for the different color value elements (a:scrgbClr,
     a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
@@ -49,7 +49,7 @@ private:
     Color&              mrColor;
 };
 
-// ============================================================================
+
 
 /** Context handler for elements that *contain* a color value element
     (a:scrgbClr, a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
@@ -67,7 +67,7 @@ private:
     Color&              mrColor;
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

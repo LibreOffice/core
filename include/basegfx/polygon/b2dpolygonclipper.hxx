@@ -24,7 +24,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {

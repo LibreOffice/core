@@ -25,16 +25,16 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace dbaui
 {
-//........................................................................
+
 
     class IController;
 
-    //====================================================================
+
     //= ControllerFrame
-    //====================================================================
+
     struct ControllerFrame_Data;
     /** helper class to ancapsulate the frame which a controller is plugged into,
         doing some common actions on it.
@@ -67,9 +67,9 @@ namespace dbaui
         ::std::auto_ptr< ControllerFrame_Data > m_pData;
     };
 
-//........................................................................
+
 } // namespace dbaui
-//........................................................................
+
 
 #endif // INCLUDED_DBACCESS_CONTROLLERFRAME_HXX
 

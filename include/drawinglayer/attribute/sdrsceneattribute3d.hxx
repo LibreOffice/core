@@ -26,14 +26,14 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace attribute {
     class ImpSdrSceneAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -75,7 +75,7 @@ namespace drawinglayer
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSCENEATTRIBUTE3D_HXX
 

@@ -24,7 +24,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {

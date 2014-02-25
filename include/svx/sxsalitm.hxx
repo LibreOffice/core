@@ -22,18 +22,18 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-//------------------------------
+
 // class SdrHorzShearAllItem
-//------------------------------
+
 class SdrHorzShearAllItem: public SdrAngleItem {
 public:
     SdrHorzShearAllItem(long nAngle=0): SdrAngleItem(SDRATTR_HORZSHEARALL,nAngle) {}
     SdrHorzShearAllItem(SvStream& rIn): SdrAngleItem(SDRATTR_HORZSHEARALL,rIn)    {}
 };
 
-//------------------------------
+
 // class SdrVertShearAllItem
-//------------------------------
+
 class SdrVertShearAllItem: public SdrAngleItem {
 public:
     SdrVertShearAllItem(long nAngle=0): SdrAngleItem(SDRATTR_VERTSHEARALL,nAngle) {}

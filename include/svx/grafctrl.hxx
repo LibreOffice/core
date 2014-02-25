@@ -25,9 +25,9 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 
-// ----------------
+
 // - TbxImageItem -
-// ----------------
+
 
 class SVX_DLLPUBLIC TbxImageItem : public SfxUInt16Item
 {
@@ -39,9 +39,9 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const;
 };
 
-// -------------------------------
+
 // - SvxGrafFilterToolBoxControl -
-// -------------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafFilterToolBoxControl : public SfxToolBoxControl
 {
@@ -57,9 +57,9 @@ public:
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
-// -------------------------
+
 // - SvxGrafToolBoxControl -
-// -------------------------
+
 
 class SvxGrafToolBoxControl : public SfxToolBoxControl
 {
@@ -71,9 +71,9 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
-// ----------------------------
+
 // - SvxGrafRedToolBoxControl -
-// ----------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafRedToolBoxControl : public SvxGrafToolBoxControl
 {
@@ -82,9 +82,9 @@ public:
                         SvxGrafRedToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-// ------------------------------
+
 // - SvxGrafGreenToolBoxControl -
-// ------------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafGreenToolBoxControl : public SvxGrafToolBoxControl
 {
@@ -93,9 +93,9 @@ public:
                         SvxGrafGreenToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-// -----------------------------
+
 // - SvxGrafBlueToolBoxControl -
-// -----------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafBlueToolBoxControl : public SvxGrafToolBoxControl
 {
@@ -104,9 +104,9 @@ public:
                         SvxGrafBlueToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-// ----------------------------------
+
 // - SvxGrafLuminanceToolBoxControl -
-// ----------------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafLuminanceToolBoxControl : public SvxGrafToolBoxControl
 {
@@ -115,9 +115,9 @@ public:
                         SvxGrafLuminanceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-// ---------------------------------
+
 // - SvxGrafContrastToolBoxControl -
-// ---------------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafContrastToolBoxControl : public SvxGrafToolBoxControl
 {
@@ -126,9 +126,9 @@ public:
                         SvxGrafContrastToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-// ------------------------------
+
 // - SvxGrafGammaToolBoxControl -
-// ------------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafGammaToolBoxControl : public SvxGrafToolBoxControl
 {
@@ -137,9 +137,9 @@ public:
                         SvxGrafGammaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-// -------------------------------------
+
 // - SvxGrafTransparenceToolBoxControl -
-// -------------------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafTransparenceToolBoxControl : public SvxGrafToolBoxControl
 {
@@ -148,9 +148,9 @@ public:
                         SvxGrafTransparenceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-// -----------------------------
+
 // - SvxGrafModeToolBoxControl -
-// -----------------------------
+
 
 class SVX_DLLPUBLIC SvxGrafModeToolBoxControl : public SfxToolBoxControl, public SfxListener
 {
@@ -163,9 +163,9 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
-// ---------------------
+
 // - SvxGrafAttrHelper -
-// ---------------------
+
 
 class SdrView;
 class SfxRequest;

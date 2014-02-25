@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace io {
 
 class SvDataPipe_Impl;
 
-//============================================================================
+
 class SVL_DLLPUBLIC SvInputStream: public SvStream
 {
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >

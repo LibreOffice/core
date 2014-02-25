@@ -32,7 +32,7 @@ struct SfxFrameDescriptor_Impl;
 class SfxFrameDescriptor;
 class Wallpaper;
 
-//===========================================================================
+
 // The SfxFrame descriptors build a recursive structure, that covers all the
 // required data in-order to display the frame document.
 // Through a SfxFrameSetDescriptor access is given to the whole underlying
@@ -41,7 +41,7 @@ class Wallpaper;
 // describes the view on it. The FrameSet is made up of lines, which in turn,
 // contains the actual window . A line can be horizontally or vertically
 // aligned, from which also the alignment of the FrameSet is given.
-//===========================================================================
+
 
 enum ScrollingMode
 {

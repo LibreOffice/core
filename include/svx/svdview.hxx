@@ -31,27 +31,27 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 //  Klassenhierarchie der View:
 //         SfxListener
 //         SdrPaintView    PntV   Action            ModChg   Attr   Notify
 //         SdrSnapView     SnpV   Action
-//
+
 //         SdrMarkView     MrkV   Action   MrkChg   ModChg          Notify
-//
+
 //         SdrEditView     EdtV            MrkChg   ModChg   Attr
 //         SdrPolyEditView PoEV
 //         SdrGlueEditView GlEV
 //         SdrObjEditView  EdxV   Action            ModChg   Attr   Notify
-//
+
 //         SdrExchangeView XcgV
 //         SdrDragView     DrgV   Action
-//
+
 //         SdrCreateView   CrtV   Action
 //         SdrView         View
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 class SvxURLField;
 
@@ -258,8 +258,8 @@ public:
 
 #endif // INCLUDED_SVX_SVDVIEW_HXX
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Die App macht sich zunaechst ein SdrModel.
 // Anschliessend oeffnet sie ein Win und erzeugt dann eine SdrView.
 // An der SdrView meldet sie dann mit der Methode ShowSdrPage() eine Seite an.
@@ -271,7 +271,7 @@ public:
 // gleichzeitiger Anzeige mehrerer Seiten ist darauf zu achten, dass der Offset-
 // Parameter von ShowSdrPage() der Seitengroesse angepasst ist, da sich sonst die
 // Seiten ueberlappen koennten.
-//
+
 // Elementare Methoden:
 // ~~~~~~~~~~~~~~~~~~~~
 //   Einfache Events:
@@ -281,25 +281,25 @@ public:
 //     sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
 //     sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
 //     sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
-//
+
 //   Exchange (Clipboard derzeit noch ohne SdrPrivateData):
 //   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //     sal_Bool Cut(sal_uIntPtr nFormat=SDR_ANYFORMAT);
 //     sal_Bool Yank(sal_uIntPtr nFormat=SDR_ANYFORMAT);
 //     sal_Bool Paste(Window* pWin=NULL, sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//
+
 //   SfxItems:
 //   ~~~~~~~~~
 //     sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
 //     sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll);
 //     SfxStyleSheet* GetStyleSheet() const;
 //     sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
-//
+
 //   Sonstiges:
 //   ~~~~~~~~~~
 //     Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
 //     OUString GetStatusText();
-//
+
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

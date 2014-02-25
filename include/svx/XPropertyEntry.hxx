@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <vcl/bitmap.hxx>
 
-// ---------------------
+
 // class XPropertyEntry
 
 class SVX_DLLPUBLIC XPropertyEntry

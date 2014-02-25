@@ -26,14 +26,14 @@
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DatabaseMetaData
-    //====================================================================
+
     struct DatabaseMetaData_Impl;
     /** encapsulates meta data about a database/connection which cannot be obtained
         from the usual XDatabaseMetaData result set.
@@ -179,9 +179,9 @@ namespace dbtools
         bool supportsThreads() const;
     };
 
-//........................................................................
+
 } // namespace dbtools
-//........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_DBMETADATA_HXX
 

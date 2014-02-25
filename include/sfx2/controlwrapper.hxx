@@ -33,20 +33,20 @@
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 
-// ============================================================================
+
 
 namespace sfx {
 
-// ============================================================================
+
 
 /** List position type of VCL ListBox. */
 typedef sal_uInt16 ListBoxPosType;
 /** List position type of SVTOOLS ValueSet. */
 typedef sal_uInt16 ValueSetPosType;
 
-// ============================================================================
+
 // Helpers
-// ============================================================================
+
 
 /** A helper class for mapping list positions from/to represented values.
 
@@ -99,9 +99,9 @@ private:
     PosT                mnNFPos;    /// Special "not found" list position.
 };
 
-// ============================================================================
+
 // Base control wrapper classes
-// ============================================================================
+
 
 /** Base class for all control wrappers.
 
@@ -167,9 +167,9 @@ private:
     ControlWrapperBase& operator=( const ControlWrapperBase& );
 };
 
-// ============================================================================
+
 // Single control wrappers
-// ============================================================================
+
 
 /** Base class template for control wrappers containing one single control.
 
@@ -212,7 +212,7 @@ private:
     ControlT&           mrControl;  /// The control of this wrapper.
 };
 
-// ============================================================================
+
 
 /** A dummy wrapper for a VCL Window that does nothing special.
 
@@ -233,7 +233,7 @@ public:
     virtual void        SetControlValue( void* );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A wrapper for the VCL CheckBox. */
 class SFX2_DLLPUBLIC CheckBoxWrapper:
@@ -249,7 +249,7 @@ public:
     virtual void        SetControlValue( sal_Bool bValue );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A wrapper for the SVTOOLS ColorListBox. */
 class SFX2_DLLPUBLIC ColorListBoxWrapper:
@@ -270,7 +270,7 @@ public:
     virtual void        SetControlValue( Color aColor );
 };
 
-// ============================================================================
+
 
 /** A wrapper for the VCL NumericField. */
 template< typename ValueT >
@@ -287,7 +287,7 @@ public:
     virtual void        SetControlValue( ValueT nValue );
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef NumericFieldWrapper< sal_Int16 >  Int16NumericFieldWrapper;
 typedef NumericFieldWrapper< sal_uInt16 > UInt16NumericFieldWrapper;
@@ -297,7 +297,7 @@ typedef NumericFieldWrapper< sal_uInt32 > UInt32NumericFieldWrapper;
 typedef NumericFieldWrapper< sal_uInt16 > UShortNumericFieldWrapper;
 typedef NumericFieldWrapper< sal_uIntPtr >  ULongNumericFieldWrapper;
 
-// ============================================================================
+
 
 /** A wrapper for the VCL MetricField.
 
@@ -322,7 +322,7 @@ private:
     FieldUnit           meUnit;
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef MetricFieldWrapper< sal_Int16 >  Int16MetricFieldWrapper;
 typedef MetricFieldWrapper< sal_uInt16 > UInt16MetricFieldWrapper;
@@ -332,7 +332,7 @@ typedef MetricFieldWrapper< sal_uInt32 > UInt32MetricFieldWrapper;
 typedef MetricFieldWrapper< sal_uInt16 > UShortMetricFieldWrapper;
 typedef MetricFieldWrapper< sal_uIntPtr >  ULongMetricFieldWrapper;
 
-// ============================================================================
+
 
 /** A wrapper for the VCL ListBox.
 
@@ -364,7 +364,7 @@ public:
     virtual void        SetControlValue( ValueT nValue );
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef ListBoxWrapper< sal_Int16 >  Int16ListBoxWrapper;
 typedef ListBoxWrapper< sal_uInt16 > UInt16ListBoxWrapper;
@@ -374,7 +374,7 @@ typedef ListBoxWrapper< sal_uInt32 > UInt32ListBoxWrapper;
 typedef ListBoxWrapper< sal_uInt16 > UShortListBoxWrapper;
 typedef ListBoxWrapper< sal_uIntPtr >  ULongListBoxWrapper;
 
-// ============================================================================
+
 
 /** A wrapper for the SVTOOLS ValueSet.
 
@@ -406,7 +406,7 @@ public:
     virtual void        SetControlValue( ValueT nValue );
 };
 
-// ----------------------------------------------------------------------------
+
 
 typedef ValueSetWrapper< sal_Int16 >  Int16ValueSetWrapper;
 typedef ValueSetWrapper< sal_uInt16 > UInt16ValueSetWrapper;
@@ -416,9 +416,9 @@ typedef ValueSetWrapper< sal_uInt32 > UInt32ValueSetWrapper;
 typedef ValueSetWrapper< sal_uInt16 > UShortValueSetWrapper;
 typedef ValueSetWrapper< sal_uIntPtr >  ULongValueSetWrapper;
 
-// ============================================================================
+
 // Multi control wrappers
-// ============================================================================
+
 
 struct MultiControlWrapperHelper_Impl;
 
@@ -451,7 +451,7 @@ private:
     std::auto_ptr< MultiControlWrapperHelper_Impl > mxImpl;
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A multi control wrapper with extended interface.
 
@@ -488,16 +488,16 @@ private:
     ValueT              maDefValue;
 };
 
-// ============================================================================
 
 
-// ============================================================================
+
+
 //               ***  Implementation of template functions  ***
-// ============================================================================
 
-// ============================================================================
+
+
 // Helpers
-// ============================================================================
+
 
 template< typename PosT, typename ValueT >
 ValueT PosValueMapper< PosT, ValueT >::GetValueFromPos( PosT nPos ) const
@@ -535,9 +535,9 @@ PosT PosValueMapper< PosT, ValueT >::GetPosFromValue( ValueT nValue ) const
     return nPos;
 }
 
-// ============================================================================
+
 // Single control wrappers
-// ============================================================================
+
 
 template< typename ControlT, typename ValueT >
 inline void SingleControlWrapper< ControlT, ValueT >::ModifyControl( TriState eEnable, TriState eShow )
@@ -548,7 +548,7 @@ inline void SingleControlWrapper< ControlT, ValueT >::ModifyControl( TriState eE
         mrControl.Show( eShow == TRISTATE_TRUE );
 }
 
-// ============================================================================
+
 
 template< typename ValueT >
 bool NumericFieldWrapper< ValueT >::IsControlDontKnow() const
@@ -575,7 +575,7 @@ void NumericFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
     this->GetControl().SetValue( this->GetControl().Normalize( static_cast< sal_Int64 >( nValue ) ) );
 }
 
-// ============================================================================
+
 
 template< typename ValueT >
 bool MetricFieldWrapper< ValueT >::IsControlDontKnow() const
@@ -602,7 +602,7 @@ void MetricFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
     this->GetControl().SetValue( this->GetControl().Normalize( static_cast< sal_Int64 >( nValue ) ), meUnit );
 }
 
-// ============================================================================
+
 
 template< typename ValueT >
 ValueT ListBoxWrapper< ValueT >::GetControlValue() const
@@ -618,7 +618,7 @@ void ListBoxWrapper< ValueT >::SetControlValue( ValueT nValue )
         this->GetControl().SelectEntryPos( nPos );
 }
 
-// ----------------------------------------------------------------------------
+
 
 template< typename ValueT >
 ValueT ValueSetWrapper< ValueT >::GetControlValue() const
@@ -634,7 +634,7 @@ void ValueSetWrapper< ValueT >::SetControlValue( ValueT nValue )
         this->GetControl().SelectItem( nPos );
 }
 
-// ============================================================================
+
 
 
 } // namespace sfx

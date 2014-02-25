@@ -176,9 +176,9 @@ namespace rtl
 
 // Normal RTL_LOGFILE_* entries will not make it into release versions,
 // TIMELOG is disabled a few versions prior relase build.
-//
+
 // We need some logs also in these builds, eg. for making performance regression tests.
-//
+
 // POLICY: Don't use RTL_LOGFILE_PRODUCT_* for your personal logging information.
 //         Be aware that these logs make it into the product shipped to customers.
 //         If you have good reasons for doing this, please contact product management.

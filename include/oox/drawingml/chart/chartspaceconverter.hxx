@@ -30,7 +30,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct ChartSpaceModel;
 
@@ -46,7 +46,7 @@ public:
                             const ::com::sun::star::awt::Point& rChartPos );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

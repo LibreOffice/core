@@ -27,9 +27,9 @@
 
 class SdrModel;
 
-//--------------------
+
 // class XLineDashItem
-//--------------------
+
 class SVX_DLLPUBLIC XLineDashItem : public NameOrIndex
 {
     XDash   aDash;

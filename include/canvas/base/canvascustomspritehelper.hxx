@@ -100,7 +100,7 @@ namespace canvas
 
 
         // Helper methods for derived classes
-        // ----------------------------------
+
 
         /// Calc sprite update area from given raw sprite bounds
         ::basegfx::B2DRange getUpdateArea( const ::basegfx::B2DRange& rUntransformedSpriteBounds ) const;
@@ -219,7 +219,7 @@ namespace canvas
          */
         bool updateClipState( const Sprite::Reference& rSprite );
 
-        // --------------------------------------------------------------------
+
 
         /// Owning sprite canvas
         SpriteSurface::Reference                            mpSpriteCanvas;
