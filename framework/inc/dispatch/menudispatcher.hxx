@@ -48,7 +48,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     We must save information about our listener and URL for listening.
     We implement this as a hashtable for strings.
 *//*-*************************************************************************************************************/
@@ -57,7 +57,7 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
                                                         OUStringHash > IMPL_ListenerHashContainer;
 
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          helper for desktop only(!) to create new tasks on demand for dispatches
     @descr          Use this class as member only! Never use it as baseclass.
                     XInterface will be ambigous and we hold a weakcss::uno::Reference to ouer OWNER - not to ouer SUPERCLASS!
@@ -80,17 +80,17 @@ class MenuDispatcher   :        // baseclasses
                                             css::frame::XDispatch           ,
                                             css::frame::XFrameActionListener >
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  constructor / destructor
+
+
+        /*-****************************************************************************************************
             @short      standard ctor
             @descr      These initialize a new instance of ths class with needed information for work.
 
@@ -106,11 +106,11 @@ class MenuDispatcher   :        // baseclasses
         MenuDispatcher(    const   css::uno::Reference< css::uno::XComponentContext >& rxContext    ,
                             const   css::uno::Reference< css::frame::XFrame >&              xOwner      );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XDispatch
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  XDispatch
+
+
+        /*-****************************************************************************************************
             @short      dispatch URL with arguments
             @descr      Every dispatch create a new task. If load of URL failed task will deleted automaticly!
 
@@ -126,7 +126,7 @@ class MenuDispatcher   :        // baseclasses
         virtual void SAL_CALL dispatch( const   css::util::URL&                                     aURL            ,
                                         const   css::uno::Sequence< css::beans::PropertyValue >&    seqProperties   ) throw( css::uno::RuntimeException, std::exception );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      add listener for state events
             @descr      You can add a listener to get information about status of dispatch: OK or Failed.
 
@@ -143,7 +143,7 @@ class MenuDispatcher   :        // baseclasses
         virtual void SAL_CALL addStatusListener(    const   css::uno::Reference< css::frame::XStatusListener >& xControl,
                                                     const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException, std::exception );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      remove listener for state events
             @descr      You can remove a listener if information of dispatch isn't important for you any longer.
 
@@ -161,17 +161,17 @@ class MenuDispatcher   :        // baseclasses
                                                     const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException, std::exception );
 
 
-        //---------------------------------------------------------------------------------------------------------
+
         //   XFrameActionListener
-        //---------------------------------------------------------------------------------------------------------
+
 
         virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw ( css::uno::RuntimeException, std::exception );
 
-        //---------------------------------------------------------------------------------------------------------
-        //   XEventListener
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //   XEventListener
+
+
+        /*-****************************************************************************************************
             @short      dispose current instance
             @descr      If service helper isn't required any longer call this method to release all used resources.
 
@@ -185,13 +185,13 @@ class MenuDispatcher   :        // baseclasses
 
         void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     protected:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
                         This method is protected, because its not allowed to use an instance of this class as a member!
@@ -207,13 +207,13 @@ class MenuDispatcher   :        // baseclasses
 
         virtual ~MenuDispatcher();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      -
             @descr      -
 
@@ -227,7 +227,7 @@ class MenuDispatcher   :        // baseclasses
 
         sal_Bool impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource = sal_False );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      -
             @descr      -
 
@@ -241,10 +241,10 @@ class MenuDispatcher   :        // baseclasses
 
         void impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

@@ -25,7 +25,7 @@ using namespace ::com::sun::star;
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          declaration of special continuation for filter selection
     @descr          Sometimes filter detection during loading document failed. Then we need a possibility
                     to ask user for his decision. These continuation transport selected filter by user to

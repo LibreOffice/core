@@ -36,9 +36,9 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwner )
         //  Init baseclasses first
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
@@ -49,16 +49,15 @@ OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwne
     SAL_WARN_IF( !impldbg_checkParameter_OComponentAccessCtor( xOwner ), "fwk", "OComponentAccess::OComponentAccess(): Invalid parameter detected!" );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 OComponentAccess::~OComponentAccess()
 {
 }
 
-//*****************************************************************************************************************
+
 //  XEnumerationAccess
-//*****************************************************************************************************************
 css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
@@ -86,9 +85,8 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
     return xReturn;
 }
 
-//*****************************************************************************************************************
+
 //  XElementAccess
-//*****************************************************************************************************************
 Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::exception )
 {
     // Elements in list an enumeration are components!
@@ -96,9 +94,8 @@ Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::e
     return ::getCppuType((const css::uno::Reference< XComponent >*)NULL);
 }
 
-//*****************************************************************************************************************
+
 //  XElementAccess
-//*****************************************************************************************************************
 sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
@@ -119,9 +116,9 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::
     return bReturn;
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Reference< XFramesSupplier >&         xNode           ,
                                                                  Sequence< css::uno::Reference< XComponent > >& seqComponents   )
 {
@@ -153,9 +150,9 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
     // ... otherwise break a recursive path and go back at current stack!
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame ) const
 {
     // Set default return value, if method failed.
@@ -200,7 +197,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-//*****************************************************************************************************************
+
 sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css::uno::Reference< XDesktop >&      xOwner  )
 {
     return xOwner.is();

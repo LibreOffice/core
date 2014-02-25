@@ -26,7 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 /**
  * This test is for bug110698. The Office is closed and is continually connected

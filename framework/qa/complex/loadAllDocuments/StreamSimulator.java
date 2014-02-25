@@ -31,7 +31,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                         com.sun.star.io.XOutputStream   ,
                                         com.sun.star.io.XSeekable
 {
-    //_________________________________
+
     /**
      * @member  m_sFileName     name of the corrsponding file on disk
      * @member  m_xInStream     the internal input stream for reading
@@ -177,7 +177,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         return nRead;
     }
 
-    //_________________________________
+
 
     public void skipBytes(int nBytesToSkip)
                                 throws com.sun.star.io.NotConnectedException,
@@ -230,7 +230,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         return nAvailable;
     }
 
-    //_________________________________
+
 
     public void closeInput() throws com.sun.star.io.NotConnectedException,
                                     com.sun.star.io.IOException
@@ -287,7 +287,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
 
     }
 
-    //_________________________________
+
 
     public void flush() throws com.sun.star.io.NotConnectedException        ,
                                com.sun.star.io.BufferSizeExceededException  ,
@@ -314,7 +314,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
     }
 
-    //_________________________________
+
 
     public void closeOutput() throws com.sun.star.io.NotConnectedException      ,
                                      com.sun.star.io.BufferSizeExceededException,
@@ -401,7 +401,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         return nPos;
     }
 
-    //_________________________________
+
 
     public long getLength() throws com.sun.star.io.IOException
     {

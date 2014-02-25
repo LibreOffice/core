@@ -53,7 +53,7 @@ static const ::sal_Int32 INVALID_ICON_ID = -1;
 static const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
 
-//*****************************************************************************************************************
+
 TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase          (&Application::GetSolarMutex())
     , m_xContext              (xContext                     )
@@ -61,12 +61,12 @@ TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::uno::XComponentCo
 {
 }
 
-//*****************************************************************************************************************
+
 TitleBarUpdate::~TitleBarUpdate()
 {
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException, std::exception)
@@ -101,7 +101,7 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
         xBroadcaster->addTitleChangeListener (this);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TitleBarUpdate::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -117,14 +117,14 @@ void SAL_CALL TitleBarUpdate::frameAction(const css::frame::FrameActionEvent& aE
     }
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TitleBarUpdate::titleChanged(const css::frame::TitleChangedEvent& /* aEvent */)
     throw (css::uno::RuntimeException, std::exception)
 {
     impl_forceUpdate ();
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TitleBarUpdate::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -209,7 +209,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 }
 
 
-//*****************************************************************************************************************
+
 ::sal_Bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                                       TModuleInfo&                               rInfo )
 {
@@ -244,7 +244,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     return sal_False;
 }
 
-//*****************************************************************************************************************
+
 void TitleBarUpdate::impl_forceUpdate()
 {
     // SYNCHRONIZED ->
@@ -269,7 +269,7 @@ void TitleBarUpdate::impl_forceUpdate()
 #endif
 }
 
-//*****************************************************************************************************************
+
 void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     css::uno::Reference< css::frame::XController > xController = xFrame->getController      ();
@@ -341,7 +341,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     // <- VCL SYNCHRONIZED
 }
 
-//*****************************************************************************************************************
+
 void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     // no window ... no chance to set any title -> return

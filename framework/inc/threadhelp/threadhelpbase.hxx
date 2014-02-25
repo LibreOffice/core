@@ -24,7 +24,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          "baseclass" to make own classes threadsafe
     @descr          Sometimes you must share your lock- or mutex member with any other baseclasses.
                     And baseclasses are initialized erlier then members! That's why you should use
@@ -41,19 +41,19 @@ namespace framework{
 *//*-*************************************************************************************************************/
 struct ThreadHelpBase
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
         ThreadHelpBase( comphelper::SolarMutex* pSolarMutex = NULL )
                 :   m_aLock( pSolarMutex )
         {
         }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public member
     //  Make it mutable for using in const functions!
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
         mutable LockHelper m_aLock;

@@ -35,13 +35,13 @@
 
 namespace framework {
 
-//-----------------------------------------------
+
 // declaration
 
 class VCLStatusIndicator : private ThreadHelpBase, // must be the first real base class!
                            public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
 {
-    //-------------------------------------------
+
     // member
 
     private:
@@ -67,7 +67,7 @@ class VCLStatusIndicator : private ThreadHelpBase, // must be the first real bas
         /** knows the current value of the progress. */
         sal_Int32 m_nValue;
 
-    //-------------------------------------------
+
     // interface
 
     public:
@@ -95,7 +95,7 @@ class VCLStatusIndicator : private ThreadHelpBase, // must be the first real bas
         virtual void SAL_CALL setValue(sal_Int32 nValue)
             throw(css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------
+
     // helper
 
     private:

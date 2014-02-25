@@ -36,7 +36,7 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 
 /** supports the API XPropertySet and XPropertySetInfo.
  *
@@ -50,13 +50,13 @@ namespace framework{
 class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
                         , public css::beans::XPropertySetInfo
 {
-    //-------------------------------------------------------------------------
+
     /* types */
     protected:
 
         typedef BaseHash< css::beans::Property > TPropInfoHash;
 
-    //-------------------------------------------------------------------------
+
     /* member */
     protected:
 
@@ -73,11 +73,11 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         LockHelper& m_rLock;
         TransactionManager& m_rTransactionManager;
 
-    //-------------------------------------------------------------------------
+
     /* native interface */
     public:
 
-        //---------------------------------------------------------------------
+
         /** initialize new instance of this helper.
          *
          *  @param  pExternalLock
@@ -97,12 +97,12 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
                                 TransactionManager*                                     pExternalTransactionManager ,
                                 sal_Bool                                                bReleaseLockOnCall          );
 
-        //---------------------------------------------------------------------
+
         /** free all needed memory.
          */
         virtual ~PropertySetHelper();
 
-        //---------------------------------------------------------------------
+
         /** set a new owner for this helper.
          *
          *  This owner is used as source for all broadcasted events.
@@ -110,7 +110,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          */
         void impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster);
 
-        //---------------------------------------------------------------------
+
         /** add a new property info to the set of supported ones.
          *
          *  @param  aProperty
@@ -128,7 +128,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
             throw(css::beans::PropertyExistException,
                   css::uno::Exception               );
 
-        //---------------------------------------------------------------------
+
         /** remove an existing property info from the set of supported ones.
          *
          *  @param  sProperty
@@ -141,7 +141,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
             throw(css::beans::UnknownPropertyException,
                   css::uno::Exception                 );
 
-        //---------------------------------------------------------------------
+
         /** mark the object as "useable for working" or "dead".
          *
          *  This correspond to the lifetime handling implemented by the base class TransactionBase.
@@ -151,7 +151,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         virtual void SAL_CALL impl_enablePropertySet();
         virtual void SAL_CALL impl_disablePropertySet();
 
-        //---------------------------------------------------------------------
+
         /**
          */
         virtual void SAL_CALL impl_setPropertyValue(const OUString& sProperty,
@@ -161,7 +161,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         virtual css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
                                                                    sal_Int32        nHandle  ) = 0;
 
-    //-------------------------------------------------------------------------
+
     /* uno interface */
     public:
 
@@ -217,7 +217,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& sName)
             throw(css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------------------------------------
+
     /* internal helper */
     private:
 

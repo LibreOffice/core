@@ -26,7 +26,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a iterator which support 2 end states!
     @descr          For our search methods we need a "walking" iterator object with special functionality!
                     We must check for 3 different states of an iterator - normal position, exact end, after end.
@@ -47,17 +47,17 @@ namespace framework{
 template< class TContainer >
 class CheckedIterator
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        // constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        // constructor / destructor
+
+
+        /*-****************************************************************************************************
             @short      standard constructor
             @descr      Set default values on members.
                         We set it internal to E_UNKNOWN to detect uninitialized instances of this class.
@@ -77,11 +77,11 @@ class CheckedIterator
         {
         }
 
-        //---------------------------------------------------------------------------------------------------------
-        // interface methods
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        // interface methods
+
+
+        /*-****************************************************************************************************
             @short      initialize instance with valid container
             @descr      Set new container at an instance of this class. The other member will set automaticly!
                         m_pPosition = first element in container
@@ -110,7 +110,7 @@ class CheckedIterator
             }
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      set internal states to E_END
             @descr      Sometimes we need a "walking" check-iterator which is initialized with the END-state!
                         We need it to return one default value if no other ones exist ...
@@ -129,7 +129,7 @@ class CheckedIterator
             m_eEndState  = E_END ;
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      set internal states to E_AFTEREND
             @descr      Sometimes we need a "walking" check-iterator which is initialized with AFTEREND-state!
                         We need it if we don't have a container but must prevent us against further searching!
@@ -148,7 +148,7 @@ class CheckedIterator
             m_eEndState  = E_AFTEREND ;
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      reset this iterator
             @descr      It must be called on an already initialized iterator.
                         Means the member m_pContainer must be valid. Otherwise the reaction
@@ -166,7 +166,7 @@ class CheckedIterator
             m_pContainer = NULL;
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      step to next element in container.
             @descr      If end of container is reached we change our internal "m_eEndState".
                         If end reached for first time; we set it to E_END;
@@ -207,7 +207,7 @@ class CheckedIterator
             return *this;
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return true if internal iterator was not initialized before
             @descr      These will be true, if use start a new search by using these iterator mechanism!
 
@@ -224,7 +224,7 @@ class CheckedIterator
             return( m_eEndState == E_UNKNOWN );
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return true if internal iterator reached end of container
             @descr      These will be true if you step to the end of internal container.
 
@@ -245,7 +245,7 @@ class CheckedIterator
                     );
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return true if you call operator++ again and end already reached
             @descr      These indicate, that end already reached but you call operator++ again and again!
 
@@ -263,7 +263,7 @@ class CheckedIterator
             return( m_eEndState == E_AFTEREND );
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      support readonly access to container entry
             @descr      Use it to get the value of current container item.
 
@@ -285,9 +285,9 @@ class CheckedIterator
             return m_pPosition;
         }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

@@ -144,7 +144,7 @@ throw ( RuntimeException, std::exception )
         m_xReceiver->statusChanged( Event );
 }
 
-//*****************************************************************************************************************
+
 
 static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
 {
@@ -178,9 +178,9 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
     return xLayoutManager;
 }
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
 
 ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,

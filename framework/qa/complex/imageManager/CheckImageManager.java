@@ -38,7 +38,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 /**
  *

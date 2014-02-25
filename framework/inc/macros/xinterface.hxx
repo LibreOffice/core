@@ -45,11 +45,11 @@ namespace framework{
 
 _________________________________________________________________________________________________________________*/
 
-//*****************************************************************************************************************
+
 //  private
 //  implementation of   XInterface::aquire()
 //                      XInterface::release()
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XINTERFACE_AQUIRE_RELEASE( CLASS, BASECLASS )                                                                                        \
     void SAL_CALL CLASS::acquire() throw()                                                                          \
     {                                                                                                                                                       \
@@ -63,10 +63,10 @@ ________________________________________________________________________________
         BASECLASS::release();                                                                                                                               \
     }
 
-//*****************************************************************************************************************
+
 //  private
 //  implementation of XInterface::queryInterface() without any other interfaces!
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_PURE( CLASS, BASECLASS )                                                                                   \
     ::com::sun::star::uno::Any SAL_CALL CLASS::queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException )  \
     {                                                                                                                                                       \
@@ -76,10 +76,10 @@ ________________________________________________________________________________
         return BASECLASS::queryInterface( aType );                                                                                                          \
     }
 
-//*****************************************************************************************************************
+
 //  private
 //  implementation of XInterface::queryInterface() with max. 12 other interfaces!
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE( CLASS, BASECLASS, INTERFACES )                                                                            \
     ::com::sun::star::uno::Any SAL_CALL CLASS::queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
     {                                                                                                                                                       \
@@ -97,10 +97,10 @@ ________________________________________________________________________________
         return aReturn;                                                                                                                                     \
     }
 
-//*****************************************************************************************************************
+
 //  private
 //  implementation of XInterface::queryInterface() with more then 12 other interfaces!
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )                                             \
     ::com::sun::star::uno::Any SAL_CALL CLASS::queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
     {                                                                                                                                                       \
@@ -124,10 +124,10 @@ ________________________________________________________________________________
         return aReturn;                                                                                                                                     \
     }
 
-//*****************************************************************************************************************
+
 //  private
 //  complete implementation of XInterface for different use cases
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XINTERFACE_PURE( CLASS, BASECLASS )                                                                                                  \
     PRIVATE_DEFINE_XINTERFACE_AQUIRE_RELEASE( CLASS, BASECLASS )                                                                                            \
     PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_PURE( CLASS, BASECLASS )
@@ -140,10 +140,10 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_XINTERFACE_AQUIRE_RELEASE( CLASS, BASECLASS )                                                                                            \
     PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )
 
-//*****************************************************************************************************************
+
 //  private
 //  help macros to replace INTERFACES in queryInterface() [see before]
-//*****************************************************************************************************************
+
 /*
 #ifdef ENABLE_SERVICEDEBUG
     #define PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 )     \
@@ -195,10 +195,10 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_INTERFACE_10( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10 ),                                             \
     INTERFACE11
 
-//*****************************************************************************************************************
+
 //  public
 //  help macros for follow XInterface definitions
-//*****************************************************************************************************************
+
 
 //  Use it as parameter for DEFINE_XINTERFACE_X(), if you CAN use an interface directly in queryInterface()!
 #define DIRECT_INTERFACE( INTERFACE ) \
@@ -209,19 +209,19 @@ ________________________________________________________________________________
 #define DERIVED_INTERFACE( BASEINTERFACE, DERIVEDINTERFACE ) \
     static_cast< BASEINTERFACE* >( static_cast< DERIVEDINTERFACE* >( this ) )
 
-//*****************************************************************************************************************
+
 //  public
 //  declaration of XInterface
-//*****************************************************************************************************************
+
 #define FWK_DECLARE_XINTERFACE                                                                                                                                      \
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType   ) throw( ::com::sun::star::uno::RuntimeException, std::exception ); \
     virtual void                        SAL_CALL acquire       (                                            ) throw();  \
     virtual void                        SAL_CALL release       (                                            ) throw();
 
-//*****************************************************************************************************************
+
 //  public
 //  implementation of XInterface
-//*****************************************************************************************************************
+
 
 //  implementation of XInterface with 0 additional interface for queryInterface()
 #define DEFINE_XINTERFACE_0( CLASS, BASECLASS )                                                                     \

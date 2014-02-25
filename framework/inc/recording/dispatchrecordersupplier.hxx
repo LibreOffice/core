@@ -53,12 +53,12 @@ class DispatchRecorderSupplier  :   // baseclasses
                                                 css::lang::XServiceInfo             ,
                                                 css::frame::XDispatchRecorderSupplier >
 {
-    //___________________________________________
+
     // member
 
     private:
 
-        //_______________________________________
+
         /** provided dispatch recorder of this supplier instance
 
             @life   Is controled from outside. Because this variable is setted
@@ -67,17 +67,17 @@ class DispatchRecorderSupplier  :   // baseclasses
          */
         css::uno::Reference< css::frame::XDispatchRecorder > m_xDispatchRecorder;
 
-    //___________________________________________
+
     // uno interface
 
     public:
 
-        //_______________________________________
+
         // XInterface, XTypeProvider, XServiceInfo
 
         DECLARE_XSERVICEINFO
 
-        //_______________________________________
+
         // XDispatchRecorderSupplier
 
         virtual void                                                 SAL_CALL setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder   ) throw (css::uno::RuntimeException, std::exception);
@@ -86,7 +86,7 @@ class DispatchRecorderSupplier  :   // baseclasses
                                                                                                    const css::uno::Sequence< css::beans::PropertyValue >&      lArguments  ,
                                                                                                    const css::uno::Reference< css::frame::XDispatch >&         xDispatcher ) throw (css::uno::RuntimeException, std::exception);
 
-    //___________________________________________
+
     // native interface
 
     public:

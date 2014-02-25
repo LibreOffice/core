@@ -28,7 +28,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a gate to block multiple threads at same time or unblock all
     @descr          A gate can be used as a negative-condition! You can open a "door" - wait() will not block ...
                     or you can close it - wait() blocks till open() is called again.
@@ -46,12 +46,12 @@ namespace framework{
 class Gate : public  IGate
            , private INonCopyable
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      ctor
             @descr      These initialize the object right as an open gate.
 
@@ -69,7 +69,7 @@ class Gate : public  IGate
             open();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      dtor
             @descr      Is user forget it - we open the gate ...
                         blocked threads can running ... but I don't know
@@ -87,7 +87,7 @@ class Gate : public  IGate
             open();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IGate
             @short      open the gate
             @descr      A wait() call will not block then.
@@ -110,7 +110,7 @@ class Gate : public  IGate
             m_bClosed = !m_aPassage.check();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IGate
             @short      close the gate
             @descr      A wait() call will block then.
@@ -133,7 +133,7 @@ class Gate : public  IGate
             m_bClosed = !m_aPassage.check();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IGate
             @short      open gate for current waiting threads
             @descr      All current waiting threads stand in wait() at line "m_aPassage.wait()" ...
@@ -159,7 +159,7 @@ class Gate : public  IGate
             m_bGapOpen = m_aPassage.check();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IGate
             @short      must be called to pass the gate
             @descr      If gate "open"   => wait() will not block.
@@ -200,9 +200,9 @@ class Gate : public  IGate
             return bSuccessful;
         }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         ::osl::Mutex        m_aAccessLock   ;

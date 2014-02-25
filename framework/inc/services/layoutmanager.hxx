@@ -112,9 +112,8 @@ namespace framework
                 return aSeq;
             }
 
-            //---------------------------------------------------------------------------------------------------------
+
             // XLayoutManager
-            //---------------------------------------------------------------------------------------------------------
             virtual void SAL_CALL attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL reset() throw (::com::sun::star::uno::RuntimeException, std::exception);
             virtual ::com::sun::star::awt::Rectangle SAL_CALL getCurrentDockingArea(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
@@ -147,51 +146,42 @@ namespace framework
             virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (::com::sun::star::uno::RuntimeException, std::exception);
             virtual sal_Bool SAL_CALL isVisible() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-            //---------------------------------------------------------------------------------------------------------
             // XMenuBarMergingAcceptor
-            //---------------------------------------------------------------------------------------------------------
+
             virtual sal_Bool SAL_CALL setMergedMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )
                                                        throw (::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL removeMergedMenuBar(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-            //---------------------------------------------------------------------------------------------------------
+
             //  XWindowListener
-            //---------------------------------------------------------------------------------------------------------
             virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception );
             virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception );
             virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
             virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
 
-            //---------------------------------------------------------------------------------------------------------
             //   XFrameActionListener
-            //---------------------------------------------------------------------------------------------------------
             virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw ( css::uno::RuntimeException, std::exception );
 
-            //---------------------------------------------------------------------------------------------------------
             //  XEventListener
-            //---------------------------------------------------------------------------------------------------------
             using cppu::OPropertySetHelper::disposing;
             virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
 
-            //---------------------------------------------------------------------------------------------------------
+
             //  XUIConfigurationListener
-            //---------------------------------------------------------------------------------------------------------
             virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-            //---------------------------------------------------------------------------------------------------------
             //  XLayoutManagerEventBroadcaster
-            //---------------------------------------------------------------------------------------------------------
             virtual void SAL_CALL addLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL removeLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
             DECL_LINK(MenuBarClose, void *);
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
-            //---------------------------------------------------------------------------------------------------------
+
             //  ILayoutNotifications
-            //---------------------------------------------------------------------------------------------------------
+
             virtual void requestLayout( Hint eHint );
 
             /// Reading of settings - shared with ToolbarLayoutManager.
@@ -204,27 +194,27 @@ namespace framework
             DECL_LINK(AsyncLayoutHdl, void *);
 
         private:
-            //---------------------------------------------------------------------------------------------------------
-            //  helper
-            //---------------------------------------------------------------------------------------------------------
 
-            //---------------------------------------------------------------------------------------------------------
+            //  helper
+
+
+
             //  menu bar
-            //---------------------------------------------------------------------------------------------------------
+
             void impl_clearUpMenuBar();
             void implts_reset( sal_Bool bAttach );
             void implts_updateMenuBarClose();
             sal_Bool implts_resetMenuBar();
 
-            //---------------------------------------------------------------------------------------------------------
+
             //  locking
-            //---------------------------------------------------------------------------------------------------------
+
             void implts_lock();
             sal_Bool implts_unlock();
 
-            //---------------------------------------------------------------------------------------------------------
+
             //  query
-            //---------------------------------------------------------------------------------------------------------
+
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_findElement( const OUString& aName );
 
             void implts_writeNewStateData( const OUString aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
@@ -281,9 +271,9 @@ namespace framework
             DECL_LINK( OptionsChanged, void* );
             DECL_LINK( SettingsChanged, void* );
 
-            //---------------------------------------------------------------------------------------------------------
+
             //  OPropertySetHelper
-            //---------------------------------------------------------------------------------------------------------
+
             virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
                                                                                                                 com::sun::star::uno::Any&        aOldValue       ,
                                                                                                                 sal_Int32                        nHandle         ,

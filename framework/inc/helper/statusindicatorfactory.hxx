@@ -24,7 +24,7 @@
 // with solaris headers ...
 #include <vector>
 
-//_______________________________________________
+
 // include files of own module
 #include <helper/wakeupthread.hxx>
 #include <threadhelp/threadhelpbase.hxx>
@@ -34,7 +34,7 @@
 #include <macros/generic.hxx>
 #include <general.h>
 
-//_______________________________________________
+
 // include uno interfaces
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -59,7 +59,7 @@
 namespace framework{
 
 
-//===============================================
+
 /**
     @descr  This struct hold some information about all currently running progress proccesses.
             Because the can be used on a stack, we must cache her states but must paint only
@@ -67,7 +67,7 @@ namespace framework{
  */
 struct IndicatorInfo
 {
-    //-------------------------------------------
+
     // member
     public:
 
@@ -84,11 +84,11 @@ struct IndicatorInfo
         /** @short  the last set value for this indicator */
         sal_Int32 m_nValue;
 
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short  initialize new instance of this class
 
             @param  xIndicator
@@ -110,7 +110,7 @@ struct IndicatorInfo
             m_nValue     = 0         ;
         }
 
-        //---------------------------------------
+
         /** @short  Don't forget to free used references!
          */
         ~IndicatorInfo()
@@ -118,7 +118,7 @@ struct IndicatorInfo
             m_xIndicator.clear();
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         /** @short  Used to locate an info struct inside a stl structure ...
 
             @descr  The indicator object itself is used as key. Its values
@@ -131,11 +131,11 @@ struct IndicatorInfo
         }
 };
 
-//===============================================
+
 /** @descr  Define a lits of child indicator objects and her data. */
 typedef ::std::vector< IndicatorInfo > IndicatorStack;
 
-//===============================================
+
 /** @short          implement a factory service to create new status indicator objects
 
     @descr          Internally it uses:
@@ -158,7 +158,7 @@ class StatusIndicatorFactory : private ThreadHelpBase
                                            , css::task::XStatusIndicatorFactory
                                            , css::util::XUpdatable >
 {
-    //-------------------------------------------
+
     // member
     private:
 
@@ -202,7 +202,7 @@ class StatusIndicatorFactory : private ThreadHelpBase
         /** prevent recursive calling of Application::Reschedule(). */
         static sal_Int32 m_nInReschedule;
 
-    //-------------------------------------------
+
     // interface
 
     public:
@@ -228,23 +228,23 @@ class StatusIndicatorFactory : private ThreadHelpBase
             return aSeq;
         }
 
-        //---------------------------------------
+
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XStatusIndicatorFactory
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator()
             throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XUpdatable
         virtual void SAL_CALL update()
             throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // similar (XStatusIndicator)
         virtual void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                            const OUString&                                    sText ,
@@ -260,14 +260,14 @@ class StatusIndicatorFactory : private ThreadHelpBase
         virtual void SAL_CALL setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                              sal_Int32                                           nValue);
 
-    //-------------------------------------------
+
     // specials
 
     protected:
 
         virtual ~StatusIndicatorFactory();
 
-    //-------------------------------------------
+
     // helper
     private:
 

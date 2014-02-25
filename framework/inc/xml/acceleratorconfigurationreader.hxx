@@ -39,12 +39,12 @@ namespace framework{
 class AcceleratorConfigurationReader : private ThreadHelpBase
                                      , public ::cppu::WeakImplHelper1< css::xml::sax::XDocumentHandler >
 {
-    //-------------------------------------------
+
     // const, types
 
     private:
 
-        //---------------------------------------
+
         /** @short  classification of XML elements. */
         enum EXMLElement
         {
@@ -52,7 +52,7 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
             E_ELEMENT_ITEM
         };
 
-        //---------------------------------------
+
         /** @short  classification of XML attributes. */
         enum EXMLAttribute
         {
@@ -64,7 +64,7 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
             E_ATTRIBUTE_URL
         };
 
-        //---------------------------------------
+
         /** @short  some namespace defines */
         enum EAcceleratorXMLNamespace
         {
@@ -72,31 +72,31 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
             E_NAMESPACE_XLINK
         };
 
-    //-------------------------------------------
+
     // member
 
     private:
 
-        //---------------------------------------
+
         /** @short  needed to read the xml configuration. */
         css::uno::Reference< css::xml::sax::XDocumentHandler > m_xReader;
 
-        //---------------------------------------
+
         /** @short  reference to the outside container, where this
                     reader/writer must work on. */
         AcceleratorCache& m_rContainer;
 
-        //---------------------------------------
+
         /** @short  used to detect if an accelerator list
                     occurs recursive inside xml. */
         sal_Bool m_bInsideAcceleratorList;
 
-        //---------------------------------------
+
         /** @short  used to detect if an accelerator item
                     occurs recursive inside xml. */
         sal_Bool m_bInsideAcceleratorItem;
 
-        //---------------------------------------
+
         /** @short  is used to map key codes to its
                     string representation.
 
@@ -105,7 +105,7 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
                     alive forever ...*/
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
-        //---------------------------------------
+
         /** @short  provide information about the parsing state.
 
             @descr  We use it to find out the line and column, where
@@ -113,12 +113,12 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
           */
         css::uno::Reference< css::xml::sax::XLocator > m_xLocator;
 
-    //-------------------------------------------
+
     // interface
 
     public:
 
-        //---------------------------------------
+
         /** @short  connect this new reader/writer instance
                     to an outside container, which should be used
                     flushed to the underlying XML configuration or
@@ -129,11 +129,11 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
           */
         AcceleratorConfigurationReader(AcceleratorCache& rContainer);
 
-        //---------------------------------------
+
         /** @short  does nothing real ... */
         virtual ~AcceleratorConfigurationReader();
 
-        //---------------------------------------
+
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
             throw(css::xml::sax::SAXException,
@@ -169,20 +169,20 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException, std::exception );
 
-    //-------------------------------------------
+
     // helper
 
     private:
 
-        //---------------------------------------
+
         /** TODO document me */
         static EXMLElement implst_classifyElement(const OUString& sElement);
 
-        //---------------------------------------
+
         /** TODO document me */
         static EXMLAttribute implst_classifyAttribute(const OUString& sAttribute);
 
-        //---------------------------------------
+
         /** TODO document me */
         OUString implts_getErrorLineString();
 };

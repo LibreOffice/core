@@ -38,7 +38,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class PathSettingsTest
 {
@@ -652,7 +652,7 @@ public class PathSettingsTest
         return bResult;
     }
 
-    // ____________________
+
     /**
      * This tests the XMultiPropertySet interface implementation.
      */
@@ -868,7 +868,7 @@ public class PathSettingsTest
 //                || ml.vetoableChangeEventFired();
 //    }
 
-    // ____________________
+
     /**
      * Change the given String to a correct path URL.
      * @return The changed path URL.

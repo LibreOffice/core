@@ -26,7 +26,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a guard to set write locks
     @descr          This guard should be used to set a lock for reading AND writing object internal member.
                     We never need a own mutex to safe our internal member access - because
@@ -43,12 +43,12 @@ namespace framework{
 *//*-*************************************************************************************************************/
 class WriteGuard : private INonCopyable
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      ctor
             @descr      These ctors initialize the guard with a reference to used lock member of object to protect.
                         Null isn't allowed as value!
@@ -68,7 +68,7 @@ class WriteGuard : private INonCopyable
             lock();
         }
 
-        //*********************************************************************************************************
+
         inline WriteGuard( IRWLock& rLock )
             :   m_pLock ( &rLock    )
             ,   m_eMode ( E_NOLOCK  )
@@ -76,7 +76,7 @@ class WriteGuard : private INonCopyable
             lock();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      dtor
             @descr      We unlock the used lock member automaticly if user forget it.
 
@@ -92,7 +92,7 @@ class WriteGuard : private INonCopyable
             unlock();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      set write lock
             @descr      Call this method to set the write lock. The call will block till all current threads are synchronized!
 
@@ -126,7 +126,7 @@ class WriteGuard : private INonCopyable
             }
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      unset write lock
             @descr      Call this method to unlock the rw-lock temp.!
                         Normaly we do it at dtor automaticly for you ...
@@ -158,7 +158,7 @@ class WriteGuard : private INonCopyable
             }
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      downgrade write access to read access without new blocking!
             @descr      If this write lock is set you can change it to a "read lock".
                         An "upgrade" is the same like new calling "lock()"!
@@ -179,7 +179,7 @@ class WriteGuard : private INonCopyable
             }
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return internal states
             @descr      For user they dont know what they are doing ...
 
@@ -195,12 +195,12 @@ class WriteGuard : private INonCopyable
             return m_eMode;
         }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      disable using of these functions!
             @descr      It's not allowed to use this methods. Different problem can occur otherwise.
                         Thats why we disable it by make it private.
@@ -214,9 +214,9 @@ class WriteGuard : private INonCopyable
         *//*-*****************************************************************************************************/
         WriteGuard();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         IRWLock*    m_pLock ;   /// reference to lock-member of protected object

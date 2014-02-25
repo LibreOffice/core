@@ -37,7 +37,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          listener for closing document frames to make her window state persistent
     @descr          It's a feature of our office. If a document window was created by ourself (and not from
                     any external process e.g. the office bean) we save and restore the window state of it
@@ -63,7 +63,7 @@ class PersistentWindowState :   // baseclasses (order necessary for right initia
                                            css::lang::XInitialization,
                                            css::frame::XFrameActionListener > // => XEventListener
 {
-    //________________________________
+
     // member
 
     private:
@@ -77,37 +77,37 @@ class PersistentWindowState :   // baseclasses (order necessary for right initia
         /// we call SetWindowState one times only for the same frame!
         sal_Bool m_bWindowStateAlreadySet;
 
-    //________________________________
+
     // interface
 
     public:
 
-        //____________________________
+
         // ctor/dtor
                  PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~PersistentWindowState(                                                                   );
 
-        //____________________________
+
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException, std::exception);
 
-        //____________________________
+
         // XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-        //____________________________
+
         // XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-    //________________________________
+
     // helper
 
     private:
-        //____________________________
+
         /** @short  identify the application module, which  is used behind the component
                     of our frame.
 
@@ -123,7 +123,7 @@ class PersistentWindowState :   // baseclasses (order necessary for right initia
         static OUString implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                      const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
-        //____________________________
+
         /** @short  retrieve the window state from the configuration.
 
             @param  rxContext
@@ -139,7 +139,7 @@ class PersistentWindowState :   // baseclasses (order necessary for right initia
         static OUString implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext      ,
                                                                const OUString&                                    sModuleName);
 
-        //____________________________
+
         /** @short  retrieve the window state from the container window.
 
             @param  xWindow
@@ -152,7 +152,7 @@ class PersistentWindowState :   // baseclasses (order necessary for right initia
          */
         static OUString implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow);
 
-        //____________________________
+
         /** @short  restore the position and size on the container window.
 
             @param  rxContext
@@ -169,7 +169,7 @@ class PersistentWindowState :   // baseclasses (order necessary for right initia
                                                   const OUString&                                    sModuleName   ,
                                                   const OUString&                                    sWindowState  );
 
-        //____________________________
+
         /** @short  restore the position and size on the container window.
 
             @param  xWindow

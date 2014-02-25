@@ -65,9 +65,9 @@ static sal_Bool impldbg_checkParameter_addStatusListener    (   const   css::uno
                                                                 const   css::util::URL&                                         aURL            );
 static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
                                                                 const   css::util::URL&                                         aURL            );
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
                                   const   uno::Reference< XFrame >&             xOwner      )
         //  Init baseclasses first
@@ -88,9 +88,9 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
     xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 MenuDispatcher::~MenuDispatcher()
 {
     // Warn programmer if he forgot to dispose this instance.
@@ -98,17 +98,17 @@ MenuDispatcher::~MenuDispatcher()
     // and a dtor isn't the best place to do that!
 }
 
-//*****************************************************************************************************************
+
 //  XDispatch
-//*****************************************************************************************************************
+
 void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        /*aURL*/            ,
                                             const   Sequence< PropertyValue >&  /*seqProperties*/   ) throw( RuntimeException, std::exception )
 {
 }
 
-//*****************************************************************************************************************
+
 //  XDispatch
-//*****************************************************************************************************************
+
 void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStatusListener >&   xControl,
                                                     const   URL&                            aURL    ) throw( RuntimeException, std::exception )
 {
@@ -121,9 +121,9 @@ void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStat
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
 }
 
-//*****************************************************************************************************************
+
 //  XDispatch
-//*****************************************************************************************************************
+
 void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< XStatusListener >&   xControl,
                                                         const   URL&                            aURL    ) throw( RuntimeException, std::exception )
 {
@@ -136,9 +136,9 @@ void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< X
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
 }
 
-//*****************************************************************************************************************
+
 //   XFrameActionListener
-//*****************************************************************************************************************
+
 
 void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) throw ( RuntimeException, std::exception )
 {
@@ -175,9 +175,8 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
     }
 }
 
-//*****************************************************************************************************************
+
 //   XEventListener
-//*****************************************************************************************************************
 void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
@@ -214,9 +213,9 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
     }
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
 {
     for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
@@ -234,9 +233,9 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
     }
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource )
 {
     uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
@@ -318,7 +317,7 @@ static sal_Bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference<
     return xContext.is() && xOwner.is();
 }
 
-//*****************************************************************************************************************
+
 // We need a valid URL. What is meaning with "register for nothing"?!
 // xControl must correct to - nobody can advised otherwise!
 static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
@@ -339,7 +338,7 @@ static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference
     return bOK ;
 }
 
-//*****************************************************************************************************************
+
 // The same goes for these case! We have added valid listener for correct URL only.
 // We can't remove invalid listener for nothing!
 static sal_Bool impldbg_checkParameter_removeStatusListener(  const   uno::Reference< XStatusListener >&   xControl,

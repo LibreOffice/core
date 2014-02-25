@@ -43,9 +43,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
 
-//-----------------------------------------------
+
+
 /** @short  Check the interface XDispatchInformationProvider
 
 @descr  Because there exists more then one implementation of a dispatch
@@ -53,10 +53,10 @@ object, we have to test all these implementations ...
  */
 public class checkdispatchapi
 {
-    //-------------------------------------------
+
     // some const
 
-    //-------------------------------------------
+
     // member
     /** points to the global uno service manager. */
     private XMultiServiceFactory m_xMSF = null;
@@ -66,9 +66,9 @@ public class checkdispatchapi
     /** provides XDispatchInformationProvider interface. */
     private XFrame m_xFrame = null;
 
-    //-------------------------------------------
+
     // test environment
-    //-------------------------------------------
+
     /** @short  A function to tell the framework,
     which test functions are available.
 
@@ -98,7 +98,7 @@ public class checkdispatchapi
 //                };
 //    }
 
-    //-------------------------------------------
+
     /** @short  Create the environment for following tests.
 
     @descr  create an empty test frame, where we can load
@@ -124,7 +124,7 @@ public class checkdispatchapi
         }
     }
 
-    //-------------------------------------------
+
     /** @short  close the environment.
      */
     @After public void after()
@@ -134,84 +134,84 @@ public class checkdispatchapi
         m_xFrame = null;
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfWriter()
     {
         impl_checkDispatchInfoOfXXX("private:factory/swriter");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfCalc()
     {
         impl_checkDispatchInfoOfXXX("private:factory/scalc");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfDraw()
     {
         impl_checkDispatchInfoOfXXX("private:factory/sdraw");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfImpress()
     {
         impl_checkDispatchInfoOfXXX("private:factory/simpress");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfChart()
     {
         impl_checkDispatchInfoOfXXX("private:factory/schart");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfMath()
     {
         impl_checkDispatchInfoOfXXX("private:factory/smath");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfDataBase()
     {
         impl_checkDispatchInfoOfXXX("private:factory/sdatabase");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfBibliography()
     {
         impl_checkDispatchInfoOfXXX(".component:Bibliography/View1");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfQueryDesign()
     {
         callDatabaseDispatch(".component:DB/QueryDesign");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfTableDesign()
     {
         callDatabaseDispatch(".component:DB/TableDesign");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfFormGridView()
     {
         impl_checkDispatchInfoOfXXX(".component:DB/FormGridView");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfDataSourceBrowser()
     {
         impl_checkDispatchInfoOfXXX(".component:DB/DataSourceBrowser");
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfRelationDesign()
     {
         callDatabaseDispatch(".component:DB/RelationDesign");
     }
-    //-------------------------------------------
+
 
     private void callDatabaseDispatch(String url)
     {
@@ -235,21 +235,21 @@ public class checkdispatchapi
         }
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfBasic()
     {
         Object aComponent = impl_createUNOComponent("com.sun.star.script.BasicIDE");
         impl_checkDispatchInfo(aComponent);
     }
 
-    //-------------------------------------------
+
     @Test public void checkDispatchInfoOfStartModule()
     {
         Object aComponent = impl_createUNOComponent("com.sun.star.frame.StartModule");
         impl_checkDispatchInfo(aComponent);
     }
 
-    //-------------------------------------------
+
     public void checkInterceptorLifeTime()
     {
         // Note: It's important for the following test, that aInterceptor will be hold alive by the uno reference
@@ -284,7 +284,7 @@ public class checkdispatchapi
         System.out.println("Destruction of interception chain works as designed .-)");
     }
 
-    //-------------------------------------------
+
     public void checkInterception()
     {
         String[] lDisabledURLs = new String[1];
@@ -309,7 +309,7 @@ public class checkdispatchapi
         xInterception.releaseDispatchProviderInterceptor(xInterceptor);
     }
 
-    //-------------------------------------------
+
     private void impl_checkDispatchInfoOfXXX(String sXXX)
     {
         XFrame xFrame = impl_createNewFrame();
@@ -318,7 +318,7 @@ public class checkdispatchapi
         impl_closeFrame(xFrame);
     }
 
-    //-------------------------------------------
+
     /** @short  load an URL into the current test frame.
      */
     private void impl_loadIntoFrame(XFrame xFrame, String sURL, PropertyValue args[])
@@ -345,7 +345,7 @@ public class checkdispatchapi
         }
     }
 
-    //-------------------------------------------
+
     /** @short  create an uno implementation directly.
      */
     private Object impl_createUNOComponent(String sName)
@@ -367,7 +367,7 @@ public class checkdispatchapi
         return aComponent;
     }
 
-    //-------------------------------------------
+
     /** @short  check the interface XDispatchInformationProvider
     at the specified component.
      */
@@ -432,7 +432,7 @@ public class checkdispatchapi
         }
     }
 
-    //-------------------------------------------
+
     private synchronized XFrame impl_createNewFrame()
     {
         XFrame xFrame = null;
@@ -450,7 +450,7 @@ public class checkdispatchapi
         return xFrame;
     }
 
-    //-------------------------------------------
+
     private synchronized void impl_closeFrame(XFrame xFrame)
     {
         XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xFrame);

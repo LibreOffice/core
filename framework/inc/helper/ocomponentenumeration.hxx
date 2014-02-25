@@ -34,7 +34,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a helper for a oneway enumeration of components
     @descr          You can step during this list only for one time! Its a snapshot.
                     Don't forget to release the reference. You are the owner of an instance of this implementation.
@@ -55,17 +55,17 @@ namespace framework{
 class OComponentEnumeration :   public ThreadHelpBase               ,
                                 public ::cppu::WeakImplHelper2< ::com::sun::star::container::XEnumeration,::com::sun::star::lang::XEventListener >
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  constructor / destructor
+
+
+        /*-****************************************************************************************************
             @short      constructor to initialize this enumeration
             @descr      An enumeration is a list with oneway-access! You can get every member only for one time.
                         This method allow to initialize this oneway list with values.
@@ -80,11 +80,11 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
          OComponentEnumeration( const css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XEventListener
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  XEventListener
+
+
+        /*-****************************************************************************************************
             @short      last chance to release all references and free memory
             @descr      This method is called, if the enumeration is used completely and has no more elements.
                         Then we must destroy ouer list and release all references to other objects.
@@ -99,11 +99,11 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XEnumeration
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  XEnumeration
+
+
+        /*-****************************************************************************************************
             @short      check count of accessible elements of enumeration
             @descr      You can call this method to get information about accessible elements in future.
                         Elements you have already getted are not accessible!
@@ -120,7 +120,7 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
         virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException, std::exception );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      give the next element, if some exist
             @descr      If a call "hasMoreElements()" return true, you can get the next element of list.
 
@@ -136,13 +136,13 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
                                                              css::lang::WrappedTargetException      ,
                                                             css::uno::RuntimeException, std::exception              );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     protected:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
                         We make it protected, because its not supported to use this class as normal instance!
@@ -158,7 +158,7 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
         virtual ~OComponentEnumeration();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      reset instance to default values
 
             @descr      There are two ways to delete an instance of this class.<BR>
@@ -178,18 +178,18 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
         virtual void impl_resetObject();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  debug methods
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+
+        /*-****************************************************************************************************
             @short      debug-method to check incoming parameter of some other mehods of this class
             @descr      The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
@@ -208,10 +208,10 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
         static sal_Bool impldbg_checkParameter_OComponentEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents   );
         static sal_Bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                             aEvent          );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

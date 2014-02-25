@@ -55,9 +55,9 @@ class UIConfigElementWrapperBase : protected ThreadHelpBase                     
                                    public ::cppu::OPropertySetHelper                             ,
                                    public UIConfigElementWrapperBase_BASE
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
         UIConfigElementWrapperBase( sal_Int16 nType );
         virtual  ~UIConfigElementWrapperBase();
@@ -103,9 +103,9 @@ class UIConfigElementWrapperBase : protected ThreadHelpBase                     
         using cppu::OPropertySetHelper::disposing;
         virtual  void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
     protected:
 
         //  OPropertySetHelper

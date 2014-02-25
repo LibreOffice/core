@@ -46,7 +46,7 @@ public class Interceptor implements XDispatchProvider,
                                     XDispatchProviderInterceptor,
                                     XInterceptorInfo
 {
-    // ____________________
+
 
     /** contains the list of interception URL schema's (wildcards are allowed there!)
         supported by this interceptor. It can be set from outside.
@@ -56,7 +56,7 @@ public class Interceptor implements XDispatchProvider,
      */
     private String[] m_lURLs4InterceptionInfo = null;
 
-    // ____________________
+
 
     /** These URL's will be blocked by this interceptor.
         Can be set from outside. Every queryDispatch() for these
@@ -66,7 +66,7 @@ public class Interceptor implements XDispatchProvider,
      */
     private String[] m_lURLs4Blocking = null;
 
-    // ____________________
+
 
     /** Every dispatch interceptor knows it's master and slave interceptor
         of the dispatch chain. These values must be stupid handled .-)
@@ -78,7 +78,7 @@ public class Interceptor implements XDispatchProvider,
     private XDispatchProvider m_xSlave  = null;
     private XDispatchProvider m_xMaster = null;
 
-    // ____________________
+
 
     /** counts calls of setSlave...().
         So the outside API test can use this value to know if this interceptor
@@ -86,7 +86,7 @@ public class Interceptor implements XDispatchProvider,
      */
     private int m_nRegistrationCount = 0;
 
-    // ____________________
+
 
     /** indicates if this interceptor object is currently part of the interceptor
         chain of OOo. Only true if a valid slave or master dispatch is set on this
@@ -95,7 +95,7 @@ public class Interceptor implements XDispatchProvider,
     private boolean m_bIsRegistered = false;
 
 
-    // ____________________
+
 
     /** ctor
      *  It's initialize an object of this class with default values.
@@ -104,7 +104,7 @@ public class Interceptor implements XDispatchProvider,
     {
     }
 
-    // ____________________
+
 
     /** XInterceptorInfo */
     public synchronized String[] getInterceptedURLs()
@@ -112,7 +112,7 @@ public class Interceptor implements XDispatchProvider,
         return impl_getURLs4InterceptionInfo();
     }
 
-    // ____________________
+
 
     /** XDispatchProviderInterceptor */
     public synchronized XDispatchProvider getSlaveDispatchProvider()
@@ -121,7 +121,7 @@ public class Interceptor implements XDispatchProvider,
         return m_xSlave;
     }
 
-    // ____________________
+
 
     /** XDispatchProviderInterceptor */
     public synchronized XDispatchProvider getMasterDispatchProvider()
@@ -130,7 +130,7 @@ public class Interceptor implements XDispatchProvider,
         return m_xMaster;
     }
 
-    // ____________________
+
 
     /** XDispatchProviderInterceptor */
     public synchronized void setSlaveDispatchProvider(XDispatchProvider xSlave)
@@ -150,7 +150,7 @@ public class Interceptor implements XDispatchProvider,
         m_xSlave = xSlave;
     }
 
-    // ____________________
+
 
     /** XDispatchProviderInterceptor */
     public synchronized void setMasterDispatchProvider(XDispatchProvider xMaster)
@@ -159,7 +159,7 @@ public class Interceptor implements XDispatchProvider,
         m_xMaster = xMaster;
     }
 
-    // ____________________
+
 
     /** XDispatchProvider
      */
@@ -185,7 +185,7 @@ public class Interceptor implements XDispatchProvider,
         return this;
     }
 
-    // ____________________
+
 
     /** XDispatchProvider
      */
@@ -205,7 +205,7 @@ public class Interceptor implements XDispatchProvider,
         return lResults;
     }
 
-    // ____________________
+
 
     /** XDispatch
      */
@@ -215,7 +215,7 @@ public class Interceptor implements XDispatchProvider,
         System.out.println("Interceptor.dispatch('"+aURL.Complete+"') called");
     }
 
-    // ____________________
+
 
     /** XDispatch
      */
@@ -225,7 +225,7 @@ public class Interceptor implements XDispatchProvider,
         System.out.println("Interceptor.addStatusListener(..., '"+aURL.Complete+"') called");
     }
 
-    // ____________________
+
 
     /** XDispatch
      */
@@ -235,21 +235,21 @@ public class Interceptor implements XDispatchProvider,
         System.out.println("Interceptor.removeStatusListener(..., '"+aURL.Complete+"') called");
     }
 
-    // ____________________
+
 
     public synchronized int getRegistrationCount()
     {
         return m_nRegistrationCount;
     }
 
-    // ____________________
+
 
     public synchronized boolean isRegistered()
     {
         return m_bIsRegistered;
     }
 
-    // ____________________
+
 
     /** set a new list of URL's, which should be used on registration time
         (that's why it's necessary to call this impl-method before the interceptor
@@ -260,7 +260,7 @@ public class Interceptor implements XDispatchProvider,
         m_lURLs4InterceptionInfo = lURLs;
     }
 
-    // ____________________
+
 
     /** set a new list of URL's, which should be blocked by this interceptor.
         (that's why it's necessary to call this impl-method before the interceptor
@@ -271,7 +271,7 @@ public class Interceptor implements XDispatchProvider,
         m_lURLs4Blocking = lURLs;
     }
 
-    // ____________________
+
 
     /** must be used internal to access the member m_lURLs4InterceptionInfo
         - threadsafe
@@ -288,7 +288,7 @@ public class Interceptor implements XDispatchProvider,
         return m_lURLs4InterceptionInfo;
     }
 
-    // ____________________
+
 
     /** must be used internal to access the member m_lURLs4Blocking
         - threadsafe
@@ -305,7 +305,7 @@ public class Interceptor implements XDispatchProvider,
         return m_lURLs4Blocking;
     }
 
-    // ____________________
+
     private boolean impl_isBlockedURL(String sURL)
     {
         String[] lBlockedURLs = impl_getURLs4Blocking();
@@ -323,7 +323,7 @@ public class Interceptor implements XDispatchProvider,
         return false;
     }
 
-    // ____________________
+
 
     private boolean impl_match(String sVal1, String sVal2)
     {

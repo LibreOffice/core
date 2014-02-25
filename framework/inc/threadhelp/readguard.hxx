@@ -28,7 +28,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a guard to set read locks
     @descr          This guard should be used to set a lock for reading object internal member.
                     Nobody can control it but don't use member after successfully locking for writing!
@@ -46,12 +46,12 @@ namespace framework{
 *//*-*************************************************************************************************************/
 class ReadGuard : private INonCopyable
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      ctor
             @descr      These ctors initialize the guard with a reference to used lock member of object to protect.
                         Null isn't allowed as value!
@@ -71,7 +71,7 @@ class ReadGuard : private INonCopyable
             lock();
         }
 
-        //*********************************************************************************************************
+
         inline ReadGuard( IRWLock& rLock )
             :   m_pLock     ( &rLock    )
             ,   m_bLocked   ( sal_False )
@@ -79,7 +79,7 @@ class ReadGuard : private INonCopyable
             lock();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      dtor
             @descr      We unlock the used lock member automaticly if user forget it.
 
@@ -95,7 +95,7 @@ class ReadGuard : private INonCopyable
             unlock();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      set read lock
             @descr      Call this method to set the read lock. The call will block till all current threads are synchronized!
 
@@ -115,7 +115,7 @@ class ReadGuard : private INonCopyable
             }
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      unset read lock
             @descr      Call this method to unlock the rw-lock temp.!
                         Normaly we do it at dtor automaticly for you ...
@@ -136,12 +136,12 @@ class ReadGuard : private INonCopyable
             }
         }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      disable using of these functions!
             @descr      It's not allowed to use this methods. Different problem can occur otherwise.
                         Thats why we disable it by make it private.
@@ -155,9 +155,9 @@ class ReadGuard : private INonCopyable
         *//*-*****************************************************************************************************/
         ReadGuard();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         IRWLock*    m_pLock     ;   /// reference to lock-member of protected object

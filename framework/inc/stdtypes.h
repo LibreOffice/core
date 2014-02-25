@@ -79,7 +79,7 @@ struct KeyEventEqualsFunc
     }
 };
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     Basic string list based on a std::vector()
@@ -114,7 +114,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< OUString >
         }
 };
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     Basic string queue based on a std::queue()
@@ -123,7 +123,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< OUString >
 */
 typedef ::std::queue< OUString > OUStringQueue;
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     Basic hash based on a boost::unordered_map() which provides key=[OUString] and value=[template type] pairs
@@ -145,7 +145,7 @@ class BaseHash : public ::boost::unordered_map< OUString                    ,
         }
 };
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     Basic OUString hash.
@@ -153,7 +153,7 @@ class BaseHash : public ::boost::unordered_map< OUString                    ,
 */
 typedef BaseHash< OUString > OUStringHashMap;
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     It can be used to map names (e.g. of properties) to her corresponding handles.
@@ -162,7 +162,7 @@ typedef BaseHash< OUString > OUStringHashMap;
 */
 typedef BaseHash< sal_Int32 > NameToHandleHash;
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     Sometimes we need this template to implement listener container ...

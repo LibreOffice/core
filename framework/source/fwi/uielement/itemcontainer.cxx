@@ -33,9 +33,9 @@ const char WRONG_TYPE_EXCEPTION[] = "Type must be com::sun::star::uno::Sequence<
 namespace framework
 {
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
 
 ItemContainer::ItemContainer( const ShareableMutex& rMutex ) :
     m_aShareMutex( rMutex )

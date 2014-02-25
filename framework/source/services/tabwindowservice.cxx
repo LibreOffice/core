@@ -79,7 +79,7 @@ typedef ::boost::unordered_map< ::sal_Int32                    ,
                          Int32HashCode                  ,
                          ::std::equal_to< ::sal_Int32 > > TTabPageInfoHash;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short  implements a helper service providing a dockable tab control window
 *//*-*************************************************************************************************************/
 
@@ -202,9 +202,9 @@ DEFINE_XTYPEPROVIDER_6              (   TabWindowService               ,
                                     )
 
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 TabWindowService::TabWindowService()
         //  Init baseclasses first
         //  Attention:
@@ -235,9 +235,9 @@ void TabWindowService::initProperties()
     m_aTransactionManager.setWorkingMode( E_WORK );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 TabWindowService::~TabWindowService()
 {
     // SAFE->
@@ -247,9 +247,9 @@ TabWindowService::~TabWindowService()
         m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
 }
 
-//*****************************************************************************************************************
+
 //  XSimpleTabController
-//*****************************************************************************************************************
+
 ::sal_Int32 SAL_CALL TabWindowService::insertTab()
     throw ( css::uno::RuntimeException, std::exception )
 {
@@ -264,9 +264,9 @@ TabWindowService::~TabWindowService()
     return nID;
 }
 
-//*****************************************************************************************************************
+
 //  XSimpleTabController
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::removeTab(::sal_Int32 nID)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception          )
@@ -283,9 +283,9 @@ void SAL_CALL TabWindowService::removeTab(::sal_Int32 nID)
         pTabWin->RemovePage(nID);
 }
 
-//*****************************************************************************************************************
+
 //  XSimpleTabController
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::setTabProps(      ::sal_Int32                                   nID        ,
                                               const css::uno::Sequence< css::beans::NamedValue >& lProperties)
     throw (css::lang::IndexOutOfBoundsException,
@@ -310,9 +310,9 @@ void SAL_CALL TabWindowService::setTabProps(      ::sal_Int32                   
     }
 }
 
-//*****************************************************************************************************************
+
 //  XSimpleTabController
-//*****************************************************************************************************************
+
 css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindowService::getTabProps(::sal_Int32 nID)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception          )
@@ -327,9 +327,9 @@ css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindowService::getTabPr
     return rInfo.m_lProperties;
 }
 
-//*****************************************************************************************************************
+
 //  XSimpleTabController
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception          )
@@ -346,9 +346,9 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
         pTabWin->ActivatePage(nID);
 }
 
-//*****************************************************************************************************************
+
 //  XSimpleTabController
-//*****************************************************************************************************************
+
 ::sal_Int32 SAL_CALL TabWindowService::getActiveTabID()
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -357,27 +357,27 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
     return m_nCurrentPageIndex;
 }
 
-//*****************************************************************************************************************
+
 //  XSimpleTabController
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::addTabListener(const css::uno::Reference< css::awt::XTabListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
     m_lListener.addInterface(::getCppuType((const css::uno::Reference< css::awt::XTabListener >*)NULL), xListener);
 }
 
-//*****************************************************************************************************************
+
 //  XSimpleTabController
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::removeTabListener(const css::uno::Reference< css::awt::XTabListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
     m_lListener.removeInterface(::getCppuType((const css::uno::Reference< css::awt::XTabListener >*)NULL), xListener);
 }
 
-//*****************************************************************************************************************
+
 //  XComponent
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::dispose()
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -396,25 +396,25 @@ void SAL_CALL TabWindowService::dispose()
     m_xTabWin.clear();
 }
 
-//*****************************************************************************************************************
+
 //  XComponent
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
     m_lListener.addInterface(::getCppuType((const css::uno::Reference< css::lang::XEventListener >*)NULL), xListener);
 }
 
-//*****************************************************************************************************************
+
 //  XComponent
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
     m_lListener.removeInterface(::getCppuType((const css::uno::Reference< css::lang::XEventListener >*)NULL), xListener);
 }
 
-//*****************************************************************************************************************
+
 void TabWindowService::impl_initializePropInfo()
 {
     impl_setPropertyChangeBroadcaster(static_cast< css::awt::XSimpleTabController* >(this));
@@ -427,7 +427,7 @@ void TabWindowService::impl_initializePropInfo()
             css::beans::PropertyAttribute::TRANSIENT));
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TabWindowService::impl_setPropertyValue(const OUString& /*sProperty*/,
                                                               sal_Int32        /*nHandle  */,
                                                         const css::uno::Any&   /*aValue   */)
@@ -435,7 +435,7 @@ void SAL_CALL TabWindowService::impl_setPropertyValue(const OUString& /*sPropert
 {
 }
 
-//*****************************************************************************************************************
+
 css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /*sProperty*/,
                                                                        sal_Int32        nHandle      )
 {
@@ -458,9 +458,9 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /
     return aValue;
 }
 
-//*****************************************************************************************************************
+
 //  TabWindowService
-//*****************************************************************************************************************
+
 IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
 {
 
@@ -527,9 +527,9 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-//*****************************************************************************************************************
+
 //  TabWindowService
-//*****************************************************************************************************************
+
 void TabWindowService::impl_checkTabIndex (::sal_Int32 nID)
     throw (css::lang::IndexOutOfBoundsException)
 {
@@ -544,9 +544,9 @@ void TabWindowService::impl_checkTabIndex (::sal_Int32 nID)
     }
 }
 
-//*****************************************************************************************************************
+
 //  TabWindowService
-//*****************************************************************************************************************
+
 TTabPageInfoHash::iterator TabWindowService::impl_getTabPageInfo(::sal_Int32 nID)
     throw (css::lang::IndexOutOfBoundsException)
 {

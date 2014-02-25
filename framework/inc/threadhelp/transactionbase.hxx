@@ -24,7 +24,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          make it possible to instanciate a transacion manager as first member!
     @descr          If you use a transaction manager as a member of your class and wish to use it earlier then other ones
                     you should have a look on this implementation. You must use it as the first base class
@@ -38,9 +38,9 @@ namespace framework{
 *//*-*************************************************************************************************************/
 struct TransactionBase
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public member
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
         mutable TransactionManager    m_aTransactionManager    ;   /// "your" public manager-member!

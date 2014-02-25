@@ -45,7 +45,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      factory to create handler-objects
     @descr      These class can be used to create new handler for specified contents.
                 We use cached values of our configuration to lay down, which handler match
@@ -81,37 +81,37 @@ class ContentHandlerFactory :   // interfaces
                         private TransactionBase                     ,
                         public  ::cppu::OWeakObject
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
                  ContentHandlerFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~ContentHandlerFactory(                                                                        );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XInterface, XTypeProvider, XServiceInfo
-        //---------------------------------------------------------------------------------------------------------
+
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XMultiServiceFactory
-        //---------------------------------------------------------------------------------------------------------
+
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance             ( const OUString&                        sTypeName   ) throw( css::uno::Exception        ,
                                                                                                                                                                      css::uno::RuntimeException );
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString&                        sTypeName   ,
                                                                                                   const css::uno::Sequence< css::uno::Any >&    lArguments  ) throw( css::uno::Exception, css::uno::RuntimeException );
         virtual css::uno::Sequence< OUString >       SAL_CALL getAvailableServiceNames   (                                                           ) throw( css::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XNameContainer
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL insertByName( const OUString&  sHandlerName        ,
                                             const css::uno::Any&    aHandlerProperties  ) throw( css::lang::IllegalArgumentException     ,
                                                                                                  css::container::ElementExistException   ,
@@ -121,41 +121,41 @@ class ContentHandlerFactory :   // interfaces
                                                                                                  css::lang::WrappedTargetException       ,
                                                                                                  css::uno::RuntimeException              );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XNameReplace
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL replaceByName( const OUString& sHandlerName       ,
                                              const css::uno::Any&   aHandlerProperties ) throw( css::lang::IllegalArgumentException    ,
                                                                                                 css::container::NoSuchElementException ,
                                                                                                 css::lang::WrappedTargetException      ,
                                                                                                 css::uno::RuntimeException             );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XNameAccess
-        //---------------------------------------------------------------------------------------------------------
+
         virtual css::uno::Any                         SAL_CALL getByName      ( const OUString& sName ) throw( css::container::NoSuchElementException ,
                                                                                                                       css::lang::WrappedTargetException      ,
                                                                                                                       css::uno::RuntimeException             );
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(                              ) throw( css::uno::RuntimeException             );
         virtual sal_Bool                              SAL_CALL hasByName      ( const OUString& sName ) throw( css::uno::RuntimeException             );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XElementAccess
-        //---------------------------------------------------------------------------------------------------------
+
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
         virtual sal_Bool       SAL_CALL hasElements   () throw( css::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XFlushable
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL flush              (                                                                   ) throw ( css::uno::RuntimeException );
         virtual void SAL_CALL addFlushListener   ( const css::uno::Reference< css::util::XFlushListener >& xListener ) throw ( css::uno::RuntimeException );
         virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& xListener ) throw ( css::uno::RuntimeException );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

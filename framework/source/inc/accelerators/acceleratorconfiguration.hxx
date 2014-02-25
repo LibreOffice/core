@@ -51,7 +51,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <salhelper/singletonref.hxx>
 
-//__________________________________________
+
 // definition
 
 namespace framework
@@ -65,7 +65,7 @@ const char CFG_ENTRY_MODULES[] = "Modules";
     in combination with the salhelper::SingletonRef mechanism! */
 typedef PresetHandler AcceleratorPresets;
 
-//__________________________________________
+
 /**
     implements a read/write access to the accelerator configuration.
  */
@@ -77,17 +77,17 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
                                                                                              //    css::ui::XUIConfigurationStorage
                                                                                              //    css::ui::XUIConfiguration
 {
-    //______________________________________
+
     // member
 
     protected:
 
-        //---------------------------------------
+
         /** the global uno service manager.
         Must be used to create own needed services. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        //---------------------------------------
+
         /** used to:
         i  ) copy configuration files from the share to the user layer
         ii ) provide access to these config files
@@ -95,15 +95,15 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         iv ) provide commit for changes. */
         PresetHandler m_aPresetHandler;
 
-        //---------------------------------------
+
         /** contains the cached configuration data */
         AcceleratorCache m_aReadCache;
 
-        //---------------------------------------
+
         /** used to implement the copy on write pattern! */
         AcceleratorCache* m_pWriteCache;
 
-        //______________________________________
+
         // native interface!
 
     public:
@@ -111,7 +111,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         XMLBasedAcceleratorConfiguration( const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~XMLBasedAcceleratorConfiguration(                                                                    );
 
-        //______________________________________
+
         // uno interface!
 
     public:
@@ -194,12 +194,12 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         // IStorageListener
         virtual void changesOccurred(const OUString& sPath);
 
-        //______________________________________
+
         // helper for derived classes
 
     protected:
 
-        //---------------------------------------
+
         /** @short  return the current office locale.
 
         @descr  We do not cache this value, because we are not listen
@@ -210,12 +210,12 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         */
         OUString impl_ts_getLocale() const;
 
-        //______________________________________
+
         // helper
 
     private:
 
-        //---------------------------------------
+
         /** @short  load a configuration set, using the given stream.
 
         @param  xStream
@@ -223,7 +223,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         */
         void impl_ts_load(const css::uno::Reference< css::io::XInputStream >& xStream);
 
-        //---------------------------------------
+
         /** @short  save a configuration set, using the given stream.
 
         @param  xStream
@@ -231,7 +231,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         */
         void impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream);
 
-        //---------------------------------------
+
         /** @short  try to locate and open a sub storage.
 
         @descr  It search at the root storage for the specified
@@ -259,7 +259,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
             const OUString&                             sSubStorage ,
             sal_Bool                                     bOutStream  );
 
-        //---------------------------------------
+
         /** @short  returns a reference to one of our internal cache members.
 
         @descr  We implement the copy-on-write pattern. Doing so
@@ -291,12 +291,12 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase,              
                                                                                            //    css::ui::XUIConfigurationStorage
                                                                                            //    css::ui::XUIConfiguration
 {
-    //______________________________________
+
     // member
 
     protected:
 
-        //---------------------------------------
+
         /** the global uno service manager.
         Must be used to create own needed services. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -312,7 +312,7 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase,              
 
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
-        //______________________________________
+
         // native interface!
 
     public:
@@ -320,7 +320,7 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         XCUBasedAcceleratorConfiguration( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~XCUBasedAcceleratorConfiguration(                                                           );
 
-        //______________________________________
+
         // uno interface!
 
     public:
@@ -413,12 +413,12 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         virtual  void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual  void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-        //______________________________________
+
         // helper for derived classes
 
     protected:
 
-        //---------------------------------------
+
         /** @short  return the current office locale.
 
         @descr  We do not cache this value, because we are not listen
@@ -429,7 +429,7 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         */
         OUString impl_ts_getLocale() const;
 
-        //______________________________________
+
         // helper
 
     private:

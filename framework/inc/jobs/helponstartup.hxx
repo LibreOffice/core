@@ -38,7 +38,7 @@
 namespace framework{
 
 
-//_______________________________________________
+
 /** @short  implements a job component, which handle the special
             feature to show a suitable help page for every (visible!)
             loaded document.
@@ -48,43 +48,43 @@ namespace framework{
 class HelpOnStartup : private ThreadHelpBase
                       ,public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::lang::XEventListener,::com::sun::star::task::XJob >
 {
-    //-------------------------------------------
+
     // member
     private:
 
-        //.......................................
+
         /** @short  reference to an uno service manager. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        //.......................................
+
         /** @short  such module manager is used to classify new opened documents. */
         css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
 
-        //.......................................
+
         /** @short  is needed to locate a might open help frame. */
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
-        //.......................................
+
         /** @short  provides read access to the underlying configuration. */
         css::uno::Reference< css::container::XNameAccess > m_xConfig;
 
-        //.......................................
+
         /** @short  knows the current locale of this office session,
                     which is needed to build complete help URLs.
          */
         OUString m_sLocale;
 
-        //.......................................
+
         /** @short  knows the current operating system of this office session,
                     which is needed to build complete help URLs.
          */
         OUString m_sSystem;
 
-    //-------------------------------------------
+
     // native interface
     public:
 
-        //---------------------------------------
+
         /** @short  create new instance of this class.
 
             @param  xContext
@@ -93,7 +93,7 @@ class HelpOnStartup : private ThreadHelpBase
          */
         HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-        //---------------------------------------
+
         /** @short  does nothing real ...
 
             @descr  But it should exists as virtual function,
@@ -102,11 +102,11 @@ class HelpOnStartup : private ThreadHelpBase
          */
         virtual ~HelpOnStartup();
 
-    //-------------------------------------------
+
     // uno interface
     public:
 
-        //---------------------------------------
+
         // css.lang.XServiceInfo
         DECLARE_XSERVICEINFO
 
@@ -120,11 +120,11 @@ class HelpOnStartup : private ThreadHelpBase
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------
+
     // helper
     private:
 
-        //---------------------------------------
+
         /** @short  analyze the given job arguments, try to locate a model reference
                     and try to classify this model.
 
@@ -140,7 +140,7 @@ class HelpOnStartup : private ThreadHelpBase
          */
         OUString its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments);
 
-        //---------------------------------------
+
         /** @short  tries to locate the open help module and return
                     the url of the currently shown help content.
 
@@ -152,7 +152,7 @@ class HelpOnStartup : private ThreadHelpBase
          */
         OUString its_getCurrentHelpURL();
 
-        //---------------------------------------
+
         /** @short  checks if the given help url match to a default help url
                     of any office module.
 
@@ -165,7 +165,7 @@ class HelpOnStartup : private ThreadHelpBase
          */
         ::sal_Bool its_isHelpUrlADefaultOne(const OUString& sHelpURL);
 
-        //---------------------------------------
+
         /** @short  checks, if the help module should be shown automaticly for the
                     currently opened office module.
 
@@ -182,7 +182,7 @@ class HelpOnStartup : private ThreadHelpBase
          */
         OUString its_checkIfHelpEnabledAndGetURL(const OUString& sModule);
 
-        //---------------------------------------
+
         /** @short  create a help URL for the given parameters.
 
             @param  sBaseURL

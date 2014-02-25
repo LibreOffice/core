@@ -32,9 +32,9 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
         //  Init baseclasses first
         //  Attention:
@@ -52,18 +52,17 @@ OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Referenc
     SAL_WARN_IF( !impldbg_checkParameter_OComponentEnumerationCtor( seqComponents ), "fwk", "OComponentEnumeration::OComponentEnumeration(): Invalid parameter detected!" );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 OComponentEnumeration::~OComponentEnumeration()
 {
     // Reset instance, free memory ....
     impl_resetObject();
 }
 
-//*****************************************************************************************************************
+
 //  XEventListener
-//*****************************************************************************************************************
 void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
@@ -78,9 +77,8 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) thro
     impl_resetObject();
 }
 
-//*****************************************************************************************************************
+
 //  XEnumeration
-//*****************************************************************************************************************
 sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
@@ -93,9 +91,9 @@ sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeExcepti
     return ( m_nPosition < (sal_uInt32)(m_seqComponents.getLength()) );
 }
 
-//*****************************************************************************************************************
+
 //  XEnumeration
-//*****************************************************************************************************************
+
 Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementException  ,
                                                              WrappedTargetException ,
                                                             RuntimeException, std::exception        )
@@ -120,9 +118,9 @@ Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementExcepti
     return aComponent;
 }
 
-//*****************************************************************************************************************
+
 //  proteced method
-//*****************************************************************************************************************
+
 void OComponentEnumeration::impl_resetObject()
 {
     // Attention:
@@ -154,7 +152,7 @@ void OComponentEnumeration::impl_resetObject()
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-//*****************************************************************************************************************
+
 // An empty list is allowed ... hasMoreElements() will return false then!
 sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
 {
@@ -171,7 +169,7 @@ sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor
     return bOK ;
 }
 
-//*****************************************************************************************************************
+
 sal_Bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObject& aEvent )
 {
     return aEvent.Source.is();
