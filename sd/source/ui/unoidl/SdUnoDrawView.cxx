@@ -176,7 +176,9 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer) t
 
 
 sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
-    throw(lang::IllegalArgumentException, RuntimeException)
+    throw (lang::IllegalArgumentException,
+           RuntimeException,
+           std::exception)
 {
     bool bOk = true;
 

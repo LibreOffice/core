@@ -50,8 +50,9 @@ public:
 
     virtual sal_Bool SAL_CALL select (
         const css::uno::Any& aSelection)
-        throw(css::lang::IllegalArgumentException,
-            css::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException,
+               std::exception);
 
     virtual css::uno::Any SAL_CALL getSelection (void)
         throw (css::uno::RuntimeException,
