@@ -18,7 +18,7 @@
  */
 
 // pricing functions add in
-//
+
 // all of the UNO add-in technical details have been copied from
 // ../datefunc/datefunc.cxx
 
