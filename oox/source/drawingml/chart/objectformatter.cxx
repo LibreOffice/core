@@ -37,7 +37,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::frame;
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::util;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 namespace {
 
@@ -563,7 +563,7 @@ void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptions
 
 } // namespace
 
-// ============================================================================
+
 
 struct ObjectFormatterData;
 
@@ -744,7 +744,7 @@ struct ObjectFormatterData
     ObjectTypeFormatter* getTypeFormatter( ObjectType eObjType );
 };
 
-// ============================================================================
+
 
 DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     mrData( rData ),
@@ -836,7 +836,7 @@ sal_Int32 DetailFormatterBase::getSchemeColor( sal_Int32 nColorToken, sal_Int32 
     return aColor.getColor( mrData.mrFilter.getGraphicHelper() );
 }
 
-// ============================================================================
+
 
 LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
@@ -864,7 +864,7 @@ void LineFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
     aLineProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), getPhColor( nSeriesIdx ) );
 }
 
-// ============================================================================
+
 
 FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
@@ -891,7 +891,7 @@ void FillFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
     aFillProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), 0, getPhColor( nSeriesIdx ) );
 }
 
-// ============================================================================
+
 
 EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
@@ -902,7 +902,7 @@ void EffectFormatter::convertFormatting( ShapePropertyMap& /*rPropMap*/, const M
 {
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -953,7 +953,7 @@ void TextFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Te
     convertFormatting( rPropSet, lclGetTextProperties( rxTextProp ) );
 }
 
-// ============================================================================
+
 
 ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const ObjectTypeFormatEntry& rEntry, const ChartSpaceModel& rChartSpace ) :
     maLineFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoLines,   rChartSpace.mnStyle ) ),
@@ -1000,7 +1000,7 @@ void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32
     rPropSet.setProperties( aPropMap );
 }
 
-// ============================================================================
+
 
 ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Reference< XChartDocument >& rxChartDoc, const ChartSpaceModel& rChartSpace ) :
     mrFilter( rFilter ),
@@ -1030,7 +1030,7 @@ ObjectTypeFormatter* ObjectFormatterData::getTypeFormatter( ObjectType eObjType 
     return maTypeFormatters.get( eObjType ).get();
 }
 
-// ============================================================================
+
 
 ObjectFormatter::ObjectFormatter( const XmlFilterBase& rFilter, const Reference< XChartDocument >& rxChartDoc, const ChartSpaceModel& rChartSpace ) :
     mxData( new ObjectFormatterData( rFilter, rxChartDoc, rChartSpace ) )
@@ -1142,7 +1142,7 @@ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
     return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has();
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

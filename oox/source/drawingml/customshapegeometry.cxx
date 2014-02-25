@@ -86,7 +86,7 @@ typedef boost::unordered_map< OUString, FormularCommand, OUStringHash > FormulaC
 
 static const FormulaCommandHMap* pCommandHashMap;
 
-//
+
 OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
 {
     OUString aRet;

@@ -25,13 +25,13 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 TextPortionContext::TextPortionContext( ContextHandler2Helper& rParent,
         TextBox& rTextBox, TextParagraphModel& rParagraph, const TextFontModel& rParentFont,
@@ -170,7 +170,7 @@ void TextPortionContext::onEndElement()
         mrTextBox.appendPortion( maParagraph, maFont, OUString( ' ' ) );
 }
 
-// ============================================================================
+
 
 TextBoxContext::TextBoxContext( ContextHandler2Helper& rParent, TextBox& rTextBox, const AttributeList& rAttribs,
     const GraphicHelper& graphicHelper ) :
@@ -275,7 +275,7 @@ void TextBoxContext::onEndElement()
     }
 }
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

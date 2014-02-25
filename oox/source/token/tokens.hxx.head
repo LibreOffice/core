@@ -22,6 +22,3 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
 namespace oox {
-
-// ============================================================================
-

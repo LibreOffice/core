@@ -23,13 +23,13 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 
-// ============================================================================
+
 
 /** Information about a processed element. */
 struct ElementInfo
@@ -42,7 +42,7 @@ struct ElementInfo
                         ElementInfo( sal_Int32 nElement ) : maChars( 0 ), mnElement( nElement ), mbTrimSpaces(false) {}
 };
 
-// ============================================================================
+
 
 ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace ) :
     mxContextStack( new ContextStack ),
@@ -179,7 +179,7 @@ void ContextHandler2Helper::processCollectedChars()
     }
 }
 
-// ============================================================================
+
 
 ContextHandler2::ContextHandler2( ContextHandler2Helper& rParent ) :
     ContextHandler( dynamic_cast< ContextHandler& >( rParent ) ),
@@ -264,7 +264,7 @@ void ContextHandler2::onEndRecord()
 {
 }
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

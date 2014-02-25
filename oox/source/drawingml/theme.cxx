@@ -22,7 +22,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 Theme::Theme()
 {
@@ -91,7 +91,7 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
     return 0;
 }
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

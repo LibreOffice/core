@@ -23,7 +23,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 DataSequenceModel::DataSequenceModel() :
     mnPointCount( -1 )
@@ -34,7 +34,7 @@ DataSequenceModel::~DataSequenceModel()
 {
 }
 
-// ============================================================================
+
 
 DataSourceModel::DataSourceModel()
 {
@@ -44,7 +44,7 @@ DataSourceModel::~DataSourceModel()
 {
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

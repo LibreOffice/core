@@ -66,7 +66,7 @@ DiagramDataFragmentHandler::onCreateContext( ::sal_Int32 aElement,
     return this;
 }
 
-///////////////////
+
 
 DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
@@ -104,7 +104,7 @@ DiagramLayoutFragmentHandler::onCreateContext( ::sal_Int32 aElement,
     return this;
 }
 
-///////////////////////
+
 
 DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFilter,
                                                               const OUString& rFragmentPath,
@@ -173,7 +173,7 @@ void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttrib
     }
 }
 
-/////////////////////
+
 
 void DiagramQStylesFragmentHandler::onEndElement( )
 {

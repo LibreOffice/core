@@ -97,7 +97,7 @@ sal_Int32 FastTokenHandler::getTokenDirect( const char *pToken, sal_Int32 nLengt
     return mrTokenMap.getTokenFromUTF8( pToken, nLength );
 }
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

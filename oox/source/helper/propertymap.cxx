@@ -82,7 +82,7 @@ using ::com::sun::star::drawing::TextVerticalAdjust;
 namespace oox {
 using ::com::sun::star::container::XIndexReplace;
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -92,7 +92,7 @@ using ::com::sun::star::drawing::TextHorizontalAdjust;
 using ::com::sun::star::drawing::TextVerticalAdjust;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -196,7 +196,7 @@ sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rProper
 
 } // namespace
 
-// ============================================================================
+
 
 PropertyMap::PropertyMap() :
     mpPropNames( &StaticPropertyNameVector::get() ) // pointer instead reference to get compiler generated copy c'tor and operator=
@@ -866,7 +866,7 @@ void PropertyMap::dumpCode()
 }
 #endif
 
-// ============================================================================
+
 
 } // namespace oox
 
