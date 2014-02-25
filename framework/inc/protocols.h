@@ -26,7 +26,7 @@
 
 namespace framework{
 
-//_______________________________________________________________________
+
 /**
     some protocols must be checked during loading or dispatching URLs manually
     It can be necessary to decide, if a URL represent a non visible content or
@@ -58,7 +58,7 @@ class ProtocolCheck
 {
     public:
 
-    //_______________________________________________________________________
+
     /**
         enums for well known protocols
      */
@@ -77,7 +77,7 @@ class ProtocolCheck
         E_NEWS
     };
 
-    //_______________________________________________________________________
+
     /**
         it checks, if the given URL string match one of the well known protocols.
         It returns the right enum value.
@@ -120,7 +120,7 @@ class ProtocolCheck
             return E_UNKNOWN_PROTOCOL;
     }
 
-    //_______________________________________________________________________
+
     /**
         it checks if given URL match the required protocol only
         It should be used instead of specifyProtocol() if only this question

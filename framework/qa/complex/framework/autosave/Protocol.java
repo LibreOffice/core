@@ -37,7 +37,7 @@ import java.sql.*;
  */
 public class Protocol extends JComponent
 {
-    // ____________________
+
     /**
      * Note: Following values can be combined - they are interpreted as flags.
      *
@@ -83,7 +83,7 @@ public class Protocol extends JComponent
     public  static final int    FILTER_STATISTIC        = TYPE_STATISTIC;
     public  static final int    FILTER_LINK             = TYPE_LINK;
 
-    // ____________________
+
     /**
      */
     private static final int    MARK_DIFF               = 5;
@@ -128,7 +128,7 @@ public class Protocol extends JComponent
     private static final String BGCOLOR_LINK            = BGCOLOR_INFO;
     private static final String FGCOLOR_LINK            = FGCOLOR_INFO;
 
-    // ____________________
+
     /**
      * @member  m_nMode         the mode, in which this protocol object runs
      * @member  m_nFilter       can be used to filter log messages by type
@@ -150,7 +150,7 @@ public class Protocol extends JComponent
     private Timestamp           m_aStartTime;
     private Timestamp           m_aEndTime  ;
 
-    // ____________________
+
     /**
      * special helper class to represent one line of a protocol.
      * Such line can be specified as a special one (ERROR, WARNING ...).
@@ -443,7 +443,7 @@ public class Protocol extends JComponent
         }
     }
 
-    // ____________________
+
     /**
      * ctor
      * It creates a new instance of this class and innitialize it in the right mode.
@@ -471,7 +471,7 @@ public class Protocol extends JComponent
         m_aStartTime = new Timestamp(System.currentTimeMillis());
     }
 
-    // ____________________
+
     /**
      * For some modes it's necessary, that we write some additional
      * information to the log. E.g. for html we must generate close targets.
@@ -491,7 +491,7 @@ public class Protocol extends JComponent
         impl_writeToLogFile(m_sFileName, true, sContent);
     }
 
-    // ____________________
+
     /**
      * log an unspecified message.
      *
@@ -509,7 +509,7 @@ public class Protocol extends JComponent
         log(TYPE_INFO, sMessage);
     }
 
-    // ____________________
+
     /**
      * log an exception.
      *
@@ -531,7 +531,7 @@ public class Protocol extends JComponent
         log(TYPE_SCOPE_CLOSE | TYPE_ERROR_INFO, "");
     }
 
-    // ____________________
+
     /**
      * log different property arrays.
      *
@@ -583,7 +583,7 @@ public class Protocol extends JComponent
         log(TYPE_SCOPE_CLOSE | TYPE_INFO, sValue.toString());
     }
 
-    // ____________________
+
     /**
      * log a message.
      *
@@ -670,7 +670,7 @@ public class Protocol extends JComponent
         }
     }
 
-    // ____________________
+
     public synchronized void defineHyperlink( /*IN*/ String sTarget     ,
                                               /*IN*/ String sDescription)
     {
@@ -687,7 +687,7 @@ public class Protocol extends JComponent
         log(TYPE_LINK, sLog.toString());
     }
 
-    // ____________________
+
     /**
      * log the current statistic values
      * We write it into our protocol buffer and
@@ -723,7 +723,7 @@ public class Protocol extends JComponent
         m_aStartTime = new Timestamp(System.currentTimeMillis());
     }
 
-    // ____________________
+
     /**
      * returns a generic html header for generating html log files
      *
@@ -755,7 +755,7 @@ public class Protocol extends JComponent
         return "\n\n";
     }
 
-    // ____________________
+
     /**
      * helper to log different representations of a property(array)
      *
@@ -799,7 +799,7 @@ public class Protocol extends JComponent
         impl_logAny(sOut, aProp.Value);
     }
 
-    // ____________________
+
     /**
      * it trys to convert the given any into a suitable string notation .-)
     */
@@ -940,7 +940,7 @@ public class Protocol extends JComponent
         }
     }
 
-    // ____________________
+
     /**
      * Writes the given content to the specified log file.
      */

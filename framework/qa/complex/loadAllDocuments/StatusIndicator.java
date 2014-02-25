@@ -30,7 +30,7 @@ package complex.loadAllDocuments;
  */
 public class StatusIndicator implements com.sun.star.task.XStatusIndicator
 {
-    // ____________________
+
 
     /**
      * @const SHOWSTATUS_NO         don't show the status - but save information about using of this indicator object
@@ -43,7 +43,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     public static final int SHOWSTATUS_DIALOG   =   4;
     public static final int SHOWSTATUS_LINK     =   8;
 
-    // ____________________
+
 
     /**
      * @member m_nRange     max value for any progress
@@ -51,7 +51,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     private int             m_nRange    ;
     private boolean         m_bWasUsed  ;
 
-    // ____________________
+
 
     /**
      * ctor
@@ -63,7 +63,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         m_bWasUsed  = false;
     }
 
-    // ____________________
+
 
     /**
      * It starts the progress and set the initial text and range.
@@ -84,7 +84,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         impl_show();
     }
 
-    // ____________________
+
 
     /**
      * Finish the progress and reset internal members.
@@ -99,7 +99,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         impl_show();
     }
 
-    // ____________________
+
 
     /**
      * Set the new description text.
@@ -116,7 +116,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         impl_show();
     }
 
-    // ____________________
+
 
     /**
      * Set the new progress value.
@@ -134,7 +134,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         impl_show();
     }
 
-    // ____________________
+
 
     /**
      * Reset text and progress value to her defaults.
@@ -148,7 +148,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         impl_show();
     }
 
-    // ____________________
+
 
     /**
      * Internal helper to show the status.

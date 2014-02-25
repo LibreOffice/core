@@ -32,7 +32,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          a helper to create new tasks or sub frames for "_blank" or FrameSearchFlag::CREATE
     @descr          There are different places to create new (task)frames. Its not easy to service this code!
                     Thats the reason for this helper. He capsulate asynchronous/synchronous creation by calling
@@ -43,13 +43,13 @@ namespace framework{
 *//*-*************************************************************************************************************/
 class TaskCreator : private ThreadHelpBase
 {
-    //_______________________
+
     // member
     private:
 
         css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
-    //_______________________
+
     // interface
     public:
 
@@ -59,7 +59,7 @@ class TaskCreator : private ThreadHelpBase
         css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName    ,
                                                                     sal_Bool         bVisible );
 
-    //_______________________
+
     // helper
     private:
 

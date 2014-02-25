@@ -34,7 +34,7 @@
 
 namespace framework{
 
-//*****************************************************************************************************************
+
 // Hash code function for using in all hash maps of follow implementation.
 
 class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.

@@ -119,9 +119,9 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
         IdToInfoCache                     m_aIdCache;
 };
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
 
 ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
     m_aConfigCategoryAccess( CONFIGURATION_ROOT_ACCESS ),

@@ -148,14 +148,14 @@ FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
 
 //It's common for an object to want to create and own a Broadcaster and set
 //itself as a Listener on its own Broadcaster member.
-//
+
 //However, calling addListener on a Broadcaster means that the Broadcaster adds
 //a reference to the Listener leading to an ownership cycle where the Listener
 //owns the Broadcaster which "owns" the Listener.
-//
+
 //The WeakContainerListener allows breaking this cycle and retrofitting
 //afflicted implentations fairly easily.
-//
+
 //OriginalListener owns the Broadcaster which "owns" the WeakContainerListener
 //which forwards the events to the OriginalListener without taking ownership of
 //it.

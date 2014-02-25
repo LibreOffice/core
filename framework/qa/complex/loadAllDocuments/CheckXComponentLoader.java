@@ -48,7 +48,7 @@ import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 
-//-----------------------------------------------
+
 /** @short  Check the interface method XComponentLoader.loadComponentFromURL()
 
     @descr  A prerequisite for this test is a server which allows access to files
@@ -68,7 +68,7 @@ import com.sun.star.util.XCloseable;
  */
 public class CheckXComponentLoader
 {
-    //-------------------------------------------
+
     // some const
 
     /** used to classify the result of a loadComponentFromURL() request. */
@@ -89,7 +89,7 @@ public class CheckXComponentLoader
     private static final String PREFIX_PASSWORD_TEMPFILE = ".sxw";
     private static final String DEFAULT_PASSWORD         = "DefaultPasswordForComponentLoaderTest";
 
-    //-------------------------------------------
+
     // member
 
     /** points to the global uno service manager. */
@@ -116,10 +116,10 @@ public class CheckXComponentLoader
     /** files of m_sTestDocPath to test. */
     private static ArrayList<String> m_lTestFiles = null;
 
-    //-------------------------------------------
+
     // test environment
 
-    //-------------------------------------------
+
     /** @short  A function to tell the framework,
                 which test functions are available.
 
@@ -139,7 +139,7 @@ public class CheckXComponentLoader
 //        };
 //    }
 
-    //-------------------------------------------
+
     /** @short  Create the environment for following tests.
 
         @descr  Use either a component loader from desktop or
@@ -227,7 +227,7 @@ public class CheckXComponentLoader
         }
     }
 
-    //-------------------------------------------
+
     /** @short  close the environment.
      */
     @After public void after()
@@ -244,7 +244,7 @@ public class CheckXComponentLoader
         m_xLoader = null;
     }
 
-    //-------------------------------------------
+
     /** @short  Look for files in the given directory for loading.
      */
     @Test public void checkUsingOfMediaDescriptor()
@@ -292,7 +292,7 @@ public class CheckXComponentLoader
         }
     }
 
-    //-------------------------------------------
+
     /** TODO document me and move this method to a more global helper! */
     private String impl_getTempFileName(String sTempPath,
                                         String sSuffix  ,
@@ -319,7 +319,7 @@ public class CheckXComponentLoader
         return null;
     }
 
-    //-------------------------------------------
+
     /** TODO document me and move this method to a more global helper! */
     private void impl_createTempOfficeDocument(XComponentLoader xLoader   ,
                                                String           sSourceURL,
@@ -368,7 +368,7 @@ public class CheckXComponentLoader
         }
     }
 
-    //-------------------------------------------
+
     /** @short  Check the password handling.
 
         @descr  The used password is the one given
@@ -482,28 +482,28 @@ public class CheckXComponentLoader
      */
 //    public void checkURLHandling() {
 //        PropertyValue[] lProps = new PropertyValue[1];
-//
+
 //        lProps[0] = new PropertyValue();
 //        lProps[0].Name = "Hidden";
 //        lProps[0].Value = Boolean.TRUE;
-//
+
 //        System.out.println("check possible but unsupported URLs");
-//
+
 //        String[] sIllegalArgs = new String[] {
 //            "slot:5000", "slot:10909", ".uno:SaveAs", ".uno:Open",
 //        };
 //        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
 //                "_blank", 0, lProps);
-//
+
 //        System.out.println("check stupid URLs");
-//
+
 //        sIllegalArgs = new String[] {
 //            "slot:xxx", "slot:111111111", ".uno:save_as", ".uno:open_this",
 //            ".UnO:*",
 //        };
 //        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
 //                "_blank", 0, lProps);
-//
+
 //        String[] sEmptyDocs = new String[] {
 //            "mailo:hansi.meier@germany.sun.com", "file:/c:\\test/file.cxx",
 //            "file:///c|:\\test/file.cxx", "http_server://staroffice-doc\\",
@@ -517,19 +517,19 @@ public class CheckXComponentLoader
 //            "macro:/ExportWizard", "macro://Euro.AutoPilotRun.StartAutoPilot",
 //            "service:com.sun.star.frame."
 //        };
-//
+
 //        //with cws_loadenv01 changed to IllegalArgumentException
 //        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
 //                lProps);
-//
+
 //        System.out.println("check case senstive URLs");
-//
+
 //        sIllegalArgs = new String[] {
 //            "sLot:5000", "sloT:10909", ".unO:SaveAs", ".uno:OPEN",
 //        };
 //        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
 //                "_blank", 0, lProps);
-//
+
 //        sEmptyDocs = new String[] {
 //            "private:factory/SWRITER", "private:factory/SWRITER/WEB",
 //            "macro:///importwizard.main.main",
@@ -538,20 +538,20 @@ public class CheckXComponentLoader
 //            "Mailto:andreas.schluens@germany.sun.com", "neWs:staroffice-doc",
 //            "News:Staroffice-doc"
 //        };
-//
+
 //        //with cws_loadenv01 changed to IllegalArgumentException
 //        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
 //                lProps);
-//
+
 //        System.out.println("check FTP URLs");
-//
+
 //        String sFTPURL = (String) param.get("FtpAccess");
 //        Enumeration aSnapshot = m_lTestFiles.elements();
-//
+
 //        while (aSnapshot.hasMoreElements()) {
 //            String doc = (String) aSnapshot.nextElement();
-//
-//
+
+
 //            // if os is windows
 //            doc = doc.replace('\\', '/');
 //      if (doc.indexOf("CVS")<0) {
@@ -559,16 +559,16 @@ public class CheckXComponentLoader
 //                    "_blank", 0, lProps);
 //      }
 //        }
-//
+
 //        System.out.println("check HTTP URLs");
-//
+
 //        String sHTTPURL = (String) param.get("HttpAccess");
 //        aSnapshot = m_lTestFiles.elements();
-//
+
 //        while (aSnapshot.hasMoreElements()) {
 //            String doc = (String) aSnapshot.nextElement();
-//
-//
+
+
 //            // if os is windows
 //            doc = doc.replace('\\', '/');
 //      if (doc.indexOf("CVS")<0) {

@@ -36,7 +36,7 @@ namespace framework{
         namespace frame{
 
 
-//-----------------------------------------------
+
 inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     css::uno::Reference< css::frame::XModel >      xModel;
@@ -48,7 +48,7 @@ inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::un
     return xModel;
 }
 
-//-----------------------------------------------
+
 /** @short  close (or dispose) the given resource.
 
     @descr  It try to close the given resource first.

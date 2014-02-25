@@ -507,7 +507,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
         impl_sendTitleChangedEvent ();
 }
 
-//*****************************************************************************************************************
+
 void TitleHelper::impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
                                              const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
@@ -518,7 +518,7 @@ void TitleHelper::impl_appendComponentTitle (      OUStringBuffer&              
         sTitle.append (xTitle->getTitle ());
 }
 
-//*****************************************************************************************************************
+
 void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
 {
     OUString name(utl::ConfigManager::getProductName());
@@ -530,7 +530,7 @@ void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
     }
 }
 
-//*****************************************************************************************************************
+
 void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
 {
     // SYNCHRONIZED ->
@@ -563,7 +563,7 @@ void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
     {}
 }
 
-//*****************************************************************************************************************
+
 #ifdef DBG_UTIL
 void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
 {

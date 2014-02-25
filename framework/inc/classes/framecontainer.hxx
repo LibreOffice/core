@@ -46,7 +46,7 @@ typedef ::std::vector< css::uno::Reference< css::frame::XFrame > >  TFrameContai
 typedef TFrameContainer::iterator                                   TFrameIterator      ;
 typedef TFrameContainer::const_iterator                             TConstFrameIterator ;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a container to hold children of frame, task or desktop
     @descr          Every object of frame, task or desktop hold reference to his children. These container is used as helper
                     to do this. Some helper-classe like OFrames or OTasksAccess use it to. They hold a pointer to an instance
@@ -62,7 +62,7 @@ typedef TFrameContainer::const_iterator                             TConstFrameI
 *//*-*************************************************************************************************************/
 class FrameContainer : private ThreadHelpBase
 {
-    //_______________________________________
+
     // member
 
     private:
@@ -72,7 +72,7 @@ class FrameContainer : private ThreadHelpBase
         /// one container item can be the current active frame. Its necessary for Desktop or Frame implementation.
         css::uno::Reference< css::frame::XFrame > m_xActiveFrame;
 
-    //_______________________________________
+
     // interface
 
     public:

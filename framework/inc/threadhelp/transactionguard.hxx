@@ -25,7 +25,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a guard to support non breakable transactions
     @descr          If you wish to support non breakable method calls without lockingf any mutex, rw-lock or
                     something like that - you should use this guard implementation.
@@ -44,12 +44,12 @@ namespace framework{
 *//*-*************************************************************************************************************/
 class TransactionGuard : private INonCopyable
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      ctors
             @descr      Use these ctor methods to initialize the guard right.
                         Given reference must be valid - otherwise crashes could occur!
@@ -83,7 +83,7 @@ class TransactionGuard : private INonCopyable
             }
         }
 
-        /*-************************************************************************************************************//**
+        /*-************************************************************************************************************
             @short      dtor
             @descr      We must release the transaction manager and can forget his pointer.
 
@@ -99,7 +99,7 @@ class TransactionGuard : private INonCopyable
             stop();
         }
 
-        /*-************************************************************************************************************//**
+        /*-************************************************************************************************************
             @short      stop current transaction
             @descr      We must release the transaction manager and can forget his pointer.
 
@@ -123,12 +123,12 @@ class TransactionGuard : private INonCopyable
             }
         }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      disable using of these functions!
             @descr      It's not allowed to use this methods. Different problem can occur otherwise.
                         Thats why we disable it by make it private.
@@ -142,9 +142,9 @@ class TransactionGuard : private INonCopyable
         *//*-*****************************************************************************************************/
         TransactionGuard();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         ITransactionManager*   m_pManager   ;   /// pointer to safed transaction manager

@@ -29,7 +29,7 @@ class ConfigHelper
 {
     private XHierarchicalNameAccess m_xConfig = null;
 
-    //-----------------------------------------------
+
     public ConfigHelper(XComponentContext context,
                         String               sConfigPath ,
                         boolean              bReadOnly   )
@@ -60,7 +60,7 @@ class ConfigHelper
         }
     }
 
-    //-----------------------------------------------
+
     public Object readRelativeKey(String sRelPath,
                                   String sKey    )
         throws com.sun.star.container.NoSuchElementException
@@ -76,7 +76,7 @@ class ConfigHelper
         }
     }
 
-    //-----------------------------------------------
+
     public void writeRelativeKey(String sRelPath,
                                  String sKey    ,
                                  Object aValue  )
@@ -93,7 +93,7 @@ class ConfigHelper
         }
     }
 
-    //-----------------------------------------------
+
     public void flush()
     {
         try
