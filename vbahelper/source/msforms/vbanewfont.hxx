@@ -23,7 +23,7 @@
 #include <ooo/vba/msforms/XNewFont.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-// ============================================================================
+
 
 typedef InheritedHelperInterfaceImpl1< ov::msforms::XNewFont > VbaNewFont_BASE;
 
@@ -60,7 +60,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxProps;
 };
 
-// ============================================================================
+
 
 #endif
 

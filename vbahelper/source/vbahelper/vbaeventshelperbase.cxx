@@ -28,7 +28,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-// ============================================================================
+
 
 VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& /*xContext*/ ) :
     mpShell( 0 ),
@@ -337,6 +337,6 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
     return rPathMap;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

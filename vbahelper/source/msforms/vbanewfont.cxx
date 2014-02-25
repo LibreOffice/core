@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-// ============================================================================
+
 
 VbaNewFont::VbaNewFont(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -136,6 +136,6 @@ void SAL_CALL VbaNewFont::setStrikethrough( sal_Bool bStrikethrough ) throw (uno
 
 VBAHELPER_IMPL_XHELPERINTERFACE( VbaNewFont, "ooo.vba.msforms.NewFont" )
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
