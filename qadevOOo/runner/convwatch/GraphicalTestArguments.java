@@ -103,7 +103,7 @@ public class GraphicalTestArguments
         {
             m_aCurrentParams = param;
             // collect interesting information from the ComplexTestCase
-            // ....
+
 
             // REFERENCE_TYPE ----------
             String sReferenceType = (String)param.get( PropertyName.DOC_COMPARATOR_REFERENCE_TYPE );
@@ -151,7 +151,7 @@ public class GraphicalTestArguments
                 m_bIncludeSubdirectories = false;
             }
 
-            // ----------------------------------------
+
             m_nMaxPages = param.getInt( PropertyName.DOC_COMPARATOR_PRINT_MAX_PAGE );
             m_sOnlyPage = (String)param.get(PropertyName.DOC_COMPARATOR_PRINT_ONLY_PAGE);
 
@@ -162,7 +162,7 @@ public class GraphicalTestArguments
                 m_nResolutionInDPI = 212;
             }
 
-            // ----------------------------------------
+
             String sImportFilterName = (String)param.get(PropertyName.DOC_CONVERTER_IMPORT_FILTER_NAME);
             if (sImportFilterName != null && sImportFilterName.length() > 0)
             {
@@ -175,7 +175,7 @@ public class GraphicalTestArguments
                     GlobalLogWriter.get().println("Must quit.");
                 }
             }
-            // ----------------------------------------
+
             String sExportFilterName = (String)param.get(PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME);
             if (sExportFilterName != null && sExportFilterName.length() > 0)
             {
@@ -188,13 +188,13 @@ public class GraphicalTestArguments
                 }
             }
 
-            // ----------------------------------------
+
             String sOfficeProgram = (String)param.get(PropertyName.DOC_CONVERTER_OFFICE_PROGRAM);
             if (sOfficeProgram != null && sOfficeProgram.length() > 0)
             {
                 m_sOfficeProgram = sOfficeProgram;
             }
-            // ----------------------------------------
+
             String sREUSE_OFFICE = (String)param.get( PropertyName.DOC_CONVERTER_REUSE_OFFICE);
             if (sREUSE_OFFICE == null)
             {
@@ -361,7 +361,7 @@ public class GraphicalTestArguments
     public GraphicalTestArguments(TestParameters param, Log xxx)
     {
         // collect interesting information from the ComplexTestCase
-        // ....
+
     }
     */
 

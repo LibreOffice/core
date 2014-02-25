@@ -142,7 +142,7 @@ public class HTMLOutputter
                 //     sbUNIXPath.append(_sHREF.substring(index + 2));
                 //     String sUNIXPath = sbUNIXPath.toString();
                 //     sUNIXPath = utils.replaceAll13(sUNIXPath, "\\", "/");
-                //
+
                 //     a.append("<A HREF=\"");
                 //     a.append(sUNIXPath);
                 //     a.append("\">");
@@ -216,7 +216,7 @@ public class HTMLOutputter
             }
         }
 
-// -----------------------------------------------------------------------------
+
     String stronghtml(String _sValue)
         {
             StringBuffer a = new StringBuffer();
@@ -332,7 +332,7 @@ public class HTMLOutputter
             }
         }
 
-// -----------------------------------------------------------------------------
+
     public void checkDiffDiffSection(String _sDocumentName)
         {
             try

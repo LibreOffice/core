@@ -46,7 +46,7 @@ public class MSOfficePrint
 
     public void setPrinterName(String _s) {m_sPrinterName = _s;}
 
-        // -----------------------------------------------------------------------------
+
     static boolean isWordDocument(String _sSuffix)
         {
             if (_sSuffix.toLowerCase().endsWith(".doc") ||
@@ -154,7 +154,7 @@ public class MSOfficePrint
             }
         }
 
-    // -----------------------------------------------------------------------------
+
     /**
      * print the given file (_sInputFile) to the file name (_sPrintFile)
      */

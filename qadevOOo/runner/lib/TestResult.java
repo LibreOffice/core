@@ -94,4 +94,4 @@ public class TestResult {
         return testedMethods.get( method );
     }
 
-}    
+}

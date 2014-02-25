@@ -38,7 +38,7 @@ import com.sun.star.util.XURLTransformer;
  */
 public class URLHelper
 {
-    // ____________________
+
 
     /**
      * Because the office need URLs for loading/saving documents
@@ -79,7 +79,7 @@ public class URLHelper
         return sFileURL;
     }
 
-    // ____________________
+
 
     /**
      * The same as getFileURLFromSystemPath() before but uses string parameter instead
@@ -98,7 +98,7 @@ public class URLHelper
         return getFileURLFromSystemPath(new File(sSystemPath));
     }
 
-    // ____________________
+
 
     /**
      * Does the same as getFileURLFromSystemPath() before ... but uses
@@ -144,7 +144,7 @@ public class URLHelper
         return sURL;
     }
 
-    // ____________________
+
 
     /**
      * The same as getURLWithProtocolFromSystemPath() before but uses string parameter instead
@@ -177,7 +177,7 @@ public class URLHelper
         return getURLWithProtocolFromSystemPath(new File(sSystemPath), new File(sBasePath), sServerPath);
     }
 
-    // ____________________
+
 
     /**
      * This convert an URL (formated as a string) to a struct com.sun.star.util.URL.
@@ -225,7 +225,7 @@ public class URLHelper
         return aURL;
     }
 
-    //_________________________________
+
     /**
      * Return a name list of all available files of a directory.
      * We filter pure sub directories names. All other files

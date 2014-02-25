@@ -189,7 +189,7 @@ public class HTMLResult
             }
         }
 
-// -----------------------------------------------------------------------------
+
     private String stronghtml(String _sValue)
         {
             StringBuffer a = new StringBuffer();

@@ -18,7 +18,7 @@
 
 package convwatch;
 
-// -----------------------------------------------------------------------------
+
 // Helper stuff to
 // abstract class Name
 // {
@@ -32,7 +32,7 @@ package convwatch;
 // {
 //     public String getName() {return "-test";}
 // }
-//
+
 // public class Basename /* extends *//* implements */ {
 //     String fs;
 //     Basename()
@@ -45,8 +45,8 @@ package convwatch;
 //             String sJPEGName = _sOutputPath + fs + sBaseNameNoSuffix + "-" + _sGS_PageOutput + _aPostNameAdd.getName() + ".jpg";
 //             return sJPEGName;
 //         }
-//
+
 //     public static void main( String[] argv ) {
-//
+
 //         }
 // }

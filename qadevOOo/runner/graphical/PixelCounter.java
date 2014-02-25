@@ -19,7 +19,7 @@
 package graphical;
 
 
-// -----------------------------------------------------------------------------
+
 abstract class CountPixel
 {
     protected int m_nCount = 0;
@@ -27,7 +27,7 @@ abstract class CountPixel
     public abstract void count(int _nRGB);
 }
 
-// -----------------------------------------------------------------------------
+
 class CountNotWhite extends CountPixel
 {
     public CountNotWhite()
@@ -73,7 +73,7 @@ class CountNotWhite extends CountPixel
         }
 }
 
-// -----------------------------------------------------------------------------
+
 class CountNotBlack extends CountPixel
 {
     public CountNotBlack()
@@ -118,7 +118,7 @@ class CountNotBlack extends CountPixel
         }
 }
 
-// -----------------------------------------------------------------------------
+
 class graphics_stuff
 {
 //    public int stuff()
@@ -178,7 +178,7 @@ class graphics_stuff
         }
 }
 
-// -----------------------------------------------------------------------------
+
 
 public class PixelCounter {
     // private Image m_aImage;
@@ -215,13 +215,13 @@ public class PixelCounter {
             return a.countNotBlackPixel(_sFile);
         }
 
-    // -----------------------------------------------------------------------------
+
 
 //    public static void main(String[] args) {
-//
+
 //        String a = helper.StringHelper.createValueString(10, 4);
 //        int dummy = 1;
-///*
+//
 // BorderRemover a = new BorderRemover();
 //        try
 //        {

@@ -244,9 +244,9 @@ public class OGridControlModel extends GenericModelTest {
 
 
 //        HashSet exclude = new HashSet();
-//
+
 //        exclude.add("FormatKey");
-//
+
 //        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
 //                            new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName, m_ChangePropertyValue));
         return tEnv;

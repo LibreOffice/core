@@ -32,7 +32,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
     //     {
     //         // System.out.println("before()");
     //     }
-    //
+
     // public void after()
     //     {
     //         // System.out.println("after()");
@@ -62,7 +62,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             }
         }
 
-    // -----------------------------------------------------------------------------
+
 
     protected void checkEnvironment(Object[] _aList)
         {
@@ -81,7 +81,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             }
         }
 
-    // -----------------------------------------------------------------------------
+
 
     protected abstract Object[] mustInstalledSoftware();
     public boolean needCheckForInstalledSoftware()
@@ -102,7 +102,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             return false;
         }
 
-    // -----------------------------------------------------------------------------
+
 
     public GraphicalTestArguments getGraphicalTestArguments()
         {

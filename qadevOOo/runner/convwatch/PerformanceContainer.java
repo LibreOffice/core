@@ -221,8 +221,7 @@ public class PerformanceContainer /* extends *//* implements */ {
         }
 
 //    public static void main(String[] args) {
-//
-///*
+
 // BorderRemover a = new BorderRemover();
 //        try
 //        {
