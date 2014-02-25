@@ -705,8 +705,8 @@ void SAL_CALL ScAreaLinkObj::refresh()
 }
 
 void SAL_CALL ScAreaLinkObj::addRefreshListener(
-                                const uno::Reference<util::XRefreshListener >& xListener )
-                                                throw(uno::RuntimeException)
+    const uno::Reference<util::XRefreshListener >& xListener )
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<util::XRefreshListener>* pObj =
