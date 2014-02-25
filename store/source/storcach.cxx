@@ -36,12 +36,7 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * PageCache (non-virtual interface) implementation.
- *
- *======================================================================*/
-
+// PageCache (non-virtual interface) implementation.
 storeError PageCache::lookupPageAt (PageHolder & rxPage, sal_uInt32 nOffset)
 {
     OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::lookupPageAt(): invalid Offset");
@@ -100,45 +95,33 @@ storeError PageCache::removePageAt (sal_uInt32 nOffset)
     return removePageAt_Impl (nOffset);
 }
 
-/*========================================================================
- *
- * Entry.
- *
- *======================================================================*/
+// Entry
 namespace
 {
 
 struct Entry
 {
-    /** Representation.
-     */
+    // Representation
     PageHolder m_xPage;
     sal_uInt32 m_nOffset;
     Entry *    m_pNext;
 
-    /** Allocation.
-     */
+    // Allocation
     static void * operator new (size_t, void * p) { return p; }
     static void   operator delete (void *, void *) {}
 
-    /** Construction.
-     */
+    // Construction
     explicit Entry (PageHolder const & rxPage = PageHolder(), sal_uInt32 nOffset = STORE_PAGE_NULL)
         : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(0)
     {}
 
-    /** Destruction.
-     */
+    // Destruction
     ~Entry() {}
 };
 
 } // namespace
 
-/*========================================================================
- *
- * EntryCache interface.
- *
- *======================================================================*/
+// EntryCache interface
 namespace
 {
 
@@ -160,12 +143,7 @@ protected:
 
 } // namespace
 
-/*========================================================================
- *
- * EntryCache implementation.
- *
- *======================================================================*/
-
+// EntryCache implementation
 EntryCache & EntryCache::get()
 {
     static EntryCache g_entry_cache;
@@ -197,7 +175,7 @@ Entry * EntryCache::create (PageHolder const & rxPage, sal_uInt32 nOffset)
     void * pAddr = rtl_cache_alloc (m_entry_cache);
     if (pAddr != 0)
     {
-        // construct.
+        // construct
         return new(pAddr) Entry (rxPage, nOffset);
     }
     return 0;
@@ -207,19 +185,15 @@ void EntryCache::destroy (Entry * entry)
 {
     if (entry != 0)
     {
-        // destruct.
+        // destruct
         entry->~Entry();
 
-        // return to cache.
+        // return to cache
         rtl_cache_free (m_entry_cache, entry);
     }
 }
 
-/*========================================================================
- *
- * highbit():= log2() + 1 (complexity O(1))
- *
- *======================================================================*/
+// highbit():= log2() + 1 (complexity O(1))
 static int highbit(sal_Size n)
 {
     int k = 1;
@@ -244,11 +218,7 @@ static int highbit(sal_Size n)
     return (k);
 }
 
-/*========================================================================
- *
- * PageCache_Impl implementation.
- *
- *======================================================================*/
+//PageCache_Impl implementation
 namespace store
 {
 
@@ -256,8 +226,7 @@ class PageCache_Impl :
     public store::OStoreObject,
     public store::PageCache
 {
-    /** Representation.
-     */
+    // Representation
     static size_t const theTableSize = 32;
     BOOST_STATIC_ASSERT(STORE_IMPL_ISP2(theTableSize));
 
@@ -283,8 +252,7 @@ class PageCache_Impl :
     Entry * lookup_Impl (Entry * entry, sal_uInt32 nOffset);
     void rescale_Impl (sal_Size new_size);
 
-    /** PageCache Implementation.
-     */
+    // PageCache Implementation
     virtual storeError lookupPageAt_Impl (
         PageHolder & rxPage,
         sal_uInt32   nOffset);
@@ -300,24 +268,20 @@ class PageCache_Impl :
     virtual storeError removePageAt_Impl (
         sal_uInt32 nOffset);
 
-    /** Not implemented.
-     */
+    // Not implemented
     PageCache_Impl (PageCache_Impl const &);
     PageCache_Impl & operator= (PageCache_Impl const &);
 
 public:
-    /** Construction.
-     */
+    // Construction
     explicit PageCache_Impl (sal_uInt16 nPageSize);
 
-    /** Delegate multiple inherited IReference.
-     */
+    // Delegate multiple inherited IReference
     virtual oslInterlockedCount SAL_CALL acquire();
     virtual oslInterlockedCount SAL_CALL release();
 
 protected:
-    /** Destruction.
-     */
+    // Destruction
     virtual ~PageCache_Impl (void);
 };
 
@@ -412,7 +376,7 @@ void PageCache_Impl::rescale_Impl (sal_Size new_size)
         }
         if (old_table != m_hash_table_0)
         {
-            //
+
             rtl_freeMemory (old_table);
         }
     }
@@ -520,20 +484,20 @@ storeError PageCache_Impl::removePageAt_Impl (
     return store_E_NotExists;
 }
 
-/*========================================================================
+/*
  *
  * Old OStorePageCache implementation.
  *
  * (two-way association (sorted address array, LRU chain)).
  * (external OStorePageData representation).
  *
- *======================================================================*/
+ */
 
-/*========================================================================
+/*
  *
  * PageCache factory implementation.
  *
- *======================================================================*/
+ */
 namespace store {
 
 storeError

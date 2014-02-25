@@ -884,7 +884,6 @@ public:
         return store_E_None;
     }
 
-
     PageHolder & get() { return m_xPage; }
     PageHolder const & get() const { return m_xPage; }
 

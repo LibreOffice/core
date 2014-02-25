@@ -1163,7 +1163,6 @@ storeError MemoryPageAccess::peekAt_Impl (sal_uInt32 nOffset, void * pBuffer, sa
   if (!(dst_lo <= dst_hi))
     return store_E_InvalidParameter;
 
-  // ...
   sal_uInt8 const * src_lo = m_pData + nOffset;
   if (!(src_lo <= m_pData + m_nSize))
     return store_E_CantSeek;
@@ -1191,7 +1190,6 @@ storeError MemoryPageAccess::pokeAt_Impl (sal_uInt32 nOffset, void const * pBuff
   if (uSize > SAL_MAX_UINT32)
     return store_E_CantSeek;
 
-  // ...
   if (uSize > m_nSize)
   {
     // increase size.
