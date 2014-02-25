@@ -1362,13 +1362,6 @@ void LanguageTagImpl::convertLocaleToBcp47()
 }
 
 
-void LanguageTag::convertLocaleToBcp47()
-{
-    getImpl()->convertLocaleToBcp47();
-    syncFromImpl();
-}
-
-
 void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
 {
     if (mbSystemLocale)

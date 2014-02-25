@@ -521,7 +521,6 @@ private:
     void                syncVarsFromRawImpl() const;
     void                syncVarsFromImpl() const;
 
-    void                convertLocaleToBcp47();
     void                convertLocaleToLang();
     void                convertBcp47ToLocale();
     void                convertBcp47ToLang();
