@@ -178,7 +178,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 
 //     OUStringBuffer aStrBuffer;
 //     ::sax::Converter::encodeBase64( aStrBuffer, aTemp );
-//
+
 //     OString aNotes = OUStringToOString(
 //         aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 

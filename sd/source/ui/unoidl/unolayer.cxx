@@ -27,7 +27,7 @@
 #include <svx/svdobj.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-// folgende fuer InsertSdPage()
+// following ones for InsertSdPage()
 #include <svx/svdlayer.hxx>
 
 #include "DrawDocShell.hxx"
@@ -53,10 +53,8 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-//=============================================================================
-// class SdLayer
-//=============================================================================
 
+// class SdLayer
 #define WID_LAYER_LOCKED    1
 #define WID_LAYER_PRINTABLE 2
 #define WID_LAYER_VISIBLE   3
@@ -136,7 +134,6 @@ OUString SdLayer::convertToExternalName( const OUString& rName )
     }
 }
 
-/** */
 SdLayer::SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw()
 : pLayerManager(pLayerManager_)
 , mxLayerManager(pLayerManager_)
@@ -145,7 +142,6 @@ SdLayer::SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw()
 {
 }
 
-/** */
 SdLayer::~SdLayer() throw()
 {
 }
@@ -304,7 +300,6 @@ void SAL_CALL SdLayer::removePropertyChangeListener( const OUString& , const uno
 void SAL_CALL SdLayer::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SdLayer::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
-/** */
 sal_Bool SdLayer::get( LayerAttribute what ) throw()
 {
     if(pLayer&&pLayerManager)
@@ -402,11 +397,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
     //TODO: uno::Exception?
 }
 
-
-
-
-//=====  ::com::sun::star::container::XChild  =================================
-
+// ::com::sun::star::container::XChild
 uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -445,18 +436,14 @@ void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventLi
 }
 
 
-//=============================================================================
-// class SdLayerManager
-//=============================================================================
 
-/** */
+// class SdLayerManager
 SdLayerManager::SdLayerManager( SdXImpressDocument& rMyModel ) throw()
 :mpModel( &rMyModel)
 {
     mpLayers = new SvUnoWeakContainer;
 }
 
-/** */
 SdLayerManager::~SdLayerManager() throw()
 {
     dispose();
@@ -649,7 +636,6 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
     }
     return aAny;
 }
-
 
 // XNameAccess
 uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )

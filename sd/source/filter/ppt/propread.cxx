@@ -53,7 +53,7 @@ PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
     return *this;
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PropItem::Clear()
 {
@@ -61,7 +61,7 @@ void PropItem::Clear()
     delete[] (sal_uInt8*)SwitchBuffer();
 }
 
-//  -----------------------------------------------------------------------
+
 
 static sal_Int32 lcl_getMaxSafeStrLen(sal_uInt32 nSize)
 {
@@ -173,7 +173,7 @@ sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAl
     return bRetValue;
 }
 
-//  -----------------------------------------------------------------------
+
 
 PropItem& PropItem::operator=( PropItem& rPropItem )
 {
@@ -191,7 +191,7 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
     return *this;
 }
 
-//  -----------------------------------------------------------------------
+
 
 Section::Section( const Section& rSection )
     : mnTextEnc(rSection.mnTextEnc),
@@ -201,7 +201,7 @@ Section::Section( const Section& rSection )
         aFMTID[ i ] = rSection.aFMTID[ i ];
 }
 
-//  -----------------------------------------------------------------------
+
 
 Section::Section( const sal_uInt8* pFMTID )
 {
@@ -210,7 +210,7 @@ Section::Section( const sal_uInt8* pFMTID )
         aFMTID[ i ] = pFMTID[ i ];
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
@@ -235,7 +235,7 @@ sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
     return sal_False;
 }
 
-//  -----------------------------------------------------------------------
+
 
 void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize )
 {
@@ -262,7 +262,7 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
     maEntries.push_back( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ) );
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool Section::GetDictionary( Dictionary& rDict )
 {
@@ -319,7 +319,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
     return bRetValue;
 }
 
-//  -----------------------------------------------------------------------
+
 
 void Section::Read( SvStorageStream *pStrm )
 {
@@ -507,7 +507,7 @@ void Section::Read( SvStorageStream *pStrm )
     pStrm->Seek( nSecOfs + nSecSize );
 }
 
-//  -----------------------------------------------------------------------
+
 
 Section& Section::operator=( const Section& rSection )
 {
@@ -520,7 +520,7 @@ Section& Section::operator=( const Section& rSection )
     return *this;
 }
 
-//  -----------------------------------------------------------------------
+
 
 PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
         mbStatus            ( sal_False ),
@@ -541,14 +541,14 @@ PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
     }
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PropRead::AddSection( Section& rSection )
 {
     maSections.push_back( new Section( rSection ) );
 }
 
-//  -----------------------------------------------------------------------
+
 
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
@@ -561,7 +561,7 @@ const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
     return NULL;
 }
 
-//  -----------------------------------------------------------------------
+
 
 void PropRead::Read()
 {
@@ -598,7 +598,7 @@ void PropRead::Read()
     }
 }
 
-//  -----------------------------------------------------------------------
+
 
 PropRead& PropRead::operator=( const PropRead& rPropRead )
 {

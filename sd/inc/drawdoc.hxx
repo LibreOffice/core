@@ -60,7 +60,6 @@ namespace sd
     class Outliner;
 }
 
-
 class Timer;
 class SfxObjectShell;
 class SdPage;
@@ -133,11 +132,7 @@ namespace sd
     };
 }
 
-
-// ------------------
-// - SdDrawDocument -
-// ------------------
-
+// SdDrawDocument
 class SdDrawDocument : public FmFormModel
 {
 private:

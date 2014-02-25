@@ -462,7 +462,6 @@ sal_uInt32 PortionObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPositi
     return mnTextSize;
 }
 
-//  -----------------------------------------------------------------------
 // Return:                              0 = no TextField
 //  bit28->31   text field type :
 //                                      1 = Date

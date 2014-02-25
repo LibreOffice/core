@@ -32,14 +32,13 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//......................................................................................................................
+
 namespace sd { namespace colortoolpanel
 {
-//......................................................................................................................
 
-    //==================================================================================================================
-    //= class SingleColorPanel
-    //==================================================================================================================
+
+
+    // class SingleColorPanel
     typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::drawing::framework::XView
                                                 ,   ::com::sun::star::ui::XToolPanel
                                                 ,   ::com::sun::star::awt::XPaintListener
@@ -83,9 +82,8 @@ namespace sd { namespace colortoolpanel
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xWindow;
     };
 
-//......................................................................................................................
+
 } } // namespace sd::colortoolpanel
-//......................................................................................................................
 
 #endif // INCLUDED_SD_WORKBEN_CUSTOMPANEL_CTP_PANEL_HXX
 

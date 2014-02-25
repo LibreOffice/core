@@ -164,8 +164,6 @@ void PPTWriter::exportPPTPost( )
     mbStatus = sal_True;
 };
 
-
-
 void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStream& rBinaryTagData10Atom );
 
 void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
@@ -358,8 +356,6 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->CloseContainer();    // EPP_Slide
 }
 
-
-
 void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
 {
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
@@ -446,8 +442,6 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->CloseContainer();    // EPP_MainMaster
 };
 
-
-
 PPTWriter::~PPTWriter()
 {
     delete mpExEmbed;
@@ -467,8 +461,6 @@ PPTWriter::~PPTWriter()
         mXStatusIndicator->end();
 }
 
-
-
 sal_Bool PPTWriter::ImplCreateCurrentUserStream()
 {
     mpCurUserStrm = mrStg->OpenSotStream( OUString( "Current User" ) );
@@ -484,7 +476,7 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
 
     sal_uInt32 nEditPos = mpCurUserStrm->Tell();
     mpCurUserStrm->WriteUInt32( (sal_uInt32)0x0 )                   // OffsetToCurrentEdit;
-                  .WriteUInt16( (sal_uInt16)nLenOfUserName )        //
+                  .WriteUInt16( (sal_uInt16)nLenOfUserName )
                   .WriteUInt16( (sal_uInt16)0x3f4 )                 // DocFileVersion
                   .WriteUChar( (sal_uInt8)3 )                      // MajorVersion
                   .WriteUChar( (sal_uInt8)0 )                      // MinorVersion
@@ -498,8 +490,6 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
     mpCurUserStrm->Seek( nEditPos );
     return sal_True;
 };
-
-
 
 sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
 {
@@ -552,8 +542,6 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
     return sal_True;
 }
 
-
-
 void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId )
 {
     if ( rSt.Tell() )
@@ -566,8 +554,6 @@ void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sa
         aBuExOutlineStream.Write( rSt.GetData(), rSt.Tell() );
     }
 }
-
-
 
 void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet )
 {
@@ -592,8 +578,6 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, ::com::sun::star
         }
     }
 }
-
-
 
 void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet )
 {
@@ -676,8 +660,6 @@ void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com
         mpPptEscherEx->CloseContainer();
     }
 }
-
-
 
 sal_Bool PPTWriter::ImplCreateDocument()
 {
@@ -943,8 +925,6 @@ sal_Bool PPTWriter::ImplCreateDocument()
     return sal_True;
 };
 
-
-
 sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
 {
     sal_uInt32 nCurrentOfs, nParaOfs, nParaCount = 0;
@@ -1026,8 +1006,6 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     return sal_True;
 }
 
-
-
 sal_Bool PPTWriter::ImplCreateMainNotes()
 {
     EscherSolverContainer aSolverContainer;
@@ -1067,8 +1045,6 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->CloseContainer();    // EPP_Notes
     return sal_True;
 }
-
-
 
 static OUString getInitials( const OUString& rName )
 {
@@ -1155,8 +1131,6 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
     }
 }
 
-
-
 void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
 {
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Notes | nPageNum, mpStrm->Tell() );
@@ -1204,7 +1178,6 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
 {
     //************************ ******
     //** DEFAULT BACKGROUND SHAPE **
-    //******************************
 
     sal_uInt32 nFillColor = 0xffffff;
     sal_uInt32 nFillBackColor = 0;
@@ -1280,8 +1253,6 @@ void PPTWriter::ImplWriteVBA()
         }
     }
 }
-
-
 
 void PPTWriter::ImplWriteOLE( )
 {
@@ -1360,7 +1331,6 @@ void PPTWriter::ImplWriteOLE( )
         }
     }
 }
-
 
 // write PersistantTable and UserEditAtom
 
@@ -1472,9 +1442,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
     return sal_True;
 }
 
-
 // - exported function -
-
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SvStorageRef& rSvStorage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,

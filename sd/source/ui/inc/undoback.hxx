@@ -26,10 +26,8 @@ class SdDrawDocument;
 class SdPage;
 class SfxItemSet;
 
-// -----------------------------
-// - SdBackgroundObjUndoAction -
-// -----------------------------
 
+// SdBackgroundObjUndoAction
 class SdBackgroundObjUndoAction : public SdUndoAction
 {
 private:

@@ -31,13 +31,7 @@
 #include "fadedef.h"
 #include "diadef.h"
 
-//------------------------------------------------------------------
-
-
-//==================================================================
-//  layer attributes
-//==================================================================
-
+// layer attributes
 class SdAttrLayerName : public SfxStringItem
 {
 public:
@@ -47,16 +41,12 @@ public:
         SfxStringItem( ATTR_LAYER_NAME, aStr ) {}
 };
 
-//------------------------------------------------------------------
-
 class SdAttrLayerTitle : public SfxStringItem
 {
 public:
     SdAttrLayerTitle() : SfxStringItem( ATTR_LAYER_TITLE, OUString()) {}
     SdAttrLayerTitle( const OUString& aStr ) : SfxStringItem( ATTR_LAYER_TITLE, aStr ) {}
 };
-
-//------------------------------------------------------------------
 
 class SdAttrLayerDesc : public SfxStringItem
 {
@@ -65,7 +55,6 @@ public:
     SdAttrLayerDesc( const OUString& aStr ) : SfxStringItem( ATTR_LAYER_DESC, aStr ) {}
 };
 
-//------------------------------------------------------------------
 
 class SdAttrLayerVisible : public SfxBoolItem
 {
@@ -74,7 +63,6 @@ public:
         SfxBoolItem( ATTR_LAYER_VISIBLE, bValue ) {}
 };
 
-//------------------------------------------------------------------
 
 class SdAttrLayerPrintable : public SfxBoolItem
 {
@@ -83,7 +71,6 @@ public:
         SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue ) {}
 };
 
-//------------------------------------------------------------------
 
 class SdAttrLayerLocked : public SfxBoolItem
 {
@@ -92,7 +79,6 @@ public:
         SfxBoolItem( ATTR_LAYER_LOCKED, bValue ) {}
 };
 
-//------------------------------------------------------------------
 
 class SdAttrLayerThisPage : public SfxBoolItem
 {
@@ -101,7 +87,6 @@ public:
         SfxBoolItem( ATTR_LAYER_THISPAGE, bValue ) {}
 };
 
-//------------------------------------------------------------------
 
 class DiaEffectItem : public SfxEnumItem
 {
@@ -117,7 +102,6 @@ public:
                             { return (::com::sun::star::presentation::FadeEffect) SfxEnumItem::GetValue(); }
 };
 
-//------------------------------------------------------------------
 
 class DiaSpeedItem : public SfxEnumItem
 {
@@ -133,7 +117,6 @@ public:
                             { return (FadeSpeed) SfxEnumItem::GetValue(); }
 };
 
-//------------------------------------------------------------------
 
 class DiaAutoItem : public SfxEnumItem
 {
@@ -148,7 +131,6 @@ public:
             PresChange      GetValue() const { return (PresChange) SfxEnumItem::GetValue(); }
 };
 
-//------------------------------------------------------------------
 
 class DiaTimeItem : public SfxUInt32Item
 {
@@ -161,6 +143,5 @@ public:
 };
 
 #endif // INCLUDED_SD_INC_SDATTR_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

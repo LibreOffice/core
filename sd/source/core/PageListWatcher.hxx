@@ -64,8 +64,6 @@ public:
     sal_uInt32 GetVisibleSdPageCount();
 };
 
-//////////////////////////////////////////////////////////////////////////////
-
 class ImpDrawPageListWatcher : public ImpPageListWatcher
 {
 protected:
@@ -76,8 +74,6 @@ public:
     ImpDrawPageListWatcher(const SdrModel& rModel);
     virtual ~ImpDrawPageListWatcher();
 };
-
-//////////////////////////////////////////////////////////////////////////////
 
 class ImpMasterPageListWatcher : public ImpPageListWatcher
 {

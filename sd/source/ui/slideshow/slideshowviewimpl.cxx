@@ -50,10 +50,8 @@ using namespace ::com::sun::star;
 namespace sd
 {
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowViewListeners
-///////////////////////////////////////////////////////////////////////
 
+// SlideShowViewListeners
 SlideShowViewListeners::SlideShowViewListeners( ::osl::Mutex& rMutex )
 :   mrMutex( rMutex )
 {
@@ -114,10 +112,8 @@ void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
     maListeners.clear();
 }
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowViewPaintListeners
-///////////////////////////////////////////////////////////////////////
 
+// SlideShowViewPaintListeners
 SlideShowViewPaintListeners::SlideShowViewPaintListeners( ::osl::Mutex& rMutex )
 :   SlideShowViewPaintListeners_Base( rMutex )
 {
@@ -130,10 +126,8 @@ bool SlideShowViewPaintListeners::implTypedNotify( const Reference< awt::XPaintL
     return true; // continue calling listeners
 }
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowViewMouseListeners
-///////////////////////////////////////////////////////////////////////
 
+// SlideShowViewMouseListeners
 SlideShowViewMouseListeners::SlideShowViewMouseListeners( ::osl::Mutex& rMutex ) :
     SlideShowViewMouseListeners_Base( rMutex )
 {
@@ -164,10 +158,8 @@ bool SlideShowViewMouseListeners::implTypedNotify( const Reference< awt::XMouseL
     return true; // continue calling listeners
 }
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowViewMouseMotionListeners
-///////////////////////////////////////////////////////////////////////
 
+// SlideShowViewMouseMotionListeners
 SlideShowViewMouseMotionListeners::SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex ) :
     SlideShowViewMouseMotionListeners_Base( rMutex )
 {
@@ -190,9 +182,9 @@ bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::X
     return true; // continue calling listeners
 }
 
-///////////////////////////////////////////////////////////////////////
+
 // SlideShowView
-///////////////////////////////////////////////////////////////////////
+
 
 SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
                               SdDrawDocument* pDoc,
@@ -223,7 +215,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mTranslationOffset.Height = 0;
 }
 
-/// Dispose all internal references
+// Dispose all internal references
 void SAL_CALL SlideShowView::dispose() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -250,7 +242,7 @@ void SAL_CALL SlideShowView::dispose() throw (RuntimeException)
     WeakComponentImplHelperBase::dispose();
 }
 
-/// Disposing our broadcaster
+// Disposing our broadcaster
 void SAL_CALL SlideShowView::disposing( const lang::EventObject& ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );

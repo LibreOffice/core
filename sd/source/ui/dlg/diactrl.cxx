@@ -37,11 +37,7 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 
-
-//========================================================================
 // SdPagesField
-//========================================================================
-
 SdPagesField::SdPagesField( Window* pParent,
                             const uno::Reference< frame::XFrame >& rFrame,
                             WinBits nBits ) :
@@ -113,13 +109,13 @@ SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox&
 {
 }
 
-//========================================================================
+
 
 SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 {
 }
 
-//========================================================================
+
 
 void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
                 SfxItemState eState, const SfxPoolItem* pState )
@@ -147,7 +143,7 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
     }
 }
 
-//========================================================================
+
 
 Window* SdTbxCtlDiaPages::CreateItemWindow( Window* pParent )
 {

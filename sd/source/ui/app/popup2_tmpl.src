@@ -28,9 +28,8 @@
 
 
 
-//
+
 // TEXTOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_TEXTOBJ_POPUP
 #elif  SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -54,11 +53,11 @@
         MN_DISTRIBUTE
         MNSUB_CONVERT
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -70,9 +69,8 @@
     };
 };
 
-//
+
 // OUTLINETEXTOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_OUTLINETEXTOBJ_POPUP
 #elif  SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -97,11 +95,11 @@
         MN_DISTRIBUTE
         MNSUB_CONVERT
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -113,9 +111,8 @@
     };
 };
 
-//
+
 // GEOMOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_GEOMOBJ_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -141,11 +138,11 @@
         MN_LEAVE_GROUP
         MN_DISMANTLE
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -157,9 +154,8 @@
     };
 };
 
-//
+
 // Customshape POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_CUSTOMSHAPE_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -185,11 +181,11 @@
         MN_LEAVE_GROUP
         MN_DISMANTLE
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -203,9 +199,8 @@
     };
 };
 
-//
+
 // 3DOSCENE_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_3DSCENE_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -226,11 +221,11 @@
         MN_ENTER_GROUP
         MN_3D_WIN
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -242,9 +237,8 @@
     };
 };
 
-//
+
 // 3DOSCENE2_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_3DSCENE2_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -266,11 +260,11 @@
         MN_LEAVE_GROUP
         MN_3D_WIN
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -282,9 +276,8 @@
     };
 };
 
-//
+
 // 3DOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_3DOBJ_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -305,11 +298,11 @@
         MN_LEAVE_GROUP
         MN_3D_WIN
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -321,9 +314,8 @@
     };
 };
 
-//
+
 // GROUPOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_GROUPOBJ_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -345,11 +337,11 @@
         MNSUB_MIRROR
         MNSUB_CONVERT
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
         SEPARATOR
         MN_UNGROUP
@@ -362,9 +354,8 @@
     };
 };
 
-//
+
 // LINEOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_LINEOBJ_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -388,11 +379,11 @@
         MN_LEAVE_GROUP
         MN_DISMANTLE
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -404,9 +395,8 @@
     };
 };
 
-//
+
 // EDGEOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_EDGEOBJ_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -432,11 +422,11 @@
         MN_LEAVE_GROUP
         MN_DISMANTLE
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -448,9 +438,8 @@
     };
 };
 
-//
+
 // MEASUREOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_MEASUREOBJ_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -476,11 +465,11 @@
         MN_LEAVE_GROUP
         MN_DISMANTLE
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -493,9 +482,8 @@
 };
 
 
-//
+
 // POLYLINEOBJ_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_POLYLINEOBJ_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -521,11 +509,11 @@
         MN_DISMANTLE
         MN_BREAK
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -537,9 +525,8 @@
     };
 };
 
-//
+
 // NOSEL_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_NOSEL_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -568,9 +555,8 @@
     };
 };
 
-//
+
 // MULTISELECTION_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_MULTISELECTION_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -609,9 +595,8 @@
     };
 };
 
-//
+
 // GRAPHIC_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_GRAPHIC_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -636,11 +621,11 @@
         MNSUB_CONVERT
         MN_BREAK
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -657,9 +642,7 @@
     };
 };
 
-//
 // OLE2_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_OLE2_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -671,30 +654,30 @@
         MN_TRANSFORM
         MN_ORIGINAL_SIZE
 
-	//-#i118485# Added support for Line,Area and Text
+        // #i118485# Added support for Line,Area and Text
         MN_LINE
         MN_AREA
         SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
-        //-#i118485#----------------------
+        // #i118485#
 
         MN_OBJECT_ALIGN
         MN_POSITION
         MN_DISTRIBUTE
 
-        //-#i118485# Added support for conversions
+        // #i118485# Added support for conversions
         MNSUB_MIRROR
         MNSUB_CONVERT
-        //-#i118485#----------------------
+        // #i118485#
 
         MN_BREAK
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -704,10 +687,7 @@
     };
 };
 
-
-//
 // PAGETAB_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_PAGETAB_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -728,9 +708,8 @@
     };
 };
 
-//
+
 // Media_POPUP
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_MEDIA_POPUP
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
@@ -746,11 +725,11 @@
         MN_DISTRIBUTE
         MN_BREAK
 
-        //-#i68101#----------------------
+        // #i68101#
         SEPARATOR
         MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        //-#i68101#----------------------
+        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -760,9 +739,8 @@
     };
 };
 
-//
+
 // Table shape context menu
-//
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_TABLE_POPUP
 #elif  SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP

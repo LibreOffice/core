@@ -153,8 +153,6 @@ CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Refer
     setNode( xNode );
 }
 
-
-
 void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
     mxNode = xNode;
@@ -278,8 +276,6 @@ void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::c
     checkForText();
 }
 
-
-
 sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_Int16 nIterateType )
 {
     sal_Int32 nSubItems = 0;
@@ -374,13 +370,9 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
     return nSubItems;
 }
 
-
-
 CustomAnimationEffect::~CustomAnimationEffect()
 {
 }
-
-
 
 CustomAnimationEffectPtr CustomAnimationEffect::clone() const
 {
@@ -390,8 +382,6 @@ CustomAnimationEffectPtr CustomAnimationEffect::clone() const
     pEffect->setEffectSequence( getEffectSequence() );
     return pEffect;
 }
-
-
 
 sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode >& xNode )
 {
@@ -418,8 +408,6 @@ sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode 
 
     return nNodeType;
 }
-
-
 
 void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
 {
@@ -503,8 +491,6 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
     }
 }
 
-
-
 void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
 {
     mnGroupId = nGroupId;
@@ -542,8 +528,6 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
         mxNode->setUserData( aUserData );
     }
 }
-
-
 
 /** checks if the text for this effect has changed and updates internal flags.
     returns true if something changed.
@@ -645,8 +629,6 @@ bool CustomAnimationEffect::calculateIterateDuration()
     return bChange;
 }
 
-
-
 void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget )
 {
     try
@@ -700,8 +682,6 @@ void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget
     }
 }
 
-
-
 void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
 {
     try
@@ -737,8 +717,6 @@ void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
     }
 }
 
-
-
 void CustomAnimationEffect::setDuration( double fDuration )
 {
     if( (mfDuration != -1.0) && (mfDuration != fDuration) ) try
@@ -761,7 +739,6 @@ void CustomAnimationEffect::setDuration( double fDuration )
                     Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
                     if( !xChildNode.is() )
                         continue;
-
 
                     double fChildBegin = 0.0;
                     xChildNode->getBegin() >>= fChildBegin;
@@ -789,8 +766,6 @@ void CustomAnimationEffect::setDuration( double fDuration )
     }
 }
 
-
-
 void CustomAnimationEffect::setBegin( double fBegin )
 {
     if( mxNode.is() ) try
@@ -803,8 +778,6 @@ void CustomAnimationEffect::setBegin( double fBegin )
         OSL_FAIL( "sd::CustomAnimationEffect::setBegin(), exception caught!" );
     }
 }
-
-
 
 void CustomAnimationEffect::setAcceleration( double fAcceleration )
 {
@@ -819,7 +792,6 @@ void CustomAnimationEffect::setAcceleration( double fAcceleration )
     }
 }
 
-
 void CustomAnimationEffect::setDecelerate( double fDecelerate )
 {
     if( mxNode.is() ) try
@@ -833,8 +805,6 @@ void CustomAnimationEffect::setDecelerate( double fDecelerate )
     }
 }
 
-
-
 void CustomAnimationEffect::setAutoReverse( sal_Bool bAutoReverse )
 {
     if( mxNode.is() ) try
@@ -847,8 +817,6 @@ void CustomAnimationEffect::setAutoReverse( sal_Bool bAutoReverse )
         OSL_FAIL( "sd::CustomAnimationEffect::setAutoReverse(), exception caught!" );
     }
 }
-
-
 
 void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
@@ -885,8 +853,6 @@ void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference<
         setIterateInterval( fIterateInterval );
 }
 
-
-
 Reference< XShape > CustomAnimationEffect::getTargetShape() const
 {
     Reference< XShape > xShape;
@@ -901,8 +867,6 @@ Reference< XShape > CustomAnimationEffect::getTargetShape() const
     return xShape;
 }
 
-
-
 Any CustomAnimationEffect::getRepeatCount() const
 {
     if( mxNode.is() )
@@ -915,8 +879,6 @@ Any CustomAnimationEffect::getRepeatCount() const
         return aAny;
     }
 }
-
-
 
 Any CustomAnimationEffect::getEnd() const
 {
@@ -931,8 +893,6 @@ Any CustomAnimationEffect::getEnd() const
     }
 }
 
-
-
 sal_Int16 CustomAnimationEffect::getFill() const
 {
     if( mxNode.is() )
@@ -940,8 +900,6 @@ sal_Int16 CustomAnimationEffect::getFill() const
     else
         return 0;
 }
-
-
 
 void CustomAnimationEffect::setRepeatCount( const Any& rRepeatCount )
 {
@@ -954,23 +912,17 @@ void CustomAnimationEffect::setRepeatCount( const Any& rRepeatCount )
     }
 }
 
-
-
 void CustomAnimationEffect::setEnd( const Any& rEnd )
 {
     if( mxNode.is() )
         mxNode->setEnd( rEnd );
 }
 
-
-
 void CustomAnimationEffect::setFill( sal_Int16 nFill )
 {
     if( mxNode.is() )
         mxNode->setFill( nFill );
 }
-
-
 
 Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const throw (Exception)
 {
@@ -1024,8 +976,6 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
 
     return xAnimate;
 }
-
-
 
 void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
 {
@@ -1116,8 +1066,6 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
     }
 }
 
-
-
 void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
 {
     if( mfIterateInterval != fIterateInterval )
@@ -1134,8 +1082,6 @@ void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
         calculateIterateDuration();
     }
 }
-
-
 
 OUString CustomAnimationEffect::getPath() const
 {
@@ -1163,8 +1109,6 @@ OUString CustomAnimationEffect::getPath() const
     return aPath;
 }
 
-
-
 void CustomAnimationEffect::setPath( const OUString& rPath )
 {
     if( mxNode.is() ) try
@@ -1188,8 +1132,6 @@ void CustomAnimationEffect::setPath( const OUString& rPath )
         OSL_FAIL("sd::CustomAnimationEffect::setPath(), exception caught!" );
     }
 }
-
-
 
 Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue )
 {
@@ -1239,8 +1181,6 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAt
 
     return aProperty;
 }
-
-
 
 bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const Any& rValue )
 {
@@ -1317,14 +1257,10 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rA
     return bChanged;
 }
 
-
-
 static bool implIsColorAttribute( const OUString& rAttributeName )
 {
     return rAttributeName == "FillColor" || rAttributeName == "LineColor" || rAttributeName == "CharColor";
 }
-
-
 
 Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
 {
@@ -1372,8 +1308,6 @@ Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
 
     return aColor;
 }
-
-
 
 void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
 {
@@ -1426,8 +1360,6 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
     }
 }
 
-
-
 Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, EValue eValue )
 {
     Any aProperty;
@@ -1473,8 +1405,6 @@ Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, 
 
     return aProperty;
 }
-
-
 
 bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const Any& rValue )
 {
@@ -1547,8 +1477,6 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
     return bChanged;
 }
 
-
-
 void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume /* = 1.0 */ )
 {
     DBG_ASSERT( !mxAudio.is(), "sd::CustomAnimationEffect::createAudio(), node already has an audio!" );
@@ -1566,8 +1494,6 @@ void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSour
         OSL_FAIL("sd::CustomAnimationEffect::createAudio(), exception caught!" );
     }
 }
-
-
 
 static Reference< XCommand > findCommandNode( const Reference< XAnimationNode >& xRootNode )
 {
@@ -1623,8 +1549,6 @@ void CustomAnimationEffect::removeAudio()
 
 }
 
-
-
 void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animations::XAudio >& xAudio )
 {
     if( mxAudio != xAudio ) try
@@ -1641,8 +1565,6 @@ void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animati
         OSL_FAIL("sd::CustomAnimationEffect::setAudio(), exception caught!" );
     }
 }
-
-
 
 void CustomAnimationEffect::setStopAudio()
 {
@@ -1667,14 +1589,10 @@ void CustomAnimationEffect::setStopAudio()
     }
 }
 
-
-
 bool CustomAnimationEffect::getStopAudio() const
 {
     return mnCommand == EffectCommands::STOPAUDIO;
 }
-
-
 
 SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
 {
@@ -1682,8 +1600,6 @@ SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
     updateSdrPathObjFromPath( *pPathObj );
     return pPathObj;
 }
-
-
 
 void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
 {
@@ -1708,8 +1624,6 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
 
     rPathObj.SetPathPoly( xPolyPoly );
 }
-
-
 
 void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj )
 {
@@ -1747,14 +1661,10 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
     setPath( ::basegfx::tools::exportToSvgD( xPolyPoly, true, true, true) );
 }
 
-// ====================================================================
-
 EffectSequenceHelper::EffectSequenceHelper()
 : mnSequenceType( EffectNodeType::DEFAULT )
 {
 }
-
-
 
 EffectSequenceHelper::EffectSequenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot )
 : mxSequenceRoot( xSequenceRoot ), mnSequenceType( EffectNodeType::DEFAULT )
@@ -1763,14 +1673,10 @@ EffectSequenceHelper::EffectSequenceHelper( const ::com::sun::star::uno::Referen
     create( xNode );
 }
 
-
-
 EffectSequenceHelper::~EffectSequenceHelper()
 {
     reset();
 }
-
-
 
 void EffectSequenceHelper::reset()
 {
@@ -1790,16 +1696,12 @@ Reference< XAnimationNode > EffectSequenceHelper::getRootNode()
     return xRoot;
 }
 
-
-
 void EffectSequenceHelper::append( const CustomAnimationEffectPtr& pEffect )
 {
     pEffect->setEffectSequence( this );
     maEffects.push_back(pEffect);
     rebuild();
 }
-
-
 
 CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPresetPtr& pPreset, const Any& rTarget, double fDuration /* = -1.0 */ )
 {
@@ -1872,8 +1774,6 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
     return pEffect;
 }
 
-
-
 CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathObj, const Any& rTarget, double fDuration /* = -1.0 */ )
 {
     CustomAnimationEffectPtr pEffect;
@@ -1921,8 +1821,6 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
     return pEffect;
 }
 
-
-
 void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, const OUString& rPresetSubType, double fDuration /* = -1.0 */ )
 {
     if( pEffect.get() && pPreset.get() ) try
@@ -1943,15 +1841,11 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
     }
 }
 
-
-
 void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, double fDuration /* = -1.0 */ )
 {
     OUString strEmpty;
     replace( pEffect, pPreset, strEmpty, fDuration );
 }
-
-
 
 void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
 {
@@ -1964,14 +1858,10 @@ void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
     rebuild();
 }
 
-
-
 void EffectSequenceHelper::rebuild()
 {
     implRebuild();
 }
-
-
 
 void EffectSequenceHelper::implRebuild()
 {
@@ -2097,21 +1987,15 @@ void EffectSequenceHelper::implRebuild()
     }
 }
 
-
-
 stl_CustomAnimationEffect_search_node_predict::stl_CustomAnimationEffect_search_node_predict( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xSearchNode )
 : mxSearchNode( xSearchNode )
 {
 }
 
-
-
 bool stl_CustomAnimationEffect_search_node_predict::operator()( CustomAnimationEffectPtr pEffect ) const
 {
     return pEffect->getNode() == mxSearchNode;
 }
-
-
 
 static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Reference< XTimeContainer >& xCurrent, Reference< XTimeContainer >& xNext )
  throw(Exception)
@@ -2132,8 +2016,6 @@ static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Referen
     }
     return xNext.is();
 }
-
-
 
 void stl_process_after_effect_node_func(AfterEffectNode& rNode)
 {
@@ -2246,14 +2128,10 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
     }
 }
 
-
-
 EffectSequence::iterator EffectSequenceHelper::find( const CustomAnimationEffectPtr& pEffect )
 {
     return std::find( maEffects.begin(), maEffects.end(), pEffect );
 }
-
-
 
 CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const
 {
@@ -2272,8 +2150,6 @@ CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const ::com::sun::sta
     return pEffect;
 }
 
-
-
 sal_Int32 EffectSequenceHelper::getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const
 {
     sal_Int32 nOffset = 0;
@@ -2288,8 +2164,6 @@ sal_Int32 EffectSequenceHelper::getOffsetFromEffect( const CustomAnimationEffect
     return -1;
 }
 
-
-
 CustomAnimationEffectPtr EffectSequenceHelper::getEffectFromOffset( sal_Int32 nOffset ) const
 {
     EffectSequence::const_iterator aIter( maEffects.begin() );
@@ -2302,8 +2176,6 @@ CustomAnimationEffectPtr EffectSequenceHelper::getEffectFromOffset( sal_Int32 nO
 
     return pEffect;
 }
-
-
 
 bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
 {
@@ -2327,8 +2199,6 @@ bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
     return bChanges;
 }
 
-
-
 bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
 {
     EffectSequence::iterator aIter( maEffects.begin() );
@@ -2341,8 +2211,6 @@ bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com:
 
     return false;
 }
-
-
 
 void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTarget )
 {
@@ -2363,8 +2231,6 @@ void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTar
     if( bChanges )
         rebuild();
 }
-
-
 
 void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTarget )
 {
@@ -2418,16 +2284,12 @@ void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTa
         rebuild();
 }
 
-
-
 CustomAnimationTextGroup::CustomAnimationTextGroup( const Reference< XShape >& rTarget, sal_Int32 nGroupId )
 :   maTarget( rTarget ),
     mnGroupId( nGroupId )
 {
     reset();
 }
-
-
 
 void CustomAnimationTextGroup::reset()
 {
@@ -2444,8 +2306,6 @@ void CustomAnimationTextGroup::reset()
 
     maEffects.clear();
 }
-
-
 
 void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
 {
@@ -2495,15 +2355,11 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
     }
 }
 
-
-
 class TextGroupMapImpl : public std::map< sal_Int32, CustomAnimationTextGroup* >
 {
 public:
     CustomAnimationTextGroup* findGroup( sal_Int32 nGroupId );
 };
-
-
 
 CustomAnimationTextGroupPtr EffectSequenceHelper::findGroup( sal_Int32 nGroupId )
 {
@@ -2515,8 +2371,6 @@ CustomAnimationTextGroupPtr EffectSequenceHelper::findGroup( sal_Int32 nGroupId 
 
     return aPtr;
 }
-
-
 
 void EffectSequenceHelper::updateTextGroups()
 {
@@ -2544,8 +2398,6 @@ void EffectSequenceHelper::updateTextGroups()
         pGroup->addEffect( pEffect );
     }
 }
-
-
 
 CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse )
 {
@@ -2603,8 +2455,6 @@ CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimati
 
     return pTextGroup;
 }
-
-
 
 void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextGroupPtr pTextGroup, CustomAnimationEffectPtr pEffect, bool bUsed )
 {
@@ -2699,8 +2549,6 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
     }
 }
 
-
-
 void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping )
 {
     if( pTextGroup->mnTextGrouping == nTextGrouping )
@@ -2781,8 +2629,6 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
     }
 }
 
-
-
 void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bAnimateForm )
 {
     if( pTextGroup->mbAnimateForm == bAnimateForm )
@@ -2855,8 +2701,6 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
     }
 }
 
-
-
 void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto )
 {
     sal_Int32 nTextGrouping = pTextGroup->mnTextGrouping;
@@ -2899,8 +2743,6 @@ void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTex
     notify_listeners();
 }
 
-
-
 struct ImplStlTextGroupSortHelper
 {
     ImplStlTextGroupSortHelper( bool bReverse ) : mbReverse( bReverse ) {};
@@ -2908,8 +2750,6 @@ struct ImplStlTextGroupSortHelper
     bool mbReverse;
     sal_Int32 getTargetParagraph( const CustomAnimationEffectPtr& p1 );
 };
-
-
 
 sal_Int32 ImplStlTextGroupSortHelper::getTargetParagraph( const CustomAnimationEffectPtr& p1 )
 {
@@ -2926,8 +2766,6 @@ sal_Int32 ImplStlTextGroupSortHelper::getTargetParagraph( const CustomAnimationE
     }
 }
 
-
-
 bool ImplStlTextGroupSortHelper::operator()( const CustomAnimationEffectPtr& p1, const CustomAnimationEffectPtr& p2 )
 {
     if( mbReverse )
@@ -2939,8 +2777,6 @@ bool ImplStlTextGroupSortHelper::operator()( const CustomAnimationEffectPtr& p1,
         return getTargetParagraph( p1 ) < getTargetParagraph( p2 );
     }
 }
-
-
 
 void EffectSequenceHelper::setTextReverse( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bTextReverse )
 {
@@ -2976,22 +2812,16 @@ void EffectSequenceHelper::setTextReverse( CustomAnimationTextGroupPtr pTextGrou
     }
 }
 
-
-
 void EffectSequenceHelper::addListener( ISequenceListener* pListener )
 {
     if( std::find( maListeners.begin(), maListeners.end(), pListener ) == maListeners.end() )
         maListeners.push_back( pListener );
 }
 
-
-
 void EffectSequenceHelper::removeListener( ISequenceListener* pListener )
 {
     maListeners.remove( pListener );
 }
-
-
 
 struct stl_notify_listeners_func : public std::unary_function<ISequenceListener*, void>
 {
@@ -2999,15 +2829,11 @@ struct stl_notify_listeners_func : public std::unary_function<ISequenceListener*
     void operator()(ISequenceListener* pListener) { pListener->notify_change(); }
 };
 
-
-
 void EffectSequenceHelper::notify_listeners()
 {
     stl_notify_listeners_func aFunc;
     std::for_each( maListeners.begin(), maListeners.end(), aFunc );
 }
-
-
 
 void EffectSequenceHelper::create( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
@@ -3029,8 +2855,6 @@ void EffectSequenceHelper::create( const ::com::sun::star::uno::Reference< ::com
     }
 }
 
-
-
 void EffectSequenceHelper::createEffectsequence( const Reference< XAnimationNode >& xNode )
 {
     DBG_ASSERT( xNode.is(), "sd::EffectSequenceHelper::createEffectsequence(), illegal argument" );
@@ -3051,8 +2875,6 @@ void EffectSequenceHelper::createEffectsequence( const Reference< XAnimationNode
         OSL_FAIL( "sd::EffectSequenceHelper::createEffectsequence(), exception caught!" );
     }
 }
-
-
 
 void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNode )
 {
@@ -3097,8 +2919,6 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
         OSL_FAIL( "sd::EffectSequenceHelper::createEffects(), exception caught!" );
     }
 }
-
-
 
 void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >& xNode )
 {
@@ -3157,8 +2977,6 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     }
 }
 
-// ====================================================================
-
 class AnimationChangeListener : public cppu::WeakImplHelper1< XChangesListener >
 {
 public:
@@ -3180,8 +2998,6 @@ void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::
 {
 }
 
-// ====================================================================
-
 MainSequence::MainSequence()
 : mxTimingRootNode( SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() ) )
 , mbRebuilding( false )
@@ -3198,8 +3014,6 @@ MainSequence::MainSequence()
     init();
 }
 
-
-
 MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 : mxTimingRootNode( xNode, UNO_QUERY )
 , mbRebuilding( false )
@@ -3210,14 +3024,10 @@ MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::
     init();
 }
 
-
-
 MainSequence::~MainSequence()
 {
     reset();
 }
-
-
 
 void MainSequence::init()
 {
@@ -3231,8 +3041,6 @@ void MainSequence::init()
     createMainSequence();
 }
 
-
-
 void MainSequence::reset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode )
 {
     reset();
@@ -3241,8 +3049,6 @@ void MainSequence::reset( const ::com::sun::star::uno::Reference< ::com::sun::st
 
     createMainSequence();
 }
-
-
 
 Reference< ::com::sun::star::animations::XAnimationNode > MainSequence::getRootNode()
 {
@@ -3257,8 +3063,6 @@ Reference< ::com::sun::star::animations::XAnimationNode > MainSequence::getRootN
 
     return EffectSequenceHelper::getRootNode();
 }
-
-
 
 void MainSequence::createMainSequence()
 {
@@ -3320,8 +3124,6 @@ void MainSequence::createMainSequence()
     DBG_ASSERT( mxSequenceRoot.is(), "sd::MainSequence::create(), found no main sequence!" );
 }
 
-
-
 void MainSequence::reset()
 {
     EffectSequenceHelper::reset();
@@ -3339,11 +3141,9 @@ void MainSequence::reset()
     }
     catch( Exception& )
     {
-        // ...
+
     }
 }
-
-
 
 InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape )
 {
@@ -3368,8 +3168,6 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     return pIS;
 }
 
-
-
 CustomAnimationEffectPtr MainSequence::findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const
 {
     CustomAnimationEffectPtr pEffect = EffectSequenceHelper::findEffect( xNode );
@@ -3384,8 +3182,6 @@ CustomAnimationEffectPtr MainSequence::findEffect( const ::com::sun::star::uno::
     }
     return pEffect;
 }
-
-
 
 sal_Int32 MainSequence::getOffsetFromEffect( const CustomAnimationEffectPtr& pEffect ) const
 {
@@ -3409,8 +3205,6 @@ sal_Int32 MainSequence::getOffsetFromEffect( const CustomAnimationEffectPtr& pEf
     return -1;
 }
 
-
-
 CustomAnimationEffectPtr MainSequence::getEffectFromOffset( sal_Int32 nOffset ) const
 {
     if( nOffset >= 0 )
@@ -3433,8 +3227,6 @@ CustomAnimationEffectPtr MainSequence::getEffectFromOffset( sal_Int32 nOffset ) 
     return pEffect;
 }
 
-
-
 bool MainSequence::disposeShape( const Reference< XShape >& xShape )
 {
     bool bChanges = EffectSequenceHelper::disposeShape( xShape );
@@ -3450,8 +3242,6 @@ bool MainSequence::disposeShape( const Reference< XShape >& xShape )
 
     return bChanges;
 }
-
-
 
 bool MainSequence::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
 {
@@ -3471,8 +3261,6 @@ bool MainSequence::hasEffect( const com::sun::star::uno::Reference< com::sun::st
     return false;
 }
 
-
-
 void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
 {
     EffectSequenceHelper::insertTextRange( aTarget );
@@ -3483,7 +3271,6 @@ void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
         (*aIter)->insertTextRange( aTarget );
     }
 }
-
 
 void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
 {
@@ -3496,8 +3283,6 @@ void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
     }
 }
 
-
-
 /** callback from the sd::View when an object just left text edit mode */
 void MainSequence::onTextChanged( const Reference< XShape >& xShape )
 {
@@ -3509,8 +3294,6 @@ void MainSequence::onTextChanged( const Reference< XShape >& xShape )
         (*aIter)->onTextChanged( xShape );
     }
 }
-
-
 
 void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
 {
@@ -3527,21 +3310,15 @@ void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
         EffectSequenceHelper::implRebuild();
 }
 
-
-
 void MainSequence::rebuild()
 {
     startRebuildTimer();
 }
 
-
-
 void MainSequence::lockRebuilds()
 {
     mnRebuildLockGuard++;
 }
-
-
 
 void MainSequence::unlockRebuilds()
 {
@@ -3555,8 +3332,6 @@ void MainSequence::unlockRebuilds()
         startRebuildTimer();
     }
 }
-
-
 
 void MainSequence::implRebuild()
 {
@@ -3596,14 +3371,10 @@ void MainSequence::implRebuild()
     mbRebuilding = false;
 }
 
-
-
 void MainSequence::notify_change()
 {
     notify_listeners();
 }
-
-
 
 bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTriggerShape )
 {
@@ -3648,8 +3419,6 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::
 
 }
 
-
-
 IMPL_LINK_NOARG(MainSequence, onTimerHdl)
 {
     if( mbTimerMode )
@@ -3665,8 +3434,6 @@ IMPL_LINK_NOARG(MainSequence, onTimerHdl)
     return 0;
 }
 
-
-
 /** starts a timer that recreates the internal structure from the API core after 1 second */
 void MainSequence::startRecreateTimer()
 {
@@ -3677,16 +3444,12 @@ void MainSequence::startRecreateTimer()
     }
 }
 
-
-
 /** starts a timer that rebuilds the API core from the internal structure after 1 second */
 void MainSequence::startRebuildTimer()
 {
     mbTimerMode = true;
     maTimer.Start();
 }
-
-// ====================================================================
 
 InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence )
 : EffectSequenceHelper( xSequenceRoot ), mpMainSequence( pMainSequence )
@@ -3716,8 +3479,6 @@ InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSe
     }
 }
 
-
-
 void InteractiveSequence::rebuild()
 {
     mpMainSequence->rebuild();
@@ -3727,8 +3488,6 @@ void InteractiveSequence::implRebuild()
 {
     EffectSequenceHelper::implRebuild();
 }
-
-
 
 MainSequenceRebuildGuard::MainSequenceRebuildGuard( const MainSequencePtr& pMainSequence )
 : mpMainSequence( pMainSequence )
@@ -3742,7 +3501,6 @@ MainSequenceRebuildGuard::~MainSequenceRebuildGuard()
     if( mpMainSequence.get() )
         mpMainSequence->unlockRebuilds();
 }
-
 
 }
 

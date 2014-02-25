@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "undo/undoobjects.hxx"
 #include "sdpage.hxx"
 #include "CustomAnimationEffect.hxx"
@@ -25,8 +24,6 @@
 #include "undoanim.hxx"
 
 using namespace sd;
-
-///////////////////////////////////////////////////////////////////////
 
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
 : mpUndoUsercall(0)
@@ -52,16 +49,12 @@ UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
     }
 }
 
-
-
 UndoRemovePresObjectImpl::~UndoRemovePresObjectImpl()
 {
     delete mpUndoAnimation;
     delete mpUndoPresObj;
     delete mpUndoUsercall;
 }
-
-
 
 void UndoRemovePresObjectImpl::Undo()
 {
@@ -73,8 +66,6 @@ void UndoRemovePresObjectImpl::Undo()
         mpUndoAnimation->Undo();
 }
 
-
-
 void UndoRemovePresObjectImpl::Redo()
 {
     if( mpUndoAnimation )
@@ -85,16 +76,11 @@ void UndoRemovePresObjectImpl::Redo()
         mpUndoUsercall->Redo();
 }
 
-///////////////////////////////////////////////////////////////////////
-
-
 UndoRemoveObject::UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 : SdrUndoRemoveObj( rObject, bOrdNumDirect ), UndoRemovePresObjectImpl( rObject )
 , mxSdrObject(&rObject)
 {
 }
-
-
 
 void UndoRemoveObject::Undo()
 {
@@ -106,8 +92,6 @@ void UndoRemoveObject::Undo()
     }
 }
 
-
-
 void UndoRemoveObject::Redo()
 {
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoRemoveObject::Redo(), object already dead!" );
@@ -118,16 +102,12 @@ void UndoRemoveObject::Redo()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-
 UndoDeleteObject::UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 : SdrUndoDelObj( rObject, bOrdNumDirect )
 , UndoRemovePresObjectImpl( rObject )
 , mxSdrObject(&rObject)
 {
 }
-
-
 
 void UndoDeleteObject::Undo()
 {
@@ -139,8 +119,6 @@ void UndoDeleteObject::Undo()
     }
 }
 
-
-
 void UndoDeleteObject::Redo()
 {
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoDeleteObject::Redo(), object already dead!" );
@@ -151,16 +129,12 @@ void UndoDeleteObject::Redo()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-
 UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 : SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect )
 , UndoRemovePresObjectImpl( rOldObject )
 , mxSdrObject( &rOldObject )
 {
 }
-
-
 
 void UndoReplaceObject::Undo()
 {
@@ -172,8 +146,6 @@ void UndoReplaceObject::Undo()
     }
 }
 
-
-
 void UndoReplaceObject::Redo()
 {
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoReplaceObject::Redo(), object already dead!" );
@@ -183,8 +155,6 @@ void UndoReplaceObject::Redo()
         SdrUndoReplaceObj::Redo();
     }
 }
-
-///////////////////////////////////////////////////////////////////////
 
 UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
 : SdrUndoObjSetText( rObject, nText )
@@ -203,14 +173,10 @@ UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
     }
 }
 
-
-
 UndoObjectSetText::~UndoObjectSetText()
 {
     delete mpUndoAnimation;
 }
-
-
 
 void UndoObjectSetText::Undo()
 {
@@ -224,8 +190,6 @@ void UndoObjectSetText::Undo()
     }
 }
 
-
-
 void UndoObjectSetText::Redo()
 {
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectSetText::Redo(), object already dead!" );
@@ -238,7 +202,6 @@ void UndoObjectSetText::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // Undo for SdrObject::SetUserCall()
 
 UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
@@ -248,8 +211,6 @@ UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
 ,   mxSdrObject( &rObject )
 {
 }
-
-
 
 void UndoObjectUserCall::Undo()
 {
@@ -261,8 +222,6 @@ void UndoObjectUserCall::Undo()
     }
 }
 
-
-
 void UndoObjectUserCall::Redo()
 {
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectUserCall::Redo(), object already dead!" );
@@ -272,7 +231,6 @@ void UndoObjectUserCall::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
 UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
@@ -288,8 +246,6 @@ UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
         meOldKind = static_cast< SdPage* >( mxPage.get() )->GetPresObjKind( &rObject );
 }
 
-
-
 void UndoObjectPresentationKind::Undo()
 {
     if( mxPage.is() && mxSdrObject.is() )
@@ -303,8 +259,6 @@ void UndoObjectPresentationKind::Undo()
     }
 }
 
-
-
 void UndoObjectPresentationKind::Redo()
 {
     if( mxPage.is() && mxSdrObject.is() )
@@ -317,21 +271,15 @@ void UndoObjectPresentationKind::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 UndoAutoLayoutPosAndSize::UndoAutoLayoutPosAndSize( SdPage& rPage )
 : mxPage( &rPage )
 {
 }
 
-
-
 void UndoAutoLayoutPosAndSize::Undo()
 {
     // do nothing
 }
-
-
 
 void UndoAutoLayoutPosAndSize::Redo()
 {
@@ -340,16 +288,12 @@ void UndoAutoLayoutPosAndSize::Redo()
         pPage->SetAutoLayout( pPage->GetAutoLayout(), sal_False, sal_False );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 : SdrUndoGeoObj( rNewObj )
 , mxPage( rNewObj.GetPage() )
 , mxSdrObject( &rNewObj )
 {
 }
-
-
 
 void UndoGeoObject::Undo()
 {
@@ -368,8 +312,6 @@ void UndoGeoObject::Undo()
     }
 }
 
-
-
 void UndoGeoObject::Redo()
 {
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoGeoObject::Redo(), object already dead!" );
@@ -387,18 +329,12 @@ void UndoGeoObject::Redo()
     }
 }
 
-
-
-//////////////////////////////////////////////////////////////////////////////
-
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 : SdrUndoAttrObj( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False )
 , mxPage( rObject.GetPage() )
 , mxSdrObject( &rObject )
 {
 }
-
-
 
 void UndoAttrObject::Undo()
 {
@@ -416,8 +352,6 @@ void UndoAttrObject::Undo()
         }
     }
 }
-
-
 
 void UndoAttrObject::Redo()
 {

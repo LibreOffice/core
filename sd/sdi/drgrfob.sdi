@@ -79,7 +79,6 @@ shell GraphicObjectBar
         StateMethod = GetFilterState;
     ]
 
-//------------------------------------------------------------------------------
 
     SID_ATTR_GRAF_MODE
     [

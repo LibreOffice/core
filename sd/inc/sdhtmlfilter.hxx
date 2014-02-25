@@ -22,10 +22,8 @@
 
 #include "sdfilter.hxx"
 
-// ----------------
-// - SdHTMLFilter -
-// ----------------
 
+// SdHTMLFilter
 class SdHTMLFilter
     : public SdFilter
 {

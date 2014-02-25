@@ -86,7 +86,7 @@ extern Reference< XAnnotation > createAnnotation( const Reference< XComponentCon
 extern Reference< XAnnotationEnumeration > createAnnotationEnumeration( const sd::AnnotationVector& );
 }
 
-/* this are the ids for page properties */
+// this are the ids for page properties
 enum WID_PAGE
 {
     WID_PAGE_LEFT, WID_PAGE_RIGHT, WID_PAGE_TOP, WID_PAGE_BOTTOM, WID_PAGE_WIDTH,
@@ -103,7 +103,7 @@ enum WID_PAGE
 
 static sal_Char const sEmptyPageName[sizeof("page")] = "page";
 
-/** this function stores the property maps for draw pages in impress and draw */
+// this function stores the property maps for draw pages in impress and draw
 const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKind ePageKind )
 {
     static const SfxItemPropertyMapEntry aDrawPagePropertyMap_Impl[] =
@@ -1862,10 +1862,8 @@ Reference< XAnimationNode > SAL_CALL SdGenericDrawPage::getAnimationNode() throw
     return pSdPage->getAnimationNode();
 }
 
-//========================================================================
-// SdPageLinkTargets
-//========================================================================
 
+// SdPageLinkTargets
 SdPageLinkTargets::SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) throw()
 {
     mxPage = pUnoPage;
@@ -1876,7 +1874,7 @@ SdPageLinkTargets::~SdPageLinkTargets() throw()
 {
 }
 
-    // XElementAccess
+// XElementAccess
 uno::Type SAL_CALL SdPageLinkTargets::getElementType()
     throw(uno::RuntimeException)
 {
@@ -2021,10 +2019,8 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
     return aSeq;
 }
 
-//========================================================================
-// SdDrawPage
-//========================================================================
 
+// SdDrawPage
 SdDrawPage::SdDrawPage(  SdXImpressDocument* pModel, SdPage* pPage ) throw()
 : SdGenericDrawPage( pModel, pPage, ImplGetDrawPagePropertySet( pModel->IsImpressDocument(), pPage->GetPageKind() ) )
 {
@@ -2422,7 +2418,6 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getNotesPage()
     return NULL;
 }
 
-
 // XIndexAccess
 sal_Int32 SAL_CALL SdDrawPage::getCount()
     throw(uno::RuntimeException)
@@ -2674,10 +2669,7 @@ Any SdGenericDrawPage::getNavigationOrder()
     }
 }
 
-//========================================================================
 // class SdMasterPage
-//========================================================================
-
 SdMasterPage::SdMasterPage( SdXImpressDocument* pModel, SdPage* pPage ) throw()
 : SdGenericDrawPage( pModel, pPage, ImplGetMasterPagePropertySet( pPage ? pPage->GetPageKind() : PK_STANDARD ) )
 {

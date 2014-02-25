@@ -78,12 +78,8 @@
 
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #define ANSI_CHARSET            0
 #define SYMBOL_CHARSET          2
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* Font Families */
 #define FF_ROMAN                0x10
@@ -92,12 +88,8 @@ using namespace ::com::sun::star;
 #define FF_SCRIPT               0x40
 #define FF_DECORATIVE           0x50
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
-
-
 
 PPTExBulletProvider::PPTExBulletProvider()
 {
@@ -153,8 +145,6 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
     return nRetValue;
 }
 
-
-
 sal_uInt32 PPTWriter::ImplVBAInfoContainer( SvStream* pStrm )
 {
     sal_uInt32 nSize = 28;
@@ -171,8 +161,6 @@ sal_uInt32 PPTWriter::ImplVBAInfoContainer( SvStream* pStrm )
     }
     return nSize;
 }
-
-
 
 sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream* pStrm )
 {
@@ -223,8 +211,6 @@ sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream
     return nSize;
 }
 
-
-
 sal_uInt32 PPTWriter::ImplOutlineViewInfoContainer( SvStream* pStrm )
 {
     sal_uInt32 nSize = 68;
@@ -242,8 +228,6 @@ sal_uInt32 PPTWriter::ImplOutlineViewInfoContainer( SvStream* pStrm )
     }
     return nSize;
 }
-
-
 
 sal_uInt32 PPTWriter::ImplProgBinaryTag( SvStream* pStrm )
 {
@@ -274,8 +258,6 @@ sal_uInt32 PPTWriter::ImplProgBinaryTag( SvStream* pStrm )
     return nSize;
 }
 
-
-
 sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStream* pBinTagStrm )
 {
     sal_uInt32 nSize = 8 + 8 + 14;
@@ -305,8 +287,6 @@ sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStrea
     return nSize;
 }
 
-
-
 sal_uInt32 PPTWriter::ImplProgTagContainer( SvStream* pStrm, SvMemoryStream* pBinTagStrm )
 {
     sal_uInt32 nSize = 0;
@@ -327,8 +307,6 @@ sal_uInt32 PPTWriter::ImplProgTagContainer( SvStream* pStrm, SvMemoryStream* pBi
     }
     return nSize;
 }
-
-
 
 sal_uInt32 PPTWriter::ImplDocumentListContainer( SvStream* pStrm )
 {
@@ -353,8 +331,6 @@ sal_uInt32 PPTWriter::ImplDocumentListContainer( SvStream* pStrm )
     return nSize;
 }
 
-
-
 sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
 {
     sal_uInt32 i, nSize = 28 * mnMasterPages + 8;
@@ -375,8 +351,6 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
     }
     return nSize;
 }
-
-
 
 sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const sal_uInt32 nType,
     const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 )
@@ -415,8 +389,6 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
     mpExEmbed->SeekRel( nHyperSize );
     return nHyperId;
 }
-
-
 
 sal_Bool PPTWriter::ImplCloseDocument()
 {
@@ -577,8 +549,6 @@ sal_Bool PPTWriter::ImplCloseDocument()
     return sal_False;
 }
 
-
-
 sal_Bool PropValue::GetPropertyValue(
     ::com::sun::star::uno::Any& rAny,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
@@ -617,8 +587,6 @@ sal_Bool PropValue::GetPropertyValue(
     return bRetValue;
 }
 
-
-
 ::com::sun::star::beans::PropertyState PropValue::GetPropertyState(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
     const OUString& rPropertyName )
@@ -633,26 +601,20 @@ sal_Bool PropValue::GetPropertyValue(
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        //...
+
     }
     return eRetValue;
 }
-
-
 
 sal_Bool PropValue::ImplGetPropertyValue( const OUString& rString )
 {
     return GetPropertyValue( mAny, mXPropSet, rString );
 }
 
-
-
 sal_Bool PropValue::ImplGetPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & aXPropSet, const OUString& rString )
 {
     return GetPropertyValue( mAny, aXPropSet, rString );
 }
-
-
 
 sal_Bool PropStateValue::ImplGetPropertyValue( const OUString& rString, sal_Bool bGetPropertyState )
 {
@@ -680,8 +642,6 @@ sal_Bool PropStateValue::ImplGetPropertyValue( const OUString& rString, sal_Bool
     }
     return bRetValue;
 }
-
-
 
 void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 {
@@ -826,8 +786,6 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             rOut.WriteUInt16( pPara->mnBiDi );
     }
 }
-
-//  -----------------------------------------------------------------------
 
 void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 {
@@ -1034,8 +992,6 @@ sal_Bool PPTWriter::ImplGetText()
     return ( mnTextSize != 0 );
 }
 
-//  -----------------------------------------------------------------------
-
 void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
 {
     if ( mnAngle < 0 )
@@ -1070,8 +1026,6 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     }
 }
 
-//  -----------------------------------------------------------------------
-
 void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropertyContainer& rPropOpt )
 {
     if ( !mbFontIndependentLineSpacing )
@@ -1103,8 +1057,6 @@ void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropert
         }
     }
 }
-
-//  -----------------------------------------------------------------------
 
 void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
     TextRuleEntry* pTextRule, SvStream& rExtBuStr, EscherPropertyContainer* pPropOpt )
@@ -1422,8 +1374,6 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         }
     }
 }
-
-//  -----------------------------------------------------------------------
 
 void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     ::com::sun::star::presentation::AnimationEffect eAe,
@@ -1942,8 +1892,6 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
        .WriteUInt16( (sal_uInt16)0 );                               // PadWord
 }
 
-//  -----------------------------------------------------------------------
-
 void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eCa, sal_Bool bMediaClickAction )
 {
     sal_uInt32 nSoundRef = 0;   // a reference to a sound in the sound collection, or NULL.
@@ -2098,8 +2046,6 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
     for ( int i = 0; i < 4; i++, rSt.WriteUInt32( (sal_uInt32)0 ) ) ;
 }
 
-//  -----------------------------------------------------------------------
-
 sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPropSet,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
                                 ::com::sun::star::presentation::AnimationEffect& eTextEffect,
@@ -2125,8 +2071,6 @@ sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com
                         || bIsSound );
     return bHasEffect;
 };
-
-//  -----------------------------------------------------------------------
 
 sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPage, const PageType /* ePageType */,
                                                         const sal_uInt32 nStyleInstance, const sal_uInt8 nPlaceHolderId )
@@ -2180,8 +2124,6 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
         bRet = sal_False;
     return bRet;
 }
-
-//  -----------------------------------------------------------------------
 
 void PPTWriter::ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& rSolver )
 {
@@ -3527,8 +3469,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     mnPagesWritten++;
 }
 
-//  -----------------------------------------------------------------------
-
 struct CellBorder
 {
     sal_Int32                       mnPos;      // specifies the distance to the top/left position of the table
@@ -3889,8 +3829,6 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
     }
     mpPptEscherEx->CloseContainer();
 }
-
-
 
 void TextObjBinary::Write( SvStream* pStrm )
 {

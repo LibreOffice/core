@@ -197,8 +197,6 @@ private:
     boost::ptr_vector<FontCollectionEntry> maFonts;
 };
 
-// ------------------------------------------------------------------------
-
 #define PPTEX_STYLESHEETENTRYS  9
 
 enum PPTExTextAttr
@@ -321,8 +319,6 @@ class PPTExStyleSheet
                 sal_uInt32      SizeOfTxCFStyleAtom() const;
                 void            WriteTxCFStyleAtom( SvStream& rSt );
 };
-
-// ------------------------------------------------------------------------
 
 class PPTWriterBase : public PropValue, public GroupTable
 {
