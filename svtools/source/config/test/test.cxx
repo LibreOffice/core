@@ -58,27 +58,27 @@ using namespace ::com::sun::star::registry  ;
 
 class TestApplication : public Application
 {
-    //*************************************************************************************************************
+
     // interface
-    //*************************************************************************************************************
+
     public:
         void Main();
 
-    //*************************************************************************************************************
+
     // test methods
-    //*************************************************************************************************************
+
     private:
         void impl_testDynamicMenuOptions();
 
-    //*************************************************************************************************************
+
     // helper methods
-    //*************************************************************************************************************
+
     private:
         static Reference< XMultiServiceFactory > getUNOServiceManager();
 
-    //*************************************************************************************************************
+
     // member
-    //*************************************************************************************************************
+
     private:
 
 };  //  class TestApplication
@@ -116,9 +116,9 @@ void TestApplication::Main()
     OSL_FAIL( "Test was successful!\n" );
 }
 
-//*****************************************************************************************************************
+
 // test configuration of dynamic menus "New" and "Wizard"
-//*****************************************************************************************************************
+
 void TestApplication::impl_testDynamicMenuOptions()
 {
     SvtDynamicMenuOptions aCFG;
@@ -201,10 +201,10 @@ void TestApplication::impl_testDynamicMenuOptions()
     OSL_FAIL( OUStringToOString( sOut.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-//*****************************************************************************************************************
+
 // create new uno servicemanager by using normall applicat.rdb and user.rdb of an office installation!
 // Don't use this application at same time like the office!
-//*****************************************************************************************************************
+
 Reference< XMultiServiceFactory > TestApplication::getUNOServiceManager()
 {
     static Reference< XMultiServiceFactory > smgr;

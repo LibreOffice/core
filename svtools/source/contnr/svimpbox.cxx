@@ -609,9 +609,9 @@ void SvImpLBox::RecalcFocusRect()
     }
 }
 
-//
+
 //  Sets cursor. When using SingleSelection, the selection is adjusted.
-//
+
 
 void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
 {
@@ -789,10 +789,10 @@ SvTreeListEntry* SvImpLBox::GetClickedEntry( const Point& rPoint ) const
     return pEntry;
 }
 
-//
+
 //  checks if the entry was hit "the right way"
 //  (Focusrect+ ContextBitmap bei TreeListBox)
-//
+
 bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPosPixel, long nLine)
 {
     bool bRet;
@@ -1619,9 +1619,9 @@ void SvImpLBox::SetNodeBmpTabDistance()
     }
 }
 
-//
+
 // corrects the cursor when using SingleSelection
-//
+
 void SvImpLBox::EntrySelected( SvTreeListEntry* pEntry, bool bSelect )
 {
     if( nFlags & F_IGNORE_SELECT )

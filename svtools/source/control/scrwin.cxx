@@ -20,7 +20,7 @@
 #include <svtools/scrwin.hxx>
 #include <vcl/settings.hxx>
 
-//===================================================================
+
 
 void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
 {

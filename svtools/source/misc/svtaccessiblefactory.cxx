@@ -30,15 +30,15 @@
     // here) died, it's not said that everybody released all references to the
     // XAccessibleContext used by this component, and implemented in the acc lib.
     // So we cannot really unload the lib.
-    //
+
     // Alternatively, if the lib would us own "usage counting", i.e. every component
     // implemented therein would affect a static ref count, the acc lib could care
     // for unloading itself.
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -55,9 +55,9 @@ namespace svt
         static GetSvtAccessibilityComponentFactory      s_pAccessibleFactoryFunc = NULL;
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
 
-        //====================================================================
+
         //= AccessibleDummyFactory
-        //====================================================================
+
         class AccessibleDummyFactory : public IAccessibleFactory
         {
         public:
@@ -248,9 +248,9 @@ namespace svt
         }
     }
 
-    //====================================================================
+
     //= AccessibleFactoryAccess
-    //====================================================================
+
 
     AccessibleFactoryAccess::AccessibleFactoryAccess()
         :m_bInitialized( false )
@@ -345,8 +345,8 @@ namespace svt
         return *s_pFactory;
     }
 
-//........................................................................
+
 }   // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

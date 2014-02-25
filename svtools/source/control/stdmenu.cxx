@@ -25,7 +25,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/stdmenu.hxx>
 
-// ========================================================================
+
 
 FontNameMenu::FontNameMenu()
 {
@@ -115,7 +115,7 @@ void FontNameMenu::SetCurName(const OUString& rName)
         CheckItem( nChecked, false );
 }
 
-// ========================================================================
+
 
 FontSizeMenu::FontSizeMenu()
 :    mpHeightAry( NULL )

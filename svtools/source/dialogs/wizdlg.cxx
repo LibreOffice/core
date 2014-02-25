@@ -22,14 +22,14 @@
 #include <vcl/tabpage.hxx>
 #include <svtools/wizdlg.hxx>
 
-// =======================================================================
+
 
 #define WIZARDDIALOG_BUTTON_OFFSET_Y        6
 #define WIZARDDIALOG_BUTTON_DLGOFFSET_X     6
 #define WIZARDDIALOG_VIEW_DLGOFFSET_X       6
 #define WIZARDDIALOG_VIEW_DLGOFFSET_Y       6
 
-// =======================================================================
+
 
 struct ImplWizPageData
 {
@@ -46,7 +46,7 @@ struct ImplWizButtonData
     long                mnOffset;
 };
 
-// =======================================================================
+
 
 void WizardDialog::ImplInitData()
 {
@@ -359,7 +359,7 @@ TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
     return NULL;
 }
 
-// =======================================================================
+
 
 WizardDialog::WizardDialog( Window* pParent, WinBits nStyle ) :
     ModalDialog( pParent, nStyle )

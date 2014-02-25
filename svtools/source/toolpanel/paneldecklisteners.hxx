@@ -25,16 +25,16 @@
 #include <boost/optional.hpp>
 #include <vector>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     class IToolPanelDeckListener;
 
-    //====================================================================
+
     //= PanelDeckListeners
-    //====================================================================
+
     /** implements a container for IToolPanelDeckListeners
     */
     class PanelDeckListeners
@@ -58,9 +58,9 @@ namespace svt
         ::std::vector< IToolPanelDeckListener* >    m_aListeners;
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_PANELDECKLISTENERS_HXX
 

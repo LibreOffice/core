@@ -790,7 +790,7 @@ sal_Bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataF
             //if(rBitmapEx.IsTransparent())
             //{
             //    const Bitmap aMask(rBitmapEx.GetAlpha().GetBitmap());
-            //
+
             //    // explicitely use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
             //    WriteDIBV5(aBitmap, aMask, aMemStm);
             //}

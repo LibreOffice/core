@@ -36,10 +36,10 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
 #define ROW_TITLE           1
 #define ROW_SIZE            2
@@ -76,9 +76,9 @@ namespace svt
     using ::ucbhelper::ResultSetInclude;
     using ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
-    //====================================================================
+
     //= FileViewContentEnumerator
-    //====================================================================
+
 
     FileViewContentEnumerator::FileViewContentEnumerator(
             const Reference< XCommandEnvironment >& _rxCommandEnv,
@@ -404,8 +404,8 @@ namespace svt
         enumerateFolderContent();
     }
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

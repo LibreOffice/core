@@ -1474,9 +1474,9 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
     return false;
 }
 
-// ====================================================================
+
 // class UnoTreeListBoxImpl
-// ====================================================================
+
 
 UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent, WinBits nWinStyle )
 : SvTreeListBox( pParent, nWinStyle )
@@ -1567,9 +1567,9 @@ sal_Bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const OUStrin
     return mxPeer.is() ? mxPeer->onEditedEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ), rNewText ) : false;
 }
 
-// ====================================================================
+
 // class UnoTreeListItem
-// ====================================================================
+
 
 UnoTreeListItem::UnoTreeListItem( SvTreeListEntry* pEntry )
 : SvLBoxString(pEntry, 0, OUString())

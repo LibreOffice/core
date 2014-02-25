@@ -24,10 +24,10 @@
 
 #include <algorithm>
 
-// .......................................................................
+
 namespace svt
 {
-// .......................................................................
+
 
     TYPEINIT0(CellController);
     TYPEINIT1(EditCellController, CellController);
@@ -38,9 +38,9 @@ namespace svt
 
     TYPEINIT1( FormattedFieldCellController, EditCellController );
 
-    //==================================================================
+
     //= ComboBoxControl
-    //==================================================================
+
     ComboBoxControl::ComboBoxControl(Window* pParent, WinBits nWinStyle)
                    :ComboBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
@@ -79,9 +79,9 @@ namespace svt
         return ComboBox::PreNotify(rNEvt);
     }
 
-    //==================================================================
+
     //= ComboBoxCellController
-    //==================================================================
+
 
     ComboBoxCellController::ComboBoxCellController(ComboBoxControl* pWin)
                              :CellController(pWin)
@@ -144,9 +144,9 @@ namespace svt
         GetComboBox().SetModifyHdl(rLink);
     }
 
-    //==================================================================
+
     //= ListBoxControl
-    //==================================================================
+
 
     ListBoxControl::ListBoxControl(Window* pParent, WinBits nWinStyle)
                   :ListBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
@@ -189,9 +189,9 @@ namespace svt
         return ListBox::PreNotify(rNEvt);
     }
 
-    //==================================================================
+
     //= ListBoxCellController
-    //==================================================================
+
 
     ListBoxCellController::ListBoxCellController(ListBoxControl* pWin)
                              :CellController(pWin)
@@ -240,9 +240,9 @@ namespace svt
         GetListBox().SetSelectHdl(rLink);
     }
 
-    //==================================================================
+
     //= CheckBoxControl
-    //==================================================================
+
 
     CheckBoxControl::CheckBoxControl(Window* pParent, WinBits nWinStyle)
                    :Control(pParent, nWinStyle)
@@ -335,9 +335,9 @@ namespace svt
         return Control::PreNotify(rEvt);
     }
 
-    //==================================================================
+
     //= CheckBoxCellController
-    //==================================================================
+
 
     sal_Bool CheckBoxCellController::WantMouseEvent() const
     {
@@ -368,9 +368,9 @@ namespace svt
         ((CheckBoxControl &)GetWindow()).SetModifyHdl(rLink);
     }
 
-    //==================================================================
+
     //= MultiLineEditImplementation
-    //==================================================================
+
 
     OUString MultiLineEditImplementation::GetText( LineEnd aSeparator ) const
     {
@@ -383,9 +383,9 @@ namespace svt
         return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetSelected( aSeparator );
     }
 
-    //==================================================================
+
     //= EditCellController
-    //==================================================================
+
 
     EditCellController::EditCellController( Edit* _pEdit )
         :CellController( _pEdit )
@@ -457,9 +457,9 @@ namespace svt
         m_pEditImplementation->SetModifyHdl(rLink);
     }
 
-    //==================================================================
+
     //= SpinCellController
-    //==================================================================
+
 
     SpinCellController::SpinCellController(SpinField* pWin)
                          :CellController(pWin)
@@ -514,9 +514,9 @@ namespace svt
         GetSpinWindow().SetModifyHdl(rLink);
     }
 
-    //==================================================================
+
     //= FormattedFieldCellController
-    //==================================================================
+
 
     FormattedFieldCellController::FormattedFieldCellController( FormattedField* _pFormatted )
         :EditCellController( _pFormatted )
@@ -529,9 +529,9 @@ namespace svt
         static_cast< FormattedField& >( GetWindow() ).Commit();
     }
 
-    //==================================================================
+
     //= MultiLineTextCell
-    //==================================================================
+
 
     void MultiLineTextCell::Modify()
     {
@@ -604,9 +604,9 @@ namespace svt
         return MultiLineEdit::PreNotify( rNEvt );
     }
 
-// .......................................................................
+
 }   // namespace svt
-// .......................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,16 +32,16 @@
 #define ROADMAP_ITEM_DISTANCE_Y 6
 #define RMINCOMPLETE        -1
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
     typedef std::vector< RoadmapItem* > HL_Vector;
 
-    //=====================================================================
+
     //= ColorChanger
-    //=====================================================================
+
     class IDLabel :  public FixedText
     {
     public:
@@ -50,9 +50,9 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     };
 
-    //=====================================================================
+
     //= ColorChanger
-    //=====================================================================
+
     class ColorChanger
     {
     protected:
@@ -73,9 +73,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= RoadmapItem
-    //=====================================================================
+
     class RoadmapItem : public RoadmapTypes
     {
     private:
@@ -114,9 +114,9 @@ namespace svt
         void                    ImplUpdatePosSize();
     };
 
-    //=====================================================================
+
     //= RoadmapImpl
-    //=====================================================================
+
     class RoadmapImpl : public RoadmapTypes
     {
     protected:
@@ -187,9 +187,9 @@ namespace svt
         m_aItemSizePixel = aLabelSize;
     }
 
-    //=====================================================================
+
     //= Roadmap
-    //=====================================================================
+
 
     ORoadmap::ORoadmap( Window* _pParent, WinBits _nWinStyle )
         :Control( _pParent, _nWinStyle )
@@ -219,7 +219,7 @@ namespace svt
         // To reach it the control itself should get focus and set it
         // on entries. The entries themself should not be reachable with
         // the Tab key directly. So each entry should have WB_NOTABSTOP.
-        //
+
         // In other words the creator should create the control with the following
         // flags:
         // SetStyle( ( GetStyle() | WB_TABSTOP ) & ~WB_DIALOGCONTROL );
@@ -603,7 +603,7 @@ namespace svt
             DrawBitmapEx( aBitmapPos, m_pImpl->getPicture() );
         }
 
-        //.................................................................
+
         // draw the headline
         DrawHeadline();
     }
@@ -916,8 +916,8 @@ namespace svt
 
 
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

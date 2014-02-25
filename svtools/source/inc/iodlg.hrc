@@ -50,7 +50,7 @@
 #define CB_AUTO_EXTENSION                   42
 #define CB_OPTIONS                          43
 
-// -----------------------------------------------
+
 
 #define STR_EXPLORERFILE_OPEN               1
 #define STR_EXPLORERFILE_SAVE               2
@@ -69,7 +69,7 @@
 #define BT_SVT_QUERYFOLDERNAME_DLG_CANCEL   14
 #define BT_SVT_QUERYFOLDERNAME_DLG_HELP     15
 
-// -----------------------------------------------
+
 
 #define SID_SFX_START                       5000
 #define SID_OPENURL                     (SID_SFX_START + 596)

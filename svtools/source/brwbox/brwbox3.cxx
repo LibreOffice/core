@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 
-// ============================================================================
+
 namespace svt
 {
     using namespace ::com::sun::star::lang;
@@ -65,7 +65,7 @@ namespace svt
         return xRet;
     }
 
-    // ============================================================================
+
 
     Reference< XAccessible > BrowseBoxImpl::getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType )
     {
@@ -83,7 +83,7 @@ namespace svt
     }
 }
 
-// ============================================================================
+
 
 Reference< XAccessible > BrowseBox::CreateAccessible()
 {

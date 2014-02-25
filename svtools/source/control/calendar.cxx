@@ -38,7 +38,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/calendar.hxx>
 
-// =======================================================================
+
 
 #define DAY_OFFX                        4
 #define DAY_OFFY                        2
@@ -62,7 +62,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 static void ImplCalendarSelectDate( IntDateSet* pTable, const Date& rDate, sal_Bool bSelect )
 {
@@ -157,7 +157,7 @@ inline void ImplCalendarClearSelectDate( IntDateSet* pTable )
     pTable->clear();
 }
 
-// =======================================================================
+
 
 void Calendar::ImplInit( WinBits nWinStyle )
 {
@@ -2192,7 +2192,7 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
     return aSize;
 }
 
-// =======================================================================
+
 
 #define CALFIELD_EXTRA_BUTTON_WIDTH         14
 #define CALFIELD_EXTRA_BUTTON_HEIGHT        8
@@ -2201,7 +2201,7 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
 #define CALFIELD_BORDER_YTOP                4
 #define CALFIELD_BORDER_Y                   5
 
-// =======================================================================
+
 
 class ImplCFieldFloatWin : public FloatingWindow
 {
@@ -2389,7 +2389,7 @@ bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
     return FloatingWindow::Notify( rNEvt );
 }
 
-// =======================================================================
+
 
 CalendarField::CalendarField( Window* pParent, WinBits nWinStyle ) :
     DateField( pParent, nWinStyle ),

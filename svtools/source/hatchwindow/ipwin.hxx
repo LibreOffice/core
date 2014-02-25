@@ -54,7 +54,7 @@ public:
                     return aRect;
                 }
                 // Clockwise, start at upper left
-                //
+
     void        FillHandleRectsPixel( Rectangle aRects[ 8 ] ) const;
     void        FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const;
     void        Draw( OutputDevice * );

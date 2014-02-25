@@ -42,9 +42,9 @@ using namespace ::comphelper;
 
 DBG_NAME( VCLXAccessibleHeaderBarItem )
 
-//  ----------------------------------------------------
+
 //  class AccessibleTabBar
-//  ----------------------------------------------------
+
 
 VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar, sal_Int32 _nIndexInParent )
     :AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )

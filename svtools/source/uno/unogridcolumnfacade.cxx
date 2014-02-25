@@ -33,10 +33,10 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-// .....................................................................................................................
+
 namespace svt { namespace table
 {
-// .....................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
@@ -86,9 +86,9 @@ namespace svt { namespace table
         }
     }
 
-    //==================================================================================================================
+
     //= ColumnChangeMultiplexer
-    //==================================================================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XGridColumnListener
                                     >   ColumnChangeMultiplexer_Base;
     class ColumnChangeMultiplexer   :public ColumnChangeMultiplexer_Base
@@ -169,9 +169,9 @@ namespace svt { namespace table
         OSL_UNUSED( i_event );
     }
 
-    //==================================================================================================================
+
     //= UnoGridColumnFacade
-    //==================================================================================================================
+
 
     UnoGridColumnFacade::UnoGridColumnFacade( UnoControlTableModel const & i_owner, Reference< XGridColumn > const & i_gridColumn )
         :m_pOwner( &i_owner )
@@ -407,8 +407,8 @@ namespace svt { namespace table
         lcl_set( m_xGridColumn, &XGridColumn::setHorizontalAlign, _align );
     }
 
-// .....................................................................................................................
+
 } } // svt::table
-// .....................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

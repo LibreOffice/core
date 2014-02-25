@@ -19,17 +19,17 @@
 
 #include <svtools/stringtransfer.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::datatransfer;
 
-    //====================================================================
+
     //= OStringTransferable
-    //====================================================================
+
 
     OStringTransferable::OStringTransferable(const OUString& _rContent)
         :TransferableHelper()
@@ -53,9 +53,9 @@ namespace svt
         return sal_False;
     }
 
-    //====================================================================
+
     //= OStringTransfer
-    //====================================================================
+
 
     void OStringTransfer::CopyString( const OUString& _rContent, Window* _pWindow )
     {
@@ -96,8 +96,8 @@ namespace svt
         pTransferable->StartDrag(_pWindow, _nDragSourceActions);
     }
 
-//........................................................................
+
 }   // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

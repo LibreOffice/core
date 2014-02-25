@@ -96,7 +96,7 @@ class SvtMiscOptions_Impl : public ConfigItem
          SvtMiscOptions_Impl();
         ~SvtMiscOptions_Impl();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      called for notify of configmanager
             @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
@@ -118,7 +118,7 @@ class SvtMiscOptions_Impl : public ConfigItem
          */
         void Load( const Sequence< OUString >& rPropertyNames );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      write changes to configuration
             @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
@@ -249,7 +249,7 @@ class SvtMiscOptions_Impl : public ConfigItem
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
@@ -269,9 +269,9 @@ class SvtMiscOptions_Impl : public ConfigItem
         void ImplSetSymbolsStyleWithoutSettingModifiedFlag( bool bValue, sal_Int16 nSet, const OUString &rName );
 };
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_MISC )
@@ -424,9 +424,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     EnableNotification( seqNames );
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
 {
     // We must save our current values .. if user forgets it!
@@ -598,18 +598,18 @@ SvtMiscOptions_Impl::SetIconTheme(const OUString &rName, SetModifiedFlag setModi
     CallListeners();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& rPropertyNames )
 {
     Load( rPropertyNames );
     CallListeners();
 }
 
-//*****************************************************************************************************************
+
 //  public method
-//*****************************************************************************************************************
+
 void SvtMiscOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
@@ -703,9 +703,9 @@ void SvtMiscOptions_Impl::Commit()
     PutProperties( seqNames, seqValues );
 }
 
-//*****************************************************************************************************************
+
 //  private method
-//*****************************************************************************************************************
+
 Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
 {
     // Build list of configuration key names.
@@ -730,17 +730,17 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
+
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
-//*****************************************************************************************************************
+
 SvtMiscOptions_Impl*    SvtMiscOptions::m_pDataContainer    = NULL  ;
 sal_Int32               SvtMiscOptions::m_nRefCount = 0     ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 SvtMiscOptions::SvtMiscOptions()
 {
     // SvtMiscOptions_Impl ctor indirectly calls code that requires locked
@@ -758,9 +758,9 @@ SvtMiscOptions::SvtMiscOptions()
     }
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 SvtMiscOptions::~SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!)
