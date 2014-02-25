@@ -56,9 +56,9 @@ namespace rptxml
         virtual void EndElement();
         virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair);
     };
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 #endif // RPT_XMLSubDocument_HXX
 

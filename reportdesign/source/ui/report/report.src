@@ -93,7 +93,7 @@ String RID_STR_PROPTITLE_GROUP
 {
     Text [ en-US ] = "Group";
 };
-// -----------------------------------------------------------------------
+
 
 Image RID_IMG_TREENODE_COLLAPSED
 {

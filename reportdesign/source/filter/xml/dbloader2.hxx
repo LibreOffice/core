@@ -60,7 +60,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <vcl/msgbox.hxx>
 
-// -------------------------------------------------------------------------
+
 namespace rptxml
 {
 

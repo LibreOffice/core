@@ -223,8 +223,8 @@ void SAL_CALL OStatusbarController::dispose() throw (::com::sun::star::uno::Runt
 
     svt::StatusbarController::dispose();
 }
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

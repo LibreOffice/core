@@ -387,8 +387,8 @@ void OSectionWindow::scrollChildren(long _nX)
     lcl_setOrigin(m_aSplitter,_nX, 0);
     lcl_scroll(m_aSplitter,aDiff);
 }
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -162,9 +162,9 @@ namespace rptui
         */
         bool isUiActive() const;
     };
-//==================================================================
+
 }   //rptui
-//==================================================================
+
 #endif // REPORT_REPORTSECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

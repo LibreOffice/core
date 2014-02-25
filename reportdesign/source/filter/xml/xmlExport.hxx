@@ -57,9 +57,9 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::report;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
-// -------------
+
 // - ORptExport -
-// -------------
+
 #define PROGRESS_BAR_STEP 20
 
 class ORptExport : public SvXMLExport
@@ -262,9 +262,9 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
-// -----------------------------------------------------------------------------
+
 } // rptxml
-// -----------------------------------------------------------------------------
+
 #endif // RPT_XMLEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

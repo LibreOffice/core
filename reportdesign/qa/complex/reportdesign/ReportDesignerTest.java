@@ -141,7 +141,7 @@ public class ReportDesignerTest
     {
         System.out.println("before");
         // String tempdir = System.getProperty("java.io.tmpdir");
-        //
+
         int dummy = 0;
         // m_xXMultiServiceFactory = getMSF();
     }
@@ -167,7 +167,7 @@ public class ReportDesignerTest
 //                    sOfficePath = _sOfficePathWithTrash.substring(0, nIndex + 7);
 //                }
 //            }
-//
+
 //            System.out.println(sOfficePath);
 //            File sOffice = new File(sOfficePath);
 //            if (! sOffice.exists())
@@ -223,13 +223,13 @@ public class ReportDesignerTest
 //            param.put("TimeOut", new Integer(300000));
 //            System.out.println("TimeOut: " + param.getInt("TimeOut"));
 //            System.out.println("ThreadTimeOut: " + param.getInt("ThreadTimeOut"));
-//
+
 //            // OfficeProvider aProvider = null;
 //            m_aProvider = new OfficeProvider();
 //            m_xXMultiServiceFactory = (XMultiServiceFactory) m_aProvider.getManager(param);
 //            param.put("ServiceFactory", m_xXMultiServiceFactory);
 //        }
-//
+
 //    private void stopOffice()
 //        {
 //            if (m_aProvider != null)
@@ -266,7 +266,7 @@ public class ReportDesignerTest
 
 //                sAppExecutionCommand = sAppExecutionCommand.replaceAll( "\\$\\{USERNAME\\}", sUser);
 //                System.out.println("sAppExecutionCommand='" + sAppExecutionCommand + "'");
-//
+
 //                checkIfOfficeExists(sAppExecutionCommand);
 //                param.put("AppExecutionCommand", new String(sAppExecutionCommand));
 
@@ -278,7 +278,7 @@ public class ReportDesignerTest
 
 //            String sCurrentDirectory = System.getProperty("user.dir");
 //            System.out.println("Current Dir: " + sCurrentDirectory);
-//
+
             String sWriterDocument =  TestDocument.getUrl("RPTWriterTests.odb");
             startTestForFile(sWriterDocument, WRITER);
 
@@ -289,12 +289,12 @@ public class ReportDesignerTest
 //                stopOffice();
 //                throw new AssureException(e.getMessage());
 //            }
-//
+
             // ------------------------------ Office shutdown ------------------------------
 //            stopOffice();
         }
 
-// -----------------------------------------------------------------------------
+
     private void startTestForFile(String _sDocument, int _nType)
         {
             FileURL aFileURL = new FileURL(_sDocument);
@@ -364,7 +364,7 @@ public class ReportDesignerTest
             return getFileFormat(_nType);
         }
 
-// -----------------------------------------------------------------------------
+
     private void createDBEntry(int _nType)
         {
             // try to connect the database

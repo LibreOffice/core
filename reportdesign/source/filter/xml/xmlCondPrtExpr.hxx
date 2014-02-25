@@ -43,9 +43,9 @@ namespace rptxml
         // current element. The default is to ignore them.
         virtual void Characters( const OUString& rChars );
     };
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 #endif // RPT_XMLCONDPRTEXPR_HXX
 

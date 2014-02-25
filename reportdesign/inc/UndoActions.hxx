@@ -105,9 +105,9 @@ namespace rptui
         static ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> getMemberFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
     };
 
-    //==================================================================================================================
+
     //= UndoContext
-    //==================================================================================================================
+
     class UndoContext
     {
     public:
@@ -126,9 +126,9 @@ namespace rptui
         SfxUndoManager& m_rUndoManager;
     };
 
-    //==================================================================================================================
+
     //= UndoSuppressor
-    //==================================================================================================================
+
     class UndoSuppressor
     {
     public:
@@ -147,9 +147,9 @@ namespace rptui
         SfxUndoManager& m_rUndoManager;
     };
 
-    //==================================================================================================================
+
     //= OCommentUndoAction
-    //==================================================================================================================
+
     class REPORTDESIGN_DLLPUBLIC OCommentUndoAction : public SdrUndoAction
     {
     protected:
@@ -166,9 +166,9 @@ namespace rptui
         virtual void        Undo();
         virtual void        Redo();
     };
-    //==================================================================
+
     // OUndoContainerAction
-    //==================================================================
+
     class REPORTDESIGN_DLLPUBLIC OUndoContainerAction: public OCommentUndoAction
     {
         OUndoContainerAction(OUndoContainerAction&);
@@ -200,9 +200,9 @@ namespace rptui
         virtual void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
     };
 
-    //==================================================================
+
     // OUndoReportSectionAction
-    //==================================================================
+
     class REPORTDESIGN_DLLPUBLIC OUndoReportSectionAction : public OUndoContainerAction
     {
         OReportHelper                               m_aReportHelper;
@@ -222,9 +222,8 @@ namespace rptui
         virtual void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
     };
 
-    //==================================================================
+
     // OUndoGroupSectionAction
-    //==================================================================
     class REPORTDESIGN_DLLPUBLIC OUndoGroupSectionAction : public OUndoContainerAction
     {
         OGroupHelper                                m_aGroupHelper;
@@ -244,9 +243,7 @@ namespace rptui
         virtual void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
     };
 
-    ///==================================================================
-    /// ORptUndoPropertyAction
-    ///==================================================================
+    // ORptUndoPropertyAction
     class REPORTDESIGN_DLLPUBLIC ORptUndoPropertyAction: public OCommentUndoAction
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xObj;
@@ -271,9 +268,9 @@ namespace rptui
         virtual OUString GetComment() const;
     };
 
-    //==================================================================
+
     // OUndoPropertyReportSectionAction
-    //==================================================================
+
     class REPORTDESIGN_DLLPUBLIC OUndoPropertyReportSectionAction : public ORptUndoPropertyAction
     {
         OReportHelper                               m_aReportHelper;
@@ -290,9 +287,9 @@ namespace rptui
                             );
     };
 
-    //==================================================================
+
     // OUndoPropertyGroupSectionAction
-    //==================================================================
+
     class REPORTDESIGN_DLLPUBLIC OUndoPropertyGroupSectionAction : public ORptUndoPropertyAction
     {
         OGroupHelper                                m_aGroupHelper;

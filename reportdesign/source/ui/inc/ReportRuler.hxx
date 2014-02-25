@@ -49,9 +49,9 @@ namespace rptui
         */
         void SetGridVisible(sal_Bool _bVisible);
     };
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 #endif // RPTUI_RULER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

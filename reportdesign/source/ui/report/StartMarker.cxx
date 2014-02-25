@@ -36,10 +36,10 @@
 
 #define CORNER_SPACE     5
 
-//=====================================================================
+
 namespace rptui
 {
-//=====================================================================
+
 
 Image*  OStartMarker::s_pDefCollapsed       = NULL;
 Image*  OStartMarker::s_pDefExpanded        = NULL;
@@ -292,8 +292,8 @@ void OStartMarker::zoom(const Fraction& _aZoom)
     Invalidate();
 }
 
-// =======================================================================
+
 }
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

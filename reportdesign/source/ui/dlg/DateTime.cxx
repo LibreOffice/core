@@ -44,9 +44,9 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-//========================================================================
+
 // class ODateTimeDialog
-//========================================================================
+
 ODateTimeDialog::ODateTimeDialog( Window* _pParent
                                            ,const uno::Reference< report::XSection >& _xHoldAlive
                                            ,OReportController* _pController)
@@ -225,8 +225,8 @@ sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
     }
     return nFormatKey;
 }
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

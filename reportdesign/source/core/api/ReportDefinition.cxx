@@ -334,7 +334,7 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_FTRSHADOW,   ++i,nBound,::getCppuType((const table::ShadowFormat*)0) ,&eShadowFormat);
     registerPropertyNoMember(SC_UNO_PAGE_FTRTOPBOR,   ++i,nBound,::getCppuType((const table::BorderLine2*)0) ,&eBorderLine);
     registerPropertyNoMember(SC_UNO_PAGE_FTRTOPBDIS,  ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    //
+
     registerPropertyNoMember(SC_UNO_PAGE_HDRBACKCOL,  ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nTransparent);
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFFILT,  ++i,nBound|nMayBeVoid,::getCppuType((const OUString*)0) ,&sEmpty);
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFLOC,   ++i,nBound|nMayBeVoid,::getCppuType((const style::GraphicLocation*)0) ,&eGraphicLocation);
@@ -357,7 +357,7 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_HDRSHADOW,   ++i,nBound|nMayBeVoid,::getCppuType((const table::ShadowFormat*)0) ,&eShadowFormat);
     registerPropertyNoMember(SC_UNO_PAGE_HDRTOPBOR,   ++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine2*)0) ,&eBorderLine);
     registerPropertyNoMember(SC_UNO_PAGE_HDRTOPBDIS,  ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    //
+
     registerProperty(PROPERTY_HEIGHT,       ++i,nBound,&m_aSize.Height,     ::getCppuType((const sal_Int32*)0) );
     registerPropertyNoMember(PROPERTY_ISLANDSCAPE,                  ++i,nBound,         ::getBooleanCppuType() ,&bFalse);
     registerPropertyNoMember(SC_UNO_PAGE_LEFTBORDER,  ++i,nBound,     ::getCppuType((const table::BorderLine2*)0) ,&eBorderLine);

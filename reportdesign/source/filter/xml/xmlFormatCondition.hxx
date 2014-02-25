@@ -42,9 +42,9 @@ namespace rptxml
         virtual ~OXMLFormatCondition();
         virtual void EndElement();
     };
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 #endif // RPT_XMLFORMATTEDFIELD_HXX
 

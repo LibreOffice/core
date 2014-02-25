@@ -112,10 +112,10 @@
 #define USER_DEF_FUNCTION   3
 #define UNDEF_DATA          4
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 using namespace ::com::sun::star;
 
 namespace{
@@ -2211,8 +2211,8 @@ void SAL_CALL GeometryHandler::propertyChange(const beans::PropertyChangeEvent& 
         resetOwnProperties(aGuard,sOldFunctionName,sOldScope,nOldDataFieldType);
     }
 }
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

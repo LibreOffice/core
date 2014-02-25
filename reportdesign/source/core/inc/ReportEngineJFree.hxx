@@ -75,7 +75,7 @@ namespace reportdesign
 
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual ~OReportEngineJFree();
     public:
         typedef ::comphelper::ImplementationReference< OReportEngineJFree   ,::com::sun::star::report::XReportEngine,::com::sun::star::uno::XWeak > TReportEngine;

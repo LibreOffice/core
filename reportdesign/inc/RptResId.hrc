@@ -219,7 +219,7 @@
 #define RID_STR_VERTICALALIGN               (RID_STRING_START + 160)
 #define RID_STR_PARAADJUST                  (RID_STRING_START + 161)
 
-// -----------------------------------------------------------------------
+
 #define RID_IMG_TREENODE_COLLAPSED          ( RID_IMAGE_START +   1 )
 #define RID_IMG_TREENODE_EXPANDED           ( RID_IMAGE_START +   2 )
 #define REPORT_TREE_ICON                    ( RID_IMAGE_START +   5 )

@@ -48,13 +48,13 @@ namespace reportdesign
         void checkIndex(sal_Int32 _nIndex);
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual ~OFunctions();
 
         /** this function is called upon disposing the component
         */
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual void SAL_CALL disposing();
     public:
         explicit OFunctions( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier >& _xParent

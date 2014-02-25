@@ -41,9 +41,9 @@ namespace rptui
         virtual void    Resize();
         virtual void GetFocus();
     };
-// =============================================================================
+
 } // namespace rptui
-// =============================================================================
+
 #endif // INCLUDED_RPTUI_NAVIGATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

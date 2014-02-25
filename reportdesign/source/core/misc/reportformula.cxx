@@ -21,10 +21,10 @@
 
 #include <rtl/ustrbuf.hxx>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Any;
 
@@ -49,9 +49,9 @@ namespace rptui
         }
     }
 
-    //====================================================================
+
     //= ReportFormula
-    //====================================================================
+
 
     ReportFormula::ReportFormula( const OUString& _rFormula )
         :m_eType( Invalid )
@@ -164,8 +164,8 @@ namespace rptui
         return aBuffer.makeStringAndClear();
     }
 
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
