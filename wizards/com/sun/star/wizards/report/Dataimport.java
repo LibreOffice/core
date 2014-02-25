@@ -73,38 +73,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.StopProcess();
     }
 
-//    public static void main(String args[]) 
-//        {
-//            String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
-//            XMultiServiceFactory xMSF = null;
-//            try
-//            {
-//                xMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
-//                if (xMSF != null)
-//                {
-//                    System.out.println("Connected to " + ConnectStr);
-//                }
-//                PropertyValue[] curproperties = new PropertyValue[3];
-//                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
-////            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //baseLocation ); "DataSourceName", "db1");
-////            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
-//                curproperties[1] = Properties.createProperty(PropertyNames.COMMAND_TYPE, new Integer(CommandType.TABLE));
-//                curproperties[2] = Properties.createProperty(PropertyNames.COMMAND, "Table2");
-//
-//                Dataimport CurDataimport = new Dataimport(xMSF);
-//                TextDocument oTextDocument = new TextDocument(xMSF, true, null);
-//                CurDataimport.createReport(xMSF, oTextDocument.xTextDocument, curproperties);
-//
-//            }
-//            catch (Exception e) 
-//            {
-//                e.printStackTrace(System.err);
-//            }
-//            catch (java.lang.Exception javaexception) 
-//            {
-//                javaexception.printStackTrace(System.err);
-//            }
-//        }
     public void showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection)
     {
         try

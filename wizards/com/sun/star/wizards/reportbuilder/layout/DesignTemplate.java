@@ -39,9 +39,9 @@ public class DesignTemplate
     private DesignTemplate()
     {
     }
-    // -------------------------------------------------------------------------
+
     // All functions from XReportDefinition, we use
-    // -------------------------------------------------------------------------
+
     XGroups getGroups()
     {
         return m_xReportDefinition.getGroups();
@@ -90,7 +90,7 @@ public class DesignTemplate
     XSection getPageFooter() throws com.sun.star.container.NoSuchElementException
     {
         return m_xReportDefinition.getPageFooter();
-    }    // -------------------------------------------------------------------------
+    }
     private SectionObject m_aDetailLabel;
     private SectionObject m_aDetailTextField;
     private SectionObject[] m_aGroupLabel;
@@ -265,7 +265,7 @@ public class DesignTemplate
     /**
      * create a new DesignTemplate by try to load a otr file from the given path.
      * Internally we store the loaded ReportDefinition.
-     * 
+     *
      * @param _xMSF
      * @param _sPath
      * @return

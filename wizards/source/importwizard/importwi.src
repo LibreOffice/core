@@ -89,7 +89,7 @@
 #define sSumMSDrawTemplates       3212
 
 
-// --------------------------------------------------------------------
+
 String sHelpButton
 {
     Text [ en-US ] = "~Help";

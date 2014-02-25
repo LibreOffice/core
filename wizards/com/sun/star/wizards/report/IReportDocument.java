@@ -30,17 +30,17 @@ import java.util.ArrayList;
  */
 public interface IReportDocument
 {
-    // -------------------------------------------------------------------------
+
     // initialisation
-    // -------------------------------------------------------------------------
+
     public void initialize(
             final XDatabaseDocumentUI i_documentUI,
             final Resource i_resource
         );
 
-    // -------------------------------------------------------------------------
+
     // Access Helper
-    // -------------------------------------------------------------------------    
+
     /**
      * Gives access to the DB Values
      * @return
@@ -56,16 +56,16 @@ public interface IReportDocument
     public com.sun.star.awt.XWindowPeer getWizardParent();
 
     /**
-     * 
+     *
      * @return the Frame of the document Window or Report Builder Window
      */
     public com.sun.star.frame.XFrame getFrame();
 
     public XComponent getComponent();
 
-    // -------------------------------------------------------------------------
+
     // First step: After entering the table name, select fields
-    // -------------------------------------------------------------------------    
+
     /**
      * Is called after first step, set Tablename and the fields, which should occur in the Report.
      * @param _aType
@@ -84,9 +84,9 @@ public interface IReportDocument
      */
     public void removeTextTableAndTextSection();
 
-    // -------------------------------------------------------------------------
+
     // Second step: Label field titles
-    // -------------------------------------------------------------------------    
+
     /**
      * Set new names for the titles
      * @param sFieldTitles
@@ -102,9 +102,9 @@ public interface IReportDocument
      * @param TitleName
      */
     public void liveupdate_changeUserFieldContent(final String FieldName, final String TitleName);
-    // -------------------------------------------------------------------------
+
     // Third step: Grouping
-    // -------------------------------------------------------------------------    
+
     /* Grouping Page */
     // Document should not hold the grouping information!
     /**
@@ -132,17 +132,17 @@ public interface IReportDocument
      * @param aGroupList
      */
     public void setGrouping(String[] aGroupList);
-    // -------------------------------------------------------------------------
+
     // Fourth step: Sorting
-    // -------------------------------------------------------------------------    
+
     /**
      * Set the list how to sort
      * @param aSort
      */
     public void setSorting(String[][] aSort);
-    // -------------------------------------------------------------------------
+
     // Fivth step: Templates / Layout
-    // -------------------------------------------------------------------------    
+
     /* Template Page */
     public void setPageOrientation(int nOrientation) throws com.sun.star.lang.IllegalArgumentException;
 
@@ -171,9 +171,9 @@ public interface IReportDocument
     public void layout_selectFirstPage();
 
     public void layout_setupRecordSection(String TemplateName);
-    // -------------------------------------------------------------------------
+
     // finishing
-    // -------------------------------------------------------------------------    
+
     // preview (update titlenames)
     // addTextListener
     /**
@@ -212,9 +212,9 @@ public interface IReportDocument
     );
 
     public void dispose();
-    // -------------------------------------------------------------------------
+
     // Garbage dump
-    // -------------------------------------------------------------------------    
+
     /* DataImport */
     // ???
     // public void addTextSectionCopies();

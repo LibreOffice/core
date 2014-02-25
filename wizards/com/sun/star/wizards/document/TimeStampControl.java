@@ -37,7 +37,7 @@ public class TimeStampControl extends DatabaseControl
 
     DatabaseControl oDateControl;
     DatabaseControl oTimeControl;
-//  XShape xGroupShape; 
+//  XShape xGroupShape;
     Resource oResource;
     private String sDateAppendix; // = GetResText(RID_FORM + 4)
     private String sTimeAppendix; // = GetResText(RID_FORM + 5)

@@ -49,7 +49,7 @@ public abstract class DataAware {
      * from/to the data object.
      */
     protected Value value;
-    
+
     /**
      * creates a DataAware object for the given data object and Value object.
      * @param dataObject_
@@ -76,7 +76,7 @@ public abstract class DataAware {
      */
     public void setDataObject(Object obj, boolean updateUI) {
 
-        if (obj != null && !value.isAssignable(obj.getClass())) 
+        if (obj != null && !value.isAssignable(obj.getClass()))
             throw new ClassCastException("can not cast new DataObject to original Class");
 
         dataObject = obj;
@@ -106,7 +106,7 @@ public abstract class DataAware {
     protected Object getFromData() {
         return value.get(getDataObject());
     }
-    
+
     /**
      * sets the given value to the UI control
      * @param newValue the value to set to the ui control.
@@ -208,7 +208,7 @@ public abstract class DataAware {
         for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
              i.next().setDataObject(dataObject, updateUI);
     }
-    
+
     /**
      * Value objects read and write a value from and
      * to an object. Typically using reflection and JavaBeans properties
@@ -241,7 +241,7 @@ public abstract class DataAware {
          */
         public boolean isAssignable(Class<?> type);
     }
-    
+
     /**
      * implementation of Value, handling JavaBeans properties through
      * reflection.
@@ -268,7 +268,7 @@ public abstract class DataAware {
             getMethod = createGetMethod(propertyName, propertyOwner);
             setMethod = createSetMethod(propertyName, propertyOwner, getMethod.getReturnType());
         }
-        
+
         /**
          * called from the constructor, and creates a get method reflection object
          * for the given property and object.

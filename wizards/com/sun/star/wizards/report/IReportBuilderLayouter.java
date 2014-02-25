@@ -84,7 +84,7 @@ public interface IReportBuilderLayouter
 
     /**
      * Insert the names of the groups, the group names are names out of the field names.
-     * 
+     *
      * If a group name is given here, it will not shown in the fields/titles, but must be in the field string list.
      * @param _aGroupFieldNames
      */

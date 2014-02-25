@@ -327,7 +327,7 @@ public class NumericalHelper
     /**
     @param _aValue a object this can contain anything
     @return true, if the parameter aValue is type of real numbers
-    
+
     see also http://en.wikipedia.org/wiki/Mathematics
      */
     public static boolean isRealNumber(Object _aValue)
@@ -1050,7 +1050,7 @@ public class NumericalHelper
 //            throws com.sun.star.script.BasicErrorException {
 //        return RomanNumbering.getRomanEquivalent(n);
 //    }
-    /** 
+    /**
      * get the type object from the given object
      * @param aValue an object representing a (numerical) value; can also be an 'any'
      * @return a type object: the object together with the its type information
@@ -1409,7 +1409,7 @@ public class NumericalHelper
                 }
                 String number = NumericalHelper.toString(new Integer(n));
                 /* converison idea: every digit is written with a maximum of two
-                 * different roman symbols, using three in total, e.g. CC, CD, 
+                 * different roman symbols, using three in total, e.g. CC, CD,
                  * DCC, CM for the hundreds (meaning 200, 400, 700 and 900).
                  * So every digit is converted separately with regard to the
                  * special cases 4 and 9.

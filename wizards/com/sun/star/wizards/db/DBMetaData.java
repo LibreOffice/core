@@ -411,7 +411,7 @@ public class DBMetaData
         // NumericTypes are all types where aggregate functions can be performed on.
         // Similarly to a major competitor date/time/timmestamp fields are not included
 
-        
+
     }
 
     public boolean isBinaryDataType(int _itype)

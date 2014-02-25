@@ -103,46 +103,6 @@ public class UIControlArranger
         HelpTexts[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40); // "As Data Sheet"
         HelpTexts[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 39); // In Blocks - Labels Above"
 
-//        flnLabelPlacement = CurUnoDialog.insertFixedLine("lnArrangementHeader1",
-//                new String[]
-//                {
-//                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
-//                },
-//                new Object[]
-//                {
-//                    UIConsts.INTEGERS[8], sArrangementHeader[0], 97, 60, IControlStep, new Short(curtabindex++), 207
-//                });
-//
-//        boolean bEnabled = true;
-//        int nBtnWidth = 16;
-//        int nXPos = 97;
-//        int nYPos = 70;
-//        CurUnoDialog.insertButton("btnLayout1", "btnLayout1",
-//                new String[]
-//                {
-//                    PropertyNames.PROPERTY_ENABLED,
-//                    PropertyNames.PROPERTY_HEIGHT,
-//                    PropertyNames.PROPERTY_HELPURL,
-//                    PropertyNames.PROPERTY_LABEL,
-//                    PropertyNames.PROPERTY_POSITION_X,
-//                    PropertyNames.PROPERTY_POSITION_Y,
-//                    PropertyNames.PROPERTY_STEP,
-//                    PropertyNames.PROPERTY_TABINDEX,
-//                    PropertyNames.PROPERTY_WIDTH
-//                },
-//                new Object[]
-//                {
-//                    Boolean.valueOf(bEnabled),
-//                    14,
-///* TODO: WRONG!*/   "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT",
-//                    "1",
-//                    new Integer(nXPos + nBtnWidth),
-//                    new Integer(nYPos),
-//                    IControlStep,
-//                    new Short(curtabindex++),
-//                    16
-//                });
-
         DefaultListModel imageModel = new DefaultListModel();
         for (int i = 0; i < HelpTexts.length; i++)
         {
@@ -233,10 +193,10 @@ public class UIControlArranger
 
 //    private class ArrangeImageList implements XItemListener
 //    {
-//
+
 //        private int formindex;
 //        private ImageList m_aButtonList = null; // new ImageList();
-//
+
 //        public ArrangeImageList(int _formindex, ListModel model, String _sArrangementHeader)
 //        {
 //            formindex = _formindex;
@@ -251,7 +211,7 @@ public class UIControlArranger
 //                    {
 //                        UIConsts.INTEGERS[8], _sArrangementHeader, 97, YPos, IControlStep, new Short(curtabindex++), 207
 //                    });
-//
+
 //            int nypos = SOBASEIMAGEYPOSITION + 12 + _formindex * SOIMAGELISTHEIGHT;
 //            m_aButtonList = new ImageList();
 //            m_aButtonList.setPos(new Size(107, nypos));
@@ -267,18 +227,18 @@ public class UIControlArranger
 //            m_aButtonList.scaleImages = Boolean.FALSE;
 //            m_aButtonList.tabIndex = (int) curtabindex++;
 //            m_aButtonList.helpURL = 34453 + (formindex * 4);
-//
+
 //            m_aButtonList.setListModel(model);
 //            m_aButtonList.create(CurUnoDialog);
 //            m_aButtonList.setSelected(FormWizard.SOGRID - 1);
 //            m_aButtonList.addItemListener(this);
 //        }
-//
+
 //        public void setToLeftAlign()
 //        {
 //            Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_STATE, new Short((short) 1));
 //        }
-//
+
 //        /* (non-Javadoc)
 //         * @see javax.swing.ListModel#addListDataListener(javax.swing.event.ListDataListener)
 //         */
@@ -286,7 +246,7 @@ public class UIControlArranger
 //        {
 //            // TODO Auto-generated method stub
 //        }
-//
+
 //        public void itemStateChanged(ItemEvent arg0)
 //        {
 //            try
@@ -298,7 +258,7 @@ public class UIControlArranger
 //                    {
 //                        final int nSelected0 = (m_aArrangeList[0].m_aButtonList.getSelected() + 1);
 //                        final int nSelected1 = (m_aArrangeList[1].m_aButtonList.getSelected() + 1);
-//
+
 //                        bEnableAlignControlGroup = ((nSelected0 == FormWizard.SOCOLUMNARLEFT) ||
 //                                                    (nSelected1 == FormWizard.SOCOLUMNARLEFT));
 //                    }
@@ -318,7 +278,7 @@ public class UIControlArranger
 //                e.printStackTrace();
 //            }
 //        }
-//
+
 //        /* (non-Javadoc)
 //         * @see javax.swing.event.ListDataListener#contentsChanged(javax.swing.event.ListDataEvent)
 //         */
@@ -326,7 +286,7 @@ public class UIControlArranger
 //        {
 //            // TODO Auto-generated method stub
 //        }
-//
+
 //        /* (non-Javadoc)
 //         * @see javax.swing.event.ListDataListener#intervalAdded(javax.swing.event.ListDataEvent)
 //         */
@@ -334,7 +294,7 @@ public class UIControlArranger
 //        {
 //            // TODO Auto-generated method stub
 //        }
-//
+
 //        /* (non-Javadoc)
 //         * @see javax.swing.event.ListDataListener#intervalRemoved(javax.swing.event.ListDataEvent)
 //         */
@@ -342,7 +302,7 @@ public class UIControlArranger
 //        {
 //            // TODO Auto-generated method stub
 //        }
-//
+
 //        /* (non-Javadoc)
 //         * @see com.sun.star.lang.XEventListener#disposing(com.sun.star.lang.EventObject)
 //         */
