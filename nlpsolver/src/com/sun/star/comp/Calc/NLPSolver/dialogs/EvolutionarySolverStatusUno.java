@@ -225,7 +225,7 @@ public class EvolutionarySolverStatusUno extends BaseDialog
                         resourceManager.getLocalizedString("Message.StopIteration",
                         "Maximum iterations reached."));
         }
-        
+
         if (pbStagnation.getValue() >= maxStagnation) {
             lblStagnation.setTextColor(COLOR_RED);
             if (userState != IEvolutionarySolverStatusDialog.CANCEL)
@@ -247,7 +247,7 @@ public class EvolutionarySolverStatusUno extends BaseDialog
         pbStagnation.setVisible(false);
         lblIterationValue.setVisible(true);
         lblStagnationValue.setVisible(true);
-        
+
         repaint();
 
         userState = IEvolutionarySolverStatusDialog.WAITING;
@@ -293,7 +293,7 @@ public class EvolutionarySolverStatusUno extends BaseDialog
     }
 
     public void disposing(EventObject eventObject) {
-        
+
     }
 
 }

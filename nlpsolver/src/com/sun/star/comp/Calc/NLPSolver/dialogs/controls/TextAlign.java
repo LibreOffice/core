@@ -31,13 +31,13 @@ public enum TextAlign {
     Left(0),
     Center(1),
     Right(2);
-    
+
     private short unoValue;
-    
+
     private TextAlign(int unoValue) {
         this.unoValue = (short)unoValue;
     }
-    
+
     public short getUnoValue() {
         return unoValue;
     }

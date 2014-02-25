@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 import com.sun.star.comp.Calc.NLPSolver.dialogs.BaseDialog;
 
 public class Label extends LabeledControl {
-    
+
     private String name;
 
     public Label(BaseDialog owner, String name) {
@@ -74,5 +74,5 @@ public class Label extends LabeledControl {
         }
         return 0;
     }
-    
+
 }
