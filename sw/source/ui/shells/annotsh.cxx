@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -519,13 +518,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
                 aDlgAttr.Put(aEditAttr);
 
-
                 aDlgAttr.Put( SvxHyphenZoneItem( false, RES_PARATR_HYPHENZONE) );
                 aDlgAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
                 aDlgAttr.Put( SvxFmtSplitItem( true, RES_PARATR_SPLIT ) );
                 aDlgAttr.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
                 aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
-
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -1068,7 +1065,6 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
 
 void SwAnnotationShell::NoteExec(SfxRequest &rReq)
 {

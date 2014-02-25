@@ -278,8 +278,6 @@ RES_UNKNOWNATR_BEGIN = RES_BOXATR_END,
 RES_UNKNOWNATR_END
 };
 
-
-
 // Format IDs
 enum RES_FMT
 {
@@ -374,7 +372,6 @@ RES_FLTRATTR_END
 #define INVALID_HINT HINT_END
 #define RES_WHICHHINT_END HINT_END
 
-
 inline bool isATR(const sal_uInt16 nWhich)
 {
     return (RES_CHRATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
@@ -420,7 +417,6 @@ inline bool isUNKNOWNATR(const sal_uInt16 nWhich)
 {
     return (RES_UNKNOWNATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
 }
-
 
 // Take the respective default attribute from the statistical default
 // attributes table over the Which-value.

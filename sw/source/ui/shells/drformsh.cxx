@@ -55,7 +55,6 @@
 
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAWFORM))
@@ -64,9 +63,7 @@ SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAWFO
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
 }
 
-
 TYPEINIT1(SwDrawFormShell, SwDrawBaseShell)
-
 
 void SwDrawFormShell::Execute(SfxRequest &rReq)
 {
@@ -141,7 +138,6 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                                     aTmp <<= rHLinkItem.GetTargetFrame();
                                     xPropSet->setPropertyValue( "TargetFrame", aTmp );
                                 }
-
 
                                 form::FormButtonType eButtonType = form::FormButtonType_URL;
                                 aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));

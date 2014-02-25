@@ -22,8 +22,6 @@ interface WebTable : BaseTextTable
     import BaseTextSelection;
 }
 
- //=========================================================================
-
 shell SwWebTableShell : SwBaseShell
 {
         import WebTable[Automation];

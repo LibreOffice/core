@@ -205,7 +205,6 @@ void SwAccessibleTableData_Impl::CollectRowHeaderData( const SwFrm *pFrm )
 
                 CollectRowHeaderData( pLower );
 
-
             }
             else if( pLower->IsCellFrm() &&
                      rLower.IsAccessible( mbIsInPagePreview ) )
@@ -253,7 +252,6 @@ void SwAccessibleTableData_Impl::CollectColumnHeaderData( const SwFrm *pFrm )
                 maRows.insert( pLower->Frm().Top() - maTabFrmPos.Y() );
 
                 CollectColumnHeaderData( pLower );
-
 
             }
             else if( pLower->IsCellFrm() &&
@@ -1889,7 +1887,6 @@ SwAccessibleTableData_Impl* SwAccessibleTableColHeaders::CreateNewTableData()
     const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( GetFrm() );
     return new SwAccessibleTableData_Impl( *(GetMap()), pTabFrm, IsInPagePreview(), true );
 }
-
 
 void SwAccessibleTableColHeaders::Modify( const SfxPoolItem * /*pOld*/, const SfxPoolItem * /*pNew*/ )
 {

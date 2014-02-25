@@ -51,7 +51,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-
 SV_IMPL_REF ( SwDocShell )
 using namespace ::com::sun::star;
 

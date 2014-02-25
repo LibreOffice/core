@@ -34,15 +34,14 @@ class SwWait;
 class SfxProgress;
 
 // The usage of LayAction is always the same:
-//
+
 // 1. Generation of the LayAction object.
 // 2. Specifying the wanted bahaviour via the Set-methods
 // 3. Calling Action()
 // 4. Soon after that the destruction of the object
-//
+
 // Das Objekt meldet sich im CTor beim SwViewImp an und erst im DTor
 // wieder ab! Es handelt sich mithin um ein typisches Stackobjekt.
-
 
 class SwLayAction
 {

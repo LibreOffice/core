@@ -138,7 +138,6 @@ sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) 
     return static_cast<sal_uInt16>(comments.size());
 }
 
-
 OUString SwWrtShell::GetRepeatString() const
 {
     OUString str;

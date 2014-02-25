@@ -438,8 +438,6 @@ inline sal_Bool SwPageFrm::IsInvalidFly() const
 #define GETGRIDWIDTH( pGrid , pDoc )  pDoc->IsSquaredPageMode() ? \
     pGrid->GetBaseHeight(): pGrid->GetBaseWidth()
 
-
-
 #endif // INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

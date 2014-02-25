@@ -39,7 +39,6 @@ typedef std::vector< SwAnchoredObject* > SwAnchoredObjList;
 
 enum PAGESIDE { LEFT_SIDE, RIGHT_SIDE, DONTKNOW_SIDE };
 
-
 class SwDrawTextInfo;
 class SwContourCache;
 /** Contour-cache global variable, initialized/destroyed in txtinit.cxx
@@ -298,7 +297,6 @@ public:
 
     void SetIgnoreObjsInHeaderFooter( const bool bNew );
 };
-
 
 inline SwAnchoredObjList* SwTxtFly::GetAnchoredObjList() const
 {

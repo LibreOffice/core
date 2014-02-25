@@ -22,7 +22,6 @@
 #include <tools/datetime.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-
 class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
@@ -50,7 +49,6 @@ public:
 };
 
 class SwBlockNames : public o3tl::sorted_vector<SwBlockName*, o3tl::less_ptr_to<SwBlockName> > {};
-
 
 class SwImpBlocks
 {

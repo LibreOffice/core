@@ -42,7 +42,6 @@ struct SwHTMLFootEndNote_Impl
     sal_Bool bFixed;
 };
 
-
 sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
                              sal_Int32 nPos )
 {

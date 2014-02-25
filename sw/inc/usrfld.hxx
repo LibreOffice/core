@@ -26,7 +26,6 @@ class SfxPoolItem;
 class SwCalc;
 class SwDoc;
 
-
 class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
     bool    bValidValue : 1;
@@ -87,7 +86,6 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
     nType = nSub;
     EnableFormat(!(nSub & nsSwGetSetExpType::GSE_STRING));
 }
-
 
 class SW_DLLPUBLIC SwUserField : public SwValueField
 {

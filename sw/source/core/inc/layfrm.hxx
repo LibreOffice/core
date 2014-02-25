@@ -77,7 +77,6 @@ public:
     void ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         const sal_Bool bChgFtn = sal_False );
 
-
         //Painted die Column-Trennlinien fuer die innenliegenden Columns.
     void PaintColLines( const SwRect &, const SwFmtCol &,
                         const SwPageFrm * ) const;

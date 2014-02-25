@@ -61,12 +61,10 @@ PageOrientationControl::PageOrientationControl(
     FreeResource();
 }
 
-
 PageOrientationControl::~PageOrientationControl(void)
 {
     delete mpOrientationValueSet;
 }
-
 
 IMPL_LINK(PageOrientationControl, ImplOrientationHdl, void *, pControl)
 {
@@ -86,7 +84,6 @@ IMPL_LINK(PageOrientationControl, ImplOrientationHdl, void *, pControl)
     mrPagePropPanel.ClosePageOrientationPopup();
     return 0;
 }
-
 
 } } // end of namespace sw::sidebar
 

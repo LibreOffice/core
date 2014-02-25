@@ -78,7 +78,6 @@ class SwTxtFrm: public SwCntntFrm
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
 
-
     sal_Int32 nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
 
     sal_uInt16 nCacheIdx;           //Index in den Cache, USHRT_MAX wenn definitiv
@@ -257,7 +256,6 @@ public:
                        const SwPosition& _rPos ) const;
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
-
 
     //Liefert in nOffset den Offset des Characters innerhalb des
     //gesetzten Textbuffers zurueck, welcher der durch aPoint
@@ -503,7 +501,6 @@ public:
 
     // Ermittelt die Startposition und Schrittweite des Registers
     bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
-
 
     sal_uInt16 GetLineCount( sal_Int32 nPos );     //Ermittelt die Zeilenanzahl
 

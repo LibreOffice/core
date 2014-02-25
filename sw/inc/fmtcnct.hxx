@@ -24,7 +24,6 @@
 #include <format.hxx>
 #include <calbck.hxx>
 
-
 class SwFlyFrmFmt;
 class IntlWrapper;
 
@@ -33,7 +32,6 @@ class SW_DLLPUBLIC SwFmtChain: public SfxPoolItem
 {
     SwClient aPrev, ///< Previous SwFlyFrmFmt (if existent).
              aNext; ///< Next SwFlyFrmFmt (if existent).
-
 
 public:
     SwFmtChain() : SfxPoolItem( RES_CHAIN ) {}
@@ -55,7 +53,6 @@ public:
     SwFlyFrmFmt* GetPrev() const { return (SwFlyFrmFmt*)aPrev.GetRegisteredIn(); }
     SwFlyFrmFmt* GetNext() const { return (SwFlyFrmFmt*)aNext.GetRegisteredIn(); }
 
-
     void SetPrev( SwFlyFrmFmt *pFmt );
     void SetNext( SwFlyFrmFmt *pFmt );
 };
@@ -66,7 +63,6 @@ SwFmtChain &SwFmtChain::operator=( const SwFmtChain &rCpy )
     SetNext( rCpy.GetNext() );
     return *this;
 }
-
 
 inline const SwFmtChain &SwAttrSet::GetChain(sal_Bool bInP) const
     { return (const SwFmtChain&)Get( RES_CHAIN,bInP); }

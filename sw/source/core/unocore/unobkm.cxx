@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unobookmark.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -42,7 +41,6 @@
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
-
 
 namespace
 {
@@ -70,7 +68,6 @@ public:
     SwDoc *                     m_pDoc;
     ::sw::mark::IMark *         m_pRegisteredBookmark;
     OUString             m_sMarkName;
-
 
     Impl(   SwXBookmark & rThis,
             SwDoc *const pDoc, ::sw::mark::IMark *const /*pBookmark*/)
@@ -417,7 +414,6 @@ uno::Reference<frame::XModel> SwXBookmark::GetModel()
     return 0;
 }
 
-
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXBookmark::getPropertySetInfo() throw (uno::RuntimeException, std::exception)
 {
@@ -585,7 +581,6 @@ void SwXFieldmarkParameters::Modify(const SfxPoolItem *pOld, const SfxPoolItem *
     ClientModify(this, pOld, pNew);
 }
 
-
 IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
     throw (uno::RuntimeException)
 {
@@ -594,7 +589,6 @@ IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
         throw uno::RuntimeException();
     return const_cast< IFieldmark* >(pFieldmark)->GetParameters();
 }
-
 
 void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTextRange )
     throw(lang::IllegalArgumentException, uno::RuntimeException)

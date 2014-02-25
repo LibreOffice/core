@@ -302,9 +302,8 @@ public:
 
     KSHORT      GetTxtHeight() const;
 
-    //
     // GetTxtSize
-    //
+
     SwPosSize GetTxtSize( OutputDevice* pOut, const SwScriptInfo* pSI,
                           const OUString& rTxt, const sal_Int32 nIdx,
                           const sal_Int32 nLen, const sal_uInt16 nComp ) const;
@@ -316,9 +315,8 @@ public:
                                  const sal_Int32 nLen, const sal_uInt16 nComp ) const;
     inline SwPosSize GetTxtSize( const OUString &rTxt ) const;
 
-    //
     // GetTxtBreak
-    //
+
     sal_Int32 GetTxtBreak( const long nLineWidth,
                                            const sal_Int32 nMaxLen,
                                            const sal_uInt16 nComp ) const;
@@ -378,9 +376,8 @@ public:
         return !m_aMaxWidth.empty();
     };
 
-    //
     // Feature: Kana Compression
-    //
+
     inline MSHORT GetKanaIdx() const { return m_nKanaIdx; }
     inline void ResetKanaIdx(){ m_nKanaIdx = 0; }
     inline void SetKanaIdx( MSHORT nNew ) { m_nKanaIdx = nNew; }
@@ -514,9 +511,8 @@ public:
 
     friend SvStream & WriteSwTxtPaintInfo( SvStream &rOS, const SwTxtPaintInfo &rInf );
 
-    //
     // STUFF FOR JUSTIFIED ALIGNMENT
-    //
+
     inline MSHORT GetSpaceIdx() const { return nSpaceIdx; }
     inline void ResetSpaceIdx(){nSpaceIdx = 0; }
     inline void SetSpaceIdx( MSHORT nNew ) { nSpaceIdx = nNew; }
@@ -528,7 +524,6 @@ public:
 
     inline void SetpSpaceAdd( std::vector<long>* pNew ){ pSpaceAdd = pNew; }
     inline std::vector<long>* GetpSpaceAdd() const { return pSpaceAdd; }
-
 
     inline void SetWrongList( const SwWrongList *pNew ){ pWrongList = pNew; }
     inline const SwWrongList* GetpWrongList() const { return pWrongList; }
@@ -846,7 +841,6 @@ inline void SwTxtPaintInfo::SetPaintOfst( const SwTwips nNew )
 {
     GetParaPortion()->GetRepaint()->SetOfst( nNew );
 }
-
 
 inline void SwTxtPaintInfo::DrawText( const OUString &rText,
                             const SwLinePortion &rPor,

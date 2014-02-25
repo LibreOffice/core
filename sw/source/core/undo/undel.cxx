@@ -1089,7 +1089,6 @@ void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.m_bDeleteRepeated = true;
 }
 
-
 void SwUndoDelete::SetTableName(const OUString & rName)
 {
     sTableName = rName;

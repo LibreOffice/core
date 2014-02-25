@@ -315,7 +315,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
 
     // pool formats
-    //
+
     const ::std::vector<OUString>& rFrmPoolArr(
             SwStyleNameMapper::GetFrmFmtUINameArray());
     for( i = 0; i < rFrmPoolArr.size(); ++i )
@@ -690,7 +690,7 @@ void SwView::Execute(SfxRequest &rReq)
             // FN_REDLINE_PREV_CHANGE leaves the selection point at the start of the redline.
             // In such cases, SelNextRedline (which starts searching from the selection point)
             // immediately finds the current redline and advances the selection point to its end.
-            //
+
             // This behavior means that PREV_CHANGE followed by NEXT_CHANGE would not change
             // the current redline, so we detect it and select the next redline again.
             if (pCurrent && pCurrent == pNext)
@@ -713,7 +713,7 @@ void SwView::Execute(SfxRequest &rReq)
                 // In such cases, SelPrevRedline (which starts searching from the selection point)
                 // immediately finds the current redline and advances the selection point to its
                 // start.
-                //
+
                 // This behavior means that NEXT_CHANGE followed by PREV_CHANGE would not change
                 // the current redline, so we detect it and move to the previous redline again.
                 if (initialCursorStart == *pPrev->Start())
@@ -1231,7 +1231,6 @@ void SwView::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphicDlg( rReq )));
         }
         break;
-
 
         default:
             OSL_ENSURE(!this, "wrong dispatcher");

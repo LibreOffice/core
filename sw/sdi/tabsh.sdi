@@ -48,8 +48,6 @@ interface TextTable : BaseTextTable
 */
 }
 
- //=========================================================================
-
 shell SwTableShell : SwBaseShell
 
 {

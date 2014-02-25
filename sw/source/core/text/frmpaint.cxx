@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -58,8 +57,6 @@
 
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////
-
 static bool bInitFont = true;
 
 class SwExtraPainter
@@ -91,7 +88,6 @@ public:
     void PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed );
     void PaintRedline( SwTwips nY, long nMax );
 };
-
 
 SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
                                 const SwLineNumberInfo &rLnInf, const SwRect &rRct,

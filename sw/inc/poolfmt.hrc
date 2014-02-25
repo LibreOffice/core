@@ -21,9 +21,9 @@
 
 #include "rcid.hrc"
 
-// ---------------
+
 // The Formats
-// ---------------
+
 
 // Drawing Templates:
 #define STR_POOLCHR_FOOTNOTE            (RC_POOLCHRFMT_BEGIN+  0)
@@ -63,9 +63,9 @@
 #define STR_POOLFRM_WATERSIGN           (RC_POOLFRMFMT_BEGIN+  5)
 #define STR_POOLFRM_LABEL               (RC_POOLFRMFMT_BEGIN+  6)
 
-// ---------------
+
 // The Templates
-// ---------------
+
 // Category Text
 #define STR_POOLCOLL_STANDARD           (RC_POOLCOLL_TEXT_BEGIN+  0)
 #define STR_POOLCOLL_TEXT               (RC_POOLCOLL_TEXT_BEGIN+  1)
@@ -233,9 +233,9 @@
 #define STR_POOLCOLL_HTML_DD            (RC_POOLCOLL_HTML_BEGIN+  3)
 #define STR_POOLCOLL_HTML_DT            (RC_POOLCOLL_HTML_BEGIN+  4)
 
-//-----------------
+
 // Page styles
-//-----------------
+
 #define STR_POOLPAGE_STANDARD           (RC_POOLPAGEDESC_BEGIN+  0)
 #define STR_POOLPAGE_FIRST              (RC_POOLPAGEDESC_BEGIN+  1)
 #define STR_POOLPAGE_LEFT               (RC_POOLPAGEDESC_BEGIN+  2)
@@ -247,9 +247,9 @@
 #define STR_POOLPAGE_ENDNOTE            (RC_POOLPAGEDESC_BEGIN+  8)
 #define STR_POOLPAGE_LANDSCAPE                  (RC_POOLPAGEDESC_BEGIN+  9)
 
-//-----------------
+
 // Numbering styles
-//-----------------
+
 #define STR_POOLNUMRULE_NUM1                (RC_POOLNUMRULE_BEGIN+  0)
 #define STR_POOLNUMRULE_NUM2                (RC_POOLNUMRULE_BEGIN+  1)
 #define STR_POOLNUMRULE_NUM3                (RC_POOLNUMRULE_BEGIN+  2)

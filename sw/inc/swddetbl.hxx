@@ -45,7 +45,6 @@ protected:
     virtual void SwClientNotify( const SwModify&, const SfxHint& );
 };
 
-
 // ----------- Inlines -----------------------------
 
 inline const SwDDEFieldType* SwDDETable::GetDDEFldType() const

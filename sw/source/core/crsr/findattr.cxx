@@ -995,7 +995,6 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
         pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
-
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ) )
     {
         if( aCmpArr.Count() )

@@ -136,7 +136,6 @@ SfxPopupWindowType  SwTbxInsertCtrl::GetPopupWindowType() const
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
 
-
 void SwTbxInsertCtrl::Select( sal_Bool /*bMod1*/ )
 {
     if( nLastSlotId )
@@ -397,7 +396,6 @@ void SwTbxFieldCtrl::DelPopup()
         pPopup = 0;
     }
 }
-
 
 // Navigation-Popup
 // determine the order of the toolbox items

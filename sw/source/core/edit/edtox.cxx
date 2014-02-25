@@ -316,7 +316,7 @@ void SwEditShell::ApplyAutoMark()
         sal_Int32 nLEV_Longer   = 3;    //! -> deletedChars;
         sal_Int32 nLEV_Shorter  = 1;    //! -> insertedChars;
         sal_Int32 nTransliterationFlags = 0;
-        //
+
         sal_Int32 nSrchFlags = 0;
         if (!bCaseSensitive)
         {
@@ -330,7 +330,7 @@ void SwEditShell::ApplyAutoMark()
         if ( bSrchInSel)
             nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
                             SearchFlags::REG_NOT_ENDOFLINE );
-        //
+
         OUString sEmpty;
         SearchOptions aSearchOpt(
                             SearchAlgorithms_ABSOLUTE, nSrchFlags,
@@ -365,7 +365,7 @@ void SwEditShell::ApplyAutoMark()
                     //3.
                     bCaseSensitive  = !sCase.isEmpty() && !comphelper::string::equals(sCase, cZero);
                     bWordOnly       = !sWordOnly.isEmpty() && !comphelper::string::equals(sWordOnly, cZero);
-                    //
+
                     if (!bCaseSensitive)
                     {
                         aSearchOpt.transliterateFlags |=
@@ -380,7 +380,7 @@ void SwEditShell::ApplyAutoMark()
                         aSearchOpt.searchFlag |=  SearchFlags::NORM_WORD_ONLY;
                     else
                         aSearchOpt.searchFlag &= ~SearchFlags::NORM_WORD_ONLY;
-                    //
+
                     aSearchOpt.searchString = sToSelect;
 
                     KillPams();

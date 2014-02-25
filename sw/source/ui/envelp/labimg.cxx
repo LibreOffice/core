@@ -32,7 +32,6 @@
 using namespace utl;
 using namespace ::com::sun::star::uno;
 
-
 SwLabItem::SwLabItem() :
 
     SfxPoolItem(FN_LABEL),

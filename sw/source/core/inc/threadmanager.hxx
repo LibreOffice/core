@@ -140,7 +140,6 @@ class ThreadManager : public IThreadListenerOwner
             }
         };
 
-
         inline oslInterlockedCount RetrieveNewThreadID()
         {
             return osl_atomic_increment( &mnThreadIDCounter );

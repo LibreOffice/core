@@ -22,7 +22,6 @@
 
 #include "frmsh.hxx"
 
-
 class SwWebFrameShell: public SwFrameShell
 {
 
@@ -35,7 +34,5 @@ public:
 };
 
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

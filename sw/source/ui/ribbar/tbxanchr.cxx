@@ -26,7 +26,6 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/mnumgr.hxx>
 
-
 #include "cmdid.h"
 #include "docsh.hxx"
 #include "swtypes.hxx"
@@ -36,8 +35,6 @@
 #include "viewopt.hxx"
 #include "ribbar.hrc"
 #include "tbxanchr.hxx"
-
-
 
 SFX_IMPL_TOOLBOX_CONTROL(SwTbxAnchor, SfxUInt16Item);
 
@@ -116,7 +113,6 @@ void  SwTbxAnchor::Click()
 
     if (nActAnchorId)
         aPopMenu.CheckItem(nActAnchorId);
-
 
     sal_uInt16 nSlotId = aPopMenu.Execute(&GetToolBox(), aRect);
     GetToolBox().EndSelection();

@@ -33,7 +33,6 @@
 
 #include <app.hrc>
 
-
 // Globals ******************************************************************
 
 static sal_uInt16 aPageRg[] = {
@@ -300,6 +299,5 @@ IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox*, pBox )
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

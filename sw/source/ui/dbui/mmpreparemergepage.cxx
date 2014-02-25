@@ -29,7 +29,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <swabstdlg.hxx>
 
-
 #include <mmpreparemergepage.hrc>
 
 #include <unomid.h>

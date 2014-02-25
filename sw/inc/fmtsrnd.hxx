@@ -50,7 +50,6 @@ public:
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-
     SwSurround GetSurround()const { return SwSurround( GetValue() ); }
     sal_Bool    IsAnchorOnly()  const { return bAnchorOnly; }
     sal_Bool    IsContour()     const { return bContour; }

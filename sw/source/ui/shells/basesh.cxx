@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sot/factory.hxx>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
@@ -136,7 +135,6 @@ static sal_uInt8 nFooterPos;
 #define SWIMAPDLG(rView) ( (SvxIMapDlg*) ( rView.GetViewFrame()->GetChildWindow(        \
                         SvxIMapDlgChildWindow::GetChildWindowId() )->   \
                         GetWindow() ) )
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1818,9 +1816,9 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 break;
             case FN_WRAP_ANCHOR_ONLY:
                 aWrap.SetAnchorOnly(!aWrap.IsAnchorOnly());
-                //
+
                 // keep previous wrapping
-                //
+
                 // switch to wrap SURROUND_PARALLEL, if previous wrap is SURROUND_NONE
                 if ( nOldSurround != SURROUND_NONE )
                 {
@@ -2450,7 +2448,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             SfxAbstractDialog * pDlg = 0;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
 
             // Table cell(s) selected?
             if ( rSh.IsTableMode() )

@@ -57,7 +57,6 @@ void SetShell( SwViewShell *pSh );
 void _TextInit();
 void _TextFinit();
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

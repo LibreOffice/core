@@ -43,9 +43,6 @@ class SdrObject;
 #define EDIT_MODE_DELETE        4
 #define EDIT_MODE_RENAME        5
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-
 class SwContentTree : public SvTreeListBox
 {
     ImageList           aEntryImages;
@@ -201,10 +198,7 @@ public:
     virtual sal_Int32  GetEntryRealChildrenNum( SvTreeListEntry* pEntry ) const;
 };
 
-
-//----------------------------------------------------------------------------
 // TreeListBox for global documents
-//----------------------------------------------------------------------------
 
 class SwLBoxString : public SvLBoxString
 {
@@ -231,7 +225,7 @@ private:
 
     ImageList           aEntryImages;
 
-    SwWrtShell*             pActiveShell;   //
+    SwWrtShell*             pActiveShell;
     SvTreeListEntry*            pEmphasisEntry; // Drag'n Drop emphasis
     SvTreeListEntry*            pDDSource;      // source for Drag'n Drop
     SwGlblDocContents*      pSwGlblDocContents; // array with sorted content

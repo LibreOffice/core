@@ -76,7 +76,6 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-
 #define CHAR_UNDERSCORE ((sal_Unicode)0x005F)
 #define CHAR_LEFT_ARROW ((sal_Unicode)0x25C0)
 #define CHAR_RIGHT_ARROW ((sal_Unicode)0x25B6)
@@ -168,7 +167,6 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
       nTxtStart( rInf.GetTxtStart() )
 { }
 
-
 #if OSL_DEBUG_LEVEL > 0
 
 void ChkOutDev( const SwTxtSizeInfo &rInf )
@@ -182,13 +180,11 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
 }
 #endif
 
-
 inline sal_Int32 GetMinLen( const SwTxtSizeInfo &rInf )
 {
     const sal_Int32 nInfLen = rInf.GetIdx() + rInf.GetLen();
     return std::min( rInf.GetTxt().getLength(), nInfLen );
 }
-
 
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
     : SwTxtInfo( rNew ),
@@ -273,9 +269,8 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         m_nDirection = DIR_LEFT2RIGHT;
     }
 
-    //
     // The Options
-    //
+
     m_pOpt = m_pVsh ?
            m_pVsh->GetViewOptions() :
            SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) ); // Options from Module, due to StarONE
@@ -528,7 +523,6 @@ static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
             pCol = NULL;
     }
 
-
     if( !pCol )
         pCol = &aGlobalRetoucheColor;
 
@@ -602,7 +596,6 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     OSL_ENSURE( GetParaPortion(), "No paragraph!");
     SwDrawTextInfo aDrawInf( m_pFrm->getRootFrm()->GetCurrShell(), *m_pOut, pSI, rText, nStart, nLength,
                              rPor.Width(), bBullet );
-
 
     aDrawInf.SetLeft( GetPaintRect().Left() );
     aDrawInf.SetRight( GetPaintRect().Right());
@@ -1537,9 +1530,8 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
     cHookChar = 0;
     sal_Int32 i = nStart;
 
-    //
     // Used for decimal tab handling:
-    //
+
     const sal_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
     const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
     // #i45951# German (Switzerland) uses ' as thousand separator
@@ -1587,10 +1579,9 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
                     }
                 }
 
-                //
                 // Compatibility: First non-digit character behind a
                 // a digit character becomes the hook character
-                //
+
                 if ( bTabCompat )
                 {
                     if ( ( 0x2F < cPos && cPos < 0x3A ) ||

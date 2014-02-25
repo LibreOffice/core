@@ -72,8 +72,6 @@ class SwDbtoolsClient;
 class SwXMailMerge;
 class SwMailMergeConfigItem;
 
-// -----------------------------------------------------------------------
-
 enum DBMgrOptions
 {
     DBMGR_MERGE,             ///< Data records in fields.
@@ -84,8 +82,6 @@ enum DBMgrOptions
     DBMGR_MERGE_DOCUMENTS,   ///< Print merged documents.
     DBMGR_MERGE_SINGLE_FILE  ///< Save merge as single file.
 };
-
-// -----------------------------------------------------------------------
 
 /*--------------------------------------------------------------------
      Administration of (new) logical databases.
@@ -204,7 +200,6 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, sal_Bool bCreate);
     SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, sal_Bool bCreate);
 
-
     SAL_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
 
     /// Insert data record as text into document.
@@ -246,7 +241,6 @@ public:
     inline void     SetEMailColumn(const OUString& sColName) { sEMailAddrFld = sColName; }
     inline void     SetSubject(const OUString& sSbj) { sSubject = sSbj; }
     inline void     SetAttachment(const OUString& sAtt) { sAttached = sAtt; }
-
 
     /// Fill listbox with all table names of a database.
     sal_Bool            GetTableNames(ListBox* pListBox, const OUString& rDBName );
@@ -302,7 +296,6 @@ public:
     const SwDSParam* CreateDSData(const SwDBData& rData)
                         {return FindDSData(rData, sal_True);}
     const SwDSParamArr& GetDSParamArray() const {return aDataSourceParams;}
-
 
     /// close all data sources - after fields were updated
     void            CloseAll(sal_Bool bIncludingMerge = sal_True);

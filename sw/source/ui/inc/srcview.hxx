@@ -43,20 +43,17 @@ class SwSrcView: public SfxViewShell
     // for read-only switching
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-
 protected:
     sal_uInt16              StartSearchAndReplace(const SvxSearchItem& rItem,
                                                         sal_Bool bFromStart,
                                                         sal_Bool bApi,
                                                         sal_Bool bRecursive = sal_False);
 
-
 public:
 
     SFX_DECL_VIEWFACTORY(SwSrcView);
     SFX_DECL_INTERFACE(SW_SRC_VIEWSHELL)
     TYPEINFO();
-
 
     SwSrcView(SfxViewFrame* pFrame, SfxViewShell*);
 
@@ -68,8 +65,6 @@ public:
     void                SaveContentTo(SfxMedium& rMed);
 
     sal_Bool                IsModified() {return aEditWin.IsModified();}
-
-
 
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);

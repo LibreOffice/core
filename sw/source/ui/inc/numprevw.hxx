@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_NUMPREVW_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_NUMPREVW_HXX
 
-
 #include <vcl/window.hxx>
 
 class SwNumRule;
@@ -68,6 +67,5 @@ class NumberingPreview : public Window
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

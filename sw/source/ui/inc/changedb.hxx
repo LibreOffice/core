@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_CHANGEDB_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_CHANGEDB_HXX
 
-
 #include <vcl/bitmap.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

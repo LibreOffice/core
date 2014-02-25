@@ -75,7 +75,6 @@ public:
     void   SetRightOfst( const SwTwips nNew ) { nRightOfst = nNew; }
 };
 
-
 /// Collection of SwLinePortion instances, representing one line of text
 class SwLineLayout : public SwTxtPortion
 {

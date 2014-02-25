@@ -27,9 +27,7 @@
 
 using namespace ::com::sun::star;
 
-
 TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
-
 
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
@@ -78,7 +76,6 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
     }
     return !IsError( nRet );
 }
-
 
 SwAutoCorrect::SwAutoCorrect( const SvxAutoCorrect& rACorr )
     : SvxAutoCorrect( rACorr )

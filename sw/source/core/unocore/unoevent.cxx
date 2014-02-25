@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 // HINTIDs must be on top; it is required for the macitem.hxx header
 #include "hintids.hxx"
 #include "unoevent.hxx"
@@ -43,9 +41,7 @@ using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::PropertyValue;
 using ::cppu::WeakImplHelper2;
 
-//
 // tables of allowed events for specific objects
-//
 
 const struct SvEventDescription aGraphicEvents[] =
 {
@@ -105,9 +101,7 @@ const struct SvEventDescription aFrameStyleEvents[] =
     { 0, NULL }
 };
 
-//
 // SwHyperlinkEventDescriptor
-//
 
 SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
     SvDetachedEventDescriptor(aHyperlinkEvents),
@@ -152,7 +146,6 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFmt(
     }
 }
 
-
 void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
     uno::Reference<
         container::XNameReplace> & xReplace)
@@ -172,10 +165,7 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
     }
 }
 
-
-//
 // SwFrameEventDescriptor
-//
 
 // use double cast in superclass constructor to avoid ambigous cast
 SwFrameEventDescriptor::SwFrameEventDescriptor(
@@ -225,10 +215,7 @@ OUString SwFrameEventDescriptor::getImplementationName()
     return sSwFrameEventDescriptor;
 }
 
-
-//
 // SwFrameStyleEventDescriptor
-//
 
 SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
     SwXFrameStyle& rStyleRef ) :

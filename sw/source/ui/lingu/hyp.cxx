@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "initui.hxx"
 #include "view.hxx"
 #include "edtwin.hxx"
@@ -62,7 +61,6 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
     SetHyphen();
 }
 
-
 void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 {
     if( SVX_SPELL_OTHER == eSpell && nPageCount )
@@ -73,8 +71,6 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
     }
     pView->HyphStart( eSpell );
 }
-
-
 
 bool SwHyphWrapper::SpellContinue()
 {
@@ -101,13 +97,11 @@ bool SwHyphWrapper::SpellContinue()
     return GetLast().is();
 }
 
-
 void SwHyphWrapper::SpellEnd()
 {
     PSH->HyphEnd();
     SvxSpellWrapper::SpellEnd();
 }
-
 
 bool SwHyphWrapper::SpellMore()
 {
@@ -116,8 +110,6 @@ bool SwHyphWrapper::SpellMore()
     PSH->Combine();
     return false;
 }
-
-
 
 void SwHyphWrapper::InsertHyphen( const sal_uInt16 nPos )
 {
@@ -128,7 +120,6 @@ void SwHyphWrapper::InsertHyphen( const sal_uInt16 nPos )
     else
         PSH->HyphIgnore();
 }
-
 
 SwHyphWrapper::~SwHyphWrapper()
 {

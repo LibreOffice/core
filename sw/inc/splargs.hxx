@@ -35,7 +35,6 @@ class Font;
  *                      struct SwArgsBase
  *************************************************************************/
 
-
 struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 {
     SwTxtNode  *pStartNode;

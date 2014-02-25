@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_POPBOX_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_POPBOX_HXX
 
-
 #include <vcl/toolbox.hxx>
 #include <svtools/transfer.hxx>
 
@@ -52,7 +51,6 @@ inline void SwHelpToolBox::SetDoubleClickLink(const Link &rLink) {
 inline void SwHelpToolBox::SetRightClickLink(const Link &rLink) {
     aRightClickLink = rLink;
 }
-
 
 #endif
 

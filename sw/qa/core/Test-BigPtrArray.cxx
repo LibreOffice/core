@@ -33,7 +33,6 @@
 
 using namespace std;
 
-
 namespace /* private */
 {
     const sal_uLong NUM_ENTRIES = 10;

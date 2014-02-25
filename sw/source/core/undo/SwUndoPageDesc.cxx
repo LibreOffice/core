@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/resid.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -33,7 +32,6 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <ndindex.hxx>
 #endif
-
 
 #if OSL_DEBUG_LEVEL > 1
 // Pure debug help function to have a quick look at the header/footer attributes.
@@ -195,7 +193,6 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
 SwUndoPageDesc::~SwUndoPageDesc()
 {
 }
-
 
 void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest )
 {
@@ -417,7 +414,6 @@ SwRewriter SwUndoPageDescCreate::GetRewriter() const
         aResult.AddRule(UndoArg1, pDesc->GetName());
     else
         aResult.AddRule(UndoArg1, aNew.GetName());
-
 
     return aResult;
 }

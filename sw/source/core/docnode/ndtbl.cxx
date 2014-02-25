@@ -677,7 +677,6 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
             aRg.aEnd++;
     }
 
-
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
         OSL_FAIL( "empty range" );
@@ -757,7 +756,6 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         {
             aBoxFmtArr2.reset(new std::vector<SwTableBoxFmt*>( nBoxArrLen, NULL ));
         }
-
 
         SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
 
@@ -1173,7 +1171,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         else
             aRg.aEnd++;
     }
-
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {

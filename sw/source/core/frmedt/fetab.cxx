@@ -62,7 +62,6 @@
 
 using namespace ::com::sun::star;
 
-
 // also see swtable.cxx
 #define COLFUZZY 20L
 
@@ -80,7 +79,6 @@ const SwTable   *pRowCacheLastTable  = 0;
 const SwTabFrm  *pRowCacheLastTabFrm = 0;
 const SwFrm     *pRowCacheLastCellFrm = 0;
 
-
 class TblWait
 {
     SwWait *pWait;
@@ -97,7 +95,6 @@ TblWait::TblWait(size_t const nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t c
     if( bWait )
         pWait = new SwWait( rDocShell, true );
 }
-
 
 void SwFEShell::ParkCursorInTab()
 {
@@ -525,7 +522,6 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
     return bRet;
 }
 
-
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methods    :  _GetTabCols
@@ -753,7 +749,6 @@ void SwFEShell::GetRowSplit( SwFmtRowSplit*& rpSz ) const
     GetDoc()->GetRowSplit( *getShellCrsr( false ), rpSz );
 }
 
-
 /***********************************************************************
  *  Class      :  SwFEShell
  *  Methods    :  SetRowHeight(), GetRowHeight()
@@ -832,7 +827,6 @@ void SwFEShell::GetTabBorders( SfxItemSet& rSet ) const
     GetDoc()->GetTabBorders( *getShellCrsr( false ), rSet );
 }
 
-
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methods    :  SetBoxBackground(), GetBoxBackground()
@@ -907,7 +901,6 @@ void SwFEShell::GetTabBackground( SvxBrushItem &rToFill ) const
     if( pFrm && pFrm->IsInTab() )
         rToFill = pFrm->ImplFindTabFrm()->GetFmt()->GetBackground();
 }
-
 
 /***********************************************************************
 #*  Class      :  SwFEShell
@@ -1646,10 +1639,9 @@ static const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
     return pRet && pRet->IsCellFrm() ? static_cast<const SwCellFrm*>(pRet) : 0;
 }
 
-//
 // pbCol  = 0 => Used for moving table rows/cols with mouse
 // pbCol != 0 => Used for selecting table/rows/cols
-//
+
 #define ENHANCED_TABLE_SELECTION_FUZZY 10
 
 const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) const
@@ -1942,7 +1934,6 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
 
     return bRet;
 }
-
 
 /*************************************************************************
 |*
@@ -2469,7 +2460,5 @@ sal_Bool SwFEShell::IsTableVertical() const
 
     return pFrm->ImplFindTabFrm()->IsVertical();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

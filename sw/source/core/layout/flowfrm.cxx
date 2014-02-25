@@ -253,7 +253,7 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
     // The return value helps deciding whether we need to flow back (3),
     // or whether we can use the good old WouldFit (0, 1), or if
     // it's reasonable to relocate and test-format (2).
-    //
+
     // Bit 1 in this case means that there are objects anchored to myself,
     // bit 2 means that I have to evade other objects.
 
@@ -775,7 +775,7 @@ SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
 sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
 {
     // Now it's getting a bit complicated:
-    //
+
     // Maybe i'm bringing a Pagedesc myself; in that case,
     // the pagedesc of the next page needs to correspond.
     // Otherwise, I'll have to dig a bit deeper to see where
@@ -839,7 +839,6 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
               (bOdd ? pDesc->GetRightFmt(bFirst) : pDesc->GetLeftFmt(bFirst)))
         || (pNewDesc && pNewDesc == pDesc);
 }
-
 
 /// Returns the next layout leaf in which we can move the frame.
 SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
@@ -2438,7 +2437,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         }
         pNewUpper->Calc();
         m_rThis.Cut();
-        //
+
         // optimization: format section, if its size is invalidated and if it's
         // the new parent of moved backward frame.
         bool bFormatSect( false );

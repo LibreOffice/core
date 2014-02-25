@@ -258,7 +258,6 @@ public:
             const SwFmt& rFmt, sal_uLong& rCpPos, sal_uInt8 nHFFlags, sal_uInt8 nFlag,  sal_uInt8 nBreakCode);
 };
 
-
 // class WW8_WrPct to construct the piece table
 class WW8_WrPct
 {
@@ -817,7 +816,6 @@ protected:
 
     virtual void OutputLinkedOLE( const OUString& ) = 0;
 
-
     /// Output SwSectionNode
     virtual void OutputSectionNode( const SwSectionNode& );
 
@@ -983,7 +981,6 @@ private:
                               const SwNumFmt& rFmt );
     static void BuildAnlvBase( WW8_ANLV& rAnlv, sal_uInt8*& rpCh, sal_uInt16& rCharLen,
                    const SwNumRule& rRul, const SwNumFmt& rFmt, sal_uInt8 nSwLevel );
-
 
     /// Output the numbering table.
     virtual void WriteNumbering();

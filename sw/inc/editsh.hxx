@@ -509,7 +509,6 @@ public:
     /// Detect highest and lowest level to check moving of outline levels.
     void GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower );
 
-
     /// Get Outline level of current paragraph.
     int GetCurrentParaOutlineLevel( ) const;
 
@@ -570,7 +569,6 @@ public:
     bool Undo(sal_uInt16 const nCount = 1);
     bool Redo(sal_uInt16 const nCount = 1);
     bool Repeat(sal_uInt16 const nCount);
-
 
     /// For all views of this document.
     void StartAllAction();
@@ -759,7 +757,6 @@ public:
         ::com::sun::star::linguistic2::XSpellAlternatives >
             GetCorrection( const Point* pPt, SwRect& rSelectRect );
 
-
     bool GetGrammarCorrection( ::com::sun::star::linguistic2::ProofreadingResult /*out*/ &rResult,
             sal_Int32 /*out*/ &rErrorPosInText,
             sal_Int32 /*out*/ &rErrorIndexInResult,
@@ -895,11 +892,9 @@ public:
     sal_Bool AcceptRedline( sal_uInt16 nPos );
     sal_Bool RejectRedline( sal_uInt16 nPos );
 
-
     /** Search Redline for this Data and @return position in array.
      If not found, return USHRT_MAX. */
     sal_uInt16 FindRedlineOfData( const SwRedlineData& ) const;
-
 
     /// Set comment to Redline at position.
     sal_Bool SetRedlineComment( const OUString& rS );

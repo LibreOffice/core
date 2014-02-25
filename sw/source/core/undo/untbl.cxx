@@ -284,7 +284,6 @@ void SwUndoInsTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             pNextNd->SetAttr( *pItem );
     }
 
-
     sTblNm = pTblNd->GetTable().GetFrmFmt()->GetName();
     if( pTblNd->GetTable().IsA( TYPE( SwDDETable )) )
         pDDEFldType = (SwDDEFieldType*)((SwDDETable&)pTblNd->GetTable()).

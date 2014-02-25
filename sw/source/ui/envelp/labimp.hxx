@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_ENVELP_LABIMP_HXX
 #define INCLUDED_SW_SOURCE_UI_ENVELP_LABIMP_HXX
 
-
 #include <sfx2/tabdlg.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
@@ -100,7 +99,6 @@ public:
     sal_Int32       nRows;
     sal_Bool        bCont;
 };
-
 
 class SwLabRecs : public std::vector<SwLabRec*> {
 public:

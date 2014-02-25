@@ -113,7 +113,6 @@ enum ToxAuthorityField
     AUTH_FIELD_END
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

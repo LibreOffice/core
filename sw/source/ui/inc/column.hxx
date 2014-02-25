@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_COLUMN_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_COLUMN_HXX
 
-
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/image.hxx>
@@ -60,7 +59,6 @@ class SwColumnDlg : public SfxModalDialog
     bool                bSectionChanged : 1;
     bool                bSelSectionChanged : 1;
     bool                bFrameChanged : 1;
-
 
     DECL_LINK(ObjectHdl, ListBox*);
     DECL_LINK(OkHdl, void *);

@@ -27,7 +27,6 @@
 #include <ooo/vba/word/XFont.hpp>
 #include <ooo/vba/word/XListTemplate.hpp>
 
-
 typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XStyle > SwVbaStyle_BASE;
 
 class SwVbaStyle : public SwVbaStyle_BASE

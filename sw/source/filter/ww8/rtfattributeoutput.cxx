@@ -1904,7 +1904,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-
                             xPropSet->getPropertyValue("StringItemList") >>= aStrSeq;
                             sal_uInt32 nListItems = aStrSeq.getLength();
                             for (sal_uInt32 i = 0; i < nListItems; i++)

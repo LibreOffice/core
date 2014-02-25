@@ -153,7 +153,6 @@ SwXMLTextBlockDocumentContext::~SwXMLTextBlockDocumentContext ( void )
 {
 }
 
-
 SwXMLTextBlockTextContext::SwXMLTextBlockTextContext(
    SwXMLTextBlockImport& rImport,
    sal_uInt16 nPrefix,
@@ -181,7 +180,6 @@ SvXMLImportContext *SwXMLTextBlockTextContext::CreateChildContext(
 SwXMLTextBlockTextContext::~SwXMLTextBlockTextContext ( void )
 {
 }
-
 
 SwXMLTextBlockBodyContext::SwXMLTextBlockBodyContext(
    SwXMLTextBlockImport& rImport,

@@ -46,7 +46,6 @@ public:
     sal_Bool    SelectNumberingType(sal_Int16 nType);
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

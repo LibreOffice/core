@@ -25,7 +25,6 @@
 #include <limits.h>
 #include <xmloff/xmlictxt.hxx>
 
-
 class SfxItemSet;
 class SvXMLImportItemMapper;
 class SvXMLUnitConverter;
@@ -62,7 +61,6 @@ public:
                                     SfxItemSet&  rItemSet,
                                    const SvXMLItemMapEntry& rEntry,
                                    const SvXMLUnitConverter& rUnitConv );
-
 
 };
 

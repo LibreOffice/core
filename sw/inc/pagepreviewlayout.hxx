@@ -35,7 +35,6 @@ class SwPageFrm;
 class Fraction;
 struct PreviewPage;
 
-// =============================================================================
 /** page preview functionality in the writer
 
     @author OD
@@ -167,7 +166,6 @@ private:
     void _CalcDocPreviewPaintRect();
 
     /** determines preview data for a given page and a given preview offset
-
 
         @author OD
 

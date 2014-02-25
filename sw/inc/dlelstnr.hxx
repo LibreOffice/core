@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
         class XDictionaryList;
@@ -39,12 +38,10 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-///////////////////////////////////////////////////////////////////////////
 // SwLinguServiceEventListener
 // is a EventListener that triggers spellchecking
 // and hyphenation when relevant changes (to the
 // dictionaries of the dictionary list, or properties) were made.
-//
 
 class SwLinguServiceEventListener :
     public cppu::WeakImplHelper2
@@ -81,7 +78,6 @@ public:
     virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
-
 
 #endif
 

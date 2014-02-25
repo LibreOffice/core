@@ -27,7 +27,6 @@
 // header for class SfxStyleSheetBasePool
 #include <svl/style.hxx>
 
-//-----------------------------------------------------------------------------
 /** This class acts as data container and execution class for the format paintbrush feature in writer.
 */
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 
 #include <svx/dialogs.hrc>
@@ -104,7 +103,6 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );// Styles from HTML.vor
         else if( ISA( SwGlobalDocShell ) )
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
-
 
         if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
             SwTransferable::InitOle( this, *pDoc );
@@ -607,7 +605,6 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     pDoc->ResetModified();
     return bRet;
 }
-
 
 void SwDocShell::SubInitNew()
 {

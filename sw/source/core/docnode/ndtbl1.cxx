@@ -149,7 +149,6 @@ inline void InsertLine( std::vector<SwTableLine*>& rLineArr, SwTableLine* pLine 
         rLineArr.push_back( pLine );
 }
 
-
 static bool lcl_IsAnLower( const SwTableLine *pLine, const SwTableLine *pAssumed )
 {
     const SwTableLine *pTmp = pAssumed->GetUpper() ?
@@ -620,7 +619,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
 
             // All Cell Borders that match the UnionRect or extend it are
             // Outer Borders. All others are Inner Borders.
-            //
+
             // New: The Outer Borders can, depending on whether it's a
             // Start/Middle/Follow Table (for Selection via FollowTabs),
             // also not be Outer Borders.
@@ -1510,7 +1509,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
 
     // In order to make the implementation easier, but still use the available
     // space properly, we do this twice.
-    //
+
     // The problem: The first column is getting wider, the others get slimmer
     // only afterwards.
     // The first column's desired width would be discarded as it would cause

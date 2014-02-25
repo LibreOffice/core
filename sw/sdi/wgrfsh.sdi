@@ -23,12 +23,8 @@ interface WebGraphic : BaseTextGraphic
 {
 }
 
-
- //=========================================================================
-
 shell SwWebGrfShell : SwBaseShell
 {
         import WebGraphic[Automation];
 }
-
 

@@ -52,12 +52,6 @@ class SwView;
 #define NID_TABLE_FORMULA_ERROR     20019
 #define NID_COUNT  20
 
-
-
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-
 class SwTbxInsertCtrl : public SfxToolBoxControl
 {
     sal_uInt16                  nLastSlotId;
@@ -80,15 +74,10 @@ public:
     virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
 {
     PopupMenu*              pPopup;
     SwView*                 pView;
-
 
     void                    DelPopup();
 public:
@@ -111,7 +100,6 @@ class SwTbxFieldCtrl : public SfxToolBoxControl
     PopupMenu*              pPopup;
     SwView*                 pView;
 
-
     void                    DelPopup();
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -127,12 +115,6 @@ public:
 
     DECL_LINK(PopupHdl, PopupMenu*);
 };
-
-
-
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
 
 class SwScrollNaviToolBox : public ToolBox
 {
@@ -171,9 +153,7 @@ public:
     void                GrabFocus(){aToolBox.GrabFocus();}
 };
 
-//----------------------------------------------------------------------------
 //  ImageButtons have to set the HelpText themselves if needed
-//----------------------------------------------------------------------------
 
 class SwHlpImageButton : public ImageButton
 {
@@ -201,7 +181,5 @@ public:
     virtual Window*         CreateItemWindow( Window *pParent );
 };
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

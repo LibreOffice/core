@@ -26,7 +26,6 @@
 #include <boost/utility.hpp>
 #include <memory>
 
-
 class ObservableThread;
 class ThreadManager;
 

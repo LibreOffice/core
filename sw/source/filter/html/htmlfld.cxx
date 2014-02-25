@@ -101,7 +101,6 @@ static HTMLOptionEnum aHTMLPageNumFldFmtTable[] =
     { 0,                     0 }
 };
 
-
 static HTMLOptionEnum aHTMLExtUsrFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_company,         EU_COMPANY },
@@ -190,7 +189,6 @@ static HTMLOptionEnum aHTMLFileNameFldFmtTable[] =
     { 0,                    0 }
 };
 
-
 sal_uInt16 SwHTMLParser::GetNumType( const OUString& rStr, sal_uInt16 nDfltType )
 {
     sal_uInt16 nType = nDfltType;
@@ -206,7 +204,6 @@ sal_uInt16 SwHTMLParser::GetNumType( const OUString& rStr, sal_uInt16 nDfltType 
 
     return nType;
 }
-
 
 void SwHTMLParser::NewField()
 {

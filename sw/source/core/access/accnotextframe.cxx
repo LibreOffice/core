@@ -295,10 +295,8 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getTextRange( sal_Int32 , sal_Int32 )
 
 sal_Bool SAL_CALL SwAccessibleNoTextFrame::copyText( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception){return sal_True;}
 
-
-//
 //  XAccessibleHyperText
-//
+
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkCount()
 throw (uno::RuntimeException, std::exception)
 {

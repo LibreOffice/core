@@ -95,26 +95,26 @@ using namespace ::com::sun::star::uno;
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
 static const char* aHelpForMenu[] =
 {
-    0,                          //
+    0,
     HID_GLBLTREE_UPDATE,        //CTX_UPDATE
     HID_GLBLTREE_INSERT,        //CTX_INSERT
     HID_GLBLTREE_EDIT,          //CTX_EDIT
     HID_GLBLTREE_DEL,           //CTX_DELETE
     HID_GLBLTREE_EDIT_LINK,     //CTX_EDIT_LINK
-    0,                        //
-    0,                        //
-    0,                        //
-    0,                        //
+    0,
+    0,
+    0,
+    0,
     HID_GLBLTREE_INS_IDX,       //CTX_INSERT_ANY_INDEX
     HID_GLBLTREE_INS_FILE,      //CTX_INSERT_FILE
     HID_GLBLTREE_INS_NEW_FILE,  //CTX_INSERT_NEW_FILE
     HID_GLBLTREE_INS_TEXT,      //CTX_INSERT_TEXT
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     HID_GLBLTREE_UPD_SEL,       //CTX_UPDATE_SEL
     HID_GLBLTREE_UPD_IDX,       //CTX_UPDATE_INDEX
     HID_GLBLTREE_UPD_LINK,      //CTX_UPDATE_LINK
@@ -348,7 +348,6 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
         pSubPop1->InsertItem(CTX_INSERT_TEXT, aContextStrings[ST_TEXT   - ST_GLOBAL_CONTEXT_FIRST]);
         pSubPop1->SetHelpId(CTX_INSERT_TEXT, aHelpForMenu[CTX_INSERT_TEXT]);
 
-
         pPop->InsertItem(CTX_UPDATE, aContextStrings[ST_UPDATE - ST_GLOBAL_CONTEXT_FIRST]);
         pPop->SetHelpId(CTX_UPDATE, aHelpForMenu[CTX_UPDATE]);
         pPop->InsertItem(CTX_EDIT, aContextStrings[ST_EDIT_CONTENT - ST_GLOBAL_CONTEXT_FIRST]);
@@ -374,7 +373,6 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
         pPop->EnableItem(CTX_INSERT,    0 != (nEnableFlags & ENABLE_INSERT_IDX));
         pPop->EnableItem(CTX_EDIT,      0 != (nEnableFlags & ENABLE_EDIT));
         pPop->EnableItem(CTX_DELETE,    0 != (nEnableFlags & ENABLE_DELETE));
-
 
         pPop->SetPopupMenu( CTX_INSERT, pSubPop1 );
         pPop->SetPopupMenu( CTX_UPDATE, pSubPop2 );

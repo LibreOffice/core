@@ -51,7 +51,6 @@ namespace sw {
                 const SwPaM& rPaM,
                 const ::rtl::OUString& rName );
 
-
             virtual void repositionMark(::sw::mark::IMark* io_pMark, const SwPaM& rPaM);
             virtual bool renameMark(::sw::mark::IMark* io_pMark, const OUString& rNewName);
             virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset);

@@ -139,7 +139,6 @@ IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
             aContentTree.ShowHiddenShell():
                 aContentTree.ShowActualView();
 
-
     }
     else
     {
@@ -730,7 +729,6 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aStatusArr[3] = SW_RESSTR(ST_ACTIVE_VIEW);
     FreeResource();
 
-
     const Size& rOutSize =  GetOutputSizePixel();
 
     nZoomIn = (short)rOutSize.Height();
@@ -1081,7 +1079,6 @@ void SwNavigationPI::UpdateListBox()
                 sEntry += aStatusArr[ST_INACTIVE - ST_STATUS_FIRST];
             sEntry += ")";
             aDocListBox.InsertEntry(sEntry);
-
 
             if (pConstView && pView == pConstView)
                 nConstPos = nCount;

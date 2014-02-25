@@ -22,7 +22,6 @@
 #include <tools/solar.h>
 #include "swdllapi.h"
 
-
 struct SW_DLLPUBLIC SwDocStat
 {
     sal_uInt16          nTbl;

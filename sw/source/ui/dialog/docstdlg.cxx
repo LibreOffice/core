@@ -71,7 +71,6 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet)
 
 }
 
-
  SwDocStatPage::~SwDocStatPage()
 {
 }

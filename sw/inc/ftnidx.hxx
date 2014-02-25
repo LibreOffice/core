@@ -32,7 +32,6 @@ class SwSectionNode;
 // not as inline methods (saves compile time).
 #define _SwTxtFtn_GetIndex( pFIdx ) (pFIdx->GetTxtNode().GetIndex())
 
-
 struct CompareSwFtnIdxs
 {
     bool operator()(SwTxtFtn* const& lhs, SwTxtFtn* const& rhs) const;
@@ -49,7 +48,6 @@ public:
     SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, sal_uInt16* pPos = 0 ) const;
 };
 
-
 class SwUpdFtnEndNtAtEnd
 {
     std::vector<const SwSectionNode*> aFtnSects, aEndSects;
@@ -64,8 +62,6 @@ public:
     sal_uInt16 GetNumber( const SwTxtFtn& rTxtFtn, const SwSectionNode& rNd );
     sal_uInt16 ChkNumber( const SwTxtFtn& rTxtFtn );
 };
-
-
 
 #endif // INCLUDED_SW_INC_FTNIDX_HXX
 

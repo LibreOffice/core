@@ -453,7 +453,6 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
     return 0;
 }
 
-
 void SwInputWindow::SetFormula( const OUString& rFormula, sal_Bool bDelFlag )
 {
     OUString sEdit('=');
@@ -486,7 +485,6 @@ IMPL_LINK_NOARG(SwInputWindow, ModifyHdl)
     }
     return 0;
 }
-
 
 void SwInputWindow::DelBoxCntnt()
 {
@@ -628,7 +626,6 @@ SwInputChild::~SwInputChild()
     if(pDispatch)
         pDispatch->Lock(sal_False);
 }
-
 
 SfxChildWinInfo SwInputChild::GetInfo() const
 {

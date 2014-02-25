@@ -750,7 +750,6 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
     return 0;
 }
 
-
 /*************************************************************************
 |*
 |*  SwFEShell::SelectionToTop(), SelectionToBottom()
@@ -1361,7 +1360,6 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
             pList = getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
         }
 
-
         OSL_ENSURE( pList, "No object list to iterate" );
 
         SdrObjListIter aObjIter( *pList, bFlat ? IM_FLAT : IM_DEEPNOGROUPS );
@@ -1597,7 +1595,6 @@ sal_Bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
     }
     return ImpEndCreate();
 }
-
 
 sal_Bool SwFEShell::ImpEndCreate()
 {
@@ -1934,7 +1931,6 @@ sal_Bool SwFEShell::ImpEndCreate()
     return sal_True;
 }
 
-
 /*************************************************************************
 |*
 |*  SwFEShell::BreakCreate()
@@ -2217,8 +2213,6 @@ Point SwFEShell::GetObjAbsPos() const
     return Imp()->GetDrawView()->GetDragStat().GetActionRect().TopLeft();
 }
 
-
-
 /*************************************************************************
 |*
 |*  SwFEShell::IsGroupSelected()
@@ -2444,7 +2438,6 @@ sal_uInt16 SwFEShell::GetFlyCount( FlyCntType eType ) const
     return GetDoc()->GetFlyCount(eType);
 }
 
-
 const SwFrmFmt*  SwFEShell::GetFlyNum(sal_uInt16 nIdx, FlyCntType eType ) const
 {
     return GetDoc()->GetFlyNum(nIdx, eType );
@@ -2461,7 +2454,6 @@ void SwFEShell::MakeSelVisible()
     else
         SwCrsrShell::MakeSelVisible();
 }
-
 
 // how is the selected object protected?
 sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
@@ -2596,7 +2588,6 @@ sal_Bool SwFEShell::IsAlignPossible() const
     return sal_False;
 }
 
-
 // temporary fix till  SS of JOE is available
 void SwFEShell::CheckUnboundObjects()
 {
@@ -2672,8 +2663,6 @@ void SwFEShell::SetCalcFieldValueHdl(Outliner* pOutliner)
     GetDoc()->SetCalcFieldValueHdl(pOutliner);
 }
 
-
-
 int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
                             const Point &rPt ) const
 {
@@ -2742,7 +2731,6 @@ void SwFEShell::Unchain( SwFrmFmt &rFmt )
     GetDoc()->Unchain(rFmt);
     EndAllAction();
 }
-
 
 void SwFEShell::HideChainMarker()
 {

@@ -561,7 +561,6 @@ void BorderLines::AddBorderLine(
     m_Lines.push_back(xLine);
 }
 
-
 SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyl,
                         const SwTabFrm *pT, const sal_uInt8 nSCol ) :
     SwRect( rRect ),
@@ -1940,21 +1939,21 @@ void DrawGraphic( const SvxBrushItem *pBrush,
                 // For PDF export, every draw operation for bitmaps takes a
                 // noticeable amount of place (~50 characters). Thus, optimize
                 // between tile bitmap size and number of drawing operations here.
-                //
+
                 //                  A_out
                 // n_chars = k1 *  ---------- + k2 * A_bitmap
                 //                  A_bitmap
-                //
+
                 // minimum n_chars is obtained for (derive for  A_bitmap,
                 // set to 0, take positive solution):
                 //                   k1
                 // A_bitmap = Sqrt( ---- A_out )
                 //                   k2
-                //
+
                 // where k1 is the number of chars per draw operation, and
                 // k2 is the number of chars per bitmap pixel.
                 // This is approximately 50 and 7 for current PDF writer, respectively.
-                //
+
                 const double    k1( 50 );
                 const double    k2( 7 );
                 const Size      aSize( aAlignedPaintRect.SSize() );
@@ -2163,8 +2162,6 @@ void DrawGraphic( const SvxBrushItem *pBrush,
         Graphic::DrawEx( pOutDev, aEmptyOUStr, aTmp, rBmp, rOrg.Pos(), rOrg.SSize() );
     }
 }
-
-
 
 /** local help method for SwRootFrm::Paint(..) - Adjust given rectangle to pixel size
 
@@ -5185,7 +5182,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
     // - flag to control,
     //-hack has to be used.
     const bool bb4779636HackActive = true;
-    //
+
     const SwFrm* pCellFrmForBottomBorderAttrs = 0;
     const SwFrm* pCellFrmForTopBorderAttrs = 0;
     bool         bFoundCellForTopOrBorderAttrs = false;

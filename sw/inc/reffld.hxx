@@ -55,7 +55,6 @@ enum REFERENCEMARK
     REF_END
 };
 
-
 /// Get reference.
 
 class SwGetRefFieldType : public SwFieldType
@@ -76,7 +75,6 @@ public:
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_Int32* pStt, sal_Int32* pEnd = 0 );
 };
-
 
 class SW_DLLPUBLIC SwGetRefField : public SwField
 {
@@ -126,7 +124,6 @@ public:
     // #i85090#
     OUString GetExpandedTxtOfReferencedTxtNode() const;
 
-
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return nSeqNo; }
     void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
@@ -143,7 +140,6 @@ public:
 
     virtual OUString GetDescription() const;
 };
-
 
 #endif /// INCLUDED_SW_INC_REFFLD_HXX
 

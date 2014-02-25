@@ -145,7 +145,6 @@ void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& ) throw (u
         pOLELRU_Cache->RemoveObj( *mpObj );
 }
 
-
 // SwEmbedObjectLink
 
 // TODO/LATER: actually SwEmbedObjectLink should be used here, but because different objects are used to control
@@ -166,8 +165,6 @@ public:
     bool            Connect() { return GetRealObject() != NULL; }
 };
 
-
-
 SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
     ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
     pOleNode(pNode)
@@ -175,13 +172,9 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
     SetSynchron( sal_False );
 }
 
-
-
 SwEmbedObjectLink::~SwEmbedObjectLink()
 {
 }
-
-
 
 ::sfx2::SvBaseLink::UpdateResult SwEmbedObjectLink::DataChanged(
     const OUString&, const uno::Any& )
@@ -216,18 +209,13 @@ SwEmbedObjectLink::~SwEmbedObjectLink()
     return SUCCESS;
 }
 
-
-
 void SwEmbedObjectLink::Closed()
 {
     pOleNode->BreakFileLink_Impl();
     SvBaseLink::Closed();
 }
 
-
-
 // SwOLENode
-
 
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const svt::EmbeddedObjectRef& xObj,
@@ -364,7 +352,6 @@ sal_Bool SwOLENode::SavePersistentData()
            pCnt->RemoveEmbeddedObject( aOLEObj.aName, false, bKeepObjectToTempStorage );
            // modify end
 
-
             // TODO/LATER: aOLEObj.aName has no meaning here, since the undo container contains the object
             // by different name, in future it might makes sence that the name is transported here.
             aOLEObj.xOLERef.AssignToContainer( 0, aOLEObj.aName );
@@ -383,7 +370,6 @@ sal_Bool SwOLENode::SavePersistentData()
 
     return sal_True;
 }
-
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
                     const svt::EmbeddedObjectRef& xObj,
@@ -407,7 +393,6 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
     return pNode;
 }
-
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
     const OUString &rName, sal_Int64 nAspect, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
@@ -667,7 +652,6 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     }
 }
 
-
 SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     pOLENd( 0 ),
     pListener( 0 ),
@@ -676,7 +660,6 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     xOLERef.Lock( true );
     xOLERef.SetViewAspect( nAspect );
 }
-
 
 SwOLEObj::~SwOLEObj()
 {
@@ -733,7 +716,6 @@ SwOLEObj::~SwOLEObj()
         // in case the object was not in the container: it's still locked, try to close
         xOLERef.Clear();
 }
-
 
 void SwOLEObj::SetNode( SwOLENode* pNode )
 {
@@ -919,7 +901,6 @@ OUString SwOLEObj::GetDescription()
 
     return SW_RESSTR(STR_OLE);
 }
-
 
 SwOLELRUCache::SwOLELRUCache()
     : utl::ConfigItem(OUString("Office.Common/Cache"))

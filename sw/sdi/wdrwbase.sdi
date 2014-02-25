@@ -24,7 +24,6 @@ interface WebDrawBase : BaseTextDrawBase
     import BaseTextSelection;
 }
 
-
 shell SwWebDrawBaseShell: SwBaseShell
 {
         import WebDrawBase[Automation];
@@ -37,5 +36,4 @@ shell SwWebDrawBaseShell: SwBaseShell
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 }
-
 

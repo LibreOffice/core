@@ -384,13 +384,11 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         if(eOrient != text::HoriOrientation::NONE)
             ((SfxItemSet&)rSet).ClearItem( SID_ATTR_LRSPACE );
 
-
         if(pRep->HasColsChanged())
         {
             bTabCols = true;
         }
     }
-
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem))
         rSh.SetRowsToRepeat( ((SfxUInt16Item*)pItem)->GetValue() );
@@ -496,7 +494,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             aInfo.SetTable( true );
             aInfo.SetValid( VALID_DISABLE, false );
-
 
 // The attributes of all lines will be read and the strongest wins.
             const SvxBorderLine* pBorderLine;

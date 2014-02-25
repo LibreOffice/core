@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <algorithm>
 
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <unotools/transliterationwrapper.hxx>
-
 
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>

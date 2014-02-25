@@ -67,7 +67,6 @@ public:
     sal_uLong CallParser();
 };
 
-
 // Call for the general reader interface
 sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OUString & )
 {
@@ -129,7 +128,6 @@ SwASCIIParser::~SwASCIIParser()
     delete [] pArr;
     delete pItemSet;
 }
-
 
 // Calling the parser
 sal_uLong SwASCIIParser::CallParser()

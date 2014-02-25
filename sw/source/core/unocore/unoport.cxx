@@ -46,7 +46,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-
 using namespace ::com::sun::star;
 
 /******************************************************************

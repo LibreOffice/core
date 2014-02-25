@@ -360,7 +360,6 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     return false;
 }
 
-
 /*************************************************************************
  *              virtual SwHyphPortion::GetExpTxt()
  *************************************************************************/
@@ -629,7 +628,5 @@ SwSoftHyphStrPortion::SwSoftHyphStrPortion( const OUString &rStr )
     SetLen( 1 );
     SetWhichPor( POR_SOFTHYPHSTR );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

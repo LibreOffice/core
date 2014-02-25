@@ -106,7 +106,6 @@ public:
     virtual void    SetPar2(const OUString& rStr);
 };
 
-
 #endif // INCLUDED_SW_INC_DDEFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

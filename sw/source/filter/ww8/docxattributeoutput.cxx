@@ -1935,7 +1935,6 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
 {
     FastAttributeList* pAttr = pSerializer->createAttrList();
 
-
     // Compute val attribute value
     // Can be one of:
     //      single, double,
@@ -6420,7 +6419,6 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
         return;
     }
-
 
     OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
     // Check if there is a shadow item

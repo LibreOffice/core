@@ -41,7 +41,6 @@ public:
 
 class SwRubyList : public boost::ptr_vector<SwRubyListEntry> {};
 
-
 #endif  //_ INCLUDED_SW_INC_RUBYLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

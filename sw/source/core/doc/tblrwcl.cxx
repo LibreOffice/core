@@ -4280,7 +4280,6 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                             return false;
                         }
 
-
                         if( ppUndo )
                             *ppUndo = aParam.CreateUndo(
                                         bBigger ? UNDO_TABLE_INSROW

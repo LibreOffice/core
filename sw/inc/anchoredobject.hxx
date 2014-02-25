@@ -126,7 +126,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             mbPositioningInProgress = _bPosInProgress;
         }
 
-
         /** check anchor character rectangle
 
             helper method for method <CheckCharRectAndTopOfLine()>
@@ -550,9 +549,8 @@ class SW_DLLPUBLIC SwAnchoredObject
         virtual const char* getElementName( ) { return "SwAnchoredObject"; }
 };
 
-// ============================================================================
 // helper class for notify that positioning of an anchored object is in progress
-// ============================================================================
+
 class SwObjPositioningInProgress
 {
     private:

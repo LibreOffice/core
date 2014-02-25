@@ -72,7 +72,6 @@ namespace sw
     /// STL const iterator for ParaStyles
     typedef PoolItems::const_iterator cPoolItemIter;
 
-
     /** Make exporting a Writer Frame easy
 
         In word all frames are effectively anchored to character or as
@@ -150,7 +149,6 @@ namespace sw
         */
         bool IsInline() const;
 
-
         /** Even if the frame isn't an inline frame, force it to behave as one
 
             There are a variety of circumstances where word cannot have
@@ -169,7 +167,6 @@ namespace sw
         const SwNode *GetContent() const { return mpStartFrameContent; }
         const Graphic &GetGraphic() const { return maGrf; }
         bool HasGraphic() const { return mbForBullet; }
-
 
         /** Does this sw::Frame refer to the same writer content as another
 
@@ -513,7 +510,6 @@ namespace sw
         */
         ParaStyles GetParaStyles(const SwDoc &rDoc);
 
-
         /** Get a Paragraph Style which fits a given name
 
             Its surprisingly tricky to get a style when all you have is a name,
@@ -592,7 +588,6 @@ namespace sw
         {
             return item_cast<T>(SearchPoolItems(rItems, eType));
         }
-
 
         /** Remove properties from an SfxItemSet which a SwFmtCharFmt overrides
 
@@ -730,7 +725,6 @@ namespace sw
         */
         bool HasPageBreak(const SwNode &rNode);
 
-
         /** Make a best fit Polygon from a PolyPolygon
 
             For custom contours in writer we use a PolyPolygon, while word uses
@@ -748,7 +742,6 @@ namespace sw
         Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly);
 
         /** Make setting a drawing object's layer in a Writer document easy
-
 
             Word has the simple concept of a drawing object either in the
             foreground and in the background. We have an additional complexity
@@ -855,7 +848,6 @@ namespace sw
         */
         sal_uInt16 GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
             const SwDoc &rDoc, sal_uInt16 nWhich);
-
 
         /** Make inserting an OLE object into a Writer document easy
 

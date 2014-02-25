@@ -261,7 +261,6 @@ public:
 
     void FireEvents();
 
-
     // IAccessibleViewForwarder
 
     virtual bool IsValid() const;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vector>
 #include <list>
 #include <utility>
@@ -297,7 +296,6 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
             }
         }
     }
-
 
     if (mrSwFmtDrop.GetWholeWord() && nStartPos <= rNd.GetDropLen(0))
         nMinPos = rNd.GetDropLen(0);
@@ -735,7 +733,6 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, sal_Int32 /*nPos*/, 
     }
     aStr += "(\\s\\up ";
 
-
     if ( g_pBreakIt->GetBreakIter().is() )
         nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rNode.GetTxt(),
                 *( pRubyTxt->GetStart() ) );
@@ -859,7 +856,6 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
     OUString sMark;
 
     bool bBookMarkOnly = AnalyzeURL( rUrl, rTarget, &sURL, &sMark );
-
 
     m_rWW8Export.OutputField( 0, ww::eHYPERLINK, sURL, WRITEFIELD_START | WRITEFIELD_CMD_START );
 
@@ -1313,7 +1309,6 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     return NULL;
 }
 
-
 short MSWordExportBase::GetCurrentPageDirection() const
 {
     const SwFrmFmt &rFmt = pAktPageDesc
@@ -1453,7 +1448,6 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
 
     return aRet;
 }
-
 
 /*
 Convert characters that need to be converted, the basic replacements and the
@@ -2526,7 +2520,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         }
     }
 
-
     const SfxItemSet* sfxItemSet = NULL;
     if(const SwpHints* pTxtAttrs = rNode.GetpSwpHints())
     {
@@ -2632,7 +2625,6 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
     return bRet;
 }
 
-
 void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
 {
     const SwSection& rSection = rSectionNode.GetSection();
@@ -2681,7 +2673,6 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
     if ( TOX_CONTENT_SECTION == rSection.GetType() )
         bStartTOX = true;
 }
-
 
 void WW8Export::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
 {
@@ -2939,7 +2930,6 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
         m_rWW8Export.InsUInt32( sw::ms::DateTime2DTTM( pRedline->GetTimeStamp() ));
     }
 }
-
 
 void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
 {

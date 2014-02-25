@@ -397,7 +397,6 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
     return bHack;
 }
 
-
 void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
 {
     OUString sSelected;
@@ -419,7 +418,6 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
         if (pStr)
             sName = *pStr;
     }
-
 
     OUString sHelp;
     {
@@ -998,7 +996,6 @@ const std::vector<sal_uInt32>* WW8_WrPlcTxtBoxes::GetShapeIdArr() const
     return &aShapeIds;
 }
 
-
 sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
 {
     sal_uInt32 nOrdNum;
@@ -1440,7 +1437,6 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
     }
 }
 
-
 void WW8Export::CreateEscher()
 {
     SfxItemState eBackSet = pDoc->GetPageDesc(0).GetMaster().
@@ -1482,7 +1478,6 @@ void SwEscherEx::WritePictures()
     }
     Flush();
 }
-
 
 // Output- Routines for Escher Export
 
@@ -1707,7 +1702,6 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
         nBrightness = ((SfxInt16Item*)pItem)->GetValue();
     }
 
-
     if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
         true, &pItem))
     {
@@ -1805,7 +1799,6 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
         // if the width and height are set correctly bRectIsSet should be set to true
         awt::Rectangle aRect;
         bool bRectIsSet = false;
-
 
         // TODO/LATER: should the icon size be stored in case of iconified object?
         if ( xObj.is() && nAspect != embed::Aspects::MSOLE_ICON )
@@ -3195,7 +3188,6 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
 
     if (!xOleStg.Is())
         return false;
-
 
     OUString sUName;
     if (!WriteOCXStream( mxModel, xOleStg,xControlModel,aSize,sUName))

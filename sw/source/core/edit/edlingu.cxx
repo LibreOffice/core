@@ -115,7 +115,6 @@ class SwSpellIter : public SwLinguIter
     bool                                bBackToStartOfSentence;
     bool                                bMoveToEndOfSentence;
 
-
     void    CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
                 linguistic2::ProofreadingResult* pGrammarResult,
                 bool bIsField, bool bIsHidden);
@@ -784,7 +783,6 @@ uno::Reference< uno::XInterface >
 
     return xRet;
 }
-
 
 /** Insert soft hyphen
  *

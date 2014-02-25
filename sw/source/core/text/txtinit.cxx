@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "swcache.hxx"
 #include "fntcache.hxx"
 #include "swfntcch.hxx"
@@ -83,7 +82,5 @@ void _TextFinit()
     delete pContourCache;
     SwDropPortion::DeleteDropCapCache();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

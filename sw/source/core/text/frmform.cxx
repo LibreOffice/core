@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
@@ -515,7 +514,6 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTxtFrm::GetT
     SwTxtFormatter      aLine( this, &aInf );
     SwTxtCursor         TxtCursor( this, &aInf );
     const Point aCharPos( TxtCursor.GetTopLeft() );
-
 
     SwTwips nRight = aLine.Right();
     CurrentPos -= aCharPos.X();

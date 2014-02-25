@@ -89,7 +89,6 @@ public:
      */
     void SetField( SwField * pField );
 
-
     const SwTxtFld* GetTxtFld() const
     {
         return mpTxtFld;
@@ -100,7 +99,6 @@ public:
     }
     void SetTxtFld( SwTxtFld& rTxtFld );
     void ClearTxtFld();
-
 
     void RegisterToFieldType( SwFieldType& );
     bool IsFldInDoc() const;

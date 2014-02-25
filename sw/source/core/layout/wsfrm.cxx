@@ -963,7 +963,7 @@ void SwCntntFrm::Cut()
         {
             if ( pUp->GetUpper() )
             {
-                //
+
                 // prevent delete of <ColLocked> footnote frame
                 if ( pUp->IsFtnFrm() && !pUp->IsColLocked())
                 {
@@ -978,7 +978,7 @@ void SwCntntFrm::Cut()
                 }
                 else
                 {
-                    //
+
                     if ( pSct->IsColLocked() || !pSct->IsInFtn() ||
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
                     {
@@ -1053,7 +1053,6 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     else
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         fnRect = GetUpper()->IsVertical() ? ( GetUpper()->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
-
 
     if( (Frm().*fnRect->fnGetWidth)() != (pParent->Prt().*fnRect->fnGetWidth)())
         _InvalidateSize();

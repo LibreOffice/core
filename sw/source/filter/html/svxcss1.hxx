@@ -40,7 +40,6 @@ enum SvxCSS1Position
     SVX_CSS1_POS_END
 };
 
-
 enum SvxCSS1LengthType
 {
     SVX_CSS1_LTYPE_NONE,        // nichts angegeben
@@ -166,7 +165,6 @@ public:
     SvxCSS1MapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                      const SvxCSS1PropertyInfo& rProp );
 
-
     const SfxItemSet& GetItemSet() const { return aItemSet; }
     SfxItemSet& GetItemSet() { return aItemSet; }
 
@@ -263,7 +261,6 @@ protected:
 
 public:
 
-
     SvxCSS1Parser( SfxItemPool& rPool,
                     const OUString& rBaseURL,
                    sal_uInt16 nMinFixLineSp,
@@ -340,6 +337,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,7 +70,6 @@ SwParaPortion *SwTxtLineAccess::GetPara()
     return pRet->GetPara();
 }
 
-
 /*************************************************************************
 |*
 |*  SwTxtLineAccess::SwTxtLineAccess()
@@ -133,7 +132,6 @@ SwParaPortion *SwTxtFrm::GetPara()
     return 0;
 }
 
-
 /*************************************************************************
 |*
 |*  SwTxtFrm::ClearPara()
@@ -193,6 +191,5 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, bool bDelete )
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

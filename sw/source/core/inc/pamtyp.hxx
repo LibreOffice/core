@@ -58,7 +58,6 @@ sal_Bool GoPrevSection( SwPaM&, SwPosSection);
 sal_Bool GoCurrSection( SwPaM&, SwPosSection);
 sal_Bool GoNextSection( SwPaM&, SwPosSection);
 
-
 // ------------ Typedefiniton fuer Funktionen ----------------------
 
 typedef sal_Bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
@@ -70,7 +69,6 @@ typedef const SwTxtAttr* (*GetHint)( const SwpHints&, sal_uInt16&, sal_Int32 );
 typedef bool (utl::TextSearch:: *SearchTxt)( const OUString&, sal_Int32*,
                     sal_Int32*, ::com::sun::star::util::SearchResult* );
 typedef void (SwNodes:: *MvSection)( SwNodeIndex * ) const;
-
 
 struct SwMoveFnCollection
 {
@@ -86,8 +84,6 @@ struct SwMoveFnCollection
 
 // --------- Funktionsdefinitionen fuers Suchen --------------
 SwCntntNode* GetNode( SwPaM&, sal_Bool&, SwMoveFn, sal_Bool bInReadOnly = sal_False );
-
-
 
 #endif
 

@@ -22,7 +22,6 @@
 #include <format.hxx>
 #include <hintids.hxx>
 
-
 // implementation of the character attribute methods of SwAttrSet
 
 inline const SvxPostureItem      &SwAttrSet::GetPosture(sal_Bool bInP) const

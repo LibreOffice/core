@@ -125,7 +125,6 @@ extern bool bFrmDrag;
 extern bool bDDINetAttr;
 extern bool bExecuteDrag;
 
-
 #define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
 
 #define SWTRANSFER_OBJECTTYPE_DRAWMODEL         0x00000001
@@ -267,7 +266,6 @@ SwTransferable::~SwTransferable()
     delete pImageMap;
     delete pTargetURL;
     delete pBkmk;
-
 
     eBufferType = TRNSFR_NONE;
 
@@ -691,7 +689,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             bRet = ( xStream->GetError() == ERRCODE_NONE );
         }
         break;
-
 
     case SWTRANSFER_OBJECTTYPE_DDE:
         {
@@ -1278,7 +1275,6 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_MOVE_PRIVATE:
             OSL_ENSURE( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: what should happen here?" );
             break;
-
 
         case EXCHG_IN_ACTION_MOVE:
         case EXCHG_IN_ACTION_COPY:
@@ -2110,7 +2106,6 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         SwDDEFieldType aType( aName, aCmd, sfx2::LINKUPDATE_ALWAYS );
         pTyp = rWrtShell.InsertFldType( aType );
     }
-
 
     SwDDEFieldType* pDDETyp = (SwDDEFieldType*)pTyp;
 

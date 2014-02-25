@@ -1056,7 +1056,6 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
 
                         const SwRangeRedline &rRedline = pSh->GetRedline(nPos);
 
-
                         /* enable again once we have redline comments in the margin
                         sComment = rRedline.GetComment();
                         if ( !sComment.Len() )
@@ -1207,6 +1206,5 @@ void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
     }
     rExtraData += ")";
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

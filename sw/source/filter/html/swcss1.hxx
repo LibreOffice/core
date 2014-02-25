@@ -35,7 +35,6 @@ class SwPageDesc;
 // ganz unauffaellig das ein oder andere! Andererseits wird diese
 // Klasse recht selten benoetigt. Deshalb ein eigener Header.
 
-
 class SwCSS1Parser : public SvxCSS1Parser
 {
     SwDoc *pDoc;
@@ -129,7 +128,6 @@ public:
     sal_Bool SetFmtBreak( SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rPropInfo );
 
-
     static void AddClassName( OUString& rFmtName, const OUString& rClass );
 
     static inline void AddFirstLetterExt( OUString& rFmtName );
@@ -165,7 +163,6 @@ public:
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
 };
 
-
 inline void SwCSS1Parser::AddFirstLetterExt( OUString& rFmtName )
 {
     rFmtName += ".FL";   // first letter
@@ -198,7 +195,6 @@ inline void SwCSS1Parser::SetTDTagStyles()
         SetTableTxtColl( sal_False );
 }
 
-
 inline void SwCSS1Parser::SetATagStyles()
 {
     if( !bLinkCharFmtsSet )
@@ -212,8 +208,6 @@ inline void SwCSS1Parser::SetDelayedStyles()
     SetATagStyles();
 }
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

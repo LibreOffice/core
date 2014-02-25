@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_CHARTINS_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_CHARTINS_HXX
 
-
 Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart );
 void SwInsertChart( Window *pParent, SfxBindings *pBindings );
 

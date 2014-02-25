@@ -21,9 +21,9 @@
 
 #include "rcid.hrc"
 
-// ---------------
+
 // Strings
-// ---------------
+
 
 #define STR_COMCORE_READERROR               (RC_COMCORE_BEGIN + 0)
 #define MSG_COMCORE_ASKSEARCH               (RC_COMCORE_BEGIN + 1)

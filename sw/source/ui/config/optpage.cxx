@@ -66,7 +66,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------
@@ -234,7 +233,6 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     aElem.bVertRuler            = m_pVRulerCBox->IsChecked();
     aElem.bVertRulerRight       = m_pVRulerRightCBox->IsChecked();
     aElem.bSmoothScroll         = m_pSmoothCBox->IsChecked();
-
 
     sal_Bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
@@ -885,7 +883,6 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         nListHeight = (sal_Int32)rFontHeightList.GetHeight();
         bListHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
-
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_LABEL);
         bLabelDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         const SvxFontItem& rFontCP = !nFontGroup ? pColl->GetFont() :
@@ -1055,7 +1052,6 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
     pHeightLB->Fill( &aFontInfo, pFontList );
     return 0;
 }
-
 
 void SwStdFontTabPage::PageCreated (SfxAllItemSet aSet)
 {
@@ -1333,14 +1329,12 @@ SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet&
     return new SwShdwCrsrOptionsTabPage( pParent, rSet );
 }
 
-
 void SwShdwCrsrOptionsTabPage::PageCreated( SfxAllItemSet aSet )
 {
     SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,false);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }
-
 
 sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -2221,8 +2215,6 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     rExampleWin.Invalidate();
 }
 
-
-
 SwCompareOptionsTabPage::SwCompareOptionsTabPage(  Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage( pParent,"OptComparison","modules/swriter/ui/optcomparison.ui", rSet )
 {
@@ -2441,9 +2433,6 @@ IMPL_LINK_NOARG_INLINE_START(SwTestTabPage, AutoClickHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwTestTabPage, AutoClickHdl)
 
-
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

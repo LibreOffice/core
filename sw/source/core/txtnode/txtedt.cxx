@@ -717,7 +717,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
 
     //MSWord f.e has special emdash and endash behaviour in that they break
     //words for the purposes of word counting, while a hyphen etc. doesn't.
-    //
+
     //The default configuration treats emdash/endash as a word break, but
     //additional ones can be added in under tools->options
     if (nWordType == i18n::WordType::WORD_COUNT)
@@ -947,7 +947,7 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
     pArgs->xSpellAlt = NULL;
 
     // 4 cases:
-    //
+
     // 1. IsWrongDirty = 0 and GetWrong = 0
     //      Everything is checked and correct
     // 2. IsWrongDirty = 0 and GetWrong = 1
@@ -956,7 +956,7 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
     //      Nothing has been checked
     // 4. IsWrongDirty = 1 and GetWrong = 1
     //      Text has been checked but there is an invalid range in the wrong list
-    //
+
     // Nothing has to be done for case 1.
     if ( ( IsWrongDirty() || GetWrong() ) && m_Text.getLength() )
     {
@@ -968,7 +968,7 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
         {
             nEnd = m_Text.getLength();
         }
-        //
+
         if(!IsWrongDirty())
         {
             const sal_Int32 nTemp = GetWrong()->NextWrong( nBegin );
@@ -1371,9 +1371,8 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             pNode->GetWrong()->Fresh( nChgStart, nChgEnd,
                                       nEnd, 0, nInsertPos, nActPos );
 
-        //
         // Calculate repaint area:
-        //
+
         if( nChgStart < nChgEnd )
         {
             aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
@@ -1468,7 +1467,6 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, sal_Int32 /*nActPos*/ 
         Reference< ::com::sun::star::text::XTextRange > xRange = SwXTextRange::CreateXTextRange(*pNode->GetDoc(), start, &end);
 
         rSmartTagMgr.RecognizeTextRange(xRange, xTextMarkup, xController);
-
 
         sal_Int32 nLangBegin = nBegin;
         sal_Int32 nLangEnd = nEnd;

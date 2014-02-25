@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "cmdid.h"
 #include "swmodule.hxx"
 #include "view.hxx"
@@ -100,7 +99,6 @@ OUString GetCommandContextByIndex( sal_Int16 nIndex )
 
 // Globals ******************************************************************
 
-
 const CommandStruct SwCondCollItem::aCmds[] =
 {
     { PARA_IN_TABLEHEAD,    0 },
@@ -133,13 +131,11 @@ const CommandStruct SwCondCollItem::aCmds[] =
     { PARA_IN_LIST,         9 }
 };
 
-
 TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
 
 /****************************************************************************
     Item for the transport of the condition table
 ****************************************************************************/
-
 
 SwCondCollItem::SwCondCollItem(sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich)

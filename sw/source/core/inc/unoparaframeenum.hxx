@@ -32,12 +32,10 @@
 
 #include <unobaseclass.hxx>
 
-
 class SwDepend;
 class SwNodeIndex;
 class SwPaM;
 class SwFrmFmt;
-
 
 struct FrameDependSortListEntry
 {
@@ -55,7 +53,6 @@ typedef ::std::deque< FrameDependSortListEntry >
 
 typedef ::std::deque< ::boost::shared_ptr<SwDepend> >
     FrameDependList_t;
-
 
 // #i28701# - adjust 4th parameter
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,

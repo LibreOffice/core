@@ -52,7 +52,6 @@ enum WrongListType
     WRONGLIST_CHANGETRACKING
 };
 
-
 // ST2
 class SwWrongArea
 {

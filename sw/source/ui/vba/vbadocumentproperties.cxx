@@ -393,7 +393,6 @@ public:
     }
 };
 
-
 typedef boost::unordered_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
 
 class BuiltInIndexHelper
@@ -441,7 +440,6 @@ public:
     MSOIndexToOODocPropInfo& getDocPropInfoMap() { return m_docPropInfoMap; }
 };
 
-
 typedef InheritedHelperInterfaceImpl1< ooo::vba::XDocumentProperty > SwVbaDocumentProperty_BASE;
 
 class SwVbaBuiltInDocumentProperty : public SwVbaDocumentProperty_BASE
@@ -485,7 +483,6 @@ public:
     virtual void SAL_CALL setType( ::sal_Int8 Type ) throw (script::BasicErrorException, uno::RuntimeException, std::exception);
 
 };
-
 
 SwVbaCustomDocumentProperty::SwVbaCustomDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const DocPropInfo& rInfo ) : SwVbaBuiltInDocumentProperty( xParent, xContext, rInfo )
 {
@@ -881,7 +878,6 @@ public:
     }
 
 };
-
 
 SwVbaCustomDocumentProperties::SwVbaCustomDocumentProperties( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : SwVbaBuiltinDocumentProperties( xParent, xContext, xModel )
 {

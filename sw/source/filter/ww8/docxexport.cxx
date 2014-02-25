@@ -451,7 +451,6 @@ void DocxExport::OutputPageSectionBreaks( const SwTxtNode& )
     OSL_TRACE( "TODO DocxExport::OutputPageSectionBreaks( const SwTxtNode& )" );
 }
 
-
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
 {
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
@@ -760,7 +759,6 @@ void DocxExport::WriteFonts()
     pFS->endElementNS( XML_w, XML_fonts );
 }
 
-
 void DocxExport::WriteProperties( )
 {
     // Write the core properties
@@ -961,7 +959,6 @@ void DocxExport::WriteGlossary()
     writer->setOutputStream( xOutputStream );
     serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
         uno::Sequence< beans::StringPair >() );
-
 
     sal_Int32 length = glossaryDomList.getLength();
     for ( int i =0; i < length; i++)

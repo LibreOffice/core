@@ -118,7 +118,6 @@ namespace {
 |*
 *************************************************************************/
 
-
 SwFmtFtn::SwFmtFtn( bool bEndNote )
     : SfxPoolItem( RES_TXTATR_FTN ),
     m_pTxtAttr( 0 ),
@@ -127,7 +126,6 @@ SwFmtFtn::SwFmtFtn( bool bEndNote )
 {
 }
 
-
 bool SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
@@ -135,7 +133,6 @@ bool SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
            m_aNumber  == ((SwFmtFtn&)rAttr).m_aNumber &&
            m_bEndNote == ((SwFmtFtn&)rAttr).m_bEndNote;
 }
-
 
 SfxPoolItem* SwFmtFtn::Clone( SfxItemPool* ) const
 {
@@ -161,7 +158,6 @@ void SwFmtFtn::SetEndNote( bool b )
 SwFmtFtn::~SwFmtFtn()
 {
 }
-
 
 void SwFmtFtn::GetFtnText( OUString& rStr ) const
 {
@@ -248,13 +244,10 @@ SwTxtFtn::SwTxtFtn( SwFmtFtn& rAttr, sal_Int32 nStartPos )
     SetHasDummyChar(true);
 }
 
-
 SwTxtFtn::~SwTxtFtn()
 {
     SetStartNode( 0 );
 }
-
-
 
 void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
 {
@@ -323,7 +316,6 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
             }
     }
 }
-
 
 void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumStr )
 {
@@ -397,7 +389,6 @@ void SwTxtFtn::CopyFtn(
     }
 }
 
-
     // lege eine neue leere TextSection fuer diese Fussnote an
 void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 {
@@ -427,7 +418,6 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
                                         SwFootnoteStartNode, pFmtColl );
     m_pStartNode = new SwNodeIndex( *pSttNd );
 }
-
 
 void SwTxtFtn::DelFrms( const SwFrm* pSib )
 {
@@ -533,8 +523,5 @@ void SwTxtFtn::CheckCondColl()
         ((SwStartNode&)GetStartNode()->GetNode()).CheckSectionCondColl();
 //FEATURE::CONDCOLL
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

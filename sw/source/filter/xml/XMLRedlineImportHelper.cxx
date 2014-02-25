@@ -424,7 +424,6 @@ void XMLRedlineImportHelper::Add(
     pInfo->aDateTime = rDateTime;
     pInfo->bMergeLastParagraph = bMergeLastPara;
 
-
     // ad 3)
     if (aRedlineMap.end() == aRedlineMap.find(rId))
     {
@@ -578,7 +577,6 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
     // else: can't find redline -> ignore
 }
 
-
 inline bool XMLRedlineImportHelper::IsReady(RedlineInfo* pRedline)
 {
     // we can insert a redline if we have start & end, and we don't
@@ -621,7 +619,6 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     {
         aPaM.DeleteMark();
     }
-
 
     // cover three cases:
     // 1) empty redlines (no range, no content)

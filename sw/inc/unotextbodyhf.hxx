@@ -28,11 +28,9 @@
 
 #include <unotext.hxx>
 
-
 class SwDoc;
 class SwFrmFmt;
 class SwXTextCursor;
-
 
 typedef ::cppu::WeakAggImplHelper2
 <   ::com::sun::star::lang::XServiceInfo
@@ -109,7 +107,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
-
 
 typedef ::cppu::WeakImplHelper2
 <   ::com::sun::star::lang::XServiceInfo

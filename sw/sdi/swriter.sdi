@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//--------------------------------------------------------------------------
 SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
 ()
 [
@@ -40,7 +39,6 @@ SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem AcceptTrackedChanges FN_REDLINE_ACCEPT
 
 [
@@ -67,7 +65,6 @@ SfxBoolItem AcceptTrackedChanges FN_REDLINE_ACCEPT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem TrackChanges FN_REDLINE_ON
 
 [
@@ -94,7 +91,6 @@ SfxBoolItem TrackChanges FN_REDLINE_ON
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AddAllUnknownWords FN_ADD_UNKNOWN
 ()
 [
@@ -119,7 +115,6 @@ SfxVoidItem AddAllUnknownWords FN_ADD_UNKNOWN
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignBottom FN_FRAME_ALIGN_VERT_BOTTOM
 ()
 [
@@ -147,7 +142,6 @@ SfxVoidItem AlignBottom FN_FRAME_ALIGN_VERT_BOTTOM
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignCharBottom FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
 ()
 [
@@ -175,7 +169,6 @@ SfxVoidItem AlignCharBottom FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignCharTop FN_FRAME_ALIGN_VERT_CHAR_TOP
 ()
 [
@@ -203,7 +196,6 @@ SfxVoidItem AlignCharTop FN_FRAME_ALIGN_VERT_CHAR_TOP
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignHorizontalCenter FN_FRAME_ALIGN_HORZ_CENTER
 ()
 [
@@ -228,7 +220,6 @@ SfxVoidItem AlignHorizontalCenter FN_FRAME_ALIGN_HORZ_CENTER
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignLeft FN_FRAME_ALIGN_HORZ_LEFT
 ()
 [
@@ -253,7 +244,6 @@ SfxVoidItem AlignLeft FN_FRAME_ALIGN_HORZ_LEFT
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignRight FN_FRAME_ALIGN_HORZ_RIGHT
 ()
 [
@@ -278,7 +268,6 @@ SfxVoidItem AlignRight FN_FRAME_ALIGN_HORZ_RIGHT
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignRowBottom FN_FRAME_ALIGN_VERT_ROW_BOTTOM
 ()
 [
@@ -306,7 +295,6 @@ SfxVoidItem AlignRowBottom FN_FRAME_ALIGN_VERT_ROW_BOTTOM
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignRowTop FN_FRAME_ALIGN_VERT_ROW_TOP
 ()
 [
@@ -334,7 +322,6 @@ SfxVoidItem AlignRowTop FN_FRAME_ALIGN_VERT_ROW_TOP
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignTop FN_FRAME_ALIGN_VERT_TOP
 ()
 [
@@ -362,7 +349,6 @@ SfxVoidItem AlignTop FN_FRAME_ALIGN_VERT_TOP
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignVerticalCenter FN_FRAME_ALIGN_VERT_CENTER
 ()
 [
@@ -390,7 +376,6 @@ SfxVoidItem AlignVerticalCenter FN_FRAME_ALIGN_VERT_CENTER
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignVerticalCharCenter FN_FRAME_ALIGN_VERT_CHAR_CENTER
 ()
 [
@@ -418,7 +403,6 @@ SfxVoidItem AlignVerticalCharCenter FN_FRAME_ALIGN_VERT_CHAR_CENTER
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AlignVerticalRowCenter FN_FRAME_ALIGN_VERT_ROW_CENTER
 ()
 [
@@ -446,7 +430,6 @@ SfxVoidItem AlignVerticalRowCenter FN_FRAME_ALIGN_VERT_ROW_CENTER
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AuthoritiesEntryDialog FN_EDIT_AUTH_ENTRY_DLG
 ()
 [
@@ -471,7 +454,6 @@ SfxVoidItem AuthoritiesEntryDialog FN_EDIT_AUTH_ENTRY_DLG
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AutoFormatApply FN_AUTOFORMAT_APPLY
 ()
 [
@@ -496,7 +478,6 @@ SfxVoidItem AutoFormatApply FN_AUTOFORMAT_APPLY
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AutoFormatRedlineApply FN_AUTOFORMAT_REDLINE_APPLY
 ()
 [
@@ -521,7 +502,6 @@ SfxVoidItem AutoFormatRedlineApply FN_AUTOFORMAT_REDLINE_APPLY
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem AutoSum FN_TABLE_AUTOSUM
 ()
 [
@@ -546,7 +526,6 @@ SfxVoidItem AutoSum FN_TABLE_AUTOSUM
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND
 
 [
@@ -573,7 +552,6 @@ SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem BackgroundDialog FN_FORMAT_BACKGROUND_DLG
 ()
 [
@@ -598,7 +576,6 @@ SfxVoidItem BackgroundDialog FN_FORMAT_BACKGROUND_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SwBackspace FN_BACKSPACE
 ()
 [
@@ -623,7 +600,6 @@ SfxVoidItem SwBackspace FN_BACKSPACE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem BorderDialog FN_FORMAT_BORDER_DLG
 ()
 [
@@ -648,7 +624,6 @@ SfxVoidItem BorderDialog FN_FORMAT_BORDER_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem BulletsAndNumberingDialog FN_NUMBER_BULLETS
 ()
 [
@@ -675,7 +650,6 @@ SfxVoidItem BulletsAndNumberingDialog FN_NUMBER_BULLETS
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem Calc FN_CALC_TABLE
 ()
 [
@@ -700,7 +674,6 @@ SfxVoidItem Calc FN_CALC_TABLE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem CalculateSel FN_CALCULATE
 ()
 [
@@ -725,7 +698,6 @@ SfxVoidItem CalculateSel FN_CALCULATE
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ChainFrames FN_FRAME_CHAIN
 
 [
@@ -752,7 +724,6 @@ SfxBoolItem ChainFrames FN_FRAME_CHAIN
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ChangeDatabaseField FN_CHANGE_DBFIELD
 ()
 [
@@ -777,7 +748,6 @@ SfxVoidItem ChangeDatabaseField FN_CHANGE_DBFIELD
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ChapterNumberingDialog FN_NUMBERING_OUTLINE_DLG
 ()
 [
@@ -802,7 +772,6 @@ SfxVoidItem ChapterNumberingDialog FN_NUMBERING_OUTLINE_DLG
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 
 [
@@ -829,7 +798,6 @@ SfxBoolItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
 
 [
@@ -856,7 +824,6 @@ SfxBoolItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem CharLeftSel FN_CHAR_LEFT_SEL
 ()
 [
@@ -881,7 +848,6 @@ SfxVoidItem CharLeftSel FN_CHAR_LEFT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem CharRightSel FN_CHAR_RIGHT_SEL
 ()
 [
@@ -906,7 +872,6 @@ SfxVoidItem CharRightSel FN_CHAR_RIGHT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ClosePreview FN_CLOSE_PAGEPREVIEW
 ()
 [
@@ -931,7 +896,6 @@ SfxVoidItem ClosePreview FN_CLOSE_PAGEPREVIEW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem CommentChangeTracking FN_REDLINE_COMMENT
 ()
 [
@@ -956,7 +920,6 @@ SfxVoidItem CommentChangeTracking FN_REDLINE_COMMENT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ControlCodes FN_VIEW_META_CHARS
 
 [
@@ -983,7 +946,6 @@ SfxBoolItem ControlCodes FN_VIEW_META_CHARS
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ConvertTableText FN_CONVERT_TEXT_TABLE
 ()
 [
@@ -1008,7 +970,6 @@ SfxVoidItem ConvertTableText FN_CONVERT_TEXT_TABLE
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem CreateAbstract FN_ABSTRACT_NEWDOC
 ()
 [
@@ -1033,7 +994,6 @@ SfxVoidItem CreateAbstract FN_ABSTRACT_NEWDOC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DecrementIndentValue FN_DEC_INDENT_OFFSET
 ()
 [
@@ -1058,7 +1018,6 @@ SfxVoidItem DecrementIndentValue FN_DEC_INDENT_OFFSET
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DecrementLevel FN_NUM_BULLET_DOWN
 ()
 [
@@ -1085,7 +1044,6 @@ SfxVoidItem DecrementLevel FN_NUM_BULLET_DOWN
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DecrementSubLevels FN_NUM_BULLET_OUTLINE_DOWN
 ()
 [
@@ -1112,7 +1070,6 @@ SfxVoidItem DecrementSubLevels FN_NUM_BULLET_OUTLINE_DOWN
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DeleteColumns FN_TABLE_DELETE_COL
 ()
 [
@@ -1137,7 +1094,6 @@ SfxVoidItem DeleteColumns FN_TABLE_DELETE_COL
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DeleteRows FN_TABLE_DELETE_ROW
 ()
 [
@@ -1162,7 +1118,6 @@ SfxVoidItem DeleteRows FN_TABLE_DELETE_ROW
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelLine FN_DELETE_WHOLE_LINE
 ()
 [
@@ -1187,7 +1142,6 @@ SfxVoidItem DelLine FN_DELETE_WHOLE_LINE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelToEndOfLine FN_DELETE_LINE
 ()
 [
@@ -1212,7 +1166,6 @@ SfxVoidItem DelToEndOfLine FN_DELETE_LINE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelToEndOfPara FN_DELETE_PARA
 ()
 [
@@ -1237,7 +1190,6 @@ SfxVoidItem DelToEndOfPara FN_DELETE_PARA
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelToEndOfSentence FN_DELETE_SENT
 ()
 [
@@ -1262,7 +1214,6 @@ SfxVoidItem DelToEndOfSentence FN_DELETE_SENT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelToEndOfWord FN_DELETE_WORD
 ()
 [
@@ -1287,7 +1238,6 @@ SfxVoidItem DelToEndOfWord FN_DELETE_WORD
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelToStartOfLine FN_DELETE_BACK_LINE
 ()
 [
@@ -1312,7 +1262,6 @@ SfxVoidItem DelToStartOfLine FN_DELETE_BACK_LINE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelToStartOfPara FN_DELETE_BACK_PARA
 ()
 [
@@ -1337,7 +1286,6 @@ SfxVoidItem DelToStartOfPara FN_DELETE_BACK_PARA
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelToStartOfSentence FN_DELETE_BACK_SENT
 ()
 [
@@ -1362,7 +1310,6 @@ SfxVoidItem DelToStartOfSentence FN_DELETE_BACK_SENT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DelToStartOfWord FN_DELETE_BACK_WORD
 ()
 [
@@ -1387,7 +1334,6 @@ SfxVoidItem DelToStartOfWord FN_DELETE_BACK_WORD
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DistributeColumns FN_TABLE_BALANCE_CELLS
 ()
 [
@@ -1412,7 +1358,6 @@ SfxVoidItem DistributeColumns FN_TABLE_BALANCE_CELLS
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DistributeRows FN_TABLE_BALANCE_ROWS
 ()
 [
@@ -1437,7 +1382,6 @@ SfxVoidItem DistributeRows FN_TABLE_BALANCE_ROWS
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EditCurIndex FN_EDIT_CURRENT_TOX
 ()
 [
@@ -1462,7 +1406,6 @@ SfxVoidItem EditCurIndex FN_EDIT_CURRENT_TOX
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EditGlossary FN_GLOSSARY_DLG
 ()
 [
@@ -1487,7 +1430,6 @@ SfxVoidItem EditGlossary FN_GLOSSARY_DLG
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EditHyperlink FN_EDIT_HYPERLINK
 ()
 [
@@ -1512,7 +1454,6 @@ SfxVoidItem EditHyperlink FN_EDIT_HYPERLINK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EditRegion FN_EDIT_REGION
 ()
 [
@@ -1537,7 +1478,6 @@ SfxVoidItem EditRegion FN_EDIT_REGION
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EndOfDocumentSel FN_END_OF_DOCUMENT_SEL
 ()
 [
@@ -1562,7 +1502,6 @@ SfxVoidItem EndOfDocumentSel FN_END_OF_DOCUMENT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EndOfLineSel FN_END_OF_LINE_SEL
 ()
 [
@@ -1587,7 +1526,6 @@ SfxVoidItem EndOfLineSel FN_END_OF_LINE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EndOfParaSel FN_END_OF_PARA_SEL
 ()
 [
@@ -1612,7 +1550,6 @@ SfxVoidItem EndOfParaSel FN_END_OF_PARA_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EntireColumn FN_TABLE_SELECT_COL
 ()
 [
@@ -1637,7 +1574,6 @@ SfxVoidItem EntireColumn FN_TABLE_SELECT_COL
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EntireRow FN_TABLE_SELECT_ROW
 ()
 [
@@ -1662,7 +1598,6 @@ SfxVoidItem EntireRow FN_TABLE_SELECT_ROW
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem Escape FN_ESCAPE
 ()
 [
@@ -1687,7 +1622,6 @@ SfxVoidItem Escape FN_ESCAPE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ExecuteMacroField FN_EXECUTE_MACROFIELD
 ()
 [
@@ -1712,7 +1646,6 @@ SfxVoidItem ExecuteMacroField FN_EXECUTE_MACROFIELD
     GroupId = GID_MACRO;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ExpandGlossary FN_EXPAND_GLOSSARY
 ()
 [
@@ -1737,7 +1670,6 @@ SfxBoolItem ExpandGlossary FN_EXPAND_GLOSSARY
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem FieldDialog FN_EDIT_FIELD
 ()
 [
@@ -1762,7 +1694,6 @@ SfxVoidItem FieldDialog FN_EDIT_FIELD
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem Fieldnames FN_VIEW_FIELDNAME
 
 [
@@ -1789,7 +1720,6 @@ SfxBoolItem Fieldnames FN_VIEW_FIELDNAME
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem Fields FN_VIEW_FIELDS
 
 [
@@ -1816,7 +1746,6 @@ SfxBoolItem Fields FN_VIEW_FIELDS
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
 
 [
@@ -1843,7 +1772,6 @@ SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem FootnoteDialog FN_FORMAT_FOOTNOTE_DLG
 ()
 [
@@ -1868,7 +1796,6 @@ SfxVoidItem FootnoteDialog FN_FORMAT_FOOTNOTE_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EditFootnote FN_EDIT_FOOTNOTE
 ()
 [
@@ -1893,7 +1820,6 @@ SfxVoidItem EditFootnote FN_EDIT_FOOTNOTE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem FormatColumns FN_FORMAT_COLUMN
 ()
 [
@@ -1918,7 +1844,6 @@ SfxVoidItem FormatColumns FN_FORMAT_COLUMN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SwFmtDrop FormatDropcap FN_FORMAT_DROPCAPS
 
 [
@@ -1945,7 +1870,6 @@ SwFmtDrop FormatDropcap FN_FORMAT_DROPCAPS
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem FrameDialog FN_FORMAT_FRAME_DLG
 ()
 [
@@ -1970,7 +1894,6 @@ SfxVoidItem FrameDialog FN_FORMAT_FRAME_DLG
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoDown FN_LINE_DOWN
 (SfxInt32Item Count FN_PARAM_MOVE_COUNT,SfxBoolItem Select FN_PARAM_MOVE_SELECTION)
 [
@@ -1995,7 +1918,6 @@ SfxBoolItem GoDown FN_LINE_DOWN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoLeft FN_CHAR_LEFT
 (SfxInt32Item Count FN_PARAM_MOVE_COUNT,SfxBoolItem Select FN_PARAM_MOVE_SELECTION)
 [
@@ -2020,7 +1942,6 @@ SfxBoolItem GoLeft FN_CHAR_LEFT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoRight FN_CHAR_RIGHT
 (SfxInt32Item Count FN_PARAM_MOVE_COUNT,SfxBoolItem Select FN_PARAM_MOVE_SELECTION)
 [
@@ -2045,7 +1966,6 @@ SfxBoolItem GoRight FN_CHAR_RIGHT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToAnchor FN_FRAME_TO_ANCHOR
 ()
 [
@@ -2070,7 +1990,6 @@ SfxVoidItem GoToAnchor FN_FRAME_TO_ANCHOR
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEnd FN_END_TABLE
 ()
 [
@@ -2095,7 +2014,6 @@ SfxVoidItem GoToEnd FN_END_TABLE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfColumn FN_END_OF_COLUMN
 ()
 [
@@ -2120,7 +2038,6 @@ SfxVoidItem GoToEndOfColumn FN_END_OF_COLUMN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToEndOfDoc FN_END_OF_DOCUMENT
 ()
 [
@@ -2145,7 +2062,6 @@ SfxBoolItem GoToEndOfDoc FN_END_OF_DOCUMENT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToEndOfLine FN_END_OF_LINE
 ()
 [
@@ -2170,7 +2086,6 @@ SfxBoolItem GoToEndOfLine FN_END_OF_LINE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfNextColumn FN_END_OF_NEXT_COLUMN
 ()
 [
@@ -2195,7 +2110,6 @@ SfxVoidItem GoToEndOfNextColumn FN_END_OF_NEXT_COLUMN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfNextPage FN_END_OF_NEXT_PAGE
 ()
 [
@@ -2220,7 +2134,6 @@ SfxVoidItem GoToEndOfNextPage FN_END_OF_NEXT_PAGE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfNextPageSel FN_END_OF_NEXT_PAGE_SEL
 ()
 [
@@ -2245,7 +2158,6 @@ SfxVoidItem GoToEndOfNextPageSel FN_END_OF_NEXT_PAGE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfPage FN_END_OF_PAGE
 ()
 [
@@ -2270,7 +2182,6 @@ SfxVoidItem GoToEndOfPage FN_END_OF_PAGE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfPageSel FN_END_OF_PAGE_SEL
 ()
 [
@@ -2295,7 +2206,6 @@ SfxVoidItem GoToEndOfPageSel FN_END_OF_PAGE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToEndOfPara FN_END_OF_PARA
 ()
 [
@@ -2320,7 +2230,6 @@ SfxBoolItem GoToEndOfPara FN_END_OF_PARA
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfPrevColumn FN_END_OF_PREV_COLUMN
 ()
 [
@@ -2345,7 +2254,6 @@ SfxVoidItem GoToEndOfPrevColumn FN_END_OF_PREV_COLUMN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfPrevPage FN_END_OF_PREV_PAGE
 ()
 [
@@ -2370,7 +2278,6 @@ SfxVoidItem GoToEndOfPrevPage FN_END_OF_PREV_PAGE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfPrevPageSel FN_END_OF_PREV_PAGE_SEL
 ()
 [
@@ -2395,7 +2302,6 @@ SfxVoidItem GoToEndOfPrevPageSel FN_END_OF_PREV_PAGE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoNextIndexMark FN_NEXT_TOXMARK
 ()
 [
@@ -2420,7 +2326,6 @@ SfxBoolItem GotoNextIndexMark FN_NEXT_TOXMARK
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoNextInputField FN_GOTO_NEXT_INPUTFLD
 ()
 [
@@ -2445,7 +2350,6 @@ SfxBoolItem GotoNextInputField FN_GOTO_NEXT_INPUTFLD
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoNextObject FN_GOTO_NEXT_OBJ
 ()
 [
@@ -2470,7 +2374,6 @@ SfxBoolItem GotoNextObject FN_GOTO_NEXT_OBJ
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToNextPara FN_NEXT_PARA
 ()
 [
@@ -2495,7 +2398,6 @@ SfxBoolItem GoToNextPara FN_NEXT_PARA
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoNextPlacemarker FN_GOTO_NEXT_MARK
 ()
 [
@@ -2520,7 +2422,6 @@ SfxBoolItem GotoNextPlacemarker FN_GOTO_NEXT_MARK
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToNextSentence FN_NEXT_SENT
 ()
 [
@@ -2545,7 +2446,6 @@ SfxBoolItem GoToNextSentence FN_NEXT_SENT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GotoNextSentenceSel FN_NEXT_SENT_SEL
 ()
 [
@@ -2570,7 +2470,6 @@ SfxVoidItem GotoNextSentenceSel FN_NEXT_SENT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoNextTableFormula FN_NEXT_TBLFML
 ()
 [
@@ -2595,7 +2494,6 @@ SfxBoolItem GotoNextTableFormula FN_NEXT_TBLFML
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToNextWord FN_NEXT_WORD
 ()
 [
@@ -2620,7 +2518,6 @@ SfxBoolItem GoToNextWord FN_NEXT_WORD
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoNextWrongTableFormula FN_NEXT_TBLFML_ERR
 ()
 [
@@ -2645,7 +2542,6 @@ SfxBoolItem GotoNextWrongTableFormula FN_NEXT_TBLFML_ERR
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GotoPage FN_NAVIGATION_PI_GOTO_PAGE
 ()
 [
@@ -2670,7 +2566,6 @@ SfxVoidItem GotoPage FN_NAVIGATION_PI_GOTO_PAGE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoPrevIndexMark FN_PREV_TOXMARK
 ()
 [
@@ -2695,7 +2590,6 @@ SfxBoolItem GotoPrevIndexMark FN_PREV_TOXMARK
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoPrevInputField FN_GOTO_PREV_INPUTFLD
 ()
 [
@@ -2720,7 +2614,6 @@ SfxBoolItem GotoPrevInputField FN_GOTO_PREV_INPUTFLD
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoPrevObject FN_GOTO_PREV_OBJ
 ()
 [
@@ -2745,7 +2638,6 @@ SfxBoolItem GotoPrevObject FN_GOTO_PREV_OBJ
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToPrevPara FN_PREV_PARA
 ()
 [
@@ -2770,7 +2662,6 @@ SfxBoolItem GoToPrevPara FN_PREV_PARA
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoPrevPlacemarker FN_GOTO_PREV_MARK
 ()
 [
@@ -2795,7 +2686,6 @@ SfxBoolItem GotoPrevPlacemarker FN_GOTO_PREV_MARK
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToPrevSentence FN_PREV_SENT
 ()
 [
@@ -2820,7 +2710,6 @@ SfxBoolItem GoToPrevSentence FN_PREV_SENT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GotoPrevSentenceSel FN_PREV_SENT_SEL
 ()
 [
@@ -2845,7 +2734,6 @@ SfxVoidItem GotoPrevSentenceSel FN_PREV_SENT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoPrevTableFormula FN_PREV_TBLFML
 ()
 [
@@ -2870,7 +2758,6 @@ SfxBoolItem GotoPrevTableFormula FN_PREV_TBLFML
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToPrevWord FN_PREV_WORD
 ()
 [
@@ -2895,7 +2782,6 @@ SfxBoolItem GoToPrevWord FN_PREV_WORD
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GotoPrevWrongTableFormula FN_PREV_TBLFML_ERR
 ()
 [
@@ -2920,7 +2806,6 @@ SfxBoolItem GotoPrevWrongTableFormula FN_PREV_TBLFML_ERR
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfTable FN_START_TABLE
 ()
 [
@@ -2945,7 +2830,6 @@ SfxVoidItem GoToStartOfTable FN_START_TABLE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfColumn FN_START_OF_COLUMN
 ()
 [
@@ -2970,7 +2854,6 @@ SfxVoidItem GoToStartOfColumn FN_START_OF_COLUMN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToStartOfDoc FN_START_OF_DOCUMENT
 ()
 [
@@ -2995,7 +2878,6 @@ SfxBoolItem GoToStartOfDoc FN_START_OF_DOCUMENT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToStartOfLine FN_START_OF_LINE
 ()
 [
@@ -3020,7 +2902,6 @@ SfxBoolItem GoToStartOfLine FN_START_OF_LINE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfNextColumn FN_START_OF_NEXT_COLUMN
 ()
 [
@@ -3045,7 +2926,6 @@ SfxVoidItem GoToStartOfNextColumn FN_START_OF_NEXT_COLUMN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfNextPage FN_START_OF_NEXT_PAGE
 ()
 [
@@ -3070,7 +2950,6 @@ SfxVoidItem GoToStartOfNextPage FN_START_OF_NEXT_PAGE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfNextPageSel FN_START_OF_NEXT_PAGE_SEL
 ()
 [
@@ -3095,7 +2974,6 @@ SfxVoidItem GoToStartOfNextPageSel FN_START_OF_NEXT_PAGE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfPage FN_START_OF_PAGE
 ()
 [
@@ -3120,7 +2998,6 @@ SfxVoidItem GoToStartOfPage FN_START_OF_PAGE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfPageSel FN_START_OF_PAGE_SEL
 ()
 [
@@ -3145,7 +3022,6 @@ SfxVoidItem GoToStartOfPageSel FN_START_OF_PAGE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoToStartOfPara FN_START_OF_PARA
 ()
 [
@@ -3170,7 +3046,6 @@ SfxBoolItem GoToStartOfPara FN_START_OF_PARA
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfPrevColumn FN_START_OF_PREV_COLUMN
 ()
 [
@@ -3195,7 +3070,6 @@ SfxVoidItem GoToStartOfPrevColumn FN_START_OF_PREV_COLUMN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfPrevPage FN_START_OF_PREV_PAGE
 ()
 [
@@ -3220,7 +3094,6 @@ SfxVoidItem GoToStartOfPrevPage FN_START_OF_PREV_PAGE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GoToStartOfPrevPageSel FN_START_OF_PREV_PAGE_SEL
 ()
 [
@@ -3245,7 +3118,6 @@ SfxVoidItem GoToStartOfPrevPageSel FN_START_OF_PREV_PAGE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem GoUp FN_LINE_UP
 (SfxInt32Item Count FN_PARAM_MOVE_COUNT,SfxBoolItem Select FN_PARAM_MOVE_SELECTION)
 [
@@ -3270,7 +3142,6 @@ SfxBoolItem GoUp FN_LINE_UP
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem Graphic FN_VIEW_GRAPHIC
 
 [
@@ -3297,7 +3168,6 @@ SfxBoolItem Graphic FN_VIEW_GRAPHIC
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem GraphicDialog FN_FORMAT_GRAFIC_DLG
 ()
 [
@@ -3322,7 +3192,6 @@ SfxVoidItem GraphicDialog FN_FORMAT_GRAFIC_DLG
     GroupId = GID_GRAPHIC;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem Grow FN_GROW_FONT_SIZE
 ()
 [
@@ -3347,7 +3216,6 @@ SfxVoidItem Grow FN_GROW_FONT_SIZE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem HScroll FN_HSCROLLBAR
 
 [
@@ -3374,7 +3242,6 @@ SfxBoolItem HScroll FN_HSCROLLBAR
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxUInt16Item HtmlMode SID_HTML_MODE
 
 [
@@ -3401,7 +3268,6 @@ SfxUInt16Item HtmlMode SID_HTML_MODE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem Hyphenate FN_HYPHENATE_OPT_DLG
 ()
 [
@@ -3426,7 +3292,6 @@ SfxVoidItem Hyphenate FN_HYPHENATE_OPT_DLG
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem IncrementIndentValue FN_INC_INDENT_OFFSET
 ()
 [
@@ -3451,7 +3316,6 @@ SfxVoidItem IncrementIndentValue FN_INC_INDENT_OFFSET
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem IncrementLevel FN_NUM_BULLET_UP
 ()
 [
@@ -3478,7 +3342,6 @@ SfxVoidItem IncrementLevel FN_NUM_BULLET_UP
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem IncrementSubLevels FN_NUM_BULLET_OUTLINE_UP
 ()
 [
@@ -3505,7 +3368,6 @@ SfxVoidItem IncrementSubLevels FN_NUM_BULLET_OUTLINE_UP
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem IndexEntryDialog FN_EDIT_IDX_ENTRY_DLG
 ()
 [
@@ -3530,7 +3392,6 @@ SfxVoidItem IndexEntryDialog FN_EDIT_IDX_ENTRY_DLG
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem IndexMarkToIndex FN_IDX_MARK_TO_IDX
 ()
 [
@@ -3555,7 +3416,6 @@ SfxVoidItem IndexMarkToIndex FN_IDX_MARK_TO_IDX
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertAnnotation FN_POSTIT
 (SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE)
 [
@@ -3580,7 +3440,6 @@ SfxVoidItem InsertAnnotation FN_POSTIT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertAuthorField FN_INSERT_FLD_AUTHOR
 ()
 [
@@ -3605,7 +3464,6 @@ SfxVoidItem InsertAuthorField FN_INSERT_FLD_AUTHOR
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertAuthoritiesEntry FN_INSERT_AUTH_ENTRY_DLG
 ()
 [
@@ -3630,7 +3488,6 @@ SfxVoidItem InsertAuthoritiesEntry FN_INSERT_AUTH_ENTRY_DLG
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
 (SfxStringItem Bookmark FN_INSERT_BOOKMARK)
 [
@@ -3655,7 +3512,6 @@ SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertBreak FN_INSERT_BREAK_DLG
 (SfxInt16Item Kind FN_INSERT_BREAK_DLG,SfxStringItem TemplateName FN_PARAM_1,SfxUInt16Item PageNumber FN_PARAM_2)
 [
@@ -3680,7 +3536,6 @@ SfxVoidItem InsertBreak FN_INSERT_BREAK_DLG
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertCaptionDialog FN_INSERT_CAPTION
 ()
 [
@@ -3705,7 +3560,6 @@ SfxVoidItem InsertCaptionDialog FN_INSERT_CAPTION
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertColumnBreak FN_INSERT_COLUMN_BREAK
 ()
 [
@@ -3730,7 +3584,6 @@ SfxVoidItem InsertColumnBreak FN_INSERT_COLUMN_BREAK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertColumnDialog FN_TABLE_INSERT_COL_DLG
 ()
 [
@@ -3755,7 +3608,6 @@ SfxVoidItem InsertColumnDialog FN_TABLE_INSERT_COL_DLG
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
 ()
 [
@@ -3780,7 +3632,6 @@ SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxStringItem InsertSection FN_INSERT_REGION
 (SfxUInt16Item Columns SID_ATTR_COLUMNS,SfxStringItem RegionName FN_PARAM_REGION_NAME,SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,SfxStringItem LinkName FN_PARAM_1,SfxStringItem FilterName FN_PARAM_2,SfxStringItem SubRegion FN_PARAM_3)
 [
@@ -3808,7 +3659,6 @@ SfxStringItem InsertSection FN_INSERT_REGION
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxImageItem InsertCtrl FN_INSERT_CTRL
 
 [
@@ -3835,7 +3685,6 @@ SfxImageItem InsertCtrl FN_INSERT_CTRL
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertDateField FN_INSERT_FLD_DATE
 ()
 [
@@ -3860,7 +3709,6 @@ SfxVoidItem InsertDateField FN_INSERT_FLD_DATE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertEndnote FN_INSERT_ENDNOTE
 (SfxStringItem FootnoteAnchorText FN_INSERT_ENDNOTE,SfxStringItem FontName FN_PARAM_1)
 [
@@ -3885,7 +3733,6 @@ SfxVoidItem InsertEndnote FN_INSERT_ENDNOTE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertEnvelope FN_ENVELOP
 (SwEnvItem Envelope FN_ENVELOP,SfxBoolItem NewDocument FN_PARAM_1)
 [
@@ -3910,7 +3757,6 @@ SfxVoidItem InsertEnvelope FN_ENVELOP
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem InsertField FN_INSERT_FIELD
 (SfxUInt16Item Type FN_PARAM_FIELD_TYPE,SfxUInt16Item SubType FN_PARAM_FIELD_SUBTYPE,SfxStringItem Name FN_INSERT_FIELD,SfxStringItem Content FN_PARAM_FIELD_CONTENT,SfxUInt32Item Format FN_PARAM_FIELD_FORMAT,SfxStringItem Separator FN_PARAM_3)
 [
@@ -3938,7 +3784,6 @@ SfxBoolItem InsertField FN_INSERT_FIELD
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem InsertFieldCtrl FN_INSERT_FIELD_CTRL
 
 [
@@ -3965,8 +3810,6 @@ SfxBoolItem InsertFieldCtrl FN_INSERT_FIELD_CTRL
     GroupId = GID_INSERT;
 ]
 
-
-//--------------------------------------------------------------------------
 SfxVoidItem InsertFootnoteDialog FN_INSERT_FOOTNOTE_DLG
 ()
 [
@@ -3991,7 +3834,6 @@ SfxVoidItem InsertFootnoteDialog FN_INSERT_FOOTNOTE_DLG
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE
 (SfxStringItem NoteAnchorText FN_INSERT_FOOTNOTE,SfxStringItem FontName FN_PARAM_1)
 [
@@ -4016,7 +3858,6 @@ SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertFormula FN_EDIT_FORMULA
 (SfxStringItem Formula FN_EDIT_FORMULA)
 [
@@ -4041,7 +3882,6 @@ SfxVoidItem InsertFormula FN_EDIT_FORMULA
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertFrame FN_INSERT_FRAME
 (SfxUInt16Item AnchorType FN_INSERT_FRAME,SfxPointItem Pos FN_PARAM_1,SvxSizeItem Size FN_PARAM_2)
 [
@@ -4069,7 +3909,6 @@ SfxVoidItem InsertFrame FN_INSERT_FRAME
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertFrameInteract FN_INSERT_FRAME_INTERACT
 (SfxUInt16Item Columns SID_ATTR_COLUMNS, SfxUInt16Item Modifier SID_MODIFIER)
 [
@@ -4097,7 +3936,6 @@ SfxVoidItem InsertFrameInteract FN_INSERT_FRAME_INTERACT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertFrameInteractNoColumns FN_INSERT_FRAME_INTERACT_NOCOL
 ()
 [
@@ -4122,7 +3960,6 @@ SfxVoidItem InsertFrameInteractNoColumns FN_INSERT_FRAME_INTERACT_NOCOL
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertHyperlinkDlg FN_INSERT_HYPERLINK
 ()
 [
@@ -4147,7 +3984,6 @@ SfxVoidItem InsertHyperlinkDlg FN_INSERT_HYPERLINK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertIndexesEntry FN_INSERT_IDX_ENTRY_DLG
 ()
 [
@@ -4172,7 +4008,6 @@ SfxVoidItem InsertIndexesEntry FN_INSERT_IDX_ENTRY_DLG
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertLinebreak FN_INSERT_LINEBREAK
 ()
 [
@@ -4197,7 +4032,6 @@ SfxVoidItem InsertLinebreak FN_INSERT_LINEBREAK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertMultiIndex FN_INSERT_MULTI_TOX
 ()
 [
@@ -4222,7 +4056,6 @@ SfxVoidItem InsertMultiIndex FN_INSERT_MULTI_TOX
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertNeutralParagraph FN_NUM_BULLET_NONUM
 ()
 [
@@ -4249,7 +4082,6 @@ SfxVoidItem InsertNeutralParagraph FN_NUM_BULLET_NONUM
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxImageItem InsertObjCtrl FN_INSERT_OBJ_CTRL
 
 [
@@ -4276,7 +4108,6 @@ SfxImageItem InsertObjCtrl FN_INSERT_OBJ_CTRL
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertObjectDialog FN_INSERT_OBJECT_DLG
 ()
 [
@@ -4301,7 +4132,6 @@ SfxVoidItem InsertObjectDialog FN_INSERT_OBJECT_DLG
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertObjectStarMath FN_INSERT_SMA
 ()
 [
@@ -4326,7 +4156,6 @@ SfxVoidItem InsertObjectStarMath FN_INSERT_SMA
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertPagebreak FN_INSERT_PAGEBREAK
 ()
 [
@@ -4351,7 +4180,6 @@ SfxVoidItem InsertPagebreak FN_INSERT_PAGEBREAK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertPageCountField FN_INSERT_FLD_PGCOUNT
 ()
 [
@@ -4376,7 +4204,6 @@ SfxVoidItem InsertPageCountField FN_INSERT_FLD_PGCOUNT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
 (SfxStringItem PageStyle FN_INSERT_PAGEFOOTER,SfxBoolItem On FN_PARAM_1)
 [
@@ -4404,7 +4231,6 @@ SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertPageHeader FN_INSERT_PAGEHEADER
 (SfxStringItem PageStyle FN_INSERT_PAGEHEADER,SfxBoolItem On FN_PARAM_1)
 [
@@ -4432,7 +4258,6 @@ SfxVoidItem InsertPageHeader FN_INSERT_PAGEHEADER
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertPageNumberField FN_INSERT_FLD_PGNUMBER
 ()
 [
@@ -4457,7 +4282,6 @@ SfxVoidItem InsertPageNumberField FN_INSERT_FLD_PGNUMBER
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertPara FN_INSERT_BREAK
 ()
 [
@@ -4482,7 +4306,6 @@ SfxVoidItem InsertPara FN_INSERT_BREAK
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertReferenceField FN_INSERT_REF_FIELD
 ()
 [
@@ -4507,7 +4330,6 @@ SfxVoidItem InsertReferenceField FN_INSERT_REF_FIELD
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertRowDialog FN_TABLE_INSERT_ROW_DLG
 ()
 [
@@ -4532,7 +4354,6 @@ SfxVoidItem InsertRowDialog FN_TABLE_INSERT_ROW_DLG
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertRows FN_TABLE_INSERT_ROW
 ()
 [
@@ -4557,7 +4378,6 @@ SfxVoidItem InsertRows FN_TABLE_INSERT_ROW
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertScript FN_JAVAEDIT
 (SfxStringItem Text FN_JAVAEDIT,SfxBoolItem IsURL FN_PARAM_1,SfxStringItem Type FN_PARAM_2)
 [
@@ -4582,7 +4402,6 @@ SfxVoidItem InsertScript FN_JAVAEDIT
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertTable FN_INSERT_TABLE
 (SfxStringItem TableName FN_INSERT_TABLE,SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN,SfxUInt16Item Rows SID_ATTR_TABLE_ROW,SfxInt32Item Flags FN_PARAM_1,SfxStringItem AutoFormat FN_PARAM_2)
 [
@@ -4610,7 +4429,6 @@ SfxVoidItem InsertTable FN_INSERT_TABLE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertTimeField FN_INSERT_FLD_TIME
 ()
 [
@@ -4635,7 +4453,6 @@ SfxVoidItem InsertTimeField FN_INSERT_FLD_TIME
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertTitleField FN_INSERT_FLD_TITLE
 ()
 [
@@ -4660,7 +4477,6 @@ SfxVoidItem InsertTitleField FN_INSERT_FLD_TITLE
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertTopicField FN_INSERT_FLD_TOPIC
 ()
 [
@@ -4685,7 +4501,6 @@ SfxVoidItem InsertTopicField FN_INSERT_FLD_TOPIC
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpDownThisLevel FN_NUM_BULLET_NEXT
 ()
 [
@@ -4710,7 +4525,6 @@ SfxVoidItem JumpDownThisLevel FN_NUM_BULLET_NEXT
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpToEndOfDoc FN_END_DOC_DIRECT
 ()
 [
@@ -4735,7 +4549,6 @@ SfxVoidItem JumpToEndOfDoc FN_END_DOC_DIRECT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpToFooter FN_TO_FOOTER
 ()
 [
@@ -4760,7 +4573,6 @@ SfxVoidItem JumpToFooter FN_TO_FOOTER
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpToFootnoteOrAnchor FN_FOOTNOTE_TO_ANCHOR
 ()
 [
@@ -4785,7 +4597,6 @@ SfxVoidItem JumpToFootnoteOrAnchor FN_FOOTNOTE_TO_ANCHOR
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpToHeader FN_TO_HEADER
 ()
 [
@@ -4810,7 +4621,6 @@ SfxVoidItem JumpToHeader FN_TO_HEADER
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToNextBookmark FN_NEXT_BOOKMARK
 ()
 [
@@ -4835,7 +4645,6 @@ SfxBoolItem JumpToNextBookmark FN_NEXT_BOOKMARK
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToNextFootnote FN_NEXT_FOOTNOTE
 ()
 [
@@ -4860,7 +4669,6 @@ SfxBoolItem JumpToNextFootnote FN_NEXT_FOOTNOTE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToNextFrame FN_CNTNT_TO_NEXT_FRAME
 ()
 [
@@ -4885,7 +4693,6 @@ SfxBoolItem JumpToNextFrame FN_CNTNT_TO_NEXT_FRAME
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToNextRegion FN_GOTO_NEXT_REGION
 ()
 [
@@ -4910,7 +4717,6 @@ SfxBoolItem JumpToNextRegion FN_GOTO_NEXT_REGION
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToNextTable FN_NEXT_TABLE
 ()
 [
@@ -4935,7 +4741,6 @@ SfxBoolItem JumpToNextTable FN_NEXT_TABLE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToPrevBookmark FN_PREV_BOOKMARK
 ()
 [
@@ -4960,7 +4765,6 @@ SfxBoolItem JumpToPrevBookmark FN_PREV_BOOKMARK
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToPrevFootnote FN_PREV_FOOTNOTE
 ()
 [
@@ -4985,7 +4789,6 @@ SfxBoolItem JumpToPrevFootnote FN_PREV_FOOTNOTE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToPrevRegion FN_GOTO_PREV_REGION
 ()
 [
@@ -5010,7 +4813,6 @@ SfxBoolItem JumpToPrevRegion FN_GOTO_PREV_REGION
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem JumpToPrevTable FN_PREV_TABLE
 ()
 [
@@ -5035,7 +4837,6 @@ SfxBoolItem JumpToPrevTable FN_PREV_TABLE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpToReference FN_GOTO_REFERENCE
 ()
 [
@@ -5060,7 +4861,6 @@ SfxVoidItem JumpToReference FN_GOTO_REFERENCE
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpToStartOfDoc FN_START_DOC_DIRECT
 ()
 [
@@ -5085,7 +4885,6 @@ SfxVoidItem JumpToStartOfDoc FN_START_DOC_DIRECT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpUpThisLevel FN_NUM_BULLET_PREV
 ()
 [
@@ -5110,7 +4909,6 @@ SfxVoidItem JumpUpThisLevel FN_NUM_BULLET_PREV
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem LineDownSel FN_LINE_DOWN_SEL
 ()
 [
@@ -5135,7 +4933,6 @@ SfxVoidItem LineDownSel FN_LINE_DOWN_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem LineNumberingDialog FN_LINE_NUMBERING_DLG
 ()
 [
@@ -5160,7 +4957,6 @@ SfxVoidItem LineNumberingDialog FN_LINE_NUMBERING_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem LineUpSel FN_LINE_UP_SEL
 ()
 [
@@ -5185,7 +4981,6 @@ SfxVoidItem LineUpSel FN_LINE_UP_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem LinkDialog FN_EDIT_LINK_DLG
 ()
 [
@@ -5210,7 +5005,6 @@ SfxVoidItem LinkDialog FN_EDIT_LINK_DLG
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem LoadStyles SID_TEMPLATE_LOAD
 (SfxStringItem FileName SID_TEMPLATE_NAME,SfxInt32Item Flags SID_TEMPLATE_LOAD)
 [
@@ -5235,7 +5029,6 @@ SfxVoidItem LoadStyles SID_TEMPLATE_LOAD
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem Marks FN_VIEW_MARKS
 
 [
@@ -5262,7 +5055,6 @@ SfxBoolItem Marks FN_VIEW_MARKS
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem MergeCells FN_TABLE_MERGE_CELLS
 ()
 [
@@ -5287,7 +5079,6 @@ SfxVoidItem MergeCells FN_TABLE_MERGE_CELLS
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem MergeDialog FN_QRY_MERGE
 ()
 [
@@ -5311,7 +5102,7 @@ SfxVoidItem MergeDialog FN_QRY_MERGE
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem MailMergeWizard FN_MAILMERGE_WIZARD
 ()
 [
@@ -5335,7 +5126,7 @@ SfxVoidItem MailMergeWizard FN_MAILMERGE_WIZARD
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem MergeTable FN_TABLE_MERGE_TABLE
 ()
 [
@@ -5359,7 +5150,7 @@ SfxBoolItem MergeTable FN_TABLE_MERGE_TABLE
     ToolBoxConfig = TRUE,
     GroupId = GID_TABLE;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ApplyStyleHead1 FN_FORMAT_APPLY_HEAD1
 ()
 [
@@ -5383,7 +5174,7 @@ SfxVoidItem ApplyStyleHead1 FN_FORMAT_APPLY_HEAD1
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ApplyStyleHead2 FN_FORMAT_APPLY_HEAD2
 ()
 [
@@ -5407,7 +5198,7 @@ SfxVoidItem ApplyStyleHead2 FN_FORMAT_APPLY_HEAD2
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ApplyStyleHead3 FN_FORMAT_APPLY_HEAD3
 ()
 [
@@ -5431,7 +5222,7 @@ SfxVoidItem ApplyStyleHead3 FN_FORMAT_APPLY_HEAD3
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ApplyStyleDefault FN_FORMAT_APPLY_DEFAULT
 ()
 [
@@ -5455,7 +5246,7 @@ SfxVoidItem ApplyStyleDefault FN_FORMAT_APPLY_DEFAULT
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ApplyStyleTextbody FN_FORMAT_APPLY_TEXTBODY
 ()
 [
@@ -5479,7 +5270,7 @@ SfxVoidItem ApplyStyleTextbody FN_FORMAT_APPLY_TEXTBODY
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem MirrorGraphicOnEvenPages FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
 ()
 [
@@ -5507,7 +5298,6 @@ SfxBoolItem MirrorGraphicOnEvenPages FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem MirrorOnEvenPages FN_FRAME_MIRROR_ON_EVEN_PAGES
 ()
 [
@@ -5535,7 +5325,6 @@ SfxBoolItem MirrorOnEvenPages FN_FRAME_MIRROR_ON_EVEN_PAGES
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem MoveDown FN_NUM_BULLET_MOVEDOWN
 ()
 [
@@ -5562,7 +5351,6 @@ SfxVoidItem MoveDown FN_NUM_BULLET_MOVEDOWN
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem MoveDownSubItems FN_NUM_BULLET_OUTLINE_MOVEDOWN
 ()
 [
@@ -5589,7 +5377,6 @@ SfxVoidItem MoveDownSubItems FN_NUM_BULLET_OUTLINE_MOVEDOWN
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem MoveUp FN_NUM_BULLET_MOVEUP
 ()
 [
@@ -5616,7 +5403,6 @@ SfxVoidItem MoveUp FN_NUM_BULLET_MOVEUP
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
 ()
 [
@@ -5671,7 +5457,6 @@ SfxVoidItem ObjectTitleDescription FN_TITLE_DESCRIPTION_SHAPE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NameGroup FN_NAME_SHAPE
 ()
 [
@@ -5699,7 +5484,6 @@ SfxVoidItem NameGroup FN_NAME_SHAPE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem NewGlobalDoc FN_NEW_GLOBAL_DOC
 (SfxStringItem FileName FN_NEW_GLOBAL_DOC,SfxStringItem TemplateName SID_TEMPLATE_NAME)
 [
@@ -5724,7 +5508,6 @@ SfxBoolItem NewGlobalDoc FN_NEW_GLOBAL_DOC
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem NewHtmlDoc FN_NEW_HTML_DOC
 (SfxStringItem FileName FN_NEW_HTML_DOC,SfxStringItem TemplateName SID_TEMPLATE_NAME)
 [
@@ -5749,7 +5532,6 @@ SfxBoolItem NewHtmlDoc FN_NEW_HTML_DOC
     GroupId = GID_APPLICATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxStringItem NumberFormat FN_NUMBER_FORMAT
 
 [
@@ -5776,7 +5558,6 @@ SfxStringItem NumberFormat FN_NUMBER_FORMAT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NumberFormatCurrency FN_NUMBER_CURRENCY
 ()
 [
@@ -5801,7 +5582,6 @@ SfxVoidItem NumberFormatCurrency FN_NUMBER_CURRENCY
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NumberFormatDate FN_NUMBER_DATE
 ()
 [
@@ -5826,7 +5606,6 @@ SfxVoidItem NumberFormatDate FN_NUMBER_DATE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NumberFormatDecimal FN_NUMBER_TWODEC
 ()
 [
@@ -5851,7 +5630,6 @@ SfxVoidItem NumberFormatDecimal FN_NUMBER_TWODEC
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NumberFormatPercent FN_NUMBER_PERCENT
 ()
 [
@@ -5876,7 +5654,6 @@ SfxVoidItem NumberFormatPercent FN_NUMBER_PERCENT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NumberFormatScientific FN_NUMBER_SCIENTIFIC
 ()
 [
@@ -5901,7 +5678,6 @@ SfxVoidItem NumberFormatScientific FN_NUMBER_SCIENTIFIC
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NumberFormatStandard FN_NUMBER_STANDARD
 ()
 [
@@ -5926,7 +5702,6 @@ SfxVoidItem NumberFormatStandard FN_NUMBER_STANDARD
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NumberFormatTime FN_NUMBER_TIME
 ()
 [
@@ -5951,7 +5726,6 @@ SfxVoidItem NumberFormatTime FN_NUMBER_TIME
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
 
 [
@@ -5980,7 +5754,6 @@ SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem NumberOrNoNumber FN_NUM_OR_NONUM
 
 [
@@ -6007,7 +5780,6 @@ SfxBoolItem NumberOrNoNumber FN_NUM_OR_NONUM
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ObjectBackOne FN_FRAME_DOWN
 ()
 [
@@ -6032,7 +5804,6 @@ SfxVoidItem ObjectBackOne FN_FRAME_DOWN
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ObjectForwardOne FN_FRAME_UP
 ()
 [
@@ -6057,7 +5828,6 @@ SfxVoidItem ObjectForwardOne FN_FRAME_UP
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem OnlineAutoFormat FN_AUTOFORMAT_AUTO
 
 [
@@ -6084,7 +5854,6 @@ SfxBoolItem OnlineAutoFormat FN_AUTOFORMAT_AUTO
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxUInt16Item OptimizeTable FN_OPTIMIZE_TABLE
 
 [
@@ -6111,7 +5880,6 @@ SfxUInt16Item OptimizeTable FN_OPTIMIZE_TABLE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PageColumnDialog FN_FORMAT_PAGE_COLUMN_DLG
 ()
 [
@@ -6136,7 +5904,6 @@ SfxVoidItem PageColumnDialog FN_FORMAT_PAGE_COLUMN_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PageDialog FN_FORMAT_PAGE_DLG
 ()
 [
@@ -6185,7 +5952,6 @@ SfxVoidItem PageSettingDialog FN_FORMAT_PAGE_SETTING_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem TitlePageDialog FN_FORMAT_TITLEPAGE_DLG
 ()
 [
@@ -6210,7 +5976,6 @@ SfxVoidItem TitlePageDialog FN_FORMAT_TITLEPAGE_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PageDown FN_PAGEDOWN
 ()
 [
@@ -6235,7 +6000,6 @@ SfxVoidItem PageDown FN_PAGEDOWN
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PageDownSel FN_PAGEDOWN_SEL
 ()
 [
@@ -6260,7 +6024,6 @@ SfxVoidItem PageDownSel FN_PAGEDOWN_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxUInt16Item PageOffset FN_CHANGE_PAGENUM
 [
     SfxVoidItem PageOffsetDialog(SfxUInt16Item nOffset FN_CHANGE_PAGENUM);
@@ -6288,7 +6051,6 @@ SfxUInt16Item PageOffset FN_CHANGE_PAGENUM
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PageStyleApply FN_SET_PAGE_STYLE
 ()
 [
@@ -6313,7 +6075,6 @@ SfxVoidItem PageStyleApply FN_SET_PAGE_STYLE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxStringItem PageStyleName FN_STAT_TEMPLATE
 
 [
@@ -6340,7 +6101,6 @@ SfxStringItem PageStyleName FN_STAT_TEMPLATE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PageUp FN_PAGEUP
 ()
 [
@@ -6365,7 +6125,6 @@ SfxVoidItem PageUp FN_PAGEUP
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PageUpSel FN_PAGEUP_SEL
 ()
 [
@@ -6390,7 +6149,6 @@ SfxVoidItem PageUpSel FN_PAGEUP_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PreviewZoom FN_PREVIEW_ZOOM
 ( SfxUInt16Item PreviewZoom FN_PREVIEW_ZOOM )
 [
@@ -6418,7 +6176,6 @@ SfxVoidItem PreviewZoom FN_PREVIEW_ZOOM
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem PrintLayout FN_PRINT_LAYOUT
 
 [
@@ -6445,7 +6202,6 @@ SfxBoolItem PrintLayout FN_PRINT_LAYOUT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PrintPagePreview FN_PRINT_PAGEPREVIEW
 ()
 [
@@ -6470,7 +6226,6 @@ SfxVoidItem PrintPagePreview FN_PRINT_PAGEPREVIEW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem Protect FN_TABLE_SET_READ_ONLY_CELLS
 ()
 [
@@ -6495,7 +6250,6 @@ SfxVoidItem Protect FN_TABLE_SET_READ_ONLY_CELLS
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
 
 [
@@ -6522,7 +6276,6 @@ SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem RefreshView FN_REFRESH_VIEW
 ()
 [
@@ -6547,7 +6300,6 @@ SfxVoidItem RefreshView FN_REFRESH_VIEW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem RemoveBullets FN_NUM_BULLET_OFF
 ()
 [
@@ -6574,7 +6326,6 @@ SfxVoidItem RemoveBullets FN_NUM_BULLET_OFF
     GroupId = GID_ENUMERATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem RemoveTableOf FN_REMOVE_CUR_TOX
 ()
 [
@@ -6599,7 +6350,6 @@ SfxVoidItem RemoveTableOf FN_REMOVE_CUR_TOX
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem Repaginate FN_REPAGINATE
 ()
 [
@@ -6624,7 +6374,6 @@ SfxVoidItem Repaginate FN_REPAGINATE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem RepeatSearch FN_REPEAT_SEARCH
 ( SfxBoolItem Quiet SID_SEARCH_QUIET )
 [
@@ -6649,7 +6398,6 @@ SfxBoolItem RepeatSearch FN_REPEAT_SEARCH
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ResetAttributes FN_FORMAT_RESET
 ()
 [
@@ -6674,7 +6422,6 @@ SfxVoidItem ResetAttributes FN_FORMAT_RESET
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ResetTableProtection FN_TABLE_UNSET_READ_ONLY
 ()
 [
@@ -6699,7 +6446,6 @@ SfxVoidItem ResetTableProtection FN_TABLE_UNSET_READ_ONLY
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem Ruler FN_RULER
 
 [
@@ -6726,7 +6472,6 @@ SfxBoolItem Ruler FN_RULER
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SbaInsert FN_QRY_INSERT
 ()
 [
@@ -6751,7 +6496,6 @@ SfxVoidItem SbaInsert FN_QRY_INSERT
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SbaInsertField FN_QRY_INSERT_FIELD
 ()
 [
@@ -6776,7 +6520,6 @@ SfxVoidItem SbaInsertField FN_QRY_INSERT_FIELD
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SbaMerge FN_QRY_MERGE_FIELD
 ()
 [
@@ -6801,7 +6544,6 @@ SfxVoidItem SbaMerge FN_QRY_MERGE_FIELD
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ScrollNavigation FN_SCROLL_NAVIGATION
 
 [
@@ -6900,7 +6642,6 @@ SfxVoidItem ScrollToNext FN_SCROLL_NEXT
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SelectTable FN_TABLE_SELECT_ALL
 ()
 [
@@ -6925,7 +6666,6 @@ SfxVoidItem SelectTable FN_TABLE_SELECT_ALL
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxUInt16Item SelectionMode FN_STAT_SELMODE
 
 [
@@ -6952,7 +6692,6 @@ SfxUInt16Item SelectionMode FN_STAT_SELMODE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SelectText FN_SELECT_PARA
 ()
 [
@@ -6977,7 +6716,6 @@ SfxVoidItem SelectText FN_SELECT_PARA
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SelectWord FN_SELECT_WORD
 ()
 [
@@ -7002,7 +6740,6 @@ SfxVoidItem SelectWord FN_SELECT_WORD
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SendAbstractToStarImpress FN_ABSTRACT_STARIMPRESS
 ()
 [
@@ -7027,7 +6764,6 @@ SfxVoidItem SendAbstractToStarImpress FN_ABSTRACT_STARIMPRESS
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SendOutlineToClipboard FN_OUTLINE_TO_CLIPBOARD
 ()
 [
@@ -7052,7 +6788,6 @@ SfxVoidItem SendOutlineToClipboard FN_OUTLINE_TO_CLIPBOARD
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SendOutlineToStarImpress FN_OUTLINE_TO_IMPRESS
 ()
 [
@@ -7077,7 +6812,6 @@ SfxVoidItem SendOutlineToStarImpress FN_OUTLINE_TO_IMPRESS
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetAnchorAtChar FN_TOOL_ANCHOR_AT_CHAR
 ()
 [
@@ -7105,7 +6839,6 @@ SfxVoidItem SetAnchorAtChar FN_TOOL_ANCHOR_AT_CHAR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetAnchorToChar FN_TOOL_ANCHOR_CHAR
 ()
 [
@@ -7133,7 +6866,6 @@ SfxVoidItem SetAnchorToChar FN_TOOL_ANCHOR_CHAR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetAnchorToFrame FN_TOOL_ANCHOR_FRAME
 ()
 [
@@ -7161,7 +6893,6 @@ SfxVoidItem SetAnchorToFrame FN_TOOL_ANCHOR_FRAME
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetAnchorToPage FN_TOOL_ANCHOR_PAGE
 ()
 [
@@ -7189,7 +6920,6 @@ SfxVoidItem SetAnchorToPage FN_TOOL_ANCHOR_PAGE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetAnchorToPara FN_TOOL_ANCHOR_PARAGRAPH
 ()
 [
@@ -7217,7 +6947,6 @@ SfxVoidItem SetAnchorToPara FN_TOOL_ANCHOR_PARAGRAPH
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetColumnWidth FN_TABLE_SET_COL_WIDTH
 ()
 [
@@ -7242,7 +6971,6 @@ SfxVoidItem SetColumnWidth FN_TABLE_SET_COL_WIDTH
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetExtSelection FN_SET_EXT_MODE
 ()
 [
@@ -7267,7 +6995,6 @@ SfxVoidItem SetExtSelection FN_SET_EXT_MODE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetMultiSelection FN_SET_ADD_MODE
 ()
 [
@@ -7292,7 +7019,6 @@ SfxVoidItem SetMultiSelection FN_SET_ADD_MODE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetOptimalColumnWidth FN_TABLE_ADJUST_CELLS
 ()
 [
@@ -7317,7 +7043,6 @@ SfxVoidItem SetOptimalColumnWidth FN_TABLE_ADJUST_CELLS
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetOptimalRowHeight FN_TABLE_OPTIMAL_HEIGHT
 ()
 [
@@ -7342,7 +7067,6 @@ SfxVoidItem SetOptimalRowHeight FN_TABLE_OPTIMAL_HEIGHT
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetRowHeight FN_TABLE_SET_ROW_HEIGHT
 ()
 [
@@ -7367,7 +7091,6 @@ SfxVoidItem SetRowHeight FN_TABLE_SET_ROW_HEIGHT
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ShadowCursor FN_SHADOWCURSOR
 
 [
@@ -7394,7 +7117,6 @@ SfxBoolItem ShadowCursor FN_SHADOWCURSOR
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ShiftBackspace FN_SHIFT_BACKSPACE
 ()
 [
@@ -7419,7 +7141,6 @@ SfxVoidItem ShiftBackspace FN_SHIFT_BACKSPACE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
 ( SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN,SfxUInt16Item Rows SID_ATTR_TABLE_ROW )
 [
@@ -7471,7 +7192,6 @@ SfxBoolItem ShowAnnotations FN_VIEW_NOTES
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
 
 [
@@ -7498,7 +7218,6 @@ SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ShowTrackedChanges FN_REDLINE_SHOW
 
 [
@@ -7525,7 +7244,6 @@ SfxBoolItem ShowTrackedChanges FN_REDLINE_SHOW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ShowTwoPages FN_SHOW_TWO_PAGES
 ()
 [
@@ -7550,7 +7268,6 @@ SfxVoidItem ShowTwoPages FN_SHOW_TWO_PAGES
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ShowBookview FN_SHOW_BOOKVIEW
 
 [
@@ -7577,7 +7294,6 @@ SfxBoolItem ShowBookview FN_SHOW_BOOKVIEW
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem Shrink FN_SHRINK_FONT_SIZE
 ()
 [
@@ -7602,7 +7318,6 @@ SfxVoidItem Shrink FN_SHRINK_FONT_SIZE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SortDialog FN_SORTING_DLG
 ()
 [
@@ -7627,7 +7342,6 @@ SfxVoidItem SortDialog FN_SORTING_DLG
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SplitCell FN_TABLE_SPLIT_CELLS
 (SfxInt32Item Amount FN_TABLE_SPLIT_CELLS,SfxBoolItem Horizontal FN_PARAM_1,
  SfxBoolItem Proportional FN_PARAM_2)
@@ -7653,7 +7367,6 @@ SfxVoidItem SplitCell FN_TABLE_SPLIT_CELLS
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SplitTable FN_TABLE_SPLIT_TABLE
 (SfxUInt16Item Type FN_PARAM_1)
 [
@@ -7678,7 +7391,6 @@ SfxVoidItem SplitTable FN_TABLE_SPLIT_TABLE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem StartAutoCorrect FN_AUTO_CORRECT
 ()
 [
@@ -7703,7 +7415,6 @@ SfxVoidItem StartAutoCorrect FN_AUTO_CORRECT
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem StartOfDocumentSel FN_START_OF_DOCUMENT_SEL
 ()
 [
@@ -7728,7 +7439,6 @@ SfxVoidItem StartOfDocumentSel FN_START_OF_DOCUMENT_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem StartOfLineSel FN_START_OF_LINE_SEL
 ()
 [
@@ -7753,7 +7463,6 @@ SfxVoidItem StartOfLineSel FN_START_OF_LINE_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem StartOfParaSel FN_START_OF_PARA_SEL
 ()
 [
@@ -7778,7 +7487,6 @@ SfxVoidItem StartOfParaSel FN_START_OF_PARA_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem StateBookmark FN_STAT_BOOKMARK
 ()
 [
@@ -7803,7 +7511,6 @@ SfxVoidItem StateBookmark FN_STAT_BOOKMARK
     GroupId = GID_INTERN;
 ]
 
-//--------------------------------------------------------------------------
 SfxStringItem StatePageNumber FN_STAT_PAGE
 
 [
@@ -7830,7 +7537,6 @@ SfxStringItem StatePageNumber FN_STAT_PAGE
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxStringItem StateZoom FN_STAT_ZOOM
 ()
 [
@@ -7855,7 +7561,6 @@ SfxStringItem StateZoom FN_STAT_ZOOM
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxStringItem StateWordCount FN_STAT_WORDCOUNT
 ()
 [
@@ -7880,7 +7585,6 @@ SfxStringItem StateWordCount FN_STAT_WORDCOUNT
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem SubScript FN_SET_SUB_SCRIPT
 
 [
@@ -7907,7 +7611,6 @@ SfxBoolItem SubScript FN_SET_SUB_SCRIPT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem SuperScript FN_SET_SUPER_SCRIPT
 
 [
@@ -7934,7 +7637,6 @@ SfxBoolItem SuperScript FN_SET_SUPER_SCRIPT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SwBrwInsert FN_SBA_BRW_INSERT
 ()
 [
@@ -7959,7 +7661,6 @@ SfxVoidItem SwBrwInsert FN_SBA_BRW_INSERT
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SwMailMerge FN_SBA_BRW_MERGE
 ()
 [
@@ -7984,7 +7685,6 @@ SfxVoidItem SwMailMerge FN_SBA_BRW_MERGE
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SwUpdate FN_SBA_BRW_UPDATE
 ()
 [
@@ -8009,7 +7709,6 @@ SfxVoidItem SwUpdate FN_SBA_BRW_UPDATE
     GroupId = GID_DATA;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem SynchronizeLabelsDlg FN_SYNC_LABELS
 ()
 [
@@ -8034,7 +7733,6 @@ SfxBoolItem SynchronizeLabelsDlg FN_SYNC_LABELS
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem TableBoundaries FN_VIEW_TABLEGRID
 
 [
@@ -8061,7 +7759,6 @@ SfxBoolItem TableBoundaries FN_VIEW_TABLEGRID
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem TableDialog FN_FORMAT_TABLE_DLG
 ()
 [
@@ -8086,7 +7783,6 @@ SfxVoidItem TableDialog FN_FORMAT_TABLE_DLG
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem TableModeFix FN_TABLE_MODE_FIX
 ()
 [
@@ -8114,7 +7810,6 @@ SfxVoidItem TableModeFix FN_TABLE_MODE_FIX
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem TableModeFixProp FN_TABLE_MODE_FIX_PROP
 ()
 [
@@ -8142,7 +7837,6 @@ SfxVoidItem TableModeFixProp FN_TABLE_MODE_FIX_PROP
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem TableModeVariable FN_TABLE_MODE_VARIABLE
 ()
 [
@@ -8170,7 +7864,6 @@ SfxVoidItem TableModeVariable FN_TABLE_MODE_VARIABLE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem TableNumberFormatDialog FN_NUM_FORMAT_TABLE_DLG
 ()
 [
@@ -8195,7 +7888,6 @@ SfxVoidItem TableNumberFormatDialog FN_NUM_FORMAT_TABLE_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem TableNumberRecognition FN_SET_MODOPT_TBLNUMFMT
 
 [
@@ -8222,7 +7914,6 @@ SfxBoolItem TableNumberRecognition FN_SET_MODOPT_TBLNUMFMT
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem TextAttributes FN_DRAWTEXT_ATTR_DLG
 ()
 [
@@ -8247,7 +7938,6 @@ SfxVoidItem TextAttributes FN_DRAWTEXT_ATTR_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem TextWrap FN_DRAW_WRAP_DLG
 ()
 [
@@ -8272,7 +7962,6 @@ SfxVoidItem TextWrap FN_DRAW_WRAP_DLG
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ToggleAnchorType FN_TOOL_ANCHOR
 ()
 [
@@ -8300,7 +7989,6 @@ SfxVoidItem ToggleAnchorType FN_TOOL_ANCHOR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem ToggleObjectLayer FN_TOOL_HIERARCHIE
 ()
 [
@@ -8325,7 +8013,6 @@ SfxVoidItem ToggleObjectLayer FN_TOOL_HIERARCHIE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem UnderlineDouble FN_UNDERLINE_DOUBLE
 
 [
@@ -8352,7 +8039,6 @@ SfxBoolItem UnderlineDouble FN_UNDERLINE_DOUBLE
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UnhainFrames FN_FRAME_UNCHAIN
 
 [
@@ -8379,7 +8065,6 @@ SfxVoidItem UnhainFrames FN_FRAME_UNCHAIN
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UnsetCellsReadOnly FN_TABLE_UNSET_READ_ONLY_CELLS
 ()
 [
@@ -8404,7 +8089,6 @@ SfxVoidItem UnsetCellsReadOnly FN_TABLE_UNSET_READ_ONLY_CELLS
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UpdateAll FN_UPDATE_ALL
 ()
 [
@@ -8429,7 +8113,6 @@ SfxVoidItem UpdateAll FN_UPDATE_ALL
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UpdateAllIndexes FN_UPDATE_TOX
 ()
 [
@@ -8454,7 +8137,6 @@ SfxVoidItem UpdateAllIndexes FN_UPDATE_TOX
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UpdateAllLinks FN_UPDATE_ALL_LINKS
 ()
 [
@@ -8479,7 +8161,6 @@ SfxVoidItem UpdateAllLinks FN_UPDATE_ALL_LINKS
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UpdateCharts FN_UPDATE_CHARTS
 ()
 [
@@ -8504,7 +8185,6 @@ SfxVoidItem UpdateCharts FN_UPDATE_CHARTS
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UpdateCurIndex FN_UPDATE_CUR_TOX
 
 [
@@ -8531,7 +8211,6 @@ SfxVoidItem UpdateCurIndex FN_UPDATE_CUR_TOX
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UpdateFields FN_UPDATE_FIELDS
 ()
 [
@@ -8556,7 +8235,6 @@ SfxVoidItem UpdateFields FN_UPDATE_FIELDS
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem UpdateInputFields FN_UPDATE_INPUTFIELDS
 ()
 [
@@ -8581,7 +8259,6 @@ SfxVoidItem UpdateInputFields FN_UPDATE_INPUTFIELDS
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem ViewBounds FN_VIEW_BOUNDS
 
 [
@@ -8608,7 +8285,6 @@ SfxBoolItem ViewBounds FN_VIEW_BOUNDS
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem VRuler FN_VLINEAL
 
 [
@@ -8635,7 +8311,6 @@ SfxBoolItem VRuler FN_VLINEAL
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem VScroll FN_VSCROLLBAR
 
 [
@@ -8662,7 +8337,6 @@ SfxBoolItem VScroll FN_VSCROLLBAR
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem WordLeftSel FN_PREV_WORD_SEL
 ()
 [
@@ -8687,7 +8361,6 @@ SfxVoidItem WordLeftSel FN_PREV_WORD_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem WordRightSel FN_NEXT_WORD_SEL
 ()
 [
@@ -8712,7 +8385,6 @@ SfxVoidItem WordRightSel FN_NEXT_WORD_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapAnchorOnly FN_WRAP_ANCHOR_ONLY
 ()
 [
@@ -8737,7 +8409,6 @@ SfxBoolItem WrapAnchorOnly FN_WRAP_ANCHOR_ONLY
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapContour FN_FRAME_WRAP_CONTOUR
 ()
 [
@@ -8764,7 +8435,6 @@ SfxBoolItem WrapContour FN_FRAME_WRAP_CONTOUR
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapIdeal FN_FRAME_WRAP_IDEAL
 ()
 [
@@ -8789,7 +8459,6 @@ SfxBoolItem WrapIdeal FN_FRAME_WRAP_IDEAL
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapLeft FN_FRAME_WRAP_LEFT
 ()
 [
@@ -8814,7 +8483,6 @@ SfxBoolItem WrapLeft FN_FRAME_WRAP_LEFT
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapOff FN_FRAME_NOWRAP
 ()
 [
@@ -8841,7 +8509,6 @@ SfxBoolItem WrapOff FN_FRAME_NOWRAP
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapOn FN_FRAME_WRAP
 ()
 [
@@ -8868,7 +8535,6 @@ SfxBoolItem WrapOn FN_FRAME_WRAP
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapRight FN_FRAME_WRAP_RIGHT
 ()
 [
@@ -8893,7 +8559,6 @@ SfxBoolItem WrapRight FN_FRAME_WRAP_RIGHT
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapThrough FN_FRAME_WRAPTHRU
 ()
 [
@@ -8920,7 +8585,6 @@ SfxBoolItem WrapThrough FN_FRAME_WRAPTHRU
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem WrapThroughTransparent FN_FRAME_WRAPTHRU_TRANSP
 ()
 [
@@ -8945,7 +8609,6 @@ SfxBoolItem WrapThroughTransparent FN_FRAME_WRAPTHRU_TRANSP
     GroupId = GID_FRAME;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertText FN_INSERT_STRING
 (SfxStringItem Text FN_INSERT_STRING)
 [
@@ -8970,7 +8633,6 @@ SfxVoidItem InsertText FN_INSERT_STRING
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SwNumRuleItem NumRule SID_ATTR_PARA_NUMRULE
 
 [
@@ -8997,7 +8659,6 @@ SwNumRuleItem NumRule SID_ATTR_PARA_NUMRULE
     GroupId = GID_FORMAT;
 ]
 
-//---------------------------------------------------------------------------
 SfxUInt16Item OutlineLevel SID_ATTR_PARA_OUTLINE_LEVEL
 
 [
@@ -9024,7 +8685,6 @@ SfxUInt16Item OutlineLevel SID_ATTR_PARA_OUTLINE_LEVEL
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxUInt16Item NumNewStartAt FN_NUMBER_NEWSTART_AT
 
 [
@@ -9051,7 +8711,6 @@ SfxUInt16Item NumNewStartAt FN_NUMBER_NEWSTART_AT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SwFmtLineNumber LineNumber FN_FORMAT_LINENUMBER
 
 [
@@ -9078,7 +8737,6 @@ SwFmtLineNumber LineNumber FN_FORMAT_LINENUMBER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxUInt16Item PageNumber SID_ATTR_PARA_PAGENUM
 
 [
@@ -9105,7 +8763,6 @@ SfxUInt16Item PageNumber SID_ATTR_PARA_PAGENUM
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SwRegisterItem RegisterTrue SID_ATTR_PARA_REGISTER
 
 [
@@ -9132,7 +8789,6 @@ SwRegisterItem RegisterTrue SID_ATTR_PARA_REGISTER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem JumpToFootnoteArea FN_TO_FOOTNOTE_AREA
 ()
 [
@@ -9157,7 +8813,6 @@ SfxVoidItem JumpToFootnoteArea FN_TO_FOOTNOTE_AREA
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SwFmtINetFmt HyperlinkAttributes FN_TXTATR_INET
 
 [
@@ -9184,7 +8839,6 @@ SwFmtINetFmt HyperlinkAttributes FN_TXTATR_INET
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem InsertGlossary FN_INSERT_GLOSSARY
 (SfxStringItem Group FN_INSERT_GLOSSARY,SfxStringItem ShortName FN_PARAM_1)
 [
@@ -9209,7 +8863,6 @@ SfxVoidItem InsertGlossary FN_INSERT_GLOSSARY
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NewGlossary FN_NEW_GLOSSARY
 (SfxStringItem Group FN_NEW_GLOSSARY,SfxStringItem Name FN_PARAM_1,SfxStringItem ShortName FN_PARAM_2)
 [
@@ -9234,7 +8887,6 @@ SfxVoidItem NewGlossary FN_NEW_GLOSSARY
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetActGlossaryGroup FN_SET_ACT_GLOSSARY
 (SfxStringItem Group FN_SET_ACT_GLOSSARY)
 [
@@ -9259,7 +8911,6 @@ SfxVoidItem SetActGlossaryGroup FN_SET_ACT_GLOSSARY
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DeleteBookmark FN_DELETE_BOOKMARK
 (SfxStringItem Bookmark FN_DELETE_BOOKMARK)
 [
@@ -9284,7 +8935,6 @@ SfxVoidItem DeleteBookmark FN_DELETE_BOOKMARK
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetDropCapText FN_DROP_TEXT
 (SfxStringItem DropCapText FN_DROP_TEXT)
 [
@@ -9309,7 +8959,6 @@ SfxVoidItem SetDropCapText FN_DROP_TEXT
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
 (SfxStringItem CharStyleName FN_DROP_CHAR_STYLE_NAME)
 [
@@ -9334,7 +8983,6 @@ SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem SelectTextMode FN_READONLY_SELECTION_MODE
 
 [
@@ -9361,7 +9009,6 @@ SfxBoolItem SelectTextMode FN_READONLY_SELECTION_MODE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem InsertDBField FN_INSERT_DBFIELD
 (SfxUInt16Item Type FN_PARAM_FIELD_TYPE,SfxStringItem DBName FN_INSERT_DBFIELD,SfxStringItem Command FN_PARAM_1,SfxStringItem ColumnName FN_PARAM_2,SfxInt32Item CommandType FN_PARAM_3,SfxStringItem Content FN_PARAM_FIELD_CONTENT,SfxUInt32Item Format FN_PARAM_FIELD_FORMAT)
 [
@@ -9385,7 +9032,7 @@ SfxBoolItem InsertDBField FN_INSERT_DBFIELD
     ToolBoxConfig = FALSE,
     GroupId = GID_INSERT;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem JumpToNextCell FN_GOTO_NEXT_CELL
 (SfxBoolItem AppendLineInReadonlyFlag FN_GOTO_NEXT_CELL)
 [
@@ -9409,7 +9056,7 @@ SfxBoolItem JumpToNextCell FN_GOTO_NEXT_CELL
     ToolBoxConfig = FALSE,
     GroupId = GID_NAVIGATOR;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem JumpToPrevCell FN_GOTO_PREV_CELL
 ()
 [
@@ -9434,7 +9081,6 @@ SfxBoolItem JumpToPrevCell FN_GOTO_PREV_CELL
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem InsertFieldDataOnly FN_INSERT_FIELD_DATA_ONLY()
 [
     /* flags: */
@@ -9460,7 +9106,7 @@ SfxBoolItem InsertFieldDataOnly FN_INSERT_FIELD_DATA_ONLY()
     ToolBoxConfig = FALSE,
     GroupId = GID_INSERT;
 ]
-//--------------------------------------------------------------------------
+
 SvxBrushItem TableRowBackground SID_ATTR_BRUSH_ROW
 
 [
@@ -9486,7 +9132,7 @@ SvxBrushItem TableRowBackground SID_ATTR_BRUSH_ROW
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SvxBrushItem TableBackground SID_ATTR_BRUSH_TABLE
 
 [
@@ -9512,7 +9158,7 @@ SvxBrushItem TableBackground SID_ATTR_BRUSH_TABLE
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
 
 [
@@ -9538,7 +9184,7 @@ SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
         ToolBoxConfig = TRUE,
         GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem MailmergeChildWindow FN_MAILMERGE_CHILDWINDOW
 ()
 [
@@ -9563,7 +9209,6 @@ SfxBoolItem MailmergeChildWindow FN_MAILMERGE_CHILDWINDOW
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem WordCountDialog FN_WORDCOUNT_DIALOG
 ()
 [
@@ -9588,7 +9233,6 @@ SfxVoidItem WordCountDialog FN_WORDCOUNT_DIALOG
     GroupId = GID_OPTIONS;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem SendMailChildWindow FN_MAILMERGE_SENDMAIL_CHILDWINDOW
 ()
 [
@@ -9612,7 +9256,7 @@ SfxBoolItem SendMailChildWindow FN_MAILMERGE_SENDMAIL_CHILDWINDOW
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem DeleteTable FN_TABLE_DELETE_TABLE
 ()
 [
@@ -9637,7 +9281,6 @@ SfxVoidItem DeleteTable FN_TABLE_DELETE_TABLE
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem EntireCell FN_TABLE_SELECT_CELL
 ()
 [
@@ -9661,7 +9304,7 @@ SfxVoidItem EntireCell FN_TABLE_SELECT_CELL
     ToolBoxConfig = TRUE,
     GroupId = GID_TABLE;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ConvertTableToText FN_CONVERT_TABLE_TO_TEXT
 (
     SfxStringItem Delimiter FN_PARAM_1,
@@ -9687,7 +9330,7 @@ SfxVoidItem ConvertTableToText FN_CONVERT_TABLE_TO_TEXT
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ConvertTextToTable FN_CONVERT_TEXT_TO_TABLE
 (
     SfxStringItem Delimiter FN_PARAM_1
@@ -9718,7 +9361,6 @@ SfxVoidItem ConvertTextToTable FN_CONVERT_TEXT_TO_TABLE
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
-//--------------------------------------------------------------------------
 
 SfxVoidItem HeadingRowsRepeat FN_TABLE_HEADLINE_REPEAT
 ()
@@ -9743,7 +9385,7 @@ SfxVoidItem HeadingRowsRepeat FN_TABLE_HEADLINE_REPEAT
     ToolBoxConfig = TRUE,
     GroupId = GID_TABLE;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem TableSort FN_TABLE_SORT_DIALOG
 ()
 [
@@ -9768,7 +9410,6 @@ SfxVoidItem TableSort FN_TABLE_SORT_DIALOG
     GroupId = GID_TABLE;
 ]
 
-//--------------------------------------------------------------------------
 // #i31958#: toggle design mode for XForms; copied from SID_FM_DESIGN_MODE
 SfxBoolItem SwitchXFormsDesignMode FN_XFORMS_DESIGN_MODE
 [
@@ -9795,7 +9436,6 @@ SfxBoolItem SwitchXFormsDesignMode FN_XFORMS_DESIGN_MODE
     GroupId = GID_CONTROLS;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem RemoveDirectCharFormats FN_REMOVE_DIRECT_CHAR_FORMATS
 [
     /* flags: */
@@ -9820,7 +9460,7 @@ SfxVoidItem RemoveDirectCharFormats FN_REMOVE_DIRECT_CHAR_FORMATS
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem ContinueNumbering FN_NUM_CONTINUE
 ()
 [
@@ -9844,7 +9484,7 @@ SfxVoidItem ContinueNumbering FN_NUM_CONTINUE
     ToolBoxConfig = TRUE,
     GroupId = GID_ENUMERATION;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem SelectionModeDefault FN_SELECTION_MODE_DEFAULT
 [
     /* flags: */
@@ -9893,7 +9533,6 @@ SfxVoidItem ReplyComment FN_REPLY
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DeleteComment FN_DELETE_COMMENT
 ()
 [
@@ -9918,7 +9557,6 @@ SfxVoidItem DeleteComment FN_DELETE_COMMENT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_NOTE_AUTHOR )
 [
     /* flags: */
@@ -9942,7 +9580,6 @@ SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem DeleteAllNotes FN_DELETE_ALL_NOTES
 ()
 [
@@ -9967,7 +9604,6 @@ SfxVoidItem DeleteAllNotes FN_DELETE_ALL_NOTES
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem HideNote FN_HIDE_NOTE
 ()
 [
@@ -9992,7 +9628,6 @@ SfxVoidItem HideNote FN_HIDE_NOTE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR ( SfxStringItem Author FN_HIDE_NOTE_AUTHOR )
 [
     /* flags: */
@@ -10016,7 +9651,6 @@ SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR ( SfxStringItem Author FN_HIDE_NOTE_A
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SvxViewLayoutItem ViewLayout SID_ATTR_VIEWLAYOUT
 [
         /* flags: */
@@ -10040,7 +9674,6 @@ SvxViewLayoutItem ViewLayout SID_ATTR_VIEWLAYOUT
         GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem HideAllNotes FN_HIDE_ALL_NOTES
 ()
 [
@@ -10065,7 +9698,6 @@ SfxVoidItem HideAllNotes FN_HIDE_ALL_NOTES
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxBoolItem SelectionModeBlock FN_SELECTION_MODE_BLOCK
 [
     /* flags: */
@@ -10090,7 +9722,7 @@ SfxBoolItem SelectionModeBlock FN_SELECTION_MODE_BLOCK
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
-//--------------------------------------------------------------------------
+
 SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
 
 [
@@ -10116,7 +9748,7 @@ SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem AcceptTracedChange FN_REDLINE_ACCEPT_DIRECT
 [
     /* flags: */
@@ -10142,7 +9774,6 @@ SfxVoidItem AcceptTracedChange FN_REDLINE_ACCEPT_DIRECT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem RejectTracedChange FN_REDLINE_REJECT_DIRECT
 [
     /* flags: */
@@ -10168,7 +9799,6 @@ SfxVoidItem RejectTracedChange FN_REDLINE_REJECT_DIRECT
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
 [
     /* flags: */
@@ -10194,7 +9824,6 @@ SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem PreviousTrackedChange FN_REDLINE_PREV_CHANGE
 [
     /* flags: */
@@ -10220,7 +9849,6 @@ SfxVoidItem PreviousTrackedChange FN_REDLINE_PREV_CHANGE
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem RemoveHyperlink FN_REMOVE_HYPERLINK
 [
     /* flags: */
@@ -10246,7 +9874,6 @@ SfxVoidItem RemoveHyperlink FN_REMOVE_HYPERLINK
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem CopyHyperlinkLocation FN_COPY_HYPERLINK_LOCATION
 [
     /* flags: */
@@ -10272,7 +9899,6 @@ SfxVoidItem CopyHyperlinkLocation FN_COPY_HYPERLINK_LOCATION
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem NavigateBack FN_NAVIGATION_BACK
 [
     /* flags: */
@@ -10297,7 +9923,7 @@ SfxVoidItem NavigateBack FN_NAVIGATION_BACK
     ToolBoxConfig = TRUE,
     GroupId = GID_NAVIGATION;
 ]
-//--------------------------------------------------------------------------
+
 SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
 [
     /* flags: */
@@ -10323,7 +9949,6 @@ SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
     GroupId = GID_NAVIGATION;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem OpenFromWriter FN_OPEN_FILE
 ()
 [

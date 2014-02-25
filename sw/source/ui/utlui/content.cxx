@@ -2756,7 +2756,6 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                     break;
                 }
 
-
                 bViewHasChanged = true;
             }
         }

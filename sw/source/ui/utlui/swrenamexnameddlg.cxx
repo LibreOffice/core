@@ -49,7 +49,6 @@
 
 #include "swrenamexnameddlg.hxx"
 
-
 using namespace ::com::sun::star;
 
 SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,

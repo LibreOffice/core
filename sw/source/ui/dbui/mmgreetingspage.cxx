@@ -302,7 +302,6 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     m_aPrevSetIB.SetClickHdl(aDataLink);
     m_aNextSetIB.SetClickHdl(aDataLink);
 
-
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
     m_aGreetingLineCB.Check(rConfig.IsGreetingLine(sal_False));
     m_aPersonalizedCB.Check(rConfig.IsIndividualGreeting(sal_False));

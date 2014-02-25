@@ -37,7 +37,6 @@
 
 #include <unobaseclass.hxx>
 
-
 typedef ::std::deque<
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > >
     TextRangeList_t;
@@ -232,7 +231,6 @@ public:
             ::com::sun::star::uno::RuntimeException, std::exception);
 
 };
-
 
 typedef ::cppu::ImplInheritanceHelper2
 <   SwXMeta

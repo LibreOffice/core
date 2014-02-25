@@ -655,7 +655,6 @@ static bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
     return pTab && pTab->IsFollow() && pTab->IsInHeadline( *pFrm );
 }
 
-
 /// Skip protected table cells. Optionally also skip repeated headlines.
 //MA 1998-01-26: Chg also skip other protected areas
 //FME: Skip follow flow cells
@@ -736,7 +735,6 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
 
     pCnt = (*fnNxtPrv)( pCnt ? pCnt : pStart );
     pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTblSel );
-
 
     const SwTabFrm *pStTab = pStart->FindTabFrm();
     const SwTabFrm *pTable = 0;

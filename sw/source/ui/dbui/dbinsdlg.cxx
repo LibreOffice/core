@@ -158,7 +158,6 @@ struct _DB_Column
     }
 };
 
-
 struct _DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
@@ -1026,7 +1025,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         sal_Bool bIsAutoUpdateCells = rSh.IsAutoUpdateCells();
         rSh.SetAutoUpdateCells( sal_False );
 
-
         if( m_pCbTableHeadon->IsChecked() )
         {
             for( n = 0; n < nCols; ++n )
@@ -1230,7 +1228,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
                                         OUString("1"), aEmptyOUStr, aDBData );
 
-
             bool bSetCrsr = true;
             sal_uInt16 n = 0, nCols = aColArr.size();
             ::sw::mark::IMark* pMark = NULL;
@@ -1255,7 +1252,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                 if(bBreak)
                     break;
-
 
                 for( n = 0; n < nCols; ++n )
                 {
@@ -1732,7 +1728,6 @@ void SwInsertDBColAutoPilot::Load()
 
                 pInsDBColumn->nUsrNumFmt = rNFmtr.GetEntryKey( pInsDBColumn->sUsrNumFmt,
                                                         pInsDBColumn->eUsrNumFmtLng );
-
 
                 pNewData->aDBColumns.insert(pInsDBColumn);
             }

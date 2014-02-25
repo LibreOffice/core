@@ -83,7 +83,6 @@ public:
     inline void SetGrfToggle( sal_Bool bNew )   { bGrfToggle = bNew; }
 };
 
-
 /******************************************************************************
  *  class SwAttrCropGrf
  ******************************************************************************/
@@ -233,7 +232,6 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
                                             sal_uInt8 nMemberId = 0 );
 
-
     const double& GetValue() const              { return nValue; }
     void SetValue( const double& rVal )         { nValue = rVal; }
 };
@@ -298,8 +296,6 @@ public:
                                         sal_uInt8 nMemberId = 0 );
 };
 
-
-
 /******************************************************************************
  *  Implementation of graphics attributes methods of SwAttr
  ******************************************************************************/
@@ -357,7 +353,6 @@ inline const SwTransparencyGrf &SwFmt::GetTransparencyGrf(sal_Bool bInP) const
     { return aSet.GetTransparencyGrf( bInP); }
 inline const SwDrawModeGrf &SwFmt::GetDrawModeGrf(sal_Bool bInP) const
     { return aSet.GetDrawModeGrf(bInP); }
-
 
 #endif // INCLUDED_SW_INC_GRFATR_HXX
 

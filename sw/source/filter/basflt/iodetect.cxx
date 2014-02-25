@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <iodetect.hxx>
 #include <boost/scoped_array.hpp>
 #include <osl/endian.h>
@@ -372,7 +371,6 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
     }
 
     TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
-
 
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     /* suche nach dem bestimmten Filter, falls kein entsprechender        */

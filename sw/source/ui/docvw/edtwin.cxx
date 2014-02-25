@@ -699,8 +699,6 @@ void SwEditWin::StopInsFrm()
     m_nInsFrmColCount = 1;
 }
 
-
-
 sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr ) const
 {
     const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
@@ -773,18 +771,18 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
                     // wants to use the language reported from the system,
                     // except if we knew that it was explicitly switched (thus
                     // the check for "bInputLangeSwitched").
-                    //
+
                     // The language reported by the system could be just the
                     // system default language that the user is not even aware
                     // of, because no language selection tool is installed at
                     // all. In this case the OOo language should get preference
                     // as it might have been selected by the user explicitly.
-                    //
+
                     // Usually this case happens if the OOo language is
                     // different to the system language but the system keyboard
                     // is still suitable for the OOo language (e.g. writing
                     // English texts with a German keyboard).
-                    //
+
                     // For non-latin keyboards overwriting the attribute is
                     // still valid. We do this for kyrillic and greek ATM.  In
                     // future versions of OOo this should be replaced by a
@@ -834,9 +832,8 @@ void SwEditWin::FlushInBuffer()
         uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = pCheckIt->xCheck;
         if ( xISC.is() && IsInputSequenceCheckingRequired( m_aInBuffer, *rSh.GetCrsr() ) )
         {
-            //
+
             // apply (Thai) input sequence checking/correction
-            //
 
             rSh.Push(); // push current cursor to stack
 
@@ -2583,7 +2580,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_CellTopSmall:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_TOP, pModOpt->GetTblVMove() );   break;
             case KS_CellBottomSmall:    rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_BOTTOM, pModOpt->GetTblVMove() );    break;
 
-
             case KS_InsDel_ColLeftBig:          rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_COL_LEFT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHInsert() ); break;
             case KS_InsDel_ColRightBig:         rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_COL_RIGHT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHInsert() );    break;
             case KS_InsDel_ColLeftSmall:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_COL_LEFT, pModOpt->GetTblHInsert() ); break;
@@ -2861,7 +2857,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             // Is the cursor in a part like similar to the one we clicked on? For example,
             // if the cursor is in a header and we click on an empty header... don't change anything to
             // keep consistent behaviour due to header edit mode (and the same for the footer as well).
-            //
+
             // Otherwise, we hide the header/footer control if a separator is shown, and vice versa.
             if ( !( bWasInHeader && eControl == Header ) &&
                  !( bWasInFooter && eControl == Footer ) )
@@ -2902,7 +2898,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 //            rSh.GetWin()->Invalidate();
         }
     }
-
 
     if ( IsChainMode() )
     {
@@ -6000,7 +5995,6 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
         // Get the necessary data to show help text.
         m_pQuickHlpData->FillStrArr( rSh, rWord );
     }
-
 
     if( !m_pQuickHlpData->m_aHelpStrings.empty() )
     {

@@ -395,7 +395,6 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     return bRet;
 }
 
-
 // Called by the functions:
 //  - FnCptlSttWrd
 //  - FnCptlSttSntnc

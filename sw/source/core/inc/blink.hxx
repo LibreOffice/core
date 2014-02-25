@@ -77,7 +77,6 @@ public:
 // Blink-Manager, global variable, see Blink.Cxx
 extern SwBlink *pBlink;
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -224,9 +224,7 @@ IMPL_LINK_NOARG(SwView, FormControlActivated)
 void SwView::SelectShell()
 {
 
-
 // Attention: Maintain the SelectShell for the WebView additionally
-
 
           if(m_bInDtor)
         return;

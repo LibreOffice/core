@@ -44,7 +44,6 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
     FixedInfo       m_aEditFI;
     PushButton      m_aEditPB;
 
-
     SwMailMergeWizard*  m_pWizard;
 
     DECL_LINK(EditDocumentHdl_Impl, void *);
@@ -61,6 +60,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

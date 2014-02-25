@@ -99,7 +99,6 @@
 #include <svx/xftshxy.hxx>
 #include <svx/grafctrl.hxx>
 
-
 #include <fmtornt.hxx>
 #include <paratr.hxx>
 #include <fmtinfmt.hxx>
@@ -136,7 +135,5 @@
 #define SFX_TYPEMAP
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

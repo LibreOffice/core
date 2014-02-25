@@ -29,7 +29,6 @@ namespace sw { namespace sidebar {
 
 class PagePropertyPanel;
 
-
 class PageOrientationControl
     : public ::svx::sidebar::PopupControl
 {

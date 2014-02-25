@@ -43,11 +43,9 @@ namespace sw { namespace mark
         }
     }
 
-
     AnnotationMark::~AnnotationMark()
     {
     }
-
 
     void AnnotationMark::InitDoc(SwDoc* const io_pDoc)
     {
@@ -78,7 +76,6 @@ namespace sw { namespace mark
         }
         io_pDoc->SetModified();
     }
-
 
     const SwFmtFld* AnnotationMark::GetAnnotationFmtFld() const
     {

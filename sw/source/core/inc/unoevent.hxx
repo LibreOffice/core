@@ -22,7 +22,6 @@
 #include <svtools/unoevent.hxx>
 #include <svl/macitem.hxx>
 
-
 class SvxMacroItem;
 class SvxMacro;
 class SwXFrame;
@@ -31,8 +30,6 @@ class SwXTextGraphicObject;
 class SwXTextEmbeddedObject;
 class SwXFrameStyle;
 class SwFmtINetFmt;
-
-
 
 class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 {
@@ -47,8 +44,6 @@ public:
 
      SwHyperlinkEventDescriptor();
 
-
-
     void copyMacrosFromINetFmt(const SwFmtINetFmt& aFmt);
     void copyMacrosIntoINetFmt(SwFmtINetFmt& aFmt);
 
@@ -56,8 +51,6 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameReplace> & xReplace);
 };
-
-
 
 // SwEventDescriptor for
 // 1) SwXTextFrame
@@ -105,7 +98,6 @@ protected:
     virtual const SvxMacroItem& getMacroItem();
     virtual sal_uInt16 getMacroItemWhich() const;
 };
-
 
 #endif
 

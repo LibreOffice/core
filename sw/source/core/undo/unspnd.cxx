@@ -32,7 +32,6 @@
 #include "docary.hxx"
 #include <IShellCursorSupplier.hxx>
 
-
 // SPLITNODE
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,

@@ -51,7 +51,6 @@ protected:
 public:
     SwXFootnoteProperties(SwDoc* pDoc);
 
-
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
@@ -82,7 +81,6 @@ protected:
 public:
     SwXEndnoteProperties(SwDoc* pDoc);
 
-
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
@@ -112,7 +110,6 @@ protected:
     virtual ~SwXLineNumberingProperties();
 public:
     SwXLineNumberingProperties(SwDoc* pDoc);
-
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
@@ -160,11 +157,9 @@ public:
     SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc = NULL); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
 
-
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-
 
     //XIndexReplace
     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
@@ -218,7 +213,6 @@ protected:
 public:
     SwXChapterNumbering(SwDocShell& rDocSh);
 
-
     void    Invalidate() {SwXNumberingRules::Invalidate();}
 
     //XServiceInfo
@@ -258,8 +252,6 @@ public:
     SwXTextColumns(sal_uInt16 nColCount);
     SwXTextColumns(const SwFmtCol& rFmtCol);
 
-
-
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
@@ -296,6 +288,5 @@ public:
     sal_Bool    IsAutomaticWidth() const {return bIsAutomaticWidth;}
 };
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

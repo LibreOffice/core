@@ -218,7 +218,6 @@ class IDocumentMarkAccess
         */
         virtual const_iterator_t findMark(const OUString& rMark) const =0;
 
-
         // interface IBookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
 
         /** returns a STL-like random access iterator to the begin of the sequence the IBookmarks.
@@ -242,7 +241,6 @@ class IDocumentMarkAccess
             an iterator pointing to the bookmark, or getBookmarksEnd() if nothing was found.
         */
         virtual const_iterator_t findBookmark(const OUString& rMark) const =0;
-
 
         // Fieldmarks
         virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& pos) const =0;

@@ -191,7 +191,6 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
     return -1;
 }
 
-
 SwPaM *
 Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndIdx)
 {
@@ -240,7 +239,6 @@ SvStream& Writer::OutULong( SvStream& rStrm, sal_uLong nVal )
 {
     return lcl_OutLongExt(rStrm, nVal, false);
 }
-
 
 sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
 {
@@ -384,7 +382,6 @@ void Writer::CreateBookmarkTbl()
         m_pImpl->InsertBkmk(**ppBkmk);
     }
 }
-
 
 // search alle Bookmarks in the range and return it in the Array
 sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_FMTRUBY_HXX
 #define INCLUDED_SW_INC_FMTRUBY_HXX
 
-
 #include <svl/poolitem.hxx>
 
 class SwTxtRuby;
@@ -57,7 +56,6 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 );
 
-
     const SwTxtRuby* GetTxtRuby() const         { return pTxtAttr; }
     SwTxtRuby* GetTxtRuby()                     { return pTxtAttr; }
 
@@ -76,7 +74,6 @@ public:
     sal_uInt16 GetAdjustment() const                { return nAdjustment; }
     void SetAdjustment( sal_uInt16 nNew )           { nAdjustment = nNew; }
 };
-
 
 #endif
 

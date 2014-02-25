@@ -49,7 +49,6 @@ interface BaseTextList
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-
     FN_NUM_BULLET_OUTLINE_DOWN  // status(final|play)
     [
         ExecMethod = Execute ;

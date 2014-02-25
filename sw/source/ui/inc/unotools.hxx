@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_UNOTOOLS_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_UNOTOOLS_HXX
 
-
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/dialog.hxx>

@@ -52,7 +52,6 @@
 #include <swuicnttab.hxx>
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
@@ -384,7 +383,6 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     uno::Any aFormatAccess = xIdxProps->getPropertyValue(UNO_NAME_LEVEL_FORMAT);
                     OSL_ENSURE(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
                         "wrong property type");
-
 
                     uno::Reference< container::XIndexReplace >  xFormatAccess;
                     aFormatAccess >>= xFormatAccess;

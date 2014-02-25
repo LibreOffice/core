@@ -524,6 +524,4 @@ void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
     DELETEZ(GetParentSwEnvDlg()->pAddresseeSet);
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

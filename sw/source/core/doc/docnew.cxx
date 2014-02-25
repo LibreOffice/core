@@ -329,7 +329,7 @@ SwDoc::SwDoc()
 
     // Note: Any non-hidden compatibility flag should obtain its default
     // by asking SvtCompatibilityOptions, see below.
-    //
+
     const SvtCompatibilityOptions aOptions;
     mbParaSpaceMax                      = aOptions.IsAddSpacing();
     mbParaSpaceMaxAtPages               = aOptions.IsAddSpacingAtPages();

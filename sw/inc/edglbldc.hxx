@@ -60,7 +60,6 @@ public:
         {   return GetDocPos() < rCmp.GetDocPos(); }
 };
 
-
 class SwGlblDocContents : public o3tl::sorted_vector<SwGlblDocContent*, o3tl::less_ptr_to<SwGlblDocContent> > {
 public:
     ~SwGlblDocContents() { DeleteAndDestroyAll(); }

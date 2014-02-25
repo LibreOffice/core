@@ -28,7 +28,6 @@
 #include <format.hxx>
 #include <svl/poolitem.hxx>
 
-
 class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
@@ -64,7 +63,6 @@ public:
     SwTwips GetPos() const { return nYPos; }
     void    SetPos( SwTwips nNew ) { nYPos = nNew; }
 };
-
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {

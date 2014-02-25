@@ -114,7 +114,6 @@ struct SwCallMouseEvent
     sal_Bool HasEvent() const { return EVENT_OBJECT_NONE != eType; }
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

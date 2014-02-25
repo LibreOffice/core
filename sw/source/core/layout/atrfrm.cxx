@@ -756,7 +756,6 @@ bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-
 //  class SwFmtCol
 //  Partially implemented inline in hxx
 
@@ -1049,7 +1048,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                                      (sal_uInt16) 0x3fff );
             sal_uInt16 nWidthSum = 0;
             // #101224# one column is no column
-            //
+
             if(nCount > 1)
                 for(sal_uInt16 i = 0; i < nCount; i++)
                 {
@@ -1136,7 +1135,6 @@ sal_uInt16  SwFmtSurround::GetValueCount() const
 {
     return SURROUND_END - SURROUND_BEGIN;
 }
-
 
 bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -1321,7 +1319,6 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     }
     return bRet;
 }
-
 
 //  class SwFmtHoriOrient
 //  Partially implemented inline in hxx

@@ -2074,7 +2074,6 @@ void SwHTMLParser::NewTextArea()
         }
     }
 
-
     const uno::Reference< lang::XMultiServiceFactory > & rSrvcMgr =
         pFormImpl->GetServiceFactory();
     if( !rSrvcMgr.is() )

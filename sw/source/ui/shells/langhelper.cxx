@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 
 #include <vcl/window.hxx>
@@ -229,7 +228,6 @@ namespace SwLangHelper
         return bRestoreSelection;
     }
 
-
     void SetLanguage( SwWrtShell &rWrtSh, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
         SetLanguage( rWrtSh, 0 , ESelection(), rLangText, bIsForSelection, rCoreSet );
@@ -405,7 +403,6 @@ namespace SwLangHelper
             rWrtSh.ResetAttr( aAttribs );
         }
     }
-
 
     /// @returns : the language for the selected text that is set for the
     ///     specified attribute (script type).
@@ -587,7 +584,6 @@ namespace SwLangHelper
 
         return aText;
     }
-
 
     void SelectPara( EditView &rEditView, const ESelection &rCurSel )
     {

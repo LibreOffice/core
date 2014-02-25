@@ -62,7 +62,6 @@ public:
 
 void GetWW8Writer( const OUString&, const OUString&, WriterRef& );
 
-
 // Umsetzen der LRSpaces im aktuell importierten Doc. Die Fremd-Filter
 // liefern immer absolute Werte fuer die Ebenen einer NumRule. Wir
 // verarbeiten jetzt aber relative Werte bezogen auf das LR-Space-Item.

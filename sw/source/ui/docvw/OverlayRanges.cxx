@@ -29,8 +29,6 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-
 namespace
 {
     // combine ranges geometrically to a single, ORed polygon
@@ -157,7 +155,6 @@ namespace sw
                 objectChange();
             }
         }
-
 
         void OverlayRanges::ShowSolidBorder()
         {

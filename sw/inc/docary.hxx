@@ -207,7 +207,6 @@ public:
     bool IsEmpty() const                              {     return m_aExtraRedlines.empty();               }
 };
 
-
 class SwUnoCrsrTbl : public std::set<SwUnoCrsr*> {
 public:
     /// the destructor will free all objects still in the set
@@ -215,7 +214,6 @@ public:
 };
 
 class SwOLENodes : public std::vector<SwOLENode*> {};
-
 
 #endif // INCLUDED_SW_INC_DOCARY_HXX
 

@@ -24,7 +24,6 @@
 #include "frmfmt.hxx"
 #include "colmgr.hxx"
 
-
 // private methods
 /*------------------------------------------------------------------------
  Description:   set column width to current width
