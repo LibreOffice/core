@@ -521,7 +521,7 @@ extern void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
 void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
 {
     OUString sType; // the type as string
-    OUString sFormel;
+    OUString sFormula;
     OUString sFormat;
     OUString sDTFormat;   // date/time format
     W1_FLD* pData = GetData(); // data bound to plc
@@ -547,7 +547,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
             sType = aStr;
             aStr = "";
         }
-        sFormel += aStr;
+        sFormula += aStr;
         sal_uInt8 rbType = pData->fltGet();
         do {
             // Read the formula part until the entire field ends or
@@ -560,27 +560,27 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
                 Out(rOut, rMan, nDepth+1);
                 rMan.Fill(c);
                 OSL_ENSURE(c==21, "Ww1PlainText");
-                sFormel += "Ww" + OUString::number(nPlcIndex);
+                sFormula += "Ww" + OUString::number(nPlcIndex);
                 c = rMan.Fill(aStr, GetLength());
                 OSL_ENSURE(Ww1PlainText::IsChar(c), "Ww1PlainText");
-                sFormel += aStr;
+                sFormula += aStr;
             }
         }
         while (pData->chGet()==19);
 
         // get format out of text
-        pos = sFormel.indexOf("\\*");
+        pos = sFormula.indexOf("\\*");
         if (pos != -1)
         {
-            sFormat = sFormel.copy(pos);
-            sFormel = sFormel.copy(0, pos);
+            sFormat = sFormula.copy(pos);
+            sFormula = sFormula.copy(0, pos);
         }
 
-        pos = sFormel.indexOf( "\\@" );
+        pos = sFormula.indexOf( "\\@" );
         if (pos != -1)
         {
-            sDTFormat = sFormel.copy(pos);
-            sFormel = sFormel.copy(0, pos);
+            sDTFormat = sFormula.copy(pos);
+            sFormula = sFormula.copy(0, pos);
         }
 
         // The formula part is done, does a result part follow?
@@ -607,10 +607,10 @@ oncemore:
         switch (rbType)
         {
         case 3: // bookmark reference
-            sFormel = rOut.ConvertUStr(sFormel);
+            sFormula = rOut.ConvertUStr(sFormula);
             pField = new SwGetRefField( (SwGetRefFieldType*)
                 rOut.GetSysFldType( RES_GETREFFLD ),
-                sFormel,
+                sFormula,
                 REF_BOOKMARK,
                 0,
                 REF_CONTENT );
@@ -816,7 +816,7 @@ oncemore:
                  (SwGetExpFieldType*)rOut.GetSysFldType(RES_GETEXPFLD);
                 OSL_ENSURE(pFieldType!=0, "Ww1Fields");
                 if (pFieldType != 0)
-                    pField = new SwGetExpField(pFieldType, sFormel,
+                    pField = new SwGetExpField(pFieldType, sFormula,
                      nsSwGetSetExpType::GSE_STRING, VVF_SYS);
             }
             else // recursion:
@@ -829,7 +829,7 @@ oncemore:
                     SwSetExpFieldType aS(&rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_FORMULA);
                     pFT = rOut.GetDoc().InsertFldType(aS);
                 }
-                SwSetExpField aFld((SwSetExpFieldType*)pFT, sFormel);
+                SwSetExpField aFld((SwSetExpFieldType*)pFT, sFormula);
                 aFld.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
                 rOut << aFld;
             }
@@ -869,7 +869,7 @@ oncemore:
         case 37: // page ref
             pField = new SwGetRefField(
              (SwGetRefFieldType*)rOut.GetSysFldType(RES_GETREFFLD),
-             sFormel, 0, 0, REF_PAGE);
+             sFormula, 0, 0, REF_PAGE);
         break;
         case 38: // ask command
         {
@@ -898,7 +898,7 @@ oncemore:
         case 39: // filling command
             pField = new SwInputField(
                 static_cast<SwInputFieldType*>(rOut.GetSysFldType( RES_INPUTFLD )),
-                OUString(), sFormel,
+                OUString(), sFormula,
                 INP_TXT, 0, false );
         break;
         case 51: // macro button
@@ -926,24 +926,24 @@ oncemore:
         break;
         case 55: // read tiff / or better: import anything
         {
-            const sal_Unicode* pFormel = sFormel.getStr();
+            const sal_Unicode* pFormula = sFormula.getStr();
             const sal_Unicode* pDot = 0;
             OUString sName;
-            while (*pFormel != '\0' && *pFormel != ' ')
+            while (*pFormula != '\0' && *pFormula != ' ')
             {
                 // from here on an extension could appear
-                if (*pFormel == '.')
-                    pDot = pFormel;
+                if (*pFormula == '.')
+                    pDot = pFormula;
                 else
                     // so far we were in directories
-                    if (*pFormel == '\\')
+                    if (*pFormula == '\\')
                     {
                         pDot = 0;
-                        if (pFormel[1] == '\\')
-                            pFormel++;
+                        if (pFormula[1] == '\\')
+                            pFormula++;
                     }
-                if (*pFormel != '\0')
-                    sName += OUString(*pFormel++);
+                if (*pFormula != '\0')
+                    sName += OUString(*pFormula++);
             }
             if( pDot )
             {
