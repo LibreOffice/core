@@ -202,8 +202,9 @@ SwXDispatch::~SwXDispatch()
     }
 }
 
-void SwXDispatch::dispatch(
-    const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs ) throw(uno::RuntimeException)
+void SwXDispatch::dispatch(const util::URL& aURL,
+    const uno::Sequence< beans::PropertyValue >& aArgs)
+        throw (uno::RuntimeException, std::exception)
 {
     if(!m_pView)
         throw uno::RuntimeException();
