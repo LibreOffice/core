@@ -159,7 +159,7 @@ VbaDummyFormControl::VbaDummyFormControl( const OUString& rName )
 
 } // namespace
 
-// ============================================================================
+
 
 VbaSiteModel::VbaSiteModel() :
     maPos( 0, 0 ),
@@ -318,7 +318,7 @@ void VbaSiteModel::convertProperties( PropertyMap& rPropMap,
     }
 }
 
-// ============================================================================
+
 
 VbaFormControl::VbaFormControl()
 {
@@ -722,7 +722,7 @@ bool VbaFormControl::compareByTabIndex( const VbaFormControlRef& rxLeft, const V
     return nLeftTabIndex < nRightTabIndex;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -868,7 +868,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     }
 }
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

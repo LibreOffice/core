@@ -40,7 +40,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 
 using namespace ::com::sun::star;
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -62,7 +62,7 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 
 } // namespace
 
-// ============================================================================
+
 
 GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
     mxContext( rxContext ),
@@ -340,7 +340,7 @@ awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic 
     return aSizeHmm;
 }
 
-// ============================================================================
+
 
 } // namespace oox
 

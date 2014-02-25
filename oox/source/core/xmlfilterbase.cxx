@@ -742,7 +742,7 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
     return StorageRef( new ZipStorage( getComponentContext(), rxOutStream ) );
 }
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

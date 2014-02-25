@@ -21,7 +21,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 NamespaceMap::NamespaceMap()
 {
@@ -37,6 +37,6 @@ NamespaceMap::NamespaceMap()
 }
 
 }
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

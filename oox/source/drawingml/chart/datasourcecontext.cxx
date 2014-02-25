@@ -25,12 +25,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 DoubleSequenceContext::DoubleSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel ) :
     DataSequenceContextBase( rParent, rModel ),
@@ -108,7 +108,7 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
     }
 }
 
-// ============================================================================
+
 
 StringSequenceContext::StringSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel ) :
     DataSequenceContextBase( rParent, rModel )
@@ -178,7 +178,7 @@ void StringSequenceContext::onCharacters( const OUString& rChars )
     }
 }
 
-// ============================================================================
+
 
 DataSourceContext::DataSourceContext( ContextHandler2Helper& rParent, DataSourceModel& rModel ) :
     ContextBase< DataSourceModel >( rParent, rModel )
@@ -227,7 +227,7 @@ ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const 
     return 0;
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

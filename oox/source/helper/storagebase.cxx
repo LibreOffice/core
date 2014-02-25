@@ -27,13 +27,13 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -265,7 +265,7 @@ StorageRef StorageBase::getSubStorage( const OUString& rElementName, bool bCreat
     return rxSubStrg;
 }
 
-// ============================================================================
+
 
 } // namespace oox
 

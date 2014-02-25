@@ -23,7 +23,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 ChartSpaceModel::ChartSpaceModel() :
     mnDispBlanksAs( XML_gap ),  // not zero as specified
@@ -39,7 +39,7 @@ ChartSpaceModel::~ChartSpaceModel()
 {
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

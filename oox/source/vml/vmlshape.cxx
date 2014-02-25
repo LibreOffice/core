@@ -66,7 +66,7 @@ using namespace ::com::sun::star::text;
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
@@ -76,7 +76,7 @@ using namespace ::com::sun::star::io;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 namespace {
 
@@ -109,7 +109,7 @@ awt::Rectangle lclGetAbsRect( const awt::Rectangle& rRelRect, const awt::Rectang
 
 } // namespace
 
-// ============================================================================
+
 
 ShapeTypeModel::ShapeTypeModel():
     mbAutoHeight( sal_False ),
@@ -208,7 +208,7 @@ awt::Rectangle ShapeType::getRelRectangle() const
         nWidth, nHeight );
 }
 
-// ============================================================================
+
 
 ClientData::ClientData() :
     mnObjType( XML_TOKEN_INVALID ),
@@ -423,7 +423,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     PropertySet( rxShape ).setProperties( aPropMap );
 }
 
-// ============================================================================
+
 
 SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
     ShapeBase( rDrawing ),
@@ -710,7 +710,7 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
     return xShape;
 }
 
-// ============================================================================
+
 
 RectangleShape::RectangleShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.RectangleShape" )
@@ -744,14 +744,14 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
     return xShape;
 }
 
-// ============================================================================
+
 
 EllipseShape::EllipseShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.EllipseShape" )
 {
 }
 
-// ============================================================================
+
 
 PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.PolyLineShape" )
@@ -808,7 +808,7 @@ awt::Rectangle LineShape::getRelRectangle() const
     return aShapeRect;
 }
 
-// ============================================================================
+
 
 BezierShape::BezierShape(Drawing& rDrawing)
     : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape")
@@ -910,7 +910,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
-// ============================================================================
+
 
 CustomShape::CustomShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.CustomShape" )
@@ -935,7 +935,7 @@ Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
-// ============================================================================
+
 
 ComplexShape::ComplexShape( Drawing& rDrawing ) :
     CustomShape( rDrawing )
@@ -1022,7 +1022,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
 }
 
-// ============================================================================
+
 
 GroupShape::GroupShape( Drawing& rDrawing ) :
     ShapeBase( rDrawing ),
@@ -1104,7 +1104,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     return xGroupShape;
 }
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespace oox

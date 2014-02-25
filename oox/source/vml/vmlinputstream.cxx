@@ -29,12 +29,12 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -255,7 +255,7 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
 
 } // namespace
 
-// ============================================================================
+
 
 InputStream::InputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm ) :
     // use single-byte ISO-8859-1 encoding which maps all byte characters to the first 256 Unicode characters
@@ -384,7 +384,7 @@ OString InputStream::readToElementEnd() throw (IOException, RuntimeException)
     return aText;
 }
 
-// ============================================================================
+
 
 } // namespace vml
 } // namespave oox

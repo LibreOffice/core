@@ -23,7 +23,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 DataLabelModelBase::DataLabelModelBase() :
     mbDeleted( false )
@@ -34,7 +34,7 @@ DataLabelModelBase::~DataLabelModelBase()
 {
 }
 
-// ============================================================================
+
 
 DataLabelModel::DataLabelModel() :
     mnIndex( -1 )
@@ -45,7 +45,7 @@ DataLabelModel::~DataLabelModel()
 {
 }
 
-// ============================================================================
+
 
 DataLabelsModel::DataLabelsModel() :
     mbShowLeaderLines( false )
@@ -56,7 +56,7 @@ DataLabelsModel::~DataLabelsModel()
 {
 }
 
-// ============================================================================
+
 
 PictureOptionsModel::PictureOptionsModel() :
     mfStackUnit( 1.0 ),
@@ -71,7 +71,7 @@ PictureOptionsModel::~PictureOptionsModel()
 {
 }
 
-// ============================================================================
+
 
 ErrorBarModel::ErrorBarModel() :
     mfValue( 0.0 ),
@@ -86,7 +86,7 @@ ErrorBarModel::~ErrorBarModel()
 {
 }
 
-// ============================================================================
+
 
 TrendlineLabelModel::TrendlineLabelModel()
 {
@@ -96,7 +96,7 @@ TrendlineLabelModel::~TrendlineLabelModel()
 {
 }
 
-// ============================================================================
+
 
 TrendlineModel::TrendlineModel() :
     mnOrder( 2 ),
@@ -111,7 +111,7 @@ TrendlineModel::~TrendlineModel()
 {
 }
 
-// ============================================================================
+
 
 DataPointModel::DataPointModel() :
     mnIndex( -1 ),
@@ -123,7 +123,7 @@ DataPointModel::~DataPointModel()
 {
 }
 
-// ============================================================================
+
 
 SeriesModel::SeriesModel() :
     mnExplosion( 0 ),
@@ -141,7 +141,7 @@ SeriesModel::~SeriesModel()
 {
 }
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

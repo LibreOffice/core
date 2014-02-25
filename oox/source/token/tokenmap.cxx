@@ -25,10 +25,10 @@
 #include "oox/token/tokens.hxx"
 
 namespace oox {
-// ============================================================================
+
 
 using ::com::sun::star::uno::Sequence;
-// ============================================================================
+
 
 namespace {
 // include auto-generated Perfect_Hash
@@ -46,7 +46,7 @@ namespace {
 #endif
 } // namespace
 
-// ============================================================================
+
 
 TokenMap::TokenMap() :
     maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
@@ -119,7 +119,7 @@ sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength ) c
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-// ============================================================================
+
 
 } // namespace oox
 

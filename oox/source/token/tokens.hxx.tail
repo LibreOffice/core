@@ -1,7 +1,7 @@
 
 const sal_Int32 XML_TOKEN_INVALID = ::com::sun::star::xml::sax::FastToken::DONTKNOW;
 
-// ============================================================================
+
 
 } // namespace oox
 

@@ -27,13 +27,13 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-// ============================================================================
+
 
 namespace {
 
@@ -116,7 +116,7 @@ sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )
         // cast, but that will have a ripple effect
 }
 
-// ============================================================================
+
 
 AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs ) :
     mxAttribs( rxAttribs ),
@@ -319,7 +319,7 @@ util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::Dat
     return getDateTime( nAttrToken ).get( rDefault );
 }
 
-// ============================================================================
+
 
 } // namespace oox
 

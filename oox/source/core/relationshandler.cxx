@@ -25,13 +25,13 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -53,7 +53,7 @@ OUString lclGetRelationsPath( const OUString& rFragmentPath )
 
 } // namespace
 
-// ============================================================================
+
 
 RelationsFragment::RelationsFragment( XmlFilterBase& rFilter, RelationsRef xRelations ) :
     FragmentHandler( rFilter, lclGetRelationsPath( xRelations->getFragmentPath() ), xRelations ),
@@ -94,7 +94,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
     return xRet;
 }
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

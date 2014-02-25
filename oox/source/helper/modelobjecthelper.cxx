@@ -29,14 +29,14 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxModelFactory, const OUString& rServiceName ) :
     mxModelFactory( rxModelFactory ),
@@ -82,7 +82,7 @@ void ObjectContainer::createContainer() const
     OSL_ENSURE( mxContainer.is(), "ObjectContainer::createContainer - container not found" );
 }
 
-// ============================================================================
+
 
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     maMarkerContainer(    rxModelFactory, "com.sun.star.drawing.MarkerTable" ),
@@ -132,7 +132,7 @@ OUString ModelObjectHelper::insertFillBitmapUrl( const OUString& rGraphicUrl )
     return OUString();
 }
 
-// ============================================================================
+
 
 } // namespace oox
 
