@@ -670,134 +670,107 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
         if( USER_FMT & nPoolId )
         {
             // Benutzer-Vorlagen
-            const OUString aNm = pPFmt->GetName();
-            switch( aNm[0] )
+            const OUString aNm(pPFmt->GetName());
+
+            if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_blockquote)
             {
-                        // nicht mehr unterstuetzt:
-                        // OOO_STRING_SVTOOLS_HTML_author
-                        // OOO_STRING_SVTOOLS_HTML_acronym
-                        // OOO_STRING_SVTOOLS_HTML_abbreviation
-                        // OOO_STRING_SVTOOLS_HTML_deletedtext
-                        // OOO_STRING_SVTOOLS_HTML_insertedtext
-                        // OOO_STRING_SVTOOLS_HTML_language
-                        // OOO_STRING_SVTOOLS_HTML_person
-            case 'B':   if( !bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_blockquote )
-                        {
-                            rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_blockquote);
-                        }
-                        break;
-            case 'C':   if( bChrFmt )
-                        {
-                            if( aNm == OOO_STRING_SVTOOLS_HTML_citiation )
-                            {
-                                rRefPoolId = RES_POOLCHR_HTML_CITIATION;
-                                rToken = OString(OOO_STRING_SVTOOLS_HTML_citiation);
-                            }
-                            else if( aNm == OOO_STRING_SVTOOLS_HTML_code )
-                            {
-                                rRefPoolId = RES_POOLCHR_HTML_CODE;
-                                rToken = OString(OOO_STRING_SVTOOLS_HTML_code);
-                            }
-                        }
-                        break;
-            case 'D':   if( bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_definstance )
-                        {
-                            rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_definstance);
-                        }
-                        else if( !bChrFmt )
-                        {
-                            sal_uInt16 nDefListLvl = GetDefListLvl( aNm, nPoolId );
-                            // Die Vorlagen DD 1/DT 1 werden ausgegeben,
-                            // aber keine von ihnen abgeleiteten Vorlagen,
-                            // auch nicht DD 2/DT 2 etc.
-                            if( nDefListLvl )
-                            {
-                                if( pPseudo &&
-                                    (nDeep || (nDefListLvl & 0x0fff) > 1) )
-                                {
-                                    bStop = true;
-                                }
-                                else if( nDefListLvl & HTML_DLCOLL_DD )
-                                {
-                                    rRefPoolId = RES_POOLCOLL_HTML_DD;
-                                    rToken = OString(OOO_STRING_SVTOOLS_HTML_dd);
-                                }
-                                else
-                                {
-                                    rRefPoolId = RES_POOLCOLL_HTML_DT;
-                                    rToken = OString(OOO_STRING_SVTOOLS_HTML_dt);
-                                }
-                            }
-                        }
-                        break;
-            case 'E':   if( bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_emphasis )
-                        {
-                            rRefPoolId = RES_POOLCHR_HTML_EMPHASIS;
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_emphasis);
-                        }
-                        break;
-            case 'H':   if( !bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_horzrule )
-                            // HR nicht ausgeben!
-                            bStop = (nDeep==0);
-                        break;
-            case 'K':   if( bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_keyboard )
-                        {
-                            rRefPoolId = RES_POOLCHR_HTML_KEYBOARD;
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_keyboard);
-                        }
-                        break;
-            case 'L':   if( !bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_listing )
-                        {
-                            // Listing als PRE exportieren bzw. von
-                            // PRE abgeleitete Vorlage exportieren
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
-                            rRefPoolId = RES_POOLCOLL_HTML_PRE;
-                            nDeep = CSS1_FMT_CMPREF;
-                        }
-                        break;
-            case 'P':   if( !bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_preformtxt )
-                        {
-                            rRefPoolId = RES_POOLCOLL_HTML_PRE;
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
-                        }
-                        break;
-            case 'S':   if( bChrFmt )
-                        {
-                            if( aNm == OOO_STRING_SVTOOLS_HTML_sample )
-                            {
-                                rRefPoolId = RES_POOLCHR_HTML_SAMPLE;
-                                rToken = OString(OOO_STRING_SVTOOLS_HTML_sample);
-                            }
-                            else if( aNm == OOO_STRING_SVTOOLS_HTML_strong )
-                            {
-                                rRefPoolId = RES_POOLCHR_HTML_STRONG;
-                                rToken = OString(OOO_STRING_SVTOOLS_HTML_strong);
-                            }
-                        }
-                        break;
-            case 'T':   if( bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_teletype )
-                        {
-                            rRefPoolId = RES_POOLCHR_HTML_TELETYPE;
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_teletype);
-                        }
-                        break;
-            case 'V':   if( bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_variable )
-                        {
-                            rRefPoolId = RES_POOLCHR_HTML_VARIABLE;
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_variable);
-                        }
-                        break;
-            case 'X':   if( !bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_xmp )
-                        {
-                            // XMP als PRE exportieren (aber nicht die
-                            // Vorlage als Style)
-                            rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
-                            rRefPoolId = RES_POOLCOLL_HTML_PRE;
-                            nDeep = CSS1_FMT_CMPREF;
-                        }
-                        break;
+                rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_blockquote);
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_citiation)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_CITIATION;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_citiation);
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_code)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_CODE;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_code);
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_definstance)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_definstance);
+            }
+            else if (!bChrFmt && (aNm == OOO_STRING_SVTOOLS_HTML_dd || OOO_STRING_SVTOOLS_HTML_dt))
+            {
+                sal_uInt16 nDefListLvl = GetDefListLvl(aNm, nPoolId);
+                // Die Vorlagen DD 1/DT 1 werden ausgegeben,
+                // aber keine von ihnen abgeleiteten Vorlagen,
+                // auch nicht DD 2/DT 2 etc.
+                if (nDefListLvl)
+                {
+                    if (pPseudo && (nDeep || (nDefListLvl & 0x0fff) > 1))
+                    {
+                        bStop = true;
+                    }
+                    else if (nDefListLvl & HTML_DLCOLL_DD)
+                    {
+                        rRefPoolId = RES_POOLCOLL_HTML_DD;
+                        rToken = OString(OOO_STRING_SVTOOLS_HTML_dd);
+                    }
+                    else
+                    {
+                        rRefPoolId = RES_POOLCOLL_HTML_DT;
+                        rToken = OString(OOO_STRING_SVTOOLS_HTML_dt);
+                    }
+                }
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_emphasis)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_EMPHASIS;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_emphasis);
+            }
+            else if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_horzrule)
+            {
+                // HR nicht ausgeben!
+                bStop = (nDeep==0);
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_keyboard)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_KEYBOARD;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_keyboard);
+            }
+            else if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_listing)
+            {
+                // Listing als PRE exportieren bzw. von
+                // PRE abgeleitete Vorlage exportieren
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
+                rRefPoolId = RES_POOLCOLL_HTML_PRE;
+                nDeep = CSS1_FMT_CMPREF;
+            }
+            else if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_preformtxt)
+            {
+                rRefPoolId = RES_POOLCOLL_HTML_PRE;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_sample)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_SAMPLE;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_sample);
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_strong)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_STRONG;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_strong);
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_teletype)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_TELETYPE;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_teletype);
+            }
+            else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_variable)
+            {
+                rRefPoolId = RES_POOLCHR_HTML_VARIABLE;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_variable);
+            }
+            else if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_xmp)
+            {
+                // XMP als PRE exportieren (aber nicht die
+                // Vorlage als Style)
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
+                rRefPoolId = RES_POOLCOLL_HTML_PRE;
+                nDeep = CSS1_FMT_CMPREF;
             }
 
             // Wenn eine PoolId gesetzt ist, entspricht der Name der
@@ -1625,22 +1598,16 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( USER_FMT & nPoolFmtId )
         {
             // Benutzer-Vorlagen
-            const OUString aNm = rFmt.GetName();
-            switch( aNm[0] )
-            {
-            case 'D':   if( aNm == "DD 1" || aNm == "DT 1" )
-                            rHTMLWrt.nDfltBottomMargin = 0;
-                        break;
-            case 'L':   if(aNm == OOO_STRING_SVTOOLS_HTML_listing )
-                            rHTMLWrt.nDfltBottomMargin = 0;
-                        break;
-            case 'P':   if( aNm == OOO_STRING_SVTOOLS_HTML_preformtxt )
-                            rHTMLWrt.nDfltBottomMargin = 0;
-                        break;
-            case 'X':   if( aNm == OOO_STRING_SVTOOLS_HTML_xmp )
-                            rHTMLWrt.nDfltBottomMargin = 0;
-                        break;
-            }
+            const OUString aNm(rFmt.GetName());
+
+            if (aNm == "DD 1" || aNm == "DT 1")
+                rHTMLWrt.nDfltBottomMargin = 0;
+            else if (aNm == OOO_STRING_SVTOOLS_HTML_listing)
+                rHTMLWrt.nDfltBottomMargin = 0;
+            else if (aNm == OOO_STRING_SVTOOLS_HTML_preformtxt)
+                rHTMLWrt.nDfltBottomMargin = 0;
+            else if (aNm == OOO_STRING_SVTOOLS_HTML_xmp)
+                rHTMLWrt.nDfltBottomMargin = 0;
         }
         else
         {

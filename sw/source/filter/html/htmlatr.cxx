@@ -540,50 +540,39 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // solchen abgeleitet
         rInfo.aToken = pFmtInfo->aToken;
 
-        // der erste Buchstabe reicht meistens
-        switch( rInfo.aToken[0] )
+        if (rInfo.aToken == OOO_STRING_SVTOOLS_HTML_address)
         {
-        case 'A': OSL_ENSURE( rInfo.aToken == OOO_STRING_SVTOOLS_HTML_address,
-                            "Doch kein ADDRESS?" );
-                    rInfo.bParaPossible = sal_True;
-                    rHWrt.bNoAlign = sal_True;
-                    break;
-
-        case 'B': OSL_ENSURE( rInfo.aToken == OOO_STRING_SVTOOLS_HTML_blockquote,
-                            "Doch kein BLOCKQUOTE?" );
-                    rInfo.bParaPossible = sal_True;
-                    rHWrt.bNoAlign = sal_True;
-                    break;
-
-        case 'P':   if( rInfo.aToken.getLength() == 1 )
-                    {
-                        bPara = sal_True;
-                    }
-                    else
-                    {
-                        OSL_ENSURE( rInfo.aToken == OOO_STRING_SVTOOLS_HTML_preformtxt,
-                                "Doch kein PRE?" );
-                        if( HTML_PREFORMTXT_ON == rHWrt.nLastParaToken )
-                        {
-                            bOutNewLine = sal_True;
-                        }
-                        else
-                        {
-                            nToken = HTML_PREFORMTXT_ON;
-                            rHWrt.bNoAlign = sal_True;
-                            bNoEndTag = sal_True;
-                        }
-                    }
-                    break;
-
-        case 'D': OSL_ENSURE( rInfo.aToken == OOO_STRING_SVTOOLS_HTML_dt ||
-                            rInfo.aToken == OOO_STRING_SVTOOLS_HTML_dd,
-                            "Doch kein DD/DT?" );
-                    bDT = rInfo.aToken == OOO_STRING_SVTOOLS_HTML_dt;
-                    rInfo.bParaPossible = !bDT;
-                    rHWrt.bNoAlign = sal_True;
-                    bForceDL = sal_True;
-                    break;
+            rInfo.bParaPossible = sal_True;
+            rHWrt.bNoAlign = sal_True;
+        }
+        else if (rInfo.aToken == OOO_STRING_SVTOOLS_HTML_blockquote)
+        {
+            rInfo.bParaPossible = sal_True;
+            rHWrt.bNoAlign = sal_True;
+        }
+        else if (rInfo.aToken == OOO_STRING_SVTOOLS_HTML_parabreak)
+        {
+            bPara = sal_True;
+        }
+        else if (rInfo.aToken == OOO_STRING_SVTOOLS_HTML_preformtxt)
+        {
+            if (HTML_PREFORMTXT_ON == rHWrt.nLastParaToken)
+            {
+                bOutNewLine = sal_True;
+            }
+            else
+            {
+                nToken = HTML_PREFORMTXT_ON;
+                rHWrt.bNoAlign = sal_True;
+                bNoEndTag = sal_True;
+            }
+        }
+        else if (rInfo.aToken == OOO_STRING_SVTOOLS_HTML_dt || rInfo.aToken == OOO_STRING_SVTOOLS_HTML_dd)
+        {
+            bDT = rInfo.aToken == OOO_STRING_SVTOOLS_HTML_dt;
+            rInfo.bParaPossible = !bDT;
+            rHWrt.bNoAlign = sal_True;
+            bForceDL = sal_True;
         }
     }
     else
