@@ -24,7 +24,7 @@
 namespace formula
 {
 
-//============================================================================
+
 // class ValWnd
 class ValWnd : public Window
 {
@@ -41,7 +41,7 @@ private:
     Rectangle   aRectOut;
 };
 
-//============================================================================
+
 // class EditBox
 class EditBox : public Control
 {
@@ -74,7 +74,7 @@ public:
     void            UpdateOldSel();
 };
 
-//============================================================================
+
 // class ArgEdit
 
 class ArgEdit : public RefEdit
@@ -96,7 +96,7 @@ private:
 };
 
 
-//============================================================================
+
 // class ArgInput
 
 class ArgInput

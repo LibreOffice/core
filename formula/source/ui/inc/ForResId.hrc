@@ -54,7 +54,7 @@
 #define RID_FORMULATAB_PARAMETER                    (RID_PAGE_START + 3)
 #define RID_FORMULADLG_FORMULA_MODAL                (RID_PAGE_START + 4)
 
-// -----------------------------------------------------------------------
+
 
 #endif          // FORMULA_FORRESID_HRC
 

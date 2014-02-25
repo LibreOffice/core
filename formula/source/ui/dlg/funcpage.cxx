@@ -27,7 +27,7 @@
 #include "formdlgs.hrc"
 #include "ForResId.hrc"
 #include "ModuleHelper.hxx"
-//============================================================================
+
 namespace formula
 {
 
@@ -59,7 +59,7 @@ bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
 
 
-//============================================================================
+
 
 inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 {
@@ -70,7 +70,7 @@ inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
     return nLbPos;
 }
 
-//============================================================================
+
 
 FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_FUNCTION)),

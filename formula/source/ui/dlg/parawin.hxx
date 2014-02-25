@@ -35,9 +35,9 @@
 
 namespace formula
 {
-//============================================================================
+
 #define NOT_FOUND 0xffff
-//============================================================================
+
 class IFunctionDescription;
 class IControlReferenceHandler;
 
