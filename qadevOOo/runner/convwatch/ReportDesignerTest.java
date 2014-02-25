@@ -53,15 +53,15 @@ import helper.OfficeWatcher;
 // import java.text.SimpleDateFormat;
 // import java.text.ParsePosition;
 // import java.sql.Time;
-//
+
 // import java.io.BufferedReader;
 // import java.io.File;
 // import java.io.FileReader;
 // import java.io.IOException;
 // import java.io.FilenameFilter;
-//
+
 // import java.util.Vector;
-//
+
 // import helper.AppProvider;
 // import java.text.DecimalFormat;
 // import util.DynamicClassLoader;
@@ -352,7 +352,7 @@ public class ReportDesignerTest extends ComplexTestCase {
             stopOffice();
         }
 
-// -----------------------------------------------------------------------------
+
     private void startTestForFile(String _sDocument /*, int _nType*/)
         {
             File aFile = new File(_sDocument);
@@ -366,7 +366,7 @@ public class ReportDesignerTest extends ComplexTestCase {
 //  context = createUnoService("com.sun.star.sdb.DatabaseContext")
 //     oDataBase = context.getByName("hh")
 //     oDBDoc = oDataBase.DatabaseDocument
-//
+
 //  dim args(1) as new com.sun.star.beans.PropertyValue
 //  args(0).Name = "ActiveConnection"
 //  args(0).Value = oDBDoc.getCurrentController().getPropertyValue("ActiveConnection")
@@ -455,7 +455,7 @@ public class ReportDesignerTest extends ComplexTestCase {
             // return getFileFormat(_nType);
         }
 
-// -----------------------------------------------------------------------------
+
     private void createDBEntry(/*int _nType*/)
         {
             // try to connect the database

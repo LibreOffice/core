@@ -98,7 +98,7 @@ public class SwXTextFrameText extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         // create testobject here
-        ////////////////////////////////////
+
 
         try {
             oFrame1 = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);

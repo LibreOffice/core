@@ -88,7 +88,7 @@ public class ConfigHelper
     private XMultiServiceFactory m_xSMGR = null;
     private XHierarchicalNameAccess m_xConfig = null;
 
-    //-----------------------------------------------
+
     public ConfigHelper(XMultiServiceFactory xSMGR       ,
                         String               sConfigPath ,
                         boolean              bReadOnly   )
@@ -124,7 +124,7 @@ public class ConfigHelper
             throw new com.sun.star.uno.Exception("Could not open configuration \""+sConfigPath+"\"");
     }
 
-    //-----------------------------------------------
+
     public Object readRelativeKey(String sRelPath,
                                   String sKey    )
         throws com.sun.star.container.NoSuchElementException
@@ -142,7 +142,7 @@ public class ConfigHelper
         }
     }
 
-    //-----------------------------------------------
+
     public void writeRelativeKey(String sRelPath,
                                  String sKey    ,
                                  Object aValue  )
@@ -161,7 +161,7 @@ public class ConfigHelper
         }
     }
 
-    //-----------------------------------------------
+
     /**
      * Updates the configuration.<p>
      * This must be called after you have changed the configuration
@@ -180,7 +180,7 @@ public class ConfigHelper
         {}
     }
 
-    //-----------------------------------------------
+
     public static Object readDirectKey(XMultiServiceFactory xSMGR      ,
                                        String               sConfigFile,
                                        String               sRelPath   ,
@@ -191,7 +191,7 @@ public class ConfigHelper
         return aConfig.readRelativeKey(sRelPath, sKey);
     }
 
-    //-----------------------------------------------
+
     public static void writeDirectKey(XMultiServiceFactory xSMGR      ,
                                       String               sConfigFile,
                                       String               sRelPath   ,

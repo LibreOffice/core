@@ -214,7 +214,7 @@ public class ConvWatch
             return aList;
         }
 
-    // -----------------------------------------------------------------------------
+
     // This creates a status for exact on document
     static boolean createINIStatus(StatusHelper[] aList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID, String _sRefBuildID)
         {
@@ -284,7 +284,7 @@ public class ConvWatch
             return bResultIsOk;
         }
 
-    // -----------------------------------------------------------------------------
+
 
     static void createINIStatus_DiffDiff(StatusHelper[] aDiffDiffList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID)
         {
@@ -320,7 +320,7 @@ public class ConvWatch
         }
 
 
-    // -----------------------------------------------------------------------------
+
 
     public static boolean check(GraphicalTestArguments _aGTA,
                              String _sOutputPath, String _sAbsoluteInputFile, String _sAbsoluteReferenceFile)
@@ -344,7 +344,7 @@ public class ConvWatch
             return bResultIsOk;
         }
 
-    // -----------------------------------------------------------------------------
+
     public static boolean checkDiffDiff(GraphicalTestArguments _aGTA,
                                      String _sOutputPath, String _sAbsoluteInputFile, String _sAbsoluteReferenceFile,
                                      String _sAbsoluteDiffPath)
@@ -412,7 +412,7 @@ public class ConvWatch
     //         a.setDocFile(       "1_Gov.ppt");
     //         a.setReferencePath( "/cws/so-cwsserv06/qadev18/SRC680/src.m47/convwatch.keep/input/msoffice/xp/PowerPoint");
     //         a.setReferenceFile( "1_Gov.prn" );
-    //
+
     //         a.setOutputPath(    "/tmp/convwatch_java");
     //         a.setPostScriptFile("1_Gov.ps" );
     //     }

@@ -39,7 +39,7 @@ interface Filenamer
     public String getSystemPath();
 }
 
-// -----------------------------------------------------------------------------
+
 
 abstract class FilenameHelper_impl implements Filenamer
 {

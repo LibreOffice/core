@@ -103,7 +103,7 @@ public class _XInteractionHandler extends MultiMethodTest {
                 XFrame docFr = xModelDoc.getCurrentController().getFrame() ;
                 docFr.dispose() ;
 
-                ///*
+                /
                 try {
 
                     Object dsk = msf.createInstance
@@ -124,7 +124,7 @@ public class _XInteractionHandler extends MultiMethodTest {
 
                 } catch (com.sun.star.uno.Exception e) {
                     e.printStackTrace();
-                } //
+                }
             }
         }) ;
         thr.start() ;

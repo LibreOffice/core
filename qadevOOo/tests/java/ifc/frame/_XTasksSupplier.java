@@ -59,7 +59,7 @@ public class _XTasksSupplier extends MultiMethodTest {
 //        int cnt = 0 ;
 //        boolean result = true ;
 //        XTask task = null ;
-//
+
 //        XEnumerationAccess enumAcc = oObj.getTasks() ;
 //        XEnumeration enum = enumAcc.createEnumeration() ;
 //        while (enum.hasMoreElements()) {
@@ -78,7 +78,7 @@ public class _XTasksSupplier extends MultiMethodTest {
 //            result &= (task != null) ;
 //        }
 //        log.println("Totaly tasks: " + cnt) ;
-//
+
 //        if (cnt > 0 && result) tRes.tested("getTasks()", true) ;
 
         log.println("DEPRECATED");

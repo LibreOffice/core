@@ -35,7 +35,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                         com.sun.star.io.XOutputStream   ,
                                         com.sun.star.io.XSeekable
 {
-    //_________________________________
+
     /**
      * @member  m_sFileName     name of the corrsponding file on disk
      * @member  m_xInStream     the internal input stream for reading
@@ -56,7 +56,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     public  boolean                         m_bInWasUsed    ;
     public  boolean                         m_bOutWasUsed   ;
 
-    //_________________________________
+
     /**
      * construct a new instance of this class
      * It set the name of the correspojnding file on disk, which
@@ -124,7 +124,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         ////m_aProtocol.log("finalize was called. Please check if it was right or not.\n");
     } */
 
-    //_________________________________
+
     /**
      * following methods simulates the XInputStream.
      * The notice all actions inside the internal protocol
@@ -167,7 +167,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         return nRead;
     }
 
-    //_________________________________
+
 
     public int readSomeBytes( /*OUT*/ byte[][] lData           ,
                               /*IN*/  int      nMaxBytesToRead ) throws com.sun.star.io.NotConnectedException       ,
@@ -205,7 +205,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         return nRead;
     }
 
-    //_________________________________
+
 
     public void skipBytes( /*IN*/ int nBytesToSkip ) throws com.sun.star.io.NotConnectedException       ,
                                                             com.sun.star.io.BufferSizeExceededException ,
@@ -236,7 +236,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         //m_aProtocol.log("\tOK\n}\n");
     }
 
-    //_________________________________
+
 
     public int available() throws com.sun.star.io.NotConnectedException,
                                   com.sun.star.io.IOException
@@ -266,7 +266,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         return nAvailable;
     }
 
-    //_________________________________
+
 
     public void closeInput() throws com.sun.star.io.NotConnectedException,
                                     com.sun.star.io.IOException
@@ -294,7 +294,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         //m_aProtocol.log("\tOK\n}\n");
     }
 
-    //_________________________________
+
     /**
      * following methods simulates the XOutputStream.
      * The notice all actions inside the internal protocol
@@ -330,7 +330,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         //m_aProtocol.log("\tOK\n}\n");
     }
 
-    //_________________________________
+
 
     public void flush() throws com.sun.star.io.NotConnectedException        ,
                                com.sun.star.io.BufferSizeExceededException  ,
@@ -360,7 +360,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         //m_aProtocol.log("\tOK\n}\n");
     }
 
-    //_________________________________
+
 
     public void closeOutput() throws com.sun.star.io.NotConnectedException      ,
                                      com.sun.star.io.BufferSizeExceededException,
@@ -391,7 +391,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         //m_aProtocol.log("\tOK\n}\n");
     }
 
-    //_________________________________
+
     /**
      * following methods simulates the XSeekable.
      * The notice all actions inside the internal protocol
@@ -431,7 +431,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         //m_aProtocol.log("\tOK\n}\n");
     }
 
-    //_________________________________
+
 
     public long getPosition() throws com.sun.star.io.IOException
     {
@@ -465,7 +465,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         return nPos;
     }
 
-    //_________________________________
+
 
     public long getLength() throws com.sun.star.io.IOException
     {

@@ -57,7 +57,7 @@ public class OfficePrint {
 
 //     static long m_nStartTime;
 //     // static Date m_aDateCache = null;
-//
+
 //     /*
 //       simple helper functions to start/stop a timer, to know how long a process need in milliseconds
 //      */
@@ -318,7 +318,7 @@ public class OfficePrint {
             return filterName;
         }
 
-    // -----------------------------------------------------------------------------
+
 
     public static boolean storeAsPDF(GraphicalTestArguments _aGTA,
                                      String _sInputURL,
@@ -358,7 +358,7 @@ public class OfficePrint {
             return bBack;
         }
 
-    // -----------------------------------------------------------------------------
+
 
     /**
      * print the document found in file (_sInputURL) to as postscript to file (_sPrintFileURL)
@@ -404,7 +404,7 @@ public class OfficePrint {
             return bBack;
         }
 
-    // -----------------------------------------------------------------------------
+
     public static void createInfoFile(String _sFile, GraphicalTestArguments _aGTA)
         {
             createInfoFile(_sFile, _aGTA, "");
@@ -509,7 +509,7 @@ public class OfficePrint {
 
 
 
-    // -----------------------------------------------------------------------------
+
     private static boolean impl_printToFileWithOOo(GraphicalTestArguments _aGTA,
                                                    XComponent _aDoc,
                                                    String _sOutputURL,
@@ -776,7 +776,7 @@ public class OfficePrint {
             return false;
         }
 
-    // -----------------------------------------------------------------------------
+
     /**
      * create a reference file
      * _sAbsoluteInputPath  contains the source file, if not exists, return with failure.
@@ -918,9 +918,9 @@ public class OfficePrint {
             return bBack;
         }
 
-    // -----------------------------------------------------------------------------
+
     // TODO: move this away!
-    // -----------------------------------------------------------------------------
+
     static void showType(String _sInputURL, XMultiServiceFactory _xMSF)
         {
             if (_sInputURL.length() == 0)
@@ -952,7 +952,7 @@ public class OfficePrint {
         }
 
 
-    // -----------------------------------------------------------------------------
+
     public static String getInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
         {
             if (_sFilterName.length() == 0)
@@ -1041,7 +1041,7 @@ public class OfficePrint {
             return null;
         }
 
-    // -----------------------------------------------------------------------------
+
 
     static String getServiceNameFromFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
         {
@@ -1117,7 +1117,7 @@ public class OfficePrint {
             }
             return null;
         }
-    // -----------------------------------------------------------------------------
+
 
     public static String getFileExtension(String _sInternalFilterName, XMultiServiceFactory _xMSF)
         {
@@ -1211,7 +1211,7 @@ public class OfficePrint {
             return null;
         }
 
-    // -----------------------------------------------------------------------------
+
     public static void convertDocument(String _sInputFile, String _sOutputPath, GraphicalTestArguments _aGTA) throws ConvWatchCancelException
         {
             XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();

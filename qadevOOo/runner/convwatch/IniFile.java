@@ -105,7 +105,7 @@ class IniFile
             return m_aList.size() > 1 ? true : false;
         }
 
-    // -----------------------------------------------------------------------------
+
 
     boolean isRemark(String _sLine)
         {
@@ -368,7 +368,7 @@ class IniFile
                 m_bListContainUnsavedChanges = true;
             }
         }
-    // -----------------------------------------------------------------------------
+
     // String replaceEvaluatedValue(String _sSection, String _sValue)
     //     {
     //         String sValue = _sValue;
@@ -394,7 +394,7 @@ class IniFile
     //         }
     //         return sValue;
     //     }
-    // -----------------------------------------------------------------------------
+
 
     // public String getLocalEvaluatedValue(String _sSection, String _sKey)
     //     {
@@ -403,7 +403,7 @@ class IniFile
     //         return sValue;
     //     }
 
-    // -----------------------------------------------------------------------------
+
 
     // this is a special behaviour.
     // public String getGlobalLocalEvaluatedValue(String _sSection, String _sKey)
@@ -418,7 +418,7 @@ class IniFile
     //         }
     //         sLocalValue = replaceEvaluatedKey(_sSection, sLocalValue);
     //         sLocalValue = replaceEvaluatedKey("global", sLocalValue);
-    //
+
     //         return sLocalValue;
     //     }
 
@@ -436,7 +436,7 @@ class IniFile
 //            aIniFile.insertValue("Section","Key","replaced value");
 //            // create a new value
 //            aIniFile.insertValue("New Section", "Key", "a new key value pair");
-//
+
 //            String sValue2 = aIniFile.getValue("Section2","Key");
 //            aIniFile.store();
 //        }

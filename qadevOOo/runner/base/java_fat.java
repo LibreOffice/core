@@ -94,7 +94,7 @@ public class java_fat implements TestBase
 
 //        String officeProviderName = (String) m_aParams.get("OfficeProvider");
 //        AppProvider office = (AppProvider) m_aDynamicClassLoader.getInstance(officeProviderName);
-//
+
 //        if (office == null) {
 //            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
 //                               " it cannot be instantiated.");
@@ -309,7 +309,7 @@ public class java_fat implements TestBase
             return retValue;
         }
 
-//
+
     private TestEnvironment getTestEnvironment(TestCase tCase, DescEntry entry)
     {
         TestEnvironment tEnv = null;
@@ -349,7 +349,7 @@ public class java_fat implements TestBase
         }
         return tEnv;
     }
-    // -------------------------------------------------------------------------
+
     private TestCase getTestCase(DescEntry _aEntry)
     {
         TestCase tCase = null;
@@ -402,20 +402,20 @@ public class java_fat implements TestBase
 //            m_aDynamicClassLoader = new DynamicClassLoader();
 //        String officeProviderName = (String) m_aParams.get("OfficeProvider");
 //        AppProvider office = (AppProvider) m_aDynamicClassLoader.getInstance(officeProviderName);
-//
+
 //        if (office == null) {
 //            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
 //                               " it cannot be instantiated.");
 //            System.exit(-1);
 //        }
-//
+
 //        XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
 //                                           m_aParams);
-//
+
 //        if (msf == null) {
 //            return null;
 //        }
-//
+
 //        m_aParams.put("ServiceFactory", msf);
 
             // AppProvider office = startOffice(m_aParams);

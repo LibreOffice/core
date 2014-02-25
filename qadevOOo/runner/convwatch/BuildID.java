@@ -132,7 +132,7 @@ public class BuildID
 //            String sBuildID;
 //            sBuildID = getBuildID(sApp);
 //            System.out.println("BuildID is: " + sBuildID);
-//
+
 //            Date aDate = new Date();
 //            long nStart = aDate.getTime();
 //            System.out.println("Time:" + nStart);
@@ -140,10 +140,10 @@ public class BuildID
 //            // sApp = "/opt/staroffice8_net/program/soffice";
 //            // sBuildID = getBuildID(sApp);
 //            // System.out.println("BuildID is: " + sBuildID);
-//            //
+
 //            // sApp = "\"/opt/staroffice8_net/program/soffice\" test blah";
 //            // sBuildID = getBuildID(sApp);
-//            //
+
 //            // System.out.println("BuildID is: " + sBuildID);
 //            System.exit(1);
 //        }
