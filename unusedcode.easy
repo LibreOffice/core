@@ -75,7 +75,6 @@ ScColumn::SetRawString(sc::ColumnBlockPosition&, int, rtl::OUString const&, bool
 ScComplexRefData::IsDeleted() const
 ScDBQueryDataIterator::DataAccessInternal::setPos(unsigned long)
 ScDPFilteredCache::SingleFilter::getMatchValue() const
-ScDocument::CountNotes() const
 ScDocument::CreateFormatTable() const
 ScDocument::GetCellCount(short, short) const
 ScDocument::IsEmptyData(short, short) const

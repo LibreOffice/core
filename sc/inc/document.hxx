@@ -912,7 +912,6 @@ public:
     SC_DLLPUBLIC ScPostIt*       ReleaseNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetOrCreateNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       CreateNote(const ScAddress& rPos);
-    size_t CountNotes() const;
     size_t GetNoteCount( SCTAB nTab, SCCOL nCol ) const;
 
     /**

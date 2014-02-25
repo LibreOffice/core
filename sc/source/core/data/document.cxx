@@ -6215,18 +6215,6 @@ ScPostIt* ScDocument::CreateNote(const ScAddress& rPos)
     return pPostIt;
 }
 
-size_t ScDocument::CountNotes() const
-{
-    size_t nCount = 0;
-    SCTAB nTabCount = GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-    {
-        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
-            nCount += GetNoteCount(nTab, nCol);
-    }
-    return nCount;
-}
-
 size_t ScDocument::GetNoteCount( SCTAB nTab, SCCOL nCol ) const
 {
     const ScTable* pTab = FetchTable(nTab);
