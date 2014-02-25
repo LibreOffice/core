@@ -34,9 +34,9 @@ public:
     CClassFactory(const CLSID& clsid);
     virtual ~CClassFactory();
 
-    //-----------------------------
+
     // IUnknown methods
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
@@ -46,9 +46,9 @@ public:
 
     virtual ULONG STDMETHODCALLTYPE Release(void);
 
-    //-----------------------------
+
     // IClassFactory methods
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE CreateInstance(
             IUnknown __RPC_FAR *pUnkOuter,
