@@ -1873,7 +1873,6 @@ public:
     SC_DLLPUBLIC void CalcFormulaTree(
         bool bOnlyForced = false, bool bProgressBar = true, bool bSetAllDirty = true );
     void                ClearFormulaTree();
-    SC_DLLPUBLIC void RebuildFormulaGroups();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
     void                TrackFormulas( sal_uLong nHintId = SC_HINT_DATACHANGED );

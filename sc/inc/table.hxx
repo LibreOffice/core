@@ -1021,7 +1021,6 @@ private:
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
-    void        RebuildFormulaGroups();
 
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );
     void        EndListening( const ScAddress& rAddress, SvtListener* pListener );

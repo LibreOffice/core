@@ -80,7 +80,6 @@ ScDocument::CreateFormatTable() const
 ScDocument::GetCellCount(short, short) const
 ScDocument::GetFormulaTokens(ScAddress const&) const
 ScDocument::IsEmptyData(short, short) const
-ScDocument::RebuildFormulaGroups()
 ScExtIButton::GetSelected() const
 ScFlatBoolRowSegments::getValue(int)
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)

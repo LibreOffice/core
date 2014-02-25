@@ -692,12 +692,4 @@ void ScDocument::ApplyAsianEditSettings( ScEditEngineDefaulter& rEngine )
     rEngine.SetKernAsianPunctuation( GetAsianKerning() );
 }
 
-void ScDocument::RebuildFormulaGroups()
-{
-    SCTAB nTab;
-    for (nTab=0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
-        if (maTabs[nTab])
-            maTabs[nTab]->RebuildFormulaGroups();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
