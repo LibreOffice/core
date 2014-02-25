@@ -41,6 +41,7 @@
 #include "scopetools.hxx"
 #include "sharedformula.hxx"
 #include "refupdatecontext.hxx"
+#include <listenercontext.hxx>
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -2328,6 +2329,67 @@ void ScColumn::MarkSubTotalCells( sc::ColumnSpanSet& rSet, SCROW nRow1, SCROW nR
 
 namespace {
 
+struct FormulaGroup
+{
+    struct {
+        ScFormulaCell* mpCell;   // non-shared formula cell
+        ScFormulaCell** mpCells; // pointer to the top formula cell in a shared group.
+    };
+    size_t mnRow;
+    size_t mnLength;
+    bool mbShared;
+
+    FormulaGroup( ScFormulaCell** pCells, size_t nRow, size_t nLength ) :
+        mpCells(pCells), mnRow(nRow), mnLength(nLength), mbShared(true) {}
+
+    FormulaGroup( ScFormulaCell* pCell, size_t nRow ) :
+        mpCell(pCell), mnRow(nRow), mnLength(0), mbShared(false) {}
+};
+
+class SharedTopFormulaCellPicker : std::unary_function<sc::CellStoreType::value_type, void>
+{
+public:
+    virtual ~SharedTopFormulaCellPicker() {}
+
+    void operator() ( sc::CellStoreType::value_type& node )
+    {
+        if (node.type != sc::element_type_formula)
+            return;
+
+        size_t nTopRow = node.position;
+
+        sc::formula_block::iterator itBeg = sc::formula_block::begin(*node.data);
+        sc::formula_block::iterator itEnd = sc::formula_block::end(*node.data);
+
+        // Only pick shared formula cells that are the top cells of their
+        // respective shared ranges.
+        for (sc::formula_block::iterator it = itBeg; it != itEnd; ++it)
+        {
+            ScFormulaCell* pCell = *it;
+            size_t nRow = nTopRow + std::distance(itBeg, it);
+            if (!pCell->IsShared())
+            {
+                processNonShared(pCell, nRow);
+                continue;
+            }
+
+            if (pCell->IsSharedTop())
+            {
+                ScFormulaCell** pp = &(*it);
+                processSharedTop(pp, nRow, pCell->GetSharedLength());
+
+                // Move to the last cell in the group, to get incremented to
+                // the next cell in the next iteration.
+                size_t nOffsetToLast = pCell->GetSharedLength() - 1;
+                std::advance(it, nOffsetToLast);
+            }
+        }
+    }
+
+    virtual void processNonShared( ScFormulaCell* /*pCell*/, size_t /*nRow*/ ) {}
+    virtual void processSharedTop( ScFormulaCell** /*ppCells*/, size_t /*nRow*/, size_t /*nLength*/ ) {}
+};
+
 class UpdateRefOnCopy
 {
     const sc::RefUpdateContext& mrCxt;
@@ -2358,67 +2420,162 @@ public:
     }
 };
 
-class UpdateRefOnNonCopy
+class UpdateRefOnNonCopy : std::unary_function<FormulaGroup, void>
 {
     SCCOL mnCol;
     SCROW mnTab;
-    const sc::RefUpdateContext& mrCxt;
+    const sc::RefUpdateContext* mpCxt;
     ScDocument* mpUndoDoc;
     bool mbUpdated;
 
+    void updateRefOnMove( FormulaGroup& rGroup )
+    {
+        if (!rGroup.mbShared)
+        {
+            ScAddress aUndoPos(mnCol, rGroup.mnRow, mnTab);
+            mbUpdated |= rGroup.mpCell->UpdateReferenceOnMove(*mpCxt, mpUndoDoc, &aUndoPos);
+            return;
+        }
+
+        // Update references of a formula group.
+        ScFormulaCell** pp = rGroup.mpCells;
+        ScFormulaCell** ppEnd = pp + rGroup.mnLength;
+        ScFormulaCell* pTop = *pp;
+        ScTokenArray* pCode = pTop->GetCode();
+        boost::scoped_ptr<ScTokenArray> pOldCode(pCode->Clone());
+
+        ScAddress aPos = pTop->aPos;
+        ScAddress aOldPos = aPos;
+
+        if (mpCxt->maRange.In(aPos))
+        {
+            // The cell is being moved or copied to a new position. The
+            // position has already been updated prior to this call.
+            // Determine its original position before the move which will be
+            // used to adjust relative references later.
+
+            aOldPos.Set(
+                aPos.Col() - mpCxt->mnColDelta,
+                aPos.Row() - mpCxt->mnRowDelta,
+                aPos.Tab() - mpCxt->mnTabDelta);
+        }
+
+        bool bRecalcOnMove = pCode->IsRecalcModeOnRefMove();
+        if (bRecalcOnMove)
+            bRecalcOnMove = aPos != aOldPos;
+
+        sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMove(*mpCxt, aOldPos, aPos);
+        if (aRes.mbReferenceModified || bRecalcOnMove)
+        {
+            // Perform end-listening, start-listening, and dirtying on all
+            // formula cells in the group.
+
+            sc::StartListeningContext aStartCxt(mpCxt->mrDoc);
+
+            sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pOldCode.get());
+            aEndCxt.setPositionDelta(
+                ScAddress(-mpCxt->mnColDelta, -mpCxt->mnRowDelta, -mpCxt->mnTabDelta));
+
+            for (; pp != ppEnd; ++pp)
+            {
+                ScFormulaCell* p = *pp;
+                p->EndListeningTo(aEndCxt);
+                p->StartListeningTo(aStartCxt);
+                p->SetDirty();
+            }
+
+            if (mpUndoDoc)
+            {
+                // Insert the old formula group into the undo document.
+                ScAddress aUndoPos = aOldPos;
+                ScFormulaCell* pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, pOldCode->Clone());
+                ScFormulaCellGroupRef xGroup = pFC->CreateCellGroup(rGroup.mnLength, false);
+
+                mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
+                aUndoPos.IncRow();
+                for (size_t i = 1; i < rGroup.mnLength; ++i, aUndoPos.IncRow())
+                {
+                    pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, xGroup);
+                    mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
+                }
+            }
+        }
+    }
+
 public:
     UpdateRefOnNonCopy(
-        SCCOL nCol, SCTAB nTab, const sc::RefUpdateContext& rCxt,
+        SCCOL nCol, SCTAB nTab, const sc::RefUpdateContext* pCxt,
         ScDocument* pUndoDoc) :
-        mnCol(nCol), mnTab(nTab), mrCxt(rCxt),
+        mnCol(nCol), mnTab(nTab), mpCxt(pCxt),
         mpUndoDoc(pUndoDoc), mbUpdated(false) {}
 
-    void operator() (size_t nRow, ScFormulaCell* pCell)
+    void operator() ( FormulaGroup& rGroup )
     {
-        ScAddress aUndoPos(mnCol, nRow, mnTab);
-        mbUpdated |= pCell->UpdateReference(mrCxt, mpUndoDoc, &aUndoPos);
+        if (mpCxt->meMode == URM_MOVE)
+        {
+            updateRefOnMove(rGroup);
+            return;
+        }
+
+        if (rGroup.mbShared)
+        {
+            ScAddress aUndoPos(mnCol, rGroup.mnRow, mnTab);
+            ScFormulaCell** pp = rGroup.mpCells;
+            ScFormulaCell** ppEnd = pp + rGroup.mnLength;
+            for (; pp != ppEnd; ++pp, aUndoPos.IncRow())
+            {
+                ScFormulaCell* p = *pp;
+                mbUpdated |= p->UpdateReference(*mpCxt, mpUndoDoc, &aUndoPos);
+            }
+        }
+        else
+        {
+            ScAddress aUndoPos(mnCol, rGroup.mnRow, mnTab);
+            mbUpdated |= rGroup.mpCell->UpdateReference(*mpCxt, mpUndoDoc, &aUndoPos);
+        }
     }
 
     bool isUpdated() const { return mbUpdated; }
 };
 
-class UpdateRefGroupBoundChecker : std::unary_function<sc::CellStoreType::value_type, void>
+class UpdateRefGroupBoundChecker : public SharedTopFormulaCellPicker
 {
     const sc::RefUpdateContext& mrCxt;
     std::vector<SCROW>& mrBounds;
+
 public:
     UpdateRefGroupBoundChecker(const sc::RefUpdateContext& rCxt, std::vector<SCROW>& rBounds) :
         mrCxt(rCxt), mrBounds(rBounds) {}
 
-    void operator() (const sc::CellStoreType::value_type& node)
+    virtual ~UpdateRefGroupBoundChecker() {}
+
+    virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ )
     {
-        if (node.type != sc::element_type_formula)
-            return;
+        // Check its tokens and record its reference boundaries.
+        ScFormulaCell& rCell = **ppCells;
+        const ScTokenArray& rCode = *rCell.GetCode();
+        rCode.CheckRelativeReferenceBounds(
+            mrCxt, rCell.aPos, rCell.GetSharedLength(), mrBounds);
+    }
+};
 
-        sc::formula_block::const_iterator it = sc::formula_block::begin(*node.data);
-        sc::formula_block::const_iterator itEnd = sc::formula_block::end(*node.data);
+class FormulaGroupPicker : public SharedTopFormulaCellPicker
+{
+    std::vector<FormulaGroup>& mrGroups;
 
-        // Only pick shared formula cells that are the top cells of their
-        // respective shared ranges.
-        for (; it != itEnd; ++it)
-        {
-            const ScFormulaCell& rCell = **it;
-            if (!rCell.IsShared())
-                continue;
+public:
+    FormulaGroupPicker( std::vector<FormulaGroup>& rGroups ) : mrGroups(rGroups) {}
 
-            if (rCell.IsSharedTop())
-            {
-                // Check its tokens and record its reference boundaries.
-                const ScTokenArray& rCode = *rCell.GetCode();
-                rCode.CheckRelativeReferenceBounds(
-                    mrCxt, rCell.aPos, rCell.GetSharedLength(), mrBounds);
+    virtual ~FormulaGroupPicker() {}
 
-                // Move to the last cell in the group, to get incremented to
-                // the next cell in the next iteration.
-                size_t nOffsetToLast = rCell.GetSharedLength() - 1;
-                std::advance(it, nOffsetToLast);
-            }
-        }
+    virtual void processNonShared( ScFormulaCell* pCell, size_t nRow )
+    {
+        mrGroups.push_back(FormulaGroup(pCell, nRow));
+    }
+
+    virtual void processSharedTop( ScFormulaCell** ppCells, size_t nRow, size_t nLength )
+    {
+        mrGroups.push_back(FormulaGroup(ppCells, nRow, nLength));
     }
 };
 
@@ -2451,8 +2608,8 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
     if (rCxt.meMode == URM_COPY)
         return UpdateReferenceOnCopy(rCxt, pUndoDoc);
 
-    if (IsEmptyData())
-        // Cells in this column are all empty.
+    if (IsEmptyData() || pDocument->IsClipOrUndo())
+        // Cells in this column are all empty, or clip or undo doc. No update needed.
         return false;
 
     std::vector<SCROW> aBounds;
@@ -2490,8 +2647,13 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
     // Do the actual splitting.
     sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
 
-    UpdateRefOnNonCopy aHandler(nCol, nTab, rCxt, pUndoDoc);
-    sc::ProcessFormula(maCells, aHandler);
+    // Collect all formula groups.
+    std::vector<FormulaGroup> aGroups;
+    std::for_each(maCells.begin(), maCells.end(), FormulaGroupPicker(aGroups));
+
+    // Process all collected formula groups.
+    UpdateRefOnNonCopy aHandler(nCol, nTab, &rCxt, pUndoDoc);
+    aHandler = std::for_each(aGroups.begin(), aGroups.end(), aHandler);
     if (aHandler.isUpdated())
         rCxt.maRegroupCols.set(nTab, nCol);
 
