@@ -1569,7 +1569,9 @@ PropertyState  SwXTextViewCursor::getPropertyState( const OUString& rPropertyNam
 }
 
 Sequence< PropertyState >  SwXTextViewCursor::getPropertyStates(
-    const Sequence< OUString >& rPropertyNames ) throw(UnknownPropertyException, RuntimeException)
+    const Sequence< OUString >& rPropertyNames )
+        throw (UnknownPropertyException, RuntimeException,
+               std::exception)
 {
     SolarMutexGuard aGuard;
     Sequence< PropertyState >  aRet;
