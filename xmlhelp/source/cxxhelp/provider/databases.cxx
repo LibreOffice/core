@@ -1509,7 +1509,7 @@ helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, O
 
             // Later:
             //case SHARED_MODULE
-                //...
+
 
             case USER_EXTENSIONS:
             {
@@ -1624,7 +1624,7 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 
             // Later:
             //case SHARED_MODULE
-                //...
+
 
             case USER_EXTENSIONS:
             {
@@ -1700,7 +1700,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
 
             // Later:
             //case SHARED_MODULE
-                //...
+
 
             case USER_EXTENSIONS:
             {
@@ -1824,7 +1824,7 @@ OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTe
 
             // Later:
             //case SHARED_MODULE
-                //...
+
 
             case USER_EXTENSIONS:
             {
