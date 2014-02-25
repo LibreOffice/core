@@ -177,7 +177,8 @@ sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aS
     return bOk;
 }
 
-uno::Any SAL_CALL ViewShellWrapper::getSelection() throw(uno::RuntimeException)
+uno::Any SAL_CALL ViewShellWrapper::getSelection()
+    throw (uno::RuntimeException, std::exception)
 {
     Any aResult;
 
