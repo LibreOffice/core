@@ -75,7 +75,8 @@ enum
     PROP_DIAGRAM_DATATABLEHBORDER,
     PROP_DIAGRAM_DATATABLEVBORDER,
     PROP_DIAGRAM_DATATABLEOUTLINE,
-    PROP_DIAGRAM_EXTERNALDATA
+    PROP_DIAGRAM_EXTERNALDATA,
+    PROP_DIAGRAM_HASUPDOWNBAR //for line chart alone
 };
 
 void lcl_AddPropertiesToVector(
@@ -196,6 +197,12 @@ void lcl_AddPropertiesToVector(
                   PROP_DIAGRAM_EXTERNALDATA,
                   ::getCppuType( reinterpret_cast< const OUString   * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
+   rOutProperties.push_back(
+        Property( "HasUpDownBar",
+                  PROP_DIAGRAM_HASUPDOWNBAR,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
 }
 
@@ -221,6 +228,7 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEOUTLINE, false );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_HASUPDOWNBAR, false );
          ::chart::SceneProperties::AddDefaultsToMap( rOutMap );
     }
 };

@@ -137,7 +137,8 @@ enum
     PROP_DIAGRAM_DATATABLEHBORDER,
     PROP_DIAGRAM_DATATABLEVBORDER,
     PROP_DIAGRAM_DATATABLEOUTLINE,
-    PROP_DIAGRAM_EXTERNALDATA
+    PROP_DIAGRAM_EXTERNALDATA,
+    PROP_DIAGRAM_HAS_UPDOWN_BARS
 };
 
 void lcl_AddPropertiesToVector(
@@ -443,6 +444,14 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    // see com.sun.star.chart.LineDiagram
+    rOutProperties.push_back(
+        Property( "UpDownInLineChart",
+                  PROP_DIAGRAM_HAS_UPDOWN_BARS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
 }
 
@@ -2052,6 +2061,7 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedSolidTypeProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedAutomaticSizeProperty() );
     aWrappedProperties.push_back( new WrappedIncludeHiddenCellsProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.push_back( new WrappedProperty( "UpDownInLineChart", "HasUpDownBar" ) );
 
     return aWrappedProperties;
 }

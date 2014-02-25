@@ -123,6 +123,12 @@ published service LineDiagram
     /** determines the number of sampling points of a spline
      */
     [optional, property] long SplineResolution;
+
+    /* specifies if the original file has an up down bar
+       in the Line Chart
+    */
+    [optional, property] boolean UpDownInLineChart;
+
 };
 
 

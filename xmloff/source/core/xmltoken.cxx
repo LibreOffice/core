@@ -3229,6 +3229,8 @@ namespace xmloff { namespace token {
         TOKEN( "display-units",     XML_CHART_DUNITS_DISPLAYUNITS ),
         TOKEN( "display-units-built-in-unit",     XML_CHART_DUNITS_BUILTINUNIT ),
         TOKEN( "external-data", XML_EXTERNALDATA),
+        //Line chart with updown bar
+        TOKEN( "has-up-down-bar", XML_CHART_LINE_HASUPDOWNBAR ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

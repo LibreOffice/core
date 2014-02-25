@@ -147,6 +147,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     // spline settings
     MAP_ENTRY( "SplineOrder", CHART, XML_SPLINE_ORDER, XML_TYPE_NUMBER ),
     MAP_ENTRY( "SplineResolution", CHART, XML_SPLINE_RESOLUTION, XML_TYPE_NUMBER ),
+    MAP_ENTRY( "UpDownInLineChart", CHART, XML_CHART_LINE_HASUPDOWNBAR, XML_TYPE_BOOL ),
 
     // plot-area properties
     MAP_ENTRY( "DataRowSource", CHART, XML_SERIES_SOURCE, XML_SCH_TYPE_DATAROWSOURCE ),

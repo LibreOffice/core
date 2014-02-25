@@ -423,6 +423,9 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             {
                 SeriesConverter& rSeriesConv = **aIt;
                 Reference< XDataSeries > xDataSeries = rSeriesConv.createDataSeries( *this, bVaryColorsByPoint );
+                /* check if Line chart has up down bars and set the property accordingly */
+                if( maTypeInfo.meTypeId == TYPEID_LINE && mrModel.mxUpDownBars.is() )
+                    aDiaProp.setProperty( PROP_HasUpDownBar, true );
                 insertDataSeries( xChartType, xDataSeries, nAxesSetIdx );
 
                 /*  Excel does not use the value of the c:smooth element of the

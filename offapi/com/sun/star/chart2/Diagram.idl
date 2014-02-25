@@ -123,6 +123,11 @@ service Diagram
 
     [optional, property] string                     ExternalData;
 
+    /* specifies if the original file has an up down bar
+      in the Line Chart
+    */
+    [optional, property] boolean                    HasUpDownBar;
+
 };
 
 } ; // chart2

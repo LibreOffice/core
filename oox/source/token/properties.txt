@@ -220,6 +220,7 @@ HasSecondaryXAxisTitle
 HasSecondaryYAxisTitle
 HasSheetTabs
 HasSortInfo
+HasUpDownBar
 HasVerticalScrollBar
 HasXAxisTitle
 HasYAxisTitle

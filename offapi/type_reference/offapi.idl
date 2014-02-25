@@ -3360,6 +3360,7 @@ module com {
      [property] long SplineType;
      [property, optional] long SplineOrder;
      [property, optional] long SplineResolution;
+     [property, optional] boolean UpDownInLineChart;
     };
     published constants MissingValueTreatment {
      const long LEAVE_GAP = 0;

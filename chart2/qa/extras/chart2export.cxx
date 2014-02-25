@@ -48,6 +48,7 @@ public:
     void testBarChartRotation();
     void testShapeFollowedByChart();
     void testPieChartDataLabels();
+    void testLineChartWithoutUpDownBars();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -68,6 +69,7 @@ public:
     CPPUNIT_TEST(testBarChartRotation);
     CPPUNIT_TEST(testShapeFollowedByChart);
     CPPUNIT_TEST(testPieChartDataLabels);
+    CPPUNIT_TEST(testLineChartWithoutUpDownBars);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -608,6 +610,20 @@ void Chart2ExportTest::testPieChartDataLabels()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pie3DChart/c:ser[1]/c:dLbls/c:dLbl[1]/c:dLblPos", "val", "bestFit");
+}
+
+void Chart2ExportTest::testLineChartWithoutUpDownBars()
+{
+    /*
+    Up Down bars were getting added to the line chart even if there were
+    no updown bars in the original file.
+    This test case ensures that updown bars will not get added if they
+    aren't present in the original file.
+    */
+    load("/chart2/qa/extras/data/docx/", "LineChartWithoutUpDownBars.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

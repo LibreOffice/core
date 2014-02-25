@@ -1422,7 +1422,12 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
     if( !mbIs3DChart )
     {
         exportHiLowLines();
-        exportUpDownBars(xChartType);
+        sal_Bool bHasUpDownBars = false ;
+        xPropSet->getPropertyValue( "HasUpDownBar") >>= bHasUpDownBars;
+        //export the updown bars only if they are present in the original file
+        if( bHasUpDownBars )
+            exportUpDownBars(xChartType);
+
         const char* marker = nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE? "0":"1";
         pFS->singleElement( FSNS( XML_c, XML_marker ),
                 XML_val, marker,
