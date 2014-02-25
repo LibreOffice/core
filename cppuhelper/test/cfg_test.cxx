@@ -73,7 +73,7 @@ static OUString impl1_getImplementationName()
     return OUString("com.sun.star.comp.bootstrap.TestComponent1");
 }
 
-//==================================================================================================
+
 class ServiceImpl0
     : public WeakImplHelper2< lang::XServiceInfo, lang::XInitialization >
 {
@@ -147,7 +147,7 @@ sal_Bool ServiceImpl0::supportsService( const OUString & rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-//==================================================================================================
+
 class ServiceImpl1 : public ServiceImpl0
 {
 public:
@@ -172,14 +172,14 @@ Sequence< OUString > ServiceImpl1::getSupportedServiceNames()
     return impl1_getSupportedServiceNames();
 }
 
-//==================================================================================================
+
 static Reference< XInterface > SAL_CALL ServiceImpl0_create(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( (Exception) )
 {
     return (OWeakObject *)new ServiceImpl0( xContext );
 }
-//==================================================================================================
+
 static Reference< XInterface > SAL_CALL ServiceImpl1_create(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( (Exception) )
@@ -207,14 +207,14 @@ static const struct ImplementationEntry g_entries[] =
 // component exports
 extern "C"
 {
-//==================================================================================================
+
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
     return component_writeInfoHelper(
         pServiceManager, pRegistryKey, g_entries );
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
@@ -224,9 +224,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 SAL_IMPLEMENT_MAIN()
 {
