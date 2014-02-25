@@ -79,7 +79,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     m_bHTMLMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
 
     // example font for both example TabPages
-    //
+
     if(pStr)
     {
         SetText(GetText() + SW_RESSTR(STR_COLL_HEADER) + *pStr + OUString(')'));

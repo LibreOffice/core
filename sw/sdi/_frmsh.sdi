@@ -281,7 +281,7 @@ interface BaseTextFrame
 
  ****************************************************/
 
-//
+
 // Slots ohne Export
 
     FN_INSERT_FRAME

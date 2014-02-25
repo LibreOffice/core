@@ -385,7 +385,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         //   (work around different definition of tab stop character - breaking or
         //   non breaking character - in compatibility mode)
         else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() &&
-                    //
+
                     rInf.IsOtherThanFtnInside() ) ||
                   ( rInf.GetLast() &&
                     rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) &&
@@ -488,7 +488,7 @@ bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 // Santa wraps, "from " turns into "from" and " " in a justified
 // paragraph, in which the glue gets expanded instead of merged
 // with the MarginPortion.
-//
+
 // rInf.nIdx points to the next word, nIdx-1 is the portion's last char
 
 void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )

@@ -2802,7 +2802,7 @@ OUString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
         SvxNumberType const& rNumberType(
                 pRule->Get( static_cast<sal_uInt16>(nLevel) ) );
         if (rNumberType.IsTxtFmt() ||
-        //
+
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
         {
             return pRule->MakeNumString( GetNum()->GetNumberVector(),
@@ -2917,7 +2917,7 @@ bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     return false;
 }
 
-//
+
 SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
 {
     SwTwips nAdditionalIndent = 0;
@@ -4330,7 +4330,7 @@ namespace {
                 {
                     mbAddTxtNodeToList = true;
                     // #i105562#
-                    //
+
                     mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                 }
             }

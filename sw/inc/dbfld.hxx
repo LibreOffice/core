@@ -33,7 +33,7 @@ class SwFrm;
 
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 {
-    SwDBData    aDBData;        //
+    SwDBData    aDBData;
     OUString sName;          ///< only used in ::GetName() !
     OUString sColumn;
     long        nRefCnt;

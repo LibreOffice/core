@@ -1034,10 +1034,10 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
             if( nSprmListIdx )
             {
                 // process Sprm Id Matching as explained in MS Documentation
-                //
+
                 // ''Property Modifier(variant 1) (PRM)''
                 // see file: s62f39.htm
-                //
+
                 // Since isprm is 7 bits, rgsprmPrm can hold 0x80 entries.
                 static const sal_uInt16 aSprmId[0x80] =
                 {
@@ -5193,7 +5193,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt.ReadUChar( envr );
     rSt.ReadUChar( aVer8Bits1 );      // unter Ver67  nur leeres Reservefeld
                             // Inhalt von aVer8Bits1
-                            //
+
                             // sal_uInt8 fMac              :1;
                             // sal_uInt8 fEmptySpecial     :1;
                             // sal_uInt8 fLoadOverridePage :1;
@@ -6427,7 +6427,7 @@ const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
 
 
 // Suche zu einem Header / Footer den Index in der WW-Liste von Headern / Footern
-//
+
 // Pferdefuesse bei WinWord6 und -7:
 // 1) Am Anfang des Einlesens muss WWPLCF_HdFt mit Fib und Dop konstruiert werden
 // 2) Der Haupttext muss sequentiell ueber alle Sections gelesen werden

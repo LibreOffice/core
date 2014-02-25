@@ -868,10 +868,10 @@ void SwGetExpField::SetValue( const double& rAny )
  */
 sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc, sal_Int32 nHint)
 {
-    //
+
     const SwTxtFld* pTxtFld = rFmt.GetTxtFld();
     const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
-    //
+
     sal_Int32 nRet = nHint ? nHint : *pTxtFld->GetStart() + 1;
     OUString sNodeText = rTxtNode.GetTxt();
 

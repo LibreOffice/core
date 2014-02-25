@@ -199,7 +199,7 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
     // or all the rows together
     if (calculateColumnsFromAllRows)
     {
-        // Calculate the width of all the columns based on ALL the rows.
+                // Calculate the width of all the columns based on ALL the rows.
         // The difference is that this kind of draws vertical lines,
         // so that if the rows look like this:
         //
@@ -210,13 +210,13 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
         //  ------------------------
         //  |       |              |
         //  ------------------------
-        //
+
         // then the actual column widths will be broken down like this:
         //
         //  ------------------------
         //  |   |   |           |  |
         //  ------------------------
-        //
+
         // See the example at
         // http://officeopenxml.com/WPtableGrid.php
         // Under "Word 2007 Example"

@@ -1646,10 +1646,10 @@ static const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
     return pRet && pRet->IsCellFrm() ? static_cast<const SwCellFrm*>(pRet) : 0;
 }
 
-//
+
 // pbCol  = 0 => Used for moving table rows/cols with mouse
 // pbCol != 0 => Used for selecting table/rows/cols
-//
+
 #define ENHANCED_TABLE_SELECTION_FUZZY 10
 
 const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) const

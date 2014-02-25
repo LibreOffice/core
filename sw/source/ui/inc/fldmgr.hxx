@@ -202,7 +202,7 @@ public:
 
     // turn off evaluation of expression fields for insertation
     // of many expressino fields (see labels)
-    //
+
     inline void     SetEvalExpFlds(sal_Bool bEval);
     void            EvalExpFlds(SwWrtShell* pSh = NULL);
 };

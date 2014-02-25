@@ -408,9 +408,9 @@ public:
        (Method in ndcopy.cxx!!). */
     void CopyCollFmt( SwTxtNode& rDestNd );
 
-    //
+
     // BEGIN OF BULLET/NUMBERING/OUTLINE STUFF:
-    //
+
 
     /**
        Returns numbering rule of this text node.
@@ -653,9 +653,9 @@ public:
     */
     OUString GetLabelFollowedBy() const;
 
-    //
+
     // END OF BULLET/NUMBERING/OUTLINE STUFF:
-    //
+
 
     void fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const;
 
@@ -801,7 +801,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
 
-//-----------------------------------------------------------------------------
+
 
 inline SwpHints & SwTxtNode::GetSwpHints()
 {

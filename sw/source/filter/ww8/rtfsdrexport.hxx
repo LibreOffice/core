@@ -57,19 +57,19 @@ public:
     virtual             ~RtfSdrExport();
 
     /// Export the sdr object as Sdr.
-    ///
+    /
     /// Call this when you need to export the object as Sdr in RTF.
     sal_uInt32 AddSdrObject( const SdrObject& rObj );
 
 protected:
     /// Start the shape for which we just collected the information.
-    ///
+    /
     /// Returns the element's tag number, -1 means we wrote nothing.
     using EscherEx::StartShape;
     sal_Int32   StartShape();
 
     /// End the shape.
-    ///
+    /
     /// The parameter is just what we got from StartShape().
     using EscherEx::EndShape;
     void        EndShape( sal_Int32 nShapeElement );

@@ -270,7 +270,7 @@ class SW_DLLPUBLIC SwDoc :
 
     //---------------- private Member --------------------------------
 
-    // -------------------------------------------------------------------
+
     ::boost::scoped_ptr<SwNodes> m_pNodes;  ///< document content (Nodes Array)
     SwAttrPool* mpAttrPool;             ///< the attribute pool
     SwPageDescs maPageDescs;             ///< PageDescriptors
@@ -293,7 +293,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
 
-    // -------------------------------------------------------------------
+
     // Pointer
 
     SwFrmFmt        *mpDfltFrmFmt;       ///< Default formats.
@@ -397,7 +397,7 @@ private:
 
     ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
-    // -------------------------------------------------------------------
+
     // other
 
     sal_uInt16  mnUndoCnt;           ///< Count of Undo Actions.
@@ -478,26 +478,26 @@ private:
     //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
     bool mbContainsAtPageObjWithContentAnchor : 1;
 
-    //
+
     // COMPATIBILITY FLAGS START
-    //
-    //
+
+
     // HISTORY OF THE COMPATIBILITY FLAGS:
-    //
+
     // SO5:
     // mbParaSpaceMax                        def = sal_False, sal_True since SO8
     // mbParaSpaceMaxAtPages                 def = sal_False, sal_True since SO8
-    //
+
     // SO6:
     // mbTabCompat                           def = sal_False, sal_True since SO8
-    //
+
     // SO7:
     // mbUseVirtualDevice                    def = sal_True
     // mbAddFlyOffsets                       def = sal_False, hidden
-    //
+
     // SO7pp1:
     // bOldNumbering                        def = sal_False, hidden
-    //
+
     // SO8:
     // mbAddExternalLeading                  def = sal_True
     // mbUseHiResolutionVirtualDevice        def = sal_True, hidden
@@ -506,12 +506,12 @@ private:
     // mbUseFormerObjectPos                  def = sal_False
     // mbUseFormerTextWrapping               def = sal_False
     // mbConsiderWrapOnObjPos                def = sal_False
-    //
+
     // SO8pp1:
     // mbIgnoreFirstLineIndentInNumbering    def = sal_False, hidden
     // mbDoNotJustifyLinesWithManualBreak    def = sal_False, hidden
     // mbDoNotResetParaAttrsForNumFont       def = sal_False, hidden
-    //
+
     // SO8pp3
     // mbDoNotCaptureDrawObjsOnPage         def = sal_False, hidden
     // - Relevant for drawing objects, which don't follow the text flow, but
@@ -524,13 +524,13 @@ private:
     // - Introduced in order to re-activate clipping of as-character anchored
     //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
     //   which are created with version prior SO8/OOo 2.0
-    //
+
     // SO8pp4
     // mbUnixForceZeroExtLeading                def = sal_False, hidden
-    //
+
     // SO8pu8
     // mbOldPrinterMetrics                      def = sal_False, hidden
-    //
+
     // SO9
     // #i24363# tab stops relative to indent
     // mbTabRelativeToIndent                    def = sal_True, hidden
@@ -589,9 +589,9 @@ private:
 
     sal_uInt32  mn32DummyCompatabilityOptions1;
     sal_uInt32  mn32DummyCompatabilityOptions2;
-    //
+
     // COMPATIBILITY FLAGS END
-    //
+
 
     bool mbStartIdleTimer;                    ///< idle timer mode start/stop
 
@@ -1966,7 +1966,7 @@ public:
     SdrObject* CloneSdrObj( const SdrObject&, bool bMoveWithinDoc = false,
                             bool bInsInPage = true );
 
-    //
+
     // -------------------- FeShell - Interface end ------------------
 
     /// Interface for TextInputData - for text input of Chinese and Japanese.

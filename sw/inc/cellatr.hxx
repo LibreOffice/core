@@ -99,7 +99,7 @@ public:
 
 
 
-//***************************************************************************
+
 
 inline const SwTblBoxNumFormat      &SwAttrSet::GetTblBoxNumFmt(sal_Bool bInP) const
     {   return (const SwTblBoxNumFormat&)Get( RES_BOXATR_FORMAT,bInP); }
@@ -108,7 +108,7 @@ inline const SwTblBoxFormula        &SwAttrSet::GetTblBoxFormula(sal_Bool bInP) 
 inline const SwTblBoxValue          &SwAttrSet::GetTblBoxValue(sal_Bool bInP) const
     {   return (const SwTblBoxValue&)Get( RES_BOXATR_VALUE, bInP); }
 
-//***************************************************************************
+
 
 inline const SwTblBoxNumFormat      &SwFmt::GetTblBoxNumFmt(sal_Bool bInP) const
     {   return aSet.GetTblBoxNumFmt(bInP); }

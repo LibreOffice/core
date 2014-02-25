@@ -716,9 +716,9 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
             DELETEZ( pReplSet );        // the attributes
     }
 
-    //
+
     // build SearchOptions to be used
-    //
+
     SearchOptions aSearchOpt( m_pSrchItem->GetSearchOptions() );
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
     if( !bDoReplace )

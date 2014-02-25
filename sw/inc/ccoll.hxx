@@ -30,14 +30,14 @@
 #include "swdllapi.h"
 #include "cmdid.h"
 
-//***********************************************************
+
 
 struct CollName {
         sal_uLong nCnd;
         sal_uLong nSubCond;
     };
 
-//***********************************************************
+
 
 #define COND_COMMAND_COUNT 28
 
@@ -47,12 +47,12 @@ struct CommandStruct
     sal_uLong nSubCond;
 };
 
-//***********************************************************
+
 
 sal_Int16       GetCommandContextIndex( const OUString &rContextName );
 OUString   GetCommandContextByIndex( sal_Int16 nIndex );
 
-//***********************************************************
+
 
 class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
 {

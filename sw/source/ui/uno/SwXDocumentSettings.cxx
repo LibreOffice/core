@@ -278,7 +278,7 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     pBaseTypes[0] = ::getCppuType((Reference< XPropertySet >*)0);
     pBaseTypes[1] = ::getCppuType((Reference< XPropertyState >*)0);
     pBaseTypes[2] = ::getCppuType((Reference< XMultiPropertySet >*)0);
-    //
+
     pBaseTypes[3] = ::getCppuType((Reference< XServiceInfo >*)0);
     pBaseTypes[4] = ::getCppuType((Reference< XTypeProvider >*)0);
 

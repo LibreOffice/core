@@ -84,7 +84,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         const bool bRTL = pFrm->IsRightToLeft();
         // #i24363# tab stops relative to indent
         // nTabLeft: The absolute value, the tab stops are relative to: Tabs origin.
-        //
+
         // #i91133#
         const bool bTabsRelativeToIndent =
             pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
@@ -94,9 +94,9 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                                  : pFrm->Frm().Left() +
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 );
 
-        //
+
         // nLinePos: The absolute position, where we started the line formatting.
-        //
+
         SwTwips nLinePos = GetLeftMargin();
         if ( bRTL )
         {
@@ -105,18 +105,18 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nLinePos = aPoint.X();
         }
 
-        //
+
         // nTabPos: The current position, relative to the line start.
-        //
+
         SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
         if( nTabPos < rInf.X() )
         {
             nTabPos = rInf.X();
         }
 
-        //
+
         // nCurrentAbsPos: The current position in absolute coordinates.
-        //
+
         const SwTwips nCurrentAbsPos = bRTL ?
                                        nLinePos - nTabPos :
                                        nLinePos + nTabPos;
@@ -139,17 +139,17 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 
         // #i24363# tab stops relative to indent
         // nSearchPos: The current position relative to the tabs origin.
-        //
+
         const SwTwips nSearchPos = bRTL ?
                                    nTabLeft - nCurrentAbsPos :
                                    nCurrentAbsPos - nTabLeft;
 
-        //
+
         // First, we examine the tab stops set at the paragraph style or
         // any hard set tab stops:
         // Note: If there are no user defined tab stops, there is always a
         // default tab stop.
-        //
+
         const SvxTabStop* pTabStop = aLineInf.GetTabStop( nSearchPos, nMyRight );
         if ( pTabStop )
         {

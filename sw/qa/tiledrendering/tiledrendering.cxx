@@ -114,7 +114,7 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
     {
         // TODO create a VirtualDevice based on SystemGraphicsData instead so
         // that we get direct rendering; something like:
-        //
+
         // SystemGraphicsData aData;
         // [setup the aData]
         // VirtualDevice aDevice(&aData, [color depth]);

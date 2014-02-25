@@ -413,7 +413,7 @@ class Range
     { m_Start = (short) start; m_End = (short) end; m_Node = node; }
 }
 
-//----------------------------------------------------------------------
+
 
 /* this is where we nail the pudding to the wall */
 class FuzzyTester
@@ -606,7 +606,7 @@ class FuzzyTester
 }
 
 
-//----------------------------------------------------------------------
+
 
 class EnumConverter
 {
@@ -782,7 +782,7 @@ class EnumConverter
 }
 
 
-//----------------------------------------------------------------------
+
 
 abstract class Inserter
 {
@@ -1186,7 +1186,7 @@ class RangeInserter extends Inserter
 }
 
 
-//----------------------------------------------------------------------
+
 
 public class TextPortionEnumerationTest
 {

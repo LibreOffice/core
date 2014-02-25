@@ -40,7 +40,7 @@
 #include <statstr.hrc>
 #include <swerror.h>
 
-//////////////////////////////////////////////////////////////////////////
+
 
 // Hash-Code errechnen (muss nicht eindeutig sein)
 
@@ -241,7 +241,7 @@ sal_Bool SwImpBlocks::PutMuchEntries( sal_Bool )
     return sal_False;
 }
 
-////////////////////////////////////////////////////////////////////////////
+
 
 
 SwTextBlocks::SwTextBlocks( const OUString& rFile )

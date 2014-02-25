@@ -24,7 +24,7 @@ interface TextGraphic : BaseTextGraphic
 {
 }
 
- //=========================================================================
+
 
 shell SwGrfShell : SwBaseShell
 

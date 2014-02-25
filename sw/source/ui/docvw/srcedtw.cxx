@@ -78,7 +78,7 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
     sal_uInt16 nActPos = 0;         // position, where '<' was found
     sal_uInt16 nOffset = 0;         // Offset of nActPos to '<'
     sal_uInt16 nPortStart = USHRT_MAX;  // for the TextPortion
-    sal_uInt16 nPortEnd  =  0;          //
+    sal_uInt16 nPortEnd  =  0;
     SwTextPortion aText;
     while(nActPos < nStrLen)
     {
@@ -722,7 +722,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
             r.eType != svtools::HTMLUNKNOWN)
                 r.eType = svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
-        sal_uInt16 nLine = nLineOff+r.nLine; //
+        sal_uInt16 nLine = nLineOff+r.nLine;
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, true );
     }
 }

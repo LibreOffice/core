@@ -24,7 +24,7 @@ interface TextMedia : BaseTextMedia
 {
 }
 
- //=========================================================================
+
 
 shell SwMediaShell : SwBaseShell
 

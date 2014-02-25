@@ -24,7 +24,7 @@ interface WebGraphic : BaseTextGraphic
 }
 
 
- //=========================================================================
+
 
 shell SwWebGrfShell : SwBaseShell
 {

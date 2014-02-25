@@ -234,7 +234,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
     }
     catch (const uno::RuntimeException&)
     {
-        //
+
     }
 
     uno::Reference< container::XEnumerationAccess >  xFldAcc = xFlds->getTextFields();

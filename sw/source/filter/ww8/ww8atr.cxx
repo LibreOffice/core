@@ -2161,7 +2161,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         // contents from paragraphs formatted with built-in heading
                         // styles". And afterward fill in any outline styles left
                         // uncovered by that range to the \t flag
-                        //
+
                         // i.e. for
                         // Heading 1
                         // Heading 2

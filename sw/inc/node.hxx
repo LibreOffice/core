@@ -34,9 +34,9 @@
 #include <index.hxx>
 #include <fmtcol.hxx>
 
-// ---------------------
+
 // forward declarations
-// ---------------------
+
 
 class SwCntntFrm;
 class SwCntntNode;
@@ -350,9 +350,9 @@ private:
 };
 
 
-// --------------------
+
 // SwCntntNode
-// --------------------
+
 class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexReg
 {
 
@@ -493,9 +493,9 @@ private:
 
 
 
-//---------
+
 // SwTableNode
-//---------
+
 class SW_DLLPUBLIC SwTableNode : public SwStartNode, public SwModify
 {
     friend class SwNodes;
@@ -531,9 +531,9 @@ private:
 };
 
 
-//---------
+
 // SwSectionNode
-//---------
+
 class SwSectionNode
     : public SwStartNode
     , private ::boost::noncopyable
@@ -582,9 +582,9 @@ public:
 };
 
 
-//----------------
+
 // SwDummySectionNode
-//----------------
+
 
 /** This class is internal. And quite frankly I don't know what ND_SECTIONDUMMY is for,
    the class has been merely created to replace "SwNode( ND_SECTIONDUMMY )", the only case

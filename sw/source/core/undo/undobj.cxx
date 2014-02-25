@@ -317,7 +317,7 @@ SwUndoSaveCntnt::~SwUndoSaveCntnt()
 // content. As a result, the attributes will not be expanded.
 // - MoveTo   moves from NodesArray into UndoNodesArray
 // - MoveFrom moves from UndoNodesArray into NodesArray
-//
+
 // If pEndNdIdx is given, Undo/Redo calls -Ins/DelFly. In that case the whole
 // section should be moved.
 void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
@@ -461,7 +461,7 @@ void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd )
 //                  - Flys
 //                  - Bookmarks
 //                  - Directories
-//
+
 // #i81002# - extending method
 // delete certain (not all) cross-reference bookmarks at text node of <rMark>
 // and at text node of <rPoint>, if these text nodes aren't the same.

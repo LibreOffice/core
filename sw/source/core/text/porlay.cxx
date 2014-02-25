@@ -678,9 +678,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
 
     const OUString& rTxt = rNode.GetTxt();
 
-    //
+
     // HIDDEN TEXT INFORMATION
-    //
+
     Range aRange( 0, !rTxt.isEmpty() ? rTxt.getLength() - 1 : 0 );
     MultiSelection aHiddenMulti( aRange );
     CalcHiddenRanges( rNode, aHiddenMulti );
@@ -696,9 +696,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         aHiddenChg.push_back( nEnd );
     }
 
-    //
+
     // SCRIPT AND SCRIPT RELATED INFORMATION
-    //
+
 
     sal_Int32 nChg = nInvalidityPos;
 
@@ -724,9 +724,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     const bool bAdjustBlock = SVX_ADJUST_BLOCK ==
                                   rNode.GetSwAttrSet().GetAdjust().GetAdjust();
 
-    //
+
     // FIND INVALID RANGES IN SCRIPT INFO ARRAYS:
-    //
+
 
     if( nChg )
     {
@@ -764,9 +764,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         }
     }
 
-    //
+
     // ADJUST nChg VALUE:
-    //
+
 
     // by stepping back one position we know that we are inside a group
     // declared as an nScript group
@@ -786,9 +786,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     if ( nChg == nGrpStart )
         nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
 
-    //
+
     // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
-    //
+
 
     // remove invalid entries from script information arrays
     aScriptChanges.erase( aScriptChanges.begin() + nCnt, aScriptChanges.end() );
@@ -820,10 +820,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     // remove invalid entries from kashida array
     aKashida.erase( aKashida.begin() + nCntKash, aKashida.end() );
 
-    //
+
     // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
     // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
-    //
+
 
     if( WEAK == g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
     {
@@ -858,9 +858,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         }
     }
 
-    //
+
     // UPDATE THE SCRIPT INFO ARRAYS:
-    //
+
 
     while ( nChg < rTxt.getLength() || ( aScriptChanges.empty() && rTxt.isEmpty() ) )
     {
@@ -1261,9 +1261,9 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
 {
     // remove invalid entries from direction information arrays
     aDirectionChanges.clear();
-    //
+
     // Bidi functions from icu 2.0
-    //
+
     UErrorCode nError = U_ZERO_ERROR;
     UBiDi* pBidi = ubidi_openSized( rTxt.getLength(), 0, &nError );
     nError = U_ZERO_ERROR;
@@ -1431,9 +1431,9 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
 
     bool bNewContainsHiddenChars = false;
 
-    //
+
     // Optimization: First examine the flags at the text node:
-    //
+
     if ( !rNode.IsCalcHiddenCharFlags() )
     {
         bool bWholePara = rNode.HasHiddenCharAttribute( true );
@@ -1458,9 +1458,9 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
     const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rNode );
     if ( pSI )
     {
-        //
+
         // Check first, if we have a valid SwScriptInfo object for this text node:
-        //
+
         bNewContainsHiddenChars = pSI->GetBoundsOfHiddenRange( nPos, rnStartPos, rnEndPos, pList );
         const bool bNewHiddenCharsHidePara =
             rnStartPos == 0 && rnEndPos >= rNode.GetTxt().getLength();
@@ -1468,9 +1468,9 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
     }
     else
     {
-        //
+
         // No valid SwScriptInfo Object, we have to do it the hard way:
-        //
+
         Range aRange(0, (!rNode.GetTxt().isEmpty())
                             ? rNode.GetTxt().getLength() - 1
                             : 0);
@@ -2256,9 +2256,9 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
     // to unhide the redlining ranges:
     selectRedLineDeleted(rNode, rHiddenMulti, false);
 
-    //
+
     // We calculated a lot of stuff. Finally we can update the flags at the text node.
-    //
+
     const bool bNewContainsHiddenChars = rHiddenMulti.GetRangeCount() > 0;
     bool bNewHiddenCharsHidePara = false;
     if ( bNewContainsHiddenChars )

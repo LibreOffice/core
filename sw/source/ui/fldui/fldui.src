@@ -24,9 +24,9 @@
 /*--------------------------------------------------------------------
     Description: strings for the types
  --------------------------------------------------------------------*/
- //
+
  // range document
- //
+
 String STR_DATEFLD
 {
     Text [ en-US ] = "Date" ;
@@ -67,9 +67,9 @@ String STR_EXTUSERFLD
 {
     Text [ en-US ] = "Sender" ;
 };
- //
+
  // range functions
- //
+
 String STR_SETFLD
 {
     Text [ en-US ] = "Set variable" ;
@@ -134,9 +134,9 @@ String STR_DROPDOWN
 {
     Text [ en-US ] = "Input list" ;
 };
- //
+
  // range references
- //
+
 String STR_SETREFFLD
 {
     Text [ en-US ] = "Set Reference" ;
@@ -145,9 +145,9 @@ String STR_GETREFFLD
 {
     Text [ en-US ] = "Insert Reference" ;
 };
- //
+
  //  range database
- //
+
 String STR_DBFLD
 {
     Text [ en-US ] = "Mail merge fields" ;
@@ -176,9 +176,9 @@ String STR_HIDDENTXTFLD
 {
     Text [ en-US ] = "Hidden text" ;
 };
- //
+
  //  range user fields
- //
+
 String STR_USERFLD
 {
     Text [ en-US ] = "User Field" ;
@@ -199,9 +199,9 @@ String STR_HIDDENPARAFLD
 {
     Text [ en-US ] = "Hidden Paragraph" ;
 };
- //
+
  // range DocumentInfo
- //
+
 String STR_DOCINFOFLD
 {
     Text [ en-US ] = "DocInformation" ;
@@ -225,9 +225,9 @@ String FLD_TIME_FIX
 {
     Text [ en-US ] = "Time (fixed)" ;
 };
- //
+
  //  SubCmd Statistic
- //
+
 String FLD_STAT_TABLE
 {
     Text [ en-US ] = "Tables" ;
@@ -257,7 +257,7 @@ String FLD_STAT_PAGE
     Text [ en-US ] = "Pages" ;
 };
  //  SubCmd DDETypes
- //
+
 String FMT_DDE_HOT
 {
     Text [ en-US ] = "DDE automatic" ;

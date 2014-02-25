@@ -409,9 +409,9 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
     sal_uLong       nEventId;
 
-    sal_uInt16  nBaseFontStMin;     //
-    sal_uInt16  nFontStMin;         //
-    sal_uInt16  nDefListDeep;       //
+    sal_uInt16  nBaseFontStMin;
+    sal_uInt16  nFontStMin;
+    sal_uInt16  nDefListDeep;
     sal_uInt16  nFontStHeadStart;   // Elemente im Font-Stack bei <Hn>
     sal_uInt16  nSBModuleCnt;       // Zaehler fuer Basic-Module
     sal_uInt16  nMissingImgMaps;    // Wie viele Image-Maps fehlen noch?

@@ -187,9 +187,9 @@ public:
     sal_uInt8 CompType( const sal_Int32 nPos ) const;
 #endif
 
-    //
+
     // HIDDEN TEXT STUFF START
-    //
+
 
 /** Hidden text range information - static and non-version
 
@@ -251,9 +251,9 @@ public:
  */
     static void DeleteHiddenRanges( SwTxtNode& rNode );
 
-    //
+
     // HIDDEN TEXT STUFF END
-    //
+
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
     // returns start index of kana entry in array, otherwise USHRT_MAX
