@@ -51,6 +51,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
+#include "RelativeSizeHelper.hxx"
+
 #include <algorithm>
 #include <iostream>
 using namespace std;
@@ -411,12 +413,22 @@ uno::Reference< drawing::XShape >
         OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
                 const awt::Size& rSize, const awt::Point& rPos,
                 uno::Sequence< uno::Reference< chart2::XFormattedString > >& rFormattedString,
-                const uno::Reference< beans::XPropertySet > &,
+                const uno::Reference< beans::XPropertySet > & xTextProperties,
                 double, const OUString& rName)
 {
     dummy::DummyFormattedText* pText = new dummy::DummyFormattedText( rFormattedString );
+    uno::Reference< drawing::XShape > xShape(pText);
+    uno::Reference< beans::XPropertySet > xTargetProps(xShape, uno::UNO_QUERY_THROW);
+    awt::Size aOldRefSize;
+    bool bHasRefPageSize =
+        ( xTextProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
+    // adapt font size according to page size
+    if( bHasRefPageSize )
+    {
+        RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rSize );
+    }
     pText->setPosition(rPos);
-    pText->setSize(rSize);
+    pText->setSize(awt::Size(0,0));
     pText->setName(rName);
     xTarget->add(pText);
     return pText;
