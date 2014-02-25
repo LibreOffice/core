@@ -35,7 +35,7 @@
 namespace climaker
 {
 
-//------------------------------------------------------------------------------
+
 extern bool g_verbose;
 
 ref struct Constants
@@ -79,13 +79,13 @@ ref struct Constants
 
 };
 
-//------------------------------------------------------------------------------
+
 inline ::System::String ^ ustring_to_String( OUString const & ustr )
 {
     return gcnew ::System::String( ustr.getStr(), 0, ustr.getLength() );
 }
 
-//------------------------------------------------------------------------------
+
 inline OUString String_to_ustring( ::System::String ^ str )
 {
     OSL_ASSERT( sizeof (wchar_t) == sizeof (sal_Unicode) );
@@ -108,7 +108,7 @@ static ::System::Reflection::MethodAttributes c_ctor_method_attr =
      /* | xxx todo: ??? compiler does not know Instance ???
         ::System::Reflection::MethodAttributes::Instance*/);
 
-//==============================================================================
+
 ref class TypeEmitter : public ::System::IDisposable
 {
     ::System::Reflection::Emit::ModuleBuilder ^ m_module_builder;

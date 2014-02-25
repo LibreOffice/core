@@ -102,10 +102,10 @@ Step 5: Changing the versions in the unoil module
 The unoil module builds the cli_oootypes.dll which contains the office types (offapi). Change the contents
 of unoil/climaker/version.txt similar to the versions.txt in this module. Then rebuild the module
 
-//======
+
 The automatic test in cli_ure/qa/versioning should be extended. See the readme.txt in that directory 
 for more information.
-//=====
+
 
 
 

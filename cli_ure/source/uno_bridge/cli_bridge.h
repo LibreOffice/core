@@ -50,7 +50,7 @@ ref struct CliEnvHolder {
 static Cli_environment ^ g_cli_env = nullptr;
 };
 
-//==================================================================================================
+
 /** An instance of Bridge represents exactly one mapping therefore either
     m_cli2uno or m_uno2cli is valid.
 */

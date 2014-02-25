@@ -641,7 +641,7 @@ srrm::IMessage^ UnoInterfaceProxy::constructReturnMessage(
     return retVal;
 }
 
-//################################################################################
+
 CliProxy::CliProxy(Bridge const* bridge, System::Object^ cliI,
                          typelib_TypeDescription const* td,
                          const OUString& usOid):
