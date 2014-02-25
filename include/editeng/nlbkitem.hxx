@@ -28,7 +28,7 @@ class EDITENG_DLLPUBLIC SvxNoLinebreakItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxNoLinebreakItem( const sal_Bool bBreak /*= sal_True*/,
+    SvxNoLinebreakItem( const bool bBreak /*= true*/,
                         const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
