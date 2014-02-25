@@ -206,8 +206,8 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInse
     if ( pObjectBase )
         pObjectBase->releaseUnoShape();
 }
-//============================================================================
+
 } // rptui
-//============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

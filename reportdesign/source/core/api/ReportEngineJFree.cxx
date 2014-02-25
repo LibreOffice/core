@@ -53,10 +53,10 @@
 #include <connectivity/CommonTools.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/docfilt.hxx>
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
@@ -70,7 +70,7 @@ OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentCon
 }
 
 // TODO: VirtualFunctionFinder: This is virtual function!
-//
+
 OReportEngineJFree::~OReportEngineJFree()
 {
 }
@@ -400,8 +400,8 @@ void SAL_CALL OReportEngineJFree::setMaxRows( ::sal_Int32 _MaxRows ) throw (uno:
 {
     set(PROPERTY_MAXROWS,_MaxRows,m_nMaxRows);
 }
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

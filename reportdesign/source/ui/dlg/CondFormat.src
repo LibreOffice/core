@@ -260,7 +260,7 @@ String STR_TRANSPARENT
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 
-//-------------------------------------------------------------------------
+
 ImageList IMG_CONDFORMAT_DLG_SC
 {
     MASKCOLOR;

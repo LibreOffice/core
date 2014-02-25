@@ -71,8 +71,8 @@ ORptPageDialog::ORptPageDialog( Window* pParent, const SfxItemSet* pAttr, const 
     if ( !aCJKOptions.IsDoubleLinesEnabled() )
         RemoveTabPage("asianlayout");
 }
-// =============================================================================
+
 } // namespace rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

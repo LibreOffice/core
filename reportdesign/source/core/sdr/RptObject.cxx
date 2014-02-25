@@ -109,7 +109,7 @@ sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportComponent>& _xComponent)
 {
     SdrObject* pNewObj = NULL;
@@ -173,7 +173,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
 
     return pNewObj;
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     class ParaAdjust : public AnyConverter
@@ -230,7 +230,7 @@ namespace
         }
     };
 }
-// -----------------------------------------------------------------------------
+
 const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
 {
     switch(_nObjectId)
@@ -308,7 +308,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
     static TPropertyNamePair s_aEmptyNameMap;
     return s_aEmptyNameMap;
 }
-// -----------------------------------------------------------------------------
+
 
 OObjectBase::OObjectBase(const uno::Reference< report::XReportComponent>& _xComponent)
 :m_bIsListening(sal_False)
@@ -329,7 +329,7 @@ OObjectBase::~OObjectBase()
         EndListening();
     m_xReportComponent.clear();
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< report::XSection> OObjectBase::getSection() const
 {
     uno::Reference< report::XSection> xSection;
@@ -338,12 +338,12 @@ uno::Reference< report::XSection> OObjectBase::getSection() const
         xSection = pPage->getSection();
     return xSection;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< report::XReportComponent> OObjectBase::getReportComponent() const
 {
     return m_xReportComponent;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< beans::XPropertySet> OObjectBase::getAwtComponent()
 {
     return uno::Reference< beans::XPropertySet>();
@@ -489,7 +489,7 @@ OCustomShape::OCustomShape(const OUString& _sComponentName)
 OCustomShape::~OCustomShape()
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt16 OCustomShape::GetObjIdentifier() const
 {
     return sal_uInt16(OBJ_CUSTOMSHAPE);
@@ -580,7 +580,7 @@ void OCustomShape::SetObjectItemHelper(const SfxPoolItem& rItem)
     //getSectionWindow()->getView()->AdjustMarkHdl();
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Reference< beans::XPropertySet> OCustomShape::getAwtComponent()
 {
     return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);
@@ -638,7 +638,7 @@ OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xCompon
 OUnoObject::~OUnoObject()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OUnoObject::impl_initializeModel_nothrow()
 {
     try
@@ -657,7 +657,7 @@ void OUnoObject::impl_initializeModel_nothrow()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OUnoObject::impl_setReportComponent_nothrow()
 {
     if ( m_xReportComponent.is() )
@@ -673,7 +673,7 @@ void OUnoObject::impl_setReportComponent_nothrow()
 
     impl_initializeModel_nothrow();
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt16 OUnoObject::GetObjIdentifier() const
 {
     return sal_uInt16(m_nObjectType);
@@ -837,7 +837,7 @@ OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
     return aDefaultName;
 }
 
-// -----------------------------------------------------------------------------
+
 void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw( uno::RuntimeException)
 {
     OObjectBase::_propertyChange(evt);
@@ -893,7 +893,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OUnoObject::CreateMediator(sal_Bool _bReverse)
 {
     if ( !m_xMediator.is() )
@@ -906,13 +906,13 @@ void OUnoObject::CreateMediator(sal_Bool _bReverse)
         OObjectBase::StartListening();
     }
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< beans::XPropertySet> OUnoObject::getAwtComponent()
 {
     return Reference<XPropertySet>(GetUnoControlModel(),uno::UNO_QUERY);
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
 {
     return OObjectBase::getUnoShapeOf( *this );
@@ -969,7 +969,7 @@ OOle2Obj::OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType)
 OOle2Obj::~OOle2Obj()
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt16 OOle2Obj::GetObjIdentifier() const
 {
     return m_nType;
@@ -1105,7 +1105,7 @@ uno::Reference< beans::XPropertySet> OOle2Obj::getAwtComponent()
     return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OOle2Obj::getUnoShape()
 {
     uno::Reference< uno::XInterface> xShape = OObjectBase::getUnoShapeOf( *this );
@@ -1125,7 +1125,7 @@ void OOle2Obj::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoS
     m_xReportComponent.clear();
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const uno::Reference < embed::XEmbeddedObject >& _xObj)
 {
     uno::Reference< chart2::data::XDatabaseDataProvider > xSource;
@@ -1161,13 +1161,13 @@ OOle2Obj& OOle2Obj::operator=(const OOle2Obj& rObj)
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+
 // Clone() soll eine komplette Kopie des Objektes erzeugen.
 OOle2Obj* OOle2Obj::Clone() const
 {
     return CloneHelper< OOle2Obj >();
 }
-// -----------------------------------------------------------------------------
+
 void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XModel>& _xModel)
 {
     try
@@ -1189,7 +1189,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
     {
     }
 }
-// -----------------------------------------------------------------------------
+
 void OOle2Obj::initializeOle()
 {
     if ( m_bOnlyOnce )
@@ -1209,7 +1209,7 @@ void OOle2Obj::initializeOle()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
 {
     uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
@@ -1242,7 +1242,7 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
             xChartModel->unlockControllers();
     }
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XReportDefinition>& _xReport)
 {
     uno::Reference<container::XNameAccess> xStyles = _xReport->getStyleFamilies();
@@ -1261,8 +1261,8 @@ uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XRepor
     return xReturn;
 }
 
-//============================================================================
+
 } // rptui
-//============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

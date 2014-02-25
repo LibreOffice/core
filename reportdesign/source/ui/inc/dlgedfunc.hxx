@@ -32,9 +32,9 @@ namespace rptui
 class OReportSection;
 class OSectionView;
 
-//============================================================================
+
 // DlgEdFunc
-//============================================================================
+
 
 class DlgEdFunc /* : public LinkHdl */
 {
@@ -116,9 +116,9 @@ protected:
 
 };
 
-//============================================================================
+
 // DlgEdFuncInsert
-//============================================================================
+
 
 class DlgEdFuncInsert : public DlgEdFunc
 {
@@ -131,9 +131,9 @@ public:
     virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
 };
 
-//============================================================================
+
 // DlgEdFuncSelect
-//============================================================================
+
 
 class DlgEdFuncSelect : public DlgEdFunc
 {

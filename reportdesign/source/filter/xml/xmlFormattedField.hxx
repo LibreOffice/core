@@ -40,9 +40,9 @@ namespace rptxml
                     ,bool _bPageCount);
         virtual ~OXMLFormattedField();
     };
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 #endif // RPT_XMLFORMATTEDFIELD_HXX
 

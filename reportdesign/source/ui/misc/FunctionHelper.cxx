@@ -20,10 +20,10 @@
 
 #include "FunctionHelper.hxx"
 
-// =============================================================================
+
 namespace rptui
 {
-// =============================================================================
+
     using namespace ::com::sun::star;
 
 FunctionManager::FunctionManager(const uno::Reference< report::meta::XFunctionManager>& _xMgr)
@@ -237,8 +237,8 @@ bool FunctionDescription::isParameterOptional(sal_uInt32 _nPos) const
     return false;
 }
 
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

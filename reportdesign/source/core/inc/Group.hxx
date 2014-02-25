@@ -75,13 +75,13 @@ namespace reportdesign
                             ,::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _member);
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual ~OGroup();
 
         /** this function is called upon disposing the component
         */
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual void SAL_CALL disposing();
     public:
         OGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups >& _xParent
@@ -149,9 +149,9 @@ namespace reportdesign
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext(){ return m_xContext; }
     };
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
-#endif //
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

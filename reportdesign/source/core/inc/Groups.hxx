@@ -47,13 +47,13 @@ namespace reportdesign
         void checkIndex(sal_Int32 _nIndex);
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual ~OGroups();
 
         /** this function is called upon disposing the component
         */
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual void SAL_CALL disposing();
     public:
         OGroups( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xParent
