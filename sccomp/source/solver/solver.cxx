@@ -413,9 +413,9 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
     if ( !maStatus.isEmpty() )
         return;
 
-    //
+
     // build lp_solve model
-    //
+
 
     lprec* lp = make_lp( 0, nVariables );
     if ( !lp )
