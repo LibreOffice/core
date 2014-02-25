@@ -601,7 +601,7 @@ End
 // ----- Vista Default Programs ----------------------------------------
 // Find more information here:
 // URL:
-// ---------------------------------------------------------------------
+
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_ApplicationDescription
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";

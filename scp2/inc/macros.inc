@@ -252,7 +252,7 @@ End
         Name = name; \
     End
 
-// ---------------------------------------
+
 #define CONDITIONAL_MODULE_ENTRY(name,modid) \
     Module gid_Module_Root_Reg_##name \
 	ParentID = modid; \
@@ -421,7 +421,7 @@ End
     REGISTRY_ENTRY_TEMPLATE_CAPABILITIES(name,modid,key,doc_type) \
     REGISTRY_ENTRY_KINDMAP(name, modid, key) \
 
-// ---------------------------------------
+
 
 #ifdef _MSC_VER
 
@@ -446,7 +446,7 @@ End
 #define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) // empty
 #endif
 
-// ---------------------------------------
+
 
 #if defined WNT
 #define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
