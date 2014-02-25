@@ -579,7 +579,7 @@ static void setup_program_dir( const char* progname )
     }
 }
 
-//*************************************************************************
+
 
 static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
 {
@@ -650,7 +650,7 @@ static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
     return pid;
 }
 
-//*************************************************************************
+
 
 static bool read_line( FILE *fp, string& rLine )
 {

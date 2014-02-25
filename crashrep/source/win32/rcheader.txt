@@ -33,9 +33,9 @@
 #define LANG_JAPANESE 81
 #define PLACEHOLDER LANGUAGE
 
-// -----------------------------------------------------------------------
+
 // 				version information
-// -----------------------------------------------------------------------
+
 
 VS_VERSION_INFO versioninfo
 	fileversion    VERSION, SUBVERSION, MICROVERSION, VERVARIANT
