@@ -82,7 +82,7 @@ struct hash_ptr
 typedef boost::unordered_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
 typedef boost::unordered_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
 
-//==============================================================================
+
 class FactoryImpl
     : public ::cppu::WeakImplHelper3< lang::XServiceInfo,
                                       script::XInvocationAdapterFactory,
@@ -126,13 +126,13 @@ public:
         throw (RuntimeException);
 };
 struct AdapterImpl;
-//==============================================================================
+
 struct InterfaceAdapterImpl : public uno_Interface
 {
     AdapterImpl *                           m_pAdapter;
     typelib_InterfaceTypeDescription *      m_pTypeDescr;
 };
-//==============================================================================
+
 struct AdapterImpl
 {
     oslInterlockedCount         m_nRef;
@@ -183,7 +183,7 @@ inline AdapterImpl::~AdapterImpl()
             (typelib_TypeDescription *)m_pInterfaces[ nPos ].m_pTypeDescr );
     }
     delete [] m_pInterfaces;
-    //
+
     (*m_pReceiver->release)( m_pReceiver );
     m_pFactory->release();
 }
@@ -917,7 +917,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     return invadp_getSupportedServiceNames();
 }
 
-//==============================================================================
+
 static Reference< XInterface > SAL_CALL FactoryImpl_create(
     const Reference< XComponentContext > & xContext )
     throw (Exception)
@@ -928,9 +928,9 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create(
 }
 
 
-//##############################################################################
-//##############################################################################
-//##############################################################################
+
+
+
 
 static const struct ::cppu::ImplementationEntry g_entries[] =
 {

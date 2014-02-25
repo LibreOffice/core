@@ -77,16 +77,16 @@ private:
     Reference<XMultiServiceFactory> m_xSMgr;
 };
 
-//*************************************************************************
+
 DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCtx )
 {
     m_xSMgr.set( xCtx->getServiceManager(), UNO_QUERY );
 }
 
-//*************************************************************************
+
 DllComponentLoader::~DllComponentLoader() {}
 
-//*************************************************************************
+
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -107,7 +107,7 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
     return seqNames;
 }
 
-//*************************************************************************
+
 void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
@@ -132,7 +132,7 @@ void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::co
 //      m_xSMgr = rServiceManager;
 }
 
-//*************************************************************************
+
 Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
     const Reference< XRegistryKey > & )
@@ -145,7 +145,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 }
 
 
-//*************************************************************************
+
 sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
     const Reference< XRegistryKey > & xKey, const OUString &, const OUString & rLibName )
 

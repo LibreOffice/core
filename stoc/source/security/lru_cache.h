@@ -99,7 +99,7 @@ public:
     */
     inline void setSize( ::std::size_t size ) SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
     ::std::size_t size ) SAL_THROW(())
@@ -121,7 +121,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
         }
     }
 }
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache(
     ::std::size_t size ) SAL_THROW(())
@@ -130,21 +130,21 @@ inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache(
 {
     setSize( size );
 }
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache() SAL_THROW(())
     : m_size( 0 )
     , m_block( 0 )
 {
 }
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::~lru_cache()
     SAL_THROW(())
 {
     delete [] m_block;
 }
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::toFront(
     Entry * entry ) const SAL_THROW(())
@@ -167,7 +167,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::toFront(
         m_head = entry;
     }
 }
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline bool lru_cache< t_key, t_val, t_hashKey, t_equalKey >::has(
     t_key const & key ) const SAL_THROW(())
@@ -175,7 +175,7 @@ inline bool lru_cache< t_key, t_val, t_hashKey, t_equalKey >::has(
     typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
     return (iFind != m_key2element.end());
 }
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
     t_key const & key ) const SAL_THROW(())
@@ -201,7 +201,7 @@ inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
     }
     return 0;
 }
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
     t_key const & key, t_val const & val ) SAL_THROW(())
@@ -252,7 +252,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
         toFront( entry );
     }
 }
-//__________________________________________________________________________________________________
+
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::clear() SAL_THROW(())
 {
