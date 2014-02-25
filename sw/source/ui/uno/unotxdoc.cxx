@@ -1811,10 +1811,10 @@ Reference< XPropertySetInfo >  SwXTextDocument::getPropertySetInfo(void) throw( 
     return xRet;
 }
 
-void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
-    const Any& aValue)
-    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
-                                         WrappedTargetException, RuntimeException)
+void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any& aValue)
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException,
+           RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
