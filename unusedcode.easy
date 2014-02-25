@@ -83,7 +83,6 @@ ScDocument::IsEmptyData(short, short) const
 ScDocument::RebuildFormulaGroups()
 ScExtIButton::GetSelected() const
 ScFlatBoolRowSegments::getValue(int)
-ScFormulaCell::HasColRowName() const
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
 ScGridWindow::HasScenarioRange(unsigned short, int, ScRange&)
 ScMyNotEmptyCellsIterator::GetCell() const

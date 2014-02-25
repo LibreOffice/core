@@ -241,7 +241,6 @@ public:
      */
     bool HasRefListExpressibleAsOneReference(ScRange& rRange) const;
     bool            HasRelNameReference() const;
-    bool            HasColRowName() const;
 
     bool UpdateReference(
         const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL, const ScAddress* pUndoCellPos = NULL );

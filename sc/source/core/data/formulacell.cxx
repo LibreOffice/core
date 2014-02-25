@@ -2442,12 +2442,6 @@ bool ScFormulaCell::HasRelNameReference() const
     return false;
 }
 
-bool ScFormulaCell::HasColRowName() const
-{
-    pCode->Reset();
-    return (pCode->GetNextColRowName() != NULL);
-}
-
 bool ScFormulaCell::UpdatePosOnShift( const sc::RefUpdateContext& rCxt )
 {
     if (rCxt.meMode != URM_INSDEL)
