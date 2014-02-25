@@ -52,10 +52,6 @@ public:
     */
     sal_Int32 EvaluateMatch (const Context& rOther) const;
 
-    /** Return the best match against the given list of contexts.
-    */
-    sal_Int32 EvaluateMatch (const ::std::vector<Context>& rOthers) const;
-
     bool operator== (const Context& rOther) const;
     bool operator!= (const Context& rOther) const;
 };

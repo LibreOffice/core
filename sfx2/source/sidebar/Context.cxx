@@ -69,30 +69,6 @@ sal_Int32 Context::EvaluateMatch (
 
 
 
-sal_Int32 Context::EvaluateMatch (const ::std::vector<Context>& rOthers) const
-{
-    sal_Int32 nBestMatch (NoMatch);
-
-    for (::std::vector<Context>::const_iterator
-             iContext(rOthers.begin()),
-             iEnd(rOthers.end());
-         iContext!=iEnd;
-         ++iContext)
-    {
-        const sal_Int32 nMatch (EvaluateMatch(*iContext));
-        if (nMatch < nBestMatch)
-        {
-            if (nMatch == OptimalMatch)
-            {
-                // We will find no better match so stop searching.
-                return OptimalMatch;
-            }
-            nBestMatch = nMatch;
-        }
-    }
-    return nBestMatch;
-}
-
 
 
 

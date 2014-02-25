@@ -310,34 +310,6 @@ sal_Int32 EnumContext::EvaluateMatch (
 }
 
 
-
-
-sal_Int32 EnumContext::EvaluateMatch (const ::std::vector<EnumContext>& rOthers) const
-{
-    sal_Int32 nBestMatch (NoMatch);
-
-    for (::std::vector<EnumContext>::const_iterator
-             iContext(rOthers.begin()),
-             iEnd(rOthers.end());
-         iContext!=iEnd;
-         ++iContext)
-    {
-        const sal_Int32 nMatch (EvaluateMatch(*iContext));
-        if (nMatch < nBestMatch)
-        {
-            if (nMatch == OptimalMatch)
-            {
-                // We will find no better match so stop searching.
-                return OptimalMatch;
-            }
-            nBestMatch = nMatch;
-        }
-    }
-    return nBestMatch;
-}
-
-
-
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

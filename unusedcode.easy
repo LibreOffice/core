@@ -323,10 +323,8 @@ sd::presenter::PresenterCanvas::copyRect(com::sun::star::uno::Reference<com::sun
 sdr::overlay::OverlayRectangle::setSecondPosition(basegfx::B2DPoint const&)
 sdr::table::Cell::getName()
 sdr::table::SdrTableObj::getRowCount() const
-sfx2::sidebar::Context::EvaluateMatch(std::vector<sfx2::sidebar::Context, std::allocator<sfx2::sidebar::Context> > const&) const
 sfx2::sidebar::ContextList::IsEmpty()
 sfx2::sidebar::Deck::PrintWindowTree(std::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)
-sfx2::sidebar::EnumContext::EvaluateMatch(std::vector<sfx2::sidebar::EnumContext, std::allocator<sfx2::sidebar::EnumContext> > const&) const
 sfx2::sidebar::EnumContext::GetContext() const
 sfx2::sidebar::Paint::Set(sfx2::sidebar::Paint const&)
 sfx2::sidebar::Panel::PrintWindowTree()

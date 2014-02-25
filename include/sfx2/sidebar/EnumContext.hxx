@@ -142,10 +142,6 @@ public:
     */
     sal_Int32 EvaluateMatch (const EnumContext& rOther) const;
 
-    /** Return the best match against the given list of contexts.
-    */
-    sal_Int32 EvaluateMatch (const ::std::vector<EnumContext>& rOthers) const;
-
     static Application GetApplicationEnum (const ::rtl::OUString& rsApplicationName);
     static const ::rtl::OUString& GetApplicationName (const Application eApplication);
 
