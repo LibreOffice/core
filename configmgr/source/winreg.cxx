@@ -39,7 +39,7 @@ namespace {
 // Last element of Key becomes prop, first part is the path and optionally nodes,
 // when the node has oor:op attribute.
 // Values can be the following: Value (string) and Final (dword, optional)
-//
+
 // For example the following registry setting:
 // [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.UserProfile\Data\o]
 // "Value"="Example Corp."
@@ -51,7 +51,7 @@ namespace {
 //         <value>Example Corp.</value>
 //     </prop>
 // </item>
-//
+
 // Another example:
 // [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.OptionsDialog\OptionsDialogGroups\ProductName/#fuse\Pages\Java/#fuse\Hide]
 // "Value"="true"
