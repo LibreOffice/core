@@ -342,4 +342,3 @@ writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::ch
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, boost::shared_ptr<writerfilter::Reference<writerfilter::Properties> >)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, rtl::OUString const&)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, unsigned int)
-writerfilter::toString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)

@@ -33,7 +33,6 @@ namespace writerfilter
 
 #if OSL_DEBUG_LEVEL > 1
     string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC toString(uno::Reference< text::XTextRange > textRange);
-    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC toString(const string & rString);
 #endif
 }
 #endif // INCLUDED_RESOURCEMODEL_UTIL_HXX

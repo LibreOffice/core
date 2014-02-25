@@ -87,10 +87,6 @@ string toString(uno::Reference< text::XTextRange > textRange)
     return result;
 }
 
-string toString(const string & rString)
-{
-    return rString;
-}
 #endif
 }
 
