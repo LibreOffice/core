@@ -89,9 +89,9 @@ public class RegressionTest_i84234 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // commit the storages and dispose them
-            // ================================================
+
 
             // commit substorage
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
@@ -109,9 +109,9 @@ public class RegressionTest_i84234 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // reopen the storages in readwrite mode and check Compressed flag
-            // ================================================
+
 
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );

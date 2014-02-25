@@ -114,10 +114,10 @@ public class RegressionTest_114358 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // create a new storage based on the stream and change the substream
             // as described in the bug description
-            // ================================================
+
 
             byte pBytes2[] = { 2, 2 };
 
@@ -159,9 +159,9 @@ public class RegressionTest_114358 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // create a new readonly storage based on the stream and check the contents
-            // ================================================
+
 
             pArgs[1] = new Integer( ElementModes.READ );
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );

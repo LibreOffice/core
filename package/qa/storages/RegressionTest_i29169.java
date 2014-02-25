@@ -120,9 +120,9 @@ public class RegressionTest_i29169 implements StorageTest {
                                                             ElementModes.WRITE ) )
                 return false;
 
-            // ================================================
+
             // commit the storages, and check the renaming in all stages
-            // ================================================
+
 
             // rename the storage before it is commited
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage1", "SubSubStorage2" ) )
@@ -180,9 +180,9 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // dispose the storages
-            // ================================================
+
 
             // dispose lowerest substorage
             if ( !m_aTestHelper.disposeStorage( xTempSubSubStorage ) )
@@ -196,9 +196,9 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // create a new storage based on the stream and check the substreams and substorages
-            // ================================================
+
 
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
@@ -245,9 +245,9 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.checkStream( xTempSubSubStorage, "SubSubStream1", "MediaType2", true, pBytes1 ) )
                 return false;
 
-            // ================================================
+
             // rename the reopened storages and streams
-            // ================================================
+
 
             // rename the storage before it is commited
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage5", "SubSubStorage6" ) )
@@ -305,9 +305,9 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // dispose the storages
-            // ================================================
+
 
             // dispose lowerest substorage
             if ( !m_aTestHelper.disposeStorage( xTempSubSubStorage ) )
@@ -322,9 +322,9 @@ public class RegressionTest_i29169 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // create a new readonly storage based on the stream and check the contents
-            // ================================================
+
 
             pArgs[1] = new Integer( ElementModes.READ );
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );

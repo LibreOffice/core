@@ -123,9 +123,9 @@ public class Test08 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempSubStorage ) )
                 return false;
 
-            // ================================================
+
             // check substorage
-            // ================================================
+
 
             if ( !checkSubStorages( xTempStorage, pBytes1, aRelations1 ) )
                 return false;
@@ -134,9 +134,9 @@ public class Test08 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // now check all the written information with readwrite access
-            // ================================================
+
 
             XStorage xResWriteStorage = m_aTestHelper.createStorageFromStream( m_xStorageFactory,
                                                                             xTempFileStream,
@@ -184,9 +184,9 @@ public class Test08 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // now check all the written information with readonly access
-            // ================================================
+
 
             // close the output part of the temporary stream
             // the output part must present since we already wrote to the stream

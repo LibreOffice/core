@@ -35,7 +35,7 @@
 #include <cppuhelper/implbase6.hxx>
 
 // SwitchablePersistenceStream
-//
+
 // Allows to switch the stream persistence on the fly. The target
 // stream ( if not filled by the implementation ) MUST have the same
 // size as the original one!

@@ -50,10 +50,10 @@ public class RegressionTest_i55821 implements StorageTest {
     {
         try
         {
-            // ================================================
+
             // create a temporary stream and a storage based on it
             // fill the storage with the data that will be used for testing
-            // ================================================
+
 
             XStream xTempFileStream = m_aTestHelper.CreateTempFileStream( m_xMSF );
             if ( xTempFileStream == null )
@@ -93,9 +93,9 @@ public class RegressionTest_i55821 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // reopen the target storage readonly, and check contents
-            // ================================================
+
 
             // the temporary file must not be locked any more after storage disposing
             pArgs[1] = new Integer( ElementModes.READ );

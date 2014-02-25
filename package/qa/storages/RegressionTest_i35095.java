@@ -118,10 +118,10 @@ public class RegressionTest_i35095 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // now check all the written information
             // and the raw stream contents
-            // ================================================
+
 
             // close the output part of the temporary stream
             // the output part must present since we already wrote to the stream

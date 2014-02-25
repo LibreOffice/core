@@ -151,9 +151,9 @@ public class Test01 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) || !m_aTestHelper.disposeStorage( xTempFileStorage ) )
                 return false;
 
-            // ================================================
+
             // now check all the written and copied information
-            // ================================================
+
 
             // the temporary file must not be locked any more after storage disposing
             XStorage xResultStorage = m_aTestHelper.createStorageFromURL( m_xStorageFactory,

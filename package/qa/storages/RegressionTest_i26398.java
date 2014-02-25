@@ -99,10 +99,10 @@ public class RegressionTest_i26398 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // commit the substorage, dispose it, reopen readonly
             // and dispose the reopened substorage
-            // ================================================
+
 
             // commit substorage
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
@@ -126,9 +126,9 @@ public class RegressionTest_i26398 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempSubStorage ) )
                 return false;
 
-            // ================================================
+
             // reopen the substorage in readwrite mode and check contents
-            // ================================================
+
 
             // open a new substorage
             xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,

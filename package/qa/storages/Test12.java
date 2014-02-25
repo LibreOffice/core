@@ -118,9 +118,9 @@ public class Test12 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempSubStorage ) )
                 return false;
 
-            // ================================================
+
             // check substorage
-            // ================================================
+
 
             if ( !checkSubStorages( xTempStorage, pBytes1, pBigBytes ) )
                 return false;
@@ -129,9 +129,9 @@ public class Test12 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // now check all the written information with readwrite access
-            // ================================================
+
 
             Object oResWriteStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResWriteStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResWriteStorage );
@@ -171,9 +171,9 @@ public class Test12 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // now check all the written information with readonly access
-            // ================================================
+
 
             // close the output part of the temporary stream
             // the output part must present since we already wrote to the stream
