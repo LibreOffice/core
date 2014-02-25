@@ -622,6 +622,7 @@ void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, 
         case NRECTANGLE:       out<<"SmRectangleNode"; break;
         case NVERTICAL_BRACE:  out<<"SmVerticalBraceNode"; break;
         case NMATHIDENT:       out<<"SmMathIdentifierNode"; break;
+        case NINTDYN:            out<<"SmDynIntegralNode"; break;
         default:
             out<<"Unknown Node";
     }
@@ -2296,6 +2297,24 @@ void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 
 /**************************************************************************/
 
+void SmDynIntegralNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong nWidth)
+{
+    // XXX: copied from SmRootSymbol for now
+    //nBodyWidth = nWidth;
+}
+
+
+void SmDynIntegralNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
+{
+    // XXX: copied from SmRootSymbol for now
+    // some additional length so that the horizontal
+    // bar will be positioned above the argument
+    //SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10L);
+}
+
+
+/**************************************************************************/
+
 
 void SmRectangleNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong nWidth)
 {
@@ -3191,6 +3210,10 @@ void SmRootNode::Accept(SmVisitor* pVisitor) {
 }
 
 void SmRootSymbolNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmDynIntegralNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
 

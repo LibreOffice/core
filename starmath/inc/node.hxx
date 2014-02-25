@@ -73,7 +73,7 @@ enum SmNodeType
 /*10*/ NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
 /*15*/ NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
 /*20*/ NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
-/*25*/ NRECTANGLE,     NVERTICAL_BRACE, NMATHIDENT
+/*25*/ NRECTANGLE,     NVERTICAL_BRACE, NMATHIDENT,    NDYNINT
 };
 
 
@@ -609,6 +609,32 @@ class SmRootSymbolNode : public SmMathSymbolNode
 public:
     SmRootSymbolNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
+    {}
+
+    sal_uLong GetBodyWidth() const {return nBodyWidth;};
+    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nHeight);
+    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
+
+    void Accept(SmVisitor* pVisitor);
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+/** Dynamic Integral symbol node
+ *
+ * Node for drawing dynamicall sized integral symbols.
+ *
+ * XXX: It might be created a parent class SmDynamicSizedNode
+        (for both dynamic integrals, roots and other dynamic symbols)
+
+ */
+class SmDynIntegralNode : public SmMathSymbolNode
+{
+    sal_uLong  nBodyWidth;  // width of body (argument) of integral sign
+
+public:
+    SmDynIntegralNode(const SmToken &rNodeToken)
+    :   SmMathSymbolNode(NDYNINT, rNodeToken)
     {}
 
     sal_uLong GetBodyWidth() const {return nBodyWidth;};
