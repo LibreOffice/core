@@ -22,9 +22,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class BreakIterator_th
-//  ----------------------------------------------------
+
 class BreakIterator_th : public BreakIterator_CTL
 {
 public:

@@ -311,7 +311,7 @@ ignoreProlongedSoundMark_ja_JP::folding( const OUString& inStr, sal_Int32 startP
         position = startPos;
     }
 
-    //
+
     sal_Unicode previousChar = *src ++;
     sal_Unicode currentChar;
 

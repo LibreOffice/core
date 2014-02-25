@@ -88,7 +88,7 @@ ignoreIandEfollowedByYa_ja_JP::folding( const OUString& inStr, sal_Int32 startPo
         position = startPos;
     }
 
-    //
+
     sal_Unicode previousChar = *src ++;
     sal_Unicode currentChar;
 

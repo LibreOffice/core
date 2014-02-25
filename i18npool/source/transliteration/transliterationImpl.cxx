@@ -332,7 +332,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
 }
 
 
-//
+
 OUString SAL_CALL
 TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset ) throw(RuntimeException)

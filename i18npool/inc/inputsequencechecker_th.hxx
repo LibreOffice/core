@@ -23,9 +23,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class InputSequenceChecker_th
-//  ----------------------------------------------------
+
 class InputSequenceChecker_th : public InputSequenceCheckerImpl
 {
 public:

@@ -25,9 +25,9 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class Index;
 
-//  ----------------------------------------------------
+
 //  class IndexEntrySupplier_Unicode
-//  ----------------------------------------------------
+
 class IndexEntrySupplier_Unicode : public IndexEntrySupplier_Common {
 public:
     IndexEntrySupplier_Unicode( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );

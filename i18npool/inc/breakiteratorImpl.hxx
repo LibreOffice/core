@@ -36,9 +36,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class BreakIterator
-//  ----------------------------------------------------
+
 class BreakIteratorImpl : public cppu::WeakImplHelper2
 <
     XBreakIterator,

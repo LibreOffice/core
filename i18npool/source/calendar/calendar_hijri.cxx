@@ -103,13 +103,13 @@ void Calendar_hijri::mapFromGregorian() throw(RuntimeException)
     fieldValue[CalendarFieldIndex::ERA] = (sal_Int16) year < 1 ? 0 : 1;
 }
 
-//
+
 // This function returns the Julian date/time of the Nth new moon since
 // January 1900.  The synodic month is passed as parameter.
-//
+
 // Adapted from "Astronomical  Formulae for Calculators" by
 // Jean Meeus, Third Edition, Willmann-Bell, 1985.
-//
+
 double
 Calendar_hijri::NewMoon(sal_Int32 n)
 {

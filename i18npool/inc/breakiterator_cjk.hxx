@@ -23,9 +23,9 @@
 #include <xdictionary.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
-//  ----------------------------------------------------
+
 //  class BreakIterator_CJK
-//  ----------------------------------------------------
+
 class BreakIterator_CJK : public BreakIterator_Unicode
 {
 public:

@@ -548,7 +548,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      // the Sequence of PropertyValues is expected to have at least 4 elements:
      // elt Name              Type             purpose
 
-     //
+
      // 0.  "Prefix"          OUString
      // 1.  "NumberingType"   sal_Int16        type of formatting from style::NumberingType (roman, arabic, etc)
      // 2.  "Suffix"          OUString

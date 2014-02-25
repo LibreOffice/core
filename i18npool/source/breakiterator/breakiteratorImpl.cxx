@@ -474,10 +474,10 @@ static const UBlock2Script scriptList[] =
 #define scriptListCount SAL_N_ELEMENTS(scriptList)
 
 //always sets rScriptType
-//
+
 //returns true for characters historically explicitly assigned to
 //latin/weak/asian
-//
+
 //returns false for characters that historically implicitly assigned to
 //weak as unknown
 bool getCompatibilityScriptClassByBlock(sal_uInt32 currentChar, sal_Int16 &rScriptType)

@@ -27,9 +27,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
+
 //  class TextConversion
-//  ----------------------------------------------------
+
 class TextConversionImpl : public cppu::WeakImplHelper2
 <
     com::sun::star::i18n::XExtendedTextConversion,
