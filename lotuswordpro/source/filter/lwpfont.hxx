@@ -107,7 +107,6 @@ private:
     LwpFontTableEntry* m_pFontEntries;
 };
 
-
 class LwpFontNameEntry
 {
 public:

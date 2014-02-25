@@ -62,7 +62,6 @@
  Mar 2005           Created
  ************************************************************************/
 
-
 #ifndef _LWPMARKER_HXX_
 #define _LWPMARKER_HXX_
 

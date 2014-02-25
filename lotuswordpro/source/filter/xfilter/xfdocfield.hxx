@@ -193,7 +193,6 @@ public:
     virtual void    ToXml(IXFStream *pStrm);
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

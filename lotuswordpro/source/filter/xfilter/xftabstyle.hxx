@@ -115,6 +115,5 @@ inline void XFTabStyle::SetLeaderChar(sal_Unicode leader)
     m_strLeader = OUString(chs);
 }
 
-
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

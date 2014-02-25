@@ -68,7 +68,6 @@
 #include "vcl/bmpacc.hxx"
 #include "svx/xbitmap.hxx"
 
-
 void LwpBackgroundStuff::Read(LwpObjectStream* pStrm)
 {
     m_nID = pStrm->QuickReaduInt16();
@@ -171,7 +170,6 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
 
     delete [] pImageBuff;
     pImageBuff = NULL;
-
 
     pXFBGImage->SetRepeate();
     // end of add

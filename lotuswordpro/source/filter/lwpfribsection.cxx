@@ -210,7 +210,6 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
     //pXFIndex->AddTemplate(A2OUSTR("separator"),A2OUSTR("Separator"),pTemplateSep);
     pXFIndex->AddTemplate(A2OUSTR("separator"),styleName,pTemplateSep);
 
-
     styleName = pFoundry->FindActuralStyleName(A2OUSTR("Primary"));
 
     XFIndexTemplate * pTemplate1 = new XFIndexTemplate();
@@ -245,7 +244,6 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
         pXFIndex->AddTemplate(Int32ToOUString(3),styleName,pTemplate3);
     }
 }
-
 
 LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
     :m_bNewSection(sal_False),m_pPara(pPara),m_pLayout(pLayout)

@@ -62,7 +62,6 @@
  Jan 2005           Created
  ************************************************************************/
 
-
 #ifndef _LWPPARAGRAPH_HXX_
 #define _LWPPARAGRAPH_HXX_
 

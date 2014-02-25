@@ -74,8 +74,6 @@ void XFListLevel::ToXml(IXFStream * /*pStrm*/)
 {
 }
 
-
-
 void XFListlevelNumber::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
@@ -104,7 +102,6 @@ void XFListlevelNumber::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("text:min-label-distance"), DoubleToOUString(m_fMinLabelDistance) + A2OUSTR("cm") );
     }
     pAttrList->AddAttribute( A2OUSTR("fo:text-align"), GetAlignName(m_eAlign) );
-
 
     pStrm->StartElement( A2OUSTR("style:properties") );
     pStrm->EndElement( A2OUSTR("style:properties") );
@@ -152,7 +149,6 @@ void    XFListLevelBullet::ToXml(IXFStream *pStrm)
 
     pStrm->EndElement( A2OUSTR("text:list-level-style-bullet") );
 }
-
 
 XFListStyle::XFListStyle()
 {
@@ -289,7 +285,7 @@ void    XFListStyle::SetListBullet(sal_Int32 level,
     pLevel->SetSuffix(suffix);
     pLevel->SetBulletChar(bullet);
     pLevel->SetFontName(fontname);
-    //
+
     pLevel->SetListlevelType(enumXFListLevelBullet);
     pLevel->SetMinLabelWidth(0.499);
     pLevel->SetIndent(0.501*level);
@@ -307,7 +303,7 @@ void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt& fmt, sal_Int16 sta
     XFListlevelNumber *pLevel = new XFListlevelNumber();
     pLevel->SetNumFmt(fmt);
     pLevel->SetStartValue(start);
-    //
+
     pLevel->SetListlevelType(enumXFListLevelNumber);
     pLevel->SetMinLabelWidth(0.499);
     pLevel->SetIndent(0.501*level);

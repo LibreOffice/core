@@ -218,7 +218,6 @@ inline void XFFootnoteConfig::ToXml(IXFStream *pStrm)
     if( !m_strMasterPage.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:master-page-name"), m_strMasterPage);
 
-
     pAttrList->AddAttribute( A2OUSTR("text:start-value"), Int32ToOUString(m_nStartValue) );
 
     if( m_bIsFootnote )

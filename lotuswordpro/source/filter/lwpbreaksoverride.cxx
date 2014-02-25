@@ -64,7 +64,6 @@
 #include "lwpobjstrm.hxx"
 #include "lwpatomholder.hxx"
 
-
 LwpBreaksOverride::LwpBreaksOverride()
 {
     m_pNextStyle = new LwpAtomHolder();

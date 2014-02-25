@@ -304,7 +304,6 @@ void LwpFontNameEntry::Override(XFFont* pFont)
         pFont->SetColor(aColor);
     }
 
-
     if (IsBackgroundColorOverridden() )
     {
         if (m_BackColor.IsValidColor())
@@ -358,7 +357,6 @@ sal_Bool LwpFontNameEntry::IsBackgroundColorOverridden()
 //{
 //    return (0 != (m_nOverrideBits & ALL_BITS));
 //}
-
 
 LwpFontNameManager::LwpFontNameManager()
     :m_pFontNames(NULL)

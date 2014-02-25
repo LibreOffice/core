@@ -160,7 +160,6 @@ void LwpFoundry::Read(LwpObjectStream *pStrm)
     m_pStyleMgr->SetFoundry(this);
 }
 
-
 void LwpFoundry::ReadStyles(LwpObjectStream *pStrm)
 {
     m_TextStyle.ReadIndexed(pStrm);
@@ -524,7 +523,6 @@ LwpStyleManager::~LwpStyleManager()
 {
     m_StyleList.clear();
 }
-
 
 #include "xfilter/xfstylemanager.hxx"
 /*

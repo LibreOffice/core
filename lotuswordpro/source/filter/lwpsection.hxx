@@ -148,7 +148,6 @@ inline LwpAtomHolder* LwpSection::GetAtomHolder()
     return &m_AtomHolder;
 }
 
-
 class LwpIndexSection : public LwpSection
 {
 public:

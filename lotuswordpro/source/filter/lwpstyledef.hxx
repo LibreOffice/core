@@ -87,7 +87,6 @@
 #define BORDER_GIRDER       23
 
 // User defined bitmap borders (200 - 400)
-//========================================
 
 // scalable lines
 #define BGRP_SOLID              20
@@ -179,7 +178,6 @@
 #define DECO3_JOIN_H        UNIT_56_96
 
 // User defined bitmap border groups 200 - 400
-//============================================
 
 /* background patterns */
 #define BACK_TRANSPARENT    0

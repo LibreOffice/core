@@ -112,7 +112,6 @@ inline LwpParaProperty* LwpParaProperty::GetPrevious(void)
 //align/indent/spacing
 //TO DO:border/backgroud etc
 
-
 class LwpParaAlignProperty : public LwpParaProperty
 {
 public:
@@ -217,7 +216,6 @@ inline LwpBreaksOverride* LwpParaBreaksProperty::GetLocalParaBreaks()
     return m_pBreaks;
 }
 
-
 class LwpParaBulletProperty : public LwpParaProperty
 {
 public:
@@ -241,7 +239,6 @@ inline LwpBulletOverride* LwpParaBulletProperty::GetLocalParaBullet()
 {
     return m_pBullet;
 }
-
 
 class LwpParaNumberingProperty : public LwpParaProperty
 {
@@ -285,7 +282,6 @@ inline sal_uInt32 LwpParaTabRackProperty::GetType(void)
 {
     return PP_LOCAL_TABRACK;
 }
-
 
 class LwpParaBackGroundProperty : public LwpParaProperty
 {

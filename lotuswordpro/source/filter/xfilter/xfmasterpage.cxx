@@ -96,7 +96,6 @@ enumXFStyle XFMasterPage::GetStyleFamily()
     return enumXFStyleMasterPage;
 }
 
-
 void    XFMasterPage::SetPageMaster(OUString pm)
 {
     m_strPageMaster = pm;

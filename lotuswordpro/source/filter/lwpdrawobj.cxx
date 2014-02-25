@@ -1308,7 +1308,6 @@ XFFrame* LwpDrawTextArt::CreateStandardDrawObj(const OUString& rStyleName )
     return this->CreateDrawObj(rStyleName);
 }
 
-
 /**
  * @descr   Constructor of class LwpDrawMetafile
  * @param   pStream   The memory stream which contains the lwp-sdw draw objects

@@ -127,5 +127,5 @@ private:
     sal_uInt16 m_nLayoutPageNumber;
 };
 
-#endif //
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

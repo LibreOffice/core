@@ -193,7 +193,6 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
     else
         pAttrList->AddAttribute( A2OUSTR("text:count-in-floating-frames"), A2OUSTR("false") );
 
-
     pStrm->StartElement( A2OUSTR("text:linenumbering-configuration") );
 
     pAttrList->Clear();
@@ -204,7 +203,6 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
 
     pStrm->EndElement( A2OUSTR("text:linenumbering-configuration") );
 }
-
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

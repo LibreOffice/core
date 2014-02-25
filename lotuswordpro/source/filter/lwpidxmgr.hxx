@@ -100,11 +100,9 @@ protected:
 protected:
     void ReadRootData(LwpObjectStream *pObjStrm );  //Read root index data
 
-
     //Add new method to handle ObjIndex
     void ReadObjIndexData(LwpObjectStream* pObjStrm);
     void ReadObjIndex( LwpSvStream *pStrm );    //Read Obj index
-
 
     void ReadLeafIndex( LwpSvStream *pStrm );   //Read leaf index obj
     void ReadLeafData( LwpObjectStream *pStrm );    //Read leaf index obj data

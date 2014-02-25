@@ -514,7 +514,6 @@ enumXFStyle XFDefaultParaStyle::GetStyleFamily()
     return enumXFStyleDefaultPara;
 }
 
-
 void XFDefaultParaStyle::ToXml(IXFStream * pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();

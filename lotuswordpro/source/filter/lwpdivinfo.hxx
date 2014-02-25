@@ -74,7 +74,6 @@
 
 #define STR_OleDivisionClassName    "OLEDivision"
 
-
 class LwpDivInfo : public LwpObject
 {
 public:

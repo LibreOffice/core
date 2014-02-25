@@ -210,7 +210,6 @@ inline sal_Int32 XFDrawLineStyle::GetTransparency()
     return m_nTransparency;
 }
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

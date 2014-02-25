@@ -145,7 +145,6 @@ inline sal_Bool XFTable::IsSubTable()
     return m_bSubTable;
 }
 
-
 inline void XFTable::SetDefaultCellStyle(OUString style)
 {
     m_strDefCellStyle = style;

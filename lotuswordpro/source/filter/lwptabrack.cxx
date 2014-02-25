@@ -79,7 +79,6 @@ void    LwpTab::Read(LwpObjectStream *pStrm)
     m_nAlignChar = pStrm->QuickReaduInt16();
 }
 
-
 LwpTabRack::LwpTabRack(LwpObjectHeader objHdr, LwpSvStream* pStrm):LwpObject(objHdr,pStrm)
 {
     m_nNumTabs = 0;

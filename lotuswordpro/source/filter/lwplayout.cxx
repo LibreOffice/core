@@ -1237,7 +1237,6 @@ sal_Bool LwpMiddleLayout::IsAutoGrowRight()
     return LwpVirtualLayout::IsAutoGrowRight();
 }
 
-
 /**
 * @descr:   Get contents orientation
 *
@@ -1397,7 +1396,6 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
                 }
             }
 
-
             //automatic, top left
             pXFBGImage->SetPosition(enumXFAlignStart,enumXFAlignTop);
             if(pLay->GetScaleCenter())
@@ -1441,7 +1439,6 @@ sal_Bool LwpMiddleLayout::GetUsePrinterSettings()
     }
     return sal_False;
 }
-
 
 //Check whether there are contents in the layout
 sal_Bool LwpMiddleLayout::HasContent()
@@ -2060,7 +2057,6 @@ sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
         return pLay ? pLay->GetBaseLineOffset() : 0;
     }
     return 0;
-
 
 }
 /**

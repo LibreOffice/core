@@ -63,7 +63,6 @@
  Jan 2005           Created
  ************************************************************************/
 
-
 #ifndef _LWPBASETYPE_HXX
 #define _LWPBASETYPE_HXX
 

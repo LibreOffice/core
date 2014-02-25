@@ -214,7 +214,6 @@ enum VO_TYPE
     //for default tab distance
     VO_VERDOCUMENT = 161,
 
-
     //The last one
     VO_INVALID = -1
 };

@@ -129,7 +129,6 @@ void LwpFribNote::XFConvert(XFContentContainer* pCont)
 
 }
 
-
 LwpNoteLayout::LwpNoteLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
     , m_nTime(0)
@@ -297,7 +296,6 @@ void LwpNoteTextLayout::XFConvert(XFContentContainer * pCont)
         pContent->XFConvert(pCont);
     }
 }
-
 
 LwpViewportLayout::LwpViewportLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)

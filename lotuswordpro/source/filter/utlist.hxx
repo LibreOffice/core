@@ -61,7 +61,6 @@
 namespace OpenStormBento
 {
 
-
 UtDefClassP(CUtListElmt);
 UtDefClassP(CUtList);
 UtDefClassP(CUtComparableListElmt);
@@ -102,9 +101,6 @@ private: // Data
     pCUtListElmt cpPrev;
 };
 
-
-
-
 class CUtComparableListElmt : public CUtListElmt
 {
 public: // Methods
@@ -115,9 +111,6 @@ public: // Methods
 
 public: // Pure virtual methods
 };
-
-
-
 
 class CUtList
 {
@@ -137,9 +130,6 @@ public: // Methods
 private: // Data
     CUtListElmt cDummyElmt;
 };
-
-
-
 
 class CUtOwningList : public CUtList
 {

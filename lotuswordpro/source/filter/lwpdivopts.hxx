@@ -84,7 +84,6 @@ private:
     sal_uInt16 m_nMaxLines;
 };
 
-
 /*
 Text languange.
 This class which holds identifiers for language and dialect.
@@ -104,7 +103,6 @@ private:
     sal_uInt16 ConvertFrom96(sal_uInt16 orgLang);
     sal_uInt16 m_nLanguage;
 };
-
 
 class LwpDivisionOptions : public LwpObject
 {

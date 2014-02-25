@@ -144,7 +144,6 @@ inline void XFDrawStyle::SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs)
     m_nWrapLines = nParagraphs;
 }
 
-
 inline void XFDrawStyle::SetArrowStart(OUString start, double size, sal_Bool center)
 {
     assert(size>0);

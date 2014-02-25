@@ -107,7 +107,6 @@ private:
     LwpAtomHolder m_UserName;
 };
 
-
 /**
  * @brief       VO_NOTEHEADERLAYOUT object
  *

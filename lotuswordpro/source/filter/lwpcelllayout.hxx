@@ -77,7 +77,6 @@ typedef enum
     enumCellBorderTopLimit = 4,
 } LwpCellBorderType;
 
-
 class XFCell;
 class XFCellStyle;
 class LwpCellList;

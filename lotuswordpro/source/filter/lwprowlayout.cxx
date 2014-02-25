@@ -462,7 +462,6 @@ sal_Bool LwpRowLayout::GetMergeCellFlag()
         return sal_True;
 }
 
-
 LwpRowHeadingLayout::LwpRowHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpRowLayout(objHdr, pStrm)
 {}

@@ -118,7 +118,6 @@ private:
     XFColor         m_aColor;
 };
 
-
 inline void XFShadow::SetPosition(enumXFShadowPos pos)
 {
     m_ePosition = pos;

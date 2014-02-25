@@ -118,7 +118,6 @@ private:
     double  m_fBottom;
 };
 
-
 inline XFPadding::XFPadding()
 {
     Reset();

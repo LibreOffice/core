@@ -248,7 +248,6 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
         pObj = pCurrentValueStream->GetValue()->GetProperty()->GetBenObject();
     }
 
-
     pObj =FindNextObjectWithProperty(pObj, pPropertyName->GetID()); // Get next object with same property name
     if (NULL == pObj)
         return NULL;
@@ -322,7 +321,6 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
 
     pS = FindValueStreamWithPropertyName(sSName);
     pD = FindValueStreamWithPropertyName(sDName);
-
 
     sal_uInt32 nDLen = 0;
     if(pD)

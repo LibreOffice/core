@@ -185,9 +185,8 @@ bool operator!=(XFBorder& b1, XFBorder& b2)
     return !(b1 == b2);
 }
 
-//
 //XFBorders:
-//
+
 void    XFBorders::SetColor(enumXFBorder side, XFColor& color)
 {
     switch(side)

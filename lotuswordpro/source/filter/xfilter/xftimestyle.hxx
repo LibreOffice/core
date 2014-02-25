@@ -135,7 +135,6 @@ private:
     sal_Bool    m_bTruncate;
 };
 
-
 inline void XFDateTimePart::SetPartType(enumXFDatePart ePart)
 {
     m_ePart = ePart;

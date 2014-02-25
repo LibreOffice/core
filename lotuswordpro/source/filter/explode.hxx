@@ -72,7 +72,6 @@ public:
     sal_uInt32 QueryValue(const sal_Char *pCode);
 };
 
-
 /**
  * @brief
  * define the function type for input read, output write
@@ -114,7 +113,6 @@ public:
     sal_uInt32 m_nOutputBufferPos;  // pointer to output buffer
 
     sal_uInt32 m_iArrayOfM[16];
-
 
     HuffmanTreeNode *m_Tree1, *m_Tree2;
 

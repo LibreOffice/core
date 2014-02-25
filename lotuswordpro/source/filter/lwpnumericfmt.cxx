@@ -64,7 +64,6 @@
 
 #include "lwpnumericfmt.hxx"
 
-///////////////////////////////////////////////////////////////////
 LwpCurrencyPool  LwpNumericFormat::m_aCurrencyInfo;
 
 /**
@@ -102,7 +101,7 @@ sal_Bool LwpCurrencyPool::IsShowSpace(sal_uInt16 nFormat)
 {
     return m_aCurrencyInfo[nFormat].bShowSpace;
 }
-//////////////////////////////////////////////////////////////////////
+
 /**
 *
 *   @date   03/26/2005
@@ -132,7 +131,6 @@ void LwpLayoutNumerics::Read()
         m_pObjStrm->SkipExtra();
     }
 }
-///////////////////////////////////////////////////////////////////
 
 /**
 *
@@ -175,7 +173,6 @@ LwpNumericFormatSubset::~LwpNumericFormatSubset()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////////
 LwpNumericFormat::LwpNumericFormat(LwpObjectStream * pStrm)
     : m_pObjStrm(pStrm)
     , cFlags(0)

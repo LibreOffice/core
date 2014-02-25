@@ -74,7 +74,6 @@
 #include <sfx2/objsh.hxx>
 #include <sot/storinfo.hxx>
 
-
 typedef struct tagAFID_CACHE
 {
     unsigned long LinkedFileSize;               /* 0 if not linked */

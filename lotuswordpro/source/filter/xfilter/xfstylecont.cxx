@@ -93,7 +93,6 @@ XFStyleContainer::~XFStyleContainer()
     }
 }
 
-
 void    XFStyleContainer::Reset()
 {
     std::vector<IXFStyle*>::iterator it;
@@ -142,7 +141,6 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
                 pStyle->SetStyleName(name);
             }
         }
-
 
         m_aStyles.push_back(pStyle);
         //transform the font object to XFFontFactory
@@ -208,7 +206,6 @@ void    XFStyleContainer::ToXml(IXFStream *pStrm)
         pStyle->ToXml(pStrm);
     }
 }
-
 
 void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
 {

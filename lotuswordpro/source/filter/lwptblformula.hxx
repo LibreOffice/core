@@ -196,7 +196,6 @@ public:
     virtual OUString ToString(LwpTableLayout* pCellsMap);
 };
 
-
 class LwpFormulaInfo : public LwpCellList
 {
 public:

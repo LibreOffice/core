@@ -228,7 +228,6 @@ inline void XFIndexTemplate::AddTextEntry(OUString sText, OUString styleName)
     m_aTextEntries[nLen] = sText;
 }
 
-
 inline void XFIndexTemplate::Clear()
 {
     m_aEntries.clear();

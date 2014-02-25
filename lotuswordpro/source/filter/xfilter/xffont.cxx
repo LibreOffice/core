@@ -238,7 +238,6 @@ bool operator!=(XFFont& f1, XFFont& f2)
     return !(f1==f2);
 }
 
-
 void XFFont::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
@@ -368,7 +367,6 @@ void XFFont::ToXml(IXFStream *pStrm)
     {
         pAttrList->AddAttribute(A2OUSTR("style:text-blinking"), A2OUSTR("true") );
     }
-
 
     //position & sacle:
     if( ((m_nFlag & XFFONT_FLAG_SCALE) && m_nScale>0 ) ||

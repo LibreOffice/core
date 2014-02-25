@@ -137,7 +137,6 @@ private:
     XFNumFmt    m_aNumFmt;
 };
 
-
 class XFListLevelBullet : public XFListLevel
 {
 public:
@@ -181,7 +180,6 @@ private:
     OUString   m_strBinaryData;
 };
 
-
 class XFListStyle : public XFStyle
 {
 public:
@@ -224,8 +222,6 @@ public:
 private:
     XFListLevel     *m_pListLevels[10];
 };
-
-
 
 inline void XFListLevel::SetListlevelType(enumXFListLevel type)
 {

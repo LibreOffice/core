@@ -62,7 +62,6 @@
  May 2005           Created
  ************************************************************************/
 
-
 #ifndef _LWPFRIBMARKER_HXX_
 #define _LWPFRIBMARKER_HXX_
 

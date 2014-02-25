@@ -144,7 +144,6 @@ LwpFootnote* LwpFribFootnote::GetFootnote()
     return dynamic_cast<LwpFootnote*>(m_Footnote.obj());
 }
 
-
 LwpFootnote::LwpFootnote(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpOrderedObject(objHdr, pStrm)
 {
@@ -438,7 +437,6 @@ void LwpFootnoteSeparatorOptions::Read(LwpObjectStream *pObjStrm)
     pObjStrm->SkipExtra();
 }
 
-
 LwpFootnoteOptions::LwpFootnoteOptions(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpObject(objHdr, pStrm)
 {
@@ -532,7 +530,6 @@ void LwpFootnoteOptions::RegisterEndnoteStyle()
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pXFStyleManager->SetEndnoteConfig(pEndnoteConfig);
 }
-
 
 /**
  * @descr  Get continue on message

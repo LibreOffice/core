@@ -322,7 +322,6 @@ void LwpCHBlkMarker::EnumAllKeywords()
     }
 }
 
-
 LwpBookMark::LwpBookMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpDLNFVList(objHdr,pStrm)
     , m_nFlag(0)
